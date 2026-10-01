@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/routing/app_router.dart';
 import '../core/theme/app_theme.dart';
-import 'routes.dart';
 
-class RadEmigrateApp extends StatelessWidget {
+class RadEmigrateApp extends ConsumerWidget {
   const RadEmigrateApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rad Emigrate',
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      title: 'RAD Emigrate',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: AppRoutes.home,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+      routerConfig: appRouter,
     );
   }
 }
