@@ -2,14 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../../../app/dependencies.dart';
 
-/// Provider is registered in `app/dependencies.dart` to own the dependency graph.
-/// This file only defines the controller type and a late-bound provider key.
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
-  throw UnimplementedError(
-    'authControllerProvider must be overridden via dependencies.dart',
-  );
+  return AuthController(ref.watch(authRepositoryProvider));
 });
 
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
@@ -18,7 +15,6 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
 
   final AuthRepository _repository;
 
-  /// Apply an already-restored session without re-fetching storage.
   void applySession(UserSession session) {
     state = AsyncValue.data(session);
   }

@@ -11,7 +11,6 @@ import '../core/storage/session_storage.dart';
 import '../features/auth/data/datasources/auth_local_datasource.dart';
 import '../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
-import '../features/auth/domain/entities/user_session.dart';
 import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/providers/auth_controller.dart';
 
@@ -32,13 +31,8 @@ final sessionStorageProvider = Provider<SessionStorage>((ref) {
   return SessionStorage(ref.read(secureStorageProvider));
 });
 
-// ── Auth datasources & repository ───────────────────────────────────
+// ── Network ─────────────────────────────────────────────────────────
 
-final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
-  return AuthLocalDataSource(ref.read(sessionStorageProvider));
-});
-
-// ApiClient needs token provider; use session storage directly to avoid cycle.
 final networkConfigProvider = Provider<NetworkConfig>((ref) {
   return NetworkConfig.fromAppConfig(ref.watch(appConfigProvider));
 });
@@ -52,6 +46,12 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   );
 });
 
+// ── Auth datasources & repository ───────────────────────────────────
+
+final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
+  return AuthLocalDataSource(ref.read(sessionStorageProvider));
+});
+
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
   return AuthRemoteDataSource(ref.watch(apiClientProvider));
 });
@@ -63,13 +63,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
     local: ref.watch(authLocalDataSourceProvider),
     allowDemoFallback: !config.environment.isProduction,
   );
-});
-
-// ── Auth controller (overrides the unimplemented stub) ──────────────
-
-final authControllerProvider =
-    StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
-  return AuthController(ref.watch(authRepositoryProvider));
 });
 
 // ── Session ─────────────────────────────────────────────────────────
