@@ -2,11 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../../../app/dependencies.dart';
 
+/// Provider is registered in `app/dependencies.dart` to own the dependency graph.
+/// This file only defines the controller type and a late-bound provider key.
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
-  return AuthController(ref.read(authRepositoryProvider));
+  throw UnimplementedError(
+    'authControllerProvider must be overridden via dependencies.dart',
+  );
 });
 
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
