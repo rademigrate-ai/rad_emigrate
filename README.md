@@ -1,37 +1,52 @@
-<<<<<<< HEAD
-# rad_emigrate
+# RAD Emigrate
 
-A new Flutter project.
+Flutter immigration platform foundation for Android, iOS, and Web.
 
-## Getting Started
+## Architecture
 
-This project is a starting point for a Flutter application.
+The project follows feature-first clean architecture:
 
-A few resources to get you started if this is your first Flutter project:
+```
+lib/
+  app/
+  core/
+  features/
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Feature layers:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# rad_emigrate
+- presentation
+- domain
+- data
+- external services
 
-A new Flutter project.
+## Development
 
-## Getting Started
+Requirements:
 
-This project is a starting point for a Flutter application.
+- Flutter SDK
+- Dart SDK
 
-A few resources to get you started if this is your first Flutter project:
+Commands:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter build web
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
->>>>>>> 8ef97fdfe8dc0cac9f8c7c147756858f6e7e2ef4
+## Features
+
+- Authentication foundation
+- Responsive application shell
+- Dashboard
+- Visa module foundation
+- Applications module foundation
+- Documents module foundation
+- Profile module foundation
+- AI assistant integration point
+
+## Future Extensions
+
+The architecture supports future API, knowledge base, AI assistant, CRM, and immigration workflow modules.
