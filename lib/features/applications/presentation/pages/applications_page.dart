@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/empty_view.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/progress_steps.dart';
+import '../../../../core/widgets/status_badge.dart';
 import '../../domain/entities/application_status.dart';
 import '../../domain/entities/visa_application.dart';
 import '../providers/application_controller.dart';
@@ -17,21 +22,58 @@ class ApplicationsPage extends ConsumerStatefulWidget {
 class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
   VisaApplication? _selected;
 
-  Color _statusColor(ApplicationStatus s) {
+  StatusTone _tone(ApplicationStatus s) {
     switch (s) {
       case ApplicationStatus.draft:
-        return Colors.grey;
+        return StatusTone.neutral;
       case ApplicationStatus.submitted:
-        return Colors.blue;
+        return StatusTone.info;
       case ApplicationStatus.reviewing:
       case ApplicationStatus.documentsRequired:
-        return Colors.orange;
+        return StatusTone.warning;
       case ApplicationStatus.approved:
       case ApplicationStatus.completed:
-        return Colors.green;
+        return StatusTone.success;
       case ApplicationStatus.rejected:
-        return AppColors.primaryRed;
+        return StatusTone.danger;
     }
+  }
+
+  List<ProgressStep> _timeline(ApplicationStatus status) {
+    final order = [
+      ApplicationStatus.draft,
+      ApplicationStatus.submitted,
+      ApplicationStatus.reviewing,
+      ApplicationStatus.approved,
+      ApplicationStatus.completed,
+    ];
+    final labels = {
+      ApplicationStatus.draft: 'Draft',
+      ApplicationStatus.submitted: 'Submitted',
+      ApplicationStatus.reviewing: 'Under review',
+      ApplicationStatus.approved: 'Approved',
+      ApplicationStatus.completed: 'Completed',
+    };
+    var currentIdx = order.indexOf(status);
+    if (status == ApplicationStatus.documentsRequired) currentIdx = 2;
+    if (status == ApplicationStatus.rejected) {
+      return [
+        const ProgressStep(label: 'Submitted', state: StepState.done),
+        const ProgressStep(label: 'Under review', state: StepState.done),
+        const ProgressStep(label: 'Rejected', state: StepState.current),
+      ];
+    }
+    return [
+      for (var i = 0; i < order.length; i++)
+        ProgressStep(
+          label: labels[order[i]]!,
+          state: i < currentIdx
+              ? StepState.done
+              : i == currentIdx
+                  ? StepState.current
+                  : StepState.upcoming,
+        ),
+    ];
   }
 
   @override
@@ -41,6 +83,7 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     if (_selected != null) {
       final app = _selected!;
       return Scaffold(
+        backgroundColor: AppColors.background,
         appBar: AppBar(
           title: Text(app.title),
           leading: IconButton(
@@ -49,30 +92,37 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
-            ListTile(title: const Text('Program'), subtitle: Text(app.programName)),
-            ListTile(title: const Text('Country'), subtitle: Text(app.country)),
-            ListTile(
-              title: const Text('Status'),
-              subtitle: Text(app.status.label),
-              trailing: Chip(
-                label: Text(
-                  app.status.label,
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                backgroundColor: _statusColor(app.status),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          app.programName,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      StatusBadge(label: app.status.label, tone: _tone(app.status)),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(app.country, style: Theme.of(context).textTheme.bodyMedium),
+                  if (app.notes != null) ...[
+                    const SizedBox(height: 12),
+                    Text(app.notes!, style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ],
               ),
             ),
-            ListTile(
-              title: const Text('Last updated'),
-              subtitle: Text(
-                '${app.updatedAt.year}-${app.updatedAt.month.toString().padLeft(2, '0')}-${app.updatedAt.day.toString().padLeft(2, '0')}',
-              ),
-            ),
-            if (app.notes != null)
-              ListTile(title: const Text('Notes'), subtitle: Text(app.notes!)),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+            Text('Progress', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            AppCard(child: ProgressSteps(steps: _timeline(app.status))),
+            const SizedBox(height: 20),
             Text('Update status', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Wrap(
@@ -103,10 +153,12 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     }
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('My Applications'),
+        title: const Text('Applications'),
         actions: [
           IconButton(
+            tooltip: 'Refresh',
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(applicationControllerProvider.notifier).load(),
@@ -120,54 +172,62 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         label: const Text('New draft'),
         onPressed: () async {
           await ref.read(applicationControllerProvider.notifier).createDraft(
-                title: 'New Application Draft',
+                title: 'New application draft',
                 programName: 'To be selected',
                 country: '—',
               );
         },
       ),
       body: state.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('$e'),
-              TextButton(
-                onPressed: () =>
-                    ref.read(applicationControllerProvider.notifier).load(),
-                child: const Text('Retry'),
-              ),
-            ],
-          ),
+        loading: () => const LoadingState(message: 'Loading applications…'),
+        error: (e, _) => ErrorState(
+          message: '$e',
+          onRetry: () => ref.read(applicationControllerProvider.notifier).load(),
         ),
         data: (apps) {
           if (apps.isEmpty) {
-            return const EmptyView(
+            return EmptyState(
               title: 'No applications yet',
-              subtitle: 'Start a draft or explore Visa programs.',
+              subtitle: 'Start a draft or explore visa programs.',
               icon: Icons.assignment_outlined,
+              actionLabel: 'New draft',
+              onAction: () {
+                ref.read(applicationControllerProvider.notifier).createDraft(
+                      title: 'New application draft',
+                      programName: 'To be selected',
+                      country: '—',
+                    );
+              },
             );
           }
           return ListView.separated(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
             itemCount: apps.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final app = apps[index];
-              return Card(
-                child: ListTile(
-                  title: Text(app.title),
-                  subtitle: Text('${app.programName} · ${app.country}'),
-                  trailing: Chip(
-                    label: Text(
-                      app.status.label,
-                      style: const TextStyle(color: Colors.white, fontSize: 11),
+              return AppCard(
+                onTap: () => setState(() => _selected = app),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            app.title,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${app.programName} · ${app.country}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
-                    backgroundColor: _statusColor(app.status),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  onTap: () => setState(() => _selected = app),
+                    StatusBadge(label: app.status.label, tone: _tone(app.status)),
+                  ],
                 ),
               );
             },

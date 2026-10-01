@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../auth/presentation/providers/auth_controller.dart';
-import '../../../applications/presentation/providers/application_controller.dart';
-import '../../../documents/presentation/providers/document_controller.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/section_card.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/section_header.dart';
+import '../../../../core/widgets/status_badge.dart';
 import '../../../applications/domain/entities/application_status.dart';
+import '../../../applications/presentation/providers/application_controller.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../documents/domain/entities/document.dart';
+import '../../../documents/presentation/providers/document_controller.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -19,151 +21,177 @@ class DashboardPage extends ConsumerWidget {
     final name = session?.fullName ?? 'Traveler';
     final apps = ref.watch(applicationControllerProvider).valueOrNull ?? [];
     final docs = ref.watch(documentControllerProvider).valueOrNull ?? [];
-    final activeApps = apps.where((a) => a.status != ApplicationStatus.completed).length;
+    final activeApps =
+        apps.where((a) => a.status != ApplicationStatus.completed).length;
     final missingDocs = docs
         .where((d) => d.status == DocumentVerificationStatus.missing)
         .length;
+    final profileDone = session?.profileComplete == true;
+
+    final needsAction = !profileDone || missingDocs > 0;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text('Home'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.smart_toy_outlined),
             tooltip: 'AI Assistant',
+            icon: const Icon(Icons.smart_toy_outlined),
             onPressed: () => context.go('/ai-assistant'),
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          Card(
-            color: AppColors.navy,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome, $name',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Your immigration journey starts here.',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
+          Text(
+            'Hello, $name',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          const SizedBox(height: 16),
-          Text('Case overview', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
+          Text(
+            needsAction
+                ? 'A few items need your attention to keep your case moving.'
+                : 'Your case is on track. Review applications or ask the assistant.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 24),
+          if (needsAction) ...[
+            SectionHeader(
+              title: 'Needs your action',
+              subtitle: 'Complete these to avoid delays',
+            ),
+            if (!profileDone)
+              AppCard(
+                margin: const EdgeInsets.only(bottom: 10),
+                onTap: () => context.go('/profile-completion'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.badge_outlined, color: AppColors.warning),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Complete your profile',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            'Name and basic details are required',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+                  ],
+                ),
+              ),
+            if (missingDocs > 0)
+              AppCard(
+                margin: const EdgeInsets.only(bottom: 10),
+                onTap: () => context.go('/documents'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.folder_outlined, color: AppColors.warning),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '$missingDocs document${missingDocs == 1 ? '' : 's'} missing',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            'Upload required files for your application',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const StatusBadge(label: 'Action', tone: StatusTone.warning),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 16),
+          ],
+          SectionHeader(
+            title: 'Case overview',
+            actionLabel: 'All cases',
+            onAction: () => context.go('/applications'),
+          ),
           Row(
             children: [
               Expanded(
-                child: _StatCard(
-                  label: 'Active applications',
+                child: _MetricTile(
                   value: '$activeApps',
+                  label: 'Active cases',
                   onTap: () => context.go('/applications'),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               Expanded(
-                child: _StatCard(
-                  label: 'Documents missing',
+                child: _MetricTile(
                   value: '$missingDocs',
+                  label: 'Docs missing',
                   onTap: () => context.go('/documents'),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
+          SectionHeader(title: 'Quick actions'),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              _QuickAction(
-                icon: Icons.public,
-                label: 'Visa Programs',
+              _ActionChip(
+                icon: Icons.public_outlined,
+                label: 'Visa programs',
                 onTap: () => context.go('/visa'),
               ),
-              _QuickAction(
+              _ActionChip(
                 icon: Icons.assignment_outlined,
                 label: 'Applications',
                 onTap: () => context.go('/applications'),
               ),
-              _QuickAction(
+              _ActionChip(
                 icon: Icons.folder_outlined,
                 label: 'Documents',
                 onTap: () => context.go('/documents'),
               ),
-              _QuickAction(
-                icon: Icons.person_outline,
-                label: 'Profile',
-                onTap: () => context.go('/profile'),
-              ),
-              _QuickAction(
+              _ActionChip(
                 icon: Icons.smart_toy_outlined,
-                label: 'AI Assistant',
+                label: 'AI assistant',
                 onTap: () => context.go('/ai-assistant'),
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          SectionCard(
-            title: 'Profile completion',
-            subtitle: session?.profileComplete == true
-                ? 'Your basic profile is complete'
-                : 'Complete your immigration profile',
-            icon: Icons.task_alt,
-            trailing: Icon(
-              session?.profileComplete == true
-                  ? Icons.check_circle
-                  : Icons.warning_amber,
-              color: session?.profileComplete == true
-                  ? Colors.green
-                  : Colors.orange,
-            ),
-            onTap: () => context.go(
-              session?.profileComplete == true ? '/profile' : '/profile-completion',
+          const SizedBox(height: 24),
+          SectionHeader(title: 'Shortcuts'),
+          AppCard(
+            onTap: () => context.go('/profile'),
+            margin: const EdgeInsets.only(bottom: 10),
+            child: const ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(Icons.person_outline),
+              title: Text('Profile'),
+              subtitle: Text('Personal and immigration details'),
+              trailing: Icon(Icons.chevron_right),
             ),
           ),
-          const SizedBox(height: 8),
-          SectionCard(
-            title: 'Application status',
-            subtitle: apps.isEmpty
-                ? 'No applications yet'
-                : '${apps.length} application(s) · $activeApps active',
-            icon: Icons.assignment_outlined,
-            onTap: () => context.go('/applications'),
-            trailing: const Icon(Icons.chevron_right),
-          ),
-          const SizedBox(height: 8),
-          SectionCard(
-            title: 'Documents',
-            subtitle: missingDocs > 0
-                ? '$missingDocs document(s) still missing'
-                : 'Document checklist ready',
-            icon: Icons.folder_outlined,
-            onTap: () => context.go('/documents'),
-            trailing: const Icon(Icons.chevron_right),
-          ),
-          const SizedBox(height: 8),
-          SectionCard(
-            title: 'AI Assistant',
-            subtitle: 'Ask questions about visas, requirements and process',
-            icon: Icons.smart_toy_outlined,
+          AppCard(
             onTap: () => context.go('/ai-assistant'),
-            trailing: const Icon(Icons.chevron_right),
+            child: const ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(Icons.smart_toy_outlined),
+              title: Text('Ask the assistant'),
+              subtitle: Text('Visas, documents, and process guidance'),
+              trailing: Icon(Icons.chevron_right),
+            ),
           ),
         ],
       ),
@@ -171,54 +199,48 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.label,
+class _MetricTile extends StatelessWidget {
+  const _MetricTile({
     required this.value,
+    required this.label,
     required this.onTap,
   });
 
-  final String label;
   final String value;
+  final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.navy,
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(label, style: Theme.of(context).textTheme.bodySmall),
-            ],
+    return AppCard(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            value,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: AppColors.navy,
+                ),
           ),
-        ),
+          const SizedBox(height: 4),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ],
       ),
     );
   }
 }
 
-class _QuickAction extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _QuickAction({
+class _ActionChip extends StatelessWidget {
+  const _ActionChip({
     required this.icon,
     required this.label,
     required this.onTap,
   });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +248,8 @@ class _QuickAction extends StatelessWidget {
       avatar: Icon(icon, size: 18),
       label: Text(label),
       onPressed: onTap,
+      backgroundColor: AppColors.surface,
+      side: const BorderSide(color: AppColors.border),
     );
   }
 }

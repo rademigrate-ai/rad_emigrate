@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../constants/app_colors.dart';
 
 class AppShell extends StatelessWidget {
@@ -9,12 +10,13 @@ class AppShell extends StatelessWidget {
   static const _items = [
     (label: 'Home', path: '/dashboard', icon: Icons.home_outlined, selectedIcon: Icons.home),
     (label: 'Visa', path: '/visa', icon: Icons.public_outlined, selectedIcon: Icons.public),
-    (label: 'Applications', path: '/applications', icon: Icons.assignment_outlined, selectedIcon: Icons.assignment),
-    (label: 'Documents', path: '/documents', icon: Icons.folder_outlined, selectedIcon: Icons.folder),
+    (label: 'Cases', path: '/applications', icon: Icons.assignment_outlined, selectedIcon: Icons.assignment),
+    (label: 'Docs', path: '/documents', icon: Icons.folder_outlined, selectedIcon: Icons.folder),
     (label: 'Profile', path: '/profile', icon: Icons.person_outline, selectedIcon: Icons.person),
   ];
 
   int _selectedIndex(String location) {
+    if (location.startsWith('/ai-assistant')) return 0;
     for (var i = 0; i < _items.length; i++) {
       if (location.startsWith(_items[i].path)) return i;
     }
@@ -25,7 +27,7 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     final selected = _selectedIndex(location);
-    final wide = MediaQuery.sizeOf(context).width >= 800;
+    final wide = MediaQuery.sizeOf(context).width >= 900;
 
     return Scaffold(
       body: Row(
@@ -36,10 +38,7 @@ class AppShell extends StatelessWidget {
               onDestinationSelected: (i) => context.go(_items[i].path),
               labelType: NavigationRailLabelType.all,
               backgroundColor: AppColors.navy,
-              selectedIconTheme: const IconThemeData(color: AppColors.primaryRed),
-              unselectedIconTheme: const IconThemeData(color: Colors.white70),
-              selectedLabelTextStyle: const TextStyle(color: Colors.white),
-              unselectedLabelTextStyle: const TextStyle(color: Colors.white70),
+              minWidth: 88,
               destinations: [
                 for (final item in _items)
                   NavigationRailDestination(
@@ -49,7 +48,12 @@ class AppShell extends StatelessWidget {
                   ),
               ],
             ),
-          Expanded(child: child),
+          Expanded(
+            child: ColoredBox(
+              color: AppColors.background,
+              child: child,
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: wide
