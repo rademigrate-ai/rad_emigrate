@@ -6,7 +6,10 @@ void main() {
   testWidgets('App boots without crashing', (tester) async {
     await tester.pumpWidget(const ProviderScope(child: RadEmigrateApp()));
     await tester.pump();
-    // Splash or login should render RAD branding or Sign in.
-    expect(find.textContaining('RAD'), findsWidgets);
+    // Splash or login should expose the shared RAD brand to assistive tech.
+    expect(
+      find.bySemanticsLabel('RAD International Institute of RAD'),
+      findsWidgets,
+    );
   });
 }

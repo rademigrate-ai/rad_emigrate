@@ -33,10 +33,11 @@ Transform the functional PROJECT 03 user journey into a production-grade UI/UX e
 | EmptyState / LoadingState / ErrorState | `lib/core/widgets/` |
 | SectionHeader | `lib/core/widgets/section_header.dart` |
 | ProgressSteps | `lib/core/widgets/progress_steps.dart` |
+| RadBrand | `lib/core/widgets/rad_brand.dart` + `assets/branding/` |
 
 ## User journey changes
 
-1. **Login** — branded mark, clearer hierarchy, structured error region, primary/secondary buttons  
+1. **Login** — shared RAD wordmark, clearer hierarchy, structured error region, primary/secondary buttons
 2. **Dashboard** — “Needs your action” prioritization, case metrics, quick actions  
 3. **Applications** — status badges, progress timeline on detail, empty state CTA  
 4. **Documents** — missing vs submitted sections, guided bottom sheet  
@@ -86,6 +87,9 @@ Re-run on a machine with private clone of `main` after pull.
 
 ## PROJECT 03 FINAL STATUS
 
+- **RAD branding integrated:** shared light, dark, and compact assets are registered through `RadBrand`; duplicate logo treatments were removed from login, splash, home, and shell surfaces.
+- **UI/UX production polish completed:** auth, visa discovery, dashboard, cards, empty states, and responsive shell refinements are in place.
+- **Accessibility reviewed:** semantic brand labels, live error regions, tooltip coverage, and 48px interaction targets were preserved or improved.
 - **Architecture frozen:** Riverpod, GoRouter, repository/data flow, domain models, and AI abstraction remain unchanged.
 - **UI/UX completed:** Premium RAD presentation-layer refinement and final lint cleanup are complete.
 - **Analyzer clean:** `flutter analyze` → **No issues found**.

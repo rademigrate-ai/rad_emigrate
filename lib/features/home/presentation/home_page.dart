@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/rad_brand.dart';
 
 /// Legacy landing page kept for reference. Primary entry is Splash → Auth → Dashboard.
 class HomePage extends StatelessWidget {
@@ -16,31 +18,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Text(
-                  'RAD',
-                  style: TextStyle(
-                    color: AppColors.primaryRed,
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              const Text(
-                'International Institute of RAD',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              const RadBrand(size: RadBrandSize.large, darkSurface: true),
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () => context.go('/login'),
