@@ -17,7 +17,7 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   final ApplicationLocalDataSource _local;
   final bool allowOfflineFallback;
 
-  static final _seed = [
+  static final List<VisaApplication> _seed = [
     VisaApplication(
       id: 'app-001',
       title: 'Study Permit Application',
@@ -71,7 +71,9 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
       if (!allowOfflineFallback) rethrow;
       final local = await _ensureLocal();
       if (userId == null) return local;
-      return local.where((a) => a.userId == userId || a.userId == null).toList();
+      return local
+          .where((a) => a.userId == userId || a.userId == null)
+          .toList();
     }
   }
 
@@ -82,11 +84,10 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
       final local = await _ensureLocal();
-      try {
-        return local.firstWhere((a) => a.id == id);
-      } catch (_) {
-        return null;
+      for (final a in local) {
+        if (a.id == id) return a;
       }
+      return null;
     }
   }
 

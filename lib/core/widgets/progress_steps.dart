@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 
-enum StepState { done, current, upcoming }
+/// Application timeline step state (avoids clash with Material StepState).
+enum ProgressStepState { done, current, upcoming }
 
 class ProgressStep {
   const ProgressStep({required this.label, required this.state});
 
   final String label;
-  final StepState state;
+  final ProgressStepState state;
 }
 
-/// Vertical application timeline (Apple-like clarity).
+/// Vertical application timeline (clear hierarchy).
 class ProgressSteps extends StatelessWidget {
   const ProgressSteps({super.key, required this.steps});
 
@@ -37,8 +38,8 @@ class _StepRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final done = step.state == StepState.done;
-    final current = step.state == StepState.current;
+    final done = step.state == ProgressStepState.done;
+    final current = step.state == ProgressStepState.current;
     final color = done
         ? AppColors.success
         : current
@@ -79,7 +80,9 @@ class _StepRow extends StatelessWidget {
                   child: Container(
                     width: 2,
                     margin: const EdgeInsets.symmetric(vertical: 4),
-                    color: done ? AppColors.success.withValues(alpha: 0.4) : AppColors.border,
+                    color: done
+                        ? AppColors.success.withValues(alpha: 0.4)
+                        : AppColors.border,
                   ),
                 ),
             ],

@@ -58,9 +58,9 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     if (status == ApplicationStatus.documentsRequired) currentIdx = 2;
     if (status == ApplicationStatus.rejected) {
       return [
-        const ProgressStep(label: 'Submitted', state: StepState.done),
-        const ProgressStep(label: 'Under review', state: StepState.done),
-        const ProgressStep(label: 'Rejected', state: StepState.current),
+        const ProgressStep(label: 'Submitted', state: ProgressStepState.done),
+        const ProgressStep(label: 'Under review', state: ProgressStepState.done),
+        const ProgressStep(label: 'Rejected', state: ProgressStepState.current),
       ];
     }
     return [
@@ -68,10 +68,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         ProgressStep(
           label: labels[order[i]]!,
           state: i < currentIdx
-              ? StepState.done
+              ? ProgressStepState.done
               : i == currentIdx
-                  ? StepState.current
-                  : StepState.upcoming,
+                  ? ProgressStepState.current
+                  : ProgressStepState.upcoming,
         ),
     ];
   }
@@ -106,14 +106,23 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                      StatusBadge(label: app.status.label, tone: _tone(app.status)),
+                      StatusBadge(
+                        label: app.status.label,
+                        tone: _tone(app.status),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(app.country, style: Theme.of(context).textTheme.bodyMedium),
+                  Text(
+                    app.country,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   if (app.notes != null) ...[
                     const SizedBox(height: 12),
-                    Text(app.notes!, style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      app.notes!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ],
                 ],
               ),
@@ -123,7 +132,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             const SizedBox(height: 12),
             AppCard(child: ProgressSteps(steps: _timeline(app.status))),
             const SizedBox(height: 20),
-            Text('Update status', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Update status',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -137,12 +149,18 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                         .read(applicationControllerProvider.notifier)
                         .updateStatus(app.id, s);
                     final list =
-                        ref.read(applicationControllerProvider).valueOrNull ?? [];
-                    final updated = list.cast<VisaApplication?>().firstWhere(
-                          (a) => a?.id == app.id,
-                          orElse: () => app,
-                        );
-                    setState(() => _selected = updated ?? app.copyWith(status: s));
+                        ref.read(applicationControllerProvider).valueOrNull ??
+                            [];
+                    VisaApplication? updated;
+                    for (final a in list) {
+                      if (a.id == app.id) {
+                        updated = a;
+                        break;
+                      }
+                    }
+                    setState(
+                      () => _selected = updated ?? app.copyWith(status: s),
+                    );
                   },
                 );
               }).toList(),
@@ -182,7 +200,8 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         loading: () => const LoadingState(message: 'Loading applications…'),
         error: (e, _) => ErrorState(
           message: '$e',
-          onRetry: () => ref.read(applicationControllerProvider.notifier).load(),
+          onRetry: () =>
+              ref.read(applicationControllerProvider.notifier).load(),
         ),
         data: (apps) {
           if (apps.isEmpty) {
@@ -226,7 +245,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                         ],
                       ),
                     ),
-                    StatusBadge(label: app.status.label, tone: _tone(app.status)),
+                    StatusBadge(
+                      label: app.status.label,
+                      tone: _tone(app.status),
+                    ),
                   ],
                 ),
               );
