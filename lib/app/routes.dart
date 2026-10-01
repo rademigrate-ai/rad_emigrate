@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../features/home/presentation/home_page.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -8,7 +9,7 @@ class AppRoutes {
     switch (settings.name) {
       case home:
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderPage(title: 'Home'),
+          builder: (_) => const HomePage(),
         );
       case login:
         return MaterialPageRoute(
