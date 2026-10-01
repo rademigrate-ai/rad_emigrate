@@ -33,7 +33,10 @@ class AppButton extends StatelessWidget {
               key: ValueKey('loading'),
               height: 20,
               width: 20,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
             )
           : Row(
               key: const ValueKey('label'),
@@ -51,31 +54,33 @@ class AppButton extends StatelessWidget {
 
     final button = switch (variant) {
       AppButtonVariant.primary => FilledButton(
-          onPressed: loading ? null : onPressed,
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primaryRed,
-            disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.45),
-            foregroundColor: AppColors.white,
-          ),
-          child: child,
+        onPressed: loading ? null : onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.primaryRed,
+          disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.45),
+          foregroundColor: AppColors.white,
         ),
+        child: child,
+      ),
       AppButtonVariant.secondary => OutlinedButton(
-          onPressed: loading ? null : onPressed,
-          child: DefaultTextStyle.merge(
-            style: const TextStyle(color: AppColors.navy),
-            child: IconTheme(
-              data: const IconThemeData(color: AppColors.navy, size: 18),
-              child: child,
-            ),
+        onPressed: loading ? null : onPressed,
+        child: DefaultTextStyle.merge(
+          style: const TextStyle(color: AppColors.navy),
+          child: IconTheme(
+            data: const IconThemeData(color: AppColors.navy, size: 18),
+            child: child,
           ),
         ),
+      ),
       AppButtonVariant.ghost => TextButton(
-          onPressed: loading ? null : onPressed,
-          child: child,
-        ),
+        onPressed: loading ? null : onPressed,
+        child: child,
+      ),
     };
 
-    final result = expanded ? SizedBox(width: double.infinity, child: button) : button;
+    final result = expanded
+        ? SizedBox(width: double.infinity, child: button)
+        : button;
     return tooltip == null ? result : Tooltip(message: tooltip!, child: result);
   }
 }

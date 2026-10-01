@@ -1,12 +1,5 @@
 /// Supported immigration document categories.
-enum DocumentTypeKind {
-  passport,
-  identity,
-  education,
-  financial,
-  visa,
-  other,
-}
+enum DocumentTypeKind { passport, identity, education, financial, visa, other }
 
 extension DocumentTypeKindX on DocumentTypeKind {
   String get label {
@@ -48,11 +41,11 @@ class DocumentType {
   final String? description;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'kind': kind.name,
-        'name': name,
-        'description': description,
-      };
+    'id': id,
+    'kind': kind.name,
+    'name': name,
+    'description': description,
+  };
 
   factory DocumentType.fromJson(Map<String, dynamic> json) {
     return DocumentType(

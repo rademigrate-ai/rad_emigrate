@@ -8,10 +8,13 @@ void main() {
       expect(session.isAuthenticated, isFalse);
     });
 
-    test('isAuthenticated is true when token present and authenticated flag set', () {
-      const session = UserSession(token: 'abc', authenticated: true);
-      expect(session.isAuthenticated, isTrue);
-    });
+    test(
+      'isAuthenticated is true when token present and authenticated flag set',
+      () {
+        const session = UserSession(token: 'abc', authenticated: true);
+        expect(session.isAuthenticated, isTrue);
+      },
+    );
 
     test('copyWith overrides specified fields only', () {
       const original = UserSession(

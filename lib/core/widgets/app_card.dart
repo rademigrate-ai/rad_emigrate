@@ -23,7 +23,9 @@ class AppCard extends StatelessWidget {
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(18),
       side: BorderSide(
-        color: emphasized ? AppColors.primaryRed.withValues(alpha: 0.22) : AppColors.borderSubtle,
+        color: emphasized
+            ? AppColors.primaryRed.withValues(alpha: 0.22)
+            : AppColors.borderSubtle,
       ),
     );
     final content = Padding(padding: padding, child: child);

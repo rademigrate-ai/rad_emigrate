@@ -13,10 +13,7 @@ void main() {
       AppConfig.fromName('production').environment,
       AppEnvironment.production,
     );
-    expect(
-      AppConfig.fromName('staging').environment,
-      AppEnvironment.staging,
-    );
+    expect(AppConfig.fromName('staging').environment, AppEnvironment.staging);
     expect(
       AppConfig.fromName('development').environment,
       AppEnvironment.development,

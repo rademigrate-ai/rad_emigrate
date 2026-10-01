@@ -61,6 +61,15 @@ class AuthRemoteDataSource {
         password: password,
         data: {if (phone.trim().isNotEmpty) 'phone': phone.trim()},
       );
+      if (response.session == null && response.user != null) {
+        return UserSession(
+          userId: response.user!.id,
+          email: response.user!.email,
+          phone: response.user!.phone,
+          authenticated: false,
+          profileComplete: false,
+        );
+      }
       return _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
       throw _apiException(error);

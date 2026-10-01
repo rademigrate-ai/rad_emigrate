@@ -5,5 +5,6 @@ class AppPlaceholder extends StatelessWidget {
   const AppPlaceholder({super.key, required this.title});
 
   @override
-  Widget build(BuildContext context) => Scaffold(body: Center(child: Text(title)));
+  Widget build(BuildContext context) =>
+      Scaffold(body: Center(child: Text(title)));
 }

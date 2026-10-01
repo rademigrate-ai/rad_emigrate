@@ -43,8 +43,8 @@ class _StepRow extends StatelessWidget {
     final color = done
         ? AppColors.success
         : current
-            ? AppColors.primaryRed
-            : AppColors.textTertiary;
+        ? AppColors.primaryRed
+        : AppColors.textTertiary;
 
     return IntrinsicHeight(
       child: Row(
@@ -63,17 +63,17 @@ class _StepRow extends StatelessWidget {
                 child: done
                     ? const Icon(Icons.check, size: 14, color: Colors.white)
                     : current
-                        ? Center(
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          )
-                        : null,
+                    ? Center(
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      )
+                    : null,
               ),
               if (!isLast)
                 Expanded(

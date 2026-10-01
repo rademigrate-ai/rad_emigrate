@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../../core/config/app_config.dart';
 import '../../../../core/storage/session_storage.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../data/datasources/auth_local_datasource.dart';
@@ -20,20 +19,10 @@ final _sessionStorageProvider = Provider<SessionStorage>((ref) {
   return SessionStorage(ref.read(_secureStorageProvider));
 });
 
-final _appConfigProvider = Provider<AppConfig>((ref) {
-  const envName = String.fromEnvironment(
-    'APP_ENV',
-    defaultValue: 'development',
-  );
-  return AppConfig.fromName(envName);
-});
-
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final config = ref.watch(_appConfigProvider);
   return AuthRepositoryImpl(
     remote: AuthRemoteDataSource(ref.watch(supabaseClientServiceProvider)),
     local: AuthLocalDataSource(ref.watch(_sessionStorageProvider)),
-    allowDemoFallback: !config.isProduction,
   );
 });
 

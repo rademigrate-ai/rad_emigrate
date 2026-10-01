@@ -12,15 +12,9 @@ class ApiResponse<T> {
   final String? message;
   final int? statusCode;
 
-  factory ApiResponse.ok(T data, {int? statusCode}) => ApiResponse(
-        success: true,
-        data: data,
-        statusCode: statusCode ?? 200,
-      );
+  factory ApiResponse.ok(T data, {int? statusCode}) =>
+      ApiResponse(success: true, data: data, statusCode: statusCode ?? 200);
 
-  factory ApiResponse.fail(String message, {int? statusCode}) => ApiResponse(
-        success: false,
-        message: message,
-        statusCode: statusCode,
-      );
+  factory ApiResponse.fail(String message, {int? statusCode}) =>
+      ApiResponse(success: false, message: message, statusCode: statusCode);
 }

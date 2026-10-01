@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -42,7 +43,8 @@ class DocumentsPage extends ConsumerWidget {
           IconButton(
             tooltip: 'Refresh',
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(documentControllerProvider.notifier).load(),
+            onPressed: () =>
+                ref.read(documentControllerProvider.notifier).load(),
           ),
         ],
       ),
@@ -52,7 +54,9 @@ class DocumentsPage extends ConsumerWidget {
         icon: const Icon(Icons.add),
         label: const Text('Add type'),
         onPressed: () async {
-          await ref.read(documentControllerProvider.notifier).addPlaceholder(
+          await ref
+              .read(documentControllerProvider.notifier)
+              .addPlaceholder(
                 name: 'New document',
                 kind: DocumentTypeKind.other,
               );
@@ -88,21 +92,25 @@ class DocumentsPage extends ConsumerWidget {
                   title: 'Missing',
                   subtitle: 'Upload these to continue your application',
                 ),
-                ...missing.map((doc) => _DocTile(
-                      doc: doc,
-                      tone: _tone(doc.status),
-                      onTap: () => _openSheet(context, ref, doc),
-                    )),
+                ...missing.map(
+                  (doc) => _DocTile(
+                    doc: doc,
+                    tone: _tone(doc.status),
+                    onTap: () => _openSheet(context, ref, doc),
+                  ),
+                ),
                 const SizedBox(height: 16),
               ],
               SectionHeader(
                 title: missing.isEmpty ? 'All documents' : 'Submitted',
               ),
-              ...rest.map((doc) => _DocTile(
-                    doc: doc,
-                    tone: _tone(doc.status),
-                    onTap: () => _openSheet(context, ref, doc),
-                  )),
+              ...rest.map(
+                (doc) => _DocTile(
+                  doc: doc,
+                  tone: _tone(doc.status),
+                  onTap: () => _openSheet(context, ref, doc),
+                ),
+              ),
             ],
           );
         },
@@ -126,8 +134,7 @@ class DocumentsPage extends ConsumerWidget {
             Text('Status: ${doc.status.label}'),
             const SizedBox(height: 12),
             Text(
-              'Upload is simulated offline. No file is sent to a server. '
-              'OCR and AI analysis connect in a later release.',
+              'Accepted formats: PDF, JPG, JPEG, and PNG. Maximum size: 10 MB.',
               style: Theme.of(ctx).textTheme.bodySmall,
             ),
             const SizedBox(height: 20),
@@ -139,14 +146,61 @@ class DocumentsPage extends ConsumerWidget {
                   minimumSize: const Size.fromHeight(48),
                 ),
                 onPressed: () async {
-                  await ref.read(documentControllerProvider.notifier).markUploaded(
-                        doc.id,
-                        fileName: '${doc.name} (uploaded)',
+                  final result = await FilePicker.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: const ['pdf', 'jpg', 'jpeg', 'png'],
+                    withData: true,
+                  );
+                  if (result == null || result.files.isEmpty) return;
+                  final file = result.files.single;
+                  final bytes = file.bytes;
+                  if (bytes == null) {
+                    if (ctx.mounted) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        const SnackBar(
+                          content: Text('Could not read that file.'),
+                        ),
                       );
-                  if (ctx.mounted) Navigator.pop(ctx);
+                    }
+                    return;
+                  }
+                  if (bytes.length > 10 * 1024 * 1024) {
+                    if (ctx.mounted) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        const SnackBar(
+                          content: Text('Files must be 10 MB or smaller.'),
+                        ),
+                      );
+                    }
+                    return;
+                  }
+                  final extension = (file.extension ?? '').toLowerCase();
+                  final contentType = switch (extension) {
+                    'pdf' => 'application/pdf',
+                    'jpg' || 'jpeg' => 'image/jpeg',
+                    'png' => 'image/png',
+                    _ => 'application/octet-stream',
+                  };
+                  try {
+                    await ref
+                        .read(documentControllerProvider.notifier)
+                        .uploadFile(
+                          doc.id,
+                          bytes: bytes,
+                          fileName: file.name,
+                          contentType: contentType,
+                        );
+                    if (ctx.mounted) Navigator.pop(ctx);
+                  } catch (error) {
+                    if (ctx.mounted) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        SnackBar(content: Text('Upload failed: $error')),
+                      );
+                    }
+                  }
                 },
                 icon: const Icon(Icons.upload_file),
-                label: const Text('Mark as uploaded'),
+                label: const Text('Choose file and upload'),
               ),
             TextButton(
               onPressed: () => Navigator.pop(ctx),
@@ -160,11 +214,7 @@ class DocumentsPage extends ConsumerWidget {
 }
 
 class _DocTile extends StatelessWidget {
-  const _DocTile({
-    required this.doc,
-    required this.tone,
-    required this.onTap,
-  });
+  const _DocTile({required this.doc, required this.tone, required this.onTap});
 
   final Document doc;
   final StatusTone tone;
@@ -182,7 +232,10 @@ class _DocTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(doc.name, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    doc.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     doc.kind.label,

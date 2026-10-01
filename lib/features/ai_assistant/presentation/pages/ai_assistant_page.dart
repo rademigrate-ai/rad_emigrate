@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 
 class _ChatMessage {
   _ChatMessage({required this.isUser, required this.text, this.sources});
@@ -29,12 +30,49 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   var _loading = false;
   static const _freeLimit = 5;
   var _used = 0;
+  String? _sessionId;
 
   static const _suggestions = [
     'What documents are typically needed for a study permit?',
     'How long can a visa process take?',
     'What is a GTE statement?',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreHistory();
+  }
+
+  Future<void> _restoreHistory() async {
+    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    if (userId == null || userId.isEmpty) return;
+    try {
+      final repository = ref.read(aiSessionRepositoryProvider);
+      final sessions = await repository.listSessions(userId);
+      if (sessions.isEmpty || !mounted) return;
+      final session = sessions.first;
+      final history = await repository.history(session.id);
+      if (!mounted) return;
+      setState(() {
+        _sessionId = session.id;
+        _used = session.questionCount;
+        _messages
+          ..clear()
+          ..addAll(
+            history.map(
+              (message) => _ChatMessage(
+                isUser: message.role == 'user',
+                text: message.content,
+              ),
+            ),
+          );
+      });
+      _scrollToEnd();
+    } catch (_) {
+      // History is supplementary; the assistant remains usable if unavailable.
+    }
+  }
 
   @override
   void dispose() {
@@ -57,6 +95,27 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       return;
     }
 
+    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    try {
+      if (userId != null && userId.isNotEmpty) {
+        final repository = ref.read(aiSessionRepositoryProvider);
+        _sessionId ??= (await repository.createSession(userId)).id;
+        await repository.saveMessage(
+          sessionId: _sessionId!,
+          userId: userId,
+          role: 'user',
+          content: text,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not save this question: $error')),
+        );
+      }
+      return;
+    }
+
     setState(() {
       _messages.add(_ChatMessage(isUser: true, text: text));
       _loading = true;
@@ -70,6 +129,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       final response = await ai.complete(
         AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
       );
+      if (userId != null && userId.isNotEmpty && _sessionId != null) {
+        await ref
+            .read(aiSessionRepositoryProvider)
+            .saveMessage(
+              sessionId: _sessionId!,
+              userId: userId,
+              role: 'assistant',
+              content: response.text,
+            );
+      }
       if (!mounted) return;
       setState(() {
         _messages.add(
@@ -86,7 +155,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       if (!mounted) return;
       setState(() {
         _messages.add(
-          _ChatMessage(isUser: false, text: 'Something went wrong. Please try again.'),
+          _ChatMessage(
+            isUser: false,
+            text: 'Something went wrong. Please try again.',
+          ),
         );
         _loading = false;
       });
@@ -154,10 +226,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       ..._suggestions.map(
                         (s) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: AppCard(
-                            onTap: () => _send(s),
-                            child: Text(s),
-                          ),
+                          child: AppCard(onTap: () => _send(s), child: Text(s)),
                         ),
                       ),
                     ],
@@ -209,13 +278,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                 m.text,
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              if (m.sources != null && m.sources!.isNotEmpty) ...[
+                              if (m.sources != null &&
+                                  m.sources!.isNotEmpty) ...[
                                 const SizedBox(height: 8),
                                 ...m.sources!.map(
                                   (s) => Text(
                                     'Source: ${s.title}'
                                     '${s.authority != null ? ' (${s.authority})' : ''}',
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall,
                                   ),
                                 ),
                               ],

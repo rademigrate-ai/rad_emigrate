@@ -80,21 +80,34 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     setState(() => _saving = true);
     final current = ref.read(profileControllerProvider).valueOrNull;
     final session = ref.read(authControllerProvider).valueOrNull;
+    final userId = current?.id ?? session?.userId;
+    if (userId == null || userId.isEmpty) {
+      if (mounted) {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign in before saving your profile.')),
+        );
+      }
+      return;
+    }
     final profile = UserProfile(
-      id: current?.id ?? session?.userId ?? 'user-demo-001',
+      id: userId,
       firstName: _firstName.text.trim(),
       lastName: _lastName.text.trim(),
       email: _email.text.trim().isEmpty ? null : _email.text.trim(),
       phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
-      nationality:
-          _nationality.text.trim().isEmpty ? null : _nationality.text.trim(),
+      nationality: _nationality.text.trim().isEmpty
+          ? null
+          : _nationality.text.trim(),
       avatar: current?.avatar,
       createdAt: current?.createdAt ?? DateTime.now(),
     );
     try {
       await ref.read(profileControllerProvider.notifier).save(profile);
       if (profile.fullName.isNotEmpty) {
-        await ref.read(authControllerProvider.notifier).completeProfile(
+        await ref
+            .read(authControllerProvider.notifier)
+            .completeProfile(
               fullName: profile.fullName,
               nationality: profile.nationality,
             );
@@ -104,16 +117,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           _saving = false;
           _editing = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile saved')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Profile saved')));
       }
     } catch (e) {
       if (mounted) {
         setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save profile: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not save profile: $e')));
       }
     }
   }
@@ -335,8 +347,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     onPressed: _saving
                         ? null
                         : () => _cancelEditing(
-                              ref.read(profileControllerProvider).valueOrNull,
-                            ),
+                            ref.read(profileControllerProvider).valueOrNull,
+                          ),
                   ),
                 ),
                 const SizedBox(width: 12),

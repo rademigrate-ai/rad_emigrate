@@ -13,36 +13,37 @@ class ApiException implements Exception {
   final Object? cause;
 
   factory ApiException.network([Object? cause]) => ApiException(
-        message: 'Network error. Check your connection and try again.',
-        code: 'network_error',
-        cause: cause,
-      );
+    message: 'Network error. Check your connection and try again.',
+    code: 'network_error',
+    cause: cause,
+  );
 
   factory ApiException.timeout([Object? cause]) => ApiException(
-        message: 'Request timed out. Please try again.',
-        code: 'timeout',
-        cause: cause,
-      );
+    message: 'Request timed out. Please try again.',
+    code: 'timeout',
+    cause: cause,
+  );
 
   factory ApiException.unauthorized([String? message]) => ApiException(
-        message: message ?? 'Session expired. Please sign in again.',
-        statusCode: 401,
-        code: 'unauthorized',
-      );
+    message: message ?? 'Session expired. Please sign in again.',
+    statusCode: 401,
+    code: 'unauthorized',
+  );
 
   factory ApiException.forbidden([String? message]) => ApiException(
-        message: message ?? 'You do not have permission for this action.',
-        statusCode: 403,
-        code: 'forbidden',
-      );
+    message: message ?? 'You do not have permission for this action.',
+    statusCode: 403,
+    code: 'forbidden',
+  );
 
   factory ApiException.notFound([String? message]) => ApiException(
-        message: message ?? 'Resource not found.',
-        statusCode: 404,
-        code: 'not_found',
-      );
+    message: message ?? 'Resource not found.',
+    statusCode: 404,
+    code: 'not_found',
+  );
 
-  factory ApiException.server([String? message, int? statusCode]) => ApiException(
+  factory ApiException.server([String? message, int? statusCode]) =>
+      ApiException(
         message: message ?? 'Server error. Please try again later.',
         statusCode: statusCode ?? 500,
         code: 'server_error',

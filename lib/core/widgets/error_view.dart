@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../constants/app_colors.dart';
 
 class ErrorView extends StatelessWidget {
@@ -15,14 +16,20 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.primaryRed),
+            const Icon(
+              Icons.error_outline,
+              size: 48,
+              color: AppColors.primaryRed,
+            ),
             const SizedBox(height: 16),
             Text(message, textAlign: TextAlign.center),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
               FilledButton(
                 onPressed: onRetry,
-                style: FilledButton.styleFrom(backgroundColor: AppColors.primaryRed),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primaryRed,
+                ),
                 child: const Text('Retry'),
               ),
             ],

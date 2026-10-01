@@ -49,16 +49,16 @@ class VisaApplication {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'title': title,
-        'programName': programName,
-        'country': country,
-        'status': status.name,
-        'updatedAt': updatedAt.toIso8601String(),
-        'createdAt': createdAt?.toIso8601String(),
-        'notes': notes,
-      };
+    'id': id,
+    'userId': userId,
+    'title': title,
+    'programName': programName,
+    'country': country,
+    'status': status.name,
+    'updatedAt': updatedAt.toIso8601String(),
+    'createdAt': createdAt?.toIso8601String(),
+    'notes': notes,
+  };
 
   factory VisaApplication.fromJson(Map<String, dynamic> json) {
     return VisaApplication(
@@ -67,8 +67,12 @@ class VisaApplication {
       title: json['title'] as String? ?? '',
       programName: json['programName'] as String? ?? '',
       country: json['country'] as String? ?? '',
-      status: ApplicationStatusX.fromString(json['status'] as String? ?? 'draft'),
-      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? '') ?? DateTime.now(),
+      status: ApplicationStatusX.fromString(
+        json['status'] as String? ?? 'draft',
+      ),
+      updatedAt:
+          DateTime.tryParse(json['updatedAt'] as String? ?? '') ??
+          DateTime.now(),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'] as String)
           : null,

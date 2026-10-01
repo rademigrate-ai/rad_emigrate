@@ -31,7 +31,8 @@ class PlaceholderAiService implements AiService {
       );
     }
     return AiResponse(
-      text: 'AI assistant foundation is ready.\n\n'
+      text:
+          'AI assistant foundation is ready.\n\n'
           'Your question: "$prompt"\n\n'
           'In a future release this will search the RAD Knowledge Base and '
           'authoritative immigration sources. No requirements are fabricated.',

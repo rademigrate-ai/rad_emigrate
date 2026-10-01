@@ -1,10 +1,6 @@
 /// Structured AI response with optional source attribution.
 class AiSource {
-  const AiSource({
-    required this.title,
-    this.url,
-    this.authority,
-  });
+  const AiSource({required this.title, this.url, this.authority});
 
   final String title;
   final String? url;

@@ -15,7 +15,9 @@ class DocumentLocalDataSource {
     if (raw == null || raw.isEmpty) return [];
     try {
       final list = jsonDecode(raw) as List<dynamic>;
-      return list.map((e) => Document.fromJson(e as Map<String, dynamic>)).toList();
+      return list
+          .map((e) => Document.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (_) {
       return [];
     }

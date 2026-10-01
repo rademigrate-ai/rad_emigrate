@@ -11,7 +11,8 @@ class SessionStorage {
   static const _phoneKey = 'user_phone';
   static const _fullNameKey = 'user_full_name';
 
-  Future<void> saveToken(String token) => _storage.write(key: _tokenKey, value: token);
+  Future<void> saveToken(String token) =>
+      _storage.write(key: _tokenKey, value: token);
 
   Future<String?> getToken() => _storage.read(key: _tokenKey);
 
@@ -24,7 +25,9 @@ class SessionStorage {
     await _storage.write(key: _userIdKey, value: userId);
     if (email != null) await _storage.write(key: _emailKey, value: email);
     if (phone != null) await _storage.write(key: _phoneKey, value: phone);
-    if (fullName != null) await _storage.write(key: _fullNameKey, value: fullName);
+    if (fullName != null) {
+      await _storage.write(key: _fullNameKey, value: fullName);
+    }
   }
 
   Future<Map<String, String?>> getUserMeta() async {
