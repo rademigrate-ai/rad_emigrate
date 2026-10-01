@@ -11,7 +11,9 @@ class RadEmigrateApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'RAD Emigrate',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: ThemeMode.light,
       routerConfig: appRouter,
     );
   }
