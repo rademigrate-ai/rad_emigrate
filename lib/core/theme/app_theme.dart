@@ -10,7 +10,9 @@ abstract final class AppTheme {
     final base = ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      fontFamily: 'Avenir',
+      // Use the platform system font: no bundled font asset is required, and
+      // typography remains reliable on web, Android, and iOS.
+      fontFamily: null,
       visualDensity: VisualDensity.standard,
     );
     final colorScheme = ColorScheme.light(

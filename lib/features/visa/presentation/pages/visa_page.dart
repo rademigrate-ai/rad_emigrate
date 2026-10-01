@@ -40,7 +40,7 @@ class _VisaPageState extends State<VisaPage> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: mockCountries.length + 1,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   final selected = _selectedCountryId == null;

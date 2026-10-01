@@ -77,4 +77,10 @@ No changes were made to:
 
 ## Validation
 
-The repository diff was checked with `git diff --check`. The active sandbox does **not** have `flutter` or `dart` installed (`flutter: command not found`), so `flutter analyze`, `flutter test`, and `flutter build web` could not be executed here. They should be run in a Flutter-enabled checkout before release.
+Final verification completed in the sandbox with Flutter 3.47.6 / Dart 3.13.5:
+
+- `flutter analyze` → **No issues found**.
+- `flutter test` → **21 tests passed**.
+- `flutter build web` → **Successful build**.
+
+The web build emitted a non-blocking WebAssembly dry-run compatibility notice from `flutter_secure_storage_web`; the standard web build itself completed successfully.

@@ -40,17 +40,17 @@ class SectionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(title, style: Theme.of(context).textTheme.titleMedium),
-                        if (subtitle != null)
-                          Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
+                        if (subtitle case final subtitle?)
+                          Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
                   ),
-                  if (trailing != null) trailing!,
+                  ...?(trailing == null ? null : <Widget?>[trailing].whereType<Widget>()),
                 ],
               ),
-              if (child != null) ...[
+              if (child case final child?) ...[
                 const SizedBox(height: 12),
-                child!,
+                child,
               ],
             ],
           ),

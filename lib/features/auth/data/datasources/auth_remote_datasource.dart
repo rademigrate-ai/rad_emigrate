@@ -57,7 +57,7 @@ class AuthRemoteDataSource {
       '/auth/profile/complete',
       data: {
         'fullName': fullName,
-        if (nationality != null) 'nationality': nationality,
+        ...?(nationality == null ? null : {'nationality': nationality}),
       },
     );
     return _mapSession(response.data);
