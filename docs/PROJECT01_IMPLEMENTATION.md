@@ -1,28 +1,61 @@
-# PROJECT 01 Implementation Notes
+# PROJECT 01 — Implementation Complete
 
-## RAD Platform Flutter Foundation
+## Status: COMPLETE
 
-This document tracks implementation decisions for the mobile foundation.
+PROJECT 01 foundation for the RAD Emigrate multi-platform app is finished.
 
-Completed foundation areas:
+## Completed areas
 
-- Flutter application shell
-- Feature-first structure
-- Core layer separation
-- Riverpod application bootstrap
-- Initial routing foundation
+### Core
+- Feature-first Clean Architecture
+- Riverpod DI (`lib/app/dependencies.dart`)
+- GoRouter with auth redirect + session guard
+- Responsive AppShell (NavigationRail ≥800px, NavigationBar mobile)
+- SessionStorage (secure token + user meta)
+- Material 3 theme (RAD colours)
+- Reusable widgets: LoadingView, ErrorView, EmptyView, SectionCard, AppPlaceholder
+- AiService foundation
 
-Implementation direction:
+### Authentication
+- Domain: UserSession entity, AuthRepository contract
+- Data: MockAuthRepository with secure storage persistence
+- Presentation: AuthController (AsyncValue), Login, Register, OTP, Profile Completion
+- Lifecycle: splash restore → login/register → OTP → profile completion → dashboard
+- Logout clears session and redirects
 
-- Features remain isolated under `lib/features`.
-- Shared infrastructure belongs under `lib/core`.
-- Future RAD modules should be added as independent features.
-- Business rules should remain backend-configurable.
+### Modules
+- **Dashboard**: welcome, quick actions, profile status, AI entry, news placeholder
+- **Visa**: countries, programs, program detail, mock data
+- **Applications**: list, detail, statuses (Draft / Submitted / Under Review / Approved / Rejected)
+- **Documents**: checklist, statuses (Missing / Uploaded / Under Review / Verified / Rejected)
+- **Profile**: session info, logout, immigration profile placeholders
 
-Active completion areas:
+### Quality
+- Unit tests for auth repository + session + UserSession
+- Widget smoke test for app boot
+- Documentation updated
 
-- Responsive shell
-- Authentication screens and state
-- Dashboard flows
-- Visa, application, document and profile experiences
-- Validation and release checks
+## Demo credentials
+
+| Flow | Value |
+|------|-------|
+| Login | any email + any password |
+| OTP | `123456` |
+
+## Out of scope (future projects)
+
+- Real backend / API
+- Knowledge Base + RAG
+- Admin CMS & Admin AI
+- Payments, CRM, notifications
+- Document upload / OCR
+- Full eligibility calculators
+
+## Validation commands
+
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter build web
+```

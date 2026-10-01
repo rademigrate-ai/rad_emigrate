@@ -1,52 +1,74 @@
 # RAD Emigrate
 
-Flutter immigration platform foundation for Android, iOS, and Web.
+Flutter foundation for the **International Institute of RAD** immigration platform.
+
+Targets: **Android · iOS · Web**
 
 ## Architecture
 
-The project follows feature-first clean architecture:
+Feature-first Clean Architecture + Riverpod + GoRouter.
 
 ```
 lib/
-  app/
-  core/
+  app/           # App bootstrap, DI, routes
+  core/          # Theme, routing shell, storage, network, widgets, services
   features/
+    auth/
+    splash/
+    dashboard/
+    visa/
+    applications/
+    documents/
+    profile/
 ```
 
-Feature layers:
+Each feature follows:
 
-- presentation
-- domain
-- data
-- external services
+`presentation → domain → data`
 
-## Development
+## Features (PROJECT 01)
 
-Requirements:
+| Module | Status |
+|--------|--------|
+| Authentication (login / register / OTP / profile completion / logout) | ✅ |
+| Session restore + secure storage | ✅ |
+| Router guards (public / protected) | ✅ |
+| Responsive shell (NavigationRail + NavigationBar) | ✅ |
+| Dashboard + quick actions + AI entry | ✅ |
+| Visa programs (countries, categories, details) | ✅ |
+| Applications list + detail + statuses | ✅ |
+| Documents checklist + status | ✅ |
+| Profile + logout | ✅ |
+| AI service foundation | ✅ |
+| Reusable UI (loading / error / empty / cards) | ✅ |
+| Unit tests (auth + session) | ✅ |
 
-- Flutter SDK
-- Dart SDK
-
-Commands:
+## Getting Started
 
 ```bash
 flutter pub get
 flutter analyze
 flutter test
+flutter run
 flutter build web
 ```
 
-## Features
+### Demo credentials
 
-- Authentication foundation
-- Responsive application shell
-- Dashboard
-- Visa module foundation
-- Applications module foundation
-- Documents module foundation
-- Profile module foundation
-- AI assistant integration point
+- Login: any email + any password
+- OTP: `123456`
 
-## Future Extensions
+## Documentation
 
-The architecture supports future API, knowledge base, AI assistant, CRM, and immigration workflow modules.
+- [Architecture](docs/architecture.md)
+- [Development](docs/development.md)
+- [PROJECT 01 Implementation](docs/PROJECT01_IMPLEMENTATION.md)
+
+## Next (beyond PROJECT 01)
+
+- Real backend API integration
+- Knowledge Base + RAG for User AI
+- Admin CMS + Admin AI Research Assistant
+- Payments, CRM, notifications
+- Full immigration profile forms
+- Document upload + OCR
