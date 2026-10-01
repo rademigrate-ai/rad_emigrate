@@ -73,7 +73,10 @@ class AuthRemoteDataSource {
 
   UserSession _mapSession(Map<String, dynamic>? data) {
     if (data == null) {
-      throw const ApiException(message: 'Empty auth response', code: 'empty_response');
+      throw const ApiException(
+        message: 'Empty auth response',
+        code: 'empty_response',
+      );
     }
     final user = data['user'] is Map<String, dynamic>
         ? data['user'] as Map<String, dynamic>

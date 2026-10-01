@@ -27,14 +27,18 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: AppColors.surfaceMuted,
-                borderRadius: BorderRadius.circular(20),
+            Semantics(
+              label: title,
+              image: true,
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(icon, size: 32, color: AppColors.textTertiary),
               ),
-              child: Icon(icon, size: 32, color: AppColors.textTertiary),
             ),
             const SizedBox(height: 20),
             Text(
@@ -42,22 +46,19 @@ class EmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            if (subtitle != null) ...[
+            if (subtitle case final subtitle?) ...[
               const SizedBox(height: 8),
               Text(
-                subtitle!,
+                subtitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
-            if (actionLabel != null && onAction != null) ...[
-              const SizedBox(height: 20),
-              AppButton(
-                label: actionLabel!,
-                onPressed: onAction,
-                expanded: false,
-              ),
-            ],
+            if (actionLabel case final label?)
+              if (onAction case final action?) ...[
+                const SizedBox(height: 20),
+                AppButton(label: label, onPressed: action, expanded: false),
+              ],
           ],
         ),
       ),

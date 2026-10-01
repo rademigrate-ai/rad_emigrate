@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_colors.dart';
+
 class SectionCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -21,38 +23,59 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppColors.surface,
+      elevation: 0,
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 22),
-                    const SizedBox(width: 10),
-                  ],
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(title, style: Theme.of(context).textTheme.titleMedium),
-                        if (subtitle case final subtitle?)
-                          Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-                      ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: const BorderSide(color: AppColors.borderSubtle),
+      ),
+      child: Semantics(
+        button: onTap != null,
+        child: InkWell(
+          onTap: onTap,
+          overlayColor: WidgetStatePropertyAll(
+            AppColors.navy.withValues(alpha: 0.05),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    if (icon != null) ...[
+                      Icon(icon, size: 22, color: AppColors.navy),
+                      const SizedBox(width: 12),
+                    ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          if (subtitle case final subtitle?)
+                            Text(
+                              subtitle,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  ...?(trailing == null ? null : <Widget?>[trailing].whereType<Widget>()),
+                    if (trailing case final value?) ...[
+                      const SizedBox(width: 12),
+                      value,
+                    ],
+                  ],
+                ),
+                if (child case final child?) ...[
+                  const SizedBox(height: 12),
+                  child,
                 ],
-              ),
-              if (child case final child?) ...[
-                const SizedBox(height: 12),
-                child,
               ],
-            ],
+            ),
           ),
         ),
       ),
