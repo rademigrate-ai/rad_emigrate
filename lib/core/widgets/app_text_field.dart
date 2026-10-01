@@ -15,6 +15,8 @@ class AppTextField extends StatelessWidget {
     this.maxLines = 1,
     this.enabled = true,
     this.onSubmitted,
+    this.textInputAction,
+    this.autofillHints,
   });
 
   final TextEditingController controller;
@@ -29,6 +31,8 @@ class AppTextField extends StatelessWidget {
   final int maxLines;
   final bool enabled;
   final void Function(String)? onSubmitted;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,8 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       enabled: enabled,
       onFieldSubmitted: onSubmitted,
+      textInputAction: textInputAction,
+      autofillHints: autofillHints,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,

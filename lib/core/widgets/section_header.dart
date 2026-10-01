@@ -21,31 +21,24 @@ class SectionHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: Theme.of(context).textTheme.titleMedium),
-                if (subtitle != null)
-                  Text(
-                    subtitle!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 3),
+                  Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
+                ],
               ],
             ),
           ),
           if (actionLabel != null && onAction != null)
             TextButton(
               onPressed: onAction,
-              child: Text(
-                actionLabel!,
-                style: const TextStyle(
-                  color: AppColors.primaryRed,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child: Text(actionLabel!, style: const TextStyle(color: AppColors.primaryRed, fontWeight: FontWeight.w700)),
             ),
         ],
       ),

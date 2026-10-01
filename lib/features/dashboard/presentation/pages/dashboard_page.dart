@@ -33,7 +33,7 @@ class DashboardPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Your journey'),
         actions: [
           IconButton(
             tooltip: 'AI Assistant',
@@ -43,20 +43,34 @@ class DashboardPage extends ConsumerWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
-          Text(
-            'Hello, $name',
-            style: Theme.of(context).textTheme.headlineMedium,
+          AppCard(
+            emphasized: true,
+            padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Hello, $name', style: Theme.of(context).textTheme.headlineMedium),
+                const SizedBox(height: 8),
+                Text(
+                  needsAction
+                      ? 'A few items need your attention to keep your case moving.'
+                      : 'Your case is on track. Review applications or ask the assistant.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(needsAction ? Icons.flag_outlined : Icons.check_circle_outline, size: 18, color: needsAction ? AppColors.warning : AppColors.success),
+                    const SizedBox(width: 8),
+                    Text(needsAction ? 'Next best step' : 'Everything looks good', style: Theme.of(context).textTheme.labelLarge),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            needsAction
-                ? 'A few items need your attention to keep your case moving.'
-                : 'Your case is on track. Review applications or ask the assistant.',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
           if (needsAction) ...[
             SectionHeader(
               title: 'Needs your action',

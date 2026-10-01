@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_controller.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_text_field.dart';
 
 class ProfileCompletionPage extends ConsumerStatefulWidget {
   const ProfileCompletionPage({super.key});
@@ -43,7 +46,7 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
     final loading = ref.watch(authControllerProvider).isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Complete Your Profile')),
+      appBar: AppBar(title: const Text('Your profile')),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -55,44 +58,39 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text('Tell us a bit about yourself to personalize your immigration journey.'),
+                    Text('One small step before you begin', style: Theme.of(context).textTheme.headlineMedium),
+                    const SizedBox(height: 8),
+                    Text('Tell us a little about yourself so we can make your immigration journey more personal.', style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 20),
+                    const LinearProgressIndicator(value: 0.5, minHeight: 6),
                     const SizedBox(height: 24),
-                    TextFormField(
+                    AppCard(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('About you', style: Theme.of(context).textTheme.titleMedium),
+                          const SizedBox(height: 16),
+                          AppTextField(
                       controller: _nameCtrl,
-                      decoration: const InputDecoration(
-                        labelText: 'Full Name',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.badge_outlined),
-                      ),
+                      label: 'Full name',
+                      prefixIcon: Icons.badge_outlined,
                       validator: (v) => (v == null || v.trim().length < 2) ? 'Required' : null,
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
+                          AppTextField(
                       controller: _nationalityCtrl,
-                      decoration: const InputDecoration(
-                        labelText: 'Nationality (optional)',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.public),
-                      ),
+                      label: 'Nationality (optional)',
+                      prefixIcon: Icons.public_outlined,
                     ),
                     if (_error != null) ...[
                       const SizedBox(height: 12),
-                      Text(_error!, style: const TextStyle(color: Colors.red)),
+                      Semantics(liveRegion: true, child: Text(_error!, style: const TextStyle(color: AppColors.error))),
                     ],
                     const SizedBox(height: 24),
-                    FilledButton(
-                      onPressed: loading ? null : _submit,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primaryRed,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                    AppButton(label: 'Continue', loading: loading, onPressed: _submit),
+                        ],
                       ),
-                      child: loading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                            )
-                          : const Text('Continue'),
                     ),
                   ],
                 ),

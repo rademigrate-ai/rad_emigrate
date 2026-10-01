@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
     this.variant = AppButtonVariant.primary,
     this.icon,
     this.expanded = true,
+    this.tooltip,
   });
 
   final String label;
@@ -21,50 +22,52 @@ class AppButton extends StatelessWidget {
   final AppButtonVariant variant;
   final IconData? icon;
   final bool expanded;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
-    final child = loading
-        ? const SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.white,
-            ),
-          )
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 18),
-                const SizedBox(width: 8),
+    final child = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 180),
+      child: loading
+          ? const SizedBox(
+              key: ValueKey('loading'),
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+            )
+          : Row(
+              key: const ValueKey('label'),
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 18),
+                  const SizedBox(width: 8),
+                ],
+                Text(label),
               ],
-              Text(label),
-            ],
-          );
+            ),
+    );
 
     final button = switch (variant) {
       AppButtonVariant.primary => FilledButton(
           onPressed: loading ? null : onPressed,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primaryRed,
-            disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.5),
+            disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.45),
+            foregroundColor: AppColors.white,
           ),
           child: child,
         ),
       AppButtonVariant.secondary => OutlinedButton(
           onPressed: loading ? null : onPressed,
-          child: child is Row
-              ? DefaultTextStyle.merge(
-                  style: const TextStyle(color: AppColors.navy),
-                  child: IconTheme(
-                    data: const IconThemeData(color: AppColors.navy, size: 18),
-                    child: child,
-                  ),
-                )
-              : child,
+          child: DefaultTextStyle.merge(
+            style: const TextStyle(color: AppColors.navy),
+            child: IconTheme(
+              data: const IconThemeData(color: AppColors.navy, size: 18),
+              child: child,
+            ),
+          ),
         ),
       AppButtonVariant.ghost => TextButton(
           onPressed: loading ? null : onPressed,
@@ -72,7 +75,7 @@ class AppButton extends StatelessWidget {
         ),
     };
 
-    if (!expanded) return button;
-    return SizedBox(width: double.infinity, child: button);
+    final result = expanded ? SizedBox(width: double.infinity, child: button) : button;
+    return tooltip == null ? result : Tooltip(message: tooltip!, child: result);
   }
 }

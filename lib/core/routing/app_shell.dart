@@ -28,7 +28,6 @@ class AppShell extends StatelessWidget {
     final location = GoRouterState.of(context).matchedLocation;
     final selected = _selectedIndex(location);
     final wide = MediaQuery.sizeOf(context).width >= 900;
-
     return Scaffold(
       body: Row(
         children: [
@@ -38,38 +37,23 @@ class AppShell extends StatelessWidget {
               onDestinationSelected: (i) => context.go(_items[i].path),
               labelType: NavigationRailLabelType.all,
               backgroundColor: AppColors.navy,
-              minWidth: 88,
-              destinations: [
-                for (final item in _items)
-                  NavigationRailDestination(
-                    icon: Icon(item.icon),
-                    selectedIcon: Icon(item.selectedIcon),
-                    label: Text(item.label),
-                  ),
-              ],
+              minWidth: 92,
+              leading: Padding(
+                padding: const EdgeInsets.only(top: 18, bottom: 20),
+                child: Semantics(label: 'RAD Emigrate', child: const _BrandMark()),
+              ),
+              destinations: [for (final item in _items) NavigationRailDestination(icon: Icon(item.icon), selectedIcon: Icon(item.selectedIcon), label: Text(item.label))],
             ),
-          Expanded(
-            child: ColoredBox(
-              color: AppColors.background,
-              child: child,
-            ),
-          ),
+          Expanded(child: ColoredBox(color: AppColors.background, child: child)),
         ],
       ),
-      bottomNavigationBar: wide
-          ? null
-          : NavigationBar(
-              selectedIndex: selected,
-              onDestinationSelected: (i) => context.go(_items[i].path),
-              destinations: [
-                for (final item in _items)
-                  NavigationDestination(
-                    icon: Icon(item.icon),
-                    selectedIcon: Icon(item.selectedIcon),
-                    label: item.label,
-                  ),
-              ],
-            ),
+      bottomNavigationBar: wide ? null : NavigationBar(selectedIndex: selected, onDestinationSelected: (i) => context.go(_items[i].path), destinations: [for (final item in _items) NavigationDestination(icon: Icon(item.icon), selectedIcon: Icon(item.selectedIcon), label: item.label)]),
     );
   }
+}
+
+class _BrandMark extends StatelessWidget {
+  const _BrandMark();
+  @override
+  Widget build(BuildContext context) => Container(width: 40, height: 40, alignment: Alignment.center, decoration: BoxDecoration(color: AppColors.primaryRed, borderRadius: BorderRadius.circular(13)), child: const Text('R', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)));
 }
