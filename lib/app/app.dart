@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../core/theme/app_theme.dart';
+import 'routes.dart';
 
 class RadEmigrateApp extends StatelessWidget {
   const RadEmigrateApp({super.key});
@@ -10,14 +12,8 @@ class RadEmigrateApp extends StatelessWidget {
       title: 'Rad Emigrate',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Rad Emigrate',
-            style: TextStyle(fontSize: 32),
-          ),
-        ),
-      ),
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
