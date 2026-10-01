@@ -2,9 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../core/config/app_config.dart';
-import '../../../../core/network/api_client.dart';
-import '../../../../core/network/network_config.dart';
 import '../../../../core/storage/session_storage.dart';
+import '../../../../core/supabase/supabase_providers.dart';
 import '../../data/datasources/auth_local_datasource.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
@@ -22,24 +21,17 @@ final _sessionStorageProvider = Provider<SessionStorage>((ref) {
 });
 
 final _appConfigProvider = Provider<AppConfig>((ref) {
-  const envName = String.fromEnvironment('APP_ENV', defaultValue: 'development');
-  return AppConfig.fromName(envName);
-});
-
-final _apiClientProvider = Provider<ApiClient>((ref) {
-  final config = ref.watch(_appConfigProvider);
-  final network = NetworkConfig.fromAppConfig(config);
-  final storage = ref.watch(_sessionStorageProvider);
-  return ApiClient(
-    config: network,
-    tokenProvider: () => storage.getToken(),
+  const envName = String.fromEnvironment(
+    'APP_ENV',
+    defaultValue: 'development',
   );
+  return AppConfig.fromName(envName);
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final config = ref.watch(_appConfigProvider);
   return AuthRepositoryImpl(
-    remote: AuthRemoteDataSource(ref.watch(_apiClientProvider)),
+    remote: AuthRemoteDataSource(ref.watch(supabaseClientServiceProvider)),
     local: AuthLocalDataSource(ref.watch(_sessionStorageProvider)),
     allowDemoFallback: !config.isProduction,
   );
@@ -47,12 +39,12 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
-  return AuthController(ref.watch(authRepositoryProvider));
-});
+      return AuthController(ref.watch(authRepositoryProvider));
+    });
 
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
   AuthController(this._repository)
-      : super(const AsyncValue.data(UserSession()));
+    : super(const AsyncValue.data(UserSession()));
 
   final AuthRepository _repository;
 

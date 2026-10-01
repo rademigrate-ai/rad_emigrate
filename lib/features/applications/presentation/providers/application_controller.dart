@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../app/dependencies.dart';
+import '../../../../core/supabase/supabase_providers.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/datasources/application_local_datasource.dart';
 import '../../data/datasources/application_remote_datasource.dart';
@@ -19,21 +20,30 @@ final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   if (prefs == null) return _EmptyApplicationRepository();
   final config = ref.watch(appConfigProvider);
   return ApplicationRepositoryImpl(
-    remote: ApplicationRemoteDataSource(ref.watch(apiClientProvider)),
+    remote: ApplicationRemoteDataSource(
+      ref.watch(supabaseClientServiceProvider),
+    ),
     local: ApplicationLocalDataSource(prefs),
     allowOfflineFallback: !config.isProduction,
   );
 });
 
 final applicationControllerProvider =
-    StateNotifierProvider<ApplicationController, AsyncValue<List<VisaApplication>>>((ref) {
-  final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
-  return ApplicationController(ref.watch(applicationRepositoryProvider), userId);
-});
+    StateNotifierProvider<
+      ApplicationController,
+      AsyncValue<List<VisaApplication>>
+    >((ref) {
+      final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
+      return ApplicationController(
+        ref.watch(applicationRepositoryProvider),
+        userId,
+      );
+    });
 
-class ApplicationController extends StateNotifier<AsyncValue<List<VisaApplication>>> {
+class ApplicationController
+    extends StateNotifier<AsyncValue<List<VisaApplication>>> {
   ApplicationController(this._repository, this._userId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -60,8 +70,9 @@ class ApplicationController extends StateNotifier<AsyncValue<List<VisaApplicatio
       }
     }
     if (app == null) return;
-    final updated =
-        await _repository.updateApplication(app.copyWith(status: status));
+    final updated = await _repository.updateApplication(
+      app.copyWith(status: status),
+    );
     final next = current.map((a) => a.id == id ? updated : a).toList();
     state = AsyncValue.data(next);
   }
@@ -97,10 +108,12 @@ class _EmptyApplicationRepository implements ApplicationRepository {
   Future<VisaApplication?> getApplication(String id) async => null;
 
   @override
-  Future<VisaApplication> createApplication(VisaApplication application) async =>
-      application;
+  Future<VisaApplication> createApplication(
+    VisaApplication application,
+  ) async => application;
 
   @override
-  Future<VisaApplication> updateApplication(VisaApplication application) async =>
-      application;
+  Future<VisaApplication> updateApplication(
+    VisaApplication application,
+  ) async => application;
 }

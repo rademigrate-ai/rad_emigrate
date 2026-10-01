@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../app/dependencies.dart';
+import '../../../../core/supabase/supabase_providers.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/datasources/document_local_datasource.dart';
 import '../../data/datasources/document_remote_datasource.dart';
@@ -19,21 +20,26 @@ final documentRepositoryProvider = Provider<DocumentRepository>((ref) {
   if (prefs == null) return _EmptyDocumentRepository();
   final config = ref.watch(appConfigProvider);
   return DocumentRepositoryImpl(
-    remote: DocumentRemoteDataSource(ref.watch(apiClientProvider)),
+    remote: DocumentRemoteDataSource(
+      ref.watch(supabaseClientServiceProvider),
+      storage: ref.watch(supabaseStorageServiceProvider),
+    ),
     local: DocumentLocalDataSource(prefs),
     allowOfflineFallback: !config.isProduction,
   );
 });
 
 final documentControllerProvider =
-    StateNotifierProvider<DocumentController, AsyncValue<List<Document>>>((ref) {
-  final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
-  return DocumentController(ref.watch(documentRepositoryProvider), userId);
-});
+    StateNotifierProvider<DocumentController, AsyncValue<List<Document>>>((
+      ref,
+    ) {
+      final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
+      return DocumentController(ref.watch(documentRepositoryProvider), userId);
+    });
 
 class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
   DocumentController(this._repository, this._userId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 

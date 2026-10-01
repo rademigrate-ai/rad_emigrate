@@ -8,12 +8,17 @@ import '../core/services/ai/ai_service.dart';
 import '../core/session/session_manager.dart';
 import '../core/session/session_state.dart';
 import '../core/storage/session_storage.dart';
+import '../core/supabase/supabase_providers.dart';
 import '../features/auth/presentation/providers/auth_controller.dart';
+import '../features/ai_assistant/data/ai_session_repository.dart';
 
 // ── Config ──────────────────────────────────────────────────────────
 
 final appConfigProvider = Provider<AppConfig>((ref) {
-  const envName = String.fromEnvironment('APP_ENV', defaultValue: 'development');
+  const envName = String.fromEnvironment(
+    'APP_ENV',
+    defaultValue: 'development',
+  );
   return AppConfig.fromName(envName);
 });
 
@@ -36,10 +41,7 @@ final networkConfigProvider = Provider<NetworkConfig>((ref) {
 final apiClientProvider = Provider<ApiClient>((ref) {
   final config = ref.watch(networkConfigProvider);
   final storage = ref.watch(sessionStorageProvider);
-  return ApiClient(
-    config: config,
-    tokenProvider: () => storage.getToken(),
-  );
+  return ApiClient(config: config, tokenProvider: () => storage.getToken());
 });
 
 // Auth repository + controller providers live in auth_controller.dart
@@ -55,10 +57,7 @@ final sessionStateProvider = Provider<SessionState>((ref) {
   final auth = ref.watch(authControllerProvider);
   final session = auth.valueOrNull;
   if (session != null && session.isAuthenticated) {
-    return SessionState(
-      status: SessionStatus.authenticated,
-      session: session,
-    );
+    return SessionState(status: SessionStatus.authenticated, session: session);
   }
   if (auth.isLoading) {
     return SessionState.unknown;
@@ -72,9 +71,14 @@ final aiServiceProvider = Provider<AiService>((ref) {
   return PlaceholderAiService();
 });
 
+final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {
+  return AiSessionRepository(ref.watch(supabaseClientServiceProvider));
+});
+
 // ── Bootstrap ───────────────────────────────────────────────────────
 
 final appBootstrapProvider = FutureProvider<void>((ref) async {
+  await ref.read(supabaseClientServiceProvider).initialize();
   final manager = ref.read(sessionManagerProvider);
   final restored = await manager.restore();
   if (restored.isAuthenticated && restored.session != null) {

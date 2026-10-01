@@ -33,8 +33,10 @@ class AuthRepositoryImpl implements AuthRepository {
       throw Exception('Password is required');
     }
     try {
-      final session =
-          await remote.login(identifier: identifier, password: password);
+      final session = await remote.login(
+        identifier: identifier,
+        password: password,
+      );
       await local.saveSession(session);
       return session;
     } on ApiException {
@@ -72,8 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String otp,
   }) async {
     try {
-      final session =
-          await remote.verifyOtp(identifier: identifier, otp: otp);
+      final session = await remote.verifyOtp(identifier: identifier, otp: otp);
       await local.saveSession(session);
       return session;
     } on ApiException {
@@ -124,7 +125,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserSession?> restoreSession() => local.readSession();
+  Future<UserSession?> restoreSession() async {
+    try {
+      final session = await remote.restoreSession();
+      if (session != null) {
+        await local.saveSession(session);
+        return session;
+      }
+    } on ApiException {
+      if (!allowDemoFallback) rethrow;
+    }
+    return local.readSession();
+  }
 
   @override
   Future<void> logout() async {
