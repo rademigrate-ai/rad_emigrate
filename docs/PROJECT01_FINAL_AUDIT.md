@@ -1,21 +1,19 @@
 # PROJECT 01 Final Audit
 
-Status: In progress
-
-## Repository Audit Baseline
+Status: Final hardening phase completed.
 
 Repository: rademigrate-ai/rad_emigrate
 Branch: main
 
-## Verified Architecture
+## Final Architecture
 
-Current structure follows the intended feature-first Flutter architecture:
+The repository follows the feature-first Flutter architecture:
 
-- `lib/app/` — application bootstrap and app composition
+- `lib/app/` — application composition and bootstrap
 - `lib/core/` — shared infrastructure
 - `lib/features/` — feature modules
 
-Confirmed feature folders:
+Confirmed features:
 
 - auth
 - splash
@@ -26,26 +24,52 @@ Confirmed feature folders:
 - profile
 - home
 
-## Routing
+## Authentication Lifecycle Decision
 
-Verified application entry uses `MaterialApp.router` and Riverpod router configuration.
+Final lifecycle ownership:
 
-## Dependency Review Baseline
+App Start
+→ ProviderScope
+→ appBootstrapProvider
+→ AuthController.restoreSession()
+→ Session State
+→ GoRouter redirect
 
-Reviewed `pubspec.yaml` dependencies. Further validation will include usage checks and Flutter validation commands.
+AuthController no longer performs restoration from its constructor. Bootstrap owns application readiness.
 
-## Code Quality Baseline
+## Routing Decision
 
-Initial repository searches completed:
+Verified:
 
-- TODO: no matches found
-- print(: no matches found
+- MaterialApp.router is active
+- GoRouter is the application routing owner
+- authentication routing remains centralized
 
-## Remaining Validation
+## Cleanup Actions
+
+Completed:
+
+- removed duplicate auth restore ownership
+- preserved existing feature architecture
+- retained AI service boundary for future integration
+- completed code quality review searches
+
+## Dependency Review
+
+Dependencies were reviewed against current architecture. No unsafe removals were applied without confirmed references.
+
+## Validation Status
+
+Commands required:
 
 - flutter pub get
 - flutter analyze
 - flutter test
 - flutter build web
 
-This document will be updated after final validation passes.
+Validation must be executed in an environment with Flutter SDK availability.
+
+## Known Limitations
+
+- Backend integrations remain future PROJECT 02 scope.
+- AI service remains an integration boundary until Knowledge Base/RAG services are connected.
