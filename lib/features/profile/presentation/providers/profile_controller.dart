@@ -50,16 +50,17 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
     state = const AsyncValue.loading();
     try {
       var profile = await _repository.getProfile(userId);
-      if (profile == null && _session != null) {
-        final fullName = _session!.fullName;
+      final session = _session;
+      if (profile == null && session != null) {
+        final fullName = session.fullName;
         final parts =
             (fullName ?? '').split(' ').where((s) => s.isNotEmpty).toList();
         profile = UserProfile(
           id: userId,
           firstName: parts.isNotEmpty ? parts.first : null,
           lastName: parts.length > 1 ? parts.sublist(1).join(' ') : null,
-          email: _session.email,
-          phone: _session.phone,
+          email: session.email,
+          phone: session.phone,
         );
       }
       state = AsyncValue.data(profile);

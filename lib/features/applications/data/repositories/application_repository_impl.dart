@@ -7,14 +7,13 @@ import '../datasources/application_remote_datasource.dart';
 
 class ApplicationRepositoryImpl implements ApplicationRepository {
   ApplicationRepositoryImpl({
-    required ApplicationRemoteDataSource remote,
-    required ApplicationLocalDataSource local,
+    required this.remote,
+    required this.local,
     this.allowOfflineFallback = true,
-  })  : _remote = remote,
-        _local = local;
+  });
 
-  final ApplicationRemoteDataSource _remote;
-  final ApplicationLocalDataSource _local;
+  final ApplicationRemoteDataSource remote;
+  final ApplicationLocalDataSource local;
   final bool allowOfflineFallback;
 
   static final List<VisaApplication> _seed = [
@@ -53,10 +52,10 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   ];
 
   Future<List<VisaApplication>> _ensureLocal() async {
-    var items = await _local.readAll();
+    var items = await local.readAll();
     if (items.isEmpty) {
       items = List.of(_seed);
-      await _local.writeAll(items);
+      await local.writeAll(items);
     }
     return items;
   }
@@ -64,14 +63,14 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   @override
   Future<List<VisaApplication>> listApplications({String? userId}) async {
     try {
-      final remote = await _remote.list(userId: userId);
-      await _local.writeAll(remote);
-      return remote;
+      final remoteList = await remote.list(userId: userId);
+      await local.writeAll(remoteList);
+      return remoteList;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final local = await _ensureLocal();
-      if (userId == null) return local;
-      return local
+      final cached = await _ensureLocal();
+      if (userId == null) return cached;
+      return cached
           .where((a) => a.userId == userId || a.userId == null)
           .toList();
     }
@@ -80,11 +79,11 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   @override
   Future<VisaApplication?> getApplication(String id) async {
     try {
-      return await _remote.get(id);
+      return await remote.get(id);
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final local = await _ensureLocal();
-      for (final a in local) {
+      final cached = await _ensureLocal();
+      for (final a in cached) {
         if (a.id == id) return a;
       }
       return null;
@@ -94,21 +93,21 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   @override
   Future<VisaApplication> createApplication(VisaApplication application) async {
     try {
-      final created = await _remote.create(application);
-      final local = await _local.readAll();
-      local.add(created);
-      await _local.writeAll(local);
+      final created = await remote.create(application);
+      final cached = await local.readAll();
+      cached.add(created);
+      await local.writeAll(cached);
       return created;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final local = await _ensureLocal();
+      final cached = await _ensureLocal();
       final created = application.copyWith(
         id: 'app-${DateTime.now().millisecondsSinceEpoch}',
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
       );
-      local.add(created);
-      await _local.writeAll(local);
+      cached.add(created);
+      await local.writeAll(cached);
       return created;
     }
   }
@@ -116,27 +115,27 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   @override
   Future<VisaApplication> updateApplication(VisaApplication application) async {
     try {
-      final updated = await _remote.update(application);
-      final local = await _local.readAll();
-      final idx = local.indexWhere((a) => a.id == updated.id);
+      final updated = await remote.update(application);
+      final cached = await local.readAll();
+      final idx = cached.indexWhere((a) => a.id == updated.id);
       if (idx >= 0) {
-        local[idx] = updated;
+        cached[idx] = updated;
       } else {
-        local.add(updated);
+        cached.add(updated);
       }
-      await _local.writeAll(local);
+      await local.writeAll(cached);
       return updated;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final local = await _ensureLocal();
+      final cached = await _ensureLocal();
       final updated = application.copyWith(updatedAt: DateTime.now());
-      final idx = local.indexWhere((a) => a.id == updated.id);
+      final idx = cached.indexWhere((a) => a.id == updated.id);
       if (idx >= 0) {
-        local[idx] = updated;
+        cached[idx] = updated;
       } else {
-        local.add(updated);
+        cached.add(updated);
       }
-      await _local.writeAll(local);
+      await local.writeAll(cached);
       return updated;
     }
   }

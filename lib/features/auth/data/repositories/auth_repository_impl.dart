@@ -1,8 +1,8 @@
+import '../../../../core/network/api_exception.dart';
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_datasource.dart';
 import '../datasources/auth_remote_datasource.dart';
-import '../../../../core/network/api_exception.dart';
 
 /// Production auth repository coordinating remote + local datasources.
 ///
@@ -10,14 +10,13 @@ import '../../../../core/network/api_exception.dart';
 /// session is used so the app remains usable without a live backend.
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
-    required AuthRemoteDataSource remote,
-    required AuthLocalDataSource local,
+    required this.remote,
+    required this.local,
     this.allowDemoFallback = true,
-  })  : _remote = remote,
-        _local = local;
+  });
 
-  final AuthRemoteDataSource _remote;
-  final AuthLocalDataSource _local;
+  final AuthRemoteDataSource remote;
+  final AuthLocalDataSource local;
 
   /// When true, network failures fall back to offline demo auth.
   final bool allowDemoFallback;
@@ -34,8 +33,9 @@ class AuthRepositoryImpl implements AuthRepository {
       throw Exception('Password is required');
     }
     try {
-      final session = await _remote.login(identifier: identifier, password: password);
-      await _local.saveSession(session);
+      final session =
+          await remote.login(identifier: identifier, password: password);
+      await local.saveSession(session);
       return session;
     } on ApiException {
       if (!allowDemoFallback) rethrow;
@@ -50,8 +50,11 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final session = await _remote.register(email: email, phone: phone, password: password);
-      return session;
+      return await remote.register(
+        email: email,
+        phone: phone,
+        password: password,
+      );
     } on ApiException {
       if (!allowDemoFallback) rethrow;
       return UserSession(
@@ -69,8 +72,9 @@ class AuthRepositoryImpl implements AuthRepository {
     required String otp,
   }) async {
     try {
-      final session = await _remote.verifyOtp(identifier: identifier, otp: otp);
-      await _local.saveSession(session);
+      final session =
+          await remote.verifyOtp(identifier: identifier, otp: otp);
+      await local.saveSession(session);
       return session;
     } on ApiException {
       if (!allowDemoFallback) rethrow;
@@ -85,7 +89,7 @@ class AuthRepositoryImpl implements AuthRepository {
         authenticated: true,
         profileComplete: false,
       );
-      await _local.saveSession(session);
+      await local.saveSession(session);
       return session;
     }
   }
@@ -96,15 +100,15 @@ class AuthRepositoryImpl implements AuthRepository {
     String? nationality,
   }) async {
     try {
-      final session = await _remote.completeProfile(
+      final session = await remote.completeProfile(
         fullName: fullName,
         nationality: nationality,
       );
-      await _local.saveSession(session);
+      await local.saveSession(session);
       return session;
     } on ApiException {
       if (!allowDemoFallback) rethrow;
-      final existing = await _local.readSession();
+      final existing = await local.readSession();
       final session = UserSession(
         token: existing?.token ?? _demoToken,
         userId: existing?.userId ?? 'user-demo-001',
@@ -114,20 +118,20 @@ class AuthRepositoryImpl implements AuthRepository {
         authenticated: true,
         profileComplete: true,
       );
-      await _local.saveSession(session);
+      await local.saveSession(session);
       return session;
     }
   }
 
   @override
-  Future<UserSession?> restoreSession() => _local.readSession();
+  Future<UserSession?> restoreSession() => local.readSession();
 
   @override
   Future<void> logout() async {
     try {
-      await _remote.logout();
+      await remote.logout();
     } finally {
-      await _local.clear();
+      await local.clear();
     }
   }
 
@@ -141,7 +145,7 @@ class AuthRepositoryImpl implements AuthRepository {
       authenticated: true,
       profileComplete: true,
     );
-    await _local.saveSession(session);
+    await local.saveSession(session);
     return session;
   }
 }

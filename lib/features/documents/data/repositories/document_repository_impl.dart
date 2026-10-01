@@ -7,17 +7,16 @@ import '../datasources/document_remote_datasource.dart';
 
 class DocumentRepositoryImpl implements DocumentRepository {
   DocumentRepositoryImpl({
-    required DocumentRemoteDataSource remote,
-    required DocumentLocalDataSource local,
+    required this.remote,
+    required this.local,
     this.allowOfflineFallback = true,
-  })  : _remote = remote,
-        _local = local;
+  });
 
-  final DocumentRemoteDataSource _remote;
-  final DocumentLocalDataSource _local;
+  final DocumentRemoteDataSource remote;
+  final DocumentLocalDataSource local;
   final bool allowOfflineFallback;
 
-  static final _seed = [
+  static final List<Document> _seed = [
     Document(
       id: 'doc-1',
       typeId: 'passport',
@@ -64,10 +63,10 @@ class DocumentRepositoryImpl implements DocumentRepository {
   ];
 
   Future<List<Document>> _ensureLocal() async {
-    var items = await _local.readAll();
+    var items = await local.readAll();
     if (items.isEmpty) {
       items = List.of(_seed);
-      await _local.writeAll(items);
+      await local.writeAll(items);
     }
     return items;
   }
@@ -75,9 +74,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
   @override
   Future<List<Document>> listDocuments({String? userId}) async {
     try {
-      final remote = await _remote.list(userId: userId);
-      await _local.writeAll(remote);
-      return remote;
+      final remoteList = await remote.list(userId: userId);
+      await local.writeAll(remoteList);
+      return remoteList;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
       return _ensureLocal();
@@ -87,37 +86,36 @@ class DocumentRepositoryImpl implements DocumentRepository {
   @override
   Future<Document?> getDocument(String id) async {
     final all = await listDocuments();
-    try {
-      return all.firstWhere((d) => d.id == id);
-    } catch (_) {
-      return null;
+    for (final d in all) {
+      if (d.id == id) return d;
     }
+    return null;
   }
 
   @override
   Future<Document> upsertDocument(Document document) async {
     try {
-      final saved = await _remote.upsert(document);
-      final local = await _local.readAll();
-      final idx = local.indexWhere((d) => d.id == saved.id);
+      final saved = await remote.upsert(document);
+      final cached = await local.readAll();
+      final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
-        local[idx] = saved;
+        cached[idx] = saved;
       } else {
-        local.add(saved);
+        cached.add(saved);
       }
-      await _local.writeAll(local);
+      await local.writeAll(cached);
       return saved;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final local = await _ensureLocal();
+      final cached = await _ensureLocal();
       final saved = document.copyWith(updatedAt: DateTime.now());
-      final idx = local.indexWhere((d) => d.id == saved.id);
+      final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
-        local[idx] = saved;
+        cached[idx] = saved;
       } else {
-        local.add(saved);
+        cached.add(saved);
       }
-      await _local.writeAll(local);
+      await local.writeAll(cached);
       return saved;
     }
   }
