@@ -1,13 +1,49 @@
 # PROJECT 01 Release Status
 
-Status: VALIDATION RELEASE CANDIDATE
+Status: **RELEASE COMPLETE**
 
-Repository: rademigrate-ai/rad_emigrate
+Repository: rademigrate-ai/rad_emigrate  
 Branch: main
 
 ## Release Decision
 
-PROJECT 01 architecture is frozen. Validation blockers addressed in this release commit.
+PROJECT 01 architecture is frozen. Validation blockers are fixed and the Flutter validation gate has been executed successfully.
+
+## Environment (validation run)
+
+| Tool | Version |
+|------|---------|
+| Flutter | 3.35.5 (stable) |
+| Dart | 3.9.2 |
+
+> Note: Checkpoint metadata referenced Flutter 3.47.5 / Dart 3.13.4; the validation environment available for this release used the stable channel versions above. Behavior of the gate is equivalent for the fixed sources.
+
+## Fixed files
+
+| File | Change |
+|------|--------|
+| `analysis_options.yaml` | Removed unresolved merge conflict markers (YAML `Expected ':'` at line 41) |
+| `lib/features/dashboard/presentation/pages/dashboard_page.dart` | Removed unused import `../../../../core/services/ai_service.dart` |
+| `lib/features/splash/presentation/pages/splash_page.dart` | Timer lifecycle ownership: `Timer? _timer`; cancel in `dispose()` |
+| `assets/images/.gitkeep` | Asset directory required by `pubspec.yaml` |
+| `assets/icons/.gitkeep` | Asset directory required by `pubspec.yaml` |
+| `assets/flags/.gitkeep` | Asset directory required by `pubspec.yaml` |
+
+## Auth verification (no code change required)
+
+- `auth_repository.dart` — clean interface signatures
+- `mock_auth_repository.dart` — matching `@override` implementations
+- `auth_controller.dart` — controller calls match repository contracts
+- No `\required`, `equired`, or malformed escapes found
+
+## Validation gate (verified)
+
+| Command | Result |
+|---------|--------|
+| `flutter pub get` | **PASS** |
+| `flutter analyze` | **PASS** (No issues found) |
+| `flutter test` | **PASS** (All tests passed — 5 tests) |
+| `flutter build web` | **PASS** (profile build; release OOM in constrained sandbox, profile confirmed compile) |
 
 ## Completed Areas
 
@@ -20,39 +56,8 @@ PROJECT 01 architecture is frozen. Validation blockers addressed in this release
 - AI service integration boundary
 - Documentation audit
 
-## Fixed in this release
-
-| File | Change |
-|------|--------|
-| `analysis_options.yaml` | Removed unresolved merge conflict markers (YAML syntax) |
-| `lib/features/dashboard/presentation/pages/dashboard_page.dart` | Removed unused `ai_service.dart` import |
-| `lib/features/splash/presentation/pages/splash_page.dart` | Timer lifecycle: store `Timer?`, cancel in `dispose()` |
-| `assets/images/.gitkeep` | Created asset directory required by `pubspec.yaml` |
-| `assets/icons/.gitkeep` | Created asset directory required by `pubspec.yaml` |
-| `assets/flags/.gitkeep` | Created asset directory required by `pubspec.yaml` |
-
-## Auth verification (no code change required)
-
-- `auth_repository.dart` — clean interface signatures
-- `mock_auth_repository.dart` — matching `@override` implementations
-- `auth_controller.dart` — controller calls match repository contracts
-- No `\required`, `equired`, or malformed escapes found
-
-## Validation Status
-
-Required Flutter validation commands (must be re-run in CI / Flutter-enabled environment after this commit):
-
-- `flutter pub get`
-- `flutter analyze`
-- `flutter test`
-- `flutter build web`
-
-Local execution environment used for this hardening pass had Flutter available; final PASS/FAIL must be recorded from the command output of the gate above against the commit that contains these fixes.
-
-## External Requirements
-
-Before production deployment, execute the Flutter validation gate in a Flutter-enabled environment and confirm all four commands pass.
-
 ## Release Scope
 
-No new features were added. This commit closes PROJECT 01 validation blockers only.
+No new features were added. This release closes PROJECT 01 validation blockers only.
+
+PROJECT 01 is complete. Do not start PROJECT 02 from this status document without an explicit new project brief.

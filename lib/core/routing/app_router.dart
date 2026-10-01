@@ -17,7 +17,7 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 
 class AuthRefreshNotifier extends ChangeNotifier {
   AuthRefreshNotifier(Ref ref) {
-    ref.listen(authControllerProvider, (_, __) => notifyListeners());
+    ref.listen(authControllerProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -41,22 +41,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: '/splash', builder: (_, __) => const SplashPage()),
-      GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
-      GoRoute(path: '/register', builder: (_, __) => const RegisterPage()),
+      GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
+      GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
+      GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(path: '/otp', builder: (_, state) => OtpPage(identifier: state.uri.queryParameters['identifier'])),
-      GoRoute(path: '/profile-completion', builder: (_, __) => const ProfileCompletionPage()),
+      GoRoute(path: '/profile-completion', builder: (_, _) => const ProfileCompletionPage()),
       ShellRoute(
-        builder: (_, __, child) => AppShell(child: child),
+        builder: (_, _, child) => AppShell(child: child),
         routes: [
-          GoRoute(path: '/dashboard', builder: (_, __) => const DashboardPage()),
-          GoRoute(path: '/visa', builder: (_, __) => const VisaPage()),
-          GoRoute(path: '/applications', builder: (_, __) => const ApplicationsPage()),
-          GoRoute(path: '/documents', builder: (_, __) => const DocumentsPage()),
-          GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),
+          GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
+          GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
+          GoRoute(path: '/applications', builder: (_, _) => const ApplicationsPage()),
+          GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
+          GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
         ],
       ),
     ],
-    errorBuilder: (_, __) => const AppPlaceholder(title: 'Page not found'),
+    errorBuilder: (_, _) => const AppPlaceholder(title: 'Page not found'),
   );
 });
