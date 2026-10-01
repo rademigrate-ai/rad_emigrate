@@ -11,7 +11,7 @@ class MockAuthRepository implements AuthRepository {
   static const _demoOtp = '123456';
 
   @override
-  Future<UserSession> login({equired String identifier, required String password}) async {
+  Future<UserSession> login({required String identifier, required String password}) async {
     await Future<void>.delayed(const Duration(milliseconds: 600));
     if (password.isEmpty) {
       throw Exception('Password is required');
@@ -36,9 +36,8 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<UserSession> register({equired String email, required String phone, required String password}) async {
+  Future<UserSession> register({required String email, required String phone, required String password}) async {
     await Future<void>.delayed(const Duration(milliseconds: 600));
-    // Registration returns unauthenticated session; OTP required next.
     return UserSession(
       email: email,
       phone: phone,
