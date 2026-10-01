@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_colors.dart';
 
+/// Legacy landing page kept for reference. Primary entry is Splash → Auth → Dashboard.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -41,7 +43,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => context.go('/login'),
                 child: const Text('Get Started'),
               ),
             ],
