@@ -14,9 +14,8 @@ final authControllerProvider =
 });
 
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
-  AuthController(this._repository) : super(const AsyncValue.data(UserSession())) {
-    restoreSession();
-  }
+  AuthController(this._repository)
+      : super(const AsyncValue.data(UserSession()));
 
   final AuthRepository _repository;
 
