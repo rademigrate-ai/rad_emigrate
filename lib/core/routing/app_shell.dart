@@ -58,27 +58,36 @@ class AppShell extends StatelessWidget {
       body: Row(
         children: [
           if (wide)
-            NavigationRail(
-              selectedIndex: selected,
-              onDestinationSelected: (i) => context.go(_items[i].path),
-              labelType: NavigationRailLabelType.all,
-              backgroundColor: AppColors.navy,
-              minWidth: 92,
-              leading: Padding(
-                padding: const EdgeInsets.only(top: 18, bottom: 20),
-                child: const RadBrand(
-                  size: RadBrandSize.small,
-                  showInstituteName: false,
+            Container(
+              decoration: const BoxDecoration(
+                color: AppColors.navy,
+                border: Border(
+                  right: BorderSide(color: Color(0x22314057)),
                 ),
               ),
-              destinations: [
-                for (final item in _items)
-                  NavigationRailDestination(
-                    icon: Icon(item.icon),
-                    selectedIcon: Icon(item.selectedIcon),
-                    label: Text(item.label),
+              child: NavigationRail(
+                selectedIndex: selected,
+                onDestinationSelected: (i) => context.go(_items[i].path),
+                labelType: NavigationRailLabelType.all,
+                backgroundColor: Colors.transparent,
+                groupAlignment: -0.55,
+                minWidth: 104,
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 18, bottom: 28),
+                  child: const RadBrand(
+                    size: RadBrandSize.small,
+                    showInstituteName: false,
                   ),
-              ],
+                ),
+                destinations: [
+                  for (final item in _items)
+                    NavigationRailDestination(
+                      icon: Icon(item.icon),
+                      selectedIcon: Icon(item.selectedIcon),
+                      label: Text(item.label),
+                    ),
+                ],
+              ),
             ),
           Expanded(
             child: ColoredBox(color: AppColors.background, child: child),

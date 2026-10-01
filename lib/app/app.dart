@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'dependencies.dart';
 import '../core/routing/app_router.dart';
 import '../core/theme/app_theme.dart';
 
@@ -8,6 +10,7 @@ class RadEmigrateApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(appBootstrapProvider);
     return MaterialApp.router(
       title: 'RAD Emigrate',
       debugShowCheckedModeBanner: false,

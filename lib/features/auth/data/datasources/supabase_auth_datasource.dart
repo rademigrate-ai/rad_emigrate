@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../domain/entities/user_session.dart';
+import '../../domain/entities/user_session.dart';
 
 class SupabaseAuthDataSource {
   SupabaseAuthDataSource(this._client);
@@ -25,10 +25,7 @@ class SupabaseAuthDataSource {
     required String password,
   }) async {
     final client = _requireClient();
-    final response = await client.auth.signUp(
-      email: email,
-      password: password,
-    );
+    final response = await client.auth.signUp(email: email, password: password);
 
     return _mapSession(response.session, response.user);
   }

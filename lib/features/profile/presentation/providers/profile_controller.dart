@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../app/dependencies.dart';
+import '../../../../core/supabase/supabase_providers.dart';
 import '../../../auth/domain/entities/user_session.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/datasources/profile_local_datasource.dart';
@@ -21,7 +22,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   }
   final config = ref.watch(appConfigProvider);
   return ProfileRepositoryImpl(
-    remote: ProfileRemoteDataSource(ref.watch(apiClientProvider)),
+    remote: ProfileRemoteDataSource(ref.watch(supabaseClientServiceProvider)),
     local: ProfileLocalDataSource(prefs),
     allowOfflineFallback: !config.isProduction,
   );
@@ -29,16 +30,13 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 
 final profileControllerProvider =
     StateNotifierProvider<ProfileController, AsyncValue<UserProfile?>>((ref) {
-  final session = ref.watch(authControllerProvider).valueOrNull;
-  return ProfileController(
-    ref.watch(profileRepositoryProvider),
-    session,
-  );
-});
+      final session = ref.watch(authControllerProvider).valueOrNull;
+      return ProfileController(ref.watch(profileRepositoryProvider), session);
+    });
 
 class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
   ProfileController(this._repository, this._session)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -53,8 +51,10 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
       final session = _session;
       if (profile == null && session != null) {
         final fullName = session.fullName;
-        final parts =
-            (fullName ?? '').split(' ').where((s) => s.isNotEmpty).toList();
+        final parts = (fullName ?? '')
+            .split(' ')
+            .where((s) => s.isNotEmpty)
+            .toList();
         profile = UserProfile(
           id: userId,
           firstName: parts.isNotEmpty ? parts.first : null,
@@ -70,12 +70,13 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
   }
 
   Future<void> save(UserProfile profile) async {
-    state = const AsyncValue.loading();
+    final previous = state;
+    state = const AsyncValue<UserProfile?>.loading().copyWithPrevious(previous);
     try {
       final saved = await _repository.updateProfile(profile);
       state = AsyncValue.data(saved);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncValue<UserProfile?>.error(e, st).copyWithPrevious(previous);
       rethrow;
     }
   }
