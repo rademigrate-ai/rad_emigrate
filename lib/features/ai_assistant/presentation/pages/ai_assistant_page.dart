@@ -5,6 +5,7 @@ import '../../../../app/dependencies.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
+import '../../../../core/widgets/app_card.dart';
 
 class _ChatMessage {
   _ChatMessage({required this.isUser, required this.text, this.sources});
@@ -14,7 +15,6 @@ class _ChatMessage {
   final List<AiSource>? sources;
 }
 
-/// Full-screen AI assistant UI. Uses [AiService] abstraction only.
 class AiAssistantPage extends ConsumerStatefulWidget {
   const AiAssistantPage({super.key});
 
@@ -30,6 +30,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   static const _freeLimit = 5;
   var _used = 0;
 
+  static const _suggestions = [
+    'What documents are typically needed for a study permit?',
+    'How long can a visa process take?',
+    'What is a GTE statement?',
+  ];
+
   @override
   void dispose() {
     _controller.dispose();
@@ -37,14 +43,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     super.dispose();
   }
 
-  Future<void> _send() async {
-    final text = _controller.text.trim();
+  Future<void> _send([String? preset]) async {
+    final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
     if (_used >= _freeLimit) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Free AI questions used for this session. Limit is configurable for production.',
+            'Free AI questions used for this session. Limits are configurable for production.',
           ),
         ),
       );
@@ -80,7 +86,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       if (!mounted) return;
       setState(() {
         _messages.add(
-          _ChatMessage(isUser: false, text: 'Something went wrong: $e'),
+          _ChatMessage(isUser: false, text: 'Something went wrong. Please try again.'),
         );
         _loading = false;
       });
@@ -92,7 +98,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       if (_scroll.hasClients) {
         _scroll.animateTo(
           _scroll.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 220),
           curve: Curves.easeOut,
         );
       }
@@ -102,15 +108,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('AI Assistant'),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                '$_used / $_freeLimit',
-                style: const TextStyle(fontSize: 13),
+                '$_used / $_freeLimit free',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ),
@@ -119,28 +126,41 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       body: Column(
         children: [
           Material(
-            color: Colors.orange.shade50,
-            child: const Padding(
-              padding: EdgeInsets.all(12),
+            color: AppColors.surfaceMuted,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
-                'Responses are placeholders until the RAD Knowledge Base is connected. '
-                'No immigration requirements are fabricated as confirmed facts.',
-                style: TextStyle(fontSize: 12, color: Colors.black87),
+                'Answers are placeholders until the RAD Knowledge Base is connected. '
+                'Nothing here is an official immigration decision.',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ),
           Expanded(
             child: _messages.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        'Ask about visas, documents, or process.\n'
-                        'Example: "What documents are typically needed for a study permit?"',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey[600]),
+                ? ListView(
+                    padding: const EdgeInsets.all(20),
+                    children: [
+                      Text(
+                        'How can we help?',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Ask about visas, documents, or process. Try a suggestion:',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      ..._suggestions.map(
+                        (s) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: AppCard(
+                            onTap: () => _send(s),
+                            child: Text(s),
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 : ListView.builder(
                     controller: _scroll,
@@ -152,40 +172,50 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                           padding: EdgeInsets.all(8),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                            child: SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
                           ),
                         );
                       }
                       final m = _messages[index];
                       return Align(
-                        alignment:
-                            m.isUser ? Alignment.centerRight : Alignment.centerLeft,
+                        alignment: m.isUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(14),
                           constraints: BoxConstraints(
                             maxWidth: MediaQuery.sizeOf(context).width * 0.85,
                           ),
                           decoration: BoxDecoration(
                             color: m.isUser
-                                ? AppColors.primaryRed.withValues(alpha: 0.12)
-                                : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(12),
+                                ? AppColors.primaryRed.withValues(alpha: 0.1)
+                                : AppColors.surface,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: m.isUser
+                                  ? AppColors.primaryRed.withValues(alpha: 0.2)
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(m.text),
+                              Text(
+                                m.text,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                               if (m.sources != null && m.sources!.isNotEmpty) ...[
                                 const SizedBox(height: 8),
                                 ...m.sources!.map(
                                   (s) => Text(
                                     'Source: ${s.title}'
                                     '${s.authority != null ? ' (${s.authority})' : ''}',
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey,
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ),
                               ],
@@ -206,20 +236,20 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       controller: _controller,
                       minLines: 1,
                       maxLines: 4,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _send(),
                       decoration: const InputDecoration(
                         hintText: 'Ask a question…',
-                        border: OutlineInputBorder(),
-                        isDense: true,
                       ),
-                      onSubmitted: (_) => _send(),
                     ),
                   ),
                   const SizedBox(width: 8),
                   IconButton.filled(
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.primaryRed,
+                      minimumSize: const Size(48, 48),
                     ),
-                    onPressed: _loading ? null : _send,
+                    onPressed: _loading ? null : () => _send(),
                     icon: const Icon(Icons.send, color: Colors.white),
                   ),
                 ],
