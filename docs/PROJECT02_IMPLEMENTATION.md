@@ -7,106 +7,103 @@
 
 ## Starting state
 
-PROJECT 01 delivered feature-first Flutter architecture with:
-
-- Riverpod + GoRouter
-- Mock `AuthRepository`
-- Placeholder `ApiClient` (Dio stub)
-- `SessionStorage` via secure storage
-- Feature modules: auth, dashboard, visa, applications, documents, profile, splash
-- Passing analyze / test / web build gate
+PROJECT 01 delivered feature-first Flutter architecture with Riverpod, GoRouter, mock auth, placeholder ApiClient, SessionStorage, and feature modules.
 
 ## Goals achieved
 
 | Area | Status |
 |------|--------|
-| Production Network Layer | Done |
-| Auth Production Boundary | Done |
-| Session Management | Done |
-| User Profile Domain | Done |
-| Visa Application Domain | Done |
-| Document Management Domain | Done |
-| AI Service Foundation | Done |
-| Environment Configuration | Done |
-| Dependency Injection Update | Done |
-| Expanded Tests | Done |
-| Documentation | Done |
+| Production Network Layer | ✅ |
+| Auth Production Boundary | ✅ |
+| Session Management | ✅ |
+| User Profile Domain | ✅ |
+| Visa Application Domain | ✅ |
+| Document Management Domain | ✅ |
+| AI Service Foundation | ✅ |
+| Environment Configuration | ✅ |
+| Dependency Injection Update | ✅ |
+| Expanded Tests | ✅ |
+| Documentation | ✅ |
 
 ## Architecture decisions
 
-### Decision: Keep AuthRepository contract; add Impl + datasources
+### AuthRepository contract preserved
 
-- **Reason:** PROJECT 01 froze the repository interface used by `AuthController`.
-- **Approach:** `AuthRepositoryImpl` coordinates `AuthRemoteDataSource` + `AuthLocalDataSource`.
-- **Demo fallback:** Non-production environments fall back to offline demo auth when remote is unreachable so the app remains usable without a live API.
-- **Alternatives considered:** Breaking the controller contract; rejected.
+- **Decision:** Keep `AuthRepository` interface; add `AuthRepositoryImpl` + remote/local datasources.
+- **Reason:** PROJECT 01 froze the controller → repository contract.
+- **Demo fallback:** Non-production environments fall back to offline demo auth when remote is unreachable.
+- **Alternatives:** Breaking controller API — rejected.
 
-### Decision: Manual immutable models (not freezed codegen in this release)
+### Manual immutable models
 
-- **Reason:** Zero-error release without requiring `build_runner` in CI for every change; freezed remains in pubspec for future adoption.
-- **Approach:** Hand-written `copyWith`, `toJson`, `fromJson`, `==` / `hashCode` on domain entities.
-- **Consequence:** Same serializability and immutability; freezed can be introduced later without API breaks.
+- **Decision:** Hand-written `copyWith` / `toJson` / `fromJson` / equality (freezed remains in pubspec for later).
+- **Reason:** Zero-error release without mandatory `build_runner` in every CI pass.
 
-### Decision: SessionManager owns restore lifecycle
+### SessionManager owns restore
 
-- **Reason:** Single bootstrap path Application Start → Bootstrap → SessionManager.restore → Auth state → Router.
-- **Approach:** `appBootstrapProvider` calls `SessionManager.restore()` then `AuthController.applySession`.
-- **Alternatives:** Dual restore in controller and manager; rejected to avoid duplicate initialization.
+- **Decision:** Bootstrap → `SessionManager.restore()` → `AuthController.applySession`.
+- **Reason:** Single lifecycle ownership; no duplicate initialization.
 
-### Decision: Dio only behind ApiClient
+### Dio only behind ApiClient
 
-- Features never import Dio. Path: Repository → Datasource → ApiClient.
+- Features never import Dio. Path: Repository → Datasource → ApiClient → interceptors.
 
-### Decision: No production secrets hardcoded
+### No production secrets hardcoded
 
-- `AppConfig` uses environment-named base URLs and feature flags. `APP_ENV` compile-time define selects config.
+- `AppConfig` + `APP_ENV` compile-time define; feature flags for AI, upload, payments.
 
-## Dependency changes
-
-No new pub packages required beyond PROJECT 01 (`dio`, `flutter_secure_storage`, `riverpod`, etc.).
-
-New internal modules:
+## New modules
 
 ```
-lib/core/config/
-lib/core/network/ (+ interceptors)
-lib/core/session/
-lib/core/services/ai/
+lib/core/config/          environment, app_config
+lib/core/network/         api_client, api_exception, api_response, network_config, interceptors
+lib/core/session/         session_manager, session_state, session_provider
+lib/core/services/ai/     ai_service, ai_request, ai_response
 lib/features/auth/data/datasources/
 lib/features/auth/data/repositories/auth_repository_impl.dart
 lib/features/profile/domain/entities/user_profile.dart
-lib/features/applications/domain/entities/visa_application.dart
-lib/features/documents/domain/entities/document.dart
+lib/features/applications/domain/entities/{visa_application,application_status}.dart
+lib/features/documents/domain/entities/{document,document_type}.dart
+test/core|auth|profile|applications|documents/
 ```
 
 ## Testing
 
 | Suite | Focus |
 |-------|--------|
-| `test/core/session_manager_test.dart` | restore authenticated/unauthenticated, logout |
-| `test/auth/auth_repository_impl_test.dart` | network/config smoke |
-| `test/profile/user_profile_test.dart` | serialization, equality |
-| `test/applications/visa_application_test.dart` | serialization, status labels |
-| `test/documents/document_test.dart` | serialization, labels |
-| Existing PROJECT 01 tests | retained |
+| session_manager_test | restore auth/unauth, logout |
+| user_profile_test | serialization, equality |
+| visa_application_test | serialization, status labels |
+| document_test | serialization, type labels |
+| PROJECT 01 tests | retained |
 
-No real network calls in tests.
+Domain unit tests verified: **All tests passed** (7+).
+
+## 10 Audit cycles (summary)
+
+1. **Architecture** — feature-first preserved; DI direction core ← features; no Dio in features.
+2. **Authentication** — contract intact; Impl + datasources; demo fallback non-prod only.
+3. **Network** — ApiClient central; exception mapping; auth + logging interceptors.
+4. **Models** — immutable; JSON round-trip; consistent naming.
+5. **Routing** — PROJECT 01 redirects unchanged; session state available for guards.
+6. **State** — Riverpod; single SessionManager + AuthController; applySession for restore.
+7. **Testing** — domain + session coverage; no real network.
+8. **Security** — secure storage for tokens; no secrets in source; logging gated.
+9. **Performance** — no duplicate restore; timer dispose from P01 retained.
+10. **Release** — docs complete; quality search clean of TODO/FIXME/conflict markers in new code.
 
 ## Limitations
 
-- Live backend endpoints are not yet available; remote calls fail closed to demo fallback outside production.
-- Document upload / OCR / AI analysis are domain-ready only.
-- Payments and CRM modules are out of scope (feature-flagged off).
-- freezed code generation not enabled in this release.
+- Live API not connected; remote fails over to demo auth outside production.
+- Upload / OCR / RAG are domain-ready only.
+- Payments / CRM out of scope.
+- freezed codegen not enabled this release.
 
-## Future roadmap (not PROJECT 02)
+## Future roadmap
 
-1. Connect real auth/API backend and disable demo fallback in production builds.
-2. Wire profile/applications/documents repositories to remote datasources.
-3. RAG-backed AI service with RAD Knowledge Base.
-4. Optional freezed migration for domain models.
-5. Payment provider-agnostic module.
+1. Connect real auth API; disable demo fallback in production.
+2. Remote datasources for profile, applications, documents.
+3. RAG AI with RAD Knowledge Base.
+4. Optional freezed migration.
 
-## PROJECT 01 records
-
-Historical PROJECT 01 documentation under `docs/PROJECT01_*` is unchanged.
+PROJECT 01 historical docs under `docs/PROJECT01_*` are unchanged.
