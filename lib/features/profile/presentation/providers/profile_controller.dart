@@ -70,12 +70,13 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
   }
 
   Future<void> save(UserProfile profile) async {
-    state = const AsyncValue.loading();
+    final previous = state;
+    state = const AsyncValue<UserProfile?>.loading().copyWithPrevious(previous);
     try {
       final saved = await _repository.updateProfile(profile);
       state = AsyncValue.data(saved);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncValue<UserProfile?>.error(e, st).copyWithPrevious(previous);
       rethrow;
     }
   }

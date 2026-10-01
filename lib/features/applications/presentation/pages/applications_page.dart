@@ -21,6 +21,8 @@ class ApplicationsPage extends ConsumerStatefulWidget {
 
 class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
   VisaApplication? _selected;
+  var _creatingDraft = false;
+  var _updatingStatus = false;
 
   StatusTone _tone(ApplicationStatus s) {
     switch (s) {
@@ -40,14 +42,14 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
   }
 
   List<ProgressStep> _timeline(ApplicationStatus status) {
-    final order = [
+    const order = [
       ApplicationStatus.draft,
       ApplicationStatus.submitted,
       ApplicationStatus.reviewing,
       ApplicationStatus.approved,
       ApplicationStatus.completed,
     ];
-    final labels = {
+    const labels = {
       ApplicationStatus.draft: 'Draft',
       ApplicationStatus.submitted: 'Submitted',
       ApplicationStatus.reviewing: 'Under review',
@@ -76,6 +78,58 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     ];
   }
 
+  Future<void> _createDraft() async {
+    if (_creatingDraft) return;
+    setState(() => _creatingDraft = true);
+    try {
+      await ref.read(applicationControllerProvider.notifier).createDraft(
+            title: 'New application draft',
+            programName: 'To be selected',
+            country: '—',
+          );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not create draft: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _creatingDraft = false);
+    }
+  }
+
+  Future<void> _updateStatus(
+    VisaApplication app,
+    ApplicationStatus status,
+  ) async {
+    if (_updatingStatus || app.status == status) return;
+    setState(() => _updatingStatus = true);
+    try {
+      await ref
+          .read(applicationControllerProvider.notifier)
+          .updateStatus(app.id, status);
+      final list = ref.read(applicationControllerProvider).valueOrNull ?? [];
+      VisaApplication? updated;
+      for (final item in list) {
+        if (item.id == app.id) {
+          updated = item;
+          break;
+        }
+      }
+      if (mounted) {
+        setState(() => _selected = updated ?? app.copyWith(status: status));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not update status: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _updatingStatus = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(applicationControllerProvider);
@@ -87,85 +141,74 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         appBar: AppBar(
           title: Text(app.title),
           leading: IconButton(
+            tooltip: 'Back to applications',
             icon: const Icon(Icons.arrow_back),
             onPressed: () => setState(() => _selected = null),
           ),
         ),
-        body: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-          children: [
-            AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 880),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+              children: [
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          app.programName,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                      Text(
+                        app.programName,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
+                      const SizedBox(height: 8),
                       StatusBadge(
                         label: app.status.label,
                         tone: _tone(app.status),
                       ),
+                      const SizedBox(height: 8),
+                      Text(app.country,
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      if (app.notes != null) ...[
+                        const SizedBox(height: 12),
+                        Text(app.notes!,
+                            style: Theme.of(context).textTheme.bodySmall),
+                      ],
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    app.country,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  if (app.notes != null) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      app.notes!,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text('Progress', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            AppCard(child: ProgressSteps(steps: _timeline(app.status))),
-            const SizedBox(height: 20),
-            Text(
-              'Update status',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: ApplicationStatus.values.map((s) {
-                return FilterChip(
-                  label: Text(s.label),
-                  selected: app.status == s,
-                  onSelected: (_) async {
-                    await ref
-                        .read(applicationControllerProvider.notifier)
-                        .updateStatus(app.id, s);
-                    final list =
-                        ref.read(applicationControllerProvider).valueOrNull ??
-                            [];
-                    VisaApplication? updated;
-                    for (final a in list) {
-                      if (a.id == app.id) {
-                        updated = a;
-                        break;
-                      }
-                    }
-                    setState(
-                      () => _selected = updated ?? app.copyWith(status: s),
+                ),
+                const SizedBox(height: 20),
+                Text('Progress', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 12),
+                AppCard(child: ProgressSteps(steps: _timeline(app.status))),
+                const SizedBox(height: 20),
+                Text('Update status',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 4),
+                Text(
+                  'Use this only to reflect the latest confirmed case state.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: ApplicationStatus.values.map((status) {
+                    return FilterChip(
+                      label: Text(status.label),
+                      selected: app.status == status,
+                      onSelected: _updatingStatus
+                          ? null
+                          : (_) => _updateStatus(app, status),
                     );
-                  },
-                );
-              }).toList(),
+                  }).toList(),
+                ),
+                if (_updatingStatus) ...[
+                  const SizedBox(height: 12),
+                  const LinearProgressIndicator(minHeight: 2),
+                ],
+              ],
             ),
-          ],
+          ),
         ),
       );
     }
@@ -178,23 +221,30 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
           IconButton(
             tooltip: 'Refresh',
             icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                ref.read(applicationControllerProvider.notifier).load(),
+            onPressed: _creatingDraft
+                ? null
+                : () => ref
+                    .read(applicationControllerProvider.notifier)
+                    .load(),
           ),
+          const SizedBox(width: 8),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: AppColors.primaryRed,
         foregroundColor: Colors.white,
-        icon: const Icon(Icons.add),
-        label: const Text('New draft'),
-        onPressed: () async {
-          await ref.read(applicationControllerProvider.notifier).createDraft(
-                title: 'New application draft',
-                programName: 'To be selected',
-                country: '—',
-              );
-        },
+        icon: _creatingDraft
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : const Icon(Icons.add),
+        label: Text(_creatingDraft ? 'Creating…' : 'New draft'),
+        onPressed: _creatingDraft ? null : _createDraft,
       ),
       body: state.when(
         loading: () => const LoadingState(message: 'Loading applications…'),
@@ -210,49 +260,43 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
               subtitle: 'Start a draft or explore visa programs.',
               icon: Icons.assignment_outlined,
               actionLabel: 'New draft',
-              onAction: () {
-                ref.read(applicationControllerProvider.notifier).createDraft(
-                      title: 'New application draft',
-                      programName: 'To be selected',
-                      country: '—',
-                    );
-              },
+              onAction: _createDraft,
             );
           }
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-            itemCount: apps.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final app = apps[index];
-              return AppCard(
-                onTap: () => setState(() => _selected = app),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            app.title,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${app.programName} · ${app.country}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 880),
+              child: ListView.separated(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
+                itemCount: apps.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final app = apps[index];
+                  return AppCard(
+                    onTap: () => setState(() => _selected = app),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(app.title,
+                            style: Theme.of(context).textTheme.titleMedium),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${app.programName} · ${app.country}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 10),
+                        StatusBadge(
+                          label: app.status.label,
+                          tone: _tone(app.status),
+                        ),
+                      ],
                     ),
-                    StatusBadge(
-                      label: app.status.label,
-                      tone: _tone(app.status),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           );
         },
       ),
