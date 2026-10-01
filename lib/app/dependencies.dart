@@ -8,10 +8,6 @@ import '../core/services/ai/ai_service.dart';
 import '../core/session/session_manager.dart';
 import '../core/session/session_state.dart';
 import '../core/storage/session_storage.dart';
-import '../features/auth/data/datasources/auth_local_datasource.dart';
-import '../features/auth/data/datasources/auth_remote_datasource.dart';
-import '../features/auth/data/repositories/auth_repository_impl.dart';
-import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/providers/auth_controller.dart';
 
 // ── Config ──────────────────────────────────────────────────────────
@@ -21,7 +17,7 @@ final appConfigProvider = Provider<AppConfig>((ref) {
   return AppConfig.fromName(envName);
 });
 
-// ── Storage ─────────────────────────────────────────────────────────
+// ── Storage (shared app-level handles) ──────────────────────────────
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   return const FlutterSecureStorage();
@@ -46,24 +42,8 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   );
 });
 
-// ── Auth datasources & repository ───────────────────────────────────
-
-final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
-  return AuthLocalDataSource(ref.read(sessionStorageProvider));
-});
-
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  return AuthRemoteDataSource(ref.watch(apiClientProvider));
-});
-
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final config = ref.watch(appConfigProvider);
-  return AuthRepositoryImpl(
-    remote: ref.watch(authRemoteDataSourceProvider),
-    local: ref.watch(authLocalDataSourceProvider),
-    allowDemoFallback: !config.environment.isProduction,
-  );
-});
+// Auth repository + controller providers live in auth_controller.dart
+// (authRepositoryProvider, authControllerProvider).
 
 // ── Session ─────────────────────────────────────────────────────────
 

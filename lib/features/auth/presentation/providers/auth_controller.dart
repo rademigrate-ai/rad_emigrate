@@ -1,8 +1,49 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/datasources/auth_local_datasource.dart';
+import '../../data/datasources/auth_remote_datasource.dart';
+import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../../../app/dependencies.dart';
+import '../../../../core/config/app_config.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/network_config.dart';
+import '../../../../core/storage/session_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+// Feature-local infrastructure providers (avoids circular import with app/dependencies).
+
+final _secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
+  return const FlutterSecureStorage();
+});
+
+final _sessionStorageProvider = Provider<SessionStorage>((ref) {
+  return SessionStorage(ref.read(_secureStorageProvider));
+});
+
+final _appConfigProvider = Provider<AppConfig>((ref) {
+  const envName = String.fromEnvironment('APP_ENV', defaultValue: 'development');
+  return AppConfig.fromName(envName);
+});
+
+final _apiClientProvider = Provider<ApiClient>((ref) {
+  final config = ref.watch(_appConfigProvider);
+  final network = NetworkConfig.fromAppConfig(config);
+  final storage = ref.watch(_sessionStorageProvider);
+  return ApiClient(
+    config: network,
+    tokenProvider: () => storage.getToken(),
+  );
+});
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final config = ref.watch(_appConfigProvider);
+  return AuthRepositoryImpl(
+    remote: AuthRemoteDataSource(ref.watch(_apiClientProvider)),
+    local: AuthLocalDataSource(ref.watch(_sessionStorageProvider)),
+    allowDemoFallback: !config.environment.isProduction,
+  );
+});
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
