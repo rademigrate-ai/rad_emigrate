@@ -1,94 +1,161 @@
 import 'package:flutter/material.dart';
-import '../../data/documents_mock_data.dart';
-import '../../domain/entities/document_entities.dart';
-import '../../../../core/constants/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DocumentsPage extends StatelessWidget {
+import '../../../../core/constants/app_colors.dart';
+import '../../domain/entities/document.dart';
+import '../../domain/entities/document_type.dart';
+import '../providers/document_controller.dart';
+
+class DocumentsPage extends ConsumerWidget {
   const DocumentsPage({super.key});
 
-  Color _statusColor(DocumentStatus s) {
+  Color _statusColor(DocumentVerificationStatus s) {
     switch (s) {
-      case DocumentStatus.missing:
+      case DocumentVerificationStatus.missing:
         return Colors.grey;
-      case DocumentStatus.uploaded:
+      case DocumentVerificationStatus.uploaded:
         return Colors.blue;
-      case DocumentStatus.underReview:
+      case DocumentVerificationStatus.underReview:
         return Colors.orange;
-      case DocumentStatus.verified:
+      case DocumentVerificationStatus.verified:
         return Colors.green;
-      case DocumentStatus.rejected:
+      case DocumentVerificationStatus.rejected:
         return AppColors.primaryRed;
     }
   }
 
-  IconData _statusIcon(DocumentStatus s) {
+  IconData _statusIcon(DocumentVerificationStatus s) {
     switch (s) {
-      case DocumentStatus.missing:
+      case DocumentVerificationStatus.missing:
         return Icons.hourglass_empty;
-      case DocumentStatus.uploaded:
+      case DocumentVerificationStatus.uploaded:
         return Icons.cloud_upload_outlined;
-      case DocumentStatus.underReview:
+      case DocumentVerificationStatus.underReview:
         return Icons.pending_actions;
-      case DocumentStatus.verified:
+      case DocumentVerificationStatus.verified:
         return Icons.verified;
-      case DocumentStatus.rejected:
+      case DocumentVerificationStatus.rejected:
         return Icons.error_outline;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(documentControllerProvider);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Documents')),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: mockDocuments.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemBuilder: (context, index) {
-          final doc = mockDocuments[index];
-          return Card(
-            child: ListTile(
-              leading: Icon(_statusIcon(doc.status), color: _statusColor(doc.status)),
-              title: Text(doc.name),
-              subtitle: Text(doc.status.label),
-              trailing: Chip(
-                label: Text(doc.status.label, style: const TextStyle(color: Colors.white, fontSize: 11)),
-                backgroundColor: _statusColor(doc.status),
-                visualDensity: VisualDensity.compact,
+      appBar: AppBar(
+        title: const Text('Documents'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => ref.read(documentControllerProvider.notifier).load(),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primaryRed,
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Add type'),
+        onPressed: () async {
+          await ref.read(documentControllerProvider.notifier).addPlaceholder(
+                name: 'New document',
+                kind: DocumentTypeKind.other,
+              );
+        },
+      ),
+      body: state.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('$e'),
+              TextButton(
+                onPressed: () => ref.read(documentControllerProvider.notifier).load(),
+                child: const Text('Retry'),
               ),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (_) => Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(doc.name, style: Theme.of(context).textTheme.titleLarge),
-                        const SizedBox(height: 8),
-                        Text('Status: ${doc.status.label}'),
-                        if (doc.updatedAt != null)
-                          Text('Updated: ${doc.updatedAt!.toIso8601String().substring(0, 10)}'),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Upload and AI document analysis will be available in a future release.',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Close'),
-                          ),
-                        ),
-                      ],
-                    ),
+            ],
+          ),
+        ),
+        data: (docs) {
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: docs.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final doc = docs[index];
+              return Card(
+                child: ListTile(
+                  leading: Icon(
+                    _statusIcon(doc.status),
+                    color: _statusColor(doc.status),
                   ),
-                );
-              },
-            ),
+                  title: Text(doc.name),
+                  subtitle: Text('${doc.kind.label} · ${doc.status.label}'),
+                  trailing: Chip(
+                    label: Text(
+                      doc.status.label,
+                      style: const TextStyle(color: Colors.white, fontSize: 11),
+                    ),
+                    backgroundColor: _statusColor(doc.status),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (ctx) => Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(doc.name, style: Theme.of(ctx).textTheme.titleLarge),
+                            const SizedBox(height: 8),
+                            Text('Type: ${doc.kind.label}'),
+                            Text('Status: ${doc.status.label}'),
+                            if (doc.updatedAt != null)
+                              Text(
+                                'Updated: ${doc.updatedAt!.toIso8601String().substring(0, 10)}',
+                              ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Upload is simulated offline. No file is sent to a server. '
+                              'OCR and AI analysis will connect in a future release.',
+                              style: TextStyle(color: Colors.grey, fontSize: 13),
+                            ),
+                            const SizedBox(height: 16),
+                            if (doc.status == DocumentVerificationStatus.missing ||
+                                doc.status == DocumentVerificationStatus.rejected)
+                              FilledButton.icon(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: AppColors.primaryRed,
+                                ),
+                                onPressed: () async {
+                                  await ref
+                                      .read(documentControllerProvider.notifier)
+                                      .markUploaded(
+                                        doc.id,
+                                        fileName: '${doc.name} (uploaded)',
+                                      );
+                                  if (ctx.mounted) Navigator.pop(ctx);
+                                },
+                                icon: const Icon(Icons.upload_file),
+                                label: const Text('Mark as uploaded'),
+                              ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: const Text('Close'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
       ),

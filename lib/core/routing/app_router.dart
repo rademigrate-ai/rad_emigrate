@@ -14,6 +14,7 @@ import '../../features/visa/presentation/pages/visa_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/documents/presentation/pages/documents_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 
 class AuthRefreshNotifier extends ChangeNotifier {
   AuthRefreshNotifier(Ref ref) {
@@ -32,28 +33,51 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final authenticated = auth.valueOrNull?.isAuthenticated ?? false;
+      final profileComplete = auth.valueOrNull?.profileComplete ?? false;
       final location = state.matchedLocation;
       const publicRoutes = {'/splash', '/login', '/register', '/otp'};
 
       if (location == '/splash') return null;
       if (!authenticated && !publicRoutes.contains(location)) return '/login';
-      if (authenticated && publicRoutes.contains(location)) return '/dashboard';
+      if (authenticated && publicRoutes.contains(location)) {
+        return profileComplete ? '/dashboard' : '/profile-completion';
+      }
+      if (authenticated &&
+          !profileComplete &&
+          location != '/profile-completion' &&
+          location != '/profile') {
+        return '/profile-completion';
+      }
       return null;
     },
     routes: [
       GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
-      GoRoute(path: '/otp', builder: (_, state) => OtpPage(identifier: state.uri.queryParameters['identifier'])),
-      GoRoute(path: '/profile-completion', builder: (_, _) => const ProfileCompletionPage()),
+      GoRoute(
+        path: '/otp',
+        builder: (_, state) =>
+            OtpPage(identifier: state.uri.queryParameters['identifier']),
+      ),
+      GoRoute(
+        path: '/profile-completion',
+        builder: (_, _) => const ProfileCompletionPage(),
+      ),
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
         routes: [
           GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
           GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
-          GoRoute(path: '/applications', builder: (_, _) => const ApplicationsPage()),
+          GoRoute(
+            path: '/applications',
+            builder: (_, _) => const ApplicationsPage(),
+          ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
+          GoRoute(
+            path: '/ai-assistant',
+            builder: (_, _) => const AiAssistantPage(),
+          ),
         ],
       ),
     ],
