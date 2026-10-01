@@ -21,7 +21,7 @@ final documentRepositoryProvider = Provider<DocumentRepository>((ref) {
   return DocumentRepositoryImpl(
     remote: DocumentRemoteDataSource(ref.watch(apiClientProvider)),
     local: DocumentLocalDataSource(prefs),
-    allowOfflineFallback: !config.environment.isProduction,
+    allowOfflineFallback: !config.isProduction,
   );
 });
 
@@ -50,13 +50,16 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
     }
   }
 
-  /// Marks a document as uploaded (simulated file pick — no real storage upload).
+  /// Marks a document as uploaded (simulated — no binary upload).
   Future<void> markUploaded(String id, {String? fileName}) async {
     final current = state.valueOrNull ?? [];
-    final doc = current.cast<Document?>().firstWhere(
-          (d) => d?.id == id,
-          orElse: () => null,
-        );
+    Document? doc;
+    for (final d in current) {
+      if (d.id == id) {
+        doc = d;
+        break;
+      }
+    }
     if (doc == null) return;
     final updated = await _repository.upsertDocument(
       doc.copyWith(

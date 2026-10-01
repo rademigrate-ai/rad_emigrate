@@ -23,7 +23,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   return ProfileRepositoryImpl(
     remote: ProfileRemoteDataSource(ref.watch(apiClientProvider)),
     local: ProfileLocalDataSource(prefs),
-    allowOfflineFallback: !config.environment.isProduction,
+    allowOfflineFallback: !config.isProduction,
   );
 });
 
@@ -52,7 +52,8 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
       var profile = await _repository.getProfile(userId);
       if (profile == null && _session != null) {
         final fullName = _session!.fullName;
-        final parts = (fullName ?? '').split(' ').where((s) => s.isNotEmpty).toList();
+        final parts =
+            (fullName ?? '').split(' ').where((s) => s.isNotEmpty).toList();
         profile = UserProfile(
           id: userId,
           firstName: parts.isNotEmpty ? parts.first : null,

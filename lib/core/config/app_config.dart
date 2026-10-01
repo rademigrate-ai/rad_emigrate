@@ -1,7 +1,7 @@
 import 'environment.dart';
 
-// Re-export so importers of AppConfig see AppEnvironment and AppEnvironmentX
-// (including isProduction) without a separate import.
+// Re-export environment types for convenience; feature code should use
+// AppConfig.isProduction rather than extension getters on AppEnvironment.
 export 'environment.dart';
 
 /// Application configuration. No production secrets are hardcoded.
@@ -22,12 +22,11 @@ class AppConfig {
   final Duration receiveTimeout;
   final Map<String, bool> featureFlags;
 
-  /// Convenience: true when [environment] is production.
-  bool get isProduction => environment.isProduction;
+  /// Single source of truth for production checks in feature layers.
+  bool get isProduction => environment == AppEnvironment.production;
 
   bool isEnabled(String flag) => featureFlags[flag] ?? false;
 
-  /// Default development configuration.
   static const development = AppConfig(
     environment: AppEnvironment.development,
     apiBaseUrl: 'https://api.dev.radvisa.local/v1',
@@ -67,7 +66,6 @@ class AppConfig {
     },
   );
 
-  /// Resolve config from compile-time environment string.
   static AppConfig fromName(String name) {
     switch (name) {
       case 'production':

@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../../core/config/app_config.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/network_config.dart';
+import '../../../../core/storage/session_storage.dart';
 import '../../data/datasources/auth_local_datasource.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../../../core/config/app_config.dart';
-import '../../../../core/network/api_client.dart';
-import '../../../../core/network/network_config.dart';
-import '../../../../core/storage/session_storage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Feature-local infrastructure providers (avoids circular import with app/dependencies).
 
@@ -41,7 +41,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
     remote: AuthRemoteDataSource(ref.watch(_apiClientProvider)),
     local: AuthLocalDataSource(ref.watch(_sessionStorageProvider)),
-    allowDemoFallback: !config.environment.isProduction,
+    allowDemoFallback: !config.isProduction,
   );
 });
 
@@ -70,7 +70,10 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
-  Future<void> login({required String identifier, required String password}) async {
+  Future<void> login({
+    required String identifier,
+    required String password,
+  }) async {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
@@ -90,7 +93,11 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
-        await _repository.register(email: email, phone: phone, password: password),
+        await _repository.register(
+          email: email,
+          phone: phone,
+          password: password,
+        ),
       );
     } catch (e, st) {
       state = AsyncValue.error(e, st);

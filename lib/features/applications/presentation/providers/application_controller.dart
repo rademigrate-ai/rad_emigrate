@@ -21,7 +21,7 @@ final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   return ApplicationRepositoryImpl(
     remote: ApplicationRemoteDataSource(ref.watch(apiClientProvider)),
     local: ApplicationLocalDataSource(prefs),
-    allowOfflineFallback: !config.environment.isProduction,
+    allowOfflineFallback: !config.isProduction,
   );
 });
 
@@ -52,12 +52,16 @@ class ApplicationController extends StateNotifier<AsyncValue<List<VisaApplicatio
 
   Future<void> updateStatus(String id, ApplicationStatus status) async {
     final current = state.valueOrNull ?? [];
-    final app = current.cast<VisaApplication?>().firstWhere(
-          (a) => a?.id == id,
-          orElse: () => null,
-        );
+    VisaApplication? app;
+    for (final a in current) {
+      if (a.id == id) {
+        app = a;
+        break;
+      }
+    }
     if (app == null) return;
-    final updated = await _repository.updateApplication(app.copyWith(status: status));
+    final updated =
+        await _repository.updateApplication(app.copyWith(status: status));
     final next = current.map((a) => a.id == id ? updated : a).toList();
     state = AsyncValue.data(next);
   }
@@ -93,8 +97,10 @@ class _EmptyApplicationRepository implements ApplicationRepository {
   Future<VisaApplication?> getApplication(String id) async => null;
 
   @override
-  Future<VisaApplication> createApplication(VisaApplication application) async => application;
+  Future<VisaApplication> createApplication(VisaApplication application) async =>
+      application;
 
   @override
-  Future<VisaApplication> updateApplication(VisaApplication application) async => application;
+  Future<VisaApplication> updateApplication(VisaApplication application) async =>
+      application;
 }
