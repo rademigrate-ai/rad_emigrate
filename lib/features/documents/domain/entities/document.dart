@@ -43,6 +43,7 @@ class Document {
     this.kind = DocumentTypeKind.other,
     this.userId,
     this.fileUrl,
+    this.storagePath,
     this.mimeType,
     this.updatedAt,
     this.ocrText,
@@ -56,6 +57,7 @@ class Document {
   final DocumentTypeKind kind;
   final String? userId;
   final String? fileUrl;
+  final String? storagePath;
   final String? mimeType;
   final DateTime? updatedAt;
   final String? ocrText;
@@ -69,6 +71,7 @@ class Document {
     DocumentTypeKind? kind,
     String? userId,
     String? fileUrl,
+    String? storagePath,
     String? mimeType,
     DateTime? updatedAt,
     String? ocrText,
@@ -82,6 +85,7 @@ class Document {
       kind: kind ?? this.kind,
       userId: userId ?? this.userId,
       fileUrl: fileUrl ?? this.fileUrl,
+      storagePath: storagePath ?? this.storagePath,
       mimeType: mimeType ?? this.mimeType,
       updatedAt: updatedAt ?? this.updatedAt,
       ocrText: ocrText ?? this.ocrText,
@@ -97,6 +101,7 @@ class Document {
     'kind': kind.name,
     'userId': userId,
     'fileUrl': fileUrl,
+    'storagePath': storagePath,
     'mimeType': mimeType,
     'updatedAt': updatedAt?.toIso8601String(),
     'ocrText': ocrText,
@@ -114,6 +119,7 @@ class Document {
       kind: DocumentTypeKindX.fromString(json['kind'] as String? ?? 'other'),
       userId: json['userId'] as String?,
       fileUrl: json['fileUrl'] as String?,
+      storagePath: json['storagePath'] as String?,
       mimeType: json['mimeType'] as String?,
       updatedAt: json['updatedAt'] != null
           ? DateTime.tryParse(json['updatedAt'] as String)

@@ -202,7 +202,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
-                'Answers are placeholders until the RAD Knowledge Base is connected. '
+                'Sourced answers are unavailable until the RAD Knowledge Base is configured. '
                 'Nothing here is an official immigration decision.',
                 style: Theme.of(context).textTheme.bodySmall,
               ),

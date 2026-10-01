@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:dio/dio.dart';
 
 /// Lightweight request/response logger. Disabled in production via [enabled].
@@ -5,16 +7,12 @@ class LoggingInterceptor extends Interceptor {
   LoggingInterceptor({this.enabled = true});
 
   final bool enabled;
+  static const _logName = 'rad_emigrate.http';
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (enabled) {
-      // Structured log boundary — no PII logging of bodies in production builds.
-      assert(() {
-        // ignore: avoid_print
-        print('[HTTP] → ${options.method} ${options.uri}');
-        return true;
-      }());
+      developer.log('→ ${options.method} ${options.uri}', name: _logName);
     }
     handler.next(options);
   }
@@ -22,11 +20,10 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (enabled) {
-      assert(() {
-        // ignore: avoid_print
-        print('[HTTP] ← ${response.statusCode} ${response.requestOptions.uri}');
-        return true;
-      }());
+      developer.log(
+        '← ${response.statusCode} ${response.requestOptions.uri}',
+        name: _logName,
+      );
     }
     handler.next(response);
   }
@@ -34,13 +31,11 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (enabled) {
-      assert(() {
-        // ignore: avoid_print
-        print(
-          '[HTTP] ✕ ${err.response?.statusCode} ${err.requestOptions.uri} ${err.type}',
-        );
-        return true;
-      }());
+      developer.log(
+        '✕ ${err.response?.statusCode} ${err.requestOptions.uri} ${err.type}',
+        name: _logName,
+        error: err.error,
+      );
     }
     handler.next(err);
   }

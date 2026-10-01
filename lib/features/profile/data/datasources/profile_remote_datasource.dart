@@ -32,7 +32,7 @@ class ProfileRemoteDataSource {
       final user = _service.client.auth.currentUser;
       final created = await _service.client
           .from('profiles')
-          .insert({'id': userId, 'email': user?.email, 'phone': user?.phone})
+          .upsert({'id': userId, 'email': user?.email, 'phone': user?.phone})
           .select()
           .single();
       return _fromRow(created);

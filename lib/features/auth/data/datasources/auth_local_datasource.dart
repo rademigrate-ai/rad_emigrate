@@ -8,11 +8,13 @@ class AuthLocalDataSource {
   final SessionStorage _storage;
 
   Future<void> saveSession(UserSession session) async {
-    if (session.token != null) {
-      await _storage.saveToken(session.token!);
+    final userId = session.userId;
+    if (session.token == null || session.token!.isEmpty || userId == null) {
+      return;
     }
+    await _storage.saveToken(session.token!);
     await _storage.saveUserMeta(
-      userId: session.userId ?? 'unknown',
+      userId: userId,
       email: session.email,
       phone: session.phone,
       fullName: session.fullName,

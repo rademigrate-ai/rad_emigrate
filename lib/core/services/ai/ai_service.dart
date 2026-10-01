@@ -13,8 +13,8 @@ abstract class AiService {
   Future<AiResponse> complete(AiRequest request);
 }
 
-/// Placeholder until Knowledge Base + RAG is connected.
-class PlaceholderAiService implements AiService {
+/// Used until a configured RAD Knowledge Base provider is available.
+class UnavailableAiService implements AiService {
   @override
   Future<String> ask(String prompt) async {
     final response = await complete(AiRequest(prompt: prompt));
@@ -32,17 +32,11 @@ class PlaceholderAiService implements AiService {
     }
     return AiResponse(
       text:
-          'AI assistant foundation is ready.\n\n'
+          'The RAD Knowledge Base is not configured for this build.\n\n'
           'Your question: "$prompt"\n\n'
-          'In a future release this will search the RAD Knowledge Base and '
-          'authoritative immigration sources. No requirements are fabricated.',
+          'Configure the approved RAD Knowledge Base provider to enable '
+          'sourced answers. No immigration requirements are inferred here.',
       uncertain: true,
-      sources: const [
-        AiSource(
-          title: 'RAD Knowledge Base (pending connection)',
-          authority: 'RAD',
-        ),
-      ],
     );
   }
 }

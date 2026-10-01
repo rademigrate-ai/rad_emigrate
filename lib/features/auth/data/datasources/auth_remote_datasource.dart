@@ -8,8 +8,7 @@ import '../../domain/entities/user_session.dart';
 /// Authentication transport boundary.
 ///
 /// Production providers pass [SupabaseClientService]. The ApiClient branch is
-/// retained so existing repository tests and development adapters remain
-/// source-compatible while the migration is rolled out.
+/// retained for source compatibility with legacy adapters and tests.
 class AuthRemoteDataSource {
   AuthRemoteDataSource(Object backend) : _backend = backend;
 
@@ -26,6 +25,7 @@ class AuthRemoteDataSource {
       );
       return _mapLegacySession(response.data);
     }
+    _ensureSupabaseReady();
     if (identifier.trim().isEmpty || !identifier.contains('@')) {
       throw const ApiException(
         message: 'Supabase email authentication requires an email address.',
@@ -55,6 +55,7 @@ class AuthRemoteDataSource {
       );
       return _mapLegacySession(response.data);
     }
+    _ensureSupabaseReady();
     try {
       final response = await _service.client.auth.signUp(
         email: email.trim(),
@@ -87,6 +88,7 @@ class AuthRemoteDataSource {
       );
       return _mapLegacySession(response.data);
     }
+    _ensureSupabaseReady();
     if (!identifier.contains('@')) {
       throw const ApiException(
         message: 'Supabase email OTP requires an email address.',
@@ -119,6 +121,7 @@ class AuthRemoteDataSource {
       );
       return _mapLegacySession(response.data);
     }
+    _ensureSupabaseReady();
     try {
       final user = _service.client.auth.currentUser;
       if (user == null) throw const ApiException(message: 'No active session.');
@@ -149,6 +152,7 @@ class AuthRemoteDataSource {
       }
       return;
     }
+    _ensureSupabaseReady();
     try {
       await _service.client.auth.signOut();
     } catch (error) {
@@ -158,12 +162,27 @@ class AuthRemoteDataSource {
 
   Future<UserSession?> restoreSession() async {
     if (_backend is ApiClient) return null;
+    _ensureSupabaseReady();
     final session = _service.client.auth.currentSession;
     if (session == null) return null;
     return _mapSupabaseSession(session);
   }
 
   SupabaseClientService get _service => _backend as SupabaseClientService;
+
+  UserSession sessionFromAuthSession(Session session) {
+    _ensureSupabaseReady();
+    return _mapSupabaseSession(session);
+  }
+
+  void _ensureSupabaseReady() {
+    if (!_service.isInitialized) {
+      throw const ApiException(
+        message: 'Supabase is not configured for this build.',
+        code: 'supabase_not_configured',
+      );
+    }
+  }
 
   UserSession _mapSupabaseSession(
     Session? session, {

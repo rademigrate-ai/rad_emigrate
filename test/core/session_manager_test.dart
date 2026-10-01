@@ -4,8 +4,8 @@ import 'package:rad_emigrate/core/session/session_state.dart';
 import 'package:rad_emigrate/features/auth/domain/entities/user_session.dart';
 import 'package:rad_emigrate/features/auth/domain/repositories/auth_repository.dart';
 
-class _FakeAuthRepository implements AuthRepository {
-  _FakeAuthRepository({this.restored});
+class _TestAuthRepository implements AuthRepository {
+  _TestAuthRepository({this.restored});
 
   UserSession? restored;
   bool loggedOut = false;
@@ -60,7 +60,7 @@ class _FakeAuthRepository implements AuthRepository {
 void main() {
   group('SessionManager', () {
     test('restore sets authenticated when session present', () async {
-      final repo = _FakeAuthRepository(
+      final repo = _TestAuthRepository(
         restored: const UserSession(
           token: 'abc',
           authenticated: true,
@@ -75,14 +75,14 @@ void main() {
     });
 
     test('restore sets unauthenticated when no session', () async {
-      final manager = SessionManager(_FakeAuthRepository());
+      final manager = SessionManager(_TestAuthRepository());
       final state = await manager.restore();
       expect(state.status, SessionStatus.unauthenticated);
       expect(manager.isAuthenticated, isFalse);
     });
 
     test('logout clears session', () async {
-      final repo = _FakeAuthRepository(
+      final repo = _TestAuthRepository(
         restored: const UserSession(token: 'abc', authenticated: true),
       );
       final manager = SessionManager(repo);

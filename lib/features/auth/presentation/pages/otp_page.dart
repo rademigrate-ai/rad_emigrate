@@ -27,12 +27,23 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   }
 
   Future<void> _submit() async {
-    final identifier = widget.identifier ?? 'demo@radvisa.com';
+    final identifier = widget.identifier?.trim() ?? '';
+    final otp = _otpCtrl.text.trim();
+    if (identifier.isEmpty || !identifier.contains('@')) {
+      setState(
+        () => _error = 'Return to sign up and enter your email address.',
+      );
+      return;
+    }
+    if (!RegExp(r'^\d{6}$').hasMatch(otp)) {
+      setState(() => _error = 'Enter the 6-digit verification code.');
+      return;
+    }
     setState(() => _error = null);
     try {
       await ref
           .read(authControllerProvider.notifier)
-          .verifyOtp(identifier: identifier, otp: _otpCtrl.text.trim());
+          .verifyOtp(identifier: identifier, otp: otp);
       final session = ref.read(authControllerProvider).valueOrNull;
       if (mounted) {
         if (session != null && !session.profileComplete) {
@@ -67,7 +78,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Enter the 6-digit code sent to your phone or email.',
+                    'Enter the 6-digit code sent to your email address.',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 20),

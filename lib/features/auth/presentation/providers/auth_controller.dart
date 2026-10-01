@@ -41,6 +41,10 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     state = AsyncValue.data(session);
   }
 
+  void clearSession() {
+    state = const AsyncValue.data(UserSession());
+  }
+
   Future<void> restoreSession() async {
     state = const AsyncValue.loading();
     try {
@@ -120,8 +124,11 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
   }
 
   Future<void> logout() async {
-    await _repository.logout();
-    state = const AsyncValue.data(UserSession());
+    try {
+      await _repository.logout();
+    } finally {
+      clearSession();
+    }
   }
 
   UserSession get current => state.valueOrNull ?? const UserSession();

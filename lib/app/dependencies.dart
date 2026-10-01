@@ -9,6 +9,7 @@ import '../core/session/session_manager.dart';
 import '../core/session/session_state.dart';
 import '../core/storage/session_storage.dart';
 import '../core/supabase/supabase_providers.dart';
+import '../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../features/auth/presentation/providers/auth_controller.dart';
 import '../features/ai_assistant/data/ai_session_repository.dart';
 
@@ -68,7 +69,7 @@ final sessionStateProvider = Provider<SessionState>((ref) {
 // ── AI ──────────────────────────────────────────────────────────────
 
 final aiServiceProvider = Provider<AiService>((ref) {
-  return PlaceholderAiService();
+  return UnavailableAiService();
 });
 
 final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {
@@ -78,7 +79,23 @@ final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {
 // ── Bootstrap ───────────────────────────────────────────────────────
 
 final appBootstrapProvider = FutureProvider<void>((ref) async {
-  await ref.read(supabaseClientServiceProvider).initialize();
+  final supabase = ref.read(supabaseClientServiceProvider);
+  await supabase.initialize();
+  if (supabase.isInitialized) {
+    final authController = ref.read(authControllerProvider.notifier);
+    final authDatasource = AuthRemoteDataSource(supabase);
+    final subscription = supabase.client.auth.onAuthStateChange.listen((data) {
+      final session = data.session;
+      if (session == null) {
+        authController.clearSession();
+      } else {
+        authController.applySession(
+          authDatasource.sessionFromAuthSession(session),
+        );
+      }
+    });
+    ref.onDispose(subscription.cancel);
+  }
   final manager = ref.read(sessionManagerProvider);
   final restored = await manager.restore();
   if (restored.isAuthenticated && restored.session != null) {

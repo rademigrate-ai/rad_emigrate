@@ -84,7 +84,21 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
     );
   }
 
-  Future<void> addPlaceholder({
+  Future<void> deleteDocument(String id) async {
+    final current = state.valueOrNull ?? [];
+    Document? document;
+    for (final item in current) {
+      if (item.id == id) {
+        document = item;
+        break;
+      }
+    }
+    if (document == null) return;
+    await _repository.deleteDocument(document);
+    state = AsyncValue.data(current.where((item) => item.id != id).toList());
+  }
+
+  Future<void> addDocumentType({
     required String name,
     required DocumentTypeKind kind,
   }) async {
@@ -113,6 +127,9 @@ class _EmptyDocumentRepository implements DocumentRepository {
 
   @override
   Future<Document> upsertDocument(Document document) async => document;
+
+  @override
+  Future<void> deleteDocument(Document document) async {}
 
   @override
   Future<Document> uploadDocument({

@@ -1,6 +1,6 @@
 import '../domain/entities/visa_entities.dart';
 
-const mockCountries = [
+const visaCountries = [
   Country(id: 'ca', name: 'Canada', code: 'CA', flagEmoji: '🇨🇦'),
   Country(id: 'au', name: 'Australia', code: 'AU', flagEmoji: '🇦🇺'),
   Country(id: 'de', name: 'Germany', code: 'DE', flagEmoji: '🇩🇪'),
@@ -8,7 +8,7 @@ const mockCountries = [
   Country(id: 'gb', name: 'United Kingdom', code: 'GB', flagEmoji: '🇬🇧'),
 ];
 
-const mockCategories = [
+const visaCategories = [
   VisaCategory(
     id: 'study',
     name: 'Study',
@@ -31,7 +31,7 @@ const mockCategories = [
   ),
 ];
 
-const mockPrograms = [
+const visaPrograms = [
   VisaProgram(
     id: 'ca-study',
     title: 'Canada Study Permit',

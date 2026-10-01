@@ -56,7 +56,7 @@ class DocumentsPage extends ConsumerWidget {
         onPressed: () async {
           await ref
               .read(documentControllerProvider.notifier)
-              .addPlaceholder(
+              .addDocumentType(
                 name: 'New document',
                 kind: DocumentTypeKind.other,
               );
@@ -202,6 +202,45 @@ class DocumentsPage extends ConsumerWidget {
                 icon: const Icon(Icons.upload_file),
                 label: const Text('Choose file and upload'),
               ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: ctx,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text('Delete document?'),
+                    content: const Text(
+                      'This removes the document record and its private file.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext, false),
+                        child: const Text('Cancel'),
+                      ),
+                      FilledButton(
+                        onPressed: () => Navigator.pop(dialogContext, true),
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirmed != true) return;
+                try {
+                  await ref
+                      .read(documentControllerProvider.notifier)
+                      .deleteDocument(doc.id);
+                  if (ctx.mounted) Navigator.pop(ctx);
+                } catch (error) {
+                  if (ctx.mounted) {
+                    ScaffoldMessenger.of(ctx).showSnackBar(
+                      SnackBar(content: Text('Delete failed: $error')),
+                    );
+                  }
+                }
+              },
+              icon: const Icon(Icons.delete_outline),
+              label: const Text('Delete document'),
+            ),
             TextButton(
               onPressed: () => Navigator.pop(ctx),
               child: const Text('Close'),

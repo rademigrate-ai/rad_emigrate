@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../widgets/app_placeholder.dart';
+import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -82,6 +82,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    errorBuilder: (_, _) => const AppPlaceholder(title: 'Page not found'),
+    errorBuilder: (_, _) => const NotFoundPage(title: 'Page not found'),
   );
 });

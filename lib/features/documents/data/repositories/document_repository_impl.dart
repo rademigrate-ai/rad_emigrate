@@ -93,4 +93,12 @@ class DocumentRepositoryImpl implements DocumentRepository {
     await local.writeAll(cached);
     return uploaded;
   }
+
+  @override
+  Future<void> deleteDocument(Document document) async {
+    await remote.delete(document);
+    final cached = await local.readAll();
+    cached.removeWhere((item) => item.id == document.id);
+    await local.writeAll(cached);
+  }
 }

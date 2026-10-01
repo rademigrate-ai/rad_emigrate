@@ -66,7 +66,7 @@ class DocumentRemoteDataSource {
         'user_id': userId,
         'name': document.name,
         'status': _statusToDb(document.status),
-        'file_path': document.fileUrl,
+        'file_path': document.storagePath ?? document.fileUrl,
         'updated_at': DateTime.now().toIso8601String(),
       };
       final row = await _service.client
@@ -125,6 +125,33 @@ class DocumentRemoteDataSource {
     }
   }
 
+  Future<void> delete(Document document) async {
+    if (_backend is ApiClient) {
+      await (_backend).delete<void>('/documents/${document.id}');
+      return;
+    }
+    try {
+      final userId = document.userId ?? _service.client.auth.currentUser?.id;
+      if (userId == null || userId.isEmpty) {
+        throw const ApiException(
+          message: 'No authenticated user.',
+          code: 'not_authenticated',
+        );
+      }
+      final path = document.storagePath;
+      if (path != null && path.startsWith('$userId/')) {
+        await _storage?.delete(path);
+      }
+      await _service.client
+          .from('documents')
+          .delete()
+          .eq('id', document.id)
+          .eq('user_id', userId);
+    } catch (error) {
+      throw _toApiException(error);
+    }
+  }
+
   SupabaseClientService get _service => _backend as SupabaseClientService;
 
   Future<Document> _fromRow(Map<String, dynamic> row) async {
@@ -145,6 +172,7 @@ class DocumentRemoteDataSource {
       kind: DocumentTypeKindX.fromString(row['name'] as String? ?? 'other'),
       userId: row['user_id'] as String?,
       fileUrl: signedUrl ?? path,
+      storagePath: path,
       updatedAt: DateTime.tryParse(
         row['updated_at']?.toString() ?? row['created_at']?.toString() ?? '',
       ),

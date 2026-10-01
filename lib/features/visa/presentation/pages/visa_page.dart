@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/visa_mock_data.dart';
+import '../../data/visa_catalog.dart';
 import '../../domain/entities/visa_entities.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -27,8 +27,8 @@ class _VisaPageState extends State<VisaPage> {
     }
 
     final programs = _selectedCountryId == null
-        ? mockPrograms
-        : mockPrograms.where((p) => p.countryId == _selectedCountryId).toList();
+        ? visaPrograms
+        : visaPrograms.where((p) => p.countryId == _selectedCountryId).toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Visa programs')),
@@ -58,7 +58,7 @@ class _VisaPageState extends State<VisaPage> {
                   height: 96,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: mockCountries.length + 1,
+                    itemCount: visaCountries.length + 1,
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -73,7 +73,7 @@ class _VisaPageState extends State<VisaPage> {
                           ),
                         );
                       }
-                      final c = mockCountries[index - 1];
+                      final c = visaCountries[index - 1];
                       final selected = _selectedCountryId == c.id;
                       return FilterChip(
                         label: Text('${c.flagEmoji} ${c.name}'),
@@ -100,7 +100,7 @@ class _VisaPageState extends State<VisaPage> {
                     icon: Icons.public_off_outlined,
                   ),
                 ...programs.map((p) {
-                  final country = mockCountries.firstWhere(
+                  final country = visaCountries.firstWhere(
                     (c) => c.id == p.countryId,
                   );
                   return Padding(
@@ -132,7 +132,7 @@ class _ProgramDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final country = mockCountries.firstWhere((c) => c.id == program.countryId);
+    final country = visaCountries.firstWhere((c) => c.id == program.countryId);
     return Scaffold(
       appBar: AppBar(
         title: Text(program.title),
