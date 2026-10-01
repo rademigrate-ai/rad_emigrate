@@ -1,12 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/repositories/mock_auth_repository.dart';
+
 import '../../domain/entities/user_session.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../../../app/dependencies.dart';
-
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return MockAuthRepository(ref.read(sessionStorageProvider));
-});
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, AsyncValue<UserSession>>((ref) {
@@ -18,6 +14,11 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
       : super(const AsyncValue.data(UserSession()));
 
   final AuthRepository _repository;
+
+  /// Apply an already-restored session without re-fetching storage.
+  void applySession(UserSession session) {
+    state = AsyncValue.data(session);
+  }
 
   Future<void> restoreSession() async {
     state = const AsyncValue.loading();
@@ -41,7 +42,11 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
-  Future<void> register({required String email, required String phone, required String password}) async {
+  Future<void> register({
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
@@ -53,7 +58,10 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
-  Future<void> verifyOtp({required String identifier, required String otp}) async {
+  Future<void> verifyOtp({
+    required String identifier,
+    required String otp,
+  }) async {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
@@ -65,11 +73,17 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
-  Future<void> completeProfile({required String fullName, String? nationality}) async {
+  Future<void> completeProfile({
+    required String fullName,
+    String? nationality,
+  }) async {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
-        await _repository.completeProfile(fullName: fullName, nationality: nationality),
+        await _repository.completeProfile(
+          fullName: fullName,
+          nationality: nationality,
+        ),
       );
     } catch (e, st) {
       state = AsyncValue.error(e, st);
