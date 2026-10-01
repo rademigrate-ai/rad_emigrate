@@ -36,7 +36,9 @@ class LoggingInterceptor extends Interceptor {
     if (enabled) {
       assert(() {
         // ignore: avoid_print
-        print('[HTTP] ✕ ${err.response?.statusCode} ${err.requestOptions.uri} ${err.type}');
+        print(
+          '[HTTP] ✕ ${err.response?.statusCode} ${err.requestOptions.uri} ${err.type}',
+        );
         return true;
       }());
     }

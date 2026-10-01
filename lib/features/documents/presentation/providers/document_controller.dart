@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,8 +58,12 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
     }
   }
 
-  /// Marks a document as uploaded (simulated — no binary upload).
-  Future<void> markUploaded(String id, {String? fileName}) async {
+  Future<void> uploadFile(
+    String id, {
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
     final current = state.valueOrNull ?? [];
     Document? doc;
     for (final d in current) {
@@ -67,12 +73,11 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
       }
     }
     if (doc == null) return;
-    final updated = await _repository.upsertDocument(
-      doc.copyWith(
-        status: DocumentVerificationStatus.uploaded,
-        name: fileName ?? doc.name,
-        updatedAt: DateTime.now(),
-      ),
+    final updated = await _repository.uploadDocument(
+      document: doc,
+      bytes: bytes,
+      fileName: fileName,
+      contentType: contentType,
     );
     state = AsyncValue.data(
       current.map((d) => d.id == id ? updated : d).toList(),
@@ -108,4 +113,12 @@ class _EmptyDocumentRepository implements DocumentRepository {
 
   @override
   Future<Document> upsertDocument(Document document) async => document;
+
+  @override
+  Future<Document> uploadDocument({
+    required Document document,
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async => throw StateError('Document repository is not ready.');
 }

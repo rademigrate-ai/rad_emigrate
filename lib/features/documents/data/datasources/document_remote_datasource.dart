@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/supabase/supabase_client.dart';
@@ -70,6 +72,51 @@ class DocumentRemoteDataSource {
       final row = await _service.client
           .from('documents')
           .upsert(payload)
+          .select()
+          .single();
+      return await _fromRow(row);
+    } catch (error) {
+      throw _toApiException(error);
+    }
+  }
+
+  Future<Document> upload({
+    required Document document,
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
+    if (_backend is ApiClient || _storage == null) {
+      throw const ApiException(
+        message: 'Document storage is not configured.',
+        code: 'storage_unavailable',
+      );
+    }
+    try {
+      final userId = document.userId ?? _service.client.auth.currentUser?.id;
+      if (userId == null || userId.isEmpty) {
+        throw const ApiException(
+          message: 'No authenticated user.',
+          code: 'not_authenticated',
+        );
+      }
+      final path = await _storage.upload(
+        userId: userId,
+        documentId: document.id,
+        fileName: fileName,
+        bytes: bytes,
+        contentType: contentType,
+      );
+      final row = await _service.client
+          .from('documents')
+          .upsert({
+            if (_isUuid(document.id)) 'id': document.id,
+            'user_id': userId,
+            'name': fileName,
+            'status': _statusToDb(DocumentVerificationStatus.uploaded),
+            'file_path': path,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
           .select()
           .single();
       return await _fromRow(row);

@@ -21,7 +21,10 @@ class UserProfile {
   final DateTime? createdAt;
 
   String get fullName {
-    final parts = [firstName, lastName].whereType<String>().where((s) => s.isNotEmpty);
+    final parts = [
+      firstName,
+      lastName,
+    ].whereType<String>().where((s) => s.isNotEmpty);
     return parts.isEmpty ? '' : parts.join(' ');
   }
 
@@ -48,15 +51,15 @@ class UserProfile {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'firstName': firstName,
-        'lastName': lastName,
-        'email': email,
-        'phone': phone,
-        'nationality': nationality,
-        'avatar': avatar,
-        'createdAt': createdAt?.toIso8601String(),
-      };
+    'id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'email': email,
+    'phone': phone,
+    'nationality': nationality,
+    'avatar': avatar,
+    'createdAt': createdAt?.toIso8601String(),
+  };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
@@ -89,13 +92,13 @@ class UserProfile {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        firstName,
-        lastName,
-        email,
-        phone,
-        nationality,
-        avatar,
-        createdAt,
-      );
+    id,
+    firstName,
+    lastName,
+    email,
+    phone,
+    nationality,
+    avatar,
+    createdAt,
+  );
 }

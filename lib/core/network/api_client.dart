@@ -12,7 +12,8 @@ class ApiClient {
     required Future<String?> Function() tokenProvider,
     Dio? dio,
   }) : _config = config {
-    _dio = dio ??
+    _dio =
+        dio ??
         Dio(
           BaseOptions(
             baseUrl: config.baseUrl,
@@ -39,37 +40,35 @@ class ApiClient {
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
-  }) =>
-      _run(() => _dio.get<T>(path, queryParameters: queryParameters, options: options));
+  }) => _run(
+    () => _dio.get<T>(path, queryParameters: queryParameters, options: options),
+  );
 
   Future<Response<T>> post<T>(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
-  }) =>
-      _run(() => _dio.post<T>(path, data: data, queryParameters: queryParameters, options: options));
+  }) => _run(
+    () => _dio.post<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    ),
+  );
 
-  Future<Response<T>> put<T>(
-    String path, {
-    Object? data,
-    Options? options,
-  }) =>
+  Future<Response<T>> put<T>(String path, {Object? data, Options? options}) =>
       _run(() => _dio.put<T>(path, data: data, options: options));
 
-  Future<Response<T>> patch<T>(
-    String path, {
-    Object? data,
-    Options? options,
-  }) =>
+  Future<Response<T>> patch<T>(String path, {Object? data, Options? options}) =>
       _run(() => _dio.patch<T>(path, data: data, options: options));
 
   Future<Response<T>> delete<T>(
     String path, {
     Object? data,
     Options? options,
-  }) =>
-      _run(() => _dio.delete<T>(path, data: data, options: options));
+  }) => _run(() => _dio.delete<T>(path, data: data, options: options));
 
   Future<Response<T>> _run<T>(Future<Response<T>> Function() call) async {
     try {
@@ -92,7 +91,10 @@ class ApiClient {
         final msg = _extractMessage(e.response?.data);
         return ApiException.fromStatusCode(status, msg);
       case DioExceptionType.cancel:
-        return const ApiException(message: 'Request cancelled', code: 'cancelled');
+        return const ApiException(
+          message: 'Request cancelled',
+          code: 'cancelled',
+        );
       default:
         return ApiException.network(e);
     }

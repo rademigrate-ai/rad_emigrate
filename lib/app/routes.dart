@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../features/home/presentation/home_page.dart';
 
 class AppRoutes {
@@ -8,9 +9,7 @@ class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute(
-          builder: (_) => const HomePage(),
-        );
+        return MaterialPageRoute(builder: (_) => const HomePage());
       case login:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderPage(title: 'Login'),
@@ -30,10 +29,6 @@ class _PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(title),
-      ),
-    );
+    return Scaffold(body: Center(child: Text(title)));
   }
 }

@@ -40,7 +40,8 @@ class ImmigrationProfile {
       education: education ?? this.education,
       workExperience: workExperience ?? this.workExperience,
       languages: languages ?? this.languages,
-      destinationPreference: destinationPreference ?? this.destinationPreference,
+      destinationPreference:
+          destinationPreference ?? this.destinationPreference,
       maritalStatus: maritalStatus ?? this.maritalStatus,
     );
   }

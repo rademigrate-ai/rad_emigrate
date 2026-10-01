@@ -9,10 +9,26 @@ const mockCountries = [
 ];
 
 const mockCategories = [
-  VisaCategory(id: 'study', name: 'Study', description: 'Student visas and study permits'),
-  VisaCategory(id: 'work', name: 'Work', description: 'Work permits and skilled worker programs'),
-  VisaCategory(id: 'visit', name: 'Visit', description: 'Tourist and visitor visas'),
-  VisaCategory(id: 'immigrate', name: 'Immigrate', description: 'Permanent residence pathways'),
+  VisaCategory(
+    id: 'study',
+    name: 'Study',
+    description: 'Student visas and study permits',
+  ),
+  VisaCategory(
+    id: 'work',
+    name: 'Work',
+    description: 'Work permits and skilled worker programs',
+  ),
+  VisaCategory(
+    id: 'visit',
+    name: 'Visit',
+    description: 'Tourist and visitor visas',
+  ),
+  VisaCategory(
+    id: 'immigrate',
+    name: 'Immigrate',
+    description: 'Permanent residence pathways',
+  ),
 ];
 
 const mockPrograms = [
@@ -22,7 +38,12 @@ const mockPrograms = [
     countryId: 'ca',
     categoryId: 'study',
     summary: 'Study at a designated learning institution in Canada.',
-    requirements: ['Letter of acceptance', 'Proof of funds', 'Language test', 'Valid passport'],
+    requirements: [
+      'Letter of acceptance',
+      'Proof of funds',
+      'Language test',
+      'Valid passport',
+    ],
     processingTime: '4–12 weeks',
   ),
   VisaProgram(
@@ -31,7 +52,12 @@ const mockPrograms = [
     countryId: 'ca',
     categoryId: 'immigrate',
     summary: 'Federal skilled worker permanent residence pathway.',
-    requirements: ['Language results', 'Education assessment', 'Work experience', 'Proof of funds'],
+    requirements: [
+      'Language results',
+      'Education assessment',
+      'Work experience',
+      'Proof of funds',
+    ],
     processingTime: '6 months',
   ),
   VisaProgram(
@@ -40,7 +66,12 @@ const mockPrograms = [
     countryId: 'au',
     categoryId: 'study',
     summary: 'Study full-time in Australia.',
-    requirements: ['Confirmation of Enrolment', 'GTE statement', 'OSHC', 'Financial capacity'],
+    requirements: [
+      'Confirmation of Enrolment',
+      'GTE statement',
+      'OSHC',
+      'Financial capacity',
+    ],
     processingTime: '4–8 weeks',
   ),
   VisaProgram(
@@ -49,7 +80,12 @@ const mockPrograms = [
     countryId: 'de',
     categoryId: 'work',
     summary: 'Search for employment in Germany for up to 6 months.',
-    requirements: ['University degree', 'Proof of funds', 'Health insurance', 'CV'],
+    requirements: [
+      'University degree',
+      'Proof of funds',
+      'Health insurance',
+      'CV',
+    ],
     processingTime: '4–12 weeks',
   ),
 ];

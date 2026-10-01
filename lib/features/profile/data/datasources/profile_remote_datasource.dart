@@ -28,13 +28,14 @@ class ProfileRemoteDataSource {
           .select()
           .eq('id', userId)
           .maybeSingle();
-      if (row == null) {
-        throw const ApiException(
-          message: 'Profile not found',
-          code: 'not_found',
-        );
-      }
-      return _fromRow(row);
+      if (row != null) return _fromRow(row);
+      final user = _service.client.auth.currentUser;
+      final created = await _service.client
+          .from('profiles')
+          .insert({'id': userId, 'email': user?.email, 'phone': user?.phone})
+          .select()
+          .single();
+      return _fromRow(created);
     } catch (error) {
       throw _toApiException(error);
     }

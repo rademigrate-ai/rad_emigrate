@@ -4,11 +4,7 @@ import '../constants/app_colors.dart';
 import 'app_button.dart';
 
 class ErrorState extends StatelessWidget {
-  const ErrorState({
-    super.key,
-    required this.message,
-    this.onRetry,
-  });
+  const ErrorState({super.key, required this.message, this.onRetry});
 
   final String message;
   final VoidCallback? onRetry;

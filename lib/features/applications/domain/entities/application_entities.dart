@@ -1,10 +1,4 @@
-enum ApplicationStatus {
-  draft,
-  submitted,
-  underReview,
-  approved,
-  rejected,
-}
+enum ApplicationStatus { draft, submitted, underReview, approved, rejected }
 
 extension ApplicationStatusX on ApplicationStatus {
   String get label {

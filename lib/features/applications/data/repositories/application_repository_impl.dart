@@ -1,5 +1,4 @@
 import '../../../../core/network/api_exception.dart';
-import '../../domain/entities/application_status.dart';
 import '../../domain/entities/visa_application.dart';
 import '../../domain/repositories/application_repository.dart';
 import '../datasources/application_local_datasource.dart';
@@ -16,48 +15,8 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   final ApplicationLocalDataSource local;
   final bool allowOfflineFallback;
 
-  static final List<VisaApplication> _seed = [
-    VisaApplication(
-      id: 'app-001',
-      title: 'Study Permit Application',
-      programName: 'Canada Study Permit',
-      country: 'Canada',
-      status: ApplicationStatus.reviewing,
-      updatedAt: DateTime(2026, 9, 20),
-      notes: 'Documents submitted. Awaiting response.',
-      userId: 'user-demo-001',
-      createdAt: DateTime(2026, 8, 1),
-    ),
-    VisaApplication(
-      id: 'app-002',
-      title: 'Student Visa Draft',
-      programName: 'Australia Student Visa (500)',
-      country: 'Australia',
-      status: ApplicationStatus.draft,
-      updatedAt: DateTime(2026, 9, 28),
-      notes: 'GTE statement pending.',
-      userId: 'user-demo-001',
-      createdAt: DateTime(2026, 9, 10),
-    ),
-    VisaApplication(
-      id: 'app-003',
-      title: 'Job Seeker',
-      programName: 'Germany Job Seeker Visa',
-      country: 'Germany',
-      status: ApplicationStatus.submitted,
-      updatedAt: DateTime(2026, 9, 15),
-      userId: 'user-demo-001',
-      createdAt: DateTime(2026, 9, 1),
-    ),
-  ];
-
   Future<List<VisaApplication>> _ensureLocal() async {
-    var items = await local.readAll();
-    if (items.isEmpty) {
-      items = List.of(_seed);
-      await local.writeAll(items);
-    }
-    return items;
+    return local.readAll();
   }
 
   @override

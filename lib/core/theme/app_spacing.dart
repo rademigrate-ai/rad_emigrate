@@ -10,7 +10,10 @@ abstract final class AppSpacing {
   static const double xxl = 32;
   static const double xxxl = 48;
 
-  static const EdgeInsets page = EdgeInsets.symmetric(horizontal: 20, vertical: 16);
+  static const EdgeInsets page = EdgeInsets.symmetric(
+    horizontal: 20,
+    vertical: 16,
+  );
   static const EdgeInsets cardPadding = EdgeInsets.all(16);
   static const double radiusSm = 10;
   static const double radiusMd = 14;

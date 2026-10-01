@@ -61,9 +61,7 @@ class AppShell extends StatelessWidget {
             Container(
               decoration: const BoxDecoration(
                 color: AppColors.navy,
-                border: Border(
-                  right: BorderSide(color: Color(0x22314057)),
-                ),
+                border: Border(right: BorderSide(color: Color(0x22314057))),
               ),
               child: NavigationRail(
                 selectedIndex: selected,

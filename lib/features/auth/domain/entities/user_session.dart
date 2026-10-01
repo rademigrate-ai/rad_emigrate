@@ -37,5 +37,6 @@ class UserSession {
     );
   }
 
-  bool get isAuthenticated => authenticated && token != null && token!.isNotEmpty;
+  bool get isAuthenticated =>
+      authenticated && token != null && token!.isNotEmpty;
 }

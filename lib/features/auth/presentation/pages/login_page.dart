@@ -134,12 +134,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       onPressed: () => context.go('/otp'),
                       child: const Text('Continue with OTP'),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Demo: any email and password',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
                   ],
                 ),
               ),

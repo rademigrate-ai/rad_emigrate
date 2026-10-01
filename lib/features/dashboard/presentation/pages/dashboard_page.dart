@@ -24,8 +24,9 @@ class DashboardPage extends ConsumerWidget {
     final name = session?.fullName ?? 'Traveler';
     final apps = ref.watch(applicationControllerProvider).valueOrNull ?? [];
     final docs = ref.watch(documentControllerProvider).valueOrNull ?? [];
-    final activeApps =
-        apps.where((a) => a.status != ApplicationStatus.completed).length;
+    final activeApps = apps
+        .where((a) => a.status != ApplicationStatus.completed)
+        .length;
     final missingDocs = docs
         .where((d) => d.status == DocumentVerificationStatus.missing)
         .length;
@@ -213,9 +214,7 @@ class _JourneyHero extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Icon(
-                needsAction
-                    ? Icons.flag_outlined
-                    : Icons.check_circle_outline,
+                needsAction ? Icons.flag_outlined : Icons.check_circle_outline,
                 size: 28,
                 color: needsAction ? AppColors.warning : AppColors.success,
               ),
@@ -308,9 +307,9 @@ class _MetricTile extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppColors.navy,
-                  fontFeatures: const [ui.FontFeature.tabularFigures()],
-                ),
+              color: AppColors.navy,
+              fontFeatures: const [ui.FontFeature.tabularFigures()],
+            ),
           ),
           const SizedBox(height: 4),
           Text(label, style: Theme.of(context).textTheme.bodySmall),

@@ -1,11 +1,31 @@
 import '../domain/entities/document_entities.dart';
 
 const mockDocumentTypes = [
-  DocumentType(id: 'passport', name: 'Passport', description: 'Valid passport bio page'),
-  DocumentType(id: 'photo', name: 'Photo', description: 'Passport-size photograph'),
-  DocumentType(id: 'education', name: 'Education Certificate', description: 'Diplomas and transcripts'),
-  DocumentType(id: 'language', name: 'Language Test', description: 'IELTS / TOEFL / PTE results'),
-  DocumentType(id: 'funds', name: 'Proof of Funds', description: 'Bank statements'),
+  DocumentType(
+    id: 'passport',
+    name: 'Passport',
+    description: 'Valid passport bio page',
+  ),
+  DocumentType(
+    id: 'photo',
+    name: 'Photo',
+    description: 'Passport-size photograph',
+  ),
+  DocumentType(
+    id: 'education',
+    name: 'Education Certificate',
+    description: 'Diplomas and transcripts',
+  ),
+  DocumentType(
+    id: 'language',
+    name: 'Language Test',
+    description: 'IELTS / TOEFL / PTE results',
+  ),
+  DocumentType(
+    id: 'funds',
+    name: 'Proof of Funds',
+    description: 'Bank statements',
+  ),
 ];
 
 final mockDocuments = [

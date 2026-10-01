@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../providers/auth_controller.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -11,7 +12,8 @@ class ProfileCompletionPage extends ConsumerStatefulWidget {
   const ProfileCompletionPage({super.key});
 
   @override
-  ConsumerState<ProfileCompletionPage> createState() => _ProfileCompletionPageState();
+  ConsumerState<ProfileCompletionPage> createState() =>
+      _ProfileCompletionPageState();
 }
 
 class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
@@ -31,9 +33,13 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _error = null);
     try {
-      await ref.read(authControllerProvider.notifier).completeProfile(
+      await ref
+          .read(authControllerProvider.notifier)
+          .completeProfile(
             fullName: _nameCtrl.text.trim(),
-            nationality: _nationalityCtrl.text.trim().isEmpty ? null : _nationalityCtrl.text.trim(),
+            nationality: _nationalityCtrl.text.trim().isEmpty
+                ? null
+                : _nationalityCtrl.text.trim(),
           );
       if (mounted) context.go('/dashboard');
     } catch (e) {
@@ -58,9 +64,15 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('One small step before you begin', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'One small step before you begin',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                     const SizedBox(height: 8),
-                    Text('Tell us a little about yourself so we can make your immigration journey more personal.', style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      'Tell us a little about yourself so we can make your immigration journey more personal.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     const SizedBox(height: 20),
                     const LinearProgressIndicator(value: 0.5, minHeight: 6),
                     const SizedBox(height: 24),
@@ -69,26 +81,41 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text('About you', style: Theme.of(context).textTheme.titleMedium),
+                          Text(
+                            'About you',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                           const SizedBox(height: 16),
                           AppTextField(
-                      controller: _nameCtrl,
-                      label: 'Full name',
-                      prefixIcon: Icons.badge_outlined,
-                      validator: (v) => (v == null || v.trim().length < 2) ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 16),
+                            controller: _nameCtrl,
+                            label: 'Full name',
+                            prefixIcon: Icons.badge_outlined,
+                            validator: (v) => (v == null || v.trim().length < 2)
+                                ? 'Required'
+                                : null,
+                          ),
+                          const SizedBox(height: 16),
                           AppTextField(
-                      controller: _nationalityCtrl,
-                      label: 'Nationality (optional)',
-                      prefixIcon: Icons.public_outlined,
-                    ),
-                    if (_error != null) ...[
-                      const SizedBox(height: 12),
-                      Semantics(liveRegion: true, child: Text(_error!, style: const TextStyle(color: AppColors.error))),
-                    ],
-                    const SizedBox(height: 24),
-                    AppButton(label: 'Continue', loading: loading, onPressed: _submit),
+                            controller: _nationalityCtrl,
+                            label: 'Nationality (optional)',
+                            prefixIcon: Icons.public_outlined,
+                          ),
+                          if (_error != null) ...[
+                            const SizedBox(height: 12),
+                            Semantics(
+                              liveRegion: true,
+                              child: Text(
+                                _error!,
+                                style: const TextStyle(color: AppColors.error),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 24),
+                          AppButton(
+                            label: 'Continue',
+                            loading: loading,
+                            onPressed: _submit,
+                          ),
                         ],
                       ),
                     ),

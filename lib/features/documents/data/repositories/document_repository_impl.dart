@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import '../../../../core/network/api_exception.dart';
 import '../../domain/entities/document.dart';
-import '../../domain/entities/document_type.dart';
 import '../../domain/repositories/document_repository.dart';
 import '../datasources/document_local_datasource.dart';
 import '../datasources/document_remote_datasource.dart';
@@ -16,59 +17,8 @@ class DocumentRepositoryImpl implements DocumentRepository {
   final DocumentLocalDataSource local;
   final bool allowOfflineFallback;
 
-  static final List<Document> _seed = [
-    Document(
-      id: 'doc-1',
-      typeId: 'passport',
-      name: 'Passport',
-      status: DocumentVerificationStatus.verified,
-      kind: DocumentTypeKind.passport,
-      updatedAt: DateTime(2026, 9, 10),
-      userId: 'user-demo-001',
-    ),
-    Document(
-      id: 'doc-2',
-      typeId: 'photo',
-      name: 'Photograph',
-      status: DocumentVerificationStatus.uploaded,
-      kind: DocumentTypeKind.identity,
-      updatedAt: DateTime(2026, 9, 18),
-      userId: 'user-demo-001',
-    ),
-    Document(
-      id: 'doc-3',
-      typeId: 'education',
-      name: 'Bachelor Degree',
-      status: DocumentVerificationStatus.underReview,
-      kind: DocumentTypeKind.education,
-      updatedAt: DateTime(2026, 9, 22),
-      userId: 'user-demo-001',
-    ),
-    Document(
-      id: 'doc-4',
-      typeId: 'language',
-      name: 'IELTS Result',
-      status: DocumentVerificationStatus.missing,
-      kind: DocumentTypeKind.education,
-      userId: 'user-demo-001',
-    ),
-    Document(
-      id: 'doc-5',
-      typeId: 'funds',
-      name: 'Bank Statement',
-      status: DocumentVerificationStatus.missing,
-      kind: DocumentTypeKind.financial,
-      userId: 'user-demo-001',
-    ),
-  ];
-
   Future<List<Document>> _ensureLocal() async {
-    var items = await local.readAll();
-    if (items.isEmpty) {
-      items = List.of(_seed);
-      await local.writeAll(items);
-    }
-    return items;
+    return local.readAll();
   }
 
   @override
@@ -118,5 +68,29 @@ class DocumentRepositoryImpl implements DocumentRepository {
       await local.writeAll(cached);
       return saved;
     }
+  }
+
+  @override
+  Future<Document> uploadDocument({
+    required Document document,
+    required Uint8List bytes,
+    required String fileName,
+    required String contentType,
+  }) async {
+    final uploaded = await remote.upload(
+      document: document,
+      bytes: bytes,
+      fileName: fileName,
+      contentType: contentType,
+    );
+    final cached = await local.readAll();
+    final index = cached.indexWhere((item) => item.id == uploaded.id);
+    if (index >= 0) {
+      cached[index] = uploaded;
+    } else {
+      cached.add(uploaded);
+    }
+    await local.writeAll(cached);
+    return uploaded;
   }
 }

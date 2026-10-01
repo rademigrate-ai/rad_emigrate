@@ -1,23 +1,17 @@
 import '../../features/auth/domain/entities/user_session.dart';
 
 /// Immutable session snapshot for the application.
-enum SessionStatus {
-  unknown,
-  unauthenticated,
-  authenticated,
-}
+enum SessionStatus { unknown, unauthenticated, authenticated }
 
 class SessionState {
-  const SessionState({
-    this.status = SessionStatus.unknown,
-    this.session,
-  });
+  const SessionState({this.status = SessionStatus.unknown, this.session});
 
   final SessionStatus status;
   final UserSession? session;
 
   bool get isAuthenticated =>
-      status == SessionStatus.authenticated && (session?.isAuthenticated ?? false);
+      status == SessionStatus.authenticated &&
+      (session?.isAuthenticated ?? false);
 
   String? get token => session?.token;
 
@@ -33,5 +27,7 @@ class SessionState {
   }
 
   static const unknown = SessionState();
-  static const unauthenticated = SessionState(status: SessionStatus.unauthenticated);
+  static const unauthenticated = SessionState(
+    status: SessionStatus.unauthenticated,
+  );
 }

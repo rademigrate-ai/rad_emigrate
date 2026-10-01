@@ -1,9 +1,5 @@
 /// Runtime environment for RAD Emigrate.
-enum AppEnvironment {
-  development,
-  staging,
-  production,
-}
+enum AppEnvironment { development, staging, production }
 
 extension AppEnvironmentX on AppEnvironment {
   String get name {

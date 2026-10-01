@@ -90,18 +90,18 @@ class Document {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'typeId': typeId,
-        'name': name,
-        'status': status.name,
-        'kind': kind.name,
-        'userId': userId,
-        'fileUrl': fileUrl,
-        'mimeType': mimeType,
-        'updatedAt': updatedAt?.toIso8601String(),
-        'ocrText': ocrText,
-        'aiSummary': aiSummary,
-      };
+    'id': id,
+    'typeId': typeId,
+    'name': name,
+    'status': status.name,
+    'kind': kind.name,
+    'userId': userId,
+    'fileUrl': fileUrl,
+    'mimeType': mimeType,
+    'updatedAt': updatedAt?.toIso8601String(),
+    'ocrText': ocrText,
+    'aiSummary': aiSummary,
+  };
 
   factory Document.fromJson(Map<String, dynamic> json) {
     return Document(

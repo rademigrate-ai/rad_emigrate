@@ -44,8 +44,12 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
   final UserSession? _session;
 
   Future<void> load() async {
-    final userId = _session?.userId ?? 'user-demo-001';
+    final userId = _session?.userId;
     state = const AsyncValue.loading();
+    if (userId == null || userId.isEmpty) {
+      state = const AsyncValue.data(null);
+      return;
+    }
     try {
       var profile = await _repository.getProfile(userId);
       final session = _session;

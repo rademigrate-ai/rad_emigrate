@@ -111,12 +111,6 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Demo OTP: 123456',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
                 ],
               ),
             ),

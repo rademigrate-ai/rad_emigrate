@@ -61,7 +61,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     if (status == ApplicationStatus.rejected) {
       return [
         const ProgressStep(label: 'Submitted', state: ProgressStepState.done),
-        const ProgressStep(label: 'Under review', state: ProgressStepState.done),
+        const ProgressStep(
+          label: 'Under review',
+          state: ProgressStepState.done,
+        ),
         const ProgressStep(label: 'Rejected', state: ProgressStepState.current),
       ];
     }
@@ -72,8 +75,8 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
           state: i < currentIdx
               ? ProgressStepState.done
               : i == currentIdx
-                  ? ProgressStepState.current
-                  : ProgressStepState.upcoming,
+              ? ProgressStepState.current
+              : ProgressStepState.upcoming,
         ),
     ];
   }
@@ -82,16 +85,18 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     if (_creatingDraft) return;
     setState(() => _creatingDraft = true);
     try {
-      await ref.read(applicationControllerProvider.notifier).createDraft(
+      await ref
+          .read(applicationControllerProvider.notifier)
+          .createDraft(
             title: 'New application draft',
             programName: 'To be selected',
             country: '—',
           );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not create draft: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not create draft: $e')));
       }
     } finally {
       if (mounted) setState(() => _creatingDraft = false);
@@ -121,9 +126,9 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not update status: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not update status: $e')));
       }
     } finally {
       if (mounted) setState(() => _updatingStatus = false);
@@ -166,23 +171,32 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                         tone: _tone(app.status),
                       ),
                       const SizedBox(height: 8),
-                      Text(app.country,
-                          style: Theme.of(context).textTheme.bodyMedium),
+                      Text(
+                        app.country,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       if (app.notes != null) ...[
                         const SizedBox(height: 12),
-                        Text(app.notes!,
-                            style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                          app.notes!,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ],
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Progress', style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  'Progress',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 const SizedBox(height: 12),
                 AppCard(child: ProgressSteps(steps: _timeline(app.status))),
                 const SizedBox(height: 20),
-                Text('Update status',
-                    style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  'Update status',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   'Use this only to reflect the latest confirmed case state.',
@@ -223,9 +237,7 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             icon: const Icon(Icons.refresh),
             onPressed: _creatingDraft
                 ? null
-                : () => ref
-                    .read(applicationControllerProvider.notifier)
-                    .load(),
+                : () => ref.read(applicationControllerProvider.notifier).load(),
           ),
           const SizedBox(width: 8),
         ],
@@ -277,8 +289,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(app.title,
-                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          app.title,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                         const SizedBox(height: 4),
                         Text(
                           '${app.programName} · ${app.country}',

@@ -7,7 +7,10 @@ class AuthInterceptor extends Interceptor {
   final Future<String?> Function() _tokenProvider;
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     try {
       final token = await _tokenProvider();
       if (token != null && token.isNotEmpty) {
