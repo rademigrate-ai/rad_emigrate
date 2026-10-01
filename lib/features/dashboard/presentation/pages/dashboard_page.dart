@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/services/ai_service.dart';
 import '../../../../app/dependencies.dart';
 import '../../../../core/widgets/section_card.dart';
 

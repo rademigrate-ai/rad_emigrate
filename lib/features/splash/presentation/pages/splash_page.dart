@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,23 +14,31 @@ class SplashPage extends ConsumerStatefulWidget {
 }
 
 class _SplashPageState extends ConsumerState<SplashPage> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
     _bootstrap();
   }
 
-  Future<void> _bootstrap() async {
-    // Wait for auth restore to settle.
-    await Future<void>.delayed(const Duration(milliseconds: 900));
-    if (!mounted) return;
+  void _bootstrap() {
+    _timer = Timer(const Duration(milliseconds: 900), () {
+      if (!mounted) return;
 
-    final session = ref.read(authControllerProvider).valueOrNull;
-    if (session != null && session.isAuthenticated) {
-      context.go('/dashboard');
-    } else {
-      context.go('/login');
-    }
+      final session = ref.read(authControllerProvider).valueOrNull;
+      if (session != null && session.isAuthenticated) {
+        context.go('/dashboard');
+      } else {
+        context.go('/login');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
