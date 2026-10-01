@@ -9,3 +9,7 @@ final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
 final sessionStorageProvider = Provider<SessionStorage>((ref) {
   return SessionStorage(ref.read(secureStorageProvider));
 });
+
+final appReadyProvider = FutureProvider<void>((ref) async {
+  await Future<void>.delayed(Duration.zero);
+});
