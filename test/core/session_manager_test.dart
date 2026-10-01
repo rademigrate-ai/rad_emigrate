@@ -11,20 +11,42 @@ class _FakeAuthRepository implements AuthRepository {
   bool loggedOut = false;
 
   @override
-  Future<UserSession> login({required String identifier, required String password}) async =>
-      const UserSession(token: 't', authenticated: true);
+  Future<UserSession> login({
+    required String identifier,
+    required String password,
+  }) async {
+    return const UserSession(token: 't', authenticated: true);
+  }
 
   @override
-  Future<UserSession> register({equired String email, required String phone, required String password}) async =>
-      const UserSession();
+  Future<UserSession> register({
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
+    return const UserSession();
+  }
 
   @override
-  Future<UserSession> verifyOtp({required String identifier, required String otp}) async =>
-      const UserSession(token: 't', authenticated: true);
+  Future<UserSession> verifyOtp({
+    required String identifier,
+    required String otp,
+  }) async {
+    return const UserSession(token: 't', authenticated: true);
+  }
 
   @override
-  Future<UserSession> completeProfile({required String fullName, String? nationality}) async =>
-      UserSession(token: 't', fullName: fullName, authenticated: true, profileComplete: true);
+  Future<UserSession> completeProfile({
+    required String fullName,
+    String? nationality,
+  }) async {
+    return UserSession(
+      token: 't',
+      fullName: fullName,
+      authenticated: true,
+      profileComplete: true,
+    );
+  }
 
   @override
   Future<UserSession?> restoreSession() async => restored;
@@ -39,7 +61,11 @@ void main() {
   group('SessionManager', () {
     test('restore sets authenticated when session present', () async {
       final repo = _FakeAuthRepository(
-        restored: const UserSession(token: 'abc', authenticated: true, userId: 'u1'),
+        restored: const UserSession(
+          token: 'abc',
+          authenticated: true,
+          userId: 'u1',
+        ),
       );
       final manager = SessionManager(repo);
       final state = await manager.restore();

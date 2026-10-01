@@ -1,5 +1,9 @@
 import 'environment.dart';
 
+// Re-export so importers of AppConfig see AppEnvironment and AppEnvironmentX
+// (including isProduction) without a separate import.
+export 'environment.dart';
+
 /// Application configuration. No production secrets are hardcoded.
 class AppConfig {
   const AppConfig({
@@ -17,6 +21,9 @@ class AppConfig {
   final Duration connectTimeout;
   final Duration receiveTimeout;
   final Map<String, bool> featureFlags;
+
+  /// Convenience: true when [environment] is production.
+  bool get isProduction => environment.isProduction;
 
   bool isEnabled(String flag) => featureFlags[flag] ?? false;
 

@@ -17,6 +17,10 @@ extension AppEnvironmentX on AppEnvironment {
     }
   }
 
+  /// True only for [AppEnvironment.production].
   bool get isProduction => this == AppEnvironment.production;
+
   bool get isDevelopment => this == AppEnvironment.development;
+
+  bool get isStaging => this == AppEnvironment.staging;
 }
