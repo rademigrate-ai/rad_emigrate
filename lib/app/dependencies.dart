@@ -16,9 +16,7 @@ final aiServiceProvider = Provider<AiService>((ref) {
   return PlaceholderAiService();
 });
 
-/// Bootstrap provider that restores session on app start.
+/// Restores persisted authentication state before the application is considered ready.
 final appBootstrapProvider = FutureProvider<void>((ref) async {
-  // Trigger auth restore by reading the controller.
-  ref.read(authControllerProvider);
-  await Future<void>.delayed(Duration.zero);
+  await ref.read(authControllerProvider.notifier).restoreSession();
 });
