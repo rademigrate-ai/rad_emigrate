@@ -130,6 +130,11 @@ class DashboardPage extends ConsumerWidget {
                     onTap: () => context.go('/visa'),
                   ),
                   _ActionChip(
+                    icon: Icons.article_outlined,
+                    label: 'RAD updates',
+                    onTap: () => context.go('/feed'),
+                  ),
+                  _ActionChip(
                     icon: Icons.assignment_outlined,
                     label: 'Applications',
                     onTap: () => context.go('/applications'),
