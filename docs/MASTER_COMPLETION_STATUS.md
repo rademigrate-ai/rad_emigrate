@@ -7,6 +7,6 @@
 | 11 | Complete and deployed | `e612b5103d49e798184d6047448bfe4b882f2a08` | pending: tag-write unavailable | CI run 55 green | Provider credentials intentionally not supplied |
 | 12 | Complete and deployed | `0f6365095eb35a584a9d82f34333ae50f1e80134` | pending: tag-write unavailable | CI run 56 green | OCR credential intentionally not supplied |
 | 13 | Complete, deployed, live UI | `43e6c12b1296938a9bd2a369c457a05e10880cfd` | pending: tag-write unavailable | final CI green | No verified admin account exists yet |
-| 14 | Pending | — | — | — | — |
+| 14 | Complete, deployed, live UI/PWA | `73de807bb7ad26fc354c1e70325f5572555e931e` | pending: tag-write unavailable | final CI green | No reviewed feed item published yet |
 | 15 | Pending | — | — | — | — |
 | 16 | Pending | — | — | — | — |
