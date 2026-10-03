@@ -8,8 +8,7 @@ void main() {
   test('web/manifest.json exists with required icon references', () {
     final file = File('web/manifest.json');
     expect(file.existsSync(), isTrue, reason: 'PWA manifest must exist');
-    final json =
-        jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+    final json = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(json['name'], isNotNull);
     expect(json['short_name'], isNotNull);
     expect(json['start_url'], isNotNull);
@@ -32,9 +31,9 @@ void main() {
   });
 
   test('manifest name is present (production branding may still lag)', () {
-    final json =
-        jsonDecode(File('web/manifest.json').readAsStringSync())
-            as Map<String, dynamic>;
+    final json = jsonDecode(
+      File('web/manifest.json').readAsStringSync(),
+    ) as Map<String, dynamic>;
     // Document current state; Master Agent owns production branding polish.
     expect(json['name'], isA<String>());
     expect((json['name'] as String).isNotEmpty, isTrue);

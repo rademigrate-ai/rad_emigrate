@@ -94,10 +94,7 @@ void main() {
           restoredProtectedDestination('https://evil.example/phish'),
           '/dashboard',
         );
-        expect(
-          restoredProtectedDestination('/unknown-route'),
-          '/dashboard',
-        );
+        expect(restoredProtectedDestination('/unknown-route'), '/dashboard');
         expect(restoredProtectedDestination(null), '/dashboard');
       },
     );

@@ -72,11 +72,7 @@ void main() {
         );
         // Only exact lowercase server roles grant access.
         final allowed = forged == 'admin' || forged == 'super_admin';
-        expect(
-          snapshot.canAccess,
-          allowed,
-          reason: 'forged role: $forged',
-        );
+        expect(snapshot.canAccess, allowed, reason: 'forged role: $forged');
       }
     });
 
