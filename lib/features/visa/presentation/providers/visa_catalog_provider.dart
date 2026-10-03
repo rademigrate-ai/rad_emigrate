@@ -8,6 +8,9 @@ final visaRepositoryProvider = Provider<VisaRepository>((ref) {
   return VisaRepository(ref.watch(supabaseClientServiceProvider));
 });
 
-final visaCatalogProvider = FutureProvider.family<VisaCatalog, String>((ref, locale) {
+final visaCatalogProvider = FutureProvider.family<VisaCatalog, String>((
+  ref,
+  locale,
+) {
   return ref.watch(visaRepositoryProvider).loadCatalog(locale: locale);
 });

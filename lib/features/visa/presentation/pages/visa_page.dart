@@ -221,9 +221,7 @@ class _ProgramDetail extends StatelessWidget {
               if (program.requirements.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 Text(
-                  isFa
-                      ? 'مدارک و الزامات منتشرشده'
-                      : 'Published requirements',
+                  isFa ? 'مدارک و الزامات منتشرشده' : 'Published requirements',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ...program.requirements.map(

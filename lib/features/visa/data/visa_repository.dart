@@ -12,20 +12,31 @@ class VisaRepository {
     }
     final language = locale == 'fa' ? 'fa' : 'en';
     final results = await Future.wait([
-      _service.client.from('destinations').select(
-        'id,code,slug,flag_emoji,destination_localizations!inner(name,summary,locale)',
-      ).eq('destination_localizations.locale', language).order('display_order'),
-      _service.client.from('program_categories').select(
-        'id,slug,program_category_localizations!inner(name,description,locale)',
-      ).eq('program_category_localizations.locale', language).order('display_order'),
-      _service.client.from('visa_programs').select(
-        'id,slug,destination_id,category_id,processing_time_text,fees_text,'
-        'visa_program_localizations!inner(title,summary,description,locale),'
-        'visa_program_requirements(requirement,is_mandatory,display_order,locale),'
-        'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
-      ).eq('visa_program_localizations.locale', language)
-        .eq('visa_program_requirements.locale', language)
-        .order('published_at', ascending: false),
+      _service.client
+          .from('destinations')
+          .select(
+            'id,code,slug,flag_emoji,destination_localizations!inner(name,summary,locale)',
+          )
+          .eq('destination_localizations.locale', language)
+          .order('display_order'),
+      _service.client
+          .from('program_categories')
+          .select(
+            'id,slug,program_category_localizations!inner(name,description,locale)',
+          )
+          .eq('program_category_localizations.locale', language)
+          .order('display_order'),
+      _service.client
+          .from('visa_programs')
+          .select(
+            'id,slug,destination_id,category_id,processing_time_text,fees_text,'
+            'visa_program_localizations!inner(title,summary,description,locale),'
+            'visa_program_requirements(requirement,is_mandatory,display_order,locale),'
+            'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
+          )
+          .eq('visa_program_localizations.locale', language)
+          .eq('visa_program_requirements.locale', language)
+          .order('published_at', ascending: false),
     ]);
 
     return VisaCatalog(
@@ -65,17 +76,17 @@ class VisaRepository {
   VisaProgram _program(Map<String, dynamic> row) {
     final localized = _first(row['visa_program_localizations']);
     final source = row['content_sources'] as Map<String, dynamic>;
-    final requirements = ((row['visa_program_requirements'] as List<dynamic>?) ?? const [])
-        .map((item) {
+    final requirements =
+        ((row['visa_program_requirements'] as List<dynamic>?) ?? const []).map((
+          item,
+        ) {
           final value = item as Map<String, dynamic>;
           return VisaRequirement(
             text: value['requirement'] as String,
             displayOrder: value['display_order'] as int? ?? 0,
             isMandatory: value['is_mandatory'] as bool?,
           );
-        })
-        .toList()
-      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+        }).toList()..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
     return VisaProgram(
       id: row['id'] as String,
       slug: row['slug'] as String,
