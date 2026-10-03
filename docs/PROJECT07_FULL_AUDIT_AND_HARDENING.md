@@ -1,104 +1,85 @@
-# PROJECT 07 — Full Audit and Hardening (Audit Snapshot)
+# RAD EMIGRATE — PROJECT 07 AUDIT AND HARDENING
 
-**Status: INCOMPLETE — production readiness is not verified.**
+**Status: implementation and verification are in progress. Production readiness is not yet verified.**
 
-This snapshot records independently checked repository and live Supabase facts from 2026-10-03. The full Definition of Done was not completed because this environment has no Flutter, Dart, or PostgreSQL CLI, and Git clone access to this private repository is unavailable. Source files were read through the connected GitHub API. Findings marked “code review” were not runtime reproduced.
+Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `main` SHA `f3ec28e6f3a4f98c7461ed4852dea78531a6346b`, Supabase RAD project `inshddthftkhcdosoqcn` in `eu-west-1`. Database engine version: `17.11.0.002`.
 
-## 1. Baseline
+## Verified
 
-- Repository: `rademigrate-ai/rad_emigrate`
-- Starting branch: `main`
-- Starting commit: `f3ec28e6f3a4f98c7461ed4852dea78531a6346b` (`chore: complete Project 06 production audit and hardening`)
-- Audit date: 2026-10-03
-- Declared Dart SDK constraint: `^3.13.4` in `pubspec.yaml`. Installed Flutter/Dart versions could not be checked because neither executable is available.
-- Supabase: RAD, project `inshddthftkhcdosoqcn`, region `eu-west-1` (confirmed from Supabase project metadata; database version `17.11.0.002`).
-- The local workspace did not contain a Git checkout or local changes; repository contents were inspected through GitHub API reads.
+### Repository and architecture
 
-## 2. Areas inspected
+- Main was unprotected and no GitHub Actions workflow existed at the starting SHA. A CI workflow has now been added on this branch for pull requests and pushes to main.
+- Existing architecture is Flutter, Riverpod, GoRouter, feature-first layers, repositories, data sources, and Supabase. Source inspection found no direct Supabase calls in feature presentation files.
+- The current tree includes generated `graphify-out` caches/reports and a nested `graphify-8` tool tree. Their ownership/purpose was not established; they were not removed.
+- A static scan of tracked source/config for common service-role, secret, JWT, database URL, and API-key patterns returned no matching file paths. This is heuristic and does not prove secret absence.
+- The legacy Project 06 statement about there being no PR branch was corrected with a dated follow-up. PR #1 remains closed without merge and its branch/document remain available.
 
-Repository metadata, main and feature branches, tags, open PRs, commit history, repository tree, documentation for Projects 01–06, dependency/configuration files, app bootstrap, routing, authentication, profile/application/document data sources, storage service, AI session repository, tests, tracked Supabase migrations, live public tables and policies, Storage bucket/policies, signup trigger privileges, Supabase Security and Performance Advisors, Edge Function inventory, and repository secret-pattern matches.
+### Live Supabase
 
-Architecture scan found no direct Supabase calls in feature presentation files. The expected Flutter/Riverpod/GoRouter/repository structure is present. This was a source inspection, not a complete dependency graph or execution audit.
-
-## 3. Findings
-
-### Bugs
-
-| Severity | Finding | Evidence and status |
-| --- | --- | --- |
-| High | The tracked migration history does not reproduce the live database history. | The repository has nine migrations named `001`–`009`. The live ledger has 16 timestamp-versioned migrations, including the initial core schema, signup/storage setup, backend indexes, table-grant hardening, and other versions without corresponding tracked migration files. A clean database cannot be reconstructed from the tracked migration directory alone. Confirmed by comparing the GitHub tree with the live Supabase migration ledger. No migration was applied during this audit. |
-| Medium | Protected deep links can be redirected to login before session restoration completes. | Code review: `app_router.dart` treats a missing authenticated session as unauthenticated for protected routes; the bootstrap future restores the session asynchronously. A direct request to a protected route can therefore lose its destination during startup. This needs a router regression test and runtime reproduction. |
-| Medium | README still advertised fake login and OTP credentials. | `README.md` said any email/password and OTP `123456` work, contradicting the Supabase-only authentication implementation and Project 06 report. The credentials were removed on this branch. |
-| Low | A historical Project 06 Git audit statement is inaccurate. | `docs/PROJECT06_COMPLETION.md` says no obsolete remote branches or PR branches were present; PR #1 and its branch were created before that completion commit. PR #1 has since been closed without merge, with its branch and historical document retained. |
-
-### Repository hygiene
-
-- The tracked tree contains generated `graphify-out` AST/semantic caches and reports, plus a nested `graphify-8` tool tree. Their intended ownership and whether they should remain in the product repository were not established; no files were removed.
-
-### Security findings
-
-- Security Advisor returned no findings at audit time.
-- All five application tables have RLS enabled and owner-scoped policies for their supported operations. `force row level security` is false; privileged service roles bypass RLS by design.
-- The signup trigger function is `SECURITY DEFINER`, has an empty search path, and denies EXECUTE to `anon` and `authenticated`.
-- Storage bucket `documents` is private. SELECT/INSERT/DELETE policies scope paths to the authenticated user's ID. The INSERT policy also checks MIME type and size metadata.
-- Static repository scans for common service-role, secret, JWT, database URL, and API-key patterns returned no matching file paths. This is a heuristic scan, not a complete secret scanner or proof of secret absence.
-- The bucket's live `file_size_limit` and `allowed_mime_types` are unset. Client validation and an RLS policy provide checks, but the bucket-level restrictions recommended by Supabase are not configured. This remains an external configuration hardening item.
+- Five public tables exist: `profiles`, `applications`, `documents`, `ai_sessions`, `ai_session_messages`. Each has RLS enabled. The live policies are owner-scoped: 17 policies across these tables.
+- The auth signup trigger `auth.on_auth_user_created` exists. `public.handle_new_user()` is SECURITY DEFINER with `search_path = ''`; execute is denied to `anon` and `authenticated`.
+- The `documents` Storage bucket is private. Its live configuration now limits files to 10 MiB and PDF/JPEG/PNG. Storage RLS policies scope read/write/delete paths to the authenticated user. Client validation also checks the same content types and byte limit; `.jpg` and `.jpeg` map to `image/jpeg`.
+- After applying the bucket restriction migration, Security Advisor returned zero findings.
+- Performance Advisor reported ten informational unused indexes. The tables were empty at inspection time; indexes remain because they support owner filters, relationships, or RLS.
 - No Edge Functions were listed.
-- No migration was applied, so post-migration advisor results do not apply.
+- The only live Supabase change in this task was applying bucket upload restrictions under version `20261003102347`. No tables, users, or Storage objects were changed.
 
-## 4. Supabase schema and migration result
+## Migration reconciliation
 
-Live public tables: `profiles`, `applications`, `documents`, `ai_sessions`, and `ai_session_messages`. All were reported with RLS enabled and zero rows at inspection time. Storage contains the private `documents` bucket. The signup trigger and current policies were queried directly.
+At the starting SHA the repository tracked nine migrations (`001`–`009`) while RAD's live ledger had 16 timestamped records. The repository now has ten migration files after adding the paired live bucket restriction migration; the live ledger now has 17 records.
 
-The repository's nine SQL files and the project's 16 live migration records have not been reconciled. Do not reset, repair, or deploy migrations until a canonical migration history is recovered and tested against a fresh database.
+The mismatch comes from missing historical migration source and missing core-schema creation SQL in the repository. Some final effects correspond to the current numbered scripts, but the exact original boundaries for all live-only entries cannot be recovered from ledger names. No production history was renamed, fabricated, or repaired.
 
-## 5. Code and documentation changes
+For clean projects, this branch adds:
 
-- Removed the obsolete demo credential block from `README.md` and replaced it with accurate Supabase account/session guidance.
-- No Dart or SQL code was changed because the repository could not be checked out and Flutter/Dart execution was unavailable.
-- No Supabase migrations were applied.
+- `supabase/bootstrap/clean_schema.sql`: guarded current-schema bootstrap; it aborts if RAD tables already exist.
+- `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying the legacy migrations, applies the guarded bootstrap, then applies the tracked SQL files in order and checks tables, RLS, policies, signup trigger, and bucket settings.
+- `docs/SUPABASE_MIGRATION_RECONCILIATION.md`: per-version reconciliation and safe future migration guidance.
 
-## 6. Tests and validation
+The clean replay is **not yet verified**; the GitHub CI database job is running/pending. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
+
+## Fixed or changed on this branch
+
+- Removed false demo login/OTP credentials from `README.md`.
+- Changed GoRouter auth redirects to respect the bootstrap restoration state, send protected deep links through splash while restoration is pending, and preserve a validated in-app destination after restoration.
+- Added six unit tests covering cold unauthenticated startup, restored protected deep links, invalid sessions, incomplete profiles, authenticated public-route redirects, and destination validation.
+- Added timestamp-matched SQL source for the additive documents bucket restriction applied live.
+- Added CI for Flutter format/analyze/tests/web build and isolated clean-schema replay. The actual run is still in progress.
+
+## Unverified and current validation
 
 | Check | Result |
 | --- | --- |
-| `dart format` | Not run — Dart unavailable |
-| `flutter analyze` | Not run — Flutter unavailable |
-| `flutter test` | Not run — Flutter unavailable |
-| `flutter build web` | Not run — Flutter unavailable |
-| `git diff --check` | Not run — no local Git checkout |
-| Fresh migration replay | Not run — migration source/ledger mismatch |
-| Security Advisor | No findings returned |
-| Performance Advisor | Ten informational unused-index findings; tables had zero rows, so index usage is not representative. No index was removed. |
-| Secret scan | Heuristic filename-only scan found no matches |
-| Re-audit after fixes | Not complete |
+| Local Git checkout / working tree | No checkout available; source was read through GitHub API. |
+| Local Flutter/Dart commands | Not available in this environment. |
+| GitHub Actions CI | Workflow added; latest run must finish before results can be claimed. |
+| Router regression tests | Added; execution pending CI. |
+| Clean Supabase replay | Script added; execution pending CI. |
+| Flutter format | Pending CI. |
+| Flutter analyze | Pending CI. |
+| Flutter tests | Pending CI. |
+| Flutter web build | Pending CI. |
+| `git diff --check` | Included in CI; pending. |
+| Supabase Security Advisor | Verified after the live bucket configuration change: zero findings. |
+| Supabase Performance Advisor | Verified: ten informational unused-index findings; retained with rationale above. |
+| Real signup/login, multi-user isolation, web hosting/deployment | Not tested. |
 
-There are no GitHub Actions workflows in the repository tree. The `main` branch was reported as unprotected. No CI result exists to substitute for local Flutter validation.
+## External configuration and remaining blockers
 
-## 7. Remaining limitations
+### BUGS / RELEASE BLOCKERS
 
-### BUGS
-
-1. High: tracked migrations do not match the live ledger and omit schema/bootstrap history needed for a reproducible fresh database.
-2. Medium: protected deep-link routing may lose the requested route during asynchronous session restoration; add a regression test and verify with Flutter.
-3. Low: generated `graphify-out` caches/reports and a nested `graphify-8` tool tree are committed. Their intended status must be checked before removal.
+- RAD's deployed migration history still lacks a one-to-one checked-in source history. The new bootstrap makes a clean project reproducible, but does not make `supabase db push` safe against the existing RAD project.
+- Router behavior is addressed in code and regression tests; it is not considered fixed until CI passes.
 
 ### EXTERNAL CONFIGURATION
 
-- Configure bucket-level 10 MB and PDF/JPEG/PNG restrictions for `documents`, then verify the resulting settings live.
-- Add a CI workflow and required checks; enable branch protection for `main`.
-- Add CI for format, analyze, tests, and web build; protect `main` with required checks.
-- Complete production-hosting environment, redirect URL, real-auth, multi-user isolation, Storage, and deployment smoke tests.
-- Recover/reconcile the canonical Supabase migration history before making schema changes.
+- `main` remains unprotected. Enable required CI checks and prevent force-push/deletion using the repository's intended governance after the workflow has a successful run.
+- Production Supabase redirect URLs, hosting environment values, real account flows, and multi-user/storage isolation require the live hosting/account setup and were not changed here.
 
 ### FUTURE PRODUCT WORK
 
-AI provider integration, OCR/document intelligence, visa catalog governance, knowledge-base ingestion, operations/admin, client workflow, and privacy-safe observability remain outside this audit snapshot.
+AI provider integration, the RAD knowledge base, OCR/document intelligence, admin/operations, client workflows, and observability remain outside Project 07. See `docs/REMAINING_PRODUCT_ROADMAP.md`.
 
-## 8. Production readiness
+## Production readiness
 
-**Not verified.** Live RLS, Storage privacy, trigger hardening, and current advisor output were inspected. Flutter build/test behavior, migration replay, real-user flows, multi-user isolation, and hosting configuration remain unverified. No claim of production readiness is made.
-
-## Open PR review
-
-PR #1, `feat: complete project 05 production launch hardening`, was closed without merge after comparison showed its only unique change was a Project 05 document and the branch was six commits behind `main`. The PR discussion records the reason; its branch and historical document remain intact.
+**Not verified.** Live database security and Storage settings were checked. CI and clean reconstruction are pending; real user flows, hosting, and production deployment remain unverified.
