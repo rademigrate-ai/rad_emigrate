@@ -37,7 +37,7 @@ class AuthRemoteDataSource {
         email: identifier.trim(),
         password: password,
       );
-      return _mapSupabaseSession(response.session);
+      return await _mapSupabaseSession(response.session);
     } catch (error) {
       throw _apiException(error);
     }
@@ -71,7 +71,7 @@ class AuthRemoteDataSource {
           profileComplete: false,
         );
       }
-      return _mapSupabaseSession(response.session, user: response.user);
+      return await _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
       throw _apiException(error);
     }
@@ -101,7 +101,7 @@ class AuthRemoteDataSource {
         token: otp,
         type: OtpType.email,
       );
-      return _mapSupabaseSession(response.session, user: response.user);
+      return await _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
       throw _apiException(error);
     }
@@ -133,12 +133,7 @@ class AuthRemoteDataSource {
         'country': nationality,
         'updated_at': DateTime.now().toIso8601String(),
       });
-      // This display-only marker is read during session restore. RLS remains
-      // the authority for all database access checks.
-      await _service.client.auth.updateUser(
-        UserAttributes(data: {...?user.userMetadata, 'full_name': fullName}),
-      );
-      return _mapSupabaseSession(
+      return await _mapSupabaseSession(
         _service.client.auth.currentSession,
         user: user,
         fullName: fullName,
@@ -175,7 +170,7 @@ class AuthRemoteDataSource {
 
   SupabaseClientService get _service => _backend as SupabaseClientService;
 
-  UserSession sessionFromAuthSession(Session session) {
+  Future<UserSession> sessionFromAuthSession(Session session) {
     _ensureSupabaseReady();
     return _mapSupabaseSession(session);
   }
@@ -189,17 +184,36 @@ class AuthRemoteDataSource {
     }
   }
 
-  UserSession _mapSupabaseSession(
+  Future<UserSession> _mapSupabaseSession(
     Session? session, {
     User? user,
     String? fullName,
-  }) {
+  }) async {
     final resolvedUser = user ?? _service.client.auth.currentUser;
     if (session == null || resolvedUser == null) {
       throw const ApiException(message: 'No active Supabase session.');
     }
+
     final metadata = resolvedUser.userMetadata ?? const <String, dynamic>{};
-    final resolvedName = fullName ?? metadata['full_name'] as String?;
+    String? resolvedName = fullName ?? metadata['full_name'] as String?;
+
+    if (resolvedName == null || resolvedName.trim().isEmpty) {
+      try {
+        final profile = await _service.client
+            .from('profiles')
+            .select('full_name')
+            .eq('id', resolvedUser.id)
+            .maybeSingle();
+        final profileName = profile?['full_name'] as String?;
+        if (profileName != null && profileName.trim().isNotEmpty) {
+          resolvedName = profileName;
+        }
+      } on PostgrestException {
+        // Route protection should fail closed on auth, but a temporarily
+        // unavailable profile row should not invalidate an otherwise valid session.
+      }
+    }
+
     return UserSession(
       token: session.accessToken,
       userId: resolvedUser.id,
@@ -207,7 +221,7 @@ class AuthRemoteDataSource {
       phone: resolvedUser.phone,
       fullName: resolvedName,
       authenticated: true,
-      profileComplete: resolvedName != null && resolvedName.isNotEmpty,
+      profileComplete: resolvedName != null && resolvedName.trim().isNotEmpty,
     );
   }
 
