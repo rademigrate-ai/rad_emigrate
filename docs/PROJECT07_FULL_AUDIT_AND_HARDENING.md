@@ -1,6 +1,6 @@
 # RAD EMIGRATE — PROJECT 07 AUDIT AND HARDENING
 
-**Status: implementation and verification are in progress. Production readiness is not yet verified.**
+**Status: Project 07 code and clean-schema validation pass. Production readiness remains unverified.**
 
 Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `main` SHA `f3ec28e6f3a4f98c7461ed4852dea78531a6346b`, Supabase RAD project `inshddthftkhcdosoqcn` in `eu-west-1`. Database engine version: `17.11.0.002`.
 
@@ -36,7 +36,7 @@ For clean projects, this branch adds:
 - `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying the legacy migrations, applies the guarded bootstrap, then applies the tracked SQL files in order and checks tables, RLS, policies, signup trigger, and bucket settings.
 - `docs/SUPABASE_MIGRATION_RECONCILIATION.md`: per-version reconciliation and safe future migration guidance.
 
-The clean replay is **not yet verified**; the GitHub CI database job is running/pending. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
+The clean replay **passed** in [GitHub Actions run 9](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117517484). The Flutter workflow checks also passed on that commit. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
 
 ## Fixed or changed on this branch
 
@@ -52,24 +52,23 @@ The clean replay is **not yet verified**; the GitHub CI database job is running/
 | --- | --- |
 | Local Git checkout / working tree | No checkout available; source was read through GitHub API. |
 | Local Flutter/Dart commands | Not available in this environment. |
-| GitHub Actions CI | Workflow added; latest run must finish before results can be claimed. |
-| Router regression tests | Added; execution pending CI. |
-| Clean Supabase replay | Script added; execution pending CI. |
-| Flutter format | Pending CI. |
-| Flutter analyze | Pending CI. |
-| Flutter tests | Pending CI. |
-| Flutter web build | Pending CI. |
-| `git diff --check` | Included in CI; pending. |
+| GitHub Actions CI | Passed on commit `4dfa45f`: format, analyze, tests, web build, clean schema replay, and `git diff --check`. |
+| Router regression tests | Six tests passed in GitHub Actions. |
+| Clean Supabase replay | Passed in GitHub Actions against an isolated Supabase stack. |
+| Flutter format | Passed strict CI check. |
+| Flutter analyze | Passed. |
+| Flutter tests | Passed. |
+| Flutter web build | Passed with placeholder non-production Supabase values. |
+| `git diff --check` | Passed. |
 | Supabase Security Advisor | Verified after the live bucket configuration change: zero findings. |
 | Supabase Performance Advisor | Verified: ten informational unused-index findings; retained with rationale above. |
 | Real signup/login, multi-user isolation, web hosting/deployment | Not tested. |
 
 ## External configuration and remaining blockers
 
-### BUGS / RELEASE BLOCKERS
+### REMAINING RELEASE BLOCKERS
 
-- RAD's deployed migration history still lacks a one-to-one checked-in source history. The new bootstrap makes a clean project reproducible, but does not make `supabase db push` safe against the existing RAD project.
-- Router behavior is addressed in code and regression tests; it is not considered fixed until CI passes.
+- RAD's deployed migration history still lacks a one-to-one checked-in source history. The clean bootstrap makes a new project reproducible, but does not make `supabase db push` safe against the existing RAD project.
 
 ### EXTERNAL CONFIGURATION
 
@@ -82,4 +81,4 @@ AI provider integration, the RAD knowledge base, OCR/document intelligence, admi
 
 ## Production readiness
 
-**Not verified.** Live database security and Storage settings were checked. CI and clean reconstruction are pending; real user flows, hosting, and production deployment remain unverified.
+**Not fully verified.** Live database security and Storage settings were checked, and code plus clean reconstruction passed CI. Real user flows, hosting configuration, and production deployment remain unverified.
