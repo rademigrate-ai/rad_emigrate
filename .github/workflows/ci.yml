@@ -52,11 +52,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
-      - name: Capture canonical formatting for Project 13
-        run: |
-          dart format lib/features/admin/presentation/pages/admin_operations_page.dart
-          git diff -- lib/features/admin/presentation/pages/admin_operations_page.dart
-          exit 1
+      - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
       - name: Build web with non-production configuration
