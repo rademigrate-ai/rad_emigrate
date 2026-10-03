@@ -1,3 +1,9 @@
+dart format --output=show lib/features/auth/presentation/pages/otp_page.dart
+shell: /usr/bin/bash -e {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+##[endgroup]
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -81,9 +87,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       }
     } catch (e) {
       if (mounted) {
-        setState(
-          () => _error = e.toString().replaceFirst('Exception: ', ''),
-        );
+        setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
       }
     } finally {
       if (mounted) setState(() => _resending = false);
@@ -187,3 +191,4 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     );
   }
 }
+Formatted 1 file (1 changed) in 0.01 seconds.
