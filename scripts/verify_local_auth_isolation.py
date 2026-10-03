@@ -123,7 +123,8 @@ def expect_success(
         method, path, token, payload, content_type, extra_headers
     )
     if status < 200 or status >= 300:
-        fail(label, f"HTTP {status}")
+        detail = body.decode("utf-8", "replace")[:400]
+        fail(label, f"HTTP {status}: {detail}")
     return json_body(body), body
 
 
