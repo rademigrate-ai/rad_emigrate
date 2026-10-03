@@ -122,6 +122,6 @@
 - Run live RAD signup/login/logout/session restoration, profile/application persistence, and two-user database/Storage isolation tests.
 - Select the production Android application ID and provide signing values through the secure release process.
 - Configure protected branch governance with the successful CI jobs under an eligible repository plan.
-- Complete owner review of PR #2. Project 08 must not be called fully deployed until the deployment and live acceptance checks above pass.
+- PR #2 has merged. Project 08 is engineering complete; it is not fully deployed until the remaining owner-selected deployment and live acceptance checks above pass.
 
 The RAD migration-ledger mismatch remains documented. Keep historical production migration repair separate; never reset or rewrite the live ledger to align filenames.
