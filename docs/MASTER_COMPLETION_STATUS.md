@@ -6,7 +6,7 @@
 | 10 | Complete, deployed, smoke-tested | `cd1b37af2d1559f3e563c661dbc7c42eebf4b36d` | pending: tag-write unavailable | CI runs 53–54 green | `pg_net` non-relocatable extension warning only |
 | 11 | Complete and deployed | `e612b5103d49e798184d6047448bfe4b882f2a08` | pending: tag-write unavailable | CI run 55 green | Provider credentials intentionally not supplied |
 | 12 | Complete and deployed | `0f6365095eb35a584a9d82f34333ae50f1e80134` | pending: tag-write unavailable | CI run 56 green | OCR credential intentionally not supplied |
-| 13 | Pending | — | — | — | — |
+| 13 | Complete, deployed, live UI | `43e6c12b1296938a9bd2a369c457a05e10880cfd` | pending: tag-write unavailable | final CI green | No verified admin account exists yet |
 | 14 | Pending | — | — | — | — |
 | 15 | Pending | — | — | — | — |
 | 16 | Pending | — | — | — | — |
