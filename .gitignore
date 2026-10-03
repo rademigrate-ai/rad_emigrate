@@ -42,3 +42,8 @@ app.*.map.json
 .env.*
 !.env.example
 supabase/.temp/
+
+# Android release signing material
+android/key.properties
+*.jks
+*.keystore

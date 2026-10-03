@@ -90,6 +90,17 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
+  Future<void> resendOtp({required String identifier}) async {
+    final previousState = state;
+    try {
+      await _repository.resendOtp(identifier: identifier);
+      state = previousState;
+    } catch (e, st) {
+      state = previousState;
+      Error.throwWithStackTrace(e, st);
+    }
+  }
+
   Future<void> verifyOtp({
     required String identifier,
     required String otp,

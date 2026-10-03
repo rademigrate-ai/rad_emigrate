@@ -11,6 +11,9 @@ class _TestAuthRepository implements AuthRepository {
   bool loggedOut = false;
 
   @override
+  Future<void> resendOtp({required String identifier}) async {}
+
+  @override
   Future<UserSession> login({
     required String identifier,
     required String password,

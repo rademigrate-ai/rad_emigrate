@@ -23,7 +23,6 @@ flutter build web
 5. Add tests when changing auth, session, or routing behaviour.
 6. Do not invent RAD services, prices, or guarantees.
 
-## Demo
+## Authentication
 
-- Login: any email + any non-empty password
-- OTP: `123456`
+Use a real account in the configured Supabase project. Demo email/password and OTP credentials are not supported. See the Authentication section in the root README.

@@ -19,6 +19,8 @@ class OtpPage extends ConsumerStatefulWidget {
 class _OtpPageState extends ConsumerState<OtpPage> {
   final _otpCtrl = TextEditingController();
   String? _error;
+  String? _notice;
+  bool _resending = false;
 
   @override
   void dispose() {
@@ -54,6 +56,35 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       }
     } catch (e) {
       setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+    }
+  }
+
+  Future<void> _resend() async {
+    final identifier = widget.identifier?.trim() ?? '';
+    if (identifier.isEmpty || !identifier.contains('@')) {
+      setState(
+        () => _error = 'Return to sign up and enter your email address.',
+      );
+      return;
+    }
+    setState(() {
+      _error = null;
+      _notice = null;
+      _resending = true;
+    });
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .resendOtp(identifier: identifier);
+      if (mounted) {
+        setState(() => _notice = 'A new verification code was sent.');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      }
+    } finally {
+      if (mounted) setState(() => _resending = false);
     }
   }
 
@@ -113,11 +144,34 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                             ),
                           ),
                         ],
+                        if (_notice case final notice?) ...[
+                          const SizedBox(height: 12),
+                          Semantics(
+                            liveRegion: true,
+                            child: Text(
+                              notice,
+                              style: TextStyle(color: AppColors.success),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 20),
                         AppButton(
                           label: 'Verify code',
                           loading: loading,
                           onPressed: _submit,
+                        ),
+                        TextButton(
+                          onPressed: loading || _resending ? null : _resend,
+                          child: _resending
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Text('Resend code'),
                         ),
                       ],
                     ),

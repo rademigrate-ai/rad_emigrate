@@ -49,6 +49,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> resendOtp({required String identifier}) =>
+      remote.resendOtp(identifier: identifier);
+
+  @override
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,

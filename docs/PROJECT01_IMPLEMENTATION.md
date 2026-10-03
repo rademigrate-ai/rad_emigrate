@@ -1,5 +1,7 @@
 # PROJECT 01 — Implementation Complete
 
+> Historical checkpoint: this document describes the original demo foundation. The demo authentication credentials from that phase are not supported by the current app; current authentication requires a real Supabase account.
+
 ## Status: COMPLETE
 
 PROJECT 01 foundation for the RAD Emigrate multi-platform app is finished.
@@ -35,12 +37,9 @@ PROJECT 01 foundation for the RAD Emigrate multi-platform app is finished.
 - Widget smoke test for app boot
 - Documentation updated
 
-## Demo credentials
+## Authentication status note
 
-| Flow | Value |
-|------|-------|
-| Login | any email + any password |
-| OTP | `123456` |
+The original demo credentials are intentionally omitted. They are not valid for the current application; use a real Supabase account.
 
 ## Out of scope (future projects)
 
