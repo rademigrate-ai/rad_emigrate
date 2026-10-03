@@ -18,7 +18,7 @@ restore_migrations() {
 }
 cleanup() {
   restore_migrations
-  if [[ "$AUTO_STARTED" == "1" ]]; then
+  if [[ "$AUTO_STARTED" == "1" && "${KEEP_SUPABASE_RUNNING:-0}" != "1" ]]; then
     supabase stop --no-backup >/dev/null 2>&1 || true
   fi
 }
