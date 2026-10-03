@@ -53,10 +53,9 @@ flutter run
 flutter build web
 ```
 
-### Demo credentials
+### Authentication
 
-- Login: any email + any password
-- OTP: `123456`
+Authentication requires a real RAD Emigrate account and a valid Supabase session. The demo credentials previously listed here are not supported.
 
 ## Documentation
 
