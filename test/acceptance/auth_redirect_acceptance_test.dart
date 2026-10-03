@@ -99,21 +99,18 @@ void main() {
       },
     );
 
-    test(
-      'admin deep-link is restorable after session restore (auth still required)',
-      () {
-        // Client route list only preserves navigation; AdminSnapshot/RLS gate data.
-        expect(restoredProtectedDestination('/admin'), '/admin');
-        expect(
-          authRedirect(
-            uri: Uri.parse('/admin'),
-            isRestoring: false,
-            isAuthenticated: false,
-            profileComplete: false,
-          ),
-          '/login',
-        );
-      },
-    );
+    test('admin deep-link restorable; unauthenticated still login', () {
+      // Client route list only preserves navigation; RLS still gates data.
+      expect(restoredProtectedDestination('/admin'), '/admin');
+      expect(
+        authRedirect(
+          uri: Uri.parse('/admin'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        '/login',
+      );
+    });
   });
 }
