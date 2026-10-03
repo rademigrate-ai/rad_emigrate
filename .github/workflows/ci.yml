@@ -52,6 +52,8 @@ jobs:
       - run: flutter pub get
       - name: Report dependency update status
         run: flutter pub outdated
+      - name: Inspect Dart formatter output for OTP page
+        run: dart format --output=show lib/features/auth/presentation/pages/otp_page.dart
       - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
