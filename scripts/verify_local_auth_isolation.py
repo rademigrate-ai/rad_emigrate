@@ -392,11 +392,6 @@ def main() -> None:
     expect_upload(object_png, token_a, png, "image/png", "PNG upload")
 
     for path, content in ((object_pdf, pdf), (object_jpg, jpg), (object_png, png)):
-        _, downloaded, _ = request(
-            "GET",
-            "/storage/v1/object/authenticated/documents/" + encoded(path),
-            token_a,
-        )
         status, downloaded, _ = request(
             "GET",
             "/storage/v1/object/authenticated/documents/" + encoded(path),
@@ -412,7 +407,13 @@ def main() -> None:
         label="owner signed read",
     )
     require(isinstance(signed, dict) and bool(signed.get("signedURL")), "signed URL created")
-    signed_url = urllib.parse.urljoin(API_URL + "/", str(signed["signedURL"]).lstrip("/"))
+    signed_path = str(signed["signedURL"])
+    if signed_path.startswith("http://") or signed_path.startswith("https://"):
+        signed_url = signed_path
+    elif signed_path.startswith("/storage/v1/"):
+        signed_url = API_URL + signed_path
+    else:
+        signed_url = API_URL + "/storage/v1/" + signed_path.lstrip("/")
     req = urllib.request.Request(signed_url, headers={"apikey": ANON_KEY})
     with urllib.request.urlopen(req, timeout=30) as response:
         require(response.read() == pdf, "owner signed URL read")
