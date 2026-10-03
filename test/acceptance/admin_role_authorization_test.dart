@@ -72,26 +72,34 @@ void main() {
         );
         // Only exact lowercase server roles grant access.
         final allowed = forged == 'admin' || forged == 'super_admin';
-        expect(snapshot.canAccess, allowed, reason: 'forged role: $forged');
+        expect(
+          snapshot.canAccess,
+          allowed,
+          reason: 'forged role: $forged',
+        );
       }
     });
 
-    test('USER cannot become ADMIN through client-side role mutation model', () {
-      // Domain model has no public setter that elevates role; role is read-only.
-      const user = AdminSnapshot(
-        role: 'user',
-        applications: 0,
-        documents: 0,
-        researchJobs: 0,
-        aiRequests: 0,
-        documentJobs: 0,
-        openTasks: 0,
-        auditEvents: 0,
-      );
-      // Constructing a new snapshot with elevated role is a different object;
-      // the original remains non-privileged.
-      expect(user.role, 'user');
-      expect(user.canAccess, isFalse);
-    });
+    test(
+      'USER cannot become ADMIN through client-side role mutation model',
+      () {
+        // Domain model has no public setter that elevates role; role is
+        // read-only.
+        const user = AdminSnapshot(
+          role: 'user',
+          applications: 0,
+          documents: 0,
+          researchJobs: 0,
+          aiRequests: 0,
+          documentJobs: 0,
+          openTasks: 0,
+          auditEvents: 0,
+        );
+        // Constructing a new snapshot with elevated role is a different
+        // object; the original remains non-privileged.
+        expect(user.role, 'user');
+        expect(user.canAccess, isFalse);
+      },
+    );
   });
 }

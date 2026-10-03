@@ -8,7 +8,8 @@ void main() {
   test('web/manifest.json exists with required icon references', () {
     final file = File('web/manifest.json');
     expect(file.existsSync(), isTrue, reason: 'PWA manifest must exist');
-    final json = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+    final json =
+        jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(json['name'], isNotNull);
     expect(json['short_name'], isNotNull);
     expect(json['start_url'], isNotNull);
