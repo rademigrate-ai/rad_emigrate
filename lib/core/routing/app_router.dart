@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/dependencies.dart';
+
+import 'auth_redirect.dart';
+
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
@@ -33,26 +37,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: ref.watch(authRefreshNotifierProvider),
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
-      final authenticated = auth.valueOrNull?.isAuthenticated ?? false;
-      final profileComplete = auth.valueOrNull?.profileComplete ?? false;
-      final location = state.matchedLocation;
-      const publicRoutes = {'/splash', '/login', '/register', '/otp'};
-
-      if (location == '/splash') return null;
-      if (!authenticated && !publicRoutes.contains(location)) return '/login';
-      if (authenticated && publicRoutes.contains(location)) {
-        return profileComplete ? '/dashboard' : '/profile-completion';
-      }
-      if (authenticated &&
-          !profileComplete &&
-          location != '/profile-completion' &&
-          location != '/profile') {
-        return '/profile-completion';
-      }
-      return null;
+      final bootstrap = ref.read(appBootstrapProvider);
+      return authRedirect(
+        uri: state.uri,
+        isRestoring: bootstrap.isLoading,
+        isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false,
+        profileComplete: auth.valueOrNull?.profileComplete ?? false,
+      );
     },
     routes: [
-      GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
+      GoRoute(
+        path: '/splash',
+        builder: (_, state) => SplashPage(
+          destination: state.uri.queryParameters['from'],
+        ),
+      ),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(
