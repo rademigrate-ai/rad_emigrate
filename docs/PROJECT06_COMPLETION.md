@@ -123,3 +123,8 @@ The standard Flutter web build may continue to show the existing non-blocking We
 **No unresolved production bugs were identified within the audited scope.**
 
 The AI provider remains intentionally unavailable until an approved RAD Knowledge Base provider is configured; the application now states this explicitly and does not fabricate immigration requirements or synthetic sources.
+
+
+## Follow-up correction (2026-10-03)
+
+The independent Project 07 repository-history review found that PR #1, `feat: complete project 05 production launch hardening`, and its `project-05-verification` branch existed before this report was committed. PR #1 was later closed without merging because its unique change was superseded Project 05 documentation; the branch and document were retained. The earlier statement that no PR branches were present was inaccurate.
