@@ -14,10 +14,11 @@ This bootstrap reconstructs the current RAD public schema in a **new, empty Supa
 From a clean Supabase CLI development stack, run:
 
 ```bash
-supabase start
-bash scripts/verify_clean_schema.sh --no-start
+bash scripts/verify_clean_schema.sh
 ```
 
 The script applies `clean_schema.sql`, then the checked-in forward SQL in lexical order, and verifies tables, RLS, policies, the signup trigger, and the private documents bucket. The normal CI path starts the local stack itself.
 
-For a new hosted Supabase project, use its SQL editor or a trusted Postgres client to apply `clean_schema.sql` once, then apply the repository's forward migrations in lexical order. Configure the project URL/keys separately. This bootstrap is for clean reconstruction; it is not a replacement for reconciliation of RAD's existing production history.
+For a new hosted Supabase project, use its SQL editor or a trusted Postgres client to apply `clean_schema.sql` once, then apply each `supabase/migrations/*.sql` file in lexical order. Configure the project URL/keys separately. This bootstrap is for clean reconstruction; it is not a replacement for reconciliation of RAD's existing production history.
+
+The script temporarily hides the tracked migration directory while starting the local stack because `supabase start` automatically applies migrations. It restores the directory before running the guarded bootstrap and replay.
