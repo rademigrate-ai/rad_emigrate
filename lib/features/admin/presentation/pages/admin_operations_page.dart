@@ -24,9 +24,7 @@ class AdminOperationsPage extends ConsumerWidget {
         ],
       ),
       body: snapshot.when(
-        loading: () => const LoadingView(
-          message: 'Loading operational data…',
-        ),
+        loading: () => const LoadingView(message: 'Loading operational data…'),
         error: (error, _) => ErrorView(
           message: 'Admin operations could not be loaded.',
           onRetry: () => ref.invalidate(adminSnapshotProvider),
@@ -61,11 +59,7 @@ class _AdminOverview extends StatelessWidget {
         value: data.applications,
         icon: Icons.assignment_outlined,
       ),
-      (
-        label: 'Documents',
-        value: data.documents,
-        icon: Icons.folder_outlined,
-      ),
+      (label: 'Documents', value: data.documents, icon: Icons.folder_outlined),
       (
         label: 'Research jobs',
         value: data.researchJobs,
@@ -98,9 +92,8 @@ class _AdminOverview extends StatelessWidget {
       children: [
         Text(
           data.isSuperAdmin ? 'Super Admin' : 'Admin',
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge?.copyWith(color: AppColors.blue),
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(color: AppColors.blue),
         ),
         const SizedBox(height: 8),
         Text(
