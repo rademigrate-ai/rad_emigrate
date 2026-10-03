@@ -1,7 +1,41 @@
+import org.gradle.api.GradleException
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val releaseSigningNames = listOf(
+    "RAD_RELEASE_STORE_FILE",
+    "RAD_RELEASE_STORE_PASSWORD",
+    "RAD_RELEASE_KEY_ALIAS",
+    "RAD_RELEASE_KEY_PASSWORD",
+)
+val releaseSigningValues = releaseSigningNames.associateWith { name ->
+    providers.environmentVariable(name).orNull
+}
+val missingReleaseSigning = releaseSigningNames.filter {
+    releaseSigningValues[it].isNullOrBlank()
+}
+val verifyReleaseSigning = tasks.register("verifyReleaseSigning") {
+    doLast {
+        if (missingReleaseSigning.isNotEmpty()) {
+            throw GradleException(
+                "Android release build requires " +
+                    missingReleaseSigning.joinToString(", ") +
+                    ". Supply signing values through the RAD_RELEASE_* environment variables.",
+            )
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name.startsWith("package") && name.contains("Release") ||
+        name == "bundleRelease"
+    ) {
+        dependsOn(verifyReleaseSigning)
+    }
 }
 
 android {
@@ -15,25 +49,30 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // This placeholder must be replaced with the owner-selected production package ID.
         applicationId = "com.example.rad_emigrate"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
-        // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
-        // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
-        // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (missingReleaseSigning.isEmpty()) {
+            create("release") {
+                storeFile = file(releaseSigningValues.getValue("RAD_RELEASE_STORE_FILE")!!)
+                storePassword = releaseSigningValues.getValue("RAD_RELEASE_STORE_PASSWORD")
+                keyAlias = releaseSigningValues.getValue("RAD_RELEASE_KEY_ALIAS")
+                keyPassword = releaseSigningValues.getValue("RAD_RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            if (missingReleaseSigning.isEmpty()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 }
