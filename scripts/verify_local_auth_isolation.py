@@ -124,7 +124,7 @@ def expect_success(
     )
     if status < 200 or status >= 300:
         detail = body.decode("utf-8", "replace")[:400]
-        fail(label, f"HTTP {status}: {detail}")
+        fail(label, f"HTTP {status} for {method} {path}: {detail}")
     return json_body(body), body
 
 
@@ -173,6 +173,14 @@ def sign_in(email: str, password: str) -> tuple[str, str]:
     return str(access_token), str(refresh_token)
 
 
+def jwt_claims(token: str) -> dict[str, object]:
+    import base64
+
+    payload = token.split(".")[1]
+    payload += "=" * (-len(payload) % 4)
+    return json.loads(base64.urlsafe_b64decode(payload))
+
+
 def rows(method: str, path: str, token: str, payload: object | None = None) -> list:
     result, _ = expect_success(
         method,
@@ -214,6 +222,10 @@ def main() -> None:
 
     token_a, refresh_a = sign_in(email_a, password_a)
     token_b, refresh_b = sign_in(email_b, password_b)
+    claims_a = jwt_claims(token_a)
+    claims_b = jwt_claims(token_b)
+    require(claims_a.get("sub") == user_a and claims_a.get("role") == "authenticated", "user A access-token claims")
+    require(claims_b.get("sub") == user_b and claims_b.get("role") == "authenticated", "user B access-token claims")
     status, _, _ = request(
         "POST",
         "/auth/v1/token?grant_type=password",

@@ -22,6 +22,3 @@ The script applies `clean_schema.sql`, then the checked-in forward SQL in lexica
 For a new hosted Supabase project, use its SQL editor or a trusted Postgres client to apply `clean_schema.sql` once, then apply each `supabase/migrations/*.sql` file in lexical order. Configure the project URL/keys separately. This bootstrap is for clean reconstruction; it is not a replacement for reconciliation of RAD's existing production history.
 
 The script temporarily hides the tracked migration directory while starting the local stack because `supabase start` automatically applies migrations. It restores the directory before running the guarded bootstrap and replay.
-
-
-Project 08 adds the owner-scoped Storage metadata readback policy in `20261003130000_documents_storage_readback_owner.sql`. The clean replay fingerprint includes this proposed target policy. It has not been applied to production RAD; the local CI check validates the target schema only.

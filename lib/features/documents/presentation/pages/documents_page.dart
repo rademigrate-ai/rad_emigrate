@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
@@ -148,17 +146,14 @@ class DocumentsPage extends ConsumerWidget {
                   minimumSize: const Size.fromHeight(48),
                 ),
                 onPressed: () async {
-                  final file = await FilePicker.pickFile(
+                  final result = await FilePicker.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: const ['pdf', 'jpg', 'jpeg', 'png'],
+                    withData: true,
                   );
-                  if (file == null) return;
-                  Uint8List? bytes;
-                  try {
-                    bytes = await file.readAsBytes();
-                  } catch (_) {
-                    bytes = null;
-                  }
+                  if (result == null || result.files.isEmpty) return;
+                  final file = result.files.single;
+                  final bytes = file.bytes;
                   if (bytes == null) {
                     if (ctx.mounted) {
                       ScaffoldMessenger.of(ctx).showSnackBar(

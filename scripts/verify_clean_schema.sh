@@ -144,20 +144,20 @@ BEGIN
   IF function_count <> 1 OR hardened_function_count <> 1 THEN RAISE EXCEPTION 'Expected one hardened handle_new_user function, got % function(s), % hardened', function_count, hardened_function_count; END IF;
   IF rls_count <> 5 THEN RAISE EXCEPTION 'Expected RLS on all 5 public RAD tables, got %', rls_count; END IF;
   IF app_policy_count <> 17 THEN RAISE EXCEPTION 'Expected 17 public owner policies, got %', app_policy_count; END IF;
-  IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 documents Storage policies, got %', storage_policy_count; END IF;
+  IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %', storage_policy_count; END IF;
   IF trigger_count <> 1 THEN RAISE EXCEPTION 'Expected auth signup trigger, got %', trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %', bucket_count; END IF;
 END
 $verify$;
 SQL
 
-expected_fingerprint='{"rls":"b8e260c296d5293c32b910745d8678e6","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"481897727361cffc431272c174ed1dd7","indexes":"cbb58f5d14388946f1bee2bdfca05ef7","policies":"649b4cc66815deb6807e4b01a8e27ed3","triggers":"f8e43dcb8bc82221372d4bfae0ce8a6d","functions":"693186205fad6d3bbe4b168e45b642df","constraints":"6cc6d8904130865028189dc318bfbf66"}'
+expected_fingerprint='{"rls":"b8e260c296d5293c32b910745d8678e6","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"481897727361cffc431272c174ed1dd7","indexes":"cbb58f5d14388946f1bee2bdfca05ef7","policies":"0e258cbac3cae4bbccee35fdf76f2b80","triggers":"f8e43dcb8bc82221372d4bfae0ce8a6d","functions":"693186205fad6d3bbe4b168e45b642df","constraints":"6cc6d8904130865028189dc318bfbf66"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
-  echo "Reconstructed schema fingerprint differs from the expected Project 08 target schema." >&2
+  echo "Reconstructed schema fingerprint differs from the verified live RAD schema." >&2
   echo "Expected: $expected_fingerprint" >&2
   echo "Actual:   $actual_fingerprint" >&2
   exit 1
 fi
 
-echo "Clean RAD schema bootstrap and forward migrations match the expected Project 08 target fingerprint; production RAD remains unchanged."
+echo "Clean RAD schema bootstrap and forward migrations verified against the live structural fingerprint."

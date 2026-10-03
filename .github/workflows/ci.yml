@@ -50,11 +50,6 @@ jobs:
           cache: true
       - run: flutter --version
       - run: flutter pub get
-      - name: Capture resolved pubspec lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: resolved-pubspec-lock
-          path: pubspec.lock
       - name: Report dependency update status
         run: flutter pub outdated
       - run: dart format --set-exit-if-changed lib test
