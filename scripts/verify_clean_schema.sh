@@ -187,7 +187,7 @@ BEGIN
   IF index_count <> 37 THEN RAISE EXCEPTION 'Expected 37 public RAD indexes, got %', index_count; END IF;
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened', function_count, hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %', rls_count; END IF;
-  IF app_policy_count <> 36 THEN RAISE EXCEPTION 'Expected 36 public policies, got %', app_policy_count; END IF;
+  IF app_policy_count <> 40 THEN RAISE EXCEPTION 'Expected 40 public policies, got %', app_policy_count; END IF;
   IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %', storage_policy_count; END IF;
   IF trigger_count <> 17 THEN RAISE EXCEPTION 'Expected auth, update, and audit trigger events, got %', trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %', bucket_count; END IF;
@@ -195,7 +195,7 @@ END
 $verify$;
 SQL
 
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"36856296e9000ec20bebcbea7ac1308b","triggers":"710a7b535cb9f1c2bd959fe1b854ae88","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"c52042a2489e9129526327c3fa0933b9","triggers":"13c5576e52a1a2cd823d97cd1137bbb2","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Reconstructed schema fingerprint differs from the verified live RAD schema." >&2
