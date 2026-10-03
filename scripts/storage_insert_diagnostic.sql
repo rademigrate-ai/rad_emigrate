@@ -3,12 +3,13 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $$
 BEGIN
-  RAISE EXCEPTION 'PROJECT08_STORAGE_DIAGNOSTIC bucket_id=%, name=%, owner_id=%, auth.uid()=%, auth.role()=%',
+  RAISE LOG 'PROJECT08_STORAGE_DIAGNOSTIC bucket_id=%, name=%, owner_id=%, auth.uid()=%, auth.role()=%',
     NEW.bucket_id,
     NEW.name,
     NEW.owner_id,
     auth.uid(),
     auth.role();
+  RAISE EXCEPTION 'PROJECT08_STORAGE_DIAGNOSTIC captured in disposable Postgres logs';
 END
 $$;
 
