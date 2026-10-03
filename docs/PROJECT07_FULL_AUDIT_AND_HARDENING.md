@@ -11,7 +11,7 @@ This snapshot records independently checked repository and live Supabase facts f
 - Starting commit: `f3ec28e6f3a4f98c7461ed4852dea78531a6346b` (`chore: complete Project 06 production audit and hardening`)
 - Audit date: 2026-10-03
 - Declared Dart SDK constraint: `^3.13.4` in `pubspec.yaml`. Installed Flutter/Dart versions could not be checked because neither executable is available.
-- Supabase: RAD, project `inshddthftkhcdosoqcn`, region `eu-west-1` (region supplied in the task).
+- Supabase: RAD, project `inshddthftkhcdosoqcn`, region `eu-west-1` (confirmed from Supabase project metadata; database version `17.11.0.002`).
 - The local workspace did not contain a Git checkout or local changes; repository contents were inspected through GitHub API reads.
 
 ## 2. Areas inspected
@@ -28,7 +28,12 @@ Architecture scan found no direct Supabase calls in feature presentation files. 
 | --- | --- | --- |
 | High | The tracked migration history does not reproduce the live database history. | The repository has nine migrations named `001`–`009`. The live ledger has 16 timestamp-versioned migrations, including the initial core schema, signup/storage setup, backend indexes, table-grant hardening, and other versions without corresponding tracked migration files. A clean database cannot be reconstructed from the tracked migration directory alone. Confirmed by comparing the GitHub tree with the live Supabase migration ledger. No migration was applied during this audit. |
 | Medium | Protected deep links can be redirected to login before session restoration completes. | Code review: `app_router.dart` treats a missing authenticated session as unauthenticated for protected routes; the bootstrap future restores the session asynchronously. A direct request to a protected route can therefore lose its destination during startup. This needs a router regression test and runtime reproduction. |
-| Medium | README still advertises fake login and OTP credentials. | `README.md` said any email/password and OTP `123456` work, contradicting the Supabase-only authentication implementation and Project 06 report. This documentation defect was corrected on the audit branch. |
+| Medium | README still advertised fake login and OTP credentials. | `README.md` said any email/password and OTP `123456` work, contradicting the Supabase-only authentication implementation and Project 06 report. The credentials were removed on this branch. |
+| Low | A historical Project 06 Git audit statement is inaccurate. | `docs/PROJECT06_COMPLETION.md` says no obsolete remote branches or PR branches were present; PR #1 and its branch were created before that completion commit. PR #1 has since been closed without merge, with its branch and historical document retained. |
+
+### Repository hygiene
+
+- The tracked tree contains generated `graphify-out` AST/semantic caches and reports, plus a nested `graphify-8` tool tree. Their intended ownership and whether they should remain in the product repository were not established; no files were removed.
 
 ### Security findings
 
@@ -81,6 +86,7 @@ There are no GitHub Actions workflows in the repository tree. The `main` branch 
 ### EXTERNAL CONFIGURATION
 
 - Configure bucket-level 10 MB and PDF/JPEG/PNG restrictions for `documents`, then verify the resulting settings live.
+- Add a CI workflow and required checks; enable branch protection for `main`.
 - Add CI for format, analyze, tests, and web build; protect `main` with required checks.
 - Complete production-hosting environment, redirect URL, real-auth, multi-user isolation, Storage, and deployment smoke tests.
 - Recover/reconcile the canonical Supabase migration history before making schema changes.
