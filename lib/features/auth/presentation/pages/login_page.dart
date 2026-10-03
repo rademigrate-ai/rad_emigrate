@@ -74,7 +74,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(height: 36),
                     AppTextField(
                       controller: _identifierCtrl,
-                      label: 'Email or phone',
+                      label: 'Email',
                       prefixIcon: Icons.person_outline,
                       keyboardType: TextInputType.emailAddress,
                       validator: (v) =>

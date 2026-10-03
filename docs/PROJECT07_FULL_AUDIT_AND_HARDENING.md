@@ -11,7 +11,7 @@ Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `m
 - Main was unprotected and no GitHub Actions workflow existed at the starting SHA. A CI workflow has now been added on this branch for pull requests and pushes to main.
 - Existing architecture is Flutter, Riverpod, GoRouter, feature-first layers, repositories, data sources, and Supabase. Source inspection found no direct Supabase calls in feature presentation files.
 - The current tree includes generated `graphify-out` caches/reports and a nested `graphify-8` tool tree. Their ownership/purpose was not established; they were not removed.
-- A static scan of tracked source/config for common service-role, secret, JWT, database URL, and API-key patterns returned no matching file paths. This is heuristic and does not prove secret absence.
+- GitHub Actions ran a path-only keyword scan for TODO/FIXME, demo/fake/mock, password, service-role, secret, and Supabase-service strings, plus a high-risk credential-pattern scan. Results are being reviewed; the scan never prints matched values.
 - The legacy Project 06 statement about there being no PR branch was corrected with a dated follow-up. PR #1 remains closed without merge and its branch/document remain available.
 
 ### Live Supabase
@@ -40,8 +40,9 @@ The expanded clean replay **passed** in [GitHub Actions run 11](https://github.c
 
 ## Fixed or changed on this branch
 
-- Removed false demo login/OTP credentials from `README.md`.
+- Removed false demo login/OTP credentials from `README.md`, `docs/PROJECT01_IMPLEMENTATION.md`, and `docs/development.md`; corrected historical fallback claims in Project 02/04 documentation.
 - Changed GoRouter auth redirects to respect the bootstrap restoration state, send protected deep links through splash while restoration is pending, and preserve a validated in-app destination after restoration.
+- Changed the login field label to “Email” to match the Supabase email-only sign-in path.
 - Added six unit tests covering cold unauthenticated startup, restored protected deep links, invalid sessions, incomplete profiles, authenticated public-route redirects, and destination validation.
 - Added timestamp-matched SQL source for the additive documents bucket restriction applied live.
 - Added CI for Flutter format/analyze/tests/web build, expanded isolated clean-schema replay, and a tracked-file keyword scan that reports file paths only. The expanded schema replay passed on run 11; the keyword scan is running in the latest workflow.
@@ -74,6 +75,8 @@ The expanded clean replay **passed** in [GitHub Actions run 11](https://github.c
 
 - `main` remains unprotected. Enable required CI checks and prevent force-push/deletion using the repository's intended governance after the workflow has a successful run.
 - Production Supabase redirect URLs, hosting environment values, real account flows, and multi-user/storage isolation require the live hosting/account setup and were not changed here.
+- Android release configuration still uses the placeholder application ID `com.example.rad_emigrate` and debug signing. Set the production package ID and release signing through the owner's release process before distributing an Android build.
+- A production web host must serve the Flutter SPA entry point (`index.html`) for direct GoRouter paths; no production hosting configuration was found or changed.
 
 ### FUTURE PRODUCT WORK
 

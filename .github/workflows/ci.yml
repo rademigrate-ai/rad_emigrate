@@ -57,6 +57,11 @@ jobs:
       - name: Scan tracked files for audit keywords (paths only)
         run: |
           git grep -I -i -l -E 'TODO|FIXME|demo|fake|mock|password|service_role|secret|SUPABASE_SERVICE' HEAD -- . ':(exclude).github/workflows/ci.yml' || true
+          if git grep -I -i -l -E 'sb_secret_[A-Za-z0-9]+|eyJ[A-Za-z0-9_-]{40,}[.][A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|SUPABASE_SERVICE_ROLE_KEY[[:space:]]*=[[:space:]]*[^<$[:space:]][^[:space:]]+' HEAD -- . ':(exclude)pubspec.lock'; then
+            echo "Potential high-risk secret pattern found; inspect filenames without printing values."
+          else
+            echo "No high-risk credential patterns found."
+          fi
 
   clean-schema:
     runs-on: ubuntu-latest

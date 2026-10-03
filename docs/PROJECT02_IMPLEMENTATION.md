@@ -1,5 +1,7 @@
 # PROJECT 02 — Production Platform Foundation
 
+> Historical checkpoint: the documented development demo fallback is no longer present. Current authentication uses Supabase and surfaces configuration or network errors without creating a demo identity.
+
 **Status:** COMPLETE  
 **Repository:** rademigrate-ai/rad_emigrate  
 **Branch:** main  
@@ -31,7 +33,7 @@ PROJECT 01 delivered feature-first Flutter architecture with Riverpod, GoRouter,
 
 - **Decision:** Keep `AuthRepository` interface; add `AuthRepositoryImpl` + remote/local datasources.
 - **Reason:** PROJECT 01 froze the controller → repository contract.
-- **Demo fallback:** Non-production environments fall back to offline demo auth when remote is unreachable.
+- **Historical behavior:** An offline demo fallback was documented for an earlier checkpoint; it is not present in the current runtime.
 - **Alternatives:** Breaking controller API — rejected.
 
 ### Manual immutable models
@@ -82,7 +84,7 @@ Domain unit tests verified: **All tests passed** (7+).
 ## 10 Audit cycles (summary)
 
 1. **Architecture** — feature-first preserved; DI direction core ← features; no Dio in features.
-2. **Authentication** — contract intact; Impl + datasources; demo fallback non-prod only.
+2. **Authentication** — repository contract retained; current runtime delegates to Supabase and does not authenticate through a demo fallback.
 3. **Network** — ApiClient central; exception mapping; auth + logging interceptors.
 4. **Models** — immutable; JSON round-trip; consistent naming.
 5. **Routing** — PROJECT 01 redirects unchanged; session state available for guards.
@@ -94,14 +96,14 @@ Domain unit tests verified: **All tests passed** (7+).
 
 ## Limitations
 
-- Live API not connected; remote fails over to demo auth outside production.
+- Current runtime requires Supabase authentication; remote failures surface as errors rather than demo authentication.
 - Upload / OCR / RAG are domain-ready only.
 - Payments / CRM out of scope.
 - freezed codegen not enabled this release.
 
 ## Future roadmap
 
-1. Connect real auth API; disable demo fallback in production.
+1. Verify Supabase auth settings and real account flows in the target environment.
 2. Remote datasources for profile, applications, documents.
 3. RAG AI with RAD Knowledge Base.
 4. Optional freezed migration.

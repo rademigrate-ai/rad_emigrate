@@ -20,7 +20,7 @@ Feature datasources
 Supabase Auth / Postgres / Storage
 ```
 
-Development keeps the existing SharedPreferences/session fallback when Supabase credentials are not configured or the remote request fails. Production disables demo/local fallback through `AppConfig.isProduction`.
+Local storage caches a verified Supabase session snapshot. Missing Supabase configuration or remote authentication failures surface as errors; the current runtime has no local/demo identity fallback.
 
 ## Flutter setup
 
