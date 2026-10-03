@@ -7,3 +7,11 @@ The runtime orders enabled providers by priority, skips cooldown entries, caps f
 Supported adapters are OpenAI-compatible, Anthropic, and Gemini. Models, capabilities, limits, health and usage are data-driven. Paid credentials remain an owner choice in `EXTERNAL_ACTIONS.md`; the application remains operational with an honest unavailable state until one is configured.
 
 Validation includes rollback migration execution, clean-schema/Auth/RLS/Storage CI, function deployment, unauthorized/no-provider checks, and Supabase advisors. Final evidence is added after merge.
+
+## Production verification
+
+- Merged SHA: `e612b5103d49e798184d6047448bfe4b882f2a08`; CI run 55 passed every repository, clean-schema, Flutter, web, Android and signing gate.
+- Live migration applied and `ai-orchestrator` version 1 deployed with JWT verification.
+- Production checks confirm 0 enabled providers, 3 role limits, runtime RPC denied to anon/authenticated and granted only to service role.
+- No paid credential, fake answer, prompt body, or response body was introduced.
+- Security Advisor retains the documented non-relocatable `pg_net` warning and flags the intentional Super-Admin-only SECURITY DEFINER configuration RPC; that RPC performs its own role check, has an empty search path, and never returns the secret.
