@@ -151,4 +151,13 @@ END
 $verify$;
 SQL
 
-echo "Clean RAD schema bootstrap and forward migrations verified."
+expected_fingerprint="f31be46e856cfd68506358881d22325b"
+actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql)"
+if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
+  echo "Reconstructed schema fingerprint differs from the verified live RAD schema." >&2
+  echo "Expected: $expected_fingerprint" >&2
+  echo "Actual:   $actual_fingerprint" >&2
+  exit 1
+fi
+
+echo "Clean RAD schema bootstrap and forward migrations verified against the live structural fingerprint."
