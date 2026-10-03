@@ -77,6 +77,32 @@ class AuthRemoteDataSource {
     }
   }
 
+  Future<void> resendOtp({required String identifier}) async {
+    final email = identifier.trim();
+    if (!email.contains('@')) {
+      throw const ApiException(
+        message: 'Supabase email authentication requires an email address.',
+        code: 'invalid_email',
+      );
+    }
+    if (_backend is ApiClient) {
+      await (_backend).post<void>(
+        '/auth/otp/resend',
+        data: {'identifier': email},
+      );
+      return;
+    }
+    _ensureSupabaseReady();
+    try {
+      await _service.client.auth.resend(
+        type: OtpType.signup,
+        email: email,
+      );
+    } catch (error) {
+      throw _apiException(error);
+    }
+  }
+
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
