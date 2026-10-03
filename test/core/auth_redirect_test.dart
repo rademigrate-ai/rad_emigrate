@@ -24,32 +24,35 @@ void main() {
       );
     });
 
-    test('authenticated deep link waits for restoration and keeps destination', () {
-      final uri = Uri.parse('/documents?kind=passport');
-      final redirected = authRedirect(
-        uri: uri,
-        isRestoring: true,
-        isAuthenticated: false,
-        profileComplete: false,
-      );
-
-      expect(redirected, isNotNull);
-      final splashUri = Uri.parse(redirected!);
-      expect(splashUri.path, '/splash');
-      expect(
-        restoredProtectedDestination(splashUri.queryParameters['from']),
-        uri.toString(),
-      );
-      expect(
-        authRedirect(
+    test(
+      'authenticated deep link waits for restoration and keeps destination',
+      () {
+        final uri = Uri.parse('/documents?kind=passport');
+        final redirected = authRedirect(
           uri: uri,
-          isRestoring: false,
-          isAuthenticated: true,
-          profileComplete: true,
-        ),
-        isNull,
-      );
-    });
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
+        );
+
+        expect(redirected, isNotNull);
+        final splashUri = Uri.parse(redirected!);
+        expect(splashUri.path, '/splash');
+        expect(
+          restoredProtectedDestination(splashUri.queryParameters['from']),
+          uri.toString(),
+        );
+        expect(
+          authRedirect(
+            uri: uri,
+            isRestoring: false,
+            isAuthenticated: true,
+            profileComplete: true,
+          ),
+          isNull,
+        );
+      },
+    );
 
     test('expired session redirects to login after restoration', () {
       expect(
@@ -75,29 +78,35 @@ void main() {
       );
     });
 
-    test('restored public route resolves to dashboard or profile completion', () {
-      expect(
-        authRedirect(
-          uri: Uri.parse('/login'),
-          isRestoring: false,
-          isAuthenticated: true,
-          profileComplete: true,
-        ),
-        '/dashboard',
-      );
-      expect(
-        authRedirect(
-          uri: Uri.parse('/register'),
-          isRestoring: false,
-          isAuthenticated: true,
-          profileComplete: false,
-        ),
-        '/profile-completion',
-      );
-    });
+    test(
+      'restored public route resolves to dashboard or profile completion',
+      () {
+        expect(
+          authRedirect(
+            uri: Uri.parse('/login'),
+            isRestoring: false,
+            isAuthenticated: true,
+            profileComplete: true,
+          ),
+          '/dashboard',
+        );
+        expect(
+          authRedirect(
+            uri: Uri.parse('/register'),
+            isRestoring: false,
+            isAuthenticated: true,
+            profileComplete: false,
+          ),
+          '/profile-completion',
+        );
+      },
+    );
 
     test('invalid restored destinations fall back to dashboard', () {
-      expect(restoredProtectedDestination('https://example.com/'), '/dashboard');
+      expect(
+        restoredProtectedDestination('https://example.com/'),
+        '/dashboard',
+      );
       expect(restoredProtectedDestination('/splash'), '/dashboard');
       expect(restoredProtectedDestination('/ai-assistant'), '/ai-assistant');
     });

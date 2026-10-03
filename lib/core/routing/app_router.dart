@@ -48,9 +48,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/splash',
-        builder: (_, state) => SplashPage(
-          destination: state.uri.queryParameters['from'],
-        ),
+        builder: (_, state) =>
+            SplashPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),

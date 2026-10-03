@@ -24,9 +24,7 @@ jobs:
           cache: true
       - run: flutter --version
       - run: flutter pub get
-      - run: dart format lib test
-      - name: Show formatter changes for routing files
-        run: git diff -- lib/core/routing/app_router.dart test/core/auth_redirect_test.dart
+      - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
       - name: Build web with non-production configuration
