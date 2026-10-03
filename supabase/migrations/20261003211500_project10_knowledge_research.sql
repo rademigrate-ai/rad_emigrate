@@ -282,4 +282,19 @@ revoke all on function private.enqueue_scheduled_rad_sync() from public, anon, a
 select cron.schedule('rad-daily-research-enqueue','17 3 * * *',
   $$select private.enqueue_scheduled_rad_sync();$$);
 
+select cron.schedule('rad-daily-research-worker','27 3 * * *', $cron$
+  select net.http_post(
+    url := (select decrypted_secret from vault.decrypted_secrets where name='project_url')
+      || '/functions/v1/research-sync',
+    headers := jsonb_build_object(
+      'Content-Type','application/json',
+      'Authorization','Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name='publishable_key'),
+      'apikey',(select decrypted_secret from vault.decrypted_secrets where name='publishable_key'),
+      'x-rad-research-token',(select invocation_token from public.research_worker_config where singleton)
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 30000
+  );
+$cron$);
+
 commit;
