@@ -7,20 +7,30 @@ on:
       - '.github/workflows/ci.yml'
       - 'lib/**'
       - 'test/**'
+      - 'android/**'
+      - 'gradle/**'
       - 'pubspec.yaml'
       - 'pubspec.lock'
+      - 'build.gradle*'
+      - 'settings.gradle*'
+      - 'gradle.properties'
       - 'supabase/**'
-      - 'scripts/verify_clean_schema.sh'
+      - 'scripts/**'
   push:
     branches: [main]
     paths:
       - '.github/workflows/ci.yml'
       - 'lib/**'
       - 'test/**'
+      - 'android/**'
+      - 'gradle/**'
       - 'pubspec.yaml'
       - 'pubspec.lock'
+      - 'build.gradle*'
+      - 'settings.gradle*'
+      - 'gradle.properties'
       - 'supabase/**'
-      - 'scripts/verify_clean_schema.sh'
+      - 'scripts/**'
 
 permissions:
   contents: read
@@ -40,6 +50,8 @@ jobs:
           cache: true
       - run: flutter --version
       - run: flutter pub get
+      - name: Report dependency update status
+        run: flutter pub outdated
       - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
@@ -48,6 +60,25 @@ jobs:
           flutter build web
           --dart-define=SUPABASE_URL=https://example.supabase.co
           --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
+      - name: Build Android debug variant
+        run: flutter build apk --debug
+      - name: Verify Android release refuses missing signing values
+        shell: bash
+        run: |
+          set +e
+          flutter build apk --release > "$RUNNER_TEMP/release-signing-check.log" 2>&1
+          build_status=$?
+          set -e
+          if [ "$build_status" -eq 0 ]; then
+            echo "Release build unexpectedly succeeded without signing values."
+            exit 1
+          fi
+          if ! grep -Fq "Android release build requires" "$RUNNER_TEMP/release-signing-check.log"; then
+            tail -n 60 "$RUNNER_TEMP/release-signing-check.log"
+            echo "Release build failed for an unexpected reason."
+            exit 1
+          fi
+          echo "Release packaging is blocked until owner-provided signing values are configured."
       - run: git diff --check
 
   repository-keyword-scan:
@@ -81,4 +112,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
       - name: Rebuild clean Supabase schema
-        run: bash scripts/verify_clean_schema.sh
+        run: KEEP_SUPABASE_RUNNING=1 bash scripts/verify_clean_schema.sh
+      - name: Test local Auth, RLS, and Storage with two JWTs
+        run: python3 scripts/verify_local_auth_isolation.py
+      - name: Stop disposable Supabase stack
+        if: always()
+        run: supabase stop --no-backup >/dev/null 2>&1 || true
