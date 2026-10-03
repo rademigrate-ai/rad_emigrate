@@ -144,7 +144,7 @@ BEGIN
   IF function_count <> 1 OR hardened_function_count <> 1 THEN RAISE EXCEPTION 'Expected one hardened handle_new_user function, got % function(s), % hardened', function_count, hardened_function_count; END IF;
   IF rls_count <> 5 THEN RAISE EXCEPTION 'Expected RLS on all 5 public RAD tables, got %', rls_count; END IF;
   IF app_policy_count <> 17 THEN RAISE EXCEPTION 'Expected 17 public owner policies, got %', app_policy_count; END IF;
-  IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %', storage_policy_count; END IF;
+  IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 documents Storage policies, got %', storage_policy_count; END IF;
   IF trigger_count <> 1 THEN RAISE EXCEPTION 'Expected auth signup trigger, got %', trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %', bucket_count; END IF;
 END
