@@ -81,24 +81,42 @@ final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {
 final appBootstrapProvider = FutureProvider<void>((ref) async {
   final supabase = ref.read(supabaseClientServiceProvider);
   await supabase.initialize();
-  if (supabase.isInitialized) {
-    final authController = ref.read(authControllerProvider.notifier);
-    final authDatasource = AuthRemoteDataSource(supabase);
-    final subscription = supabase.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session == null) {
-        authController.clearSession();
-      } else {
-        authController.applySession(
-          authDatasource.sessionFromAuthSession(session),
-        );
-      }
-    });
-    ref.onDispose(subscription.cancel);
+
+  if (!supabase.isInitialized) {
+    await ref.read(authControllerProvider.notifier).restoreSession();
+    return;
   }
-  final manager = ref.read(sessionManagerProvider);
-  final restored = await manager.restore();
-  if (restored.isAuthenticated && restored.session != null) {
-    ref.read(authControllerProvider.notifier).applySession(restored.session!);
+
+  final authController = ref.read(authControllerProvider.notifier);
+  final authDatasource = AuthRemoteDataSource(supabase);
+
+  final currentSession = supabase.client.auth.currentSession;
+  if (currentSession != null) {
+    try {
+      authController.applySession(
+        await authDatasource.sessionFromAuthSession(currentSession),
+      );
+    } catch (_) {
+      await supabase.client.auth.signOut();
+      authController.clearSession();
+    }
+  } else {
+    authController.clearSession();
   }
+
+  final subscription = supabase.client.auth.onAuthStateChange.listen((data) async {
+    final session = data.session;
+    if (session == null) {
+      authController.clearSession();
+      return;
+    }
+    try {
+      authController.applySession(
+        await authDatasource.sessionFromAuthSession(session),
+      );
+    } catch (_) {
+      authController.clearSession();
+    }
+  });
+  ref.onDispose(subscription.cancel);
 });
