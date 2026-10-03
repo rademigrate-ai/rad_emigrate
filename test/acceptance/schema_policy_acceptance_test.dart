@@ -51,8 +51,8 @@ void main() {
 
     test('source authority distinguishes rad_official from government', () {
       expect(knowledgeSql, contains("'rad_official'"));
-      expect(knowledgeSql, contains("'government'"));
       expect(knowledgeSql, contains("'embassy'"));
+      expect(knowledgeSql, contains("'government'"));
       expect(knowledgeSql, isNot(contains("'rad_official'='government'")));
     });
 
@@ -106,19 +106,18 @@ void main() {
       expect(aiSql, contains('vault.update_secret'));
       expect(aiSql, contains('vault.decrypted_secrets'));
 
-      // Scope to CREATE TABLE body only (function params may name p_api_key).
-      final tableMatch = RegExp(
-        r'create table public\.ai_providers\s*\(([^)]+)\)',
-        caseSensitive: false,
-      ).firstMatch(aiSql);
-      expect(tableMatch, isNotNull, reason: 'ai_providers table must exist');
-      final tableBody = tableMatch!.group(1)!;
+      // Slice from ai_providers CREATE through next CREATE TABLE (models).
+      final start = aiSql.indexOf('create table public.ai_providers');
+      final end = aiSql.indexOf('create table public.ai_models');
+      expect(start, greaterThanOrEqualTo(0));
+      expect(end, greaterThan(start));
+      final providersDdl = aiSql.substring(start, end);
       expect(
-        tableBody.contains(RegExp(r'\bapi_key\b')),
+        providersDdl.contains(RegExp(r'\bapi_key\b')),
         isFalse,
         reason: 'plaintext api_key column must not exist on providers',
       );
-      expect(tableBody, contains('secret_id'));
+      expect(providersDdl, contains('secret_id'));
     });
 
     test('configure_ai_provider requires super_admin', () {
