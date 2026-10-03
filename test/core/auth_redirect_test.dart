@@ -109,6 +109,7 @@ void main() {
       );
       expect(restoredProtectedDestination('/splash'), '/dashboard');
       expect(restoredProtectedDestination('/ai-assistant'), '/ai-assistant');
+      expect(restoredProtectedDestination('/admin'), '/admin');
     });
   });
 }

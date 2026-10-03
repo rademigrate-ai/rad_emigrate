@@ -99,14 +99,18 @@ void main() {
       },
     );
 
-    test(
-      'admin is not treated as a restorable protected deep-link destination',
-      () {
-        // Documented behavior: /admin is omitted from _protectedRoutes.
-        // Unauthenticated deep-links to /admin still redirect to login via
-        // the generic unauthenticated branch; restoration falls back safely.
-        expect(restoredProtectedDestination('/admin'), '/dashboard');
-      },
-    );
+    test('admin deep-link restorable; unauthenticated still login', () {
+      // Client route list only preserves navigation; RLS still gates data.
+      expect(restoredProtectedDestination('/admin'), '/admin');
+      expect(
+        authRedirect(
+          uri: Uri.parse('/admin'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        '/login',
+      );
+    });
   });
 }

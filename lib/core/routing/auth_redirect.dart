@@ -7,9 +7,14 @@ const Set<String> _protectedRoutes = {
   '/profile',
   '/ai-assistant',
   '/profile-completion',
+  '/admin',
 };
 
 /// Resolves auth routing while distinguishing session restoration from logout.
+///
+/// Authorization for `/admin` remains server-side (RLS + role). Including
+/// `/admin` here only preserves deep-link restoration after session restore;
+/// it does not grant data access.
 String? authRedirect({
   required Uri uri,
   required bool isRestoring,
