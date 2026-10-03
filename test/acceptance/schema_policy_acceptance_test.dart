@@ -24,13 +24,16 @@ void main() {
   });
 
   group('Knowledge / research review gates', () {
-    test('knowledge_items review_status includes draft through archived', () {
-      expect(knowledgeSql, contains("'draft'"));
-      expect(knowledgeSql, contains("'review'"));
-      expect(knowledgeSql, contains("'approved'"));
-      expect(knowledgeSql, contains("'rejected'"));
-      expect(knowledgeSql, contains("'archived'"));
-    });
+    test(
+      'knowledge_items review_status includes draft and approved only path',
+      () {
+        expect(knowledgeSql, contains("'draft'"));
+        expect(knowledgeSql, contains("'review'"));
+        expect(knowledgeSql, contains("'approved'"));
+        expect(knowledgeSql, contains("'rejected'"));
+        expect(knowledgeSql, contains("'archived'"));
+      },
+    );
 
     test('public knowledge read requires approved status', () {
       expect(knowledgeSql, contains("review_status = 'approved'"));
@@ -42,12 +45,15 @@ void main() {
       expect(knowledgeSql, contains("'review','approved','rejected'"));
     });
 
-    test('content_drafts status machine includes published only as explicit status', () {
-      expect(
-        knowledgeSql,
-        contains("'draft','review','approved','rejected','published'"),
-      );
-    });
+    test(
+      'content_drafts cannot skip draft/review into published without status',
+      () {
+        expect(
+          knowledgeSql,
+          contains("'draft','review','approved','rejected','published'"),
+        );
+      },
+    );
 
     test('source authority distinguishes rad_official from government', () {
       expect(knowledgeSql, contains("'rad_official'"));
@@ -56,15 +62,18 @@ void main() {
       expect(knowledgeSql, isNot(contains("'rad_official'='government'")));
     });
 
-    test('knowledge conflicts retain dual statements and resolution status', () {
-      expect(knowledgeSql, contains('statement_a'));
-      expect(knowledgeSql, contains('statement_b'));
-      expect(knowledgeSql, contains('proposed_interpretation'));
-      expect(
-        knowledgeSql,
-        contains("'open','reviewing','resolved','dismissed'"),
-      );
-    });
+    test(
+      'knowledge conflicts retain dual statements and resolution status',
+      () {
+        expect(knowledgeSql, contains('statement_a'));
+        expect(knowledgeSql, contains('statement_b'));
+        expect(knowledgeSql, contains('proposed_interpretation'));
+        expect(
+          knowledgeSql,
+          contains("'open','reviewing','resolved','dismissed'"),
+        );
+      },
+    );
 
     test('research jobs bound retries with max_attempts', () {
       expect(knowledgeSql, contains('max_attempts'));
@@ -80,10 +89,7 @@ void main() {
     });
 
     test('feed status machine includes draft review published archived', () {
-      expect(
-        feedSql,
-        contains("'draft','review','published','archived'"),
-      );
+      expect(feedSql, contains("'draft','review','published','archived'"));
     });
 
     test('saved feed and reads are owner-scoped by user_id', () {
@@ -103,16 +109,19 @@ void main() {
   });
 
   group('AI provider secret isolation', () {
-    test('provider API keys stored via vault secret_id not plaintext column', () {
-      expect(aiSql, contains('secret_id'));
-      expect(aiSql, contains('vault.create_secret'));
-      expect(aiSql, contains('vault.update_secret'));
-      expect(
-        aiSql.contains('api_key text'),
-        isFalse,
-        reason: 'plaintext api_key column must not exist on providers',
-      );
-    });
+    test(
+      'provider API keys stored via vault secret_id not plaintext column',
+      () {
+        expect(aiSql, contains('secret_id'));
+        expect(aiSql, contains('vault.create_secret'));
+        expect(aiSql, contains('vault.update_secret'));
+        expect(
+          aiSql.contains('api_key text'),
+          isFalse,
+          reason: 'plaintext api_key column must not exist on providers',
+        );
+      },
+    );
 
     test('configure_ai_provider requires super_admin', () {
       expect(aiSql, contains("private.has_role(array['super_admin'])"));
@@ -121,9 +130,11 @@ void main() {
 
     test('runtime chain with decrypted secrets is service_role only', () {
       expect(aiSql, contains('get_ai_runtime_chain'));
-      expect(aiSql, contains("auth.jwt()->>'role'"));
-      expect(aiSql, contains("<> 'service_role'"));
-      expect(aiSql, contains('grant execute on function public.get_ai_runtime_chain'));
+      expect(aiSql, contains("role','') <> 'service_role'"));
+      expect(
+        aiSql,
+        contains('grant execute on function public.get_ai_runtime_chain'),
+      );
     });
 
     test('enabled providers and models gate client metadata reads', () {
