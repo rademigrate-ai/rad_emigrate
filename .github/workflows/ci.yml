@@ -66,9 +66,10 @@ jobs:
           --target-platform android-arm64
       - name: Verify Android release refuses missing signing values
         shell: bash
+        working-directory: android
         run: |
           set +e
-          android/gradlew --no-daemon :app:verifyReleaseSigning > "$RUNNER_TEMP/release-signing-check.log" 2>&1
+          ./gradlew --no-daemon :app:verifyReleaseSigning > "$RUNNER_TEMP/release-signing-check.log" 2>&1
           build_status=$?
           set -e
           if [ "$build_status" -eq 0 ]; then
