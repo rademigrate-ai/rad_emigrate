@@ -8,5 +8,5 @@
 | 12 | Complete and deployed | `0f6365095eb35a584a9d82f34333ae50f1e80134` | pending: tag-write unavailable | CI run 56 green | OCR credential intentionally not supplied |
 | 13 | Complete, deployed, live UI | `43e6c12b1296938a9bd2a369c457a05e10880cfd` | pending: tag-write unavailable | final CI green | No verified admin account exists yet |
 | 14 | Complete, deployed, live UI/PWA | `73de807bb7ad26fc354c1e70325f5572555e931e` | pending: tag-write unavailable | final CI green | No reviewed feed item published yet |
-| 15 | Pending | — | — | — | — |
-| 16 | Pending | — | — | — | — |
+| 15 | Complete (branch + live migration) | pending merge of `feature/project-15` | pending: tag-write unavailable | pending PR CI | No external APM product configured |
+| 16 | Pending final release QA | — | — | — | Production host/domain/signing remain external |
