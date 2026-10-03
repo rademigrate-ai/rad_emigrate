@@ -49,9 +49,37 @@ Each feature follows:
 flutter pub get
 flutter analyze
 flutter test
-flutter run
-flutter build web
 ```
+
+### Supabase configuration
+
+The app requires the public Supabase URL and publishable key at build time.
+Never use a service-role key in Flutter or commit real keys to the repository.
+
+For a local run, replace `<publishable-key>` with the **Publishable key** from
+Supabase Dashboard → Project Settings → API:
+
+```bash
+flutter run \
+  --dart-define=APP_ENV=development \
+  --dart-define=SUPABASE_URL=https://inshddthftkhcdosoqcn.supabase.co \
+  --dart-define=SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+```
+
+For an Android APK, the same defines must be supplied while building:
+
+```bash
+flutter build apk --release \
+  --dart-define=APP_ENV=production \
+  --dart-define=SUPABASE_URL=https://inshddthftkhcdosoqcn.supabase.co \
+  --dart-define=SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+```
+
+If these values are omitted, the app intentionally shows
+`supabase_not_configured` and cannot authenticate. The CI Android build only
+validates compilation and does not contain production credentials.
+
+Web builds use the same two Supabase defines.
 
 ### Authentication
 

@@ -41,6 +41,7 @@ app.*.map.json
 .env
 .env.*
 !.env.example
+dart_defines.json
 supabase/.temp/
 
 # Android release signing material

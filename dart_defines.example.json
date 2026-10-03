@@ -1,0 +1,5 @@
+{
+  "APP_ENV": "development",
+  "SUPABASE_URL": "https://inshddthftkhcdosoqcn.supabase.co",
+  "SUPABASE_PUBLISHABLE_KEY": "replace-with-the-supabase-publishable-key"
+}
