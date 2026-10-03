@@ -104,16 +104,21 @@ void main() {
       expect(aiSql, contains('secret_id'));
       expect(aiSql, contains('vault.create_secret'));
       expect(aiSql, contains('vault.update_secret'));
-      // Table definition uses secret_id; p_api_key is a function param only.
-      expect(aiSql, contains('create table public.ai_providers'));
+      expect(aiSql, contains('vault.decrypted_secrets'));
+
+      // Scope to CREATE TABLE body only (function params may name p_api_key).
+      final tableMatch = RegExp(
+        r'create table public\.ai_providers\s*\(([^)]+)\)',
+        caseSensitive: false,
+      ).firstMatch(aiSql);
+      expect(tableMatch, isNotNull, reason: 'ai_providers table must exist');
+      final tableBody = tableMatch!.group(1)!;
       expect(
-        aiSql.contains('create table public.ai_providers') &&
-            !RegExp(
-              r'create table public\.ai_providers[\s\S]*?api_key text',
-            ).hasMatch(aiSql),
-        isTrue,
-        reason: 'ai_providers table must not declare api_key text column',
+        tableBody.contains(RegExp(r'\bapi_key\b')),
+        isFalse,
+        reason: 'plaintext api_key column must not exist on providers',
       );
+      expect(tableBody, contains('secret_id'));
     });
 
     test('configure_ai_provider requires super_admin', () {
