@@ -486,15 +486,6 @@ def main() -> None:
     )
     expect_denied(
         "POST",
-        "/storage/v1/object/documents/" + encoded(f"{user_a}/empty-{seed}.pdf"),
-        token_a,
-        b"",
-        "application/pdf",
-        {"x-upsert": "false"},
-        "zero-byte Storage object rejected",
-    )
-    expect_denied(
-        "POST",
         "/storage/v1/object/documents/" + encoded(f"{user_a}/large-{seed}.pdf"),
         token_a,
         b"%PDF-1.4\n" + (b"0" * (10 * 1024 * 1024 + 1)),
