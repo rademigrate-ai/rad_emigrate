@@ -48,10 +48,10 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
-      - name: Report dependency update status
-        run: flutter pub outdated
       - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
