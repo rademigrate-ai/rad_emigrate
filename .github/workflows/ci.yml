@@ -113,8 +113,13 @@ jobs:
           sudo apt-get install --yes postgresql-client
       - name: Rebuild clean Supabase schema
         run: KEEP_SUPABASE_RUNNING=1 bash scripts/verify_clean_schema.sh
+      - name: Install temporary local Storage insert diagnostic
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f scripts/storage_insert_diagnostic.sql
       - name: Test local Auth, RLS, and Storage with two JWTs
         run: python3 scripts/verify_local_auth_isolation.py
+      - name: Remove temporary local Storage insert diagnostic
+        if: always()
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -c 'DROP TRIGGER IF EXISTS project08_storage_insert_diagnostic ON storage.objects; DROP FUNCTION IF EXISTS public.project08_storage_insert_diagnostic();'
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true
