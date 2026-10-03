@@ -94,10 +94,7 @@ class AuthRemoteDataSource {
     }
     _ensureSupabaseReady();
     try {
-      await _service.client.auth.resend(
-        type: OtpType.signup,
-        email: email,
-      );
+      await _service.client.auth.resend(type: OtpType.signup, email: email);
     } catch (error) {
       throw _apiException(error);
     }
