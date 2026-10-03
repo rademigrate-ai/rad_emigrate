@@ -62,7 +62,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   Future<void> _resend() async {
     final identifier = widget.identifier?.trim() ?? '';
     if (identifier.isEmpty || !identifier.contains('@')) {
-      setState(() => _error = 'Return to sign up and enter your email address.');
+      setState(
+        () => _error = 'Return to sign up and enter your email address.',
+      );
       return;
     }
     setState(() {
@@ -74,7 +76,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       await ref
           .read(authControllerProvider.notifier)
           .resendOtp(identifier: identifier);
-      if (mounted) setState(() => _notice = 'A new verification code was sent.');
+      if (mounted) {
+        setState(() => _notice = 'A new verification code was sent.');
+      }
     } catch (e) {
       if (mounted) {
         setState(
