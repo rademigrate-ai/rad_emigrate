@@ -9,7 +9,7 @@ BEGIN
     NEW.owner_id,
     auth.uid(),
     auth.role();
-  RAISE EXCEPTION 'PROJECT08_STORAGE_DIAGNOSTIC captured in disposable Postgres logs';
+  RETURN NEW;
 END
 $$;
 
