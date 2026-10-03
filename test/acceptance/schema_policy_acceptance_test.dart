@@ -24,8 +24,7 @@ void main() {
   });
 
   group('Knowledge / research review gates', () {
-    test('knowledge_items review_status includes draft and approved only path',
-        () {
+    test('knowledge_items review_status includes draft through archived', () {
       expect(knowledgeSql, contains("'draft'"));
       expect(knowledgeSql, contains("'review'"));
       expect(knowledgeSql, contains("'approved'"));
@@ -33,97 +32,81 @@ void main() {
       expect(knowledgeSql, contains("'archived'"));
     });
 
-    test('public knowledge read requires approved status',
-        () {
-      expect(
-        knowledgeSql,
-        contains("review_status = 'approved'"),
-      );
+    test('public knowledge read requires approved status', () {
+      expect(knowledgeSql, contains("review_status = 'approved'"));
       expect(knowledgeSql, contains('approved knowledge public read'));
     });
 
-    test('research findings default to review not published',
-        () {
-      expect(
-        knowledgeSql,
-        contains("default 'review'"),
-      );
+    test('research findings default to review not published', () {
+      expect(knowledgeSql, contains("default 'review'"));
       expect(knowledgeSql, contains("'review','approved','rejected'"));
     });
 
-    test('content_drafts cannot skip draft/review into published without status',
-        () {
+    test('content_drafts status machine includes published only as explicit status', () {
       expect(
         knowledgeSql,
         contains("'draft','review','approved','rejected','published'"),
       );
     });
 
-    test('source authority distinguishes rad_official from government',
-        () {
+    test('source authority distinguishes rad_official from government', () {
       expect(knowledgeSql, contains("'rad_official'"));
       expect(knowledgeSql, contains("'government'"));
       expect(knowledgeSql, contains("'embassy'"));
       expect(knowledgeSql, isNot(contains("'rad_official'='government'")));
     });
 
-    test('knowledge conflicts retain dual statements and resolution status',
-        () {
+    test('knowledge conflicts retain dual statements and resolution status', () {
       expect(knowledgeSql, contains('statement_a'));
       expect(knowledgeSql, contains('statement_b'));
       expect(knowledgeSql, contains('proposed_interpretation'));
-      expect(knowledgeSql, contains("'open','reviewing','resolved','dismissed'"));
+      expect(
+        knowledgeSql,
+        contains("'open','reviewing','resolved','dismissed'"),
+      );
     });
 
-    test('research jobs bound retries with max_attempts',
-        () {
+    test('research jobs bound retries with max_attempts', () {
       expect(knowledgeSql, contains('max_attempts'));
       expect(knowledgeSql, contains('between 1 and 5'));
     });
   });
 
   group('Feed publish visibility', () {
-    test('feed public read requires published status and published_at',
-        () {
+    test('feed public read requires published status and published_at', () {
       expect(feedSql, contains("status='published'"));
       expect(feedSql, contains('published_at<=now()'));
       expect(feedSql, contains('published feed public read'));
     });
 
-    test('feed status machine includes draft review published archived',
-        () {
+    test('feed status machine includes draft review published archived', () {
       expect(
         feedSql,
         contains("'draft','review','published','archived'"),
       );
     });
 
-    test('saved feed and reads are owner-scoped by user_id',
-        () {
+    test('saved feed and reads are owner-scoped by user_id', () {
       expect(feedSql, contains('users manage saved feed'));
       expect(feedSql, contains('user_id=(select auth.uid())'));
     });
 
-    test('notifications are owner-scoped for read and mark-read',
-        () {
+    test('notifications are owner-scoped for read and mark-read', () {
       expect(feedSql, contains('users read own notifications'));
       expect(feedSql, contains('users mark own notifications'));
     });
 
-    test('feed localizations support fa and en',
-        () {
+    test('feed localizations support fa and en', () {
       expect(feedSql, contains("'fa','en'"));
       expect(feedSql, contains('feed_item_localizations'));
     });
   });
 
   group('AI provider secret isolation', () {
-    test('provider API keys stored via vault secret_id not plaintext column',
-        () {
+    test('provider API keys stored via vault secret_id not plaintext column', () {
       expect(aiSql, contains('secret_id'));
       expect(aiSql, contains('vault.create_secret'));
       expect(aiSql, contains('vault.update_secret'));
-      // No client-facing api_key column on ai_providers table definition.
       expect(
         aiSql.contains('api_key text'),
         isFalse,
@@ -131,30 +114,24 @@ void main() {
       );
     });
 
-    test('configure_ai_provider requires super_admin',
-        () {
+    test('configure_ai_provider requires super_admin', () {
       expect(aiSql, contains("private.has_role(array['super_admin'])"));
       expect(aiSql, contains('configure_ai_provider'));
     });
 
-    test('runtime chain with decrypted secrets is service_role only',
-        () {
+    test('runtime chain with decrypted secrets is service_role only', () {
       expect(aiSql, contains('get_ai_runtime_chain'));
-      expect(aiSql, contains("role','') <> 'service_role'"));
-      expect(
-        aiSql,
-        contains('grant execute on function public.get_ai_runtime_chain'),
-      );
+      expect(aiSql, contains("auth.jwt()->>'role'"));
+      expect(aiSql, contains("<> 'service_role'"));
+      expect(aiSql, contains('grant execute on function public.get_ai_runtime_chain'));
     });
 
-    test('enabled providers and models gate client metadata reads',
-        () {
+    test('enabled providers and models gate client metadata reads', () {
       expect(aiSql, contains('enabled provider metadata read'));
       expect(aiSql, contains('enabled model metadata read'));
     });
 
-    test('request attempt_count is bounded',
-        () {
+    test('request attempt_count is bounded', () {
       expect(aiSql, contains('attempt_count between 0 and 5'));
     });
   });

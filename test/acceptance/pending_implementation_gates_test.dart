@@ -7,8 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// still external (owner actions) or intentionally deferred.
 void main() {
   group('External / deferred engineering gates', () {
-    test('Super Admin bootstrap requires verified Auth accounts',
-        () {
+    test('Super Admin bootstrap requires verified Auth accounts', () {
       // Intended identities (owner-supplied):
       // Super Admin: mehrshad.evol.b@gmail.com
       // Admin: B.rad14@yahoo.com
@@ -17,22 +16,19 @@ void main() {
       expect(true, isTrue, reason: 'EXTERNAL ACTION');
     });
 
-    test('Full Flutter ARB locale service beyond bilingual content model',
-        () {
+    test('Full Flutter ARB locale service beyond bilingual content model', () {
       // Feed/knowledge already model fa/en. Global ARB package is optional
       // for the web engineering gate.
       expect(true, isTrue, reason: 'DEFERRED OPTIONAL');
     });
 
-    test('Data export / account deletion product UI',
-        () {
+    test('Data export / account deletion product UI', () {
       // Legal policy text and host-specific flows remain external;
       // schema isolation already owner-scoped for user data.
       expect(true, isTrue, reason: 'DEFERRED / EXTERNAL POLICY');
     });
 
-    test('Production domain, DNS, Auth redirect URLs, app signing',
-        () {
+    test('Production domain, DNS, Auth redirect URLs, app signing', () {
       expect(true, isTrue, reason: 'EXTERNAL ACTION');
     });
   });
