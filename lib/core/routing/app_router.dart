@@ -21,6 +21,7 @@ import '../../features/documents/presentation/pages/documents_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
+import '../../features/feed/presentation/pages/feed_page.dart';
 
 class AuthRefreshNotifier extends ChangeNotifier {
   AuthRefreshNotifier(Ref ref) {
@@ -82,6 +83,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin',
             builder: (_, _) => const AdminOperationsPage(),
           ),
+          GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],
       ),
     ],
