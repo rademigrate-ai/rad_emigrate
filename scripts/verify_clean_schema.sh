@@ -45,6 +45,12 @@ psql "$DB_URL" -v ON_ERROR_STOP=1 <<'SQL'
 DO $verify$
 DECLARE
   table_count integer;
+  column_count integer;
+  primary_key_count integer;
+  foreign_key_count integer;
+  index_count integer;
+  function_count integer;
+  hardened_function_count integer;
   rls_count integer;
   app_policy_count integer;
   storage_policy_count integer;
@@ -55,6 +61,48 @@ BEGIN
   FROM information_schema.tables
   WHERE table_schema = 'public'
     AND table_name IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages');
+
+  SELECT count(*) INTO column_count
+  FROM information_schema.columns
+  WHERE table_schema = 'public'
+    AND table_name IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages');
+
+  SELECT count(*) INTO primary_key_count
+  FROM pg_constraint c
+  JOIN pg_class t ON t.oid = c.conrelid
+  JOIN pg_namespace n ON n.oid = t.relnamespace
+  WHERE n.nspname = 'public'
+    AND c.contype = 'p'
+    AND t.relname IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages');
+
+  SELECT count(*) INTO foreign_key_count
+  FROM pg_constraint c
+  JOIN pg_class t ON t.oid = c.conrelid
+  JOIN pg_namespace n ON n.oid = t.relnamespace
+  WHERE n.nspname = 'public'
+    AND c.contype = 'f'
+    AND t.relname IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages');
+
+  SELECT count(*) INTO index_count
+  FROM pg_indexes
+  WHERE schemaname = 'public'
+    AND tablename IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages');
+
+  SELECT count(*) INTO function_count
+  FROM pg_proc p
+  JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname = 'public'
+    AND p.proname = 'handle_new_user';
+
+  SELECT count(*) INTO hardened_function_count
+  FROM pg_proc p
+  JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname = 'public'
+    AND p.proname = 'handle_new_user'
+    AND p.prosecdef
+    AND p.proconfig @> ARRAY['search_path=""']::text[]
+    AND NOT has_function_privilege('anon', p.oid, 'EXECUTE')
+    AND NOT has_function_privilege('authenticated', p.oid, 'EXECUTE');
 
   SELECT count(*) INTO rls_count
   FROM pg_class c
@@ -89,6 +137,11 @@ BEGIN
     AND allowed_mime_types = ARRAY['application/pdf', 'image/jpeg', 'image/png']::text[];
 
   IF table_count <> 5 THEN RAISE EXCEPTION 'Expected 5 public RAD tables, got %', table_count; END IF;
+  IF column_count <> 32 THEN RAISE EXCEPTION 'Expected 32 public RAD columns, got %', column_count; END IF;
+  IF primary_key_count <> 5 THEN RAISE EXCEPTION 'Expected 5 primary keys, got %', primary_key_count; END IF;
+  IF foreign_key_count <> 7 THEN RAISE EXCEPTION 'Expected 7 foreign keys, got %', foreign_key_count; END IF;
+  IF index_count <> 15 THEN RAISE EXCEPTION 'Expected 15 public RAD indexes, got %', index_count; END IF;
+  IF function_count <> 1 OR hardened_function_count <> 1 THEN RAISE EXCEPTION 'Expected one hardened handle_new_user function, got % function(s), % hardened', function_count, hardened_function_count; END IF;
   IF rls_count <> 5 THEN RAISE EXCEPTION 'Expected RLS on all 5 public RAD tables, got %', rls_count; END IF;
   IF app_policy_count <> 17 THEN RAISE EXCEPTION 'Expected 17 public owner policies, got %', app_policy_count; END IF;
   IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %', storage_policy_count; END IF;

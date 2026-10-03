@@ -36,7 +36,7 @@ For clean projects, this branch adds:
 - `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying the legacy migrations, applies the guarded bootstrap, then applies the tracked SQL files in order and checks tables, RLS, policies, signup trigger, and bucket settings.
 - `docs/SUPABASE_MIGRATION_RECONCILIATION.md`: per-version reconciliation and safe future migration guidance.
 
-The clean replay **passed** in [GitHub Actions run 9](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117517484). The Flutter workflow checks also passed on that commit. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
+The previous clean replay **passed** in [GitHub Actions run 9](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117517484), as did the Flutter workflow checks. Expanded schema structure assertions are running in the latest CI. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
 
 ## Fixed or changed on this branch
 
@@ -44,7 +44,7 @@ The clean replay **passed** in [GitHub Actions run 9](https://github.com/rademig
 - Changed GoRouter auth redirects to respect the bootstrap restoration state, send protected deep links through splash while restoration is pending, and preserve a validated in-app destination after restoration.
 - Added six unit tests covering cold unauthenticated startup, restored protected deep links, invalid sessions, incomplete profiles, authenticated public-route redirects, and destination validation.
 - Added timestamp-matched SQL source for the additive documents bucket restriction applied live.
-- Added CI for Flutter format/analyze/tests/web build and isolated clean-schema replay. The actual run is still in progress.
+- Added CI for Flutter format/analyze/tests/web build and isolated clean-schema replay. The replay script checks tables, columns, primary and foreign keys, indexes, hardened function privileges, triggers, RLS, policies, and Storage restrictions. The expanded checks are running in CI.
 
 ## Unverified and current validation
 
@@ -52,9 +52,9 @@ The clean replay **passed** in [GitHub Actions run 9](https://github.com/rademig
 | --- | --- |
 | Local Git checkout / working tree | No checkout available; source was read through GitHub API. |
 | Local Flutter/Dart commands | Not available in this environment. |
-| GitHub Actions CI | Passed on commit `4dfa45f`: format, analyze, tests, web build, clean schema replay, and `git diff --check`. |
+| GitHub Actions CI | Run 9 passed on commit `4dfa45f`. The expanded replay assertions are pending in the latest run. |
 | Router regression tests | Six tests passed in GitHub Actions. |
-| Clean Supabase replay | Passed in GitHub Actions against an isolated Supabase stack. |
+| Clean Supabase replay | Prior replay passed; expanded table/column/key/index/function assertions are pending in the latest run. |
 | Flutter format | Passed strict CI check. |
 | Flutter analyze | Passed. |
 | Flutter tests | Passed. |
