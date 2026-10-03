@@ -20,7 +20,7 @@ SELECT jsonb_build_object(
       AND tablename IN ('profiles', 'applications', 'documents', 'ai_sessions', 'ai_session_messages')
   ), '[]')),
   'functions', md5(coalesce((
-    SELECT jsonb_agg(jsonb_build_array(p.proname, pg_get_functiondef(p.oid), p.prosecdef, coalesce(p.proconfig, ARRAY[]::text[]), has_function_privilege('anon', p.oid, 'EXECUTE'), has_function_privilege('authenticated', p.oid, 'EXECUTE')) ORDER BY p.proname, p.oid)::text
+    SELECT jsonb_agg(jsonb_build_array(p.proname, p.prosrc, p.prosecdef, coalesce(p.proconfig, ARRAY[]::text[]), has_function_privilege('anon', p.oid, 'EXECUTE'), has_function_privilege('authenticated', p.oid, 'EXECUTE')) ORDER BY p.proname, p.oid)::text
     FROM pg_proc p
     JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = 'public'

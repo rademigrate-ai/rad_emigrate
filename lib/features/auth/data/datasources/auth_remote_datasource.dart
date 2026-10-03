@@ -133,6 +133,11 @@ class AuthRemoteDataSource {
         'country': nationality,
         'updated_at': DateTime.now().toIso8601String(),
       });
+      // This display-only marker is read during session restore. RLS remains
+      // the authority for all database access checks.
+      await _service.client.auth.updateUser(
+        UserAttributes(data: {...?user.userMetadata, 'full_name': fullName}),
+      );
       return _mapSupabaseSession(
         _service.client.auth.currentSession,
         user: user,
