@@ -52,11 +52,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
-      - name: Capture canonical feed formatting
-        run: |
-          dart format lib/features/feed/data/feed_repository.dart
-          git diff -- lib/features/feed/data/feed_repository.dart
-          exit 1
+      - run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
       - name: Build web with non-production configuration
