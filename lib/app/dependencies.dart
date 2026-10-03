@@ -104,7 +104,9 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
     authController.clearSession();
   }
 
-  final subscription = supabase.client.auth.onAuthStateChange.listen((data) async {
+  final subscription = supabase.client.auth.onAuthStateChange.listen((
+    data,
+  ) async {
     final session = data.session;
     if (session == null) {
       authController.clearSession();
