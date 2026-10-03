@@ -47,14 +47,11 @@ class FeedRepository {
           .from('saved_feed_items')
           .select('feed_item_id')
           .eq('user_id', userId);
-      saved.addAll(
-        savedRows.map((row) => row['feed_item_id'] as String),
-      );
+      saved.addAll(savedRows.map((row) => row['feed_item_id'] as String));
     }
     return rows.map((row) {
-      final localizations =
-          (row['feed_item_localizations'] as List<dynamic>)
-              .cast<Map<String, dynamic>>();
+      final localizations = (row['feed_item_localizations'] as List<dynamic>)
+          .cast<Map<String, dynamic>>();
       Map<String, dynamic>? text;
       for (final item in localizations) {
         if (item['locale'] == locale) text = item;
