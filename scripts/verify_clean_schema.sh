@@ -6,9 +6,34 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT"
 
+AUTO_STARTED=0
+MIGRATION_BACKUP=""
+restore_migrations() {
+  if [[ -n "$MIGRATION_BACKUP" && -d "$MIGRATION_BACKUP" ]]; then
+    rm -rf supabase/migrations
+    mv "$MIGRATION_BACKUP" supabase/migrations
+    rmdir "$(dirname "$MIGRATION_BACKUP")"
+    MIGRATION_BACKUP=""
+  fi
+}
+cleanup() {
+  restore_migrations
+  if [[ "$AUTO_STARTED" == "1" ]]; then
+    supabase stop --no-backup >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup EXIT
+
 if [[ "${1:-}" != "--no-start" ]]; then
+  MIGRATION_BACKUP="$(mktemp -d)/migrations"
+  mv supabase/migrations "$MIGRATION_BACKUP"
+  mkdir -p supabase/migrations
+  AUTO_STARTED=1
   supabase start
-  trap 'supabase stop --no-backup >/dev/null 2>&1 || true' EXIT
+  # `supabase start` replays a project's migrations. Restore them only after
+  # the empty local Supabase stack is ready, then explicitly apply the guarded
+  # bootstrap followed by each tracked SQL file.
+  restore_migrations
 fi
 
 psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/bootstrap/clean_schema.sql
