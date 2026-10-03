@@ -5,10 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/dependencies.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/rad_brand.dart';
+import '../../../../core/routing/auth_redirect.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key, this.destination});
+
+  final String? destination;
 
   @override
   ConsumerState<SplashPage> createState() => _SplashPageState();
@@ -31,7 +34,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
     final session = ref.read(authControllerProvider).valueOrNull;
     if (session != null && session.isAuthenticated) {
-      context.go('/dashboard');
+      context.go(restoredProtectedDestination(widget.destination));
     } else {
       context.go('/login');
     }
