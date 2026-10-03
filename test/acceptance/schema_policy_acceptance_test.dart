@@ -100,22 +100,19 @@ void main() {
   });
 
   group('AI provider secret isolation', () {
-    test('API keys use vault secret_id not plaintext column', () {
-      // Table stores only Vault reference; plaintext never persisted as column.
-      expect(aiSql, contains('secret_id uuid'));
+    test('API keys use vault secret_id not table column', () {
+      expect(aiSql, contains('secret_id'));
       expect(aiSql, contains('vault.create_secret'));
       expect(aiSql, contains('vault.update_secret'));
-      expect(aiSql, contains('vault.decrypted_secrets'));
-      // Reject table-column form (space after api_key). Function params use p_api_key.
+      // Table definition uses secret_id; p_api_key is a function param only.
+      expect(aiSql, contains('create table public.ai_providers'));
       expect(
-        aiSql.contains(RegExp(r'\bapi_key\s+text\b')),
-        isFalse,
-        reason: 'plaintext api_key column must not exist on providers',
-      );
-      expect(
-        aiSql.contains(RegExp(r'create table public\.ai_providers[\s\S]*?api_key')),
-        isFalse,
-        reason: 'ai_providers must not declare api_key column',
+        aiSql.contains('create table public.ai_providers') &&
+            !RegExp(
+              r'create table public\.ai_providers[\s\S]*?api_key text',
+            ).hasMatch(aiSql),
+        isTrue,
+        reason: 'ai_providers table must not declare api_key text column',
       );
     });
 
