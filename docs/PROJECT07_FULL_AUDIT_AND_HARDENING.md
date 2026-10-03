@@ -1,18 +1,18 @@
 # RAD EMIGRATE — PROJECT 07 AUDIT AND HARDENING
 
-**Status: Project 07 code and clean-schema validation pass. Production readiness remains unverified.**
+**Status: Project 07 hardening, CI, and clean schema comparison passed. Production readiness remains unverified.**
 
-Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `main` SHA `f3ec28e6f3a4f98c7461ed4852dea78531a6346b`, Supabase RAD project `inshddthftkhcdosoqcn` in `eu-west-1`. Database engine version: `17.11.0.002`.
+Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `main` SHA `f3ec28e6f3a4f98c7461ed4852dea78531a6346b`, Supabase RAD project `inshddthftkhcdosoqcn` in `eu-west-1`. Database engine version: `17.11.0.002`. Main later advanced to `fb5e323` when PR #3 merged; this branch incorporates that history.
 
 ## Verified
 
 ### Repository and architecture
 
-- Main was unprotected and no GitHub Actions workflow existed at the starting SHA. A CI workflow has now been added on this branch for pull requests and pushes to main.
+- Main was unprotected and no GitHub Actions workflow existed at the starting SHA. CI is now configured for pull requests and main pushes; all three jobs passed on the audit branch.
 - Existing architecture is Flutter, Riverpod, GoRouter, feature-first layers, repositories, data sources, and Supabase. Source inspection found no direct Supabase calls in feature presentation files.
 - The current tree includes generated `graphify-out` caches/reports and a nested `graphify-8` tool tree. Their ownership/purpose was not established; they were not removed.
-- GitHub Actions ran a path-only keyword scan for TODO/FIXME, demo/fake/mock, password, service-role, secret, and Supabase-service strings, plus a high-risk credential-pattern scan. Results are being reviewed; the scan never prints matched values.
-- The legacy Project 06 statement about there being no PR branch was corrected with a dated follow-up. PR #1 remains closed without merge and its branch/document remain available.
+- The path-only keyword scan surfaced historical documentation, expected password form/source fields, the nested graphify tool/cache, and the Android template TODO. The outdated demo credentials/fallback instructions were corrected. The high-risk credential scan found no service-role key assignment, Supabase secret key, JWT-like token, cloud access key, or private-key block. CI prints filenames only.
+- PR #1 remains closed without merge; its branch/document remain available. PR #3 merged during this audit; its Supabase-backed session bootstrap and database-backed profile completion restoration are included in the current branch.
 
 ### Live Supabase
 
@@ -33,29 +33,29 @@ The mismatch comes from missing historical migration source and missing core-sch
 For clean projects, this branch adds:
 
 - `supabase/bootstrap/clean_schema.sql`: guarded current-schema bootstrap; it aborts if RAD tables already exist.
-- `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying the legacy migrations, applies the guarded bootstrap, then applies the tracked SQL files in order and checks tables, RLS, policies, signup trigger, and bucket settings.
+- `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying legacy migrations, applies the guarded bootstrap and tracked SQL files, checks table/column/key/index/function/trigger/RLS/policy/bucket counts, and compares a deterministic structural fingerprint against the live intended schema.
 - `docs/SUPABASE_MIGRATION_RECONCILIATION.md`: per-version reconciliation and safe future migration guidance.
 
-The expanded clean replay **passed** in [GitHub Actions run 11](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117896707), as did the Flutter workflow checks. It verified 5 tables, 32 columns, 5 primary keys, 7 foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, 3 Storage policies, and bucket restrictions. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
+The expanded clean replay and structural fingerprint comparison **passed** in [GitHub Actions run 17](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37119626172), along with Flutter and keyword-scan checks. It verified 5 tables, 32 columns, 5 primary keys, 7 foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, 3 Storage policies, and bucket restrictions. The fingerprint compared column definitions, constraints, index definitions, function source/security, triggers, policy definitions, RLS settings, and bucket config. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
 
 ## Fixed or changed on this branch
 
 - Removed false demo login/OTP credentials from `README.md`, `docs/PROJECT01_IMPLEMENTATION.md`, and `docs/development.md`; corrected historical fallback claims in Project 02/04 documentation.
-- Changed GoRouter auth redirects to respect the bootstrap restoration state, send protected deep links through splash while restoration is pending, and preserve a validated in-app destination after restoration.
+- Changed GoRouter auth redirects to respect bootstrap restoration state, send protected deep links through splash while restoration is pending, and preserve a validated in-app destination after restoration. The current auth bootstrap also restores profile completion from the owner-scoped `profiles` row.
 - Changed the login field label to “Email” to match the Supabase email-only sign-in path.
 - Added six unit tests covering cold unauthenticated startup, restored protected deep links, invalid sessions, incomplete profiles, authenticated public-route redirects, and destination validation.
 - Added timestamp-matched SQL source for the additive documents bucket restriction applied live.
-- Added CI for Flutter format/analyze/tests/web build, expanded isolated clean-schema replay, and a tracked-file keyword scan that reports file paths only. The expanded schema replay passed on run 11; the keyword scan is running in the latest workflow.
+- Added CI for strict Dart format, Flutter analysis/tests/web build, clean schema replay/fingerprint comparison, and tracked-file/high-risk credential scans.
 
 ## Unverified and current validation
 
 | Check | Result |
 | --- | --- |
-| Local Git checkout / working tree | No checkout available; source was read through GitHub API. |
+| Local Git checkout / working tree | No local checkout is available; source and branch state were handled through GitHub API. All changes are committed, and CI `git diff --check` passed. |
 | Local Flutter/Dart commands | Not available in this environment. |
-| GitHub Actions CI | Run 11 passed on commit `c5c5de9`: format, analyze, tests, web build, expanded clean schema replay, and `git diff --check`. |
+| GitHub Actions CI | Run 17 passed on commit `c792ec3`: strict format, analyze, tests, web build, clean schema replay/fingerprint, keyword scans, and `git diff --check`. |
 | Router regression tests | Six tests passed in GitHub Actions. |
-| Clean Supabase replay | Expanded assertions passed on run 11 against an isolated Supabase stack. |
+| Clean Supabase replay | Expanded assertions and live structural fingerprint comparison passed on run 17 against an isolated Supabase stack. |
 | Flutter format | Passed strict CI check. |
 | Flutter analyze | Passed. |
 | Flutter tests | Passed. |
@@ -73,7 +73,7 @@ The expanded clean replay **passed** in [GitHub Actions run 11](https://github.c
 
 ### EXTERNAL CONFIGURATION
 
-- `main` remains unprotected. Enable required CI checks and prevent force-push/deletion using the repository's intended governance after the workflow has a successful run.
+- `main` remains unprotected. Require the `flutter`, `clean-schema`, and `repository-keyword-scan` checks, and prevent force-push/deletion using the repository's intended governance.
 - Production Supabase redirect URLs, hosting environment values, real account flows, and multi-user/storage isolation require the live hosting/account setup and were not changed here.
 - Android release configuration still uses the placeholder application ID `com.example.rad_emigrate` and debug signing. Set the production package ID and release signing through the owner's release process before distributing an Android build.
 - A production web host must serve the Flutter SPA entry point (`index.html`) for direct GoRouter paths; no production hosting configuration was found or changed.
@@ -84,4 +84,4 @@ AI provider integration, the RAD knowledge base, OCR/document intelligence, admi
 
 ## Production readiness
 
-**Not fully verified.** Live database security and Storage settings were checked, and code plus clean reconstruction passed CI. Real user flows, hosting configuration, and production deployment remain unverified.
+**Not fully verified.** Live database security and Storage settings were checked; code, Flutter validation, keyword scans, and clean schema equivalence passed CI. Real user flows, hosting configuration, and production deployment remain unverified.

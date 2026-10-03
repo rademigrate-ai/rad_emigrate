@@ -1,17 +1,15 @@
 # Remaining Product Roadmap
 
-This roadmap records future work after the current codebase has been stabilized and the incomplete Project 07 audit blockers have been resolved. No phase below is marked complete by this document.
+Project 07 code hardening, CI, live security checks, and clean schema reconstruction are complete. Project 08 covers real account, hosting, and release verification that still needs the owner's production environment. No phase below is marked complete by this document.
 
 ## PROJECT 08 — Production Verification and Deployment
 
-- Clean-clone verification and reproducible migrations
-- CI validation for formatting, analysis, tests, and web build
-- Production hosting and environment variables
-- Supabase redirect URLs
-- Real signup/login and profile CRUD smoke tests
-- Application CRUD and document upload/download/delete tests
-- Multi-user isolation and browser route tests
-- Deployment verification
+- Configure production hosting, environment values, and SPA rewrites to serve `index.html` for GoRouter paths
+- Configure Supabase Auth redirect URLs
+- Verify real signup/login, profile CRUD, and application CRUD
+- Verify document upload/download/delete and multi-user isolation
+- Run browser route tests and production deployment smoke checks
+- Set the production Android package ID and release signing configuration
 
 ## PROJECT 09 — Visa and Product Data Layer
 
