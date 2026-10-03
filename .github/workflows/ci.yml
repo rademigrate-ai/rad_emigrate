@@ -50,6 +50,14 @@ jobs:
           --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
       - run: git diff --check
 
+  repository-keyword-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan tracked files for audit keywords (paths only)
+        run: |
+          git grep -I -i -l -E 'TODO|FIXME|demo|fake|mock|password|service_role|secret|SUPABASE_SERVICE' HEAD -- . ':(exclude).github/workflows/ci.yml' || true
+
   clean-schema:
     runs-on: ubuntu-latest
     steps:

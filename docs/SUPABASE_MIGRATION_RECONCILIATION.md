@@ -45,7 +45,7 @@ The current intended public schema is reconstructed in `supabase/bootstrap/clean
 
 The checked-in SQL migrations then create the policies, indexes, bucket, and upload restrictions. The bootstrap has a guard that aborts if any RAD application table already exists. It assumes the Supabase platform has created the `auth`/`storage` schemas and roles.
 
-`bash scripts/verify_clean_schema.sh` starts an isolated local Supabase stack with an empty migration directory, applies the bootstrap and then every tracked migration in lexical order, and verifies five tables, 32 columns, five primary keys, seven foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, three Storage policies, and bucket restrictions. The initial replay passed in [GitHub Actions run 9](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117517484); expanded assertions are being verified by the latest run. A hosted clean project can use the same bootstrap-first and forward-SQL sequence through a trusted database connection.
+`bash scripts/verify_clean_schema.sh` starts an isolated local Supabase stack with an empty migration directory, applies the bootstrap and then every tracked migration in lexical order, and verifies five tables, 32 columns, five primary keys, seven foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, three Storage policies, and bucket restrictions. The expanded replay passed in [GitHub Actions run 11](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37117896707). A hosted clean project can use the same bootstrap-first and forward-SQL sequence through a trusted database connection.
 
 ## Future production migration handling
 
