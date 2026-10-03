@@ -1,0 +1,9 @@
+# Project 14 — Feed, Notifications, Localization and PWA
+
+Project 14 adds a review-gated bilingual content feed with source attribution, effective/expiry dates, bookmarks, read state, notification preferences, per-user notifications, and private push subscriptions.
+
+Only published, currently effective items are public. Admins manage drafts and localizations; users can access only their own interactions, preferences, notifications and subscriptions. Publishing creates in-app notifications only for users who opted into feed updates. No external email or push is sent without an enabled preference and a future provider configuration.
+
+The Flutter `/feed` experience reads live Supabase content, supports Persian RTL and English LTR, exposes bookmark/read actions, and is linked from the dashboard. Empty/error/loading states are honest.
+
+The web manifest and HTML metadata now identify RAD Emigrate, use the RAD palette, support installable standalone display and maskable icons, and carry Persian RTL defaults while the in-app feed can switch language.
