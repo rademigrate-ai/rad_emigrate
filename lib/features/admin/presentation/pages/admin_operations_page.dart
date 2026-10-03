@@ -93,7 +93,7 @@ class _AdminOverview extends StatelessWidget {
         Text(
           data.isSuperAdmin ? 'Super Admin' : 'Admin',
           style: Theme.of(context).textTheme.labelLarge
-              ?.copyWith(color: AppColors.blue),
+              ?.copyWith(color: AppColors.info),
         ),
         const SizedBox(height: 8),
         Text(
@@ -137,7 +137,7 @@ class _MetricTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(icon, color: AppColors.blue),
+        leading: Icon(icon, color: AppColors.info),
         title: Text(label),
         trailing: Text(
           '$value',
