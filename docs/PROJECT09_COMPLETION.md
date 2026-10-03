@@ -39,4 +39,4 @@ None for the Project 09 architecture. The two intended Super Admin identities re
 
 ## Release
 
-Final SHA, CI result, and tag are recorded in `MASTER_COMPLETION_STATUS.md` after merge.
+Merged implementation SHA: `699e89e44239a4ef1c88b8831351f3ebdf2d81f7`. CI run 49 passed all jobs. The `project-09-final` tag remains a manual release-history action because the active GitHub connector cannot create tag refs.
