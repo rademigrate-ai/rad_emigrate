@@ -57,16 +57,18 @@ jobs:
       - run: flutter test
       - name: Build web with non-production configuration
         run: >-
-          flutter build web
+          flutter build web --no-pub
           --dart-define=SUPABASE_URL=https://example.supabase.co
           --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
       - name: Build Android debug variant
-        run: flutter build apk --debug
+        run: >-
+          flutter build apk --debug --no-pub
+          --target-platform android-arm64
       - name: Verify Android release refuses missing signing values
         shell: bash
         run: |
           set +e
-          flutter build apk --release > "$RUNNER_TEMP/release-signing-check.log" 2>&1
+          android/gradlew --no-daemon :app:verifyReleaseSigning > "$RUNNER_TEMP/release-signing-check.log" 2>&1
           build_status=$?
           set -e
           if [ "$build_status" -eq 0 ]; then
