@@ -11,7 +11,7 @@ Audit baseline: 2026-10-03, repository `rademigrate-ai/rad_emigrate`, initial `m
 - Main was unprotected and no GitHub Actions workflow existed at the starting SHA. CI is now configured for pull requests and main pushes; all three jobs passed on the audit branch.
 - Existing architecture is Flutter, Riverpod, GoRouter, feature-first layers, repositories, data sources, and Supabase. Source inspection found no direct Supabase calls in feature presentation files.
 - The current tree includes generated `graphify-out` caches/reports and a nested `graphify-8` tool tree. Their ownership/purpose was not established; they were not removed.
-- The path-only keyword scan surfaced historical documentation, expected password form/source fields, the nested graphify tool/cache, and the Android template TODO. The outdated demo credentials/fallback instructions were corrected. The high-risk credential scan found no service-role key assignment, Supabase secret key, JWT-like token, cloud access key, or private-key block. CI prints filenames only.
+- The path-only keyword scan surfaced historical documentation, expected password form/source fields, the nested graphify tool/cache, and the Android template TODO. The outdated demo credentials/fallback instructions were corrected. The high-risk credential scan found no service-role key assignment, Supabase secret key, JWT-like token, cloud access key, or private-key block. CI prints filenames only and now fails on a match or scan error.
 - PR #1 remains closed without merge; its branch/document remain available. PR #3 merged during this audit; its Supabase-backed session bootstrap and database-backed profile completion restoration are included in the current branch.
 
 ### Live Supabase
@@ -36,7 +36,7 @@ For clean projects, this branch adds:
 - `scripts/verify_clean_schema.sh`: starts a local Supabase stack without automatically replaying legacy migrations, applies the guarded bootstrap and tracked SQL files, checks table/column/key/index/function/trigger/RLS/policy/bucket counts, and compares a deterministic structural fingerprint against the live intended schema.
 - `docs/SUPABASE_MIGRATION_RECONCILIATION.md`: per-version reconciliation and safe future migration guidance.
 
-The expanded clean replay and structural fingerprint comparison **passed** in [GitHub Actions run 17](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37119626172), along with Flutter and keyword-scan checks. It verified 5 tables, 32 columns, 5 primary keys, 7 foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, 3 Storage policies, and bucket restrictions. The fingerprint compared column definitions, constraints, index definitions, function source/security, triggers, policy definitions, RLS settings, and bucket config. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
+The expanded clean replay and structural fingerprint comparison **passed** in [GitHub Actions run 17](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/37119626172), along with Flutter and keyword-scan checks. It verified 5 tables, 32 columns, 5 primary keys, 7 foreign keys, 15 indexes, the hardened signup function and trigger, RLS, 17 public policies, 3 Storage policies, and bucket restrictions. The fingerprint compared column definitions, constraints, index definitions, function source/security, triggers, policy definitions, RLS settings, and bucket config. Run 19 passed again after the high-risk scan was changed to fail closed on matches/errors; the isolated replay and fingerprint passed on that run as well. Do not run `supabase db push`, reset RAD, or alter its historical ledger until a dedicated production migration plan is reviewed.
 
 ## Fixed or changed on this branch
 
@@ -45,7 +45,7 @@ The expanded clean replay and structural fingerprint comparison **passed** in [G
 - Changed the login field label to “Email” to match the Supabase email-only sign-in path.
 - Added six unit tests covering cold unauthenticated startup, restored protected deep links, invalid sessions, incomplete profiles, authenticated public-route redirects, and destination validation.
 - Added timestamp-matched SQL source for the additive documents bucket restriction applied live.
-- Added CI for strict Dart format, Flutter analysis/tests/web build, clean schema replay/fingerprint comparison, and tracked-file/high-risk credential scans.
+- Added CI for strict Dart format, Flutter analysis/tests/web build, clean schema replay/fingerprint comparison, and tracked-file/high-risk credential scans. High-risk matches and scan errors fail the scan job.
 
 ## Unverified and current validation
 
@@ -53,9 +53,9 @@ The expanded clean replay and structural fingerprint comparison **passed** in [G
 | --- | --- |
 | Local Git checkout / working tree | No local checkout is available; source and branch state were handled through GitHub API. All changes are committed, and CI `git diff --check` passed. |
 | Local Flutter/Dart commands | Not available in this environment. |
-| GitHub Actions CI | Run 17 passed on commit `c792ec3`: strict format, analyze, tests, web build, clean schema replay/fingerprint, keyword scans, and `git diff --check`. |
+| GitHub Actions CI | Run 19 passed on workflow commit `3d2febd`: strict format, analyze, tests, web build, clean schema replay/fingerprint, fail-closed high-risk scan, keyword scan, and `git diff --check`. |
 | Router regression tests | Six tests passed in GitHub Actions. |
-| Clean Supabase replay | Expanded assertions and live structural fingerprint comparison passed on run 17 against an isolated Supabase stack. |
+| Clean Supabase replay | Expanded assertions and live structural fingerprint comparison passed on runs 17 and 19 against an isolated Supabase stack. |
 | Flutter format | Passed strict CI check. |
 | Flutter analyze | Passed. |
 | Flutter tests | Passed. |
