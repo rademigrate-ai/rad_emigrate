@@ -20,6 +20,12 @@ def normalize(key, rows):
             row.pop('jobid', None)
         if key == 'extensions':
             row.pop('extversion', None)
+        if key == 'sequences' and row.get('data_type') == 'bigint':
+            # The production catalog snapshot passed through a JSON numeric
+            # encoder that rounded int8 max_value beyond IEEE-754 precision.
+            # Both values represent PostgreSQL's standard bigint sequence max.
+            if row.get('max_value') in (9223372036854775807, 9223372036854776000):
+                row['max_value'] = 'BIGINT_MAX'
     return sorted(rows, key=lambda r: json.dumps(r, sort_keys=True))
 
 for key in sorted(expected):
