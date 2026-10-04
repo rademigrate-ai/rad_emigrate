@@ -32,7 +32,9 @@ class AdminHubPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 _AdminTile(
                   icon: Icons.key_outlined,
-                  title: fa ? 'تنظیم Provider و API' : 'Provider & API configuration',
+                  title: fa
+                      ? 'تنظیم Provider و API'
+                      : 'Provider & API configuration',
                   subtitle: fa
                       ? 'Base URL، Provider و کلید دسترسی را بدون نمایش دوباره کلید ذخیره کنید.'
                       : 'Configure provider, Base URL and credential without exposing stored secrets.',
@@ -56,7 +58,13 @@ class AdminHubPage extends StatelessWidget {
 }
 
 class _AdminTile extends StatelessWidget {
-  const _AdminTile({required this.icon, required this.title, required this.subtitle, required this.onTap});
+  const _AdminTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
   final IconData icon;
   final String title;
   final String subtitle;
@@ -68,7 +76,10 @@ class _AdminTile extends StatelessWidget {
       contentPadding: const EdgeInsets.all(16),
       leading: Icon(icon, size: 30),
       title: Text(title),
-      subtitle: Padding(padding: const EdgeInsets.only(top: 6), child: Text(subtitle)),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Text(subtitle),
+      ),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
     ),
