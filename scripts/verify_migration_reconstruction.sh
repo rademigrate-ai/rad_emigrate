@@ -16,12 +16,10 @@ supabase --help >/dev/null
 supabase migration up --help >/dev/null
 supabase migration list --help >/dev/null
 supabase db push --help >/dev/null
-# Start without the product migration directory. Never link to production.
 supabase start
 cp supabase/reconciliation/candidate/*.sql supabase/migrations/
 supabase migration up --local
-psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 \
-  -f supabase/reconciliation/catalog_fingerprint.sql > reconstructed-catalog.json
+psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/reconciliation/catalog_fingerprint.sql > reconstructed-catalog.json
 python3 scripts/compare_reconciliation_catalog.py reconstructed-catalog.json
 supabase migration list --db-url "$DB_URL" > reconstruction-migration-list.txt
 supabase db push --db-url "$DB_URL" --dry-run > reconstruction-dry-run.txt 2>&1
@@ -51,6 +49,5 @@ for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
 print('Canonical active lineage: PASS (25 authoritative + 1 current unapplied hardening).')
 PY
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 \
-  -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
