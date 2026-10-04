@@ -5,13 +5,7 @@ class Country {
   final String flagEmoji;
   final String slug;
 
-  const Country({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.flagEmoji,
-    required this.slug,
-  });
+  const Country({required this.id, required this.name, required this.code, required this.flagEmoji, required this.slug});
 }
 
 class VisaCategory {
@@ -20,22 +14,11 @@ class VisaCategory {
   final String description;
   final String slug;
 
-  const VisaCategory({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.slug,
-  });
+  const VisaCategory({required this.id, required this.name, required this.description, required this.slug});
 }
 
 class VisaSource {
-  const VisaSource({
-    required this.title,
-    required this.url,
-    required this.publisher,
-    required this.retrievedAt,
-  });
-
+  const VisaSource({required this.title, required this.url, required this.publisher, required this.retrievedAt});
   final String title;
   final String url;
   final String publisher;
@@ -43,15 +26,17 @@ class VisaSource {
 }
 
 class VisaRequirement {
-  const VisaRequirement({
-    required this.text,
-    required this.displayOrder,
-    this.isMandatory,
-  });
-
+  const VisaRequirement({required this.text, required this.displayOrder, this.isMandatory});
   final String text;
   final int displayOrder;
   final bool? isMandatory;
+}
+
+class VisaStep {
+  const VisaStep({required this.title, required this.description, required this.displayOrder});
+  final String title;
+  final String description;
+  final int displayOrder;
 }
 
 class VisaProgram {
@@ -63,6 +48,7 @@ class VisaProgram {
   final String summary;
   final String? description;
   final List<VisaRequirement> requirements;
+  final List<VisaStep> steps;
   final String? processingTime;
   final String? fees;
   final VisaSource source;
@@ -77,18 +63,14 @@ class VisaProgram {
     required this.source,
     this.description,
     this.requirements = const [],
+    this.steps = const [],
     this.processingTime,
     this.fees,
   });
 }
 
 class VisaCatalog {
-  const VisaCatalog({
-    required this.countries,
-    required this.categories,
-    required this.programs,
-  });
-
+  const VisaCatalog({required this.countries, required this.categories, required this.programs});
   final List<Country> countries;
   final List<VisaCategory> categories;
   final List<VisaProgram> programs;
