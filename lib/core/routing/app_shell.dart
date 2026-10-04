@@ -72,11 +72,13 @@ class AppShell extends ConsumerWidget {
           if (wide)
             Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).navigationRailTheme.backgroundColor ??
+                color:
+                    Theme.of(context).navigationRailTheme.backgroundColor ??
                     AppColors.navy,
                 border: Border(
                   right: BorderSide(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.4),
+                    color: Theme.of(context).dividerColor
+                        .withValues(alpha: 0.4),
                   ),
                 ),
               ),
