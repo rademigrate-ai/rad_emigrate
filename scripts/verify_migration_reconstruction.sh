@@ -22,8 +22,7 @@ cp supabase/reconciliation/candidate/*.sql supabase/migrations/
 supabase migration up --local
 psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 \
   -f supabase/reconciliation/catalog_fingerprint.sql > reconstructed-catalog.json
-# Do not mutate reconstructed cron metadata before equivalence verification.
-# This disposable stack has no production secrets or production linkage.
+# Do not mutate reconstructed metadata before equivalence verification.
 python3 scripts/compare_reconciliation_catalog.py reconstructed-catalog.json
 supabase migration list --db-url "$DB_URL" > reconstruction-migration-list.txt
 supabase db push --db-url "$DB_URL" --dry-run > reconstruction-dry-run.txt 2>&1
@@ -41,9 +40,9 @@ assert not any(p.name in text for p in files), text
 assert 'up to date' in text.lower(), text
 print('Zero historical pending: PASS (25 authoritative versions, CLI dry-run).')
 PY
-python3 scripts/verify_local_auth_isolation.py
-# Preserve and verify current main's NEW, unapplied hardening separately.
-# It is intentionally absent from the historical-equivalence fingerprint.
+# The full current-lineage Auth/RLS/Storage behavioral suite runs independently
+# in clean-schema. Here preserve exact historical equivalence, then apply and
+# verify only current main's NEW, unapplied hardening on top of that baseline.
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 \
   -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
