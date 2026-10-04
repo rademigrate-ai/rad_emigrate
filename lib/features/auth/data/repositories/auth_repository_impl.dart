@@ -94,4 +94,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await local.clear();
     }
   }
+
+  @override
+  Future<void> requestPasswordReset({required String email}) =>
+      remote.requestPasswordReset(email: email);
 }
