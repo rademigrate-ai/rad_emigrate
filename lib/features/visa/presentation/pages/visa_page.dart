@@ -53,11 +53,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     );
   }
 
-  Widget _catalog(
-    BuildContext context,
-    VisaCatalog catalog,
-    AppLocalizations l10n,
-  ) {
+  Widget _catalog(BuildContext context, VisaCatalog catalog, AppLocalizations l10n) {
     final query = _query.trim().toLowerCase();
     final programs = catalog.programs
         .where(

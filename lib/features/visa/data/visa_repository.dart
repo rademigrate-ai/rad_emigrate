@@ -47,9 +47,7 @@ class VisaRepository {
           .map((row) => _category(row as Map<String, dynamic>))
           .toList(growable: false),
       programs: (results[2] as List<dynamic>)
-          .map(
-            (row) => _program(row as Map<String, dynamic>, language),
-          )
+          .map((row) => _program(row as Map<String, dynamic>, language))
           .toList(growable: false),
     );
   }
@@ -80,10 +78,7 @@ class VisaRepository {
     final source = row['content_sources'] as Map<String, dynamic>;
     final requirements =
         ((row['visa_program_requirements'] as List<dynamic>?) ?? const [])
-            .where(
-              (item) =>
-                  (item as Map<String, dynamic>)['locale'] == language,
-            )
+            .where((item) => (item as Map<String, dynamic>)['locale'] == language)
             .map((item) {
               final value = item as Map<String, dynamic>;
               return VisaRequirement(
@@ -95,9 +90,7 @@ class VisaRepository {
             .toList()
           ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
     final steps = ((row['visa_program_steps'] as List<dynamic>?) ?? const [])
-        .where(
-          (item) => (item as Map<String, dynamic>)['locale'] == language,
-        )
+        .where((item) => (item as Map<String, dynamic>)['locale'] == language)
         .map((item) {
           final value = item as Map<String, dynamic>;
           return VisaStep(

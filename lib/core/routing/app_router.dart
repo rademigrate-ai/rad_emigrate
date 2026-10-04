@@ -79,19 +79,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
         routes: [
-          GoRoute(
-            path: '/dashboard',
-            builder: (_, _) => const DashboardPage(),
-          ),
+          GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
           GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
           GoRoute(
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),
           ),
-          GoRoute(
-            path: '/documents',
-            builder: (_, _) => const DocumentsPage(),
-          ),
+          GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
           GoRoute(
             path: '/ai-assistant',
