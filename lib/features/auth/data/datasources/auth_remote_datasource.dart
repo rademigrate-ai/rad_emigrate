@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/network/api_client.dart';
@@ -77,7 +78,10 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<void> resendOtp({required String identifier}) async {
+  Future<void> resendOtp({
+    required String identifier,
+    bool signup = false,
+  }) async {
     final email = identifier.trim();
     if (!email.contains('@')) {
       throw const ApiException(
@@ -94,7 +98,14 @@ class AuthRemoteDataSource {
     }
     _ensureSupabaseReady();
     try {
-      await _service.client.auth.resend(type: OtpType.signup, email: email);
+      if (signup) {
+        await _service.client.auth.resend(type: OtpType.signup, email: email);
+      } else {
+        await _service.client.auth.signInWithOtp(
+          email: email,
+          shouldCreateUser: false,
+        );
+      }
     } catch (error) {
       throw _apiException(error);
     }
@@ -103,6 +114,7 @@ class AuthRemoteDataSource {
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async {
     if (_backend is ApiClient) {
       final response = await (_backend).post<Map<String, dynamic>>(
@@ -122,7 +134,7 @@ class AuthRemoteDataSource {
       final response = await _service.client.auth.verifyOTP(
         email: identifier.trim(),
         token: otp,
-        type: OtpType.email,
+        type: signup ? OtpType.signup : OtpType.email,
       );
       return await _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
@@ -160,6 +172,43 @@ class AuthRemoteDataSource {
         _service.client.auth.currentSession,
         user: user,
         fullName: fullName,
+      );
+    } catch (error) {
+      throw _apiException(error);
+    }
+  }
+
+  /// Sends a password-recovery email via Supabase Auth.
+  ///
+  /// On web, [redirectTo] points at `/reset-password` on the current origin so
+  /// Render SPA routing can deliver the recovery session to the set-password UI.
+  Future<void> requestPasswordReset({required String email}) async {
+    final trimmed = email.trim();
+    if (!trimmed.contains('@')) {
+      throw const ApiException(
+        message: 'A valid email address is required.',
+        code: 'invalid_email',
+      );
+    }
+    if (_backend is ApiClient) {
+      await (_backend).post<void>(
+        '/auth/password/reset',
+        data: {'email': trimmed},
+      );
+      return;
+    }
+    _ensureSupabaseReady();
+    try {
+      String? redirectTo;
+      if (kIsWeb) {
+        final origin = Uri.base.origin;
+        if (origin.isNotEmpty && origin != 'null') {
+          redirectTo = '$origin/reset-password';
+        }
+      }
+      await _service.client.auth.resetPasswordForEmail(
+        trimmed,
+        redirectTo: redirectTo,
       );
     } catch (error) {
       throw _apiException(error);
@@ -277,6 +326,10 @@ class AuthRemoteDataSource {
     if (error is PostgrestException) {
       return ApiException(message: error.message, code: error.code);
     }
-    return ApiException(message: error.toString(), code: 'supabase_error');
+    return ApiException(
+      message: 'Unexpected Supabase error.',
+      code: 'supabase_error',
+      cause: error,
+    );
   }
 }

@@ -104,3 +104,4 @@ AI-01 must extend, never recreate: `ai_providers`, `ai_models`, `ai_provider_hea
 **MIGRATION LINEAGE RECONCILIATION BLOCKED**
 
 Exact unresolved proof obligation: create an executable canonical baseline from the authoritative production state, reconstruct it in a disposable isolated environment, compare tables/columns/constraints/indexes/RLS/policies/grants/functions/security/search_path/triggers/Storage SQL/cron/extensions against production, and demonstrate zero historical migrations pending after canonicalization. Production must remain untouched while doing so.
+

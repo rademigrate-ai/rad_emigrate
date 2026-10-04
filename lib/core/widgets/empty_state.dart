@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import 'app_button.dart';
 
 class EmptyState extends StatelessWidget {
@@ -21,6 +20,7 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -34,10 +34,10 @@ class EmptyState extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceMuted,
+                  color: scheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Icon(icon, size: 32, color: AppColors.textTertiary),
+                child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
               ),
             ),
             const SizedBox(height: 20),

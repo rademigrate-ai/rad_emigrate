@@ -46,13 +46,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.47.6'
           channel: stable
           cache: true
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
-      - run: dart format --set-exit-if-changed lib test
+      - name: Dart format gate
+        run: |
+          set -euo pipefail
+          if ! dart format --set-exit-if-changed lib test; then
+            echo '::error::dart format would change files. Listing offenders:'
+            dart format lib test
+            git --no-pager diff --name-only
+            git --no-pager diff --stat
+            exit 1
+          fi
       - run: flutter analyze
       - run: flutter test
       - name: Build web with non-production configuration
@@ -120,3 +130,28 @@ jobs:
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true
+
+  migration-reconstruction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.119.0
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+      - name: Reconstruct authoritative lineage and compare production metadata
+        run: bash scripts/verify_migration_reconstruction.sh
+      - name: Upload metadata-only reconciliation proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-reconstruction-proof
+          path: |
+            reconstructed-catalog.json
+            reconciliation-report.json
+            reconstruction-migration-list.txt
+            reconstruction-dry-run.txt
+          if-no-files-found: ignore

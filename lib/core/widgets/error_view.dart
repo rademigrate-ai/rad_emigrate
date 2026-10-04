@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 
 class ErrorView extends StatelessWidget {
   final String message;
@@ -30,7 +31,7 @@ class ErrorView extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primaryRed,
                 ),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context).retry),
               ),
             ],
           ],

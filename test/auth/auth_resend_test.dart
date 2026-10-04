@@ -5,13 +5,21 @@ import 'package:rad_emigrate/features/auth/presentation/providers/auth_controlle
 
 class _FakeAuthRepository implements AuthRepository {
   String? resentIdentifier;
+  bool? resentSignup;
   Object? resendError;
 
   @override
-  Future<void> resendOtp({required String identifier}) async {
+  Future<void> resendOtp({
+    required String identifier,
+    bool signup = false,
+  }) async {
     resentIdentifier = identifier;
+    resentSignup = signup;
     if (resendError case final error?) throw error;
   }
+
+  @override
+  Future<void> requestPasswordReset({required String email}) async {}
 
   @override
   Future<UserSession> login({
@@ -42,6 +50,7 @@ class _FakeAuthRepository implements AuthRepository {
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async => throw UnimplementedError();
 }
 
@@ -59,9 +68,24 @@ void main() {
     await controller.resendOtp(identifier: 'pending@example.test');
 
     expect(repository.resentIdentifier, 'pending@example.test');
+    expect(repository.resentSignup, isFalse);
     expect(controller.current.userId, 'pending-user');
     expect(controller.current.email, 'pending@example.test');
     expect(controller.current.isAuthenticated, isFalse);
+    controller.dispose();
+  });
+
+  test('signup resend mode reaches the repository explicitly', () async {
+    final repository = _FakeAuthRepository();
+    final controller = AuthController(repository);
+
+    await controller.resendOtp(
+      identifier: 'pending@example.test',
+      signup: true,
+    );
+
+    expect(repository.resentIdentifier, 'pending@example.test');
+    expect(repository.resentSignup, isTrue);
     controller.dispose();
   });
 

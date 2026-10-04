@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
-
 class SectionCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -22,20 +20,21 @@ class SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
-      color: AppColors.surface,
+      color: theme.cardColor,
       elevation: 0,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppColors.borderSubtle),
+        side: BorderSide(color: theme.dividerColor),
       ),
       child: Semantics(
         button: onTap != null,
         child: InkWell(
           onTap: onTap,
           overlayColor: WidgetStatePropertyAll(
-            AppColors.navy.withValues(alpha: 0.05),
+            theme.colorScheme.primary.withValues(alpha: 0.06),
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -45,7 +44,7 @@ class SectionCard extends StatelessWidget {
                 Row(
                   children: [
                     if (icon != null) ...[
-                      Icon(icon, size: 22, color: AppColors.navy),
+                      Icon(icon, size: 22, color: theme.colorScheme.secondary),
                       const SizedBox(width: 12),
                     ],
                     Expanded(

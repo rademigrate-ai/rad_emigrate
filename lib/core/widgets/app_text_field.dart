@@ -17,6 +17,7 @@ class AppTextField extends StatelessWidget {
     this.onSubmitted,
     this.textInputAction,
     this.autofillHints,
+    this.textDirection,
   });
 
   final TextEditingController controller;
@@ -33,6 +34,7 @@ class AppTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class AppTextField extends StatelessWidget {
       onFieldSubmitted: onSubmitted,
       textInputAction: textInputAction,
       autofillHints: autofillHints,
+      textDirection: textDirection,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,

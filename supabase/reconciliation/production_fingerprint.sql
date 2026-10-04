@@ -82,3 +82,4 @@ select count(*) as search_provider_count from public.search_providers;
 select enabled, secret_id is not null as has_secret
 from public.document_processor_config where singleton;
 select id, name, base_url, enabled from public.research_sources order by id;
+

@@ -38,13 +38,15 @@ class _StepRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final done = step.state == ProgressStepState.done;
     final current = step.state == ProgressStepState.current;
     final color = done
         ? AppColors.success
         : current
         ? AppColors.primaryRed
-        : AppColors.textTertiary;
+        : scheme.onSurfaceVariant;
 
     return IntrinsicHeight(
       child: Row(
@@ -56,7 +58,7 @@ class _StepRow extends StatelessWidget {
                 width: 22,
                 height: 22,
                 decoration: BoxDecoration(
-                  color: done || current ? color : AppColors.surface,
+                  color: done || current ? color : scheme.surface,
                   shape: BoxShape.circle,
                   border: Border.all(color: color, width: 2),
                 ),
@@ -82,7 +84,7 @@ class _StepRow extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     color: done
                         ? AppColors.success.withValues(alpha: 0.4)
-                        : AppColors.border,
+                        : theme.dividerColor,
                   ),
                 ),
             ],
@@ -97,8 +99,8 @@ class _StepRow extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: current ? FontWeight.w600 : FontWeight.w400,
                   color: current || done
-                      ? AppColors.textPrimary
-                      : AppColors.textTertiary,
+                      ? scheme.onSurface
+                      : scheme.onSurfaceVariant,
                 ),
               ),
             ),

@@ -10,6 +10,7 @@ void main() {
   late String knowledgeSql;
   late String feedSql;
   late String aiSql;
+  late String ssrfSql;
 
   setUpAll(() {
     knowledgeSql = File(
@@ -20,6 +21,9 @@ void main() {
     ).readAsStringSync();
     aiSql = File(
       'supabase/migrations/20261003213000_project11_ai_orchestration.sql',
+    ).readAsStringSync();
+    ssrfSql = File(
+      'supabase/migrations/20261003235000_ai_base_url_ssrf_hardening.sql',
     ).readAsStringSync();
   });
 
@@ -142,6 +146,33 @@ void main() {
 
     test('request attempt_count is bounded', () {
       expect(aiSql, contains('attempt_count between 0 and 5'));
+    });
+  });
+
+  group('AI base_url SSRF hardening', () {
+    test('is_safe_public_https_url helper exists', () {
+      expect(ssrfSql, contains('private.is_safe_public_https_url'));
+      expect(ssrfSql, contains('169.254.'));
+      expect(ssrfSql, contains('localhost'));
+      expect(ssrfSql, contains('metadata.google.internal'));
+    });
+
+    test(
+      'configure_ai_provider uses safe URL helper not only https prefix',
+      () {
+        expect(
+          ssrfSql,
+          contains('not private.is_safe_public_https_url(p_base_url)'),
+        );
+        expect(ssrfSql, contains('configure_ai_provider'));
+      },
+    );
+
+    test('blocks private and loopback IPv4 ranges', () {
+      expect(ssrfSql, contains("like '10.%'"));
+      expect(ssrfSql, contains("like '192.168.%'"));
+      expect(ssrfSql, contains("like '127.%'"));
+      expect(ssrfSql, contains('172\\.(1[6-9]|2[0-9]|3[0-1])\\.'));
     });
   });
 }

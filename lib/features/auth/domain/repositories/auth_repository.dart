@@ -10,10 +10,11 @@ abstract class AuthRepository {
     required String phone,
     required String password,
   });
-  Future<void> resendOtp({required String identifier});
+  Future<void> resendOtp({required String identifier, bool signup = false});
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   });
   Future<UserSession> completeProfile({
     required String fullName,
@@ -21,4 +22,7 @@ abstract class AuthRepository {
   });
   Future<UserSession?> restoreSession();
   Future<void> logout();
+
+  /// Request a password-reset email. Does not reveal whether the account exists.
+  Future<void> requestPasswordReset({required String email});
 }

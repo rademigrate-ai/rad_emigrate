@@ -198,5 +198,9 @@ class DocumentRemoteDataSource {
 
   ApiException _toApiException(Object error) => error is ApiException
       ? error
-      : ApiException(message: error.toString(), code: 'supabase_error');
+      : ApiException(
+          message: 'Unexpected Supabase error.',
+          code: 'supabase_error',
+          cause: error,
+        );
 }

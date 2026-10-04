@@ -21,3 +21,4 @@ These files are forensic/review artifacts. They are deliberately outside `supaba
 7. Only then rename/replace migration lineage and prepare a history-only production reconciliation plan.
 
 Until all seven pass, reconciliation is NO-GO and AI-01 must not be added.
+
