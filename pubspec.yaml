@@ -8,7 +8,7 @@ environment:
 
 flutter:
   uses-material-design: true
-  generate: true
+  generate: false
   assets:
     - assets/branding/
     - assets/images/
