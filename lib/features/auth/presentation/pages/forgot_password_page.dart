@@ -36,9 +36,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       _error = null;
     });
     try {
-      await ref.read(authControllerProvider.notifier).requestPasswordReset(
-            email: _emailCtrl.text.trim(),
-          );
+      await ref
+          .read(authControllerProvider.notifier)
+          .requestPasswordReset(email: _emailCtrl.text.trim());
       if (mounted) {
         setState(() {
           _sent = true;
