@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/section_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
 import '../providers/visa_catalog_provider.dart';
 
@@ -24,8 +26,8 @@ class _VisaPageState extends ConsumerState<VisaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    final isFa = locale == 'fa';
     final catalog = ref.watch(visaCatalogProvider(locale));
     if (_selected != null) {
       return catalog.maybeWhen(
@@ -34,7 +36,6 @@ class _VisaPageState extends ConsumerState<VisaPage> {
           country: value.countries.firstWhere(
             (item) => item.id == _selected!.countryId,
           ),
-          isFa: isFa,
           onBack: () => setState(() => _selected = null),
         ),
         orElse: () => const SizedBox.shrink(),
@@ -42,28 +43,24 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          isFa ? 'مسیرهای مهاجرت و ویزا' : 'Visa and migration pathways',
-        ),
+        title: Text(l10n.visaPathways),
       ),
       body: catalog.when(
-        loading: () => LoadingState(
-          message: isFa
-              ? 'در حال دریافت اطلاعات…'
-              : 'Loading verified catalogue…',
-        ),
+        loading: () => LoadingState(message: l10n.loadingCatalogue),
         error: (error, _) => ErrorState(
-          message: isFa
-              ? 'دریافت اطلاعات ممکن نشد: $error'
-              : 'Catalogue unavailable: $error',
+          message: l10n.catalogueUnavailable,
           onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
         ),
-        data: (value) => _catalog(context, value, isFa),
+        data: (value) => _catalog(context, value, l10n),
       ),
     );
   }
 
-  Widget _catalog(BuildContext context, VisaCatalog catalog, bool isFa) {
+  Widget _catalog(
+    BuildContext context,
+    VisaCatalog catalog,
+    AppLocalizations l10n,
+  ) {
     final query = _query.trim().toLowerCase();
     final programs = catalog.programs.where((program) {
       return (_countryId == null || program.countryId == _countryId) &&
@@ -79,18 +76,14 @@ class _VisaPageState extends ConsumerState<VisaPage> {
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
             Text(
-              isFa ? 'مسیر مناسب را پیدا کنید' : 'Find a relevant pathway',
+              l10n.findPathway,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 8),
-            Text(
-              isFa
-                  ? 'فقط محتوای منتشرشده و منبع‌دار نمایش داده می‌شود. شرایط روز را همیشه با مرجع رسمی بررسی کنید.'
-                  : 'Only published, sourced RAD content is shown. Always verify current rules with the official authority.',
-            ),
+            Text(l10n.catalogueDisclaimer),
             const SizedBox(height: 20),
             SearchBar(
-              hintText: isFa ? 'جست‌وجوی کشور یا مسیر' : 'Search programmes',
+              hintText: l10n.searchProgrammes,
               leading: const Icon(Icons.search),
               onChanged: (value) => setState(() => _query = value),
             ),
@@ -100,7 +93,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
               runSpacing: 8,
               children: [
                 FilterChip(
-                  label: Text(isFa ? 'همه کشورها' : 'All destinations'),
+                  label: Text(l10n.allDestinations),
                   selected: _countryId == null,
                   onSelected: (_) => setState(() => _countryId = null),
                 ),
@@ -119,7 +112,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
               runSpacing: 8,
               children: [
                 FilterChip(
-                  label: Text(isFa ? 'همه خدمات' : 'All services'),
+                  label: Text(l10n.allServices),
                   selected: _categoryId == null,
                   onSelected: (_) => setState(() => _categoryId = null),
                 ),
@@ -136,10 +129,8 @@ class _VisaPageState extends ConsumerState<VisaPage> {
             const SizedBox(height: 20),
             if (programs.isEmpty)
               EmptyState(
-                title: isFa ? 'موردی پیدا نشد' : 'No programme found',
-                subtitle: isFa
-                    ? 'فیلترها یا عبارت جست‌وجو را تغییر دهید.'
-                    : 'Try changing the search or filters.',
+                title: l10n.noProgrammeFound,
+                subtitle: l10n.tryChangingFilters,
                 icon: Icons.public_off_outlined,
               ),
             ...programs.map((program) {
@@ -154,7 +145,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                       '${country.flagEmoji} ${country.name} · ${program.source.publisher}',
                   icon: Icons.flight_takeoff,
                   onTap: () => setState(() => _selected = program),
-                  trailing: const Icon(Icons.chevron_right),
+                  trailing: Icon(directionalChevron(context)),
                 ),
               );
             }),
@@ -169,22 +160,21 @@ class _ProgramDetail extends StatelessWidget {
   const _ProgramDetail({
     required this.program,
     required this.country,
-    required this.isFa,
     required this.onBack,
   });
 
   final VisaProgram program;
   final Country country;
-  final bool isFa;
   final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(program.title),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(directionalBack(context)),
           onPressed: onBack,
         ),
       ),
@@ -207,21 +197,17 @@ class _ProgramDetail extends StatelessWidget {
               if (program.processingTime != null) ...[
                 const SizedBox(height: 12),
                 Text(
-                  '${isFa ? 'زمان اعلام‌شده' : 'Published timeline'}: '
-                  '${program.processingTime}',
+                  '${l10n.publishedTimeline}: ${program.processingTime}',
                 ),
               ],
               if (program.fees != null) ...[
                 const SizedBox(height: 8),
-                Text(
-                  '${isFa ? 'هزینه اعلام‌شده' : 'Published fee'}: '
-                  '${program.fees}',
-                ),
+                Text('${l10n.publishedFee}: ${program.fees}'),
               ],
               if (program.requirements.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 Text(
-                  isFa ? 'مدارک و الزامات منتشرشده' : 'Published requirements',
+                  l10n.publishedRequirements,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ...program.requirements.map(
@@ -237,7 +223,7 @@ class _ProgramDetail extends StatelessWidget {
               ],
               const SizedBox(height: 20),
               Text(
-                isFa ? 'منبع' : 'Source',
+                l10n.source,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 6),
@@ -250,9 +236,7 @@ class _ProgramDetail extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                isFa
-                    ? 'این اطلاعات تضمین نتیجه نیست و جایگزین بررسی مقررات رسمی یا مشاوره تخصصی نمی‌شود.'
-                    : 'This information does not guarantee an outcome and does not replace current official rules or professional review.',
+                l10n.visaDisclaimer,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
