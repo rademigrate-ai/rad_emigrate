@@ -146,5 +146,15 @@ revoke all on function private.observability_retention() from public,anon,authen
 
 select cron.schedule('rad-observability-retention','41 2 * * *',$$select private.observability_retention();$$);
 
-commit;
+-- Reconstruct the authoritative production policy state without changing the
+-- production migration-history versions. This protects profile role changes.
+drop policy if exists "profiles update own" on public.profiles;
+create policy "profiles update own" on public.profiles
+  for update
+  using ((select auth.uid()) = id)
+  with check (
+    (select auth.uid()) = id
+    and role = (select p.role from public.profiles p where p.id = auth.uid())
+  );
 
+commit;
