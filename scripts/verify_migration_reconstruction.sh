@@ -22,10 +22,8 @@ cp supabase/reconciliation/candidate/*.sql supabase/migrations/
 supabase migration up --local
 psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 \
   -f supabase/reconciliation/catalog_fingerprint.sql > reconstructed-catalog.json
-# Disable only disposable cron jobs before running longer behavioral tests.
-# The local postgres login is not the pg_cron table owner, so use the local
-# Supabase superuser role for this disposable-only state change.
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -c 'set role supabase_admin; update cron.job set active=false;'
+# Do not mutate reconstructed cron metadata before equivalence verification.
+# This disposable stack has no production secrets or production linkage.
 python3 scripts/compare_reconciliation_catalog.py reconstructed-catalog.json
 supabase migration list --db-url "$DB_URL" > reconstruction-migration-list.txt
 supabase db push --db-url "$DB_URL" --dry-run > reconstruction-dry-run.txt 2>&1
