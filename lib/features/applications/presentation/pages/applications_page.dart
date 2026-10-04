@@ -62,7 +62,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     }
   }
 
-  List<ProgressStep> _timeline(ApplicationStatus status, AppLocalizations l10n) {
+  List<ProgressStep> _timeline(
+    ApplicationStatus status,
+    AppLocalizations l10n,
+  ) {
     const order = [
       ApplicationStatus.draft,
       ApplicationStatus.submitted,
@@ -81,7 +84,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     if (status == ApplicationStatus.documentsRequired) currentIdx = 2;
     if (status == ApplicationStatus.rejected) {
       return [
-        ProgressStep(label: l10n.statusSubmitted, state: ProgressStepState.done),
+        ProgressStep(
+          label: l10n.statusSubmitted,
+          state: ProgressStepState.done,
+        ),
         ProgressStep(
           label: l10n.statusReviewing,
           state: ProgressStepState.done,
@@ -110,16 +116,17 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     final l10n = AppLocalizations.of(context);
     setState(() => _creatingDraft = true);
     try {
-      await ref.read(applicationControllerProvider.notifier).createDraft(
+      await ref
+          .read(applicationControllerProvider.notifier)
+          .createDraft(
             title: l10n.newApplicationDraft,
             programName: l10n.toBeSelected,
             country: '—',
           );
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.couldNotCreateDraft)),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.couldNotCreateDraft)));
       }
     } finally {
       if (mounted) setState(() => _creatingDraft = false);
@@ -150,9 +157,8 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.couldNotUpdateStatus)),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.couldNotUpdateStatus)));
       }
     } finally {
       if (mounted) setState(() => _updatingStatus = false);

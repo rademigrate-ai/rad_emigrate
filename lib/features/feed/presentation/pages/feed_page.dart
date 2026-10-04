@@ -20,9 +20,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     final locale = Localizations.localeOf(context).languageCode;
     final feed = ref.watch(feedProvider(locale));
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.feedTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.feedTitle)),
       body: feed.when(
         loading: () => LoadingView(message: l10n.loadingUpdates),
         error: (error, _) => ErrorView(
@@ -52,24 +50,45 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                 return Card(
                   child: ListTile(
                     isThreeLine: true,
-                    title: Text(item.title),
-                    subtitle: Text(item.summary),
+                    title: Text(
+                      item.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      item.summary,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     leading: const Icon(Icons.article_outlined),
                     trailing: IconButton(
-                      tooltip:
-                          item.saved ? l10n.removeBookmark : l10n.bookmark,
+                      tooltip: item.saved ? l10n.removeBookmark : l10n.bookmark,
                       icon: Icon(
                         item.saved ? Icons.bookmark : Icons.bookmark_border,
                       ),
                       onPressed: () async {
-                        await ref
-                            .read(feedRepositoryProvider)
-                            .setSaved(item.id, !item.saved);
-                        ref.invalidate(feedProvider(locale));
+                        try {
+                          await ref
+                              .read(feedRepositoryProvider)
+                              .setSaved(item.id, !item.saved);
+                          ref.invalidate(feedProvider(locale));
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.errorGeneric)),
+                            );
+                          }
+                        }
                       },
                     ),
-                    onTap: () {
-                      ref.read(feedRepositoryProvider).markRead(item.id);
+                    onTap: () async {
+                      try {
+                        await ref
+                            .read(feedRepositoryProvider)
+                            .markRead(item.id);
+                      } catch (_) {
+                        // Read tracking is supplementary and never blocks feed.
+                      }
                     },
                   ),
                 );

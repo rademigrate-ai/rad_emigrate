@@ -225,6 +225,30 @@ abstract class AppLocalizations {
   String get nationality;
   String get firstName;
   String get lastName;
+  String get aboutYou;
+  String get nationalityOptional;
+  String get changesSaved;
+  String get accountAlreadyExists;
+  String get otpInvalidOrExpired;
+  String get otpResent;
+  String get more;
+  String get sendMessage;
+  String get suggestionStudyPermitDocuments;
+  String get suggestionVisaProcessingTime;
+  String get suggestionGteStatement;
+  String aiUnavailableResponse(String question);
+  String get newDocument;
+  String get documentTypePassport;
+  String get documentTypeIdentity;
+  String get documentTypeEducation;
+  String get documentTypeFinancial;
+  String get documentTypeVisa;
+  String get documentTypeOther;
+  String get documentStatusMissing;
+  String get documentStatusUploaded;
+  String get documentStatusUnderReview;
+  String get documentStatusVerified;
+  String get documentStatusRejected;
 }
 
 class _AppLocalizationsDelegate

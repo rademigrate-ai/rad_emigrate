@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/errors/localized_error_message.dart';
 import '../providers/auth_controller.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ProfileCompletionPage extends ConsumerStatefulWidget {
   const ProfileCompletionPage({super.key});
@@ -21,6 +22,7 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
   final _nameCtrl = TextEditingController();
   final _nationalityCtrl = TextEditingController();
   String? _error;
+  bool _submitting = false;
 
   @override
   void dispose() {
@@ -30,8 +32,12 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _error = null);
+    final l10n = AppLocalizations.of(context);
+    if (_submitting || !_formKey.currentState!.validate()) return;
+    setState(() {
+      _error = null;
+      _submitting = true;
+    });
     try {
       await ref
           .read(authControllerProvider.notifier)
@@ -43,16 +49,22 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
           );
       if (mounted) context.go('/dashboard');
     } catch (e) {
-      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      if (mounted) {
+        setState(() => _error = localizedAuthError(e, l10n));
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loading = ref.watch(authControllerProvider).isLoading;
+    final l10n = AppLocalizations.of(context);
+    final loading = ref.watch(authControllerProvider).isLoading || _submitting;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Your profile')),
+      appBar: AppBar(title: Text(l10n.profile)),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -65,13 +77,13 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'One small step before you begin',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      l10n.profileCompletionTitle,
+                      style: theme.textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Tell us a little about yourself so we can make your immigration journey more personal.',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      l10n.profileCompletionSubtitle,
+                      style: theme.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 20),
                     const LinearProgressIndicator(value: 0.5, minHeight: 6),
@@ -82,22 +94,22 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'About you',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            l10n.aboutYou,
+                            style: theme.textTheme.titleMedium,
                           ),
                           const SizedBox(height: 16),
                           AppTextField(
                             controller: _nameCtrl,
-                            label: 'Full name',
+                            label: l10n.fullName,
                             prefixIcon: Icons.badge_outlined,
                             validator: (v) => (v == null || v.trim().length < 2)
-                                ? 'Required'
+                                ? l10n.required
                                 : null,
                           ),
                           const SizedBox(height: 16),
                           AppTextField(
                             controller: _nationalityCtrl,
-                            label: 'Nationality (optional)',
+                            label: l10n.nationalityOptional,
                             prefixIcon: Icons.public_outlined,
                           ),
                           if (_error != null) ...[
@@ -106,15 +118,17 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                               liveRegion: true,
                               child: Text(
                                 _error!,
-                                style: const TextStyle(color: AppColors.error),
+                                style: TextStyle(
+                                  color: theme.colorScheme.error,
+                                ),
                               ),
                             ),
                           ],
                           const SizedBox(height: 24),
                           AppButton(
-                            label: 'Continue',
+                            label: l10n.saveAndContinue,
                             loading: loading,
-                            onPressed: _submit,
+                            onPressed: loading ? null : _submit,
                           ),
                         ],
                       ),

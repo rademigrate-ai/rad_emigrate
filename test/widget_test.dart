@@ -20,9 +20,6 @@ void main() {
     );
     await tester.pump();
     // Splash or login should expose the shared RAD brand to assistive tech.
-    expect(
-      find.bySemanticsLabel('RAD International Institute of RAD'),
-      findsWidgets,
-    );
+    expect(find.bySemanticsLabel('RAD International Institute'), findsWidgets);
   });
 }

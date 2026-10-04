@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,12 +34,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   static const _freeLimit = 5;
   var _used = 0;
   String? _sessionId;
-
-  static const _suggestions = [
-    'What documents are typically needed for a study permit?',
-    'How long can a visa process take?',
-    'What is a GTE statement?',
-  ];
 
   @override
   void initState() {
@@ -87,9 +83,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
     if (_used >= _freeLimit) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.aiQuotaExhausted)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
       return;
     }
 
@@ -107,9 +102,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.couldNotSaveQuestion)),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
@@ -124,11 +118,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
     try {
       final ai = ref.read(aiServiceProvider);
-      final response = await ai.complete(
-        AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
-      );
+      final response = ai.isAvailable
+          ? await ai.complete(
+              AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
+            )
+          : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
       if (userId != null && userId.isNotEmpty && _sessionId != null) {
-        await ref.read(aiSessionRepositoryProvider).saveMessage(
+        await ref
+            .read(aiSessionRepositoryProvider)
+            .saveMessage(
               sessionId: _sessionId!,
               userId: userId,
               role: 'assistant',
@@ -150,12 +148,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _messages.add(
-          _ChatMessage(
-            isUser: false,
-            text: l10n.errorGeneric,
-          ),
-        );
+        _messages.add(_ChatMessage(isUser: false, text: l10n.errorGeneric));
         _loading = false;
       });
     }
@@ -177,6 +170,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final suggestions = [
+      l10n.suggestionStudyPermitDocuments,
+      l10n.suggestionVisaProcessingTime,
+      l10n.suggestionGteStatement,
+    ];
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -220,7 +218,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 16),
-                      ..._suggestions.map(
+                      ...suggestions.map(
                         (s) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: AppCard(onTap: () => _send(s), child: Text(s)),
@@ -237,7 +235,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                         return const Padding(
                           padding: EdgeInsets.all(8),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: AlignmentDirectional.centerStart,
                             child: SizedBox(
                               width: 22,
                               height: 22,
@@ -249,13 +247,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       final m = _messages[index];
                       return Align(
                         alignment: m.isUser
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
+                            ? AlignmentDirectional.centerEnd
+                            : AlignmentDirectional.centerStart,
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           padding: const EdgeInsets.all(14),
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.sizeOf(context).width * 0.85,
+                            maxWidth: math.min(
+                              680,
+                              MediaQuery.sizeOf(context).width * 0.85,
+                            ),
                           ),
                           decoration: BoxDecoration(
                             color: m.isUser
@@ -314,6 +315,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   ),
                   const SizedBox(width: 8),
                   IconButton.filled(
+                    tooltip: l10n.sendMessage,
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.primaryRed,
                       minimumSize: const Size(48, 48),

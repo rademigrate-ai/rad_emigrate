@@ -192,8 +192,9 @@ class _JourneyHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final title = needsAction ? l10n.nextStepReady : l10n.onTrack;
-    final description =
-        needsAction ? l10n.nextStepDescription : l10n.onTrackDescription;
+    final description = needsAction
+        ? l10n.nextStepDescription
+        : l10n.onTrackDescription;
     return AppCard(
       emphasized: true,
       padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
@@ -232,7 +233,9 @@ class _JourneyHero extends StatelessWidget {
           const SizedBox(height: 18),
           AppButton(
             label: needsAction ? l10n.reviewNextStep : l10n.viewApplications,
-            icon: needsAction ? Icons.arrow_forward : Icons.assignment_outlined,
+            icon: needsAction
+                ? directionalForward(context)
+                : Icons.assignment_outlined,
             expanded: false,
             variant: needsAction
                 ? AppButtonVariant.primary
@@ -285,7 +288,7 @@ class _ActionRow extends StatelessWidget {
           badge ??
               Icon(
                 directionalChevron(context),
-                color: AppColors.textTertiary,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
         ],
       ),
@@ -391,7 +394,7 @@ class _ShortcutRow extends StatelessWidget {
           ),
           Icon(
             directionalChevron(context),
-            color: AppColors.textTertiary,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ],
       ),

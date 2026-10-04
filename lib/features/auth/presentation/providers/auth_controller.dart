@@ -90,10 +90,13 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
-  Future<void> resendOtp({required String identifier}) async {
+  Future<void> resendOtp({
+    required String identifier,
+    bool signup = false,
+  }) async {
     final previousState = state;
     try {
-      await _repository.resendOtp(identifier: identifier);
+      await _repository.resendOtp(identifier: identifier, signup: signup);
       state = previousState;
     } catch (e, st) {
       state = previousState;
@@ -104,11 +107,16 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
   Future<void> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async {
     state = const AsyncValue.loading();
     try {
       state = AsyncValue.data(
-        await _repository.verifyOtp(identifier: identifier, otp: otp),
+        await _repository.verifyOtp(
+          identifier: identifier,
+          otp: otp,
+          signup: signup,
+        ),
       );
     } catch (e, st) {
       state = AsyncValue.error(e, st);

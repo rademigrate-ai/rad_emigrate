@@ -11,7 +11,10 @@ class _TestAuthRepository implements AuthRepository {
   bool loggedOut = false;
 
   @override
-  Future<void> resendOtp({required String identifier}) async {}
+  Future<void> resendOtp({
+    required String identifier,
+    bool signup = false,
+  }) async {}
 
   @override
   Future<void> requestPasswordReset({required String email}) async {}
@@ -37,6 +40,7 @@ class _TestAuthRepository implements AuthRepository {
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async {
     return const UserSession(token: 't', authenticated: true);
   }

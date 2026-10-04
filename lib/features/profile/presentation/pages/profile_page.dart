@@ -112,7 +112,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     try {
       await ref.read(profileControllerProvider.notifier).save(profile);
       if (profile.fullName.isNotEmpty) {
-        await ref.read(authControllerProvider.notifier).completeProfile(
+        await ref
+            .read(authControllerProvider.notifier)
+            .completeProfile(
               fullName: profile.fullName,
               nationality: profile.nationality,
             );
@@ -123,7 +125,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           _editing = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).save)),
+          SnackBar(content: Text(AppLocalizations.of(context).changesSaved)),
         );
       }
     } catch (_) {
@@ -244,11 +246,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       _ContactLine(
                         icon: Icons.mail_outline,
                         text: profile?.email ?? session?.email ?? '',
+                        textDirection: TextDirection.ltr,
                       ),
                     if (profile?.phone != null || session?.phone != null)
                       _ContactLine(
                         icon: Icons.phone_outlined,
                         text: profile?.phone ?? session?.phone ?? '',
+                        textDirection: TextDirection.ltr,
                       ),
                     if (profile?.nationality != null)
                       _ContactLine(
@@ -310,59 +314,28 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.language),
-                title: Text(l10n.language),
-                subtitle: Text(
-                  localePref.languageCode == 'fa' ? l10n.persian : l10n.english,
-                ),
-                trailing: SegmentedButton<String>(
-                  segments: [
-                    ButtonSegment(value: 'en', label: Text(l10n.english)),
-                    ButtonSegment(value: 'fa', label: Text(l10n.persian)),
-                  ],
-                  selected: {localePref.languageCode},
-                  onSelectionChanged: (set) {
-                    final code = set.first;
-                    ref
-                        .read(localeControllerProvider.notifier)
-                        .setLocale(AppLocale.fromLanguageCode(code));
-                  },
-                ),
+              _PreferenceSelector<String>(
+                icon: Icons.language,
+                title: l10n.language,
+                selected: localePref.languageCode,
+                options: {'en': l10n.english, 'fa': l10n.persian},
+                onSelected: (code) => ref
+                    .read(localeControllerProvider.notifier)
+                    .setLocale(AppLocale.fromLanguageCode(code)),
               ),
-              const Divider(height: 1),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.brightness_6_outlined),
-                title: Text(l10n.theme),
-                subtitle: Text(switch (themePref) {
-                  AppThemePreference.light => l10n.themeLight,
-                  AppThemePreference.dark => l10n.themeDark,
-                  AppThemePreference.system => l10n.themeSystem,
-                }),
-                trailing: SegmentedButton<AppThemePreference>(
-                  segments: [
-                    ButtonSegment(
-                      value: AppThemePreference.light,
-                      label: Text(l10n.themeLight),
-                    ),
-                    ButtonSegment(
-                      value: AppThemePreference.dark,
-                      label: Text(l10n.themeDark),
-                    ),
-                    ButtonSegment(
-                      value: AppThemePreference.system,
-                      label: Text(l10n.themeSystem),
-                    ),
-                  ],
-                  selected: {themePref},
-                  onSelectionChanged: (set) {
-                    ref
-                        .read(themeControllerProvider.notifier)
-                        .setPreference(set.first);
-                  },
-                ),
+              const Divider(height: 24),
+              _PreferenceSelector<AppThemePreference>(
+                icon: Icons.brightness_6_outlined,
+                title: l10n.theme,
+                selected: themePref,
+                options: {
+                  AppThemePreference.light: l10n.themeLight,
+                  AppThemePreference.dark: l10n.themeDark,
+                  AppThemePreference.system: l10n.themeSystem,
+                },
+                onSelected: (preference) => ref
+                    .read(themeControllerProvider.notifier)
+                    .setPreference(preference),
               ),
             ],
           ),
@@ -403,6 +376,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               label: l10n.email,
               prefixIcon: Icons.mail_outline,
               keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
               textInputAction: TextInputAction.next,
               validator: _optionalEmailValidator,
             ),
@@ -412,6 +386,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               label: l10n.phone,
               prefixIcon: Icons.phone_outlined,
               keyboardType: TextInputType.phone,
+              textDirection: TextDirection.ltr,
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -471,10 +446,15 @@ class _ProfileContent extends StatelessWidget {
 }
 
 class _ContactLine extends StatelessWidget {
-  const _ContactLine({required this.icon, required this.text});
+  const _ContactLine({
+    required this.icon,
+    required this.text,
+    this.textDirection,
+  });
 
   final IconData icon;
   final String text;
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -485,10 +465,61 @@ class _ContactLine extends StatelessWidget {
           Icon(icon, size: 15, color: Theme.of(context).hintColor),
           const SizedBox(width: 6),
           Expanded(
-            child: Text(text, style: Theme.of(context).textTheme.bodySmall),
+            child: Text(
+              text,
+              textDirection: textDirection,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PreferenceSelector<T> extends StatelessWidget {
+  const _PreferenceSelector({
+    required this.icon,
+    required this.title,
+    required this.selected,
+    required this.options,
+    required this.onSelected,
+  });
+
+  final IconData icon;
+  final String title;
+  final T selected;
+  final Map<T, String> options;
+  final ValueChanged<T> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Icon(icon),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final option in options.entries)
+              ChoiceChip(
+                label: Text(option.value),
+                selected: selected == option.key,
+                onSelected: (_) => onSelected(option.key),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

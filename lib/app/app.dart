@@ -19,7 +19,7 @@ class RadEmigrateApp extends ConsumerWidget {
     final appLocale = ref.watch(localeControllerProvider);
 
     return MaterialApp.router(
-      title: 'RAD International Institute',
+      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../core/widgets/loading_view.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -49,10 +48,7 @@ class _AdminOverview extends StatelessWidget {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(
-            l10n.adminRestricted,
-            textAlign: TextAlign.center,
-          ),
+          child: Text(l10n.adminRestricted, textAlign: TextAlign.center),
         ),
       );
     }
@@ -100,7 +96,7 @@ class _AdminOverview extends StatelessWidget {
         Text(
           data.isSuperAdmin ? l10n.superAdmin : l10n.admin,
           style: Theme.of(context).textTheme.labelLarge
-              ?.copyWith(color: AppColors.info),
+              ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -141,7 +137,7 @@ class _MetricTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(icon, color: AppColors.info),
+        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
         title: Text(label),
         trailing: Text(
           '$value',

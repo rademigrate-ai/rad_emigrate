@@ -29,7 +29,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (_loading || !_formKey.currentState!.validate()) return;
     setState(() {
       _loading = true;
       _error = null;
@@ -102,6 +102,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                         label: l10n.email,
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
+                        textDirection: TextDirection.ltr,
                         autofillHints: const [AutofillHints.email],
                         textInputAction: TextInputAction.done,
                         onSubmitted: (_) => _submit(),

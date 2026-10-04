@@ -84,5 +84,36 @@
   "passwordResetSent": "If an account exists for that email, we sent a reset link.",
   "passwordUpdated": "Password updated successfully. You can now sign in.",
   "sendResetLink": "Send reset link",
-  "backToSignIn": "Back to sign in"
+  "backToSignIn": "Back to sign in",
+  "aboutYou": "About you",
+  "nationalityOptional": "Nationality (optional)",
+  "changesSaved": "Changes saved.",
+  "accountAlreadyExists": "An account already exists for this email. Sign in instead.",
+  "otpInvalidOrExpired": "That verification code is invalid or has expired.",
+  "otpResent": "A new verification code was sent.",
+  "more": "More",
+  "sendMessage": "Send message",
+  "suggestionStudyPermitDocuments": "What documents are typically needed for a study permit?",
+  "suggestionVisaProcessingTime": "How long can a visa process take?",
+  "suggestionGteStatement": "What is a GTE statement?",
+  "aiUnavailableResponse": "The RAD Knowledge Base is not configured for this build.\n\nYour question: \"{question}\"\n\nSourced answers will be available after the approved provider is configured. No immigration requirements are inferred here.",
+  "@aiUnavailableResponse": {
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "newDocument": "New document",
+  "documentTypePassport": "Passport",
+  "documentTypeIdentity": "Identity document",
+  "documentTypeEducation": "Education document",
+  "documentTypeFinancial": "Financial document",
+  "documentTypeVisa": "Visa document",
+  "documentTypeOther": "Other",
+  "documentStatusMissing": "Missing",
+  "documentStatusUploaded": "Uploaded",
+  "documentStatusUnderReview": "Under review",
+  "documentStatusVerified": "Verified",
+  "documentStatusRejected": "Rejected"
 }

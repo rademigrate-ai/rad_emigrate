@@ -347,8 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loadingCatalogue => 'Loading verified catalogue…';
   @override
-  String get catalogueUnavailable =>
-      'Catalogue unavailable. Please try again.';
+  String get catalogueUnavailable => 'Catalogue unavailable. Please try again.';
   @override
   String get findPathway => 'Find a relevant pathway';
   @override
@@ -391,8 +390,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get backToApplications => 'Back to applications';
   @override
-  String get couldNotCreateDraft =>
-      'Could not create draft. Please try again.';
+  String get couldNotCreateDraft => 'Could not create draft. Please try again.';
   @override
   String get couldNotUpdateStatus =>
       'Could not update status. Please try again.';
@@ -408,4 +406,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get firstName => 'First name';
   @override
   String get lastName => 'Last name';
+  @override
+  String get aboutYou => 'About you';
+  @override
+  String get nationalityOptional => 'Nationality (optional)';
+  @override
+  String get changesSaved => 'Changes saved.';
+  @override
+  String get accountAlreadyExists =>
+      'An account already exists for this email. Sign in instead.';
+  @override
+  String get otpInvalidOrExpired =>
+      'That verification code is invalid or has expired.';
+  @override
+  String get otpResent => 'A new verification code was sent.';
+  @override
+  String get more => 'More';
+  @override
+  String get sendMessage => 'Send message';
+  @override
+  String get suggestionStudyPermitDocuments =>
+      'What documents are typically needed for a study permit?';
+  @override
+  String get suggestionVisaProcessingTime =>
+      'How long can a visa process take?';
+  @override
+  String get suggestionGteStatement => 'What is a GTE statement?';
+  @override
+  String aiUnavailableResponse(String question) =>
+      'The RAD Knowledge Base is not configured for this build.\n\n'
+      'Your question: "$question"\n\n'
+      'Sourced answers will be available after the approved provider is '
+      'configured. No immigration requirements are inferred here.';
+  @override
+  String get newDocument => 'New document';
+  @override
+  String get documentTypePassport => 'Passport';
+  @override
+  String get documentTypeIdentity => 'Identity document';
+  @override
+  String get documentTypeEducation => 'Education document';
+  @override
+  String get documentTypeFinancial => 'Financial document';
+  @override
+  String get documentTypeVisa => 'Visa document';
+  @override
+  String get documentTypeOther => 'Other';
+  @override
+  String get documentStatusMissing => 'Missing';
+  @override
+  String get documentStatusUploaded => 'Uploaded';
+  @override
+  String get documentStatusUnderReview => 'Under review';
+  @override
+  String get documentStatusVerified => 'Verified';
+  @override
+  String get documentStatusRejected => 'Rejected';
 }

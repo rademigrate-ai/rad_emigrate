@@ -5,16 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../widgets/rad_brand.dart';
 import '../../l10n/app_localizations.dart';
+import '../../features/admin/data/admin_operations_repository.dart';
 
 class AppShell extends ConsumerWidget {
   final Widget child;
   const AppShell({super.key, required this.child});
 
   int _selectedIndex(String location, List<_NavItem> items) {
-    if (location.startsWith('/ai-assistant')) {
-      final aiIdx = items.indexWhere((e) => e.path == '/ai-assistant');
-      return aiIdx >= 0 ? aiIdx : 0;
-    }
     for (var i = 0; i < items.length; i++) {
       if (location.startsWith(items[i].path)) return i;
     }
@@ -25,6 +22,8 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final location = GoRouterState.of(context).matchedLocation;
+    final canAccessAdmin =
+        ref.watch(adminSnapshotProvider).valueOrNull?.canAccess == true;
     final items = [
       _NavItem(
         label: l10n.home,
@@ -45,16 +44,22 @@ class AppShell extends ConsumerWidget {
         selectedIcon: Icons.assignment,
       ),
       _NavItem(
+        label: l10n.feed,
+        path: '/feed',
+        icon: Icons.newspaper_outlined,
+        selectedIcon: Icons.newspaper,
+      ),
+      _NavItem(
         label: l10n.docs,
         path: '/documents',
         icon: Icons.folder_outlined,
         selectedIcon: Icons.folder,
       ),
       _NavItem(
-        label: l10n.feed,
-        path: '/feed',
-        icon: Icons.newspaper_outlined,
-        selectedIcon: Icons.newspaper,
+        label: l10n.aiAssistant,
+        path: '/ai-assistant',
+        icon: Icons.smart_toy_outlined,
+        selectedIcon: Icons.smart_toy,
       ),
       _NavItem(
         label: l10n.profile,
@@ -62,8 +67,20 @@ class AppShell extends ConsumerWidget {
         icon: Icons.person_outline,
         selectedIcon: Icons.person,
       ),
+      if (canAccessAdmin)
+        _NavItem(
+          label: l10n.admin,
+          path: '/admin',
+          icon: Icons.admin_panel_settings_outlined,
+          selectedIcon: Icons.admin_panel_settings,
+        ),
     ];
     final selected = _selectedIndex(location, items);
+    final compactItems = items.take(4).toList();
+    final compactSelected = _selectedIndex(location, compactItems);
+    final isCompactRoute = compactItems.any(
+      (item) => location.startsWith(item.path),
+    );
     final wide = MediaQuery.sizeOf(context).width >= 900;
 
     return Scaffold(
@@ -117,17 +134,63 @@ class AppShell extends ConsumerWidget {
       bottomNavigationBar: wide
           ? null
           : NavigationBar(
-              selectedIndex: selected.clamp(0, items.length - 1),
-              onDestinationSelected: (i) => context.go(items[i].path),
+              selectedIndex: isCompactRoute ? compactSelected : 4,
+              onDestinationSelected: (i) async {
+                if (i < compactItems.length) {
+                  context.go(compactItems[i].path);
+                  return;
+                }
+                final path = await _showMore(
+                  context,
+                  items.skip(compactItems.length).toList(),
+                  location,
+                );
+                if (path != null && context.mounted) context.go(path);
+              },
               destinations: [
-                for (final item in items)
+                for (final item in compactItems)
                   NavigationDestination(
                     icon: Icon(item.icon),
                     selectedIcon: Icon(item.selectedIcon),
                     label: item.label,
                   ),
+                NavigationDestination(
+                  icon: const Icon(Icons.more_horiz),
+                  selectedIcon: const Icon(Icons.more),
+                  label: l10n.more,
+                ),
               ],
             ),
+    );
+  }
+
+  Future<String?> _showMore(
+    BuildContext context,
+    List<_NavItem> items,
+    String location,
+  ) {
+    return showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+          children: [
+            for (final item in items)
+              ListTile(
+                selected: location.startsWith(item.path),
+                leading: Icon(
+                  location.startsWith(item.path)
+                      ? item.selectedIcon
+                      : item.icon,
+                ),
+                title: Text(item.label),
+                onTap: () => Navigator.pop(sheetContext, item.path),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

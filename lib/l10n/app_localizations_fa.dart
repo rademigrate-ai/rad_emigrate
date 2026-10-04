@@ -309,7 +309,8 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String freeQuota(int used, int limit) => '$used / $limit رایگان';
   @override
-  String get aiQuotaExhausted => 'سقف پرسش‌های رایگان این نشست استفاده شده است.';
+  String get aiQuotaExhausted =>
+      'سقف پرسش‌های رایگان این نشست استفاده شده است.';
   @override
   String get couldNotSaveQuestion =>
       'ذخیره سؤال ممکن نشد. لطفاً دوباره تلاش کنید.';
@@ -383,8 +384,7 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get updatesLoadFailed => 'دریافت تازه‌ها ممکن نشد.';
   @override
-  String get noReviewedUpdates =>
-      'هنوز محتوای تأییدشده‌ای منتشر نشده است.';
+  String get noReviewedUpdates => 'هنوز محتوای تأییدشده‌ای منتشر نشده است.';
   @override
   String get bookmark => 'نشان‌گذاری';
   @override
@@ -409,4 +409,60 @@ class AppLocalizationsFa extends AppLocalizations {
   String get firstName => 'نام';
   @override
   String get lastName => 'نام خانوادگی';
+  @override
+  String get aboutYou => 'درباره شما';
+  @override
+  String get nationalityOptional => 'ملیت (اختیاری)';
+  @override
+  String get changesSaved => 'تغییرات ذخیره شد.';
+  @override
+  String get accountAlreadyExists =>
+      'با این ایمیل حسابی وجود دارد. لطفاً وارد شوید.';
+  @override
+  String get otpInvalidOrExpired =>
+      'کد تأیید نامعتبر است یا اعتبار آن به پایان رسیده است.';
+  @override
+  String get otpResent => 'کد تأیید جدید ارسال شد.';
+  @override
+  String get more => 'بیشتر';
+  @override
+  String get sendMessage => 'ارسال پیام';
+  @override
+  String get suggestionStudyPermitDocuments =>
+      'برای مجوز تحصیلی معمولاً چه مدارکی لازم است؟';
+  @override
+  String get suggestionVisaProcessingTime =>
+      'فرایند بررسی ویزا ممکن است چقدر طول بکشد؟';
+  @override
+  String get suggestionGteStatement => 'نامه GTE چیست؟';
+  @override
+  String aiUnavailableResponse(String question) =>
+      'پایگاه دانش RAD برای این نسخه پیکربندی نشده است.\n\n'
+      'پرسش شما: «$question»\n\n'
+      'پس از پیکربندی ارائه‌دهندهٔ تأییدشده، پاسخ‌های مستند در دسترس خواهند '
+      'بود. در این پیام هیچ الزام مهاجرتی استنباط نشده است.';
+  @override
+  String get newDocument => 'مدرک جدید';
+  @override
+  String get documentTypePassport => 'گذرنامه';
+  @override
+  String get documentTypeIdentity => 'مدرک هویتی';
+  @override
+  String get documentTypeEducation => 'مدرک تحصیلی';
+  @override
+  String get documentTypeFinancial => 'مدرک مالی';
+  @override
+  String get documentTypeVisa => 'مدرک ویزا';
+  @override
+  String get documentTypeOther => 'سایر';
+  @override
+  String get documentStatusMissing => 'موجود نیست';
+  @override
+  String get documentStatusUploaded => 'بارگذاری‌شده';
+  @override
+  String get documentStatusUnderReview => 'در حال بررسی';
+  @override
+  String get documentStatusVerified => 'تأییدشده';
+  @override
+  String get documentStatusRejected => 'ردشده';
 }

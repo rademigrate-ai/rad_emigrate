@@ -78,7 +78,10 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<void> resendOtp({required String identifier}) async {
+  Future<void> resendOtp({
+    required String identifier,
+    bool signup = false,
+  }) async {
     final email = identifier.trim();
     if (!email.contains('@')) {
       throw const ApiException(
@@ -95,7 +98,14 @@ class AuthRemoteDataSource {
     }
     _ensureSupabaseReady();
     try {
-      await _service.client.auth.resend(type: OtpType.signup, email: email);
+      if (signup) {
+        await _service.client.auth.resend(type: OtpType.signup, email: email);
+      } else {
+        await _service.client.auth.signInWithOtp(
+          email: email,
+          shouldCreateUser: false,
+        );
+      }
     } catch (error) {
       throw _apiException(error);
     }
@@ -104,6 +114,7 @@ class AuthRemoteDataSource {
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async {
     if (_backend is ApiClient) {
       final response = await (_backend).post<Map<String, dynamic>>(
@@ -123,7 +134,7 @@ class AuthRemoteDataSource {
       final response = await _service.client.auth.verifyOTP(
         email: identifier.trim(),
         token: otp,
-        type: OtpType.email,
+        type: signup ? OtpType.signup : OtpType.email,
       );
       return await _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
@@ -315,6 +326,10 @@ class AuthRemoteDataSource {
     if (error is PostgrestException) {
       return ApiException(message: error.message, code: error.code);
     }
-    return ApiException(message: error.toString(), code: 'supabase_error');
+    return ApiException(
+      message: 'Unexpected Supabase error.',
+      code: 'supabase_error',
+      cause: error,
+    );
   }
 }

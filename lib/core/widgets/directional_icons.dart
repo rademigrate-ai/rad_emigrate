@@ -12,3 +12,9 @@ IconData directionalBack(BuildContext context) {
       ? Icons.arrow_forward
       : Icons.arrow_back;
 }
+
+IconData directionalForward(BuildContext context) {
+  return Directionality.of(context) == TextDirection.rtl
+      ? Icons.arrow_back
+      : Icons.arrow_forward;
+}

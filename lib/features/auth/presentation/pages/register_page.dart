@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
@@ -32,19 +33,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     super.dispose();
   }
 
-  String _mapError(Object e, AppLocalizations l10n) {
-    final raw = e.toString().toLowerCase();
-    if (raw.contains('network') ||
-        raw.contains('socket') ||
-        raw.contains('connection')) {
-      return l10n.errorNetwork;
-    }
-    if (raw.contains('already') || raw.contains('registered')) {
-      return l10n.errorAuthInvalid;
-    }
-    return l10n.errorGeneric;
-  }
-
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context);
     if (_submitting || !_formKey.currentState!.validate()) return;
@@ -62,12 +50,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           );
       if (mounted) {
         context.go(
-          '/otp?identifier=${Uri.encodeComponent(_emailCtrl.text.trim())}',
+          '/otp?identifier=${Uri.encodeComponent(_emailCtrl.text.trim())}'
+          '&mode=signup',
         );
       }
     } catch (e) {
       if (mounted) {
-        setState(() => _error = _mapError(e, l10n));
+        setState(
+          () => _error = localizedAuthError(
+            e,
+            l10n,
+            context: AuthErrorContext.registration,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -118,6 +113,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             label: l10n.email,
                             prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
+                            textDirection: TextDirection.ltr,
                             textInputAction: TextInputAction.next,
                             autofillHints: const [AutofillHints.email],
                             validator: (v) {
@@ -134,6 +130,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             label: l10n.phone,
                             prefixIcon: Icons.phone_outlined,
                             keyboardType: TextInputType.phone,
+                            textDirection: TextDirection.ltr,
                             textInputAction: TextInputAction.next,
                             autofillHints: const [
                               AutofillHints.telephoneNumber,

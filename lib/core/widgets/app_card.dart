@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
-
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
@@ -20,21 +18,28 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(18),
       side: BorderSide(
         color: emphasized
-            ? AppColors.primaryRed.withValues(alpha: 0.22)
-            : AppColors.borderSubtle,
+            ? scheme.primary.withValues(alpha: 0.28)
+            : theme.dividerColor,
       ),
     );
     final content = Padding(padding: padding, child: child);
     return Padding(
       padding: margin,
       child: Material(
-        color: emphasized ? AppColors.surfaceWarm : AppColors.surface,
+        color: emphasized
+            ? Color.alphaBlend(
+                scheme.primary.withValues(alpha: 0.06),
+                scheme.surface,
+              )
+            : theme.cardColor,
         elevation: emphasized ? 1 : 0,
-        shadowColor: AppColors.navy.withValues(alpha: 0.10),
+        shadowColor: scheme.shadow.withValues(alpha: 0.10),
         shape: shape,
         clipBehavior: Clip.antiAlias,
         child: onTap == null
@@ -44,7 +49,7 @@ class AppCard extends StatelessWidget {
                 child: InkWell(
                   onTap: onTap,
                   overlayColor: WidgetStatePropertyAll(
-                    AppColors.navy.withValues(alpha: 0.05),
+                    scheme.primary.withValues(alpha: 0.06),
                   ),
                   child: content,
                 ),

@@ -67,8 +67,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/otp',
-        builder: (_, state) =>
-            OtpPage(identifier: state.uri.queryParameters['identifier']),
+        builder: (_, state) => OtpPage(
+          identifier: state.uri.queryParameters['identifier'],
+          signup: state.uri.queryParameters['mode'] == 'signup',
+        ),
       ),
       GoRoute(
         path: '/profile-completion',
@@ -97,6 +99,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    errorBuilder: (_, _) => const NotFoundPage(title: 'Page not found'),
+    errorBuilder: (_, _) => const NotFoundPage(),
   );
 });

@@ -42,9 +42,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
       );
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.visaPathways),
-      ),
+      appBar: AppBar(title: Text(l10n.visaPathways)),
       body: catalog.when(
         loading: () => LoadingState(message: l10n.loadingCatalogue),
         error: (error, _) => ErrorState(
@@ -174,6 +172,7 @@ class _ProgramDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(program.title),
         leading: IconButton(
+          tooltip: l10n.back,
           icon: Icon(directionalBack(context)),
           onPressed: onBack,
         ),
@@ -196,9 +195,7 @@ class _ProgramDetail extends StatelessWidget {
               ],
               if (program.processingTime != null) ...[
                 const SizedBox(height: 12),
-                Text(
-                  '${l10n.publishedTimeline}: ${program.processingTime}',
-                ),
+                Text('${l10n.publishedTimeline}: ${program.processingTime}'),
               ],
               if (program.fees != null) ...[
                 const SizedBox(height: 8),
@@ -222,16 +219,16 @@ class _ProgramDetail extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 20),
-              Text(
-                l10n.source,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text(l10n.source, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 6),
               Text(program.source.title),
               SelectionArea(
-                child: Text(
-                  program.source.url,
-                  style: Theme.of(context).textTheme.bodySmall,
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Text(
+                    program.source.url,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
