@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rad_brand.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -29,29 +29,52 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
+  String _mapError(Object e, AppLocalizations l10n) {
+    final raw = e.toString().toLowerCase();
+    if (raw.contains('invalid') ||
+        raw.contains('credentials') ||
+        raw.contains('wrong') ||
+        raw.contains('not found')) {
+      return l10n.errorAuthInvalid;
+    }
+    if (raw.contains('network') ||
+        raw.contains('socket') ||
+        raw.contains('connection')) {
+      return l10n.errorNetwork;
+    }
+    if (raw.contains('session') || raw.contains('expired')) {
+      return l10n.errorAuthSession;
+    }
+    // Never surface raw ApiException / stack traces.
+    return l10n.errorGeneric;
+  }
+
   Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context);
     if (!_formKey.currentState!.validate()) return;
     setState(() => _error = null);
     try {
-      await ref
-          .read(authControllerProvider.notifier)
-          .login(
+      await ref.read(authControllerProvider.notifier).login(
             identifier: _identifierCtrl.text.trim(),
             password: _passwordCtrl.text,
           );
       if (mounted) context.go('/dashboard');
     } catch (e) {
-      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      if (mounted) {
+        setState(() => _error = _mapError(e, l10n));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final loading = ref.watch(authControllerProvider).isLoading;
     final wide = MediaQuery.sizeOf(context).width >= 800;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -67,29 +90,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const Center(child: RadBrand(size: RadBrandSize.medium)),
                     const SizedBox(height: 20),
                     Text(
-                      'Sign in to manage your immigration case',
+                      l10n.signInSubtitle,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: theme.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 36),
                     AppTextField(
                       controller: _identifierCtrl,
-                      label: 'Email',
+                      label: l10n.email,
                       prefixIcon: Icons.person_outline,
                       keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      textInputAction: TextInputAction.next,
                       validator: (v) =>
-                          (v == null || v.trim().isEmpty) ? 'Required' : null,
+                          (v == null || v.trim().isEmpty) ? l10n.required : null,
                     ),
                     const SizedBox(height: 14),
                     AppTextField(
                       controller: _passwordCtrl,
-                      label: 'Password',
+                      label: l10n.password,
                       prefixIcon: Icons.lock_outline,
                       obscureText: _obscure,
+                      autofillHints: const [AutofillHints.password],
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) => _submit(),
                       validator: (v) =>
-                          (v == null || v.isEmpty) ? 'Required' : null,
+                          (v == null || v.isEmpty) ? l10n.required : null,
                       suffixIcon: IconButton(
-                        tooltip: _obscure ? 'Show password' : 'Hide password',
+                        tooltip:
+                            _obscure ? l10n.showPassword : l10n.hidePassword,
                         icon: Icon(
                           _obscure
                               ? Icons.visibility_outlined
@@ -105,34 +134,42 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.error.withValues(alpha: 0.08),
+                            color: theme.colorScheme.error.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             _error!,
-                            style: const TextStyle(
-                              color: AppColors.error,
+                            style: TextStyle(
+                              color: theme.colorScheme.error,
                               fontSize: 13,
                             ),
                           ),
                         ),
                       ),
                     ],
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: TextButton(
+                        onPressed: () => context.go('/forgot-password'),
+                        child: Text(l10n.forgotPassword),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     AppButton(
-                      label: 'Sign in',
+                      label: l10n.signIn,
                       loading: loading,
-                      onPressed: _submit,
+                      onPressed: loading ? null : _submit,
                     ),
                     const SizedBox(height: 12),
                     AppButton(
-                      label: 'Create an account',
+                      label: l10n.createAccount,
                       variant: AppButtonVariant.secondary,
                       onPressed: () => context.go('/register'),
                     ),
                     TextButton(
                       onPressed: () => context.go('/otp'),
-                      child: const Text('Continue with OTP'),
+                      child: Text(l10n.continueWithOtp),
                     ),
                   ],
                 ),
