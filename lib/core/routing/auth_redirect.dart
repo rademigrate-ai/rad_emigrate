@@ -4,6 +4,7 @@ const Set<String> _publicRoutes = {
   '/register',
   '/otp',
   '/forgot-password',
+  '/reset-password',
 };
 const Set<String> _protectedRoutes = {
   '/dashboard',
@@ -22,6 +23,9 @@ const Set<String> _protectedRoutes = {
 /// Authorization for `/admin` remains server-side (RLS + role). Including
 /// `/admin` here only preserves deep-link restoration after session restore;
 /// it does not grant data access.
+///
+/// `/reset-password` stays public so Supabase recovery sessions can complete
+/// without being redirected away by the authenticated-public-route rule.
 String? authRedirect({
   required Uri uri,
   required bool isRestoring,
@@ -40,6 +44,9 @@ String? authRedirect({
   }
 
   if (location == '/splash') return null;
+
+  // Recovery deep-link: keep user on set-password even if a session exists.
+  if (location == '/reset-password') return null;
 
   if (!isAuthenticated && !_publicRoutes.contains(location)) {
     return '/login';
