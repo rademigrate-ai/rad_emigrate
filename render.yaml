@@ -1,0 +1,28 @@
+# Render Blueprint — RAD Emigrate Flutter Web (staging)
+#
+# Set these environment variables on the service (Dashboard or here under envVars):
+#   SUPABASE_URL              = https://inshddthftkhcdosoqcn.supabase.co  (normal)
+#   SUPABASE_PUBLISHABLE_KEY  = publishable or legacy anon key             (normal; public by design)
+#   APP_ENV                   = staging                                    (optional, default staging)
+#
+# NEVER set SUPABASE_SERVICE_ROLE_KEY or any secret AI keys on this service.
+
+services:
+  - type: web
+    name: rad-emigrate
+    runtime: static
+    repo: https://github.com/rademigrate-ai/rad_emigrate
+    branch: main
+    buildCommand: bash scripts/build_web_render.sh
+    staticPublishPath: build/web
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: APP_ENV
+        value: staging
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
