@@ -7,11 +7,33 @@ class AdminAiConfigRepository {
   const AdminAiConfigRepository(this._supabase);
   final SupabaseClientService _supabase;
 
-  Future<void> configureProvider(Map<String, Object?> values) async {
+  /// Configures or updates an AI provider. The API key is write-only:
+  /// stored in Vault server-side and never returned to the client.
+  Future<String> configureProvider({
+    required String slug,
+    required String displayName,
+    required String adapter,
+    required String baseUrl,
+    required String apiKey,
+    bool enabled = false,
+    int priority = 100,
+  }) async {
     if (!_supabase.isInitialized) {
       throw StateError('Supabase is not configured.');
     }
-    await _supabase.client.rpc('configure_ai_provider', params: values);
+    final result = await _supabase.client.rpc(
+      'configure_ai_provider',
+      params: {
+        'p_slug': slug,
+        'p_display_name': displayName,
+        'p_adapter': adapter,
+        'p_base_url': baseUrl,
+        'p_api_key': apiKey,
+        'p_enabled': enabled,
+        'p_priority': priority,
+      },
+    );
+    return result.toString();
   }
 }
 
