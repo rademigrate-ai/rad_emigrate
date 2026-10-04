@@ -53,7 +53,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       _submitting = true;
     });
     try {
-      await ref.read(authControllerProvider.notifier).register(
+      await ref
+          .read(authControllerProvider.notifier)
+          .register(
             email: _emailCtrl.text.trim(),
             phone: _phoneCtrl.text.trim(),
             password: _passwordCtrl.text,
@@ -92,10 +94,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      l10n.signUp,
-                      style: theme.textTheme.headlineMedium,
-                    ),
+                    Text(l10n.signUp, style: theme.textTheme.headlineMedium),
                     const SizedBox(height: 8),
                     Text(
                       l10n.signInSubtitle,
@@ -185,8 +184,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               child: Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.error
-                                      .withValues(alpha: 0.08),
+                                  color: theme.colorScheme.error.withValues(
+                                    alpha: 0.08,
+                                  ),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
