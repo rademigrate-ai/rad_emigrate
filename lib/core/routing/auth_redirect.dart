@@ -1,4 +1,10 @@
-const Set<String> _publicRoutes = {'/splash', '/login', '/register', '/otp'};
+const Set<String> _publicRoutes = {
+  '/splash',
+  '/login',
+  '/register',
+  '/otp',
+  '/forgot-password',
+};
 const Set<String> _protectedRoutes = {
   '/dashboard',
   '/visa',
@@ -8,6 +14,7 @@ const Set<String> _protectedRoutes = {
   '/ai-assistant',
   '/profile-completion',
   '/admin',
+  '/feed',
 };
 
 /// Resolves auth routing while distinguishing session restoration from logout.
