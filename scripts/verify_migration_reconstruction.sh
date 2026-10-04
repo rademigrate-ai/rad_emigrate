@@ -43,11 +43,16 @@ from pathlib import Path
 root = Path(sys.argv[1])
 expected = json.loads(Path('supabase/reconciliation/production_history.json').read_text())
 expected_names = [r['version']+'_'+r['name']+'.sql' for r in expected]
+current_unapplied = [
+    '20261003235000_ai_base_url_ssrf_hardening.sql',
+    '20261004190000_fix_profile_update_rls_recursion.sql',
+]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
-assert actual_names == sorted(expected_names + ['20261003235000_ai_base_url_ssrf_hardening.sql']), actual_names
+assert actual_names == sorted(expected_names + current_unapplied), actual_names
 for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
-print('Canonical active lineage: PASS (25 authoritative + 1 current unapplied hardening).')
+print('Canonical active lineage: PASS (25 authoritative + 2 current unapplied hardenings).')
 PY
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004190000_fix_profile_update_rls_recursion.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
