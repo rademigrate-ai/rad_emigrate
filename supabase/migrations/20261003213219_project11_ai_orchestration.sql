@@ -1,5 +1,3 @@
--- Project 11: server-side multi-provider AI orchestration and safe key lifecycle.
-begin;
 
 create table public.ai_providers (
   id uuid primary key default gen_random_uuid(),
@@ -172,4 +170,5 @@ alter function public.get_ai_runtime_chain(text) owner to postgres;
 revoke all on function public.get_ai_runtime_chain(text) from public,anon,authenticated;
 grant execute on function public.get_ai_runtime_chain(text) to service_role;
 
-commit;
+
+

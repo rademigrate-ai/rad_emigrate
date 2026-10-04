@@ -1,5 +1,3 @@
--- Project 13: auditable role-based admin operations.
-begin;
 
 create table public.admin_case_notes (
  id uuid primary key default gen_random_uuid(),
@@ -105,4 +103,5 @@ alter function public.set_user_role(uuid,text) owner to postgres;
 revoke all on function public.set_user_role(uuid,text) from public,anon;
 grant execute on function public.set_user_role(uuid,text) to authenticated;
 
-commit;
+
+

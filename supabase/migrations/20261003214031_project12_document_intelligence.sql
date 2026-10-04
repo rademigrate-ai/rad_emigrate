@@ -1,5 +1,3 @@
--- Project 12: versioned document-intelligence pipeline with human review.
-begin;
 
 create table public.document_processor_config (
   singleton boolean primary key default true check (singleton),
@@ -129,4 +127,5 @@ alter function public.get_document_processor_runtime() owner to postgres;
 revoke all on function public.get_document_processor_runtime() from public,anon,authenticated;
 grant execute on function public.get_document_processor_runtime() to service_role;
 
-commit;
+
+

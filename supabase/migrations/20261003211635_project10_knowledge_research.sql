@@ -1,5 +1,3 @@
--- Project 10: reviewed knowledge base and bounded RAD research ingestion.
-begin;
 
 create extension if not exists pg_cron with schema pg_catalog;
 create extension if not exists pg_net;
@@ -297,4 +295,5 @@ select cron.schedule('rad-daily-research-worker','27 3 * * *', $cron$
   );
 $cron$);
 
-commit;
+
+

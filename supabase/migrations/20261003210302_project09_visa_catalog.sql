@@ -494,4 +494,3 @@ create trigger programs_audit after insert or update or delete on public.visa_pr
 create trigger sources_audit after insert or update or delete on public.content_sources
   for each row execute function private.audit_content_change();
 
-commit;

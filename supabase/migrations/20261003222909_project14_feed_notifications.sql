@@ -1,5 +1,3 @@
--- Project 14: bilingual content feed, user interactions, and opt-in notifications.
-begin;
 
 create table public.feed_items (
  id uuid primary key default gen_random_uuid(),
@@ -143,4 +141,5 @@ revoke all on function private.notify_feed_publication() from public,anon,authen
 create trigger feed_publication_notifications after insert or update of status,published_at on public.feed_items
  for each row execute function private.notify_feed_publication();
 
-commit;
+
+
