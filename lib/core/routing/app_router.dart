@@ -31,7 +31,9 @@ class AuthRefreshNotifier extends ChangeNotifier {
   }
 }
 
-final authRefreshNotifierProvider = Provider<AuthRefreshNotifier>((ref) => AuthRefreshNotifier(ref));
+final authRefreshNotifierProvider = Provider<AuthRefreshNotifier>(
+  (ref) => AuthRefreshNotifier(ref),
+);
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -40,28 +42,70 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final bootstrap = ref.read(appBootstrapProvider);
-      return authRedirect(uri: state.uri, isRestoring: bootstrap.isLoading, isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false, profileComplete: auth.valueOrNull?.profileComplete ?? false);
+      return authRedirect(
+        uri: state.uri,
+        isRestoring: bootstrap.isLoading,
+        isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false,
+        profileComplete: auth.valueOrNull?.profileComplete ?? false,
+      );
     },
     routes: [
-      GoRoute(path: '/splash', builder: (_, state) => SplashPage(destination: state.uri.queryParameters['from'])),
+      GoRoute(
+        path: '/splash',
+        builder: (_, state) =>
+            SplashPage(destination: state.uri.queryParameters['from']),
+      ),
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
-      GoRoute(path: '/forgot-password', builder: (_, _) => const ForgotPasswordPage()),
-      GoRoute(path: '/reset-password', builder: (_, _) => const ResetPasswordPage()),
-      GoRoute(path: '/otp', builder: (_, state) => OtpPage(identifier: state.uri.queryParameters['identifier'], signup: state.uri.queryParameters['mode'] == 'signup')),
-      GoRoute(path: '/profile-completion', builder: (_, _) => const ProfileCompletionPage()),
+      GoRoute(
+        path: '/forgot-password',
+        builder: (_, _) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (_, _) => const ResetPasswordPage(),
+      ),
+      GoRoute(
+        path: '/otp',
+        builder: (_, state) => OtpPage(
+          identifier: state.uri.queryParameters['identifier'],
+          signup: state.uri.queryParameters['mode'] == 'signup',
+        ),
+      ),
+      GoRoute(
+        path: '/profile-completion',
+        builder: (_, _) => const ProfileCompletionPage(),
+      ),
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
         routes: [
-          GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
+          GoRoute(
+            path: '/dashboard',
+            builder: (_, _) => const DashboardPage(),
+          ),
           GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
-          GoRoute(path: '/applications', builder: (_, _) => const ApplicationsPage()),
-          GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
+          GoRoute(
+            path: '/applications',
+            builder: (_, _) => const ApplicationsPage(),
+          ),
+          GoRoute(
+            path: '/documents',
+            builder: (_, _) => const DocumentsPage(),
+          ),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
-          GoRoute(path: '/ai-assistant', builder: (_, _) => const AiAssistantPage()),
+          GoRoute(
+            path: '/ai-assistant',
+            builder: (_, _) => const AiAssistantPage(),
+          ),
           GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
-          GoRoute(path: '/admin/ai-config', builder: (_, _) => const AdminAiConfigPage()),
-          GoRoute(path: '/admin/operations', builder: (_, _) => const AdminOperationsPage()),
+          GoRoute(
+            path: '/admin/ai-config',
+            builder: (_, _) => const AdminAiConfigPage(),
+          ),
+          GoRoute(
+            path: '/admin/operations',
+            builder: (_, _) => const AdminOperationsPage(),
+          ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],
       ),
