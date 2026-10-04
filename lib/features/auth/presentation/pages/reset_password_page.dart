@@ -117,8 +117,9 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                           return null;
                         },
                         suffixIcon: IconButton(
-                          tooltip:
-                              _obscure ? l10n.showPassword : l10n.hidePassword,
+                          tooltip: _obscure
+                              ? l10n.showPassword
+                              : l10n.hidePassword,
                           icon: Icon(
                             _obscure
                                 ? Icons.visibility_outlined
