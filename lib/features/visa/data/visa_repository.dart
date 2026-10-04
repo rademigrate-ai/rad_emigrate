@@ -79,8 +79,7 @@ class VisaRepository {
     final requirements =
         ((row['visa_program_requirements'] as List<dynamic>?) ?? const [])
             .where(
-              (item) =>
-                  (item as Map<String, dynamic>)['locale'] == language,
+              (item) => (item as Map<String, dynamic>)['locale'] == language,
             )
             .map((item) {
               final value = item as Map<String, dynamic>;
@@ -95,8 +94,7 @@ class VisaRepository {
     final steps =
         ((row['visa_program_steps'] as List<dynamic>?) ?? const [])
             .where(
-              (item) =>
-                  (item as Map<String, dynamic>)['locale'] == language,
+              (item) => (item as Map<String, dynamic>)['locale'] == language,
             )
             .map((item) {
               final value = item as Map<String, dynamic>;
