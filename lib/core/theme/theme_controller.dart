@@ -10,10 +10,10 @@ enum AppThemePreference {
   system;
 
   ThemeMode get themeMode => switch (this) {
-        AppThemePreference.light => ThemeMode.light,
-        AppThemePreference.dark => ThemeMode.dark,
-        AppThemePreference.system => ThemeMode.system,
-      };
+    AppThemePreference.light => ThemeMode.light,
+    AppThemePreference.dark => ThemeMode.dark,
+    AppThemePreference.system => ThemeMode.system,
+  };
 
   static AppThemePreference fromStorage(String? value) {
     return switch (value) {
@@ -53,6 +53,6 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 final themeControllerProvider =
     StateNotifierProvider<ThemeController, AppThemePreference>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return ThemeController(prefs);
-});
+      final prefs = ref.watch(sharedPreferencesProvider);
+      return ThemeController(prefs);
+    });
