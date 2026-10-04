@@ -14,13 +14,13 @@ void main() {
 
   setUpAll(() {
     knowledgeSql = File(
-      'supabase/migrations/20261003211500_project10_knowledge_research.sql',
+      'supabase/migrations/20261003211635_project10_knowledge_research.sql',
     ).readAsStringSync();
     feedSql = File(
-      'supabase/migrations/20261003221000_project14_feed_notifications.sql',
+      'supabase/migrations/20261003222909_project14_feed_notifications.sql',
     ).readAsStringSync();
     aiSql = File(
-      'supabase/migrations/20261003213000_project11_ai_orchestration.sql',
+      'supabase/migrations/20261003213219_project11_ai_orchestration.sql',
     ).readAsStringSync();
     ssrfSql = File(
       'supabase/migrations/20261003235000_ai_base_url_ssrf_hardening.sql',

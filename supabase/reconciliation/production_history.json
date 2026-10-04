@@ -1,0 +1,102 @@
+[
+  {
+    "version": "20261001191421",
+    "name": "initial_rad_core_schema"
+  },
+  {
+    "version": "20261001191653",
+    "name": "create_profile_trigger_and_storage_setup_v2"
+  },
+  {
+    "version": "20261001194638",
+    "name": "security_hardening_handle_new_user"
+  },
+  {
+    "version": "20261001194715",
+    "name": "add_rad_backend_indexes"
+  },
+  {
+    "version": "20261001195750",
+    "name": "security_hardening"
+  },
+  {
+    "version": "20261001195754",
+    "name": "rls_policies"
+  },
+  {
+    "version": "20261001195756",
+    "name": "storage_policies"
+  },
+  {
+    "version": "20261001200202",
+    "name": "ai_sessions_and_document_bootstrap"
+  },
+  {
+    "version": "20261001214952",
+    "name": "project05_launch_hardening"
+  },
+  {
+    "version": "20261001215315",
+    "name": "project05_storage_upload_limits"
+  },
+  {
+    "version": "20261001215758",
+    "name": "project05_minimize_table_privileges"
+  },
+  {
+    "version": "20261001225237",
+    "name": "profile_bootstrap_policy"
+  },
+  {
+    "version": "20261001225632",
+    "name": "storage_validation_policies"
+  },
+  {
+    "version": "20261001225634",
+    "name": "ai_message_ownership_policies"
+  },
+  {
+    "version": "20261001233027",
+    "name": "signup_trigger_search_path"
+  },
+  {
+    "version": "20261001233048",
+    "name": "relationship_policies_and_indexes"
+  },
+  {
+    "version": "20261003102347",
+    "name": "restrict_documents_bucket_uploads"
+  },
+  {
+    "version": "20261003210302",
+    "name": "project09_visa_catalog"
+  },
+  {
+    "version": "20261003211635",
+    "name": "project10_knowledge_research"
+  },
+  {
+    "version": "20261003212339",
+    "name": "project10_security_hardening"
+  },
+  {
+    "version": "20261003213219",
+    "name": "project11_ai_orchestration"
+  },
+  {
+    "version": "20261003214031",
+    "name": "project12_document_intelligence"
+  },
+  {
+    "version": "20261003221324",
+    "name": "project13_admin_operations"
+  },
+  {
+    "version": "20261003222909",
+    "name": "project14_feed_notifications"
+  },
+  {
+    "version": "20261003223717",
+    "name": "project15_observability"
+  }
+]
