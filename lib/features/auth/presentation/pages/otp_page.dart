@@ -76,10 +76,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     }
     setState(() => _error = null);
     try {
-      await ref.read(authControllerProvider.notifier).verifyOtp(
-            identifier: identifier,
-            otp: otp,
-          );
+      await ref
+          .read(authControllerProvider.notifier)
+          .verifyOtp(identifier: identifier, otp: otp);
       final session = ref.read(authControllerProvider).valueOrNull;
       if (mounted) {
         if (session != null && !session.profileComplete) {
@@ -140,15 +139,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    l10n.otpTitle,
-                    style: theme.textTheme.headlineMedium,
-                  ),
+                  Text(l10n.otpTitle, style: theme.textTheme.headlineMedium),
                   const SizedBox(height: 8),
-                  Text(
-                    l10n.otpSubtitle,
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(l10n.otpSubtitle, style: theme.textTheme.bodyMedium),
                   if (identifier.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     Directionality(
@@ -217,10 +210,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                           onPressed: loading ? null : _submit,
                         ),
                         TextButton(
-                          onPressed:
-                              loading || _resending || _cooldown > 0
-                                  ? null
-                                  : _resend,
+                          onPressed: loading || _resending || _cooldown > 0
+                              ? null
+                              : _resend,
                           child: _resending
                               ? const SizedBox(
                                   width: 18,
