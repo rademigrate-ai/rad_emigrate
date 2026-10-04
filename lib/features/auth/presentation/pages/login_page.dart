@@ -45,7 +45,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (raw.contains('session') || raw.contains('expired')) {
       return l10n.errorAuthSession;
     }
-    // Never surface raw ApiException / stack traces.
     return l10n.errorGeneric;
   }
 
@@ -113,7 +112,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       obscureText: _obscure,
                       autofillHints: const [AutofillHints.password],
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) => _submit(),
+                      onSubmitted: (_) => _submit(),
                       validator: (v) =>
                           (v == null || v.isEmpty) ? l10n.required : null,
                       suffixIcon: IconButton(
