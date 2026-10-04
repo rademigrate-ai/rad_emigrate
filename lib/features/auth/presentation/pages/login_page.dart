@@ -103,8 +103,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       keyboardType: TextInputType.emailAddress,
                       autofillHints: const [AutofillHints.email],
                       textInputAction: TextInputAction.next,
-                      validator: (v) =>
-                          (v == null || v.trim().isEmpty) ? l10n.required : null,
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? l10n.required
+                          : null,
                     ),
                     const SizedBox(height: 14),
                     AppTextField(
@@ -118,8 +119,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       validator: (v) =>
                           (v == null || v.isEmpty) ? l10n.required : null,
                       suffixIcon: IconButton(
-                        tooltip:
-                            _obscure ? l10n.showPassword : l10n.hidePassword,
+                        tooltip: _obscure
+                            ? l10n.showPassword
+                            : l10n.hidePassword,
                         icon: Icon(
                           _obscure
                               ? Icons.visibility_outlined
