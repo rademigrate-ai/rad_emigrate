@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../providers/auth_controller.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../providers/auth_controller.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -21,6 +21,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _phoneCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscure = true;
+  bool _submitting = false;
   String? _error;
 
   @override
@@ -31,13 +32,28 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     super.dispose();
   }
 
+  String _mapError(Object e, AppLocalizations l10n) {
+    final raw = e.toString().toLowerCase();
+    if (raw.contains('network') ||
+        raw.contains('socket') ||
+        raw.contains('connection')) {
+      return l10n.errorNetwork;
+    }
+    if (raw.contains('already') || raw.contains('registered')) {
+      return l10n.errorAuthInvalid;
+    }
+    return l10n.errorGeneric;
+  }
+
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _error = null);
+    final l10n = AppLocalizations.of(context);
+    if (_submitting || !_formKey.currentState!.validate()) return;
+    setState(() {
+      _error = null;
+      _submitting = true;
+    });
     try {
-      await ref
-          .read(authControllerProvider.notifier)
-          .register(
+      await ref.read(authControllerProvider.notifier).register(
             email: _emailCtrl.text.trim(),
             phone: _phoneCtrl.text.trim(),
             password: _passwordCtrl.text,
@@ -48,16 +64,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         );
       }
     } catch (e) {
-      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      if (mounted) {
+        setState(() => _error = _mapError(e, l10n));
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loading = ref.watch(authControllerProvider).isLoading;
+    final l10n = AppLocalizations.of(context);
+    final loading = ref.watch(authControllerProvider).isLoading || _submitting;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Create your account')),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(title: Text(l10n.createAccount)),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -70,13 +93,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Start with the basics',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      l10n.signUp,
+                      style: theme.textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Create your secure RAD Emigrate account. You can add the rest of your profile next.',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      l10n.signInSubtitle,
+                      style: theme.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 20),
                     const LinearProgressIndicator(value: 0.33, minHeight: 6),
@@ -87,47 +110,58 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Account details',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            l10n.createAccount,
+                            style: theme.textTheme.titleMedium,
                           ),
                           const SizedBox(height: 16),
                           AppTextField(
                             controller: _emailCtrl,
-                            label: 'Email',
+                            label: l10n.email,
                             prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             autofillHints: const [AutofillHints.email],
-                            validator: (v) => (v == null || !v.contains('@'))
-                                ? 'Enter a valid email'
-                                : null,
+                            validator: (v) {
+                              if (v == null || v.trim().isEmpty) {
+                                return l10n.required;
+                              }
+                              if (!v.contains('@')) return l10n.invalidEmail;
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 14),
                           AppTextField(
                             controller: _phoneCtrl,
-                            label: 'Phone number',
+                            label: l10n.phone,
                             prefixIcon: Icons.phone_outlined,
                             keyboardType: TextInputType.phone,
                             textInputAction: TextInputAction.next,
                             autofillHints: const [
                               AutofillHints.telephoneNumber,
                             ],
-                            validator: (v) => (v == null || v.trim().length < 8)
-                                ? 'Enter a valid phone number'
-                                : null,
+                            validator: (v) {
+                              final digits = (v ?? '').replaceAll(
+                                RegExp(r'[^0-9+]'),
+                                '',
+                              );
+                              if (digits.length < 8) {
+                                return l10n.required;
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 14),
                           AppTextField(
                             controller: _passwordCtrl,
-                            label: 'Password',
+                            label: l10n.password,
                             prefixIcon: Icons.lock_outline,
                             obscureText: _obscure,
                             textInputAction: TextInputAction.done,
                             autofillHints: const [AutofillHints.newPassword],
                             suffixIcon: IconButton(
                               tooltip: _obscure
-                                  ? 'Show password'
-                                  : 'Hide password',
+                                  ? l10n.showPassword
+                                  : l10n.hidePassword,
                               icon: Icon(
                                 _obscure
                                     ? Icons.visibility_outlined
@@ -136,9 +170,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               onPressed: () =>
                                   setState(() => _obscure = !_obscure),
                             ),
-                            validator: (v) => (v == null || v.length < 6)
-                                ? 'Use at least 6 characters'
-                                : null,
+                            validator: (v) {
+                              if (v == null || v.length < 8) {
+                                return l10n.passwordTooShort;
+                              }
+                              return null;
+                            },
                             onSubmitted: (_) => _submit(),
                           ),
                           if (_error case final error?) ...[
@@ -148,15 +185,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               child: Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.error.withValues(
-                                    alpha: 0.08,
-                                  ),
+                                  color: theme.colorScheme.error
+                                      .withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   error,
-                                  style: const TextStyle(
-                                    color: AppColors.error,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.error,
                                     fontSize: 13,
                                   ),
                                 ),
@@ -165,16 +201,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           ],
                           const SizedBox(height: 22),
                           AppButton(
-                            label: 'Continue',
+                            label: l10n.next,
                             loading: loading,
-                            onPressed: _submit,
+                            onPressed: loading ? null : _submit,
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 12),
                     AppButton(
-                      label: 'Already have an account? Sign in',
+                      label: l10n.alreadyHaveAccount,
                       variant: AppButtonVariant.ghost,
                       onPressed: () => context.go('/login'),
                     ),
