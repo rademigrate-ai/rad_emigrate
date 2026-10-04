@@ -21,4 +21,7 @@ abstract class AuthRepository {
   });
   Future<UserSession?> restoreSession();
   Future<void> logout();
+
+  /// Request a password-reset email. Does not reveal whether the account exists.
+  Future<void> requestPasswordReset({required String email});
 }
