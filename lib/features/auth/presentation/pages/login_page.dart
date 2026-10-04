@@ -53,7 +53,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _error = null);
     try {
-      await ref.read(authControllerProvider.notifier).login(
+      await ref
+          .read(authControllerProvider.notifier)
+          .login(
             identifier: _identifierCtrl.text.trim(),
             password: _passwordCtrl.text,
           );
