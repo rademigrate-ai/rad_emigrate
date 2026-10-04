@@ -166,6 +166,33 @@ class AuthRemoteDataSource {
     }
   }
 
+  /// Sends a password-recovery email via Supabase Auth.
+  ///
+  /// Does not throw on "user not found" to avoid account enumeration when the
+  /// project is configured that way; callers should show a generic message.
+  Future<void> requestPasswordReset({required String email}) async {
+    final trimmed = email.trim();
+    if (!trimmed.contains('@')) {
+      throw const ApiException(
+        message: 'A valid email address is required.',
+        code: 'invalid_email',
+      );
+    }
+    if (_backend is ApiClient) {
+      await (_backend).post<void>(
+        '/auth/password/reset',
+        data: {'email': trimmed},
+      );
+      return;
+    }
+    _ensureSupabaseReady();
+    try {
+      await _service.client.auth.resetPasswordForEmail(trimmed);
+    } catch (error) {
+      throw _apiException(error);
+    }
+  }
+
   Future<void> logout() async {
     if (_backend is ApiClient) {
       try {
