@@ -22,6 +22,14 @@ If either value is empty, the app sets `supabase_not_configured` and login fails
 | **Publish Directory** | `build/web` |
 | **Rewrite rule** | Source `/*` → Destination `/index.html` (Rewrite) |
 
+### Do not use this Build Command
+
+```text
+git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter && ...
+```
+
+That one-liner fails when Render restores a non-empty Flutter cache (`destination path already exists`) and does **not** inject Supabase dart-defines.
+
 ### Environment variables (Build)
 
 | Name | Maps to | Type | Notes |

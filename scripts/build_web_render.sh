@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Build Flutter Web for Render (or any static host).
 # Requires public Supabase compile-time defines only.
+#
+# Render Dashboard must use THIS script as Build Command:
+#   bash scripts/build_web_render.sh
+# Do NOT use an inline `git clone ... flutter` one-liner — cached SDK dirs break it.
 set -euo pipefail
 
 if [[ -z "${SUPABASE_URL:-}" ]]; then
@@ -15,17 +19,44 @@ fi
 PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-$SUPABASE_ANON_KEY}"
 APP_ENV_VALUE="${APP_ENV:-staging}"
 
-# Install Flutter if not already on PATH (Render static build environment).
-if ! command -v flutter >/dev/null 2>&1; then
-  FLUTTER_DIR="${FLUTTER_ROOT:-$HOME/flutter}"
-  if [[ ! -x "$FLUTTER_DIR/bin/flutter" ]]; then
-    git clone https://github.com/flutter/flutter.git -b stable --depth 1 "$FLUTTER_DIR"
+# Resolve Flutter SDK (reuse cache when present).
+ensure_flutter() {
+  if command -v flutter >/dev/null 2>&1; then
+    return 0
   fi
-  export PATH="$FLUTTER_DIR/bin:$PATH"
-fi
+
+  local candidates=(
+    "${FLUTTER_ROOT:-}"
+    "${HOME}/flutter"
+    "/opt/render/flutter"
+    "${HOME}/.flutter"
+  )
+
+  local dir
+  for dir in "${candidates[@]}"; do
+    if [[ -n "$dir" && -x "${dir}/bin/flutter" ]]; then
+      export PATH="${dir}/bin:${PATH}"
+      return 0
+    fi
+  done
+
+  local install_dir="${FLUTTER_ROOT:-${HOME}/flutter}"
+  if [[ -d "$install_dir" && ! -x "${install_dir}/bin/flutter" ]]; then
+    echo "Removing incomplete Flutter directory at ${install_dir}"
+    rm -rf "$install_dir"
+  fi
+  if [[ ! -x "${install_dir}/bin/flutter" ]]; then
+    echo "Cloning Flutter stable into ${install_dir}"
+    git clone https://github.com/flutter/flutter.git -b stable --depth 1 "$install_dir"
+  fi
+  export PATH="${install_dir}/bin:${PATH}"
+}
+
+ensure_flutter
 
 flutter --version
 flutter config --no-analytics
+flutter config --enable-web
 flutter pub get
 
 flutter build web --release --no-pub \
@@ -33,7 +64,6 @@ flutter build web --release --no-pub \
   --dart-define="SUPABASE_URL=${SUPABASE_URL}" \
   --dart-define="SUPABASE_PUBLISHABLE_KEY=${PUBLISHABLE_KEY}"
 
-# SPA fallback helpers for hosts that serve 404.html on unknown paths.
 cp -f build/web/index.html build/web/404.html
 
 echo "Web build complete: build/web (APP_ENV=${APP_ENV_VALUE})"
