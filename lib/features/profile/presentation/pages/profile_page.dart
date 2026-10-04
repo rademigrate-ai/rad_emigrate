@@ -8,6 +8,7 @@ import '../../../../core/theme/theme_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -111,9 +112,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     try {
       await ref.read(profileControllerProvider.notifier).save(profile);
       if (profile.fullName.isNotEmpty) {
-        await ref
-            .read(authControllerProvider.notifier)
-            .completeProfile(
+        await ref.read(authControllerProvider.notifier).completeProfile(
               fullName: profile.fullName,
               nationality: profile.nationality,
             );
@@ -127,7 +126,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           SnackBar(content: Text(AppLocalizations.of(context).save)),
         );
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() => _saving = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -211,7 +210,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   ) {
     final displayName = profile?.fullName.isNotEmpty == true
         ? profile!.fullName
-        : (session?.fullName ?? 'User');
+        : (session?.fullName ?? l10n.travelerFallback);
     final initials = displayName.trim().isEmpty
         ? 'U'
         : displayName.trim()[0].toUpperCase();
@@ -271,7 +270,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             subtitle: l10n.profileCompletionSubtitle,
             icon: Icons.badge_outlined,
             onTap: () => setState(() => _editing = true),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: Icon(directionalChevron(context)),
             child: Text(
               profile == null
                   ? l10n.profileCompletionSubtitle
@@ -286,7 +285,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           subtitle: l10n.viewDetails,
           icon: Icons.assignment_outlined,
           onTap: () => context.go('/applications'),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: Icon(directionalChevron(context)),
         ),
         const SizedBox(height: 8),
         SectionCard(
@@ -294,7 +293,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           subtitle: l10n.uploadDocument,
           icon: Icons.folder_outlined,
           onTap: () => context.go('/documents'),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: Icon(directionalChevron(context)),
         ),
         const SizedBox(height: 8),
         SectionCard(
@@ -302,7 +301,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           subtitle: l10n.viewDetails,
           icon: Icons.smart_toy_outlined,
           onTap: () => context.go('/ai-assistant'),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: Icon(directionalChevron(context)),
         ),
         const SizedBox(height: 16),
         Text(l10n.settings, style: Theme.of(context).textTheme.titleMedium),
@@ -384,7 +383,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             const SizedBox(height: 18),
             AppTextField(
               controller: _firstName,
-              label: l10n.fullName,
+              label: l10n.firstName,
               prefixIcon: Icons.person_outline,
               textInputAction: TextInputAction.next,
               validator: (value) => (value == null || value.trim().isEmpty)
@@ -394,7 +393,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             const SizedBox(height: 12),
             AppTextField(
               controller: _lastName,
-              label: l10n.fullName,
+              label: l10n.lastName,
               prefixIcon: Icons.person_outline,
               textInputAction: TextInputAction.next,
             ),
@@ -418,7 +417,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             const SizedBox(height: 12),
             AppTextField(
               controller: _nationality,
-              label: l10n.profile,
+              label: l10n.nationality,
               prefixIcon: Icons.public_outlined,
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => _save(),
