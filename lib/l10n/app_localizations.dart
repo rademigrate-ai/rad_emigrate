@@ -16,8 +16,10 @@ abstract class AppLocalizations {
   final String localeName;
 
   static AppLocalizations of(BuildContext context) {
-    final instance =
-        Localizations.of<AppLocalizations>(context, AppLocalizations);
+    final instance = Localizations.of<AppLocalizations>(
+      context,
+      AppLocalizations,
+    );
     assert(instance != null, 'No AppLocalizations found in context');
     return instance!;
   }
@@ -32,10 +34,7 @@ abstract class AppLocalizations {
     GlobalWidgetsLocalizations.delegate,
   ];
 
-  static const List<Locale> supportedLocales = [
-    Locale('en'),
-    Locale('fa'),
-  ];
+  static const List<Locale> supportedLocales = [Locale('en'), Locale('fa')];
 
   String get appTitle;
   String get signIn;
