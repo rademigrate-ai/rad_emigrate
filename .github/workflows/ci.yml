@@ -57,10 +57,9 @@ jobs:
         run: |
           set -euo pipefail
           if ! dart format --set-exit-if-changed lib test; then
-            echo '::error::dart format would change files. Listing offenders:'
+            echo '::error::dart format would change files. Showing canonical patch:'
             dart format lib test
-            git --no-pager diff --name-only
-            git --no-pager diff --stat
+            git --no-pager diff -- lib/features/admin/data/admin_operations_repository.dart lib/features/admin/presentation/pages/admin_operations_page.dart
             exit 1
           fi
       - run: flutter analyze
