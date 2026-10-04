@@ -1,84 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants/app_colors.dart';
 import '../widgets/rad_brand.dart';
+import '../../l10n/app_localizations.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   final Widget child;
   const AppShell({super.key, required this.child});
 
-  static const _items = [
-    (
-      label: 'Home',
-      path: '/dashboard',
-      icon: Icons.home_outlined,
-      selectedIcon: Icons.home,
-    ),
-    (
-      label: 'Visa',
-      path: '/visa',
-      icon: Icons.public_outlined,
-      selectedIcon: Icons.public,
-    ),
-    (
-      label: 'Cases',
-      path: '/applications',
-      icon: Icons.assignment_outlined,
-      selectedIcon: Icons.assignment,
-    ),
-    (
-      label: 'Docs',
-      path: '/documents',
-      icon: Icons.folder_outlined,
-      selectedIcon: Icons.folder,
-    ),
-    (
-      label: 'Profile',
-      path: '/profile',
-      icon: Icons.person_outline,
-      selectedIcon: Icons.person,
-    ),
-  ];
-
-  int _selectedIndex(String location) {
-    if (location.startsWith('/ai-assistant')) return 0;
-    for (var i = 0; i < _items.length; i++) {
-      if (location.startsWith(_items[i].path)) return i;
+  int _selectedIndex(String location, List<_NavItem> items) {
+    if (location.startsWith('/ai-assistant')) {
+      final aiIdx = items.indexWhere((e) => e.path == '/ai-assistant');
+      return aiIdx >= 0 ? aiIdx : 0;
+    }
+    for (var i = 0; i < items.length; i++) {
+      if (location.startsWith(items[i].path)) return i;
     }
     return 0;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final location = GoRouterState.of(context).matchedLocation;
-    final selected = _selectedIndex(location);
+    final items = [
+      _NavItem(
+        label: l10n.home,
+        path: '/dashboard',
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home,
+      ),
+      _NavItem(
+        label: l10n.visa,
+        path: '/visa',
+        icon: Icons.public_outlined,
+        selectedIcon: Icons.public,
+      ),
+      _NavItem(
+        label: l10n.cases,
+        path: '/applications',
+        icon: Icons.assignment_outlined,
+        selectedIcon: Icons.assignment,
+      ),
+      _NavItem(
+        label: l10n.docs,
+        path: '/documents',
+        icon: Icons.folder_outlined,
+        selectedIcon: Icons.folder,
+      ),
+      _NavItem(
+        label: l10n.feed,
+        path: '/feed',
+        icon: Icons.newspaper_outlined,
+        selectedIcon: Icons.newspaper,
+      ),
+      _NavItem(
+        label: l10n.profile,
+        path: '/profile',
+        icon: Icons.person_outline,
+        selectedIcon: Icons.person,
+      ),
+    ];
+    final selected = _selectedIndex(location, items);
     final wide = MediaQuery.sizeOf(context).width >= 900;
+
     return Scaffold(
       body: Row(
         children: [
           if (wide)
             Container(
-              decoration: const BoxDecoration(
-                color: AppColors.navy,
-                border: Border(right: BorderSide(color: Color(0x22314057))),
+              decoration: BoxDecoration(
+                color: Theme.of(context).navigationRailTheme.backgroundColor ??
+                    AppColors.navy,
+                border: Border(
+                  right: BorderSide(
+                    color: Theme.of(context).dividerColor.withValues(alpha: 0.4),
+                  ),
+                ),
               ),
               child: NavigationRail(
                 selectedIndex: selected,
-                onDestinationSelected: (i) => context.go(_items[i].path),
+                onDestinationSelected: (i) => context.go(items[i].path),
                 labelType: NavigationRailLabelType.all,
                 backgroundColor: Colors.transparent,
                 groupAlignment: -0.55,
                 minWidth: 104,
-                leading: Padding(
-                  padding: const EdgeInsets.only(top: 18, bottom: 28),
-                  child: const RadBrand(
+                leading: const Padding(
+                  padding: EdgeInsets.only(top: 18, bottom: 28),
+                  child: RadBrand(
                     size: RadBrandSize.small,
                     showInstituteName: false,
                   ),
                 ),
                 destinations: [
-                  for (final item in _items)
+                  for (final item in items)
                     NavigationRailDestination(
                       icon: Icon(item.icon),
                       selectedIcon: Icon(item.selectedIcon),
@@ -88,17 +105,20 @@ class AppShell extends StatelessWidget {
               ),
             ),
           Expanded(
-            child: ColoredBox(color: AppColors.background, child: child),
+            child: ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: child,
+            ),
           ),
         ],
       ),
       bottomNavigationBar: wide
           ? null
           : NavigationBar(
-              selectedIndex: selected,
-              onDestinationSelected: (i) => context.go(_items[i].path),
+              selectedIndex: selected.clamp(0, items.length - 1),
+              onDestinationSelected: (i) => context.go(items[i].path),
               destinations: [
-                for (final item in _items)
+                for (final item in items)
                   NavigationDestination(
                     icon: Icon(item.icon),
                     selectedIcon: Icon(item.selectedIcon),
@@ -108,4 +128,18 @@ class AppShell extends StatelessWidget {
             ),
     );
   }
+}
+
+class _NavItem {
+  const _NavItem({
+    required this.label,
+    required this.path,
+    required this.icon,
+    required this.selectedIcon,
+  });
+
+  final String label;
+  final String path;
+  final IconData icon;
+  final IconData selectedIcon;
 }
