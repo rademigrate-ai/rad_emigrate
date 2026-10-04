@@ -14,6 +14,9 @@ class _TestAuthRepository implements AuthRepository {
   Future<void> resendOtp({required String identifier}) async {}
 
   @override
+  Future<void> requestPasswordReset({required String email}) async {}
+
+  @override
   Future<UserSession> login({
     required String identifier,
     required String password,
