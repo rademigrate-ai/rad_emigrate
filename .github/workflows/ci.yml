@@ -33,7 +33,7 @@ on:
       - 'scripts/**'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -44,8 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.6'
@@ -55,21 +53,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
-      - name: Canonicalize Admin Dart files
-        if: github.event_name == 'pull_request'
+      - name: Dart format gate
         run: |
           set -euo pipefail
-          dart format lib/features/admin/data/admin_operations_repository.dart lib/features/admin/presentation/pages/admin_operations_page.dart
-          if ! git diff --quiet -- lib/features/admin/data/admin_operations_repository.dart lib/features/admin/presentation/pages/admin_operations_page.dart; then
-            git config user.name github-actions[bot]
-            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-            git add lib/features/admin/data/admin_operations_repository.dart lib/features/admin/presentation/pages/admin_operations_page.dart
-            git commit -m 'style: apply canonical Dart formatting'
-            git push origin HEAD:${{ github.head_ref }}
+          if ! dart format --set-exit-if-changed lib test; then
+            echo '::error::dart format would change files. Listing offenders:'
+            dart format lib test
+            git --no-pager diff --name-only
+            git --no-pager diff --stat
             exit 1
           fi
-      - name: Dart format gate
-        run: dart format --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
       - name: Build web with non-production configuration
