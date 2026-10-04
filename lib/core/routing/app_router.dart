@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/dependencies.dart';
+import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
@@ -39,12 +40,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final bootstrap = ref.read(appBootstrapProvider);
-      return authRedirect(
-        uri: state.uri,
-        isRestoring: bootstrap.isLoading,
-        isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false,
-        profileComplete: auth.valueOrNull?.profileComplete ?? false,
-      );
+      return authRedirect(uri: state.uri, isRestoring: bootstrap.isLoading, isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false, profileComplete: auth.valueOrNull?.profileComplete ?? false);
     },
     routes: [
       GoRoute(path: '/splash', builder: (_, state) => SplashPage(destination: state.uri.queryParameters['from'])),
@@ -64,6 +60,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
           GoRoute(path: '/ai-assistant', builder: (_, _) => const AiAssistantPage()),
           GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
+          GoRoute(path: '/admin/ai-config', builder: (_, _) => const AdminAiConfigPage()),
           GoRoute(path: '/admin/operations', builder: (_, _) => const AdminOperationsPage()),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],
