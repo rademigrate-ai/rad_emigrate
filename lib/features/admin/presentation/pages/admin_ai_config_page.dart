@@ -167,7 +167,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
               ),
               const SizedBox(height: 28),
               Text(
-                fa ? 'افزودن یا به‌روزرسانی Provider' : 'Add or update provider',
+                fa
+                    ? 'افزودن یا به‌روزرسانی Provider'
+                    : 'Add or update provider',
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
