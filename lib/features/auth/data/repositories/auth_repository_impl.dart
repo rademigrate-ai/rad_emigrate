@@ -49,15 +49,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> resendOtp({required String identifier}) =>
-      remote.resendOtp(identifier: identifier);
+  Future<void> resendOtp({required String identifier, bool signup = false}) =>
+      remote.resendOtp(identifier: identifier, signup: signup);
 
   @override
   Future<UserSession> verifyOtp({
     required String identifier,
     required String otp,
+    bool signup = false,
   }) async {
-    final session = await remote.verifyOtp(identifier: identifier, otp: otp);
+    final session = await remote.verifyOtp(
+      identifier: identifier,
+      otp: otp,
+      signup: signup,
+    );
     await local.saveSession(session);
     return session;
   }
@@ -94,4 +99,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await local.clear();
     }
   }
+
+  @override
+  Future<void> requestPasswordReset({required String email}) =>
+      remote.requestPasswordReset(email: email);
 }

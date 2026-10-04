@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 
 enum RadBrandSize { small, medium, large }
 
@@ -34,9 +35,7 @@ class RadBrand extends StatelessWidget {
               ? 'assets/branding/rad_logo_dark.png'
               : 'assets/branding/rad_logo.png')
         : 'assets/branding/rad_logo_mark.png';
-    final label = showInstituteName
-        ? 'RAD International Institute of RAD'
-        : 'RAD Emigrate';
+    final label = AppLocalizations.of(context).appTitle;
 
     return Semantics(
       label: label,

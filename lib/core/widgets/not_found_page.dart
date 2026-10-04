@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class NotFoundPage extends StatelessWidget {
-  final String title;
-  const NotFoundPage({super.key, required this.title});
+  const NotFoundPage({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(body: Center(child: Text(title)));
+  Widget build(BuildContext context) => Scaffold(
+    body: Center(child: Text(AppLocalizations.of(context).pageNotFound)),
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 import 'app_button.dart';
 
 class ErrorState extends StatelessWidget {
@@ -27,7 +28,7 @@ class ErrorState extends StatelessWidget {
             if (onRetry != null) ...[
               const SizedBox(height: 16),
               AppButton(
-                label: 'Try again',
+                label: AppLocalizations.of(context).retry,
                 onPressed: onRetry,
                 expanded: false,
                 variant: AppButtonVariant.secondary,

@@ -7,8 +7,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/status_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../applications/domain/entities/application_status.dart';
 import '../../../applications/presentation/providers/application_controller.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -20,8 +22,9 @@ class DashboardPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
-    final name = session?.fullName ?? 'Traveler';
+    final name = session?.fullName ?? l10n.travelerFallback;
     final apps = ref.watch(applicationControllerProvider).valueOrNull ?? [];
     final docs = ref.watch(documentControllerProvider).valueOrNull ?? [];
     final activeApps = apps
@@ -34,12 +37,12 @@ class DashboardPage extends ConsumerWidget {
     final needsAction = !profileDone || missingDocs > 0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Your journey'),
+        title: Text(l10n.yourJourney),
         actions: [
           IconButton(
-            tooltip: 'AI Assistant',
+            tooltip: l10n.aiAssistant,
             icon: const Icon(Icons.smart_toy_outlined),
             onPressed: () => context.go('/ai-assistant'),
           ),
@@ -62,26 +65,27 @@ class DashboardPage extends ConsumerWidget {
               const SizedBox(height: 28),
               if (needsAction) ...[
                 SectionHeader(
-                  title: 'Needs your action',
-                  subtitle: 'Complete these items to keep your case moving',
+                  title: l10n.needsYourAction,
+                  subtitle: l10n.needsActionSubtitle,
                 ),
                 if (!profileDone)
                   _ActionRow(
                     icon: Icons.badge_outlined,
-                    title: 'Complete your profile',
-                    subtitle: 'Add your name and basic details',
+                    title: l10n.completeProfileTitle,
+                    subtitle: l10n.completeProfileSubtitle,
                     tone: AppColors.warning,
                     onTap: () => context.go('/profile-completion'),
                   ),
                 if (missingDocs > 0)
                   _ActionRow(
                     icon: Icons.folder_outlined,
-                    title:
-                        '$missingDocs document${missingDocs == 1 ? '' : 's'} missing',
-                    subtitle: 'Review the required files for your case',
+                    title: missingDocs == 1
+                        ? l10n.documentMissingOne
+                        : l10n.documentsMissingCount(missingDocs),
+                    subtitle: l10n.reviewRequiredFiles,
                     tone: AppColors.warning,
-                    badge: const StatusBadge(
-                      label: 'Action',
+                    badge: StatusBadge(
+                      label: l10n.actionBadge,
                       tone: StatusTone.warning,
                     ),
                     onTap: () => context.go('/documents'),
@@ -89,9 +93,9 @@ class DashboardPage extends ConsumerWidget {
                 const SizedBox(height: 16),
               ],
               SectionHeader(
-                title: 'Case overview',
-                subtitle: 'A quick view of your active work',
-                actionLabel: 'All cases',
+                title: l10n.caseOverview,
+                subtitle: l10n.caseOverviewSubtitle,
+                actionLabel: l10n.allCases,
                 onAction: () => context.go('/applications'),
               ),
               Row(
@@ -99,7 +103,7 @@ class DashboardPage extends ConsumerWidget {
                   Expanded(
                     child: _MetricTile(
                       value: '$activeApps',
-                      label: 'Active cases',
+                      label: l10n.activeCases,
                       icon: Icons.assignment_outlined,
                       onTap: () => context.go('/applications'),
                     ),
@@ -108,7 +112,7 @@ class DashboardPage extends ConsumerWidget {
                   Expanded(
                     child: _MetricTile(
                       value: '$missingDocs',
-                      label: 'Documents missing',
+                      label: l10n.documentsMissing,
                       icon: Icons.folder_outlined,
                       onTap: () => context.go('/documents'),
                     ),
@@ -117,8 +121,8 @@ class DashboardPage extends ConsumerWidget {
               ),
               const SizedBox(height: 28),
               SectionHeader(
-                title: 'Quick actions',
-                subtitle: 'Start where you need help today',
+                title: l10n.quickActions,
+                subtitle: l10n.quickActionsSubtitle,
               ),
               Wrap(
                 spacing: 8,
@@ -126,43 +130,43 @@ class DashboardPage extends ConsumerWidget {
                 children: [
                   _ActionChip(
                     icon: Icons.public_outlined,
-                    label: 'Visa programs',
+                    label: l10n.visaPrograms,
                     onTap: () => context.go('/visa'),
                   ),
                   _ActionChip(
                     icon: Icons.article_outlined,
-                    label: 'RAD updates',
+                    label: l10n.radUpdates,
                     onTap: () => context.go('/feed'),
                   ),
                   _ActionChip(
                     icon: Icons.assignment_outlined,
-                    label: 'Applications',
+                    label: l10n.applications,
                     onTap: () => context.go('/applications'),
                   ),
                   _ActionChip(
                     icon: Icons.folder_outlined,
-                    label: 'Documents',
+                    label: l10n.documents,
                     onTap: () => context.go('/documents'),
                   ),
                   _ActionChip(
                     icon: Icons.smart_toy_outlined,
-                    label: 'AI assistant',
+                    label: l10n.aiAssistant,
                     onTap: () => context.go('/ai-assistant'),
                   ),
                 ],
               ),
               const SizedBox(height: 28),
-              SectionHeader(title: 'Shortcuts'),
+              SectionHeader(title: l10n.shortcuts),
               _ShortcutRow(
                 icon: Icons.person_outline,
-                title: 'Profile',
-                subtitle: 'Personal and immigration details',
+                title: l10n.profile,
+                subtitle: l10n.profileShortcutSubtitle,
                 onTap: () => context.go('/profile'),
               ),
               _ShortcutRow(
                 icon: Icons.smart_toy_outlined,
-                title: 'Ask the assistant',
-                subtitle: 'Visas, documents, and process guidance',
+                title: l10n.askAssistant,
+                subtitle: l10n.askAssistantSubtitle,
                 onTap: () => context.go('/ai-assistant'),
               ),
             ],
@@ -186,10 +190,11 @@ class _JourneyHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = needsAction ? 'Your next step is ready' : 'You are on track';
+    final l10n = AppLocalizations.of(context);
+    final title = needsAction ? l10n.nextStepReady : l10n.onTrack;
     final description = needsAction
-        ? 'A few items need your attention before your case can move forward.'
-        : 'Your current case information is up to date. Review your progress or ask for guidance.';
+        ? l10n.nextStepDescription
+        : l10n.onTrackDescription;
     return AppCard(
       emphasized: true,
       padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
@@ -204,7 +209,7 @@ class _JourneyHero extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello, $name',
+                      l10n.helloName(name),
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 8),
@@ -227,8 +232,10 @@ class _JourneyHero extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           AppButton(
-            label: needsAction ? 'Review next step' : 'View applications',
-            icon: needsAction ? Icons.arrow_forward : Icons.assignment_outlined,
+            label: needsAction ? l10n.reviewNextStep : l10n.viewApplications,
+            icon: needsAction
+                ? directionalForward(context)
+                : Icons.assignment_outlined,
             expanded: false,
             variant: needsAction
                 ? AppButtonVariant.primary
@@ -279,7 +286,10 @@ class _ActionRow extends StatelessWidget {
             ),
           ),
           badge ??
-              const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+              Icon(
+                directionalChevron(context),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ],
       ),
     );
@@ -301,18 +311,19 @@ class _MetricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.fromLTRB(18, 17, 18, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: AppColors.navyMuted),
+          Icon(icon, size: 20, color: colorScheme.primary),
           const SizedBox(height: 12),
           Text(
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: AppColors.navy,
+              color: colorScheme.primary,
               fontFeatures: const [ui.FontFeature.tabularFigures()],
             ),
           ),
@@ -341,8 +352,8 @@ class _ActionChip extends StatelessWidget {
       avatar: Icon(icon, size: 18),
       label: Text(label),
       onPressed: onTap,
-      backgroundColor: AppColors.surface,
-      side: const BorderSide(color: AppColors.border),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      side: BorderSide(color: Theme.of(context).dividerColor),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     );
   }
@@ -369,7 +380,7 @@ class _ShortcutRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.navyMuted),
+          Icon(icon, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -381,7 +392,10 @@ class _ShortcutRow extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+          Icon(
+            directionalChevron(context),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ],
       ),
     );

@@ -26,6 +26,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final child = AnimatedSwitcher(
       duration: const Duration(milliseconds: 180),
       child: loading
@@ -65,9 +66,9 @@ class AppButton extends StatelessWidget {
       AppButtonVariant.secondary => OutlinedButton(
         onPressed: loading ? null : onPressed,
         child: DefaultTextStyle.merge(
-          style: const TextStyle(color: AppColors.navy),
+          style: TextStyle(color: scheme.secondary),
           child: IconTheme(
-            data: const IconThemeData(color: AppColors.navy, size: 18),
+            data: IconThemeData(color: scheme.secondary, size: 18),
             child: child,
           ),
         ),

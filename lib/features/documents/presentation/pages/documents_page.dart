@@ -1,6 +1,6 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -9,6 +9,7 @@ import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/status_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/document.dart';
 import '../../domain/entities/document_type.dart';
 import '../providers/document_controller.dart';
@@ -31,17 +32,42 @@ class DocumentsPage extends ConsumerWidget {
     }
   }
 
+  String _kindLabel(DocumentTypeKind kind, AppLocalizations l10n) {
+    return switch (kind) {
+      DocumentTypeKind.passport => l10n.documentTypePassport,
+      DocumentTypeKind.identity => l10n.documentTypeIdentity,
+      DocumentTypeKind.education => l10n.documentTypeEducation,
+      DocumentTypeKind.financial => l10n.documentTypeFinancial,
+      DocumentTypeKind.visa => l10n.documentTypeVisa,
+      DocumentTypeKind.other => l10n.documentTypeOther,
+    };
+  }
+
+  String _statusLabel(
+    DocumentVerificationStatus status,
+    AppLocalizations l10n,
+  ) {
+    return switch (status) {
+      DocumentVerificationStatus.missing => l10n.documentStatusMissing,
+      DocumentVerificationStatus.uploaded => l10n.documentStatusUploaded,
+      DocumentVerificationStatus.underReview => l10n.documentStatusUnderReview,
+      DocumentVerificationStatus.verified => l10n.documentStatusVerified,
+      DocumentVerificationStatus.rejected => l10n.documentStatusRejected,
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final state = ref.watch(documentControllerProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Documents'),
+        title: Text(l10n.documents),
         actions: [
           IconButton(
-            tooltip: 'Refresh',
+            tooltip: l10n.refresh,
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(documentControllerProvider.notifier).load(),
@@ -52,27 +78,27 @@ class DocumentsPage extends ConsumerWidget {
         backgroundColor: AppColors.primaryRed,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
-        label: const Text('Add type'),
+        label: Text(l10n.addType),
         onPressed: () async {
           await ref
               .read(documentControllerProvider.notifier)
               .addDocumentType(
-                name: 'New document',
+                name: l10n.newDocument,
                 kind: DocumentTypeKind.other,
               );
         },
       ),
       body: state.when(
-        loading: () => const LoadingState(message: 'Loading documents…'),
+        loading: () => LoadingState(message: l10n.loadingDocuments),
         error: (e, _) => ErrorState(
-          message: '$e',
+          message: l10n.errorGeneric,
           onRetry: () => ref.read(documentControllerProvider.notifier).load(),
         ),
         data: (docs) {
           if (docs.isEmpty) {
             return EmptyState(
-              title: 'No documents yet',
-              subtitle: 'Add required document types for your case.',
+              title: l10n.noDocuments,
+              subtitle: l10n.noDocumentsSubtitle,
               icon: Icons.folder_outlined,
             );
           }
@@ -89,25 +115,31 @@ class DocumentsPage extends ConsumerWidget {
             children: [
               if (missing.isNotEmpty) ...[
                 SectionHeader(
-                  title: 'Missing',
-                  subtitle: 'Upload these to continue your application',
+                  title: l10n.missingSection,
+                  subtitle: l10n.missingSectionSubtitle,
                 ),
                 ...missing.map(
                   (doc) => _DocTile(
                     doc: doc,
                     tone: _tone(doc.status),
+                    kindLabel: _kindLabel(doc.kind, l10n),
+                    statusLabel: _statusLabel(doc.status, l10n),
                     onTap: () => _openSheet(context, ref, doc),
                   ),
                 ),
                 const SizedBox(height: 16),
               ],
               SectionHeader(
-                title: missing.isEmpty ? 'All documents' : 'Submitted',
+                title: missing.isEmpty
+                    ? l10n.allDocuments
+                    : l10n.submittedSection,
               ),
               ...rest.map(
                 (doc) => _DocTile(
                   doc: doc,
                   tone: _tone(doc.status),
+                  kindLabel: _kindLabel(doc.kind, l10n),
+                  statusLabel: _statusLabel(doc.status, l10n),
                   onTap: () => _openSheet(context, ref, doc),
                 ),
               ),
@@ -122,141 +154,155 @@ class DocumentsPage extends ConsumerWidget {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(doc.name, style: Theme.of(ctx).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text('Type: ${doc.kind.label}'),
-            Text('Status: ${doc.status.label}'),
-            const SizedBox(height: 12),
-            Text(
-              'Accepted formats: PDF, JPG, JPEG, and PNG. Maximum size: 10 MB.',
-              style: Theme.of(ctx).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 20),
-            if (doc.status == DocumentVerificationStatus.missing ||
-                doc.status == DocumentVerificationStatus.rejected)
-              FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.primaryRed,
-                  minimumSize: const Size.fromHeight(48),
+      builder: (ctx) {
+        final sheetL10n = AppLocalizations.of(ctx);
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(doc.name, style: Theme.of(ctx).textTheme.titleLarge),
+                const SizedBox(height: 8),
+                Text(
+                  '${sheetL10n.typeLabel}: '
+                  '${_kindLabel(doc.kind, sheetL10n)}',
                 ),
-                onPressed: () async {
-                  final result = await FilePicker.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: const ['pdf', 'jpg', 'jpeg', 'png'],
-                    withData: true,
-                  );
-                  if (result == null || result.files.isEmpty) return;
-                  final file = result.files.single;
-                  final bytes = file.bytes;
-                  if (bytes == null) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        const SnackBar(
-                          content: Text('Could not read that file.'),
-                        ),
-                      );
-                    }
-                    return;
-                  }
-                  if (bytes.length > 10 * 1024 * 1024) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        const SnackBar(
-                          content: Text('Files must be 10 MB or smaller.'),
-                        ),
-                      );
-                    }
-                    return;
-                  }
-                  final extension = (file.extension ?? '').toLowerCase();
-                  final contentType = switch (extension) {
-                    'pdf' => 'application/pdf',
-                    'jpg' || 'jpeg' => 'image/jpeg',
-                    'png' => 'image/png',
-                    _ => 'application/octet-stream',
-                  };
-                  try {
-                    await ref
-                        .read(documentControllerProvider.notifier)
-                        .uploadFile(
-                          doc.id,
-                          bytes: bytes,
-                          fileName: file.name,
-                          contentType: contentType,
-                        );
-                    if (ctx.mounted) Navigator.pop(ctx);
-                  } catch (error) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        SnackBar(content: Text('Upload failed: $error')),
-                      );
-                    }
-                  }
-                },
-                icon: const Icon(Icons.upload_file),
-                label: const Text('Choose file and upload'),
-              ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              onPressed: () async {
-                final confirmed = await showDialog<bool>(
-                  context: ctx,
-                  builder: (dialogContext) => AlertDialog(
-                    title: const Text('Delete document?'),
-                    content: const Text(
-                      'This removes the document record and its private file.',
+                Text(
+                  '${sheetL10n.statusLabel}: '
+                  '${_statusLabel(doc.status, sheetL10n)}',
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  sheetL10n.acceptedFormats,
+                  style: Theme.of(ctx).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 20),
+                if (doc.status == DocumentVerificationStatus.missing ||
+                    doc.status == DocumentVerificationStatus.rejected)
+                  FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.primaryRed,
+                      minimumSize: const Size.fromHeight(48),
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(dialogContext, false),
-                        child: const Text('Cancel'),
-                      ),
-                      FilledButton(
-                        onPressed: () => Navigator.pop(dialogContext, true),
-                        child: const Text('Delete'),
-                      ),
-                    ],
+                    onPressed: () async {
+                      final result = await FilePicker.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: const ['pdf', 'jpg', 'jpeg', 'png'],
+                        withData: true,
+                      );
+                      if (result == null || result.files.isEmpty) return;
+                      final file = result.files.single;
+                      final bytes = file.bytes;
+                      if (bytes == null) {
+                        if (ctx.mounted) {
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            SnackBar(content: Text(sheetL10n.couldNotReadFile)),
+                          );
+                        }
+                        return;
+                      }
+                      if (bytes.length > 10 * 1024 * 1024) {
+                        if (ctx.mounted) {
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            SnackBar(content: Text(sheetL10n.fileTooLarge)),
+                          );
+                        }
+                        return;
+                      }
+                      final extension = (file.extension ?? '').toLowerCase();
+                      final contentType = switch (extension) {
+                        'pdf' => 'application/pdf',
+                        'jpg' || 'jpeg' => 'image/jpeg',
+                        'png' => 'image/png',
+                        _ => 'application/octet-stream',
+                      };
+                      try {
+                        await ref
+                            .read(documentControllerProvider.notifier)
+                            .uploadFile(
+                              doc.id,
+                              bytes: bytes,
+                              fileName: file.name,
+                              contentType: contentType,
+                            );
+                        if (ctx.mounted) Navigator.pop(ctx);
+                      } catch (_) {
+                        if (ctx.mounted) {
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            SnackBar(content: Text(sheetL10n.uploadFailed)),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.upload_file),
+                    label: Text(sheetL10n.chooseFileUpload),
                   ),
-                );
-                if (confirmed != true) return;
-                try {
-                  await ref
-                      .read(documentControllerProvider.notifier)
-                      .deleteDocument(doc.id);
-                  if (ctx.mounted) Navigator.pop(ctx);
-                } catch (error) {
-                  if (ctx.mounted) {
-                    ScaffoldMessenger.of(ctx).showSnackBar(
-                      SnackBar(content: Text('Delete failed: $error')),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final confirmed = await showDialog<bool>(
+                      context: ctx,
+                      builder: (dialogContext) => AlertDialog(
+                        title: Text(sheetL10n.deleteDocumentTitle),
+                        content: Text(sheetL10n.deleteDocumentBody),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(dialogContext, false),
+                            child: Text(sheetL10n.cancel),
+                          ),
+                          FilledButton(
+                            onPressed: () => Navigator.pop(dialogContext, true),
+                            child: Text(sheetL10n.delete),
+                          ),
+                        ],
+                      ),
                     );
-                  }
-                }
-              },
-              icon: const Icon(Icons.delete_outline),
-              label: const Text('Delete document'),
+                    if (confirmed != true) return;
+                    try {
+                      await ref
+                          .read(documentControllerProvider.notifier)
+                          .deleteDocument(doc.id);
+                      if (ctx.mounted) Navigator.pop(ctx);
+                    } catch (_) {
+                      if (ctx.mounted) {
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          SnackBar(content: Text(sheetL10n.deleteFailed)),
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.delete_outline),
+                  label: Text(sheetL10n.deleteDocument),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(sheetL10n.close),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
 class _DocTile extends StatelessWidget {
-  const _DocTile({required this.doc, required this.tone, required this.onTap});
+  const _DocTile({
+    required this.doc,
+    required this.tone,
+    required this.kindLabel,
+    required this.statusLabel,
+    required this.onTap,
+  });
 
   final Document doc;
   final StatusTone tone;
+  final String kindLabel;
+  final String statusLabel;
   final VoidCallback onTap;
 
   @override
@@ -274,16 +320,16 @@ class _DocTile extends StatelessWidget {
                   Text(
                     doc.name,
                     style: Theme.of(context).textTheme.titleMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    doc.kind.label,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                  Text(kindLabel, style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
             ),
-            StatusBadge(label: doc.status.label, tone: tone),
+            const SizedBox(width: 8),
+            StatusBadge(label: statusLabel, tone: tone),
           ],
         ),
       ),

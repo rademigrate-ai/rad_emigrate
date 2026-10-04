@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,6 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class _ChatMessage {
@@ -31,12 +34,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   static const _freeLimit = 5;
   var _used = 0;
   String? _sessionId;
-
-  static const _suggestions = [
-    'What documents are typically needed for a study permit?',
-    'How long can a visa process take?',
-    'What is a GTE statement?',
-  ];
 
   @override
   void initState() {
@@ -82,16 +79,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   }
 
   Future<void> _send([String? preset]) async {
+    final l10n = AppLocalizations.of(context);
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
     if (_used >= _freeLimit) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Free AI questions used for this session. Limits are configurable for production.',
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
       return;
     }
 
@@ -107,11 +100,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
           content: text,
         );
       }
-    } catch (error) {
+    } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save this question: $error')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
@@ -126,9 +118,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
     try {
       final ai = ref.read(aiServiceProvider);
-      final response = await ai.complete(
-        AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
-      );
+      final response = ai.isAvailable
+          ? await ai.complete(
+              AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
+            )
+          : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
       if (userId != null && userId.isNotEmpty && _sessionId != null) {
         await ref
             .read(aiSessionRepositoryProvider)
@@ -151,15 +145,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         _loading = false;
       });
       _scrollToEnd();
-    } catch (e) {
+    } catch (_) {
       if (!mounted) return;
       setState(() {
-        _messages.add(
-          _ChatMessage(
-            isUser: false,
-            text: 'Something went wrong. Please try again.',
-          ),
-        );
+        _messages.add(_ChatMessage(isUser: false, text: l10n.errorGeneric));
         _loading = false;
       });
     }
@@ -179,16 +168,23 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final suggestions = [
+      l10n.suggestionStudyPermitDocuments,
+      l10n.suggestionVisaProcessingTime,
+      l10n.suggestionGteStatement,
+    ];
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('AI Assistant'),
+        title: Text(l10n.aiAssistant),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                '$_used / $_freeLimit free',
+                l10n.freeQuota(_used, _freeLimit),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -198,12 +194,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       body: Column(
         children: [
           Material(
-            color: AppColors.surfaceMuted,
+            color: colorScheme.surfaceContainerHighest,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
-                'Sourced answers are unavailable until the RAD Knowledge Base is configured. '
-                'Nothing here is an official immigration decision.',
+                l10n.aiDisclaimer,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -214,16 +209,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                     padding: const EdgeInsets.all(20),
                     children: [
                       Text(
-                        'How can we help?',
+                        l10n.howCanWeHelp,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Ask about visas, documents, or process. Try a suggestion:',
+                        l10n.askAboutVisas,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 16),
-                      ..._suggestions.map(
+                      ...suggestions.map(
                         (s) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: AppCard(onTap: () => _send(s), child: Text(s)),
@@ -240,7 +235,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                         return const Padding(
                           padding: EdgeInsets.all(8),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: AlignmentDirectional.centerStart,
                             child: SizedBox(
                               width: 22,
                               height: 22,
@@ -252,23 +247,26 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       final m = _messages[index];
                       return Align(
                         alignment: m.isUser
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
+                            ? AlignmentDirectional.centerEnd
+                            : AlignmentDirectional.centerStart,
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           padding: const EdgeInsets.all(14),
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.sizeOf(context).width * 0.85,
+                            maxWidth: math.min(
+                              680,
+                              MediaQuery.sizeOf(context).width * 0.85,
+                            ),
                           ),
                           decoration: BoxDecoration(
                             color: m.isUser
                                 ? AppColors.primaryRed.withValues(alpha: 0.1)
-                                : AppColors.surface,
+                                : colorScheme.surface,
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
                               color: m.isUser
                                   ? AppColors.primaryRed.withValues(alpha: 0.2)
-                                  : AppColors.border,
+                                  : Theme.of(context).dividerColor,
                             ),
                           ),
                           child: Column(
@@ -283,7 +281,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                 const SizedBox(height: 8),
                                 ...m.sources!.map(
                                   (s) => Text(
-                                    'Source: ${s.title}'
+                                    '${l10n.sourceLabel}: ${s.title}'
                                     '${s.authority != null ? ' (${s.authority})' : ''}',
                                     style: Theme.of(context)
                                         .textTheme
@@ -310,13 +308,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       maxLines: 4,
                       textInputAction: TextInputAction.send,
                       onSubmitted: (_) => _send(),
-                      decoration: const InputDecoration(
-                        hintText: 'Ask a question…',
+                      decoration: InputDecoration(
+                        hintText: l10n.askQuestionHint,
                       ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   IconButton.filled(
+                    tooltip: l10n.sendMessage,
                     style: IconButton.styleFrom(
                       backgroundColor: AppColors.primaryRed,
                       minimumSize: const Size(48, 48),

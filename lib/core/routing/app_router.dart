@@ -13,6 +13,8 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/otp_page.dart';
 import '../../features/auth/presentation/pages/profile_completion_page.dart';
+import '../../features/auth/presentation/pages/forgot_password_page.dart';
+import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/pages/visa_page.dart';
@@ -56,9 +58,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(
+        path: '/forgot-password',
+        builder: (_, _) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (_, _) => const ResetPasswordPage(),
+      ),
+      GoRoute(
         path: '/otp',
-        builder: (_, state) =>
-            OtpPage(identifier: state.uri.queryParameters['identifier']),
+        builder: (_, state) => OtpPage(
+          identifier: state.uri.queryParameters['identifier'],
+          signup: state.uri.queryParameters['mode'] == 'signup',
+        ),
       ),
       GoRoute(
         path: '/profile-completion',
@@ -87,6 +99,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    errorBuilder: (_, _) => const NotFoundPage(title: 'Page not found'),
+    errorBuilder: (_, _) => const NotFoundPage(),
   );
 });

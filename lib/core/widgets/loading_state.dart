@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
-
 class LoadingState extends StatelessWidget {
   const LoadingState({super.key, this.message});
 
@@ -13,12 +11,12 @@ class LoadingState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
+          SizedBox(
             width: 28,
             height: 28,
             child: CircularProgressIndicator(
               strokeWidth: 2.5,
-              color: AppColors.navy,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           if (message != null) ...[

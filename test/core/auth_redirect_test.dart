@@ -102,6 +102,37 @@ void main() {
       },
     );
 
+    test('forgot and reset password stay public', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/forgot-password'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/reset-password'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      // Recovery session may be authenticated; still stay on set-password.
+      expect(
+        authRedirect(
+          uri: Uri.parse('/reset-password'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: true,
+        ),
+        isNull,
+      );
+    });
+
     test('invalid restored destinations fall back to dashboard', () {
       expect(
         restoredProtectedDestination('https://example.com/'),
@@ -110,6 +141,7 @@ void main() {
       expect(restoredProtectedDestination('/splash'), '/dashboard');
       expect(restoredProtectedDestination('/ai-assistant'), '/ai-assistant');
       expect(restoredProtectedDestination('/admin'), '/admin');
+      expect(restoredProtectedDestination('/feed'), '/feed');
     });
   });
 }
