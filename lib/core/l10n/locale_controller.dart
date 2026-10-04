@@ -53,8 +53,9 @@ class LocaleController extends StateNotifier<AppLocale> {
   }
 
   Future<void> toggle() async {
-    final next =
-        state.languageCode == 'en' ? AppLocale.persian : AppLocale.english;
+    final next = state.languageCode == 'en'
+        ? AppLocale.persian
+        : AppLocale.english;
     await setLocale(next);
   }
 }
