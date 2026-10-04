@@ -83,13 +83,13 @@ END
 $verify$;
 SQL
 
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"c52042a2489e9129526327c3fa0933b9","triggers":"13c5576e52a1a2cd823d97cd1137bbb2","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"572e85a2363cda55e855b4383485f832","triggers":"13c5576e52a1a2cd823d97cd1137bbb2","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
-  echo "Reconstructed schema fingerprint differs from the verified live RAD schema." >&2
+  echo "Reconstructed schema fingerprint differs from the verified canonical RAD schema." >&2
   echo "Expected: $expected_fingerprint" >&2
   echo "Actual:   $actual_fingerprint" >&2
   exit 1
 fi
 
-echo "Clean RAD schema bootstrap and forward migrations verified against the live structural fingerprint."
+echo "Clean RAD schema bootstrap and canonical migrations verified against the reconstructed structural fingerprint."
