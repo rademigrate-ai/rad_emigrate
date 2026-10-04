@@ -82,9 +82,10 @@ $verify$;
 SQL
 
 # This fingerprint is the exact output of schema_fingerprint.sql after replaying
-# the complete canonical active lineage through the recursion-safe profile
-# update policy. Only the policy component changes from the prior proof.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"00488dad2a63acae301901a63689e127","triggers":"13c5576e52a1a2cd823d97cd1137bbb2","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
+# the complete canonical active lineage through the recursion-safe profile and
+# owner-folder Storage policies. Only the policy component changes from the
+# prior proof.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"b1904e5964974b6a2a671adb37848570","policies":"dd1c97283d09aa2799e5aef7579c9077","triggers":"13c5576e52a1a2cd823d97cd1137bbb2","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2
