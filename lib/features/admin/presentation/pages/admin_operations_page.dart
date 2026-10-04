@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../core/widgets/loading_view.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
 
 class AdminOperationsPage extends ConsumerWidget {
@@ -11,22 +12,23 @@ class AdminOperationsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final snapshot = ref.watch(adminSnapshotProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin operations'),
+        title: Text(l10n.adminOperations),
         actions: [
           IconButton(
-            tooltip: 'Refresh',
+            tooltip: l10n.refresh,
             onPressed: () => ref.invalidate(adminSnapshotProvider),
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
       body: snapshot.when(
-        loading: () => const LoadingView(message: 'Loading operational data…'),
+        loading: () => LoadingView(message: l10n.loadingOperational),
         error: (error, _) => ErrorView(
-          message: 'Admin operations could not be loaded.',
+          message: l10n.adminLoadFailed,
           onRetry: () => ref.invalidate(adminSnapshotProvider),
         ),
         data: (data) => _AdminOverview(data: data),
@@ -42,12 +44,13 @@ class _AdminOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (!data.canAccess) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Text(
-            'This route is restricted to verified RAD administrators.',
+            l10n.adminRestricted,
             textAlign: TextAlign.center,
           ),
         ),
@@ -55,34 +58,38 @@ class _AdminOverview extends StatelessWidget {
     }
     final metrics = <({String label, int value, IconData icon})>[
       (
-        label: 'Applications',
+        label: l10n.applications,
         value: data.applications,
         icon: Icons.assignment_outlined,
       ),
-      (label: 'Documents', value: data.documents, icon: Icons.folder_outlined),
       (
-        label: 'Research jobs',
+        label: l10n.documents,
+        value: data.documents,
+        icon: Icons.folder_outlined,
+      ),
+      (
+        label: l10n.researchJobs,
         value: data.researchJobs,
         icon: Icons.travel_explore_outlined,
       ),
       (
-        label: 'AI requests',
+        label: l10n.aiRequests,
         value: data.aiRequests,
         icon: Icons.smart_toy_outlined,
       ),
       (
-        label: 'Document jobs',
+        label: l10n.documentJobs,
         value: data.documentJobs,
         icon: Icons.document_scanner_outlined,
       ),
       (
-        label: 'Open tasks',
+        label: l10n.openTasks,
         value: data.openTasks,
         icon: Icons.task_alt_outlined,
       ),
       if (data.isSuperAdmin)
         (
-          label: 'Audit events',
+          label: l10n.auditEvents,
           value: data.auditEvents,
           icon: Icons.policy_outlined,
         ),
@@ -91,13 +98,13 @@ class _AdminOverview extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       children: [
         Text(
-          data.isSuperAdmin ? 'Super Admin' : 'Admin',
+          data.isSuperAdmin ? l10n.superAdmin : l10n.admin,
           style: Theme.of(context).textTheme.labelLarge
               ?.copyWith(color: AppColors.info),
         ),
         const SizedBox(height: 8),
         Text(
-          'Operational overview',
+          l10n.operationalOverview,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 20),
@@ -107,14 +114,11 @@ class _AdminOverview extends StatelessWidget {
             value: metric.value,
             icon: metric.icon,
           ),
-        const Card(
+        Card(
           child: ListTile(
-            leading: Icon(Icons.security_outlined),
-            title: Text('Server-enforced access'),
-            subtitle: Text(
-              'Case notes, tasks, status history, provider health, and role '
-              'changes are protected by RLS and audit events.',
-            ),
+            leading: const Icon(Icons.security_outlined),
+            title: Text(l10n.serverEnforcedAccess),
+            subtitle: Text(l10n.serverEnforcedAccessBody),
           ),
         ),
       ],
