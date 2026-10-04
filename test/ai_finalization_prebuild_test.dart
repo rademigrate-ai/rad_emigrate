@@ -48,21 +48,26 @@ void main() {
     expect(admin.attempts.map((e) => e.candidate.model), ['admin', 'both']);
   });
 
-  test('fallback is priority ordered finite and returns controlled failure', () async {
-    final candidates = [3, 1, 2]
-        .map((p) => candidate('m$p', p, AssistantScope.user))
-        .toList();
-    final result = await const FallbackEngine(maxAttempts: 2).run(
-      scope: AssistantScope.user,
-      candidates: candidates,
-      now: now,
-      attempt: (c) async => FailureKind.timeout,
-    );
+  test(
+    'fallback is priority ordered finite and returns controlled failure',
+    () async {
+      final candidates = [
+        3,
+        1,
+        2,
+      ].map((p) => candidate('m$p', p, AssistantScope.user)).toList();
+      final result = await const FallbackEngine(maxAttempts: 2).run(
+        scope: AssistantScope.user,
+        candidates: candidates,
+        now: now,
+        attempt: (c) async => FailureKind.timeout,
+      );
 
-    expect(result.attempts.map((e) => e.candidate.priority), [1, 2]);
-    expect(result.failed, isTrue);
-    expect(result.attempts.length, 2);
-  });
+      expect(result.attempts.map((e) => e.candidate.priority), [1, 2]);
+      expect(result.failed, isTrue);
+      expect(result.attempts.length, 2);
+    },
+  );
 
   test('fallback stops on first success without recursion', () async {
     var calls = 0;
@@ -83,32 +88,35 @@ void main() {
     expect(calls, 1);
   });
 
-  test('disabled provider model unhealthy and cooldown candidates are skipped', () async {
-    final result = await const FallbackEngine().run(
-      scope: AssistantScope.user,
-      candidates: [
-        candidate('model-disabled', 0, AssistantScope.user, enabled: false),
-        candidate(
-          'provider-disabled',
-          1,
-          AssistantScope.user,
-          providerEnabled: false,
-        ),
-        candidate('unhealthy', 2, AssistantScope.user, healthy: false),
-        candidate(
-          'cooldown',
-          3,
-          AssistantScope.user,
-          cooldownUntil: now.add(const Duration(hours: 1)),
-        ),
-        candidate('ok', 4, AssistantScope.user),
-      ],
-      now: now,
-      attempt: (c) async => null,
-    );
+  test(
+    'disabled provider model unhealthy and cooldown candidates are skipped',
+    () async {
+      final result = await const FallbackEngine().run(
+        scope: AssistantScope.user,
+        candidates: [
+          candidate('model-disabled', 0, AssistantScope.user, enabled: false),
+          candidate(
+            'provider-disabled',
+            1,
+            AssistantScope.user,
+            providerEnabled: false,
+          ),
+          candidate('unhealthy', 2, AssistantScope.user, healthy: false),
+          candidate(
+            'cooldown',
+            3,
+            AssistantScope.user,
+            cooldownUntil: now.add(const Duration(hours: 1)),
+          ),
+          candidate('ok', 4, AssistantScope.user),
+        ],
+        now: now,
+        attempt: (c) async => null,
+      );
 
-    expect(result.attempts.single.candidate.model, 'ok');
-  });
+      expect(result.attempts.single.candidate.model, 'ok');
+    },
+  );
 
   test('429 and timeout have explicit retry and fallback policies', () {
     final rateLimit = classifyFailure(FailureKind.rateLimit);
@@ -121,13 +129,16 @@ void main() {
     expect(timeout.fallback, isTrue);
   });
 
-  test('model discovery normalizes duplicates and preserves removed models', () {
-    final result = synchronizeModels({'a', 'old'}, [' a ', 'b', 'b', '']);
+  test(
+    'model discovery normalizes duplicates and preserves removed models',
+    () {
+      final result = synchronizeModels({'a', 'old'}, [' a ', 'b', 'b', '']);
 
-    expect(result.added, {'b'});
-    expect(result.retained, {'a'});
-    expect(result.removed, {'old'});
-  });
+      expect(result.added, {'b'});
+      expect(result.retained, {'a'});
+      expect(result.removed, {'old'});
+    },
+  );
 
   test('newly discovered models are never auto-enabled', () {
     final sync = synchronizeModels({'existing'}, ['existing', 'new-model']);
@@ -225,7 +236,10 @@ void main() {
 
     final start = rendered.indexOf('<UNTRUSTED_RETRIEVED_CONTENT>');
     final end = rendered.indexOf('</UNTRUSTED_RETRIEVED_CONTENT>');
-    expect(start, greaterThan(rendered.indexOf('</TRUSTED_APPLICATION_CONTEXT>')));
+    expect(
+      start,
+      greaterThan(rendered.indexOf('</TRUSTED_APPLICATION_CONTEXT>')),
+    );
     expect(rendered.indexOf(attack), greaterThan(start));
     expect(rendered.indexOf(attack), lessThan(end));
     for (final text in attacks) {
@@ -245,16 +259,19 @@ void main() {
     expect(capabilities.contains(AiCapability.retrieveSecrets), isFalse);
   });
 
-  test('Admin research can review and approve but cannot publish roles or secrets', () {
-    final capabilities = capabilitiesFor(AssistantScope.admin);
+  test(
+    'Admin research can review and approve but cannot publish roles or secrets',
+    () {
+      final capabilities = capabilitiesFor(AssistantScope.admin);
 
-    expect(capabilities.contains(AiCapability.research), isTrue);
-    expect(capabilities.contains(AiCapability.review), isTrue);
-    expect(capabilities.contains(AiCapability.approve), isTrue);
-    expect(capabilities.contains(AiCapability.publish), isFalse);
-    expect(capabilities.contains(AiCapability.manageRoles), isFalse);
-    expect(capabilities.contains(AiCapability.retrieveSecrets), isFalse);
-  });
+      expect(capabilities.contains(AiCapability.research), isTrue);
+      expect(capabilities.contains(AiCapability.review), isTrue);
+      expect(capabilities.contains(AiCapability.approve), isTrue);
+      expect(capabilities.contains(AiCapability.publish), isFalse);
+      expect(capabilities.contains(AiCapability.manageRoles), isFalse);
+      expect(capabilities.contains(AiCapability.retrieveSecrets), isFalse);
+    },
+  );
 
   test('Admin research result exposes only pre-publication stages', () {
     final evidence = ResearchEvidence(const []);

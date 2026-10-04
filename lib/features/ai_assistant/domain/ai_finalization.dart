@@ -131,9 +131,7 @@ class FallbackEngine {
     final attempts = <AttemptResult>[];
     for (final candidate in eligible.take(maxAttempts)) {
       final failure = await attempt(candidate);
-      attempts.add(
-        AttemptResult(candidate, failure == null, failure: failure),
-      );
+      attempts.add(AttemptResult(candidate, failure == null, failure: failure));
       if (failure == null) {
         return FallbackResult(attempts: attempts, succeeded: true);
       }
@@ -169,13 +167,14 @@ FailurePolicy classifyFailure(FailureKind kind) => switch (kind) {
     cooldown: true,
     configurationError: false,
   ),
-  FailureKind.timeout || FailureKind.server || FailureKind.network =>
-    const FailurePolicy(
-      retryable: true,
-      fallback: true,
-      cooldown: false,
-      configurationError: false,
-    ),
+  FailureKind.timeout ||
+  FailureKind.server ||
+  FailureKind.network => const FailurePolicy(
+    retryable: true,
+    fallback: true,
+    cooldown: false,
+    configurationError: false,
+  ),
   FailureKind.malformed || FailureKind.unsupported => const FailurePolicy(
     retryable: false,
     fallback: true,
