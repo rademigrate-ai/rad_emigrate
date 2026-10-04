@@ -29,7 +29,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   }
 
   Future<void> _submit() async {
-    final l10n = AppLocalizations.of(context);
     if (!_formKey.currentState!.validate()) return;
     setState(() {
       _loading = true;
