@@ -78,7 +78,10 @@ class VisaRepository {
     final source = row['content_sources'] as Map<String, dynamic>;
     final requirements =
         ((row['visa_program_requirements'] as List<dynamic>?) ?? const [])
-            .where((item) => (item as Map<String, dynamic>)['locale'] == language)
+            .where(
+              (item) =>
+                  (item as Map<String, dynamic>)['locale'] == language,
+            )
             .map((item) {
               final value = item as Map<String, dynamic>;
               return VisaRequirement(
@@ -89,18 +92,22 @@ class VisaRepository {
             })
             .toList()
           ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
-    final steps = ((row['visa_program_steps'] as List<dynamic>?) ?? const [])
-        .where((item) => (item as Map<String, dynamic>)['locale'] == language)
-        .map((item) {
-          final value = item as Map<String, dynamic>;
-          return VisaStep(
-            title: value['title'] as String,
-            description: value['description'] as String? ?? '',
-            displayOrder: value['display_order'] as int? ?? 0,
-          );
-        })
-        .toList()
-      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+    final steps =
+        ((row['visa_program_steps'] as List<dynamic>?) ?? const [])
+            .where(
+              (item) =>
+                  (item as Map<String, dynamic>)['locale'] == language,
+            )
+            .map((item) {
+              final value = item as Map<String, dynamic>;
+              return VisaStep(
+                title: value['title'] as String,
+                description: value['description'] as String? ?? '',
+                displayOrder: value['display_order'] as int? ?? 0,
+              );
+            })
+            .toList()
+          ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
     return VisaProgram(
       id: row['id'] as String,
       slug: row['slug'] as String,
