@@ -134,6 +134,10 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     }
   }
 
+  Future<void> requestPasswordReset({required String email}) async {
+    await _repository.requestPasswordReset(email: email);
+  }
+
   Future<void> logout() async {
     try {
       await _repository.logout();
