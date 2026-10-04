@@ -100,4 +100,36 @@ alter function public.configure_ai_provider(text,text,text,text,text,boolean,int
 revoke all on function public.configure_ai_provider(text,text,text,text,text,boolean,integer) from public,anon;
 grant execute on function public.configure_ai_provider(text,text,text,text,text,boolean,integer) to authenticated;
 
+-- The reconstructed production policy compared role against a subquery on the
+-- same RLS-protected table, which recursively re-entered the profiles policy
+-- during ordinary PostgREST updates. Keep role immutable for self-service
+-- updates without querying profiles from inside its own policy.
+create or replace function private.profile_role_is_unchanged(p_role text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $function$
+  select exists (
+    select 1
+    from public.profiles p
+    where p.id = (select auth.uid())
+      and p.role = p_role
+  );
+$function$;
+
+alter function private.profile_role_is_unchanged(text) owner to postgres;
+revoke all on function private.profile_role_is_unchanged(text) from public, anon;
+grant execute on function private.profile_role_is_unchanged(text) to authenticated, service_role;
+
+drop policy if exists "profiles update own" on public.profiles;
+create policy "profiles update own" on public.profiles
+  for update to authenticated
+  using ((select auth.uid()) = id)
+  with check (
+    (select auth.uid()) = id
+    and (select private.profile_role_is_unchanged(role))
+  );
+
 commit;
