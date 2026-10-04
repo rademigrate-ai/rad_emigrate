@@ -10,7 +10,8 @@ class AdminOperationsPage extends ConsumerStatefulWidget {
   const AdminOperationsPage({super.key});
 
   @override
-  ConsumerState<AdminOperationsPage> createState() => _AdminOperationsPageState();
+  ConsumerState<AdminOperationsPage> createState() =>
+      _AdminOperationsPageState();
 }
 
 class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
@@ -122,8 +123,8 @@ class _AdminConsole extends StatelessWidget {
                   Text(
                     summary.isSuperAdmin ? l10n.superAdmin : l10n.admin,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   for (var index = 0; index < sections.length; index++)
@@ -188,21 +189,52 @@ class _Overview extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final metrics = <({String label, int value, IconData icon})>[
-      (label: l10n.applications, value: summary.applications, icon: Icons.assignment_outlined),
-      (label: l10n.documents, value: summary.documents, icon: Icons.folder_outlined),
-      (label: l10n.researchJobs, value: summary.researchJobs, icon: Icons.travel_explore_outlined),
-      (label: l10n.aiRequests, value: summary.aiRequests, icon: Icons.smart_toy_outlined),
-      (label: l10n.documentJobs, value: summary.documentJobs, icon: Icons.document_scanner_outlined),
-      (label: l10n.openTasks, value: summary.openTasks, icon: Icons.task_alt_outlined),
+      (
+        label: l10n.applications,
+        value: summary.applications,
+        icon: Icons.assignment_outlined,
+      ),
+      (
+        label: l10n.documents,
+        value: summary.documents,
+        icon: Icons.folder_outlined,
+      ),
+      (
+        label: l10n.researchJobs,
+        value: summary.researchJobs,
+        icon: Icons.travel_explore_outlined,
+      ),
+      (
+        label: l10n.aiRequests,
+        value: summary.aiRequests,
+        icon: Icons.smart_toy_outlined,
+      ),
+      (
+        label: l10n.documentJobs,
+        value: summary.documentJobs,
+        icon: Icons.document_scanner_outlined,
+      ),
+      (
+        label: l10n.openTasks,
+        value: summary.openTasks,
+        icon: Icons.task_alt_outlined,
+      ),
     ];
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Text(l10n.operationalOverview, style: Theme.of(context).textTheme.headlineMedium),
+        Text(
+          l10n.operationalOverview,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, constraints) {
-            final columns = constraints.maxWidth >= 900 ? 3 : constraints.maxWidth >= 560 ? 2 : 1;
+            final columns = constraints.maxWidth >= 900
+                ? 3
+                : constraints.maxWidth >= 560
+                ? 2
+                : 1;
             final ratio = columns == 1 ? 4.2 : 2.5;
             return GridView.builder(
               shrinkWrap: true,
@@ -214,7 +246,8 @@ class _Overview extends StatelessWidget {
                 childAspectRatio: ratio,
               ),
               itemCount: metrics.length,
-              itemBuilder: (context, index) => _MetricCard(metric: metrics[index]),
+              itemBuilder: (context, index) =>
+                  _MetricCard(metric: metrics[index]),
             );
           },
         ),
@@ -256,7 +289,10 @@ class _MetricCard extends StatelessWidget {
             Icon(metric.icon, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 12),
             Expanded(child: Text(metric.label)),
-            Text('${metric.value}', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              '${metric.value}',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
           ],
         ),
       ),
@@ -285,27 +321,46 @@ class _Providers extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(child: Text(provider.displayName, style: Theme.of(context).textTheme.titleMedium)),
-                      _StatusBadge('${provider.healthStatus} · ${provider.enabled ? 'enabled' : 'disabled'}'),
+                      Expanded(
+                        child: Text(
+                          provider.displayName,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      _StatusBadge(
+                        '${provider.healthStatus} · ${provider.enabled ? 'enabled' : 'disabled'}',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   _LtrValue('${provider.adapter} · ${provider.baseUrl}'),
                   const SizedBox(height: 8),
-                  Text('Credential: ${provider.credentialConfigured ? 'Configured' : 'Not configured'} · Priority ${provider.priority}'),
+                  Text(
+                    'Credential: ${provider.credentialConfigured ? 'Configured' : 'Not configured'} · Priority ${provider.priority}',
+                  ),
                   const SizedBox(height: 12),
                   Text('Models', style: Theme.of(context).textTheme.labelLarge),
                   const SizedBox(height: 6),
-                  if (data.models.where((item) => item.providerId == provider.id).isEmpty)
+                  if (data.models
+                      .where((item) => item.providerId == provider.id)
+                      .isEmpty)
                     const Text('No models registered.')
                   else
-                    ...data.models.where((item) => item.providerId == provider.id).map(
+                    ...data.models
+                        .where((item) => item.providerId == provider.id)
+                        .map(
                           (model) => ListTile(
                             contentPadding: EdgeInsets.zero,
                             dense: true,
-                            leading: Icon(model.enabled ? Icons.check_circle_outline : Icons.pause_circle_outline),
+                            leading: Icon(
+                              model.enabled
+                                  ? Icons.check_circle_outline
+                                  : Icons.pause_circle_outline,
+                            ),
                             title: Text(model.displayName),
-                            subtitle: _LtrValue('${model.slug} · ${model.capability}'),
+                            subtitle: _LtrValue(
+                              '${model.slug} · ${model.capability}',
+                            ),
                             trailing: Text('${model.maxOutputTokens}'),
                           ),
                         ),
@@ -333,12 +388,18 @@ class _Sources extends StatelessWidget {
         for (final source in data.sources)
           Card(
             child: ListTile(
-              leading: Icon(source.active ? Icons.verified_outlined : Icons.pause_circle_outline),
+              leading: Icon(
+                source.active
+                    ? Icons.verified_outlined
+                    : Icons.pause_circle_outline,
+              ),
               title: Text(source.title),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${source.publisher} · ${source.sourceType} · ${source.languageCode.toUpperCase()}'),
+                  Text(
+                    '${source.publisher} · ${source.sourceType} · ${source.languageCode.toUpperCase()}',
+                  ),
                   _LtrValue(source.url),
                 ],
               ),
@@ -347,7 +408,10 @@ class _Sources extends StatelessWidget {
           ),
         if (data.researchSources.isNotEmpty) ...[
           const SizedBox(height: 16),
-          Text('Research allowlist', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'Research allowlist',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           for (final source in data.researchSources)
             Card(
@@ -355,7 +419,9 @@ class _Sources extends StatelessWidget {
                 leading: const Icon(Icons.shield_outlined),
                 title: _LtrValue(source.allowedHost),
                 subtitle: _LtrValue(source.baseUrl),
-                trailing: _StatusBadge(source.enabled ? source.authority : 'disabled'),
+                trailing: _StatusBadge(
+                  source.enabled ? source.authority : 'disabled',
+                ),
               ),
             ),
         ],
@@ -381,7 +447,11 @@ class _Research extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.travel_explore_outlined),
               title: Text(job.jobType.replaceAll('_', ' ')),
-              subtitle: Text(job.safeError == null ? job.triggerType : 'Safe error: ${job.safeError}'),
+              subtitle: Text(
+                job.safeError == null
+                    ? job.triggerType
+                    : 'Safe error: ${job.safeError}',
+              ),
               trailing: _StatusBadge(job.status),
             ),
           ),
@@ -405,9 +475,15 @@ class _Reviews extends StatelessWidget {
         for (final item in data.reviews)
           Card(
             child: ListTile(
-              leading: Icon(item.kind == 'finding' ? Icons.find_in_page_outlined : Icons.edit_note_outlined),
+              leading: Icon(
+                item.kind == 'finding'
+                    ? Icons.find_in_page_outlined
+                    : Icons.edit_note_outlined,
+              ),
               title: Text(item.title),
-              subtitle: Text(item.kind == 'finding' ? 'Research finding' : 'Editorial draft'),
+              subtitle: Text(
+                item.kind == 'finding' ? 'Research finding' : 'Editorial draft',
+              ),
               trailing: _StatusBadge(item.status),
             ),
           ),
@@ -426,7 +502,8 @@ class _Feed extends StatelessWidget {
     return _SectionList(
       title: 'Feed / Publishing',
       emptyTitle: 'No Feed items yet.',
-      emptySubtitle: 'Publishing is a deliberate human-admin action after review.',
+      emptySubtitle:
+          'Publishing is a deliberate human-admin action after review.',
       children: [
         for (final item in data.feedItems)
           Card(
@@ -457,10 +534,16 @@ class _Health extends StatelessWidget {
         for (final item in data.health)
           Card(
             child: ListTile(
-              leading: Icon(item.enabled ? Icons.monitor_heart_outlined : Icons.pause_circle_outline),
+              leading: Icon(
+                item.enabled
+                    ? Icons.monitor_heart_outlined
+                    : Icons.pause_circle_outline,
+              ),
               title: Text(item.displayName),
               subtitle: _LtrValue(item.slug),
-              trailing: _StatusBadge('${item.enabled ? 'enabled' : 'disabled'}${item.critical ? ' · critical' : ''}'),
+              trailing: _StatusBadge(
+                '${item.enabled ? 'enabled' : 'disabled'}${item.critical ? ' · critical' : ''}',
+              ),
             ),
           ),
       ],
@@ -485,7 +568,9 @@ class _Audit extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.policy_outlined),
               title: Text(item.action),
-              subtitle: Text('${item.resourceType}${item.resourceId == null ? '' : ' · ${item.resourceId}'}'),
+              subtitle: Text(
+                '${item.resourceType}${item.resourceId == null ? '' : ' · ${item.resourceId}'}',
+              ),
             ),
           ),
       ],
@@ -520,7 +605,10 @@ class _SectionList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(emptyTitle, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    emptyTitle,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 6),
                   Text(emptySubtitle),
                 ],
@@ -576,7 +664,11 @@ class _KeyValue {
 }
 
 class _DataSummaryCard extends StatelessWidget {
-  const _DataSummaryCard({required this.icon, required this.title, required this.rows});
+  const _DataSummaryCard({
+    required this.icon,
+    required this.title,
+    required this.rows,
+  });
 
   final IconData icon;
   final String title;
@@ -590,12 +682,23 @@ class _DataSummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [Icon(icon), const SizedBox(width: 8), Text(title, style: Theme.of(context).textTheme.titleMedium)]),
+            Row(
+              children: [
+                Icon(icon),
+                const SizedBox(width: 8),
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
+              ],
+            ),
             const SizedBox(height: 12),
             for (final row in rows)
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
-                child: Row(children: [Expanded(child: Text(row.label)), Text(row.value)]),
+                child: Row(
+                  children: [
+                    Expanded(child: Text(row.label)),
+                    Text(row.value),
+                  ],
+                ),
               ),
           ],
         ),

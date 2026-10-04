@@ -376,32 +376,33 @@ class AdminOperationsRepository {
     List<Map<String, dynamic>> rows(int index) =>
         (results[index] as List).cast<Map<String, dynamic>>();
 
-    final reviews = <AdminReviewRecord>[
-      ...rows(5).map(
-        (row) => AdminReviewRecord(
-          id: row['id'] as String,
-          kind: 'finding',
-          title: row['summary'] as String? ?? '',
-          summary: row['summary'] as String?,
-          status: row['review_status'] as String? ?? 'review',
-          createdAt: _date(row['created_at']),
-        ),
-      ),
-      ...rows(6).map(
-        (row) => AdminReviewRecord(
-          id: row['id'] as String,
-          kind: 'draft',
-          title: row['title'] as String? ?? '',
-          summary: null,
-          status: row['status'] as String? ?? 'draft',
-          createdAt: _date(row['created_at']),
-        ),
-      ),
-    ]..sort((a, b) {
-        final left = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final right = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return right.compareTo(left);
-      });
+    final reviews =
+        <AdminReviewRecord>[
+          ...rows(5).map(
+            (row) => AdminReviewRecord(
+              id: row['id'] as String,
+              kind: 'finding',
+              title: row['summary'] as String? ?? '',
+              summary: row['summary'] as String?,
+              status: row['review_status'] as String? ?? 'review',
+              createdAt: _date(row['created_at']),
+            ),
+          ),
+          ...rows(6).map(
+            (row) => AdminReviewRecord(
+              id: row['id'] as String,
+              kind: 'draft',
+              title: row['title'] as String? ?? '',
+              summary: null,
+              status: row['status'] as String? ?? 'draft',
+              createdAt: _date(row['created_at']),
+            ),
+          ),
+        ]..sort((a, b) {
+          final left = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          final right = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          return right.compareTo(left);
+        });
 
     return AdminConsoleData(
       providers: rows(0).map((row) {
