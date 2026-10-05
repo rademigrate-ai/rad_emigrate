@@ -64,7 +64,8 @@ void main() {
       ]) {
         expect(orchestrator, contains(code));
       }
-      expect(orchestrator, isNot(contains('response.text()')));
+      expect(orchestrator, isNot(contains('new ProviderError(text')));
+      expect(orchestrator, isNot(contains('{ error: text')));
     });
   });
 
