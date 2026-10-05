@@ -82,6 +82,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _send([String? preset]) async {
     final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
     if (_used >= _freeLimit) {
@@ -120,7 +121,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
     try {
       final ai = ref.read(aiServiceProvider);
-      final locale = Localizations.localeOf(context).languageCode;
       final response = ai.isAvailable
           ? await ai.complete(
               AiRequest(
