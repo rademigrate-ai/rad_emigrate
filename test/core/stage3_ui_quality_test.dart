@@ -6,6 +6,9 @@ import 'package:rad_emigrate/core/widgets/empty_state.dart';
 
 void main() {
   testWidgets('EmptyState exposes combined semantics label', (tester) async {
+    final semantics = tester.ensureSemantics();
+    addTearDown(semantics.dispose);
+
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -20,26 +23,24 @@ void main() {
   testWidgets('ConstrainedContent applies max width constraint', (
     tester,
   ) async {
+    const childKey = Key('constrained-child');
+
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: Scaffold(
           body: ConstrainedContent(
             maxWidth: 320,
             padding: EdgeInsets.zero,
-            child: Builder(
-              builder: (context) {
-                final max = context
-                    .findAncestorRenderObjectOfType<RenderConstrainedBox>()
-                    ?.constraints
-                    .maxWidth;
-                return Text('max=$max');
-              },
-            ),
+            child: SizedBox(key: childKey, height: 24),
           ),
         ),
       ),
     );
 
-    expect(find.textContaining('max=320'), findsOneWidget);
+    final constrainedBox = tester.renderObject<RenderConstrainedBox>(
+      find.byType(ConstrainedBox).first,
+    );
+    expect(constrainedBox.additionalConstraints.maxWidth, 320);
+    expect(tester.getSize(find.byKey(childKey)).width, 320);
   });
 }
