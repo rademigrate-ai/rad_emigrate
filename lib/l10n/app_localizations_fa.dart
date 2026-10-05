@@ -473,24 +473,24 @@ class AppLocalizationsFa extends AppLocalizations {
   String get credentialsServerOnly =>
       'کلیدهای دسترسی فقط در سرور نگهداری می‌شوند و مقدار ذخیره‌شده هرگز به مرورگر بازگردانده نمی‌شود.';
   @override
-  String get configurationUnavailable => 'دریافت تنظیمات ممکن نیست.';
+  String get configurationUnavailable => 'دریافت تنظیمات ممکن نشد.';
   @override
   String get noProviderConfigured =>
-      'هنوز ارائه‌دهنده‌ای ثبت نشده است. فرم زیر را برای پیکربندی اولیه تکمیل کنید.';
+      'هنوز ارائه‌دهنده‌ای پیکربندی نشده است. از فرم زیر برای راه‌اندازی اولیه استفاده کنید.';
   @override
   String get addOrUpdateProvider => 'افزودن یا به‌روزرسانی ارائه‌دهنده';
   @override
-  String get slugLabel => 'شناسه (slug)';
+  String get slugLabel => 'شناسه';
   @override
   String get displayName => 'نام نمایشی';
   @override
-  String get adapterType => 'نوع Adapter';
+  String get adapterType => 'آداپتر';
   @override
-  String get publicHttpsOnly => 'فقط نشانی معتبر و عمومی HTTPS مجاز است';
+  String get publicHttpsOnly => 'باید یک نشانی HTTPS عمومی معتبر باشد';
   @override
   String get apiKeyWriteOnly => 'کلید API (فقط نوشتنی)';
   @override
-  String get keyMinimumEight => 'کلید باید حداقل ۸ نویسه باشد';
+  String get keyMinimumEight => 'کلید باید حداقل ۸ کاراکتر باشد';
   @override
   String get keepCurrentCredential =>
       'برای حفظ کلید فعلی، این بخش را خالی بگذارید.';
@@ -536,4 +536,42 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get modelDiscoveryFailed =>
       'کشف مدل‌ها با یک خطای پالایش‌شده ناموفق بود.';
+
+  @override
+  String get reviewQueueTitle => 'صف بررسی';
+  @override
+  String get reviewDraftTitle => 'پیش‌نویس تحریریه';
+  @override
+  String get reviewFindingTitle => 'یافته پژوهشی';
+  @override
+  String get reject => 'رد';
+  @override
+  String get keepPending => 'نگه‌داشتن در انتظار';
+  @override
+  String get approve => 'تأیید';
+  @override
+  String get publishExplicit => 'انتشار در فید';
+  @override
+  String get publishRequiresHuman =>
+      'انتشار یک اقدام عمدی مدیر است. پژوهش و هوش مصنوعی هرگز به‌صورت خودکار منتشر نمی‌کنند.';
+  @override
+  String get findingPublishNote =>
+      'تأیید یافته به‌تنهایی مطلب را در فید عمومی منتشر نمی‌کند. برای انتشار، پیش‌نویس تحریریه بسازید یا ارتقا دهید.';
+  @override
+  String get editTitle => 'عنوان';
+  @override
+  String get editBody => 'متن';
+  @override
+  String get category => 'دسته';
+  @override
+  String get applicationSteps => 'مراحل اقدام';
+  @override
+  String get structuredSourceNote =>
+      'اطلاعات بالا از محتوای ساختاریافته و منبع ثبت‌شده تهیه شده است؛ لینک خام به‌جای محتوا نمایش داده نمی‌شود.';
+  @override
+  String get publishedStatus => 'منتشرشده';
+  @override
+  String get draftStatusLabel => 'پیش‌نویس';
+  @override
+  String get reviewStatusLabel => 'در حال بررسی';
 }
