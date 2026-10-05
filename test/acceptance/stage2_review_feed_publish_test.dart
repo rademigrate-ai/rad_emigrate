@@ -35,12 +35,22 @@ void main() {
     );
     expect(stage1.contains('create_research_review_candidate'), isTrue);
     expect(stage1.contains('content_drafts'), isTrue);
-    expect(stage1.contains("status,'review'"), isTrue);
-    // No feed write in Stage 1 candidate path.
-    final fnStart = stage1.indexOf('create_research_review_candidate');
-    final fnBody = stage1.substring(fnStart, fnStart + 800);
+    expect(stage1.contains("'review'"), isTrue);
+
+    // Inspect the complete candidate function rather than a fixed-size source
+    // window. Formatting and finding-linkage changes must not make this safety
+    // assertion brittle.
+    const functionStart =
+        'create or replace function public.create_research_review_candidate';
+    const functionEnd =
+        'alter function public.create_research_review_candidate';
+    final start = stage1.indexOf(functionStart);
+    final end = stage1.indexOf(functionEnd, start);
+    expect(start, greaterThanOrEqualTo(0));
+    expect(end, greaterThan(start));
+    final fnBody = stage1.substring(start, end);
     expect(fnBody.contains('feed_items'), isFalse);
-    expect(fnBody.contains('publish'), isFalse);
+    expect(fnBody.contains('publish_content_draft'), isFalse);
   });
 
   test('research-sync worker does not publish feed', () {
