@@ -10,8 +10,7 @@ class _Providers extends StatelessWidget {
     return _SectionList(
       title: 'AI Configuration · Providers & Models',
       emptyTitle: 'No AI provider is configured yet.',
-      emptySubtitle:
-          'Provider credentials remain server-side. Existing secrets are never displayed.',
+      emptySubtitle: 'Provider credentials remain server-side. Existing secrets are never displayed.',
       children: [
         for (final provider in data.providers)
           Card(
@@ -59,8 +58,7 @@ class _Sources extends ConsumerWidget {
     return _SectionList(
       title: l10n.source,
       emptyTitle: 'No content sources are configured.',
-      emptySubtitle:
-          'RAD official sources and approved authoritative sources appear here.',
+      emptySubtitle: 'RAD official sources and approved authoritative sources appear here.',
       children: [
         for (final source in data.sources)
           Card(
@@ -131,9 +129,8 @@ class _Research extends ConsumerWidget {
                 ref.invalidate(adminConsoleProvider);
               } catch (_) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.errorGeneric)),
-                  );
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
                 }
               }
             },
