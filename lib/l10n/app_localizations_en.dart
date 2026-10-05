@@ -533,4 +533,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get modelDiscoveryFailed =>
       'Model discovery failed with a sanitized provider error.';
+
+  @override
+  String get reviewQueueTitle => 'Review queue';
+  @override
+  String get reviewDraftTitle => 'Editorial draft';
+  @override
+  String get reviewFindingTitle => 'Research finding';
+  @override
+  String get reject => 'Reject';
+  @override
+  String get keepPending => 'Keep pending';
+  @override
+  String get approve => 'Approve';
+  @override
+  String get publishExplicit => 'Publish to Feed';
+  @override
+  String get publishRequiresHuman =>
+      'Publishing is an intentional admin action. Research and AI never publish automatically.';
+  @override
+  String get findingPublishNote =>
+      'Approving a finding does not publish to the public Feed. Create or promote an editorial draft to publish.';
+  @override
+  String get editTitle => 'Title';
+  @override
+  String get editBody => 'Body';
+  @override
+  String get category => 'Category';
+  @override
+  String get applicationSteps => 'Application steps';
+  @override
+  String get structuredSourceNote =>
+      'The guidance above is rendered from structured content and its recorded source; a raw link is not used as the content.';
+  @override
+  String get publishedStatus => 'Published';
+  @override
+  String get draftStatusLabel => 'Draft';
+  @override
+  String get reviewStatusLabel => 'In review';
 }
