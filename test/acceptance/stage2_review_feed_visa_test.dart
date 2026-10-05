@@ -74,7 +74,6 @@ void main() {
       expect(actions.contains('set_content_draft_status'), isTrue);
       expect(actions.contains('update_content_draft'), isTrue);
       expect(ops.contains("part 'admin_operations_sections.dart'"), isTrue);
-      expect(ops.contains('showAdminReviewDetail'), isTrue);
       expect(ops.contains('admin_review_detail_sheet.dart'), isTrue);
       expect(sections.contains('showAdminReviewDetail'), isTrue);
       expect(sections.contains('onTap: () => showAdminReviewDetail'), isTrue);
