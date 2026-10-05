@@ -58,9 +58,7 @@ void main() {
       final sheet = read(
         'lib/features/admin/presentation/pages/admin_review_detail_sheet.dart',
       );
-      final actions = read(
-        'lib/features/admin/data/admin_review_actions.dart',
-      );
+      final actions = read('lib/features/admin/data/admin_review_actions.dart');
       final ops = read(
         'lib/features/admin/presentation/pages/admin_operations_page.dart',
       );
@@ -88,21 +86,22 @@ void main() {
   });
 
   group('Stage 2 visa structured content', () {
-    test('visa steps migration seeds ordered steps without fabricating fees', () {
-      final sql = read(
-        'supabase/migrations/20261005130000_stage2_visa_structured_steps.sql',
-      );
-      expect(sql.contains('visa_program_steps'), isTrue);
-      expect(sql.contains('study-canada'), isTrue);
-      expect(sql.contains('work-germany'), isTrue);
-      expect(sql.contains('25000'), isFalse);
-      expect(sql.contains(r'$'), isFalse);
-    });
+    test(
+      'visa steps migration seeds ordered steps without fabricating fees',
+      () {
+        final sql = read(
+          'supabase/migrations/20261005130000_stage2_visa_structured_steps.sql',
+        );
+        expect(sql.contains('visa_program_steps'), isTrue);
+        expect(sql.contains('study-canada'), isTrue);
+        expect(sql.contains('work-germany'), isTrue);
+        expect(sql.contains('25000'), isFalse);
+        expect(sql.contains(r'$'), isFalse);
+      },
+    );
 
     test('visa page uses localization facade not language ternaries', () {
-      final page = read(
-        'lib/features/visa/presentation/pages/visa_page.dart',
-      );
+      final page = read('lib/features/visa/presentation/pages/visa_page.dart');
       expect(page.contains("fa ? '"), isFalse);
       expect(page.contains('applicationSteps'), isTrue);
       expect(page.contains('structuredSourceNote'), isTrue);
