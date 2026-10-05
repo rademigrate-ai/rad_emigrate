@@ -65,9 +65,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                               ? l10n.removeBookmark
                               : l10n.bookmark,
                           icon: Icon(
-                            item.saved
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
+                            item.saved ? Icons.bookmark : Icons.bookmark_border,
                           ),
                           onPressed: () async {
                             try {

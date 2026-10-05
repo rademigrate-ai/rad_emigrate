@@ -16,7 +16,9 @@ void main() {
     expect(find.bySemanticsLabel('No items. Try again later'), findsOneWidget);
   });
 
-  testWidgets('ConstrainedContent applies max width constraint', (tester) async {
+  testWidgets('ConstrainedContent applies max width constraint', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
