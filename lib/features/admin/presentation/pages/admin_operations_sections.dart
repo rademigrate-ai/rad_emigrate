@@ -39,34 +39,115 @@ class _Providers extends StatelessWidget {
                   Text(
                     'Credential: ${provider.credentialConfigured ? 'Configured' : 'Not configured'} · Priority ${provider.priority}',
                   ),
-                  const SizedBox(height: 12),
-                  Text('Models', style: Theme.of(context).textTheme.labelLarge),
-                  const SizedBox(height: 6),
-                  if (data.models
-                      .where((item) => item.providerId == provider.id)
-                      .isEmpty)
-                    const Text('No models registered.')
-                  else
-                    ...data.models
-                        .where((item) => item.providerId == provider.id)
-                        .map(
-                          (model) => ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            dense: true,
-                            leading: Icon(
-                              model.enabled
-                                  ? Icons.check_circle_outline
-                                  : Icons.pause_circle_outline,
-                            ),
-                            title: Text(model.displayName),
-                            subtitle: _LtrValue(
-                              '${model.slug} · ${model.capability}',
-                            ),
-                            trailing: Text('${model.maxOutputTokens}'),
-                          ),
-                        ),
                 ],
               ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _Sources extends ConsumerWidget {
+  const _Sources({required this.data});
+
+  final AdminConsoleData data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    return _SectionList(
+      title: l10n.source,
+      emptyTitle: 'No content sources are configured.',
+      emptySubtitle:
+          'RAD official sources and approved authoritative sources appear here.',
+      children: [
+        for (final source in data.sources)
+          Card(
+            child: ListTile(
+              leading: Icon(
+                source.active
+                    ? Icons.verified_outlined
+                    : Icons.pause_circle_outline,
+              ),
+              title: Text(source.title),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${source.publisher} · ${source.sourceType} · ${source.languageCode.toUpperCase()}',
+                  ),
+                  _LtrValue(source.url),
+                ],
+              ),
+              trailing: _StatusBadge(source.active ? 'active' : 'inactive'),
+            ),
+          ),
+        for (final source in data.researchSources)
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.shield_outlined),
+              title: Text(source.displayName),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _LtrValue(source.baseUrl),
+                  Text(
+                    '${source.sourceType} · ${source.trustClass} · ${source.runtimeScope.toUpperCase()}',
+                  ),
+                ],
+              ),
+              trailing: _StatusBadge(
+                source.enabled ? source.authority : 'disabled',
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _Research extends ConsumerWidget {
+  const _Research({required this.data});
+
+  final AdminConsoleData data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    return _SectionList(
+      title: l10n.researchJobs,
+      emptyTitle: 'No research jobs yet.',
+      emptySubtitle: l10n.untrustedResearchDisclaimer,
+      children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: FilledButton.icon(
+            onPressed: () async {
+              try {
+                await ref.read(adminOperationsRepositoryProvider).queueResearch();
+                ref.invalidate(adminConsoleProvider);
+              } catch (_) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.errorGeneric)),
+                  );
+                }
+              }
+            },
+            icon: const Icon(Icons.play_arrow),
+            label: Text(l10n.queueResearchRun),
+          ),
+        ),
+        for (final job in data.researchJobs)
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.travel_explore_outlined),
+              title: Text(job.jobType),
+              subtitle: Text(
+                '${job.triggerType}${job.safeError == null ? '' : ' · ${job.safeError}'}',
+              ),
+              trailing: _StatusBadge(job.status),
             ),
           ),
       ],
