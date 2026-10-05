@@ -8,18 +8,12 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: EmptyState(
-            title: 'No items',
-            subtitle: 'Try again later',
-          ),
+          body: EmptyState(title: 'No items', subtitle: 'Try again later'),
         ),
       ),
     );
 
-    expect(
-      find.bySemanticsLabel('No items. Try again later'),
-      findsOneWidget,
-    );
+    expect(find.bySemanticsLabel('No items. Try again later'), findsOneWidget);
   });
 
   testWidgets('ConstrainedContent applies max width constraint', (tester) async {

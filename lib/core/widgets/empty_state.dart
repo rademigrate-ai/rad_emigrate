@@ -53,8 +53,8 @@ class EmptyState extends StatelessWidget {
                   subtitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
               ],
               if (actionLabel case final label?)
