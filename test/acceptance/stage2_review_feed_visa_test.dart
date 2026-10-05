@@ -58,13 +58,26 @@ void main() {
       final ops = read(
         'lib/features/admin/presentation/pages/admin_operations_page.dart',
       );
+      final sections = read(
+        'lib/features/admin/presentation/pages/admin_operations_sections.dart',
+      );
       expect(sheet.contains('showAdminReviewDetail'), isTrue);
       expect(sheet.contains('publishExplicit'), isTrue);
       expect(sheet.contains('reject'), isTrue);
+      expect(sheet.contains('keepPending'), isTrue);
+      expect(sheet.contains('approve'), isTrue);
       expect(actions.contains('publish_content_draft'), isTrue);
       expect(actions.contains('set_content_draft_status'), isTrue);
+      expect(actions.contains('update_content_draft'), isTrue);
+      expect(ops.contains("part 'admin_operations_sections.dart'"), isTrue);
       expect(ops.contains('showAdminReviewDetail'), isTrue);
-      expect(ops.contains('onTap: () => showAdminReviewDetail'), isTrue);
+      expect(ops.contains('admin_review_detail_sheet.dart'), isTrue);
+      expect(sections.contains('showAdminReviewDetail'), isTrue);
+      expect(sections.contains('onTap: () => showAdminReviewDetail'), isTrue);
+      expect(sections.contains('_Reviews'), isTrue);
+      expect(sections.contains('_Sources'), isTrue);
+      expect(sections.contains('_Research'), isTrue);
+      expect(sections.contains('_Feed'), isTrue);
     });
   });
 
@@ -105,6 +118,9 @@ void main() {
         (en.structuredSourceNote, fa.structuredSourceNote),
         (en.editTitle, fa.editTitle),
         (en.editBody, fa.editBody),
+        (en.findingPublishNote, fa.findingPublishNote),
+        (en.reviewDraftTitle, fa.reviewDraftTitle),
+        (en.reviewFindingTitle, fa.reviewFindingTitle),
       ];
       for (final pair in pairs) {
         expect(pair.$1.trim().isNotEmpty, isTrue);
