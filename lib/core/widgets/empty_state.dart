@@ -21,7 +21,8 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final description = subtitle == null ? title : '$title. $subtitle';
+    final description =
+        subtitle == null ? title : '$title. $subtitle';
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -38,7 +39,11 @@ class EmptyState extends StatelessWidget {
                     color: scheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
+                  child: Icon(
+                    icon,
+                    size: 32,
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -47,21 +52,24 @@ class EmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              if (subtitle case final subtitle?) ...[
+              if (subtitle != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  subtitle,
+                  subtitle!,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+                        color: scheme.onSurfaceVariant,
+                      ),
                 ),
               ],
-              if (actionLabel case final label?)
-                if (onAction case final action?) ...[
-                  const SizedBox(height: 20),
-                  AppButton(label: label, onPressed: action, expanded: false),
-                ],
+              if (actionLabel != null && onAction != null) ...[
+                const SizedBox(height: 20),
+                AppButton(
+                  label: actionLabel!,
+                  onPressed: onAction,
+                  expanded: false,
+                ),
+              ],
             ],
           ),
         ),
