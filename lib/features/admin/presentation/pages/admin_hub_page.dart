@@ -20,22 +20,22 @@ class AdminHubPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               children: [
                 Text(
-                  l10n.adminCenterTitle,
+                  l10n.adminOperations,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
-                Text(l10n.adminCenterSubtitle),
+                Text(l10n.serverEnforcedAccessBody),
                 const SizedBox(height: 20),
                 _AdminTile(
                   icon: Icons.key_outlined,
-                  title: l10n.adminProviderConfigTitle,
-                  subtitle: l10n.adminProviderConfigSubtitle,
+                  title: l10n.adminAiConfig,
+                  subtitle: l10n.providerModelConnection,
                   onTap: () => context.go('/admin/ai-config'),
                 ),
                 _AdminTile(
                   icon: Icons.dashboard_customize_outlined,
-                  title: l10n.adminOperationsConsoleTitle,
-                  subtitle: l10n.adminOperationsConsoleSubtitle,
+                  title: l10n.adminOperations,
+                  subtitle: l10n.operationalOverview,
                   onTap: () => context.go('/admin/operations'),
                 ),
                 _AdminTile(
