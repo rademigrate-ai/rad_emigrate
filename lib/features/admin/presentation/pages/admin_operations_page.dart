@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/widgets/error_view.dart';
-import '../../../../core/widgets/loading_view.dart';
+import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/loading_state.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
 import 'admin_review_detail_sheet.dart';
@@ -40,8 +40,8 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
         ],
       ),
       body: snapshot.when(
-        loading: () => LoadingView(message: l10n.loadingOperational),
-        error: (error, _) => ErrorView(
+        loading: () => LoadingState(message: l10n.loadingOperational),
+        error: (error, _) => ErrorState(
           message: l10n.adminLoadFailed,
           onRetry: () => ref.invalidate(adminSnapshotProvider),
         ),
@@ -55,8 +55,8 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
             );
           }
           return console.when(
-            loading: () => LoadingView(message: l10n.loadingOperational),
-            error: (error, _) => ErrorView(
+            loading: () => LoadingState(message: l10n.loadingOperational),
+            error: (error, _) => ErrorState(
               message: l10n.adminLoadFailed,
               onRetry: () => ref.invalidate(adminConsoleProvider),
             ),
