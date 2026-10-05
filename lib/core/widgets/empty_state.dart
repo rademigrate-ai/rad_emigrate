@@ -22,9 +22,9 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final description = subtitle == null ? title : '$title. $subtitle';
-    final subtitleStyle = Theme.of(
-      context,
-    ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant);
+    final subtitleStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: scheme.onSurfaceVariant,
+    );
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
