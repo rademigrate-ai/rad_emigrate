@@ -169,7 +169,6 @@ class _ProgramDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final fa = Localizations.localeOf(context).languageCode == 'fa';
     return Scaffold(
       appBar: AppBar(
         title: Text(program.title),
@@ -245,7 +244,7 @@ class _ProgramDetail extends StatelessWidget {
               if (program.steps.isNotEmpty) ...[
                 const SizedBox(height: 22),
                 Text(
-                  fa ? 'مراحل اقدام' : 'Application steps',
+                  l10n.applicationSteps,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),
@@ -287,9 +286,7 @@ class _ProgramDetail extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              fa
-                                  ? 'اطلاعات بالا از محتوای ساختاریافته و منبع ثبت‌شده تهیه شده است؛ لینک خام به‌جای محتوا نمایش داده نمی‌شود.'
-                                  : 'The guidance above is rendered from structured content and its recorded source; a raw link is not used as the content.',
+                              l10n.structuredSourceNote,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
