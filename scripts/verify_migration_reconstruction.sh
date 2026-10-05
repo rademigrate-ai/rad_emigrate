@@ -50,6 +50,7 @@ current_unapplied = [
     '20261005102000_stage1_ai_research_completion.sql',
     '20261005120000_stage2_review_feed_publish.sql',
     '20261005130000_stage2_visa_structured_steps.sql',
+    '20261005190000_stage3_fk_covering_indexes.sql',
 ]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
 assert actual_names == sorted(expected_names + current_unapplied), actual_names
@@ -63,4 +64,5 @@ psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004203000_client_delivery_
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005102000_stage1_ai_research_completion.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005120000_stage2_review_feed_publish.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005130000_stage2_visa_structured_steps.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005190000_stage3_fk_covering_indexes.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
