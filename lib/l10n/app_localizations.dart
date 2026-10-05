@@ -280,6 +280,25 @@ abstract class AppLocalizations {
   String get providerSaveFailed;
   String get providerTestFailed;
   String get modelDiscoveryFailed;
+
+  // Stage 2 review / feed / visa
+  String get reviewQueueTitle;
+  String get reviewDraftTitle;
+  String get reviewFindingTitle;
+  String get reject;
+  String get keepPending;
+  String get approve;
+  String get publishExplicit;
+  String get publishRequiresHuman;
+  String get findingPublishNote;
+  String get editTitle;
+  String get editBody;
+  String get category;
+  String get applicationSteps;
+  String get structuredSourceNote;
+  String get publishedStatus;
+  String get draftStatusLabel;
+  String get reviewStatusLabel;
 }
 
 class _AppLocalizationsDelegate
