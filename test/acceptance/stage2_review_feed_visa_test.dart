@@ -14,9 +14,15 @@ void main() {
         'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
       );
       expect(sql.contains('publish_content_draft'), isTrue);
-      expect(sql.contains("private.has_role(array['admin','super_admin'])"), isTrue);
+      expect(
+        sql.contains("private.has_role(array['admin','super_admin'])"),
+        isTrue,
+      );
       expect(sql.contains("raise exception 'forbidden'"), isTrue);
-      expect(sql.contains("raise exception 'rejected draft cannot be published'"), isTrue);
+      expect(
+        sql.contains("raise exception 'rejected draft cannot be published'"),
+        isTrue,
+      );
       expect(sql.contains('Idempotent'), isTrue);
       expect(sql.contains('feed_item_localizations'), isTrue);
     });

@@ -5,17 +5,27 @@ import 'package:flutter_test/flutter_test.dart';
 /// Stage 2 acceptance: review → explicit publish, no auto-publish.
 void main() {
   final root = Directory.current.path;
-  String read(String relative) =>
-      File('$root/$relative').readAsStringSync();
+  String read(String relative) => File('$root/$relative').readAsStringSync();
 
   test('publish_content_draft RPC exists and is admin-gated', () {
     final sql = read(
       'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
     );
-    expect(sql.contains('create or replace function public.publish_content_draft'), isTrue);
-    expect(sql.contains("private.has_role(array['admin','super_admin'])"), isTrue);
+    expect(
+      sql.contains(
+        'create or replace function public.publish_content_draft',
+      ),
+      isTrue,
+    );
+    expect(
+      sql.contains("private.has_role(array['admin','super_admin'])"),
+      isTrue,
+    );
     expect(sql.contains("raise exception 'forbidden'"), isTrue);
-    expect(sql.contains("raise exception 'rejected draft cannot be published'"), isTrue);
+    expect(
+      sql.contains("raise exception 'rejected draft cannot be published'"),
+      isTrue,
+    );
     expect(sql.contains('Idempotent'), isTrue);
     expect(sql.contains("status = 'published'"), isTrue);
     expect(sql.contains('feed_item_localizations'), isTrue);

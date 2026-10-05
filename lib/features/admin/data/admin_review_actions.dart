@@ -16,10 +16,7 @@ class AdminReviewActions {
   }) async {
     await _supabase.client.rpc(
       'set_content_draft_status',
-      params: {
-        'p_draft_id': draftId,
-        'p_status': status,
-      },
+      params: {'p_draft_id': draftId, 'p_status': status},
     );
   }
 
@@ -65,10 +62,7 @@ class AdminReviewActions {
   }) async {
     await _supabase.client.rpc(
       'set_research_finding_status',
-      params: {
-        'p_finding_id': findingId,
-        'p_status': status,
-      },
+      params: {'p_finding_id': findingId, 'p_status': status},
     );
   }
 
