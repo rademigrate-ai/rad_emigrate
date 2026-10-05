@@ -47,11 +47,7 @@ class AdminReviewActions {
   }) async {
     final result = await _supabase.client.rpc(
       'publish_content_draft',
-      params: {
-        'p_draft_id': draftId,
-        'p_category': category,
-        'p_slug': slug,
-      },
+      params: {'p_draft_id': draftId, 'p_category': category, 'p_slug': slug},
     );
     return result as String;
   }

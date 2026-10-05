@@ -12,9 +12,7 @@ void main() {
       'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
     );
     expect(
-      sql.contains(
-        'create or replace function public.publish_content_draft',
-      ),
+      sql.contains('create or replace function public.publish_content_draft'),
       isTrue,
     );
     expect(
@@ -52,14 +50,17 @@ void main() {
     expect(worker.contains("status: 'published'"), isFalse);
   });
 
-  test('set_content_draft_status supports reject/keep/approve without publish', () {
-    final sql = read(
-      'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
-    );
-    expect(sql.contains('set_content_draft_status'), isTrue);
-    expect(sql.contains("'draft','review','approved','rejected'"), isTrue);
-    expect(sql.contains("status is distinct from 'published'"), isTrue);
-  });
+  test(
+    'set_content_draft_status supports reject/keep/approve without publish',
+    () {
+      final sql = read(
+        'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
+      );
+      expect(sql.contains('set_content_draft_status'), isTrue);
+      expect(sql.contains("'draft','review','approved','rejected'"), isTrue);
+      expect(sql.contains("status is distinct from 'published'"), isTrue);
+    },
+  );
 
   test('update_content_draft preserves separate provenance path', () {
     final sql = read(
