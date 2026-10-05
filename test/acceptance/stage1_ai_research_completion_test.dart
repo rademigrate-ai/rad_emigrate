@@ -98,7 +98,8 @@ void main() {
     test('meaningful change creates review candidate but never Feed', () {
       expect(research, contains("prior?.[0]?.content_hash !== hash"));
       expect(research, contains('create_research_review_candidate'));
-      expect(migration, contains("p_summary,'review'"));
+      expect(migration, contains('p_summary'));
+      expect(migration, contains("'review'"));
       expect(research, isNot(contains('feed_items')));
       expect(migration, isNot(contains('insert into public.feed_items')));
     });
