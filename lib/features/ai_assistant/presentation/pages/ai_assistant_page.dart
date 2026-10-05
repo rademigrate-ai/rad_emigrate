@@ -120,13 +120,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
     try {
       final ai = ref.read(aiServiceProvider);
+      final locale = Localizations.localeOf(context).languageCode;
       final response = ai.isAvailable
           ? await ai.complete(
               AiRequest(
                 prompt: text,
                 kind: AiRequestKind.immigrationQuestion,
                 conversationId: _sessionId,
-                locale: Localizations.localeOf(context).languageCode,
+                locale: locale,
                 metadata: {if (widget.adminMode) 'scope': 'admin'},
               ),
             )
@@ -237,110 +238,3 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                         ),
                       ),
                     ],
-                  )
-                : ListView.builder(
-                    controller: _scroll,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length + (_loading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (_loading && index == _messages.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Align(
-                            alignment: AlignmentDirectional.centerStart,
-                            child: SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          ),
-                        );
-                      }
-                      final m = _messages[index];
-                      return Align(
-                        alignment: m.isUser
-                            ? AlignmentDirectional.centerEnd
-                            : AlignmentDirectional.centerStart,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(14),
-                          constraints: BoxConstraints(
-                            maxWidth: math.min(
-                              680,
-                              MediaQuery.sizeOf(context).width * 0.85,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            color: m.isUser
-                                ? AppColors.primaryRed.withValues(alpha: 0.1)
-                                : colorScheme.surface,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: m.isUser
-                                  ? AppColors.primaryRed.withValues(alpha: 0.2)
-                                  : Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                m.text,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              if (m.sources != null &&
-                                  m.sources!.isNotEmpty) ...[
-                                const SizedBox(height: 8),
-                                ...m.sources!.map(
-                                  (s) => Text(
-                                    '${l10n.sourceLabel}: ${s.title}'
-                                    '${s.authority != null ? ' (${s.authority})' : ''}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      minLines: 1,
-                      maxLines: 4,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => _send(),
-                      decoration: InputDecoration(
-                        hintText: l10n.askQuestionHint,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton.filled(
-                    tooltip: l10n.sendMessage,
-                    style: IconButton.styleFrom(
-                      backgroundColor: AppColors.primaryRed,
-                      minimumSize: const Size(48, 48),
-                    ),
-                    onPressed: _loading ? null : () => _send(),
-                    icon: const Icon(Icons.send, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
