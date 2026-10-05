@@ -35,6 +35,9 @@ class AiSessionRepository {
 
   final SupabaseClientService _service;
 
+  static const int _sessionPageSize = 40;
+  static const int _messagePageSize = 200;
+
   Future<AiSession> createSession(String userId) async {
     final row = await _service.client
         .from('ai_sessions')
@@ -49,7 +52,8 @@ class AiSessionRepository {
         .from('ai_sessions')
         .select()
         .eq('user_id', userId)
-        .order('created_at', ascending: false);
+        .order('created_at', ascending: false)
+        .limit(_sessionPageSize);
     return (rows as List<dynamic>)
         .map((row) => _sessionFromRow(row as Map<String, dynamic>))
         .toList();
@@ -88,7 +92,8 @@ class AiSessionRepository {
         .from('ai_session_messages')
         .select()
         .eq('session_id', sessionId)
-        .order('created_at');
+        .order('created_at')
+        .limit(_messagePageSize);
     return (rows as List<dynamic>)
         .map((row) => _messageFromRow(row as Map<String, dynamic>))
         .toList();
