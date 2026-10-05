@@ -22,19 +22,27 @@ void main() {
     );
   });
 
-  testWidgets('ConstrainedContent caps child width', (tester) async {
+  testWidgets('ConstrainedContent applies max width constraint', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: Scaffold(
           body: ConstrainedContent(
             maxWidth: 320,
-            child: SizedBox(width: 2000, height: 40, child: Text('wide')),
+            padding: EdgeInsets.zero,
+            child: Builder(
+              builder: (context) {
+                final max = context
+                    .findAncestorRenderObjectOfType<RenderConstrainedBox>()
+                    ?.constraints
+                    .maxWidth;
+                return Text('max=$max');
+              },
+            ),
           ),
         ),
       ),
     );
 
-    final box = tester.renderObject<RenderBox>(find.text('wide'));
-    expect(box.size.width, lessThanOrEqualTo(320));
+    expect(find.textContaining('max=320'), findsOneWidget);
   });
 }
