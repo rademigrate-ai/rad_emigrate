@@ -21,45 +21,49 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final description = subtitle == null ? title : '$title. $subtitle';
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Semantics(
-              label: title,
-              image: true,
-              child: Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(20),
+        child: Semantics(
+          label: description,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ExcludeSemantics(
+                child: Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: scheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
                 ),
-                child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            if (subtitle case final subtitle?) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: 20),
               Text(
-                subtitle,
+                title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ],
-            if (actionLabel case final label?)
-              if (onAction case final action?) ...[
-                const SizedBox(height: 20),
-                AppButton(label: label, onPressed: action, expanded: false),
+              if (subtitle case final subtitle?) ...[
+                const SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                ),
               ],
-          ],
+              if (actionLabel case final label?)
+                if (onAction case final action?) ...[
+                  const SizedBox(height: 20),
+                  AppButton(label: label, onPressed: action, expanded: false),
+                ],
+            ],
+          ),
         ),
       ),
     );
