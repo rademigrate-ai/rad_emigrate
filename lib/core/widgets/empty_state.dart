@@ -21,8 +21,7 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final description =
-        subtitle == null ? title : '$title. $subtitle';
+    final description = subtitle == null ? title : '$title. $subtitle';
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -39,11 +38,7 @@ class EmptyState extends StatelessWidget {
                     color: scheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 32,
-                    color: scheme.onSurfaceVariant,
-                  ),
+                  child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
                 ),
               ),
               const SizedBox(height: 20),
@@ -58,8 +53,8 @@ class EmptyState extends StatelessWidget {
                   subtitle!,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
               ],
               if (actionLabel != null && onAction != null) ...[
