@@ -267,9 +267,9 @@ class _Overview extends StatelessWidget {
           icon: Icons.hub_outlined,
           title: l10n.aiRequests,
           rows: [
-            _KeyValue('Providers', '${data.providers.length}'),
-            _KeyValue('Models', '${data.models.length}'),
-            _KeyValue('Review queue', '${data.reviews.length}'),
+            _KeyValue(l10n.providersLabel, '${data.providers.length}'),
+            _KeyValue(l10n.modelsLabel, '${data.models.length}'),
+            _KeyValue(l10n.reviewQueueTitle, '${data.reviews.length}'),
           ],
         ),
       ],
