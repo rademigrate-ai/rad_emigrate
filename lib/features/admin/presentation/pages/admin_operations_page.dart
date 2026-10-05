@@ -7,6 +7,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
 import 'admin_review_detail_sheet.dart';
 
+part 'admin_operations_sections.dart';
+
 class AdminOperationsPage extends ConsumerStatefulWidget {
   const AdminOperationsPage({super.key});
 
@@ -300,6 +302,3 @@ class _MetricCard extends StatelessWidget {
     );
   }
 }
-
-// Remainder of admin console sections live in admin_operations_sections.dart
-export 'admin_operations_sections.dart';
