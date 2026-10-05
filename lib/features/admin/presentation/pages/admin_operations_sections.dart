@@ -131,9 +131,9 @@ class _Research extends ConsumerWidget {
                 ref.invalidate(adminConsoleProvider);
               } catch (_) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.errorGeneric)),
+                  );
                 }
               }
             },
