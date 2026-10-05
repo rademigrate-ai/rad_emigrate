@@ -123,9 +123,8 @@ Future<void> showAdminReviewDetail(
               ref.invalidate(adminConsoleProvider);
             } catch (_) {
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.errorGeneric)),
-                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
               }
             } finally {
               if (context.mounted) setState(() => busy = false);
@@ -219,58 +218,58 @@ Future<void> showAdminReviewDetail(
                         onPressed: busy
                             ? null
                             : () => run(
-                                  () => actions.setDraftStatus(
-                                    draftId: item.id,
-                                    status: 'rejected',
-                                  ),
+                                () => actions.setDraftStatus(
+                                  draftId: item.id,
+                                  status: 'rejected',
                                 ),
+                              ),
                         child: Text(l10n.reject),
                       ),
                       OutlinedButton(
                         onPressed: busy
                             ? null
                             : () => run(
-                                  () => actions.setDraftStatus(
-                                    draftId: item.id,
-                                    status: 'review',
-                                  ),
+                                () => actions.setDraftStatus(
+                                  draftId: item.id,
+                                  status: 'review',
                                 ),
+                              ),
                         child: Text(l10n.keepPending),
                       ),
                       OutlinedButton(
                         onPressed: busy
                             ? null
                             : () => run(() async {
-                                  await actions.updateDraft(
-                                    draftId: item.id,
-                                    title: titleCtrl.text.trim(),
-                                    body: bodyCtrl.text.trim(),
-                                    languageCode: language,
-                                    category: category,
-                                  );
-                                  await actions.setDraftStatus(
-                                    draftId: item.id,
-                                    status: 'approved',
-                                  );
-                                }),
+                                await actions.updateDraft(
+                                  draftId: item.id,
+                                  title: titleCtrl.text.trim(),
+                                  body: bodyCtrl.text.trim(),
+                                  languageCode: language,
+                                  category: category,
+                                );
+                                await actions.setDraftStatus(
+                                  draftId: item.id,
+                                  status: 'approved',
+                                );
+                              }),
                         child: Text(l10n.approve),
                       ),
                       FilledButton(
                         onPressed: busy
                             ? null
                             : () => run(() async {
-                                  await actions.updateDraft(
-                                    draftId: item.id,
-                                    title: titleCtrl.text.trim(),
-                                    body: bodyCtrl.text.trim(),
-                                    languageCode: language,
-                                    category: category,
-                                  );
-                                  await actions.publishDraft(
-                                    draftId: item.id,
-                                    category: category,
-                                  );
-                                }),
+                                await actions.updateDraft(
+                                  draftId: item.id,
+                                  title: titleCtrl.text.trim(),
+                                  body: bodyCtrl.text.trim(),
+                                  languageCode: language,
+                                  category: category,
+                                );
+                                await actions.publishDraft(
+                                  draftId: item.id,
+                                  category: category,
+                                );
+                              }),
                         child: Text(l10n.publishExplicit),
                       ),
                     ],
