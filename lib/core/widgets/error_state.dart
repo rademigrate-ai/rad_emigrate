@@ -15,26 +15,34 @@ class ErrorState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 40, color: AppColors.error),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (onRetry != null) ...[
-              const SizedBox(height: 16),
-              AppButton(
-                label: AppLocalizations.of(context).retry,
-                onPressed: onRetry,
-                expanded: false,
-                variant: AppButtonVariant.secondary,
+        child: Semantics(
+          liveRegion: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 40,
+                color: Theme.of(context).colorScheme.error,
+                semanticLabel: message,
               ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              if (onRetry != null) ...[
+                const SizedBox(height: 16),
+                AppButton(
+                  label: AppLocalizations.of(context).retry,
+                  onPressed: onRetry,
+                  expanded: false,
+                  variant: AppButtonVariant.secondary,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

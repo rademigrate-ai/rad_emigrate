@@ -110,40 +110,45 @@ class DocumentsPage extends ConsumerWidget {
               .where((d) => d.status != DocumentVerificationStatus.missing)
               .toList();
 
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-            children: [
-              if (missing.isNotEmpty) ...[
-                SectionHeader(
-                  title: l10n.missingSection,
-                  subtitle: l10n.missingSectionSubtitle,
-                ),
-                ...missing.map(
-                  (doc) => _DocTile(
-                    doc: doc,
-                    tone: _tone(doc.status),
-                    kindLabel: _kindLabel(doc.kind, l10n),
-                    statusLabel: _statusLabel(doc.status, l10n),
-                    onTap: () => _openSheet(context, ref, doc),
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 880),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
+                children: [
+                  if (missing.isNotEmpty) ...[
+                    SectionHeader(
+                      title: l10n.missingSection,
+                      subtitle: l10n.missingSectionSubtitle,
+                    ),
+                    ...missing.map(
+                      (doc) => _DocTile(
+                        doc: doc,
+                        tone: _tone(doc.status),
+                        kindLabel: _kindLabel(doc.kind, l10n),
+                        statusLabel: _statusLabel(doc.status, l10n),
+                        onTap: () => _openSheet(context, ref, doc),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  SectionHeader(
+                    title: missing.isEmpty
+                        ? l10n.allDocuments
+                        : l10n.submittedSection,
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
-              SectionHeader(
-                title: missing.isEmpty
-                    ? l10n.allDocuments
-                    : l10n.submittedSection,
+                  ...rest.map(
+                    (doc) => _DocTile(
+                      doc: doc,
+                      tone: _tone(doc.status),
+                      kindLabel: _kindLabel(doc.kind, l10n),
+                      statusLabel: _statusLabel(doc.status, l10n),
+                      onTap: () => _openSheet(context, ref, doc),
+                    ),
+                  ),
+                ],
               ),
-              ...rest.map(
-                (doc) => _DocTile(
-                  doc: doc,
-                  tone: _tone(doc.status),
-                  kindLabel: _kindLabel(doc.kind, l10n),
-                  statusLabel: _statusLabel(doc.status, l10n),
-                  onTap: () => _openSheet(context, ref, doc),
-                ),
-              ),
-            ],
+            ),
           );
         },
       ),
