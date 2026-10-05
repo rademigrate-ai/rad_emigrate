@@ -15,12 +15,16 @@ alter table public.research_sources
   add column if not exists topic text,
   add column if not exists last_error_code text;
 
-alter table public.research_sources
-  add constraint research_sources_source_type_check
-  check (source_type in ('rad_first_party','government','embassy','institution','external'));
-alter table public.research_sources
-  add constraint research_sources_trust_class_check
-  check (trust_class in ('rad_official','authoritative_external','admin_defined','general_web'));
+do $$ begin
+  alter table public.research_sources
+    add constraint research_sources_source_type_check
+    check (source_type in ('rad_first_party','government','embassy','institution','external'));
+exception when duplicate_object then null; end $$;
+do $$ begin
+  alter table public.research_sources
+    add constraint research_sources_trust_class_check
+    check (trust_class in ('rad_official','authoritative_external','admin_defined','general_web'));
+exception when duplicate_object then null; end $$;
 
 update public.research_sources
 set display_name = case allowed_host
@@ -37,6 +41,7 @@ alter table public.research_sources alter column display_name set not null;
 
 revoke insert,update,delete on table public.research_sources from authenticated;
 drop policy if exists "admins manage research sources" on public.research_sources;
+drop policy if exists "admins read research sources" on public.research_sources;
 create policy "admins read research sources" on public.research_sources for select to authenticated
   using ((select private.has_role(array['admin','super_admin'])));
 
@@ -45,8 +50,6 @@ create index if not exists ai_models_runtime_idx
 create index if not exists research_sources_runtime_idx
   on public.research_sources(enabled, runtime_scope, source_type);
 
--- Credential replacement is optional on update. A new provider still requires
--- a key, and no response ever contains the stored value.
 create or replace function public.configure_ai_provider(
   p_slug text,p_display_name text,p_adapter text,p_base_url text,p_api_key text,
   p_enabled boolean default false,p_priority integer default 100
@@ -163,8 +166,6 @@ alter function public.upsert_research_source(uuid,text,text,text,text,text,boole
 revoke all on function public.upsert_research_source(uuid,text,text,text,text,text,boolean,text,text) from public,anon;
 grant execute on function public.upsert_research_source(uuid,text,text,text,text,text,boolean,text,text) to authenticated;
 
--- Runtime credentials remain service-role only. Scope is enforced here, not
--- in Flutter, and unhealthy/cooldown/unavailable candidates are excluded.
 create or replace function public.get_ai_runtime_chain(p_capability text,p_scope text)
 returns table(provider_id uuid,provider_slug text,adapter text,base_url text,model_id uuid,model_slug text,
   max_output_tokens integer,request_timeout_seconds integer,max_retries integer,api_key text)
@@ -202,16 +203,32 @@ alter function public.get_ai_provider_runtime(uuid) owner to postgres;
 revoke all on function public.get_ai_provider_runtime(uuid) from public,anon,authenticated;
 grant execute on function public.get_ai_provider_runtime(uuid) to service_role;
 
--- Stage 1 research produces a review candidate only; there is intentionally
--- no Feed write or publish transition in this function.
+-- Link review candidates to findings; Stage 1 never publishes to Feed.
+alter table public.content_drafts
+  add column if not exists research_finding_id uuid references public.research_findings(id) on delete set null;
+
 create or replace function public.create_research_review_candidate(
   p_job_id uuid,p_finding_id uuid,p_title text,p_summary text,p_language_code text default 'en'
 ) returns uuid language plpgsql security definer set search_path='' as $$
 declare v_id uuid;
 begin
-  insert into public.content_drafts(research_job_id,language_code,title,body,status)
-  values(p_job_id,case when p_language_code='fa' then 'fa' else 'en' end,left(p_title,300),p_summary,'review')
-  returning id into v_id;
+  if p_finding_id is not null then
+    select id into v_id from public.content_drafts
+    where research_finding_id = p_finding_id limit 1;
+    if v_id is not null then
+      return v_id;
+    end if;
+  end if;
+  insert into public.content_drafts(
+    research_job_id, research_finding_id, language_code, title, body, status
+  ) values (
+    p_job_id,
+    p_finding_id,
+    case when p_language_code = 'fa' then 'fa' else 'en' end,
+    left(p_title, 300),
+    p_summary,
+    'review'
+  ) returning id into v_id;
   return v_id;
 end $$;
 alter function public.create_research_review_candidate(uuid,uuid,text,text,text) owner to postgres;
