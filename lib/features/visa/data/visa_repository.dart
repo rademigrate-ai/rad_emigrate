@@ -34,8 +34,8 @@ class VisaRepository {
             'visa_program_steps(title,description,display_order,locale),'
             'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
           )
+          .eq('status', 'published')
           .eq('visa_program_localizations.locale', language)
-          .eq('visa_program_requirements.locale', language)
           .order('published_at', ascending: false),
     ]);
 
