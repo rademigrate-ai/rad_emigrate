@@ -465,4 +465,113 @@ class AppLocalizationsFa extends AppLocalizations {
   String get documentStatusVerified => 'تأییدشده';
   @override
   String get documentStatusRejected => 'ردشده';
+  @override
+  String get adminAiConfig => 'تنظیمات هوش مصنوعی';
+  @override
+  String get providerModelConnection => 'ارائه‌دهندگان، مدل‌ها و اتصال API';
+  @override
+  String get credentialsServerOnly =>
+      'کلیدهای دسترسی فقط در سرور نگهداری می‌شوند و مقدار ذخیره‌شده هرگز به مرورگر بازگردانده نمی‌شود.';
+  @override
+  String get configurationUnavailable => 'دریافت تنظیمات ممکن نشد.';
+  @override
+  String get noProviderConfigured =>
+      'هنوز ارائه‌دهنده‌ای پیکربندی نشده است. از فرم زیر برای راه‌اندازی اولیه استفاده کنید.';
+  @override
+  String get addOrUpdateProvider => 'افزودن یا به‌روزرسانی ارائه‌دهنده';
+  @override
+  String get slugLabel => 'شناسه';
+  @override
+  String get displayName => 'نام نمایشی';
+  @override
+  String get adapterType => 'آداپتر';
+  @override
+  String get publicHttpsOnly => 'باید یک نشانی HTTPS عمومی معتبر باشد';
+  @override
+  String get apiKeyWriteOnly => 'کلید API (فقط نوشتنی)';
+  @override
+  String get keyMinimumEight => 'کلید باید حداقل ۸ کاراکتر باشد';
+  @override
+  String get keepCurrentCredential =>
+      'برای حفظ کلید فعلی، این بخش را خالی بگذارید.';
+  @override
+  String get enabled => 'فعال';
+  @override
+  String get priority => 'اولویت';
+  @override
+  String get saveProvider => 'ذخیره ارائه‌دهنده';
+  @override
+  String get credentialConfigured => 'کلید ثبت شده';
+  @override
+  String get credentialMissing => 'کلید ثبت نشده';
+  @override
+  String get testProvider => 'آزمایش ارائه‌دهنده';
+  @override
+  String get discoverModels => 'کشف مدل‌ها';
+  @override
+  String get runtimeScope => 'دامنه اجرا';
+  @override
+  String get trustClass => 'رده اعتماد';
+  @override
+  String get researchSource => 'منبع پژوهش';
+  @override
+  String get queueResearchRun => 'افزودن پژوهش به صف';
+  @override
+  String get adminResearchAssistant => 'دستیار پژوهش مدیریت';
+  @override
+  String get adminResearchSubtitle =>
+      'پژوهش گسترده‌تر با حفظ شواهد، منشأ و تعارض‌ها؛ بدون انتشار خودکار.';
+  @override
+  String get untrustedResearchDisclaimer =>
+      'محتوای بازیابی‌شده غیرقابل‌اعتماد است؛ تعارض‌ها حفظ می‌شوند و هیچ مطلبی خودکار منتشر نمی‌شود.';
+  @override
+  String get providerSaved =>
+      'ارائه‌دهنده ذخیره شد. کلید در سرور نگهداری می‌شود و دوباره نمایش داده نخواهد شد.';
+  @override
+  String get providerSaveFailed =>
+      'ذخیره تنظیمات ممکن نشد. نقش مدیر ارشد و صحت ورودی‌ها را بررسی کنید.';
+  @override
+  String get providerTestFailed =>
+      'آزمایش ارائه‌دهنده با یک خطای پالایش‌شده ناموفق بود.';
+  @override
+  String get modelDiscoveryFailed =>
+      'کشف مدل‌ها با یک خطای پالایش‌شده ناموفق بود.';
+
+  @override
+  String get reviewQueueTitle => 'صف بررسی';
+  @override
+  String get reviewDraftTitle => 'پیش‌نویس تحریریه';
+  @override
+  String get reviewFindingTitle => 'یافته پژوهشی';
+  @override
+  String get reject => 'رد';
+  @override
+  String get keepPending => 'نگه‌داشتن در انتظار';
+  @override
+  String get approve => 'تأیید';
+  @override
+  String get publishExplicit => 'انتشار در فید';
+  @override
+  String get publishRequiresHuman =>
+      'انتشار یک اقدام عمدی مدیر است. پژوهش و هوش مصنوعی هرگز به‌صورت خودکار منتشر نمی‌کنند.';
+  @override
+  String get findingPublishNote =>
+      'تأیید یافته به‌تنهایی مطلب را در فید عمومی منتشر نمی‌کند. برای انتشار، پیش‌نویس تحریریه بسازید یا ارتقا دهید.';
+  @override
+  String get editTitle => 'عنوان';
+  @override
+  String get editBody => 'متن';
+  @override
+  String get category => 'دسته';
+  @override
+  String get applicationSteps => 'مراحل اقدام';
+  @override
+  String get structuredSourceNote =>
+      'اطلاعات بالا از محتوای ساختاریافته و منبع ثبت‌شده تهیه شده است؛ لینک خام به‌جای محتوا نمایش داده نمی‌شود.';
+  @override
+  String get publishedStatus => 'منتشرشده';
+  @override
+  String get draftStatusLabel => 'پیش‌نویس';
+  @override
+  String get reviewStatusLabel => 'در حال بررسی';
 }

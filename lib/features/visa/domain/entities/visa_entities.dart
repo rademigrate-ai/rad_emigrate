@@ -35,7 +35,6 @@ class VisaSource {
     required this.publisher,
     required this.retrievedAt,
   });
-
   final String title;
   final String url;
   final String publisher;
@@ -48,10 +47,20 @@ class VisaRequirement {
     required this.displayOrder,
     this.isMandatory,
   });
-
   final String text;
   final int displayOrder;
   final bool? isMandatory;
+}
+
+class VisaStep {
+  const VisaStep({
+    required this.title,
+    required this.description,
+    required this.displayOrder,
+  });
+  final String title;
+  final String description;
+  final int displayOrder;
 }
 
 class VisaProgram {
@@ -63,6 +72,7 @@ class VisaProgram {
   final String summary;
   final String? description;
   final List<VisaRequirement> requirements;
+  final List<VisaStep> steps;
   final String? processingTime;
   final String? fees;
   final VisaSource source;
@@ -77,6 +87,7 @@ class VisaProgram {
     required this.source,
     this.description,
     this.requirements = const [],
+    this.steps = const [],
     this.processingTime,
     this.fees,
   });
@@ -88,7 +99,6 @@ class VisaCatalog {
     required this.categories,
     required this.programs,
   });
-
   final List<Country> countries;
   final List<VisaCategory> categories;
   final List<VisaProgram> programs;

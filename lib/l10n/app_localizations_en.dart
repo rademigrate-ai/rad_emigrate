@@ -462,4 +462,113 @@ class AppLocalizationsEn extends AppLocalizations {
   String get documentStatusVerified => 'Verified';
   @override
   String get documentStatusRejected => 'Rejected';
+  @override
+  String get adminAiConfig => 'AI configuration';
+  @override
+  String get providerModelConnection => 'Providers, models & API connection';
+  @override
+  String get credentialsServerOnly =>
+      'Credentials are server-side only and stored values are never returned to the browser.';
+  @override
+  String get configurationUnavailable => 'Configuration is unavailable.';
+  @override
+  String get noProviderConfigured =>
+      'No provider is configured yet. Use the form below for initial setup.';
+  @override
+  String get addOrUpdateProvider => 'Add or update provider';
+  @override
+  String get slugLabel => 'Slug';
+  @override
+  String get displayName => 'Display name';
+  @override
+  String get adapterType => 'Adapter';
+  @override
+  String get publicHttpsOnly => 'Must be a valid public HTTPS URL';
+  @override
+  String get apiKeyWriteOnly => 'API key (write-only)';
+  @override
+  String get keyMinimumEight => 'Key must be at least 8 characters';
+  @override
+  String get keepCurrentCredential =>
+      'Leave blank to keep the current credential.';
+  @override
+  String get enabled => 'Enabled';
+  @override
+  String get priority => 'Priority';
+  @override
+  String get saveProvider => 'Save provider';
+  @override
+  String get credentialConfigured => 'Credential configured';
+  @override
+  String get credentialMissing => 'Credential missing';
+  @override
+  String get testProvider => 'Test provider';
+  @override
+  String get discoverModels => 'Discover models';
+  @override
+  String get runtimeScope => 'Runtime scope';
+  @override
+  String get trustClass => 'Trust class';
+  @override
+  String get researchSource => 'Research source';
+  @override
+  String get queueResearchRun => 'Queue research run';
+  @override
+  String get adminResearchAssistant => 'Admin research assistant';
+  @override
+  String get adminResearchSubtitle =>
+      'Broader research with evidence, provenance and conflicts preserved; no automatic publishing.';
+  @override
+  String get untrustedResearchDisclaimer =>
+      'Retrieved content is untrusted; conflicts are preserved and nothing is published automatically.';
+  @override
+  String get providerSaved =>
+      'Provider saved. The credential is stored server-side and will not be shown again.';
+  @override
+  String get providerSaveFailed =>
+      'Could not save configuration. Confirm Super Admin role and input validity.';
+  @override
+  String get providerTestFailed =>
+      'Provider test failed with a sanitized provider error.';
+  @override
+  String get modelDiscoveryFailed =>
+      'Model discovery failed with a sanitized provider error.';
+
+  @override
+  String get reviewQueueTitle => 'Review queue';
+  @override
+  String get reviewDraftTitle => 'Editorial draft';
+  @override
+  String get reviewFindingTitle => 'Research finding';
+  @override
+  String get reject => 'Reject';
+  @override
+  String get keepPending => 'Keep pending';
+  @override
+  String get approve => 'Approve';
+  @override
+  String get publishExplicit => 'Publish to Feed';
+  @override
+  String get publishRequiresHuman =>
+      'Publishing is an intentional admin action. Research and AI never publish automatically.';
+  @override
+  String get findingPublishNote =>
+      'Approving a finding does not publish to the public Feed. Create or promote an editorial draft to publish.';
+  @override
+  String get editTitle => 'Title';
+  @override
+  String get editBody => 'Body';
+  @override
+  String get category => 'Category';
+  @override
+  String get applicationSteps => 'Application steps';
+  @override
+  String get structuredSourceNote =>
+      'The guidance above is rendered from structured content and its recorded source; a raw link is not used as the content.';
+  @override
+  String get publishedStatus => 'Published';
+  @override
+  String get draftStatusLabel => 'Draft';
+  @override
+  String get reviewStatusLabel => 'In review';
 }

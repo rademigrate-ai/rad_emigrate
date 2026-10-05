@@ -27,6 +27,27 @@ begin
      or has_function_privilege('anon','public.get_ai_runtime_chain(text)','EXECUTE') then
     raise exception 'Provider runtime client exposure';
   end if;
+  if has_function_privilege('authenticated','public.get_ai_runtime_chain(text,text)','EXECUTE')
+     or has_function_privilege('anon','public.get_ai_runtime_chain(text,text)','EXECUTE')
+     or has_function_privilege('authenticated','public.get_ai_provider_runtime(uuid)','EXECUTE')
+     or has_function_privilege('anon','public.get_ai_provider_runtime(uuid)','EXECUTE')
+     or has_function_privilege('authenticated','public.create_research_review_candidate(uuid,uuid,text,text,text)','EXECUTE')
+     or has_function_privilege('anon','public.create_research_review_candidate(uuid,uuid,text,text,text)','EXECUTE') then
+    raise exception 'Stage 1 service runtime client exposure';
+  end if;
+  -- Stage 2: publish/review RPCs must never be executable by anon.
+  if has_function_privilege('anon','public.publish_content_draft(uuid,text,text)','EXECUTE')
+     or has_function_privilege('anon','public.set_content_draft_status(uuid,text)','EXECUTE')
+     or has_function_privilege('anon','public.update_content_draft(uuid,text,text,text,text)','EXECUTE')
+     or has_function_privilege('anon','public.set_research_finding_status(uuid,text)','EXECUTE') then
+    raise exception 'Stage 2 publish/review RPC exposed to anon';
+  end if;
+  if not exists (select 1 from pg_proc where oid='public.publish_content_draft(uuid,text,text)'::regprocedure
+                 and prosecdef and proconfig @> array['search_path=""']
+                 and position('admin' in prosrc)>0
+                 and position('rejected draft cannot be published' in prosrc)>0) then
+    raise exception 'Stage 2 publish RPC lost admin gate or rejection guard';
+  end if;
   if private.is_safe_public_https_url('https://127.0.0.1/')
      or private.is_safe_public_https_url('https://10.0.0.1/')
      or private.is_safe_public_https_url('https://169.254.169.254/')

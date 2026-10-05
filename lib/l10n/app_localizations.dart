@@ -249,6 +249,56 @@ abstract class AppLocalizations {
   String get documentStatusUnderReview;
   String get documentStatusVerified;
   String get documentStatusRejected;
+  String get adminAiConfig;
+  String get providerModelConnection;
+  String get credentialsServerOnly;
+  String get configurationUnavailable;
+  String get noProviderConfigured;
+  String get addOrUpdateProvider;
+  String get slugLabel;
+  String get displayName;
+  String get adapterType;
+  String get publicHttpsOnly;
+  String get apiKeyWriteOnly;
+  String get keyMinimumEight;
+  String get keepCurrentCredential;
+  String get enabled;
+  String get priority;
+  String get saveProvider;
+  String get credentialConfigured;
+  String get credentialMissing;
+  String get testProvider;
+  String get discoverModels;
+  String get runtimeScope;
+  String get trustClass;
+  String get researchSource;
+  String get queueResearchRun;
+  String get adminResearchAssistant;
+  String get adminResearchSubtitle;
+  String get untrustedResearchDisclaimer;
+  String get providerSaved;
+  String get providerSaveFailed;
+  String get providerTestFailed;
+  String get modelDiscoveryFailed;
+
+  // Stage 2 review / feed / visa
+  String get reviewQueueTitle;
+  String get reviewDraftTitle;
+  String get reviewFindingTitle;
+  String get reject;
+  String get keepPending;
+  String get approve;
+  String get publishExplicit;
+  String get publishRequiresHuman;
+  String get findingPublishNote;
+  String get editTitle;
+  String get editBody;
+  String get category;
+  String get applicationSteps;
+  String get structuredSourceNote;
+  String get publishedStatus;
+  String get draftStatusLabel;
+  String get reviewStatusLabel;
 }
 
 class _AppLocalizationsDelegate

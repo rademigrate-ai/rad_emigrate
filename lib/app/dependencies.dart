@@ -5,6 +5,7 @@ import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
 import '../core/network/network_config.dart';
 import '../core/services/ai/ai_service.dart';
+import '../core/services/ai/supabase_ai_service.dart';
 import '../core/session/session_manager.dart';
 import '../core/session/session_state.dart';
 import '../core/storage/session_storage.dart';
@@ -69,7 +70,7 @@ final sessionStateProvider = Provider<SessionState>((ref) {
 // ── AI ──────────────────────────────────────────────────────────────
 
 final aiServiceProvider = Provider<AiService>((ref) {
-  return UnavailableAiService();
+  return SupabaseAiService(ref.watch(supabaseClientServiceProvider));
 });
 
 final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {

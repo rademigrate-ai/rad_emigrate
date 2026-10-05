@@ -79,4 +79,36 @@ void main() {
       expect(faArb[key], isA<String>(), reason: 'missing FA key: $key');
     }
   });
+
+  test('Stage 1 AI and research strings are complete in EN and FA', () {
+    final english = [
+      en.adminAiConfig,
+      en.providerModelConnection,
+      en.credentialsServerOnly,
+      en.testProvider,
+      en.discoverModels,
+      en.runtimeScope,
+      en.researchSource,
+      en.queueResearchRun,
+      en.adminResearchAssistant,
+      en.untrustedResearchDisclaimer,
+    ];
+    final persian = [
+      fa.adminAiConfig,
+      fa.providerModelConnection,
+      fa.credentialsServerOnly,
+      fa.testProvider,
+      fa.discoverModels,
+      fa.runtimeScope,
+      fa.researchSource,
+      fa.queueResearchRun,
+      fa.adminResearchAssistant,
+      fa.untrustedResearchDisclaimer,
+    ];
+    expect(english.every((value) => value.trim().isNotEmpty), isTrue);
+    expect(persian.every((value) => value.trim().isNotEmpty), isTrue);
+    for (var index = 0; index < english.length; index++) {
+      expect(persian[index], isNot(english[index]));
+    }
+  });
 }

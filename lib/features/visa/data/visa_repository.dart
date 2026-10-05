@@ -3,7 +3,6 @@ import '../domain/entities/visa_entities.dart';
 
 class VisaRepository {
   const VisaRepository(this._service);
-
   final SupabaseClientService _service;
 
   Future<VisaCatalog> loadCatalog({required String locale}) async {
@@ -32,10 +31,11 @@ class VisaRepository {
             'id,slug,destination_id,category_id,processing_time_text,fees_text,'
             'visa_program_localizations!inner(title,summary,description,locale),'
             'visa_program_requirements(requirement,is_mandatory,display_order,locale),'
+            'visa_program_steps(title,description,display_order,locale),'
             'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
           )
+          .eq('status', 'published')
           .eq('visa_program_localizations.locale', language)
-          .eq('visa_program_requirements.locale', language)
           .order('published_at', ascending: false),
     ]);
 
@@ -47,7 +47,7 @@ class VisaRepository {
           .map((row) => _category(row as Map<String, dynamic>))
           .toList(growable: false),
       programs: (results[2] as List<dynamic>)
-          .map((row) => _program(row as Map<String, dynamic>))
+          .map((row) => _program(row as Map<String, dynamic>, language))
           .toList(growable: false),
     );
   }
@@ -73,20 +73,39 @@ class VisaRepository {
     );
   }
 
-  VisaProgram _program(Map<String, dynamic> row) {
+  VisaProgram _program(Map<String, dynamic> row, String language) {
     final localized = _first(row['visa_program_localizations']);
     final source = row['content_sources'] as Map<String, dynamic>;
     final requirements =
-        ((row['visa_program_requirements'] as List<dynamic>?) ?? const []).map((
-          item,
-        ) {
-          final value = item as Map<String, dynamic>;
-          return VisaRequirement(
-            text: value['requirement'] as String,
-            displayOrder: value['display_order'] as int? ?? 0,
-            isMandatory: value['is_mandatory'] as bool?,
-          );
-        }).toList()..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+        ((row['visa_program_requirements'] as List<dynamic>?) ?? const [])
+            .where(
+              (item) => (item as Map<String, dynamic>)['locale'] == language,
+            )
+            .map((item) {
+              final value = item as Map<String, dynamic>;
+              return VisaRequirement(
+                text: value['requirement'] as String,
+                displayOrder: value['display_order'] as int? ?? 0,
+                isMandatory: value['is_mandatory'] as bool?,
+              );
+            })
+            .toList()
+          ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+    final steps =
+        ((row['visa_program_steps'] as List<dynamic>?) ?? const [])
+            .where(
+              (item) => (item as Map<String, dynamic>)['locale'] == language,
+            )
+            .map((item) {
+              final value = item as Map<String, dynamic>;
+              return VisaStep(
+                title: value['title'] as String,
+                description: value['description'] as String? ?? '',
+                displayOrder: value['display_order'] as int? ?? 0,
+              );
+            })
+            .toList()
+          ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
     return VisaProgram(
       id: row['id'] as String,
       slug: row['slug'] as String,
@@ -98,6 +117,7 @@ class VisaRepository {
       processingTime: row['processing_time_text'] as String?,
       fees: row['fees_text'] as String?,
       requirements: requirements,
+      steps: steps,
       source: VisaSource(
         title: source['title'] as String,
         url: source['url'] as String,
