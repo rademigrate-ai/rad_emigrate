@@ -48,6 +48,12 @@ class AdminHubPage extends StatelessWidget {
                       : 'Models, sources, research, review queue, Feed and system health.',
                   onTap: () => context.go('/admin/operations'),
                 ),
+                _AdminTile(
+                  icon: Icons.travel_explore_outlined,
+                  title: l10n.adminResearchAssistant,
+                  subtitle: l10n.adminResearchSubtitle,
+                  onTap: () => context.go('/admin/ai-research'),
+                ),
               ],
             ),
           ),

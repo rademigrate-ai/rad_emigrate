@@ -100,6 +100,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin/operations',
             builder: (_, _) => const AdminOperationsPage(),
           ),
+          GoRoute(
+            path: '/admin/ai-research',
+            builder: (_, _) => const AiAssistantPage(adminMode: true),
+          ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],
       ),

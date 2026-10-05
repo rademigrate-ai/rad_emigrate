@@ -37,6 +37,7 @@ class AdminProviderRecord {
     required this.baseUrl,
     required this.enabled,
     required this.priority,
+    required this.runtimeScope,
     required this.credentialConfigured,
     required this.healthStatus,
     required this.lastSuccessAt,
@@ -50,6 +51,7 @@ class AdminProviderRecord {
   final String baseUrl;
   final bool enabled;
   final int priority;
+  final String runtimeScope;
   final bool credentialConfigured;
   final String healthStatus;
   final DateTime? lastSuccessAt;
@@ -65,6 +67,9 @@ class AdminModelRecord {
     required this.capability,
     required this.enabled,
     required this.maxOutputTokens,
+    required this.runtimeScope,
+    required this.priority,
+    required this.available,
   });
 
   final String id;
@@ -74,6 +79,9 @@ class AdminModelRecord {
   final String capability;
   final bool enabled;
   final int maxOutputTokens;
+  final String runtimeScope;
+  final int priority;
+  final bool available;
 }
 
 class AdminSourceRecord {
@@ -105,6 +113,11 @@ class AdminResearchSourceRecord {
     required this.allowedHost,
     required this.authority,
     required this.enabled,
+    required this.displayName,
+    required this.runtimeScope,
+    required this.trustClass,
+    required this.sourceType,
+    required this.lastErrorCode,
     required this.lastAttemptAt,
     required this.lastSuccessAt,
   });
@@ -114,6 +127,11 @@ class AdminResearchSourceRecord {
   final String allowedHost;
   final String authority;
   final bool enabled;
+  final String displayName;
+  final String runtimeScope;
+  final String trustClass;
+  final String sourceType;
+  final String? lastErrorCode;
   final DateTime? lastAttemptAt;
   final DateTime? lastSuccessAt;
 }
@@ -305,13 +323,15 @@ class AdminOperationsRepository {
         .from('ai_providers')
         .select(
           'id,slug,display_name,adapter,base_url,secret_id,enabled,priority,'
+          'runtime_scope,'
           'ai_provider_health(status,last_success_at,last_failure_at)',
         )
         .order('priority');
     final modelsFuture = client
         .from('ai_models')
         .select(
-          'id,provider_id,slug,display_name,capability,enabled,max_output_tokens',
+          'id,provider_id,slug,display_name,capability,enabled,max_output_tokens,'
+          'runtime_scope,priority,available',
         )
         .order('display_name');
     final sourcesFuture = client
@@ -324,7 +344,8 @@ class AdminOperationsRepository {
     final researchSourcesFuture = client
         .from('research_sources')
         .select(
-          'id,base_url,allowed_host,authority,enabled,last_attempt_at,last_success_at',
+          'id,base_url,allowed_host,authority,enabled,last_attempt_at,last_success_at,'
+          'display_name,runtime_scope,trust_class,source_type,last_error_code',
         )
         .order('authority');
     final researchJobsFuture = client
@@ -421,6 +442,7 @@ class AdminOperationsRepository {
           baseUrl: row['base_url'] as String,
           enabled: row['enabled'] as bool? ?? false,
           priority: row['priority'] as int? ?? 100,
+          runtimeScope: row['runtime_scope'] as String? ?? 'both',
           credentialConfigured: row['secret_id'] != null,
           healthStatus: health?['status'] as String? ?? 'unknown',
           lastSuccessAt: _date(health?['last_success_at']),
@@ -437,6 +459,9 @@ class AdminOperationsRepository {
               capability: row['capability'] as String,
               enabled: row['enabled'] as bool? ?? false,
               maxOutputTokens: row['max_output_tokens'] as int? ?? 2048,
+              runtimeScope: row['runtime_scope'] as String? ?? 'both',
+              priority: row['priority'] as int? ?? 100,
+              available: row['available'] as bool? ?? true,
             ),
           )
           .toList(),
@@ -462,6 +487,13 @@ class AdminOperationsRepository {
               allowedHost: row['allowed_host'] as String,
               authority: row['authority'] as String,
               enabled: row['enabled'] as bool? ?? false,
+              displayName:
+                  row['display_name'] as String? ??
+                  row['allowed_host'] as String,
+              runtimeScope: row['runtime_scope'] as String? ?? 'both',
+              trustClass: row['trust_class'] as String? ?? 'admin_defined',
+              sourceType: row['source_type'] as String? ?? 'external',
+              lastErrorCode: row['last_error_code'] as String?,
               lastAttemptAt: _date(row['last_attempt_at']),
               lastSuccessAt: _date(row['last_success_at']),
             ),
@@ -513,6 +545,72 @@ class AdminOperationsRepository {
           )
           .toList(),
     );
+  }
+
+  Future<void> configureResearchSource({
+    required String sourceId,
+    required String displayName,
+    required bool enabled,
+    required String runtimeScope,
+    required String trustClass,
+    String? countryCode,
+    String? topic,
+  }) async {
+    await _supabase.client.rpc(
+      'set_research_source_configuration',
+      params: {
+        'p_source_id': sourceId,
+        'p_display_name': displayName,
+        'p_enabled': enabled,
+        'p_runtime_scope': runtimeScope,
+        'p_trust_class': trustClass,
+        'p_country_code': countryCode,
+        'p_topic': topic,
+      },
+    );
+  }
+
+  Future<void> createResearchSource({
+    required String displayName,
+    required String baseUrl,
+    required String sourceType,
+    required String trustClass,
+    required String runtimeScope,
+  }) async {
+    await _supabase.client.rpc(
+      'upsert_research_source',
+      params: {
+        'p_source_id': null,
+        'p_display_name': displayName,
+        'p_base_url': baseUrl,
+        'p_source_type': sourceType,
+        'p_trust_class': trustClass,
+        'p_runtime_scope': runtimeScope,
+        'p_enabled': false,
+        'p_country_code': null,
+        'p_topic': null,
+      },
+    );
+  }
+
+  Future<void> queueResearch() async {
+    final userId = _supabase.client.auth.currentUser?.id;
+    if (userId == null) throw StateError('Authentication required.');
+    await _supabase.client.from('research_jobs').insert({
+      'job_type': 'official_source_refresh',
+      'trigger_type': 'manual',
+      'requested_by': userId,
+      'idempotency_key':
+          'manual-$userId-${DateTime.now().toUtc().microsecondsSinceEpoch}',
+      'input': {'requested_from': 'admin_console'},
+    });
+    final response = await _supabase.client.functions.invoke(
+      'research-sync',
+      body: const {},
+    );
+    if (response.data is Map && (response.data as Map)['error'] != null) {
+      throw StateError((response.data as Map)['error'].toString());
+    }
   }
 }
 

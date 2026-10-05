@@ -27,6 +27,14 @@ begin
      or has_function_privilege('anon','public.get_ai_runtime_chain(text)','EXECUTE') then
     raise exception 'Provider runtime client exposure';
   end if;
+  if has_function_privilege('authenticated','public.get_ai_runtime_chain(text,text)','EXECUTE')
+     or has_function_privilege('anon','public.get_ai_runtime_chain(text,text)','EXECUTE')
+     or has_function_privilege('authenticated','public.get_ai_provider_runtime(uuid)','EXECUTE')
+     or has_function_privilege('anon','public.get_ai_provider_runtime(uuid)','EXECUTE')
+     or has_function_privilege('authenticated','public.create_research_review_candidate(uuid,uuid,text,text,text)','EXECUTE')
+     or has_function_privilege('anon','public.create_research_review_candidate(uuid,uuid,text,text,text)','EXECUTE') then
+    raise exception 'Stage 1 service runtime client exposure';
+  end if;
   if private.is_safe_public_https_url('https://127.0.0.1/')
      or private.is_safe_public_https_url('https://10.0.0.1/')
      or private.is_safe_public_https_url('https://169.254.169.254/')

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_ai_config_repository.dart';
 import '../../data/admin_operations_repository.dart';
 
@@ -25,8 +26,128 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
   bool _enabled = true;
   int _priority = 10;
   bool _submitting = false;
+  bool _editingExisting = false;
   String? _status;
   String? _error;
+
+  void _editProvider(AdminProviderRecord provider) {
+    setState(() {
+      _editingExisting = true;
+      _slugCtrl.text = provider.slug;
+      _displayNameCtrl.text = provider.displayName;
+      _baseUrlCtrl.text = provider.baseUrl;
+      _apiKeyCtrl.clear();
+      _adapter = provider.adapter;
+      _enabled = provider.enabled;
+      _priority = provider.priority;
+      _status = null;
+      _error = null;
+    });
+  }
+
+  Future<void> _providerAction(
+    AdminProviderRecord provider, {
+    required bool discover,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    setState(() {
+      _submitting = true;
+      _error = null;
+      _status = null;
+    });
+    try {
+      final repository = ref.read(adminAiConfigRepositoryProvider);
+      final result = discover
+          ? await repository.discoverModels(provider.id)
+          : await repository.testProvider(provider.id);
+      ref.invalidate(adminConsoleProvider);
+      if (mounted) {
+        setState(() {
+          _status = discover
+              ? 'Model discovery completed: ${result['discovered'] ?? 0} found, ${result['added'] ?? 0} added.'
+              : 'Provider is reachable (${result['model_count'] ?? 0} models visible).';
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _error = discover
+              ? l10n.modelDiscoveryFailed
+              : l10n.providerTestFailed,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  Future<void> _configureModel(AdminModelRecord model) async {
+    final l10n = AppLocalizations.of(context);
+    var enabled = model.enabled;
+    var scope = model.runtimeScope;
+    var priority = model.priority.toDouble();
+    final save = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(model.displayName),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.enabled),
+                value: enabled,
+                onChanged: (value) => setDialogState(() => enabled = value),
+              ),
+              DropdownButtonFormField<String>(
+                initialValue: scope,
+                decoration: InputDecoration(labelText: l10n.runtimeScope),
+                items: const [
+                  DropdownMenuItem(value: 'user', child: Text('USER')),
+                  DropdownMenuItem(value: 'admin', child: Text('ADMIN')),
+                  DropdownMenuItem(value: 'both', child: Text('BOTH')),
+                ],
+                onChanged: (value) {
+                  if (value != null) setDialogState(() => scope = value);
+                },
+              ),
+              const SizedBox(height: 12),
+              Text('Priority ${priority.round()}'),
+              Slider(
+                value: priority,
+                min: 0,
+                max: 1000,
+                divisions: 100,
+                onChanged: (value) => setDialogState(() => priority = value),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.save),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (save != true) return;
+    await ref
+        .read(adminAiConfigRepositoryProvider)
+        .configureModel(
+          modelId: model.id,
+          enabled: enabled,
+          runtimeScope: scope,
+          priority: priority.round(),
+          maxOutputTokens: model.maxOutputTokens,
+        );
+    ref.invalidate(adminConsoleProvider);
+  }
 
   @override
   void dispose() {
@@ -61,20 +182,14 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       _apiKeyCtrl.clear();
       ref.invalidate(adminConsoleProvider);
       if (mounted) {
-        final fa = Localizations.localeOf(context).languageCode == 'fa';
         setState(() {
-          _status = fa
-              ? 'Provider با موفقیت ذخیره شد. کلید در سرور نگهداری می‌شود و دیگر نمایش داده نمی‌شود.'
-              : 'Provider saved. The credential is stored server-side and will not be shown again.';
+          _status = AppLocalizations.of(context).providerSaved;
         });
       }
     } catch (e) {
       if (mounted) {
-        final fa = Localizations.localeOf(context).languageCode == 'fa';
         setState(() {
-          _error = fa
-              ? 'ذخیره تنظیمات ممکن نشد. نقش Super Admin و صحت ورودی‌ها را بررسی کنید.'
-              : 'Could not save configuration. Confirm Super Admin role and input validity.';
+          _error = AppLocalizations.of(context).providerSaveFailed;
         });
       }
     } finally {
@@ -84,14 +199,12 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    final fa = Localizations.localeOf(context).languageCode == 'fa';
+    final l10n = AppLocalizations.of(context);
     final console = ref.watch(adminConsoleProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(fa ? 'تنظیمات هوش مصنوعی' : 'AI configuration'),
-      ),
+      appBar: AppBar(title: Text(l10n.adminAiConfig)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 900),
@@ -99,66 +212,107 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
             padding: const EdgeInsets.all(20),
             children: [
               Text(
-                fa
-                    ? 'Provider، مدل و اتصال API'
-                    : 'Providers, models & API connection',
+                l10n.providerModelConnection,
                 style: theme.textTheme.headlineMedium,
               ),
               const SizedBox(height: 8),
-              Text(
-                fa
-                    ? 'کلیدهای دسترسی در سمت سرور نگهداری می‌شوند و مقدار ذخیره‌شده هرگز به مرورگر برگردانده نمی‌شود.'
-                    : 'Credentials are server-side only and stored values are never returned to the browser.',
-              ),
+              Text(l10n.credentialsServerOnly),
               const SizedBox(height: 20),
               console.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (_, _) => Text(
-                  fa
-                      ? 'امکان دریافت تنظیمات وجود ندارد.'
-                      : 'Configuration is unavailable.',
-                ),
+                error: (_, _) => Text(l10n.configurationUnavailable),
                 data: (data) => data.providers.isEmpty
                     ? Card(
                         child: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: Text(
-                            fa
-                                ? 'هنوز Provider فعالی ثبت نشده است. فرم زیر را برای پیکربندی اولیه تکمیل کنید.'
-                                : 'No provider is configured yet. Use the form below for initial setup.',
-                          ),
+                          child: Text(l10n.noProviderConfigured),
                         ),
                       )
                     : Column(
                         children: [
                           for (final provider in data.providers)
                             Card(
-                              child: ListTile(
-                                leading: Icon(
-                                  provider.enabled
-                                      ? Icons.smart_toy_outlined
-                                      : Icons.pause_circle_outline,
-                                ),
-                                title: Text(provider.displayName),
-                                subtitle: Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: Text(
-                                    '${provider.adapter}\n${provider.baseUrl}',
-                                  ),
-                                ),
-                                trailing: Tooltip(
-                                  message: provider.credentialConfigured
-                                      ? (fa
-                                            ? 'کلید ثبت شده'
-                                            : 'Credential configured')
-                                      : (fa
-                                            ? 'کلید ثبت نشده'
-                                            : 'Credential missing'),
-                                  child: Icon(
-                                    provider.credentialConfigured
-                                        ? Icons.verified_user_outlined
-                                        : Icons.key_off_outlined,
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      onTap: () => _editProvider(provider),
+                                      leading: Icon(
+                                        provider.enabled
+                                            ? Icons.smart_toy_outlined
+                                            : Icons.pause_circle_outline,
+                                      ),
+                                      title: Text(provider.displayName),
+                                      subtitle: Directionality(
+                                        textDirection: TextDirection.ltr,
+                                        child: Text(
+                                          '${provider.adapter}\n${provider.baseUrl}\nScope: ${provider.runtimeScope.toUpperCase()}',
+                                        ),
+                                      ),
+                                      trailing: Tooltip(
+                                        message: provider.credentialConfigured
+                                            ? l10n.credentialConfigured
+                                            : l10n.credentialMissing,
+                                        child: Icon(
+                                          provider.credentialConfigured
+                                              ? Icons.verified_user_outlined
+                                              : Icons.key_off_outlined,
+                                        ),
+                                      ),
+                                    ),
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: [
+                                        OutlinedButton.icon(
+                                          onPressed: _submitting
+                                              ? null
+                                              : () => _providerAction(
+                                                  provider,
+                                                  discover: false,
+                                                ),
+                                          icon: const Icon(
+                                            Icons.health_and_safety_outlined,
+                                          ),
+                                          label: Text(l10n.testProvider),
+                                        ),
+                                        OutlinedButton.icon(
+                                          onPressed: _submitting
+                                              ? null
+                                              : () => _providerAction(
+                                                  provider,
+                                                  discover: true,
+                                                ),
+                                          icon: const Icon(
+                                            Icons.manage_search_outlined,
+                                          ),
+                                          label: Text(l10n.discoverModels),
+                                        ),
+                                      ],
+                                    ),
+                                    for (final model in data.models.where(
+                                      (model) =>
+                                          model.providerId == provider.id,
+                                    ))
+                                      ListTile(
+                                        dense: true,
+                                        onTap: () => _configureModel(model),
+                                        leading: Icon(
+                                          model.enabled && model.available
+                                              ? Icons.check_circle_outline
+                                              : Icons.pause_circle_outline,
+                                        ),
+                                        title: Directionality(
+                                          textDirection: TextDirection.ltr,
+                                          child: Text(model.slug),
+                                        ),
+                                        subtitle: Text(
+                                          '${model.runtimeScope.toUpperCase()} · priority ${model.priority}${model.available ? '' : ' · unavailable'}',
+                                        ),
+                                        trailing: const Icon(Icons.tune),
+                                      ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -166,12 +320,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                       ),
               ),
               const SizedBox(height: 28),
-              Text(
-                fa
-                    ? 'افزودن یا به‌روزرسانی Provider'
-                    : 'Add or update provider',
-                style: theme.textTheme.titleLarge,
-              ),
+              Text(l10n.addOrUpdateProvider, style: theme.textTheme.titleLarge),
               const SizedBox(height: 12),
               Form(
                 key: _formKey,
@@ -180,17 +329,15 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                   children: [
                     AppTextField(
                       controller: _slugCtrl,
-                      label: fa ? 'شناسه (slug)' : 'Slug',
+                      label: l10n.slugLabel,
                       textDirection: TextDirection.ltr,
                       validator: (v) {
                         final value = v?.trim() ?? '';
                         if (value.isEmpty) {
-                          return fa ? 'الزامی' : 'Required';
+                          return l10n.required;
                         }
                         if (!RegExp(r'^[a-z0-9_]+$').hasMatch(value)) {
-                          return fa
-                              ? 'فقط حروف کوچک انگلیسی، عدد و _'
-                              : 'Use lowercase letters, digits, underscore';
+                          return 'Use lowercase letters, digits, underscore';
                         }
                         return null;
                       },
@@ -198,15 +345,15 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                     const SizedBox(height: 12),
                     AppTextField(
                       controller: _displayNameCtrl,
-                      label: fa ? 'نام نمایشی' : 'Display name',
+                      label: l10n.displayName,
                       validator: (v) => (v == null || v.trim().isEmpty)
-                          ? (fa ? 'الزامی' : 'Required')
+                          ? l10n.required
                           : null,
                     ),
                     const SizedBox(height: 12),
                     InputDecorator(
                       decoration: InputDecoration(
-                        labelText: fa ? 'نوع Adapter' : 'Adapter',
+                        labelText: l10n.adapterType,
                         border: const OutlineInputBorder(),
                       ),
                       child: DropdownButtonHideUnderline(
@@ -247,21 +394,19 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                     const SizedBox(height: 12),
                     AppTextField(
                       controller: _baseUrlCtrl,
-                      label: fa ? 'Base URL' : 'Base URL',
+                      label: 'Base URL',
                       textDirection: TextDirection.ltr,
                       keyboardType: TextInputType.url,
                       validator: (v) {
                         final value = v?.trim() ?? '';
                         if (value.isEmpty) {
-                          return fa ? 'الزامی' : 'Required';
+                          return l10n.required;
                         }
                         final uri = Uri.tryParse(value);
                         if (uri == null ||
                             uri.scheme != 'https' ||
                             uri.host.isEmpty) {
-                          return fa
-                              ? 'فقط آدرس HTTPS عمومی معتبر'
-                              : 'Must be a valid public HTTPS URL';
+                          return l10n.publicHttpsOnly;
                         }
                         return null;
                       },
@@ -269,31 +414,33 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                     const SizedBox(height: 12),
                     AppTextField(
                       controller: _apiKeyCtrl,
-                      label: fa
-                          ? 'کلید API (فقط نوشتن)'
-                          : 'API key (write-only)',
+                      label: l10n.apiKeyWriteOnly,
                       textDirection: TextDirection.ltr,
                       obscureText: true,
                       validator: (v) {
                         final value = v?.trim() ?? '';
-                        if (value.length < 8) {
-                          return fa
-                              ? 'کلید باید حداقل ۸ نویسه باشد'
-                              : 'Key must be at least 8 characters';
+                        if ((!_editingExisting && value.length < 8) ||
+                            (value.isNotEmpty && value.length < 8)) {
+                          return l10n.keyMinimumEight;
                         }
                         return null;
                       },
                     ),
+                    if (_editingExisting)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(l10n.keepCurrentCredential),
+                      ),
                     const SizedBox(height: 8),
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: Text(fa ? 'فعال' : 'Enabled'),
+                      title: Text(l10n.enabled),
                       value: _enabled,
                       onChanged: (v) => setState(() => _enabled = v),
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: Text(fa ? 'اولویت' : 'Priority'),
+                      title: Text(l10n.priority),
                       subtitle: Text('$_priority'),
                       trailing: SizedBox(
                         width: 160,
@@ -323,7 +470,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                     ],
                     const SizedBox(height: 16),
                     AppButton(
-                      label: fa ? 'ذخیره Provider' : 'Save provider',
+                      label: l10n.saveProvider,
                       loading: _submitting,
                       onPressed: _submitting ? null : _submit,
                     ),

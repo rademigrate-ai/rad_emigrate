@@ -20,7 +20,9 @@ class _ChatMessage {
 }
 
 class AiAssistantPage extends ConsumerStatefulWidget {
-  const AiAssistantPage({super.key});
+  const AiAssistantPage({super.key, this.adminMode = false});
+
+  final bool adminMode;
 
   @override
   ConsumerState<AiAssistantPage> createState() => _AiAssistantPageState();
@@ -120,7 +122,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       final ai = ref.read(aiServiceProvider);
       final response = ai.isAvailable
           ? await ai.complete(
-              AiRequest(prompt: text, kind: AiRequestKind.immigrationQuestion),
+              AiRequest(
+                prompt: text,
+                kind: AiRequestKind.immigrationQuestion,
+                conversationId: _sessionId,
+                locale: Localizations.localeOf(context).languageCode,
+                metadata: {if (widget.adminMode) 'scope': 'admin'},
+              ),
             )
           : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
       if (userId != null && userId.isNotEmpty && _sessionId != null) {
@@ -178,7 +186,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(l10n.aiAssistant),
+        title: Text(
+          widget.adminMode ? l10n.adminResearchAssistant : l10n.aiAssistant,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -198,7 +208,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
-                l10n.aiDisclaimer,
+                widget.adminMode
+                    ? l10n.untrustedResearchDisclaimer
+                    : l10n.aiDisclaimer,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),

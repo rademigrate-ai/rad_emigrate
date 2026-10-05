@@ -373,18 +373,26 @@ class _Providers extends StatelessWidget {
   }
 }
 
-class _Sources extends StatelessWidget {
+class _Sources extends ConsumerWidget {
   const _Sources({required this.data});
 
   final AdminConsoleData data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return _SectionList(
       title: 'Sources',
       emptyTitle: 'No content sources are configured.',
       emptySubtitle: 'RAD official sources and approved authoritative sources appear here.',
       children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: FilledButton.icon(
+            onPressed: () => _addSource(context, ref),
+            icon: const Icon(Icons.add),
+            label: Text(AppLocalizations.of(context).researchSource),
+          ),
+        ),
         for (final source in data.sources)
           Card(
             child: ListTile(
@@ -416,9 +424,18 @@ class _Sources extends StatelessWidget {
           for (final source in data.researchSources)
             Card(
               child: ListTile(
+                onTap: () => _editSource(context, ref, source),
                 leading: const Icon(Icons.shield_outlined),
-                title: _LtrValue(source.allowedHost),
-                subtitle: _LtrValue(source.baseUrl),
+                title: Text(source.displayName),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _LtrValue(source.baseUrl),
+                    Text(
+                      '${source.sourceType} · ${source.trustClass} · ${source.runtimeScope.toUpperCase()}${source.lastErrorCode == null ? '' : ' · ${source.lastErrorCode}'}',
+                    ),
+                  ],
+                ),
                 trailing: _StatusBadge(
                   source.enabled ? source.authority : 'disabled',
                 ),
@@ -428,20 +445,238 @@ class _Sources extends StatelessWidget {
       ],
     );
   }
+
+  Future<void> _editSource(
+    BuildContext context,
+    WidgetRef ref,
+    AdminResearchSourceRecord source,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    var enabled = source.enabled;
+    var scope = source.runtimeScope;
+    var trust = source.trustClass;
+    final name = TextEditingController(text: source.displayName);
+    final save = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(l10n.researchSource),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: name,
+                  decoration: InputDecoration(labelText: l10n.displayName),
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.enabled),
+                  value: enabled,
+                  onChanged: (value) => setState(() => enabled = value),
+                ),
+                DropdownButtonFormField<String>(
+                  initialValue: scope,
+                  decoration: InputDecoration(labelText: l10n.runtimeScope),
+                  items: const [
+                    DropdownMenuItem(value: 'user', child: Text('USER')),
+                    DropdownMenuItem(value: 'admin', child: Text('ADMIN')),
+                    DropdownMenuItem(value: 'both', child: Text('BOTH')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => scope = value);
+                  },
+                ),
+                DropdownButtonFormField<String>(
+                  initialValue: trust,
+                  decoration: InputDecoration(labelText: l10n.trustClass),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'rad_official',
+                      child: Text('RAD official'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'authoritative_external',
+                      child: Text('Authoritative external'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'admin_defined',
+                      child: Text('Admin defined'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'general_web',
+                      child: Text('General web'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => trust = value);
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.save),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (save != true || name.text.trim().isEmpty) return;
+    await ref
+        .read(adminOperationsRepositoryProvider)
+        .configureResearchSource(
+          sourceId: source.id,
+          displayName: name.text.trim(),
+          enabled: enabled,
+          runtimeScope: scope,
+          trustClass: trust,
+        );
+    ref.invalidate(adminConsoleProvider);
+  }
+
+  Future<void> _addSource(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final name = TextEditingController();
+    final url = TextEditingController();
+    var sourceType = 'external';
+    var trust = 'admin_defined';
+    var scope = 'admin';
+    final save = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(l10n.researchSource),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: name,
+                  decoration: InputDecoration(labelText: l10n.displayName),
+                ),
+                TextField(
+                  controller: url,
+                  textDirection: TextDirection.ltr,
+                  decoration: const InputDecoration(labelText: 'Base URL'),
+                ),
+                DropdownButtonFormField<String>(
+                  initialValue: sourceType,
+                  decoration: const InputDecoration(labelText: 'Source type'),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'government',
+                      child: Text('Government'),
+                    ),
+                    DropdownMenuItem(value: 'embassy', child: Text('Embassy')),
+                    DropdownMenuItem(
+                      value: 'institution',
+                      child: Text('Institution'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'external',
+                      child: Text('External'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => sourceType = value);
+                  },
+                ),
+                DropdownButtonFormField<String>(
+                  initialValue: trust,
+                  decoration: InputDecoration(labelText: l10n.trustClass),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'authoritative_external',
+                      child: Text('Authoritative external'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'admin_defined',
+                      child: Text('Admin defined'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'general_web',
+                      child: Text('General web'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => trust = value);
+                  },
+                ),
+                DropdownButtonFormField<String>(
+                  initialValue: scope,
+                  decoration: InputDecoration(labelText: l10n.runtimeScope),
+                  items: const [
+                    DropdownMenuItem(value: 'user', child: Text('USER')),
+                    DropdownMenuItem(value: 'admin', child: Text('ADMIN')),
+                    DropdownMenuItem(value: 'both', child: Text('BOTH')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => scope = value);
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.save),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (save != true || name.text.trim().isEmpty || url.text.trim().isEmpty) {
+      return;
+    }
+    await ref
+        .read(adminOperationsRepositoryProvider)
+        .createResearchSource(
+          displayName: name.text.trim(),
+          baseUrl: url.text.trim(),
+          sourceType: sourceType,
+          trustClass: trust,
+          runtimeScope: scope,
+        );
+    ref.invalidate(adminConsoleProvider);
+  }
 }
 
-class _Research extends StatelessWidget {
+class _Research extends ConsumerWidget {
   const _Research({required this.data});
 
   final AdminConsoleData data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return _SectionList(
       title: 'Research',
       emptyTitle: 'No research jobs yet.',
       emptySubtitle: 'Research discovers and compares evidence, but never publishes automatically.',
       children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: FilledButton.icon(
+            onPressed: () async {
+              await ref.read(adminOperationsRepositoryProvider).queueResearch();
+              ref.invalidate(adminConsoleProvider);
+            },
+            icon: const Icon(Icons.play_arrow),
+            label: Text(l10n.queueResearchRun),
+          ),
+        ),
         for (final job in data.researchJobs)
           Card(
             child: ListTile(

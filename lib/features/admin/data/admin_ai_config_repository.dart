@@ -14,7 +14,7 @@ class AdminAiConfigRepository {
     required String displayName,
     required String adapter,
     required String baseUrl,
-    required String apiKey,
+    String apiKey = '',
     bool enabled = false,
     int priority = 100,
   }) async {
@@ -34,6 +34,48 @@ class AdminAiConfigRepository {
       },
     );
     return result.toString();
+  }
+
+  Future<Map<String, dynamic>> testProvider(String providerId) async {
+    final response = await _supabase.client.functions.invoke(
+      'ai-orchestrator',
+      body: {'action': 'test_provider', 'provider_id': providerId},
+    );
+    return _responseMap(response.data);
+  }
+
+  Future<Map<String, dynamic>> discoverModels(String providerId) async {
+    final response = await _supabase.client.functions.invoke(
+      'ai-orchestrator',
+      body: {'action': 'discover_models', 'provider_id': providerId},
+    );
+    return _responseMap(response.data);
+  }
+
+  Future<void> configureModel({
+    required String modelId,
+    required bool enabled,
+    required String runtimeScope,
+    required int priority,
+    required int maxOutputTokens,
+  }) async {
+    await _supabase.client.rpc(
+      'set_ai_model_configuration',
+      params: {
+        'p_model_id': modelId,
+        'p_enabled': enabled,
+        'p_runtime_scope': runtimeScope,
+        'p_priority': priority,
+        'p_max_output_tokens': maxOutputTokens,
+      },
+    );
+  }
+
+  Map<String, dynamic> _responseMap(Object? value) {
+    if (value is! Map) throw const FormatException('invalid_ai_response');
+    final result = value.cast<String, dynamic>();
+    if (result['error'] != null) throw StateError(result['error'].toString());
+    return result;
   }
 }
 

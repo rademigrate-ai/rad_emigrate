@@ -465,4 +465,75 @@ class AppLocalizationsFa extends AppLocalizations {
   String get documentStatusVerified => 'تأییدشده';
   @override
   String get documentStatusRejected => 'ردشده';
+  @override
+  String get adminAiConfig => 'تنظیمات هوش مصنوعی';
+  @override
+  String get providerModelConnection => 'ارائه‌دهندگان، مدل‌ها و اتصال API';
+  @override
+  String get credentialsServerOnly =>
+      'کلیدهای دسترسی فقط در سرور نگهداری می‌شوند و مقدار ذخیره‌شده هرگز به مرورگر بازگردانده نمی‌شود.';
+  @override
+  String get configurationUnavailable => 'دریافت تنظیمات ممکن نیست.';
+  @override
+  String get noProviderConfigured =>
+      'هنوز ارائه‌دهنده‌ای ثبت نشده است. فرم زیر را برای پیکربندی اولیه تکمیل کنید.';
+  @override
+  String get addOrUpdateProvider => 'افزودن یا به‌روزرسانی ارائه‌دهنده';
+  @override
+  String get slugLabel => 'شناسه (slug)';
+  @override
+  String get displayName => 'نام نمایشی';
+  @override
+  String get adapterType => 'نوع Adapter';
+  @override
+  String get publicHttpsOnly => 'فقط نشانی معتبر و عمومی HTTPS مجاز است';
+  @override
+  String get apiKeyWriteOnly => 'کلید API (فقط نوشتنی)';
+  @override
+  String get keyMinimumEight => 'کلید باید حداقل ۸ نویسه باشد';
+  @override
+  String get keepCurrentCredential =>
+      'برای حفظ کلید فعلی، این بخش را خالی بگذارید.';
+  @override
+  String get enabled => 'فعال';
+  @override
+  String get priority => 'اولویت';
+  @override
+  String get saveProvider => 'ذخیره ارائه‌دهنده';
+  @override
+  String get credentialConfigured => 'کلید ثبت شده';
+  @override
+  String get credentialMissing => 'کلید ثبت نشده';
+  @override
+  String get testProvider => 'آزمایش ارائه‌دهنده';
+  @override
+  String get discoverModels => 'کشف مدل‌ها';
+  @override
+  String get runtimeScope => 'دامنه اجرا';
+  @override
+  String get trustClass => 'رده اعتماد';
+  @override
+  String get researchSource => 'منبع پژوهش';
+  @override
+  String get queueResearchRun => 'افزودن پژوهش به صف';
+  @override
+  String get adminResearchAssistant => 'دستیار پژوهش مدیریت';
+  @override
+  String get adminResearchSubtitle =>
+      'پژوهش گسترده‌تر با حفظ شواهد، منشأ و تعارض‌ها؛ بدون انتشار خودکار.';
+  @override
+  String get untrustedResearchDisclaimer =>
+      'محتوای بازیابی‌شده غیرقابل‌اعتماد است؛ تعارض‌ها حفظ می‌شوند و هیچ مطلبی خودکار منتشر نمی‌شود.';
+  @override
+  String get providerSaved =>
+      'ارائه‌دهنده ذخیره شد. کلید در سرور نگهداری می‌شود و دوباره نمایش داده نخواهد شد.';
+  @override
+  String get providerSaveFailed =>
+      'ذخیره تنظیمات ممکن نشد. نقش مدیر ارشد و صحت ورودی‌ها را بررسی کنید.';
+  @override
+  String get providerTestFailed =>
+      'آزمایش ارائه‌دهنده با یک خطای پالایش‌شده ناموفق بود.';
+  @override
+  String get modelDiscoveryFailed =>
+      'کشف مدل‌ها با یک خطای پالایش‌شده ناموفق بود.';
 }
