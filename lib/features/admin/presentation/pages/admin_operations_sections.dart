@@ -125,7 +125,9 @@ class _Research extends ConsumerWidget {
           child: FilledButton.icon(
             onPressed: () async {
               try {
-                await ref.read(adminOperationsRepositoryProvider).queueResearch();
+                await ref
+                    .read(adminOperationsRepositoryProvider)
+                    .queueResearch();
                 ref.invalidate(adminConsoleProvider);
               } catch (_) {
                 if (context.mounted) {
