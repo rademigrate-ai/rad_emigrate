@@ -33,17 +33,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _scroll = ScrollController();
   final _messages = <_ChatMessage>[];
   var _loading = false;
+
   /// Client-side display only. Server (ai-orchestrator + ai_usage_limits) is
-  /// the authority. Admin/super_admin are never capped by this constant.
+  /// the authority. Admin routes pass [adminMode] so the soft gate is skipped.
   static const _userDisplayHintLimit = 5;
   var _used = 0;
   String? _sessionId;
 
-  bool get _isPrivilegedAdmin {
-    if (widget.adminMode) return true;
-    final role = ref.read(authControllerProvider).valueOrNull?.role;
-    return role == 'admin' || role == 'super_admin';
-  }
+  bool get _isPrivilegedAdmin => widget.adminMode;
 
   @override
   void initState() {
@@ -94,11 +91,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
-    // Client-side soft gate for normal users only. Admin is never blocked here.
+    // Soft gate for normal users only. Admin workspace sets adminMode.
     // Server returns 429 if daily limits are exceeded.
     if (!_isPrivilegedAdmin && _used >= _userDisplayHintLimit) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
       return;
     }
 
@@ -116,8 +114,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
@@ -325,9 +324,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                   (s) => Text(
                                     '${l10n.sourceLabel}: ${s.title}'
                                     '${s.authority != null ? ' (${s.authority})' : ''}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
                                   ),
                                 ),
                               ],

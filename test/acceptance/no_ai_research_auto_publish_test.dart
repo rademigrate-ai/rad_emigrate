@@ -21,9 +21,10 @@ void main() {
 
   test('create_research_review_candidate creates drafts not feed', () {
     final stage1 = read(
-      'supabase/migrations/20261005123202_stage1_ai_research_completion.sql',
+      'supabase/migrations/20261005102000_stage1_ai_research_completion.sql',
     );
-    const start = 'create or replace function public.create_research_review_candidate';
+    const start =
+        'create or replace function public.create_research_review_candidate';
     final i = stage1.indexOf(start);
     expect(i, greaterThanOrEqualTo(0));
     final body = stage1.substring(i, (i + 3500).clamp(0, stage1.length));

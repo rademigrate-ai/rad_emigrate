@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// Admin/super_admin must not be constrained by the client five-message gate.
+/// Admin routes must not be constrained by the client five-message gate.
 void main() {
   final root = Directory.current.path;
   String read(String relative) => File('$root/$relative').readAsStringSync();
@@ -11,11 +11,9 @@ void main() {
     final page = read(
       'lib/features/ai_assistant/presentation/pages/ai_assistant_page.dart',
     );
-    // Legacy hard gate constant must not exist as the sole authority.
     expect(page.contains('static const _freeLimit = 5'), isFalse);
     expect(page.contains('_isPrivilegedAdmin'), isTrue);
-    expect(page.contains("role == 'admin' || role == 'super_admin'"), isTrue);
-    // Soft user hint limit only.
+    expect(page.contains('widget.adminMode'), isTrue);
     expect(page.contains('_userDisplayHintLimit'), isTrue);
   });
 
@@ -28,10 +26,7 @@ void main() {
 
     final router = read('lib/core/routing/app_router.dart');
     expect(router.contains('AdminAiWorkspacePage'), isTrue);
-    expect(
-      router.contains("/admin/ai-research"),
-      isTrue,
-    );
+    expect(router.contains('/admin/ai-research'), isTrue);
   });
 
   test('ai-orchestrator enforces server-side daily limits by role', () {
