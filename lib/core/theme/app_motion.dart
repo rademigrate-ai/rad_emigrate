@@ -12,8 +12,7 @@ abstract final class AppMotion {
 
   /// True when the platform requests minimal motion.
   static bool reduceMotion(BuildContext context) {
-    return MediaQuery.disableAnimationsOf(context) ||
-        MediaQuery.maybeOf(context)?.disableAnimations == true;
+    return MediaQuery.of(context).disableAnimations;
   }
 
   /// Duration that collapses to zero under reduced motion.
