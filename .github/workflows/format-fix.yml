@@ -1,0 +1,27 @@
+name: format-fix
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/corrective-production-audit
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+      - run: dart format lib test
+      - run: |
+          git config user.name "rademigrate-ai"
+          git config user.email "rademigrate@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "style: dart format (CI auto-fix)"
+            git push
+          fi
