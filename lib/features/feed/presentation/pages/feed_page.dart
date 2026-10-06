@@ -101,9 +101,9 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                                   item.category,
                                   style: Theme.of(context).textTheme.labelSmall
                                       ?.copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                 ),
                               ],
@@ -131,9 +131,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                               } catch (_) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(l10n.errorGeneric),
-                                    ),
+                                    SnackBar(content: Text(l10n.errorGeneric)),
                                   );
                                 }
                               }

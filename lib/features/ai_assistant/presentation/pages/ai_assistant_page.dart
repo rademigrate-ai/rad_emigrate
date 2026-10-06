@@ -325,9 +325,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                     maxLines: 4,
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _send(),
-                    decoration: InputDecoration(
-                      hintText: l10n.askQuestionHint,
-                    ),
+                    decoration: InputDecoration(hintText: l10n.askQuestionHint),
                   ),
                 ),
                 const SizedBox(width: 8),
