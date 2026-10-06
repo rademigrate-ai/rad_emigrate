@@ -15,17 +15,17 @@ void main() {
     );
 
     final semantics = tester.widget<Semantics>(
-      find.descendant(
-        of: find.byType(EmptyState),
-        matching: find.byType(Semantics),
-      ).first,
+      find
+          .descendant(
+            of: find.byType(EmptyState),
+            matching: find.byType(Semantics),
+          )
+          .first,
     );
     expect(semantics.properties.label, 'No items. Try again later');
   });
 
-  testWidgets('ConstrainedContent applies max width constraint', (
-    tester,
-  ) async {
+  testWidgets('ConstrainedContent applies max width constraint', (tester) async {
     const childKey = Key('constrained-child');
 
     await tester.pumpWidget(
