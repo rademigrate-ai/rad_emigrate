@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/dependencies.dart';
 import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
+import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
@@ -102,7 +103,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/admin/ai-research',
-            builder: (_, _) => const AiAssistantPage(adminMode: true),
+            builder: (_, _) => const AdminAiWorkspacePage(),
           ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],

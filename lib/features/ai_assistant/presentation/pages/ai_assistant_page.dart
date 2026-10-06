@@ -33,9 +33,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _scroll = ScrollController();
   final _messages = <_ChatMessage>[];
   var _loading = false;
-  static const _freeLimit = 5;
+
+  /// Client-side display only. Server (ai-orchestrator + ai_usage_limits) is
+  /// the authority. Admin routes pass [adminMode] so the soft gate is skipped.
+  static const _userDisplayHintLimit = 5;
   var _used = 0;
   String? _sessionId;
+
+  bool get _isPrivilegedAdmin => widget.adminMode;
 
   @override
   void initState() {
@@ -85,7 +90,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final locale = Localizations.localeOf(context).languageCode;
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
-    if (_used >= _freeLimit) {
+
+    // Soft gate for normal users only. Admin workspace sets adminMode.
+    // Server returns 429 if daily limits are exceeded.
+    if (!_isPrivilegedAdmin && _used >= _userDisplayHintLimit) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
       return;
@@ -198,15 +206,26 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
           widget.adminMode ? l10n.adminResearchAssistant : l10n.aiAssistant,
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                l10n.freeQuota(_used, _freeLimit),
-                style: Theme.of(context).textTheme.bodySmall,
+          if (!_isPrivilegedAdmin)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(
+                child: Text(
+                  l10n.freeQuota(_used, _userDisplayHintLimit),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(
+                child: Text(
+                  l10n.adminResearchAssistant,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: Column(
