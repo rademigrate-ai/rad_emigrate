@@ -111,13 +111,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
     try {
       await ref.read(profileControllerProvider.notifier).save(profile);
-      if (profile.fullName.isNotEmpty) {
-        await ref
-            .read(authControllerProvider.notifier)
-            .completeProfile(
-              fullName: profile.fullName,
-              nationality: profile.nationality,
-            );
+      // Sync display name to auth session only when name actually changed.
+      // Never put global auth into loading (that redirected users to login).
+      final priorName = (session?.fullName ?? current?.fullName ?? '').trim();
+      if (profile.fullName.isNotEmpty && profile.fullName.trim() != priorName) {
+        try {
+          await ref.read(authControllerProvider.notifier).completeProfile(
+                fullName: profile.fullName,
+                nationality: profile.nationality,
+              );
+        } catch (_) {
+          // Profile row already saved; auth metadata sync is best-effort.
+        }
       }
       if (mounted) {
         setState(() {
