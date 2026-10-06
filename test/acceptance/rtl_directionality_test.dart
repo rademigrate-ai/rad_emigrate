@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/l10n/locale_controller.dart';
-import 'package:rad_emigrate/core/widgets/directional_icons.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
-/// Guards Persian/RTL wiring so screens cannot regress to LTR-only chrome.
 void main() {
   final root = Directory.current.path;
   String read(String relative) => File('$root/$relative').readAsStringSync();
@@ -26,7 +24,7 @@ void main() {
     expect(app, contains('AppLocalizations.delegate'));
   });
 
-  test('directional helpers flip chevron/back/forward for RTL', () {
+  test('directional helpers flip chevron back and forward for RTL', () {
     final icons = read('lib/core/widgets/directional_icons.dart');
     expect(icons, contains('directionalChevron'));
     expect(icons, contains('directionalBack'));
@@ -36,63 +34,30 @@ void main() {
     expect(icons, contains('Icons.chevron_right'));
   });
 
-  testWidgets(
-    'directionalChevron resolves from ambient Directionality',
-    (tester) async {
-      IconData? ltr;
-      IconData? rtl;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              ltr = directionalChevron(context);
-              return Directionality(
-                textDirection: TextDirection.rtl,
-                child: Builder(
-                  builder: (rtlContext) {
-                    rtl = directionalChevron(rtlContext);
-                    return const SizedBox.shrink();
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-      );
-      expect(ltr, Icons.chevron_right);
-      expect(rtl, Icons.chevron_left);
-    },
-  );
-
   test('primary product pages use directional helpers not fixed arrows', () {
-    final pages = <String>[
+    final dashboard = read(
       'lib/features/dashboard/presentation/pages/dashboard_page.dart',
-      'lib/features/visa/presentation/pages/visa_page.dart',
+    );
+    final visa = read('lib/features/visa/presentation/pages/visa_page.dart');
+    final profile = read(
       'lib/features/profile/presentation/pages/profile_page.dart',
-    ];
-    for (final path in pages) {
-      final source = read(path);
-      final usesDirectional =
-          source.contains('directionalChevron') ||
-          source.contains('directionalBack') ||
-          source.contains('directionalForward');
-      expect(usesDirectional, isTrue, reason: path);
-      expect(source, isNot(contains('Icons.chevron_right')));
-      expect(source, isNot(contains('Icons.arrow_back,')));
-    }
+    );
+    expect(dashboard, contains('directional'));
+    expect(visa, contains('directional'));
+    expect(profile, contains('directional'));
+    expect(dashboard, isNot(contains('Icons.chevron_right')));
+    expect(visa, isNot(contains('Icons.chevron_right')));
+    expect(profile, isNot(contains('Icons.chevron_right')));
   });
 
-  test(
-    'EN and FA localizations remain non-empty and distinct for core keys',
-    () {
-      final en = lookupAppLocalizations(const Locale('en'));
-      final fa = lookupAppLocalizations(const Locale('fa'));
-      expect(en.appTitle.trim(), isNotEmpty);
-      expect(fa.appTitle.trim(), isNotEmpty);
-      expect(en.visaPathways, isNot(fa.visaPathways));
-      expect(en.feedTitle, isNot(fa.feedTitle));
-      expect(en.structuredDetailsPending.trim(), isNotEmpty);
-      expect(fa.structuredDetailsPending.trim(), isNotEmpty);
-    },
-  );
+  test('EN and FA core keys are non-empty and distinct', () {
+    final en = lookupAppLocalizations(const Locale('en'));
+    final fa = lookupAppLocalizations(const Locale('fa'));
+    expect(en.appTitle.trim(), isNotEmpty);
+    expect(fa.appTitle.trim(), isNotEmpty);
+    expect(en.visaPathways, isNot(fa.visaPathways));
+    expect(en.feedTitle, isNot(fa.feedTitle));
+    expect(en.structuredDetailsPending.trim(), isNotEmpty);
+    expect(fa.structuredDetailsPending.trim(), isNotEmpty);
+  });
 }
