@@ -62,88 +62,100 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     return AnimatedOpacity(
                       opacity: 1,
                       duration: AppMotion.duration(context, AppMotion.fast),
-                      child: Card(
-                        child: ListTile(
-                          isThreeLine: true,
-                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                            16,
-                            12,
-                            8,
-                            12,
-                          ),
-                          title: Text(
-                            item.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 6),
-                              Text(
-                                item.summary,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              if (dateLabel != null) ...[
-                                const SizedBox(height: 8),
-                                Text(
-                                  dateLabel,
-                                  style: Theme.of(context).textTheme.labelSmall,
+                      curve: AppMotion.curve(context),
+                      child: Semantics(
+                        button: true,
+                        label: item.title,
+                        child: Card(
+                          child: ListTile(
+                            isThreeLine: true,
+                            contentPadding:
+                                const EdgeInsetsDirectional.fromSTEB(
+                                  16,
+                                  12,
+                                  8,
+                                  12,
                                 ),
-                              ],
-                              if (item.category.isNotEmpty) ...[
-                                const SizedBox(height: 4),
-                                Text(
-                                  item.category,
-                                  style: Theme.of(context).textTheme.labelSmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                ),
-                              ],
-                            ],
-                          ),
-                          leading: Icon(
-                            Icons.article_outlined,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          trailing: IconButton(
-                            tooltip: item.saved
-                                ? l10n.removeBookmark
-                                : l10n.bookmark,
-                            icon: Icon(
-                              item.saved
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
+                            title: Text(
+                              item.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            onPressed: () async {
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 6),
+                                Text(
+                                  item.summary,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (dateLabel != null) ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    dateLabel,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall,
+                                  ),
+                                ],
+                                if (item.category.isNotEmpty) ...[
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    item.category,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            leading: Icon(
+                              Icons.article_outlined,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            trailing: IconButton(
+                              tooltip: item.saved
+                                  ? l10n.removeBookmark
+                                  : l10n.bookmark,
+                              icon: Icon(
+                                item.saved
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                              ),
+                              onPressed: () async {
+                                try {
+                                  await ref
+                                      .read(feedRepositoryProvider)
+                                      .setSaved(item.id, !item.saved);
+                                  ref.invalidate(feedProvider(locale));
+                                } catch (_) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(l10n.errorGeneric),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                            onTap: () async {
                               try {
                                 await ref
                                     .read(feedRepositoryProvider)
-                                    .setSaved(item.id, !item.saved);
-                                ref.invalidate(feedProvider(locale));
+                                    .markRead(item.id);
                               } catch (_) {
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(l10n.errorGeneric)),
-                                  );
-                                }
+                                // Read tracking is supplementary.
                               }
                             },
                           ),
-                          onTap: () async {
-                            try {
-                              await ref
-                                  .read(feedRepositoryProvider)
-                                  .markRead(item.id);
-                            } catch (_) {
-                              // Read tracking is supplementary.
-                            }
-                          },
                         ),
                       ),
                     );
