@@ -69,6 +69,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                   program.summary.toLowerCase().contains(query)),
         )
         .toList();
+    final pendingColor = Theme.of(context).colorScheme.onSurfaceVariant;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 920),
@@ -137,6 +138,8 @@ class _VisaPageState extends ConsumerState<VisaPage> {
               final country = catalog.countries.firstWhere(
                 (item) => item.id == program.countryId,
               );
+              final hasStructure =
+                  program.requirements.isNotEmpty || program.steps.isNotEmpty;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: SectionCard(
@@ -145,7 +148,22 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                       '${country.flagEmoji} ${country.name}\n${program.summary}',
                   icon: Icons.flight_takeoff,
                   onTap: () => setState(() => _selected = program),
-                  trailing: Icon(directionalChevron(context)),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!hasStructure)
+                        Tooltip(
+                          message: l10n.structuredDetailsPending,
+                          child: Icon(
+                            Icons.hourglass_empty_outlined,
+                            size: 18,
+                            color: pendingColor,
+                          ),
+                        ),
+                      if (!hasStructure) const SizedBox(width: 8),
+                      Icon(directionalChevron(context)),
+                    ],
+                  ),
                 ),
               );
             }),

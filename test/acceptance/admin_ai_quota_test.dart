@@ -22,7 +22,8 @@ void main() {
       'lib/features/admin/presentation/pages/admin_ai_workspace_page.dart',
     );
     expect(workspace.contains('class AdminAiWorkspacePage'), isTrue);
-    expect(workspace.contains('AiAssistantPage(adminMode: true)'), isTrue);
+    expect(workspace.contains('adminMode: true'), isTrue);
+    expect(workspace.contains('AiAssistantPage('), isTrue);
 
     final router = read('lib/core/routing/app_router.dart');
     expect(router.contains('AdminAiWorkspacePage'), isTrue);
