@@ -69,6 +69,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                   program.summary.toLowerCase().contains(query)),
         )
         .toList();
+    final pendingColor = Theme.of(context).colorScheme.onSurfaceVariant;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 920),
@@ -156,9 +157,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                           child: Icon(
                             Icons.hourglass_empty_outlined,
                             size: 18,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
+                            color: pendingColor,
                           ),
                         ),
                       if (!hasStructure) const SizedBox(width: 8),
