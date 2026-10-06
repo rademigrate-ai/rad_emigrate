@@ -25,7 +25,9 @@ void main() {
     expect(semantics.properties.label, 'No items. Try again later');
   });
 
-  testWidgets('ConstrainedContent applies max width constraint', (tester) async {
+  testWidgets('ConstrainedContent applies max width constraint', (
+    tester,
+  ) async {
     const childKey = Key('constrained-child');
 
     await tester.pumpWidget(
