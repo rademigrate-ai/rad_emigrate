@@ -305,6 +305,18 @@ abstract class AppLocalizations {
   String get categoryDeadline;
   String get categoryEvent;
   String get categoryAnnouncement;
+  String get addSource;
+  String get requiredField;
+  String get invalidUrl;
+  String get titleLabel;
+  String get sourceType;
+  String get researchPipelineSummary;
+  String findingsCount(int count);
+  String draftsInReview(int count);
+  String get feedPublishedOnly;
+  String get lastResearchRun;
+  String get researchNeverAutoPublishes;
+  String get researchQueued;
 
   // Stage 2 review / feed / visa
   String get reviewQueueTitle;
