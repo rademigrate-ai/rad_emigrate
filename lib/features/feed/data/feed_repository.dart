@@ -30,7 +30,11 @@ class FeedRepository {
 
   final SupabaseClientService _supabase;
 
-  Future<List<FeedEntry>> load(String locale) async {
+  /// Loads the most recent published feed items for [locale].
+  ///
+  /// Bounded to 50 rows so growth of the feed table cannot unbounded-load
+  /// the client. Ordering is stable by published_at desc.
+  Future<List<FeedEntry>> load(String locale, {int limit = 50}) async {
     if (!_supabase.isInitialized) return const [];
     final client = _supabase.client;
     final rows = await client
@@ -39,7 +43,9 @@ class FeedRepository {
           'id,slug,category,source_url,published_at,'
           'feed_item_localizations(locale,title,summary)',
         )
-        .order('published_at', ascending: false);
+        .eq('status', 'published')
+        .order('published_at', ascending: false)
+        .limit(limit);
     final userId = client.auth.currentUser?.id;
     final saved = <String>{};
     if (userId != null) {

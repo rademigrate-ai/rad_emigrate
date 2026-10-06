@@ -133,14 +133,19 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             )
           : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
       if (userId != null && userId.isNotEmpty && _sessionId != null) {
-        await ref
-            .read(aiSessionRepositoryProvider)
-            .saveMessage(
-              sessionId: _sessionId!,
-              userId: userId,
-              role: 'assistant',
-              content: response.text,
-            );
+        try {
+          await ref
+              .read(aiSessionRepositoryProvider)
+              .saveMessage(
+                sessionId: _sessionId!,
+                userId: userId,
+                role: 'assistant',
+                content: response.text,
+              );
+        } catch (_) {
+          // Conversation persistence is supplementary once a sourced response
+          // has been produced; do not replace that response with an error.
+        }
       }
       if (!mounted) return;
       setState(() {
@@ -157,7 +162,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _messages.add(_ChatMessage(isUser: false, text: l10n.errorGeneric));
+        _messages.add(
+          _ChatMessage(isUser: false, text: l10n.aiUnavailableResponse(text)),
+        );
         _loading = false;
       });
     }

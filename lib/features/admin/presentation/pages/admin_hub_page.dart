@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class AdminHubPage extends StatelessWidget {
@@ -8,7 +9,6 @@ class AdminHubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fa = Localizations.localeOf(context).languageCode == 'fa';
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.adminOperations)),
@@ -20,32 +20,22 @@ class AdminHubPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               children: [
                 Text(
-                  fa ? 'مرکز مدیریت راد' : 'RAD Admin Center',
+                  l10n.adminOperations,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  fa
-                      ? 'تنظیمات هوش مصنوعی، منابع، پژوهش، بازبینی و عملیات از این بخش مدیریت می‌شوند.'
-                      : 'Manage AI configuration, sources, research, review, and operations from one place.',
-                ),
+                Text(l10n.serverEnforcedAccessBody),
                 const SizedBox(height: 20),
                 _AdminTile(
                   icon: Icons.key_outlined,
-                  title: fa
-                      ? 'تنظیم Provider و API'
-                      : 'Provider & API configuration',
-                  subtitle: fa
-                      ? 'Base URL، Provider و کلید دسترسی را بدون نمایش دوباره کلید ذخیره کنید.'
-                      : 'Configure provider, Base URL and credential without exposing stored secrets.',
+                  title: l10n.adminAiConfig,
+                  subtitle: l10n.providerModelConnection,
                   onTap: () => context.go('/admin/ai-config'),
                 ),
                 _AdminTile(
                   icon: Icons.dashboard_customize_outlined,
-                  title: fa ? 'کنسول عملیات' : 'Operations console',
-                  subtitle: fa
-                      ? 'مدل‌ها، منابع، پژوهش، صف بازبینی، Feed و سلامت سیستم.'
-                      : 'Models, sources, research, review queue, Feed and system health.',
+                  title: l10n.adminOperations,
+                  subtitle: l10n.operationalOverview,
                   onTap: () => context.go('/admin/operations'),
                 ),
                 _AdminTile(
@@ -86,7 +76,7 @@ class _AdminTile extends StatelessWidget {
         padding: const EdgeInsets.only(top: 6),
         child: Text(subtitle),
       ),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: Icon(directionalChevron(context)),
       onTap: onTap,
     ),
   );

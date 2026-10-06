@@ -50,12 +50,14 @@ current_unapplied = [
     '20261005102000_stage1_ai_research_completion.sql',
     '20261005120000_stage2_review_feed_publish.sql',
     '20261005130000_stage2_visa_structured_steps.sql',
+    '20261005190000_stage3_fk_covering_indexes.sql',
+    '20261006132931_stage5_research_review_candidate_backfill.sql',
 ]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
 assert actual_names == sorted(expected_names + current_unapplied), actual_names
 for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
-print('Canonical active lineage: PASS (25 authoritative + current additive migrations).')
+print('Canonical active lineage: PASS (25 authoritative + 8 current additive migrations).')
 PY
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004190000_fix_profile_update_rls_recursion.sql"
@@ -63,4 +65,6 @@ psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004203000_client_delivery_
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005102000_stage1_ai_research_completion.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005120000_stage2_review_feed_publish.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005130000_stage2_visa_structured_steps.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005190000_stage3_fk_covering_indexes.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261006132931_stage5_research_review_candidate_backfill.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql

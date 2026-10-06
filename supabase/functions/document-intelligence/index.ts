@@ -1,9 +1,10 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 const URL=Deno.env.get("SUPABASE_URL")!;
 const SERVICE=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const serviceHeaders={apikey:SERVICE,Authorization:`Bearer ${SERVICE}`,"Content-Type":"application/json"};
-const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, apikey, content-type"};
+const cors=corsHeaders;
 const json=(status:number,body:unknown)=>new Response(JSON.stringify(body),{status,headers:{...cors,"Content-Type":"application/json"}});
 async function db(path:string,init:RequestInit={}){
  const response=await fetch(`${URL}/rest/v1/${path}`,{...init,headers:{...serviceHeaders,...(init.headers??{})}});

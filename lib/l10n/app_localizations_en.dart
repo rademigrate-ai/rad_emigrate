@@ -370,6 +370,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get publishedRequirements => 'Published requirements';
   @override
+  String get structuredDetailsPending =>
+      'Structured details are awaiting review';
+  @override
+  String get structuredDetailsPendingBody =>
+      'No verified requirements or application steps have been published for this programme yet. Use the cited source and confirm current rules with the official authority.';
+  @override
   String get source => 'Source';
   @override
   String get visaDisclaimer =>
@@ -533,6 +539,58 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get modelDiscoveryFailed =>
       'Model discovery failed with a sanitized provider error.';
+  @override
+  String get disabled => 'Disabled';
+  @override
+  String get active => 'Active';
+  @override
+  String get inactive => 'Inactive';
+  @override
+  String get critical => 'Critical';
+  @override
+  String get unavailable => 'Unavailable';
+  @override
+  String get baseUrl => 'Base URL';
+  @override
+  String get lowercaseSlugHint =>
+      'Use lowercase letters, digits, and underscores only';
+  @override
+  String providerReachable(int count) =>
+      'Provider is reachable ($count models visible).';
+  @override
+  String modelDiscoveryCompleted(int discovered, int added) =>
+      'Model discovery completed: $discovered found, $added added.';
+  @override
+  String get noContentSources => 'No content sources are configured.';
+  @override
+  String get approvedSourcesAppearHere =>
+      'RAD official sources and approved authoritative sources appear here.';
+  @override
+  String get noResearchJobs => 'No research jobs yet.';
+  @override
+  String get operationsHealth => 'Operations / Health';
+  @override
+  String get noOperationalComponents =>
+      'No operational components are registered.';
+  @override
+  String get componentInventoryUnavailable =>
+      'Component inventory is unavailable.';
+  @override
+  String get auditSecurity => 'Audit / Security';
+  @override
+  String get noAuditEvents => 'No audit events are visible.';
+  @override
+  String get auditRestricted => 'Audit history is restricted to Super Admin.';
+  @override
+  String get categoryUpdate => 'Update';
+  @override
+  String get categoryGuide => 'Guide';
+  @override
+  String get categoryDeadline => 'Deadline';
+  @override
+  String get categoryEvent => 'Event';
+  @override
+  String get categoryAnnouncement => 'Announcement';
 
   @override
   String get reviewQueueTitle => 'Review queue';

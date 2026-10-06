@@ -64,8 +64,11 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       if (mounted) {
         setState(() {
           _status = discover
-              ? 'Model discovery completed: ${result['discovered'] ?? 0} found, ${result['added'] ?? 0} added.'
-              : 'Provider is reachable (${result['model_count'] ?? 0} models visible).';
+              ? l10n.modelDiscoveryCompleted(
+                  result['discovered'] as int? ?? 0,
+                  result['added'] as int? ?? 0,
+                )
+              : l10n.providerReachable(result['model_count'] as int? ?? 0);
         });
       }
     } catch (_) {
@@ -113,7 +116,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                 },
               ),
               const SizedBox(height: 12),
-              Text('Priority ${priority.round()}'),
+              Text('${l10n.priority} ${priority.round()}'),
               Slider(
                 value: priority,
                 min: 0,
@@ -308,7 +311,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                                           child: Text(model.slug),
                                         ),
                                         subtitle: Text(
-                                          '${model.runtimeScope.toUpperCase()} · priority ${model.priority}${model.available ? '' : ' · unavailable'}',
+                                          '${model.runtimeScope.toUpperCase()} · ${l10n.priority} ${model.priority}${model.available ? '' : ' · ${l10n.unavailable}'}',
                                         ),
                                         trailing: const Icon(Icons.tune),
                                       ),
@@ -337,7 +340,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                           return l10n.required;
                         }
                         if (!RegExp(r'^[a-z0-9_]+$').hasMatch(value)) {
-                          return 'Use lowercase letters, digits, underscore';
+                          return l10n.lowercaseSlugHint;
                         }
                         return null;
                       },
@@ -394,7 +397,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                     const SizedBox(height: 12),
                     AppTextField(
                       controller: _baseUrlCtrl,
-                      label: 'Base URL',
+                      label: l10n.baseUrl,
                       textDirection: TextDirection.ltr,
                       keyboardType: TextInputType.url,
                       validator: (v) {

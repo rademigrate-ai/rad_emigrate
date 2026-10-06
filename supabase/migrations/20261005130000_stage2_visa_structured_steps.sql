@@ -51,68 +51,9 @@ where p.slug = 'work-germany'
     where s.program_id = p.id and s.locale = x.locale and s.display_order = x.ord
   );
 
--- study-australia / study-united-kingdom generic study service steps (RAD study visa content)
-insert into public.visa_program_steps (
-  program_id, locale, title, description, display_order, source_id
-)
-select p.id, x.locale, x.title, x.description, x.ord,
-  '10000000-0000-4000-8000-000000000001'::uuid
-from public.visa_programs p
-cross join (values
-  ('fa','مشاوره مسیر تحصیلی','بررسی هدف تحصیلی و انتخاب کشور و مقطع مناسب.',10),
-  ('fa','پذیرش آموزشی','پیگیری پذیرش از مرکز آموزشی مرتبط.',20),
-  ('fa','مدارک پرونده','آماده‌سازی مدارک تحصیلی، زبان و مالی متناسب با مسیر.',30),
-  ('fa','درخواست ویزای تحصیلی','ثبت درخواست ویزا و پیگیری نتیجه.',40),
-  ('en','Study pathway consultation','Review study goals and select an appropriate country and level.',10),
-  ('en','Educational admission','Pursue admission from a relevant educational institution.',20),
-  ('en','Case documents','Prepare academic, language and financial documents for the route.',30),
-  ('en','Study visa application','Submit the visa application and track the outcome.',40)
-) x(locale, title, description, ord)
-where p.slug in ('study-australia', 'study-united-kingdom')
-  and not exists (
-    select 1 from public.visa_program_steps s
-    where s.program_id = p.id and s.locale = x.locale and s.display_order = x.ord
-  );
-
--- medical-study-germany
-insert into public.visa_program_steps (
-  program_id, locale, title, description, display_order, source_id
-)
-select p.id, x.locale, x.title, x.description, x.ord,
-  '10000000-0000-4000-8000-000000000008'::uuid
-from public.visa_programs p
-cross join (values
-  ('fa','مشاوره تحصیل پزشکی','بررسی شرایط ورود به مسیرهای تحصیل پزشکی منتشرشده توسط راد.',10),
-  ('fa','پذیرش و پیش‌نیازها','پیگیری پذیرش و پیش‌نیازهای زبانی یا علمی مسیر انتخابی.',20),
-  ('fa','مدارک و درخواست','آماده‌سازی مدارک و ثبت درخواست مرتبط با مسیر.',30),
-  ('en','Medical study consultation','Review published RAD medical study pathways and entry conditions.',10),
-  ('en','Admission and prerequisites','Pursue admission and language or academic prerequisites for the route.',20),
-  ('en','Documents and application','Prepare documents and submit the related application.',30)
-) x(locale, title, description, ord)
-where p.slug = 'medical-study-germany'
-  and not exists (
-    select 1 from public.visa_program_steps s
-    where s.program_id = p.id and s.locale = x.locale and s.display_order = x.ord
-  );
-
--- Expand requirements for remaining published programs where missing (high-level only)
-insert into public.visa_program_requirements (
-  program_id, locale, requirement, is_mandatory, display_order, source_id
-)
-select p.id, x.locale, x.requirement, x.is_mandatory, x.ord, p.primary_source_id
-from public.visa_programs p
-cross join (values
-  ('fa','مدارک هویتی و گذرنامه معتبر',true,10),
-  ('fa','مدارک پشتیبان متناسب با مسیر انتخابی',null,20),
-  ('fa','بررسی الزامات جاری مرجع رسمی کشور مقصد',true,30),
-  ('en','Valid identity documents and passport',true,10),
-  ('en','Supporting documents appropriate to the selected pathway',null,20),
-  ('en','Verify current requirements with the destination authority',true,30)
-) x(locale, requirement, is_mandatory, ord)
-where p.status = 'published'
-  and not exists (
-    select 1 from public.visa_program_requirements r
-    where r.program_id = p.id and r.locale = x.locale
-  );
+-- Other published programmes intentionally remain summary-only until their
+-- programme-specific process and requirements are reviewed against a current
+-- RAD primary source and the relevant destination authority. Do not populate
+-- generic requirements: a plausible-sounding checklist is not evidence.
 
 commit;

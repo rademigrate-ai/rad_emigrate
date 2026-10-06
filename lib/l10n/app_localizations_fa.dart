@@ -373,6 +373,12 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get publishedRequirements => 'مدارک و الزامات منتشرشده';
   @override
+  String get structuredDetailsPending =>
+      'جزئیات ساختاریافته در انتظار بازبینی است';
+  @override
+  String get structuredDetailsPendingBody =>
+      'هنوز الزامات یا مراحل اقدامِ تأییدشده‌ای برای این برنامه منتشر نشده است. منبع ذکرشده را ببینید و مقررات روز را با مرجع رسمی تطبیق دهید.';
+  @override
   String get source => 'منبع';
   @override
   String get visaDisclaimer =>
@@ -536,6 +542,58 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get modelDiscoveryFailed =>
       'کشف مدل‌ها با یک خطای پالایش‌شده ناموفق بود.';
+  @override
+  String get disabled => 'غیرفعال';
+  @override
+  String get active => 'فعال';
+  @override
+  String get inactive => 'غیرفعال';
+  @override
+  String get critical => 'حیاتی';
+  @override
+  String get unavailable => 'در دسترس نیست';
+  @override
+  String get baseUrl => 'نشانی پایه';
+  @override
+  String get lowercaseSlugHint =>
+      'فقط از حروف کوچک انگلیسی، رقم و زیرخط استفاده کنید';
+  @override
+  String providerReachable(int count) =>
+      'ارائه‌دهنده در دسترس است ($count مدل قابل مشاهده).';
+  @override
+  String modelDiscoveryCompleted(int discovered, int added) =>
+      'کشف مدل‌ها انجام شد: $discovered مدل پیدا و $added مدل افزوده شد.';
+  @override
+  String get noContentSources => 'هنوز منبع محتوایی پیکربندی نشده است.';
+  @override
+  String get approvedSourcesAppearHere =>
+      'منابع رسمی راد و منابع معتبر تأییدشده در این بخش نمایش داده می‌شوند.';
+  @override
+  String get noResearchJobs => 'هنوز پژوهشی در صف قرار نگرفته است.';
+  @override
+  String get operationsHealth => 'عملیات و سلامت سامانه';
+  @override
+  String get noOperationalComponents => 'هیچ مؤلفه عملیاتی ثبت نشده است.';
+  @override
+  String get componentInventoryUnavailable =>
+      'فهرست مؤلفه‌های سامانه در دسترس نیست.';
+  @override
+  String get auditSecurity => 'ممیزی و امنیت';
+  @override
+  String get noAuditEvents => 'هیچ رویداد ممیزی قابل مشاهده نیست.';
+  @override
+  String get auditRestricted =>
+      'تاریخچه ممیزی فقط برای مدیر ارشد در دسترس است.';
+  @override
+  String get categoryUpdate => 'به‌روزرسانی';
+  @override
+  String get categoryGuide => 'راهنما';
+  @override
+  String get categoryDeadline => 'مهلت';
+  @override
+  String get categoryEvent => 'رویداد';
+  @override
+  String get categoryAnnouncement => 'اطلاعیه';
 
   @override
   String get reviewQueueTitle => 'صف بررسی';

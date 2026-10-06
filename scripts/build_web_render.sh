@@ -13,7 +13,14 @@ if [[ -z "${SUPABASE_PUBLISHABLE_KEY:-}${SUPABASE_ANON_KEY:-}" ]]; then
 fi
 
 PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-$SUPABASE_ANON_KEY}"
-APP_ENV_VALUE="${APP_ENV:-staging}"
+APP_ENV_VALUE="${APP_ENV:-production}"
+case "$APP_ENV_VALUE" in
+  development|staging|production) ;;
+  *)
+    echo "ERROR: APP_ENV must be development, staging, or production." >&2
+    exit 1
+    ;;
+esac
 
 # Install Flutter if not already on PATH (Render static build environment).
 if ! command -v flutter >/dev/null 2>&1; then

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 import 'app_button.dart';
 
@@ -15,26 +14,39 @@ class ErrorState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 40, color: AppColors.error),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (onRetry != null) ...[
-              const SizedBox(height: 16),
-              AppButton(
-                label: AppLocalizations.of(context).retry,
-                onPressed: onRetry,
-                expanded: false,
-                variant: AppButtonVariant.secondary,
+        child: Semantics(
+          label: message,
+          liveRegion: true,
+          explicitChildNodes: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ExcludeSemantics(
+                child: Icon(
+                  Icons.error_outline,
+                  size: 40,
+                  color: Theme.of(context).colorScheme.error,
+                ),
               ),
+              const SizedBox(height: 12),
+              ExcludeSemantics(
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+              if (onRetry != null) ...[
+                const SizedBox(height: 16),
+                AppButton(
+                  label: AppLocalizations.of(context).retry,
+                  onPressed: onRetry,
+                  expanded: false,
+                  variant: AppButtonVariant.secondary,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

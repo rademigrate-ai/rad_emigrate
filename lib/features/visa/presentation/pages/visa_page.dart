@@ -263,6 +263,14 @@ class _ProgramDetail extends StatelessWidget {
                   ),
                 ),
               ],
+              if (program.requirements.isEmpty && program.steps.isEmpty) ...[
+                const SizedBox(height: 22),
+                EmptyState(
+                  title: l10n.structuredDetailsPending,
+                  subtitle: l10n.structuredDetailsPendingBody,
+                  icon: Icons.fact_check_outlined,
+                ),
+              ],
               const SizedBox(height: 22),
               Card(
                 child: Padding(

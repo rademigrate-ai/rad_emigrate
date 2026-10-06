@@ -15,6 +15,9 @@ const Set<String> _protectedRoutes = {
   '/ai-assistant',
   '/profile-completion',
   '/admin',
+  '/admin/ai-config',
+  '/admin/operations',
+  '/admin/ai-research',
   '/feed',
 };
 

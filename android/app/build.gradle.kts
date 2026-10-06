@@ -15,11 +15,20 @@ val releaseSigningNames = listOf(
 val releaseSigningValues = releaseSigningNames.associateWith { name ->
     providers.environmentVariable(name).orNull
 }
+val releaseApplicationId = providers.environmentVariable("RAD_ANDROID_APPLICATION_ID").orNull
 val missingReleaseSigning = releaseSigningNames.filter {
     releaseSigningValues[it].isNullOrBlank()
 }
 val verifyReleaseSigning = tasks.register("verifyReleaseSigning") {
     doLast {
+        if (releaseApplicationId.isNullOrBlank() ||
+            releaseApplicationId == "com.example.rad_emigrate"
+        ) {
+            throw GradleException(
+                "Android release build requires a permanent, owner-approved " +
+                    "RAD_ANDROID_APPLICATION_ID. The placeholder package ID is not allowed.",
+            )
+        }
         if (missingReleaseSigning.isNotEmpty()) {
             throw GradleException(
                 "Android release build requires " +
@@ -49,8 +58,9 @@ android {
     }
 
     defaultConfig {
-        // This placeholder must be replaced with the owner-selected production package ID.
-        applicationId = "com.example.rad_emigrate"
+        // Debug builds keep the local placeholder. Release packaging is blocked above
+        // until the owner supplies the permanent identity explicitly.
+        applicationId = releaseApplicationId ?: "com.example.rad_emigrate"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
