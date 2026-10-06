@@ -65,9 +65,7 @@ class AdminAiWorkspacePage extends ConsumerWidget {
               ),
             ),
           ),
-          const Expanded(
-            child: _AdminChatBody(),
-          ),
+          const Expanded(child: _AdminChatBody()),
         ],
       ),
     );
