@@ -187,7 +187,9 @@ class _Sources extends ConsumerWidget {
     }
 
     try {
-      await ref.read(adminOperationsRepositoryProvider).createResearchSource(
+      await ref
+          .read(adminOperationsRepositoryProvider)
+          .createResearchSource(
             displayName: nameCtrl.text.trim(),
             baseUrl: urlCtrl.text.trim(),
             sourceType: sourceType,
@@ -196,15 +198,15 @@ class _Sources extends ConsumerWidget {
           );
       ref.invalidate(adminConsoleProvider);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.changesSaved)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.changesSaved)));
       }
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.errorGeneric)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
       }
     } finally {
       nameCtrl.dispose();
@@ -285,8 +287,7 @@ class _Research extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final findingsPending =
         data.reviews.where((r) => r.kind == 'finding').length;
-    final draftsInReview =
-        data.reviews.where((r) => r.kind == 'draft').length;
+    final draftsInReview = data.reviews.where((r) => r.kind == 'draft').length;
     final lastJob =
         data.researchJobs.isEmpty ? null : data.researchJobs.first;
 
@@ -594,9 +595,16 @@ class _DataSummaryCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: Text(row.label)),
-                    Text(row.value),
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        row.label,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                    Expanded(child: Text(row.value)),
                   ],
                 ),
               ),
