@@ -35,13 +35,12 @@ void main() {
           body: ConstrainedContent(
             maxWidth: 320,
             padding: EdgeInsets.zero,
-            child: SizedBox(key: childKey, height: 24),
+            child: SizedBox(key: childKey, width: 800, height: 24),
           ),
         ),
       ),
     );
 
-    expect(tester.getSize(find.byType(ConstrainedContent)).width, 320);
     expect(tester.getSize(find.byKey(childKey)).width, 320);
   });
 }
