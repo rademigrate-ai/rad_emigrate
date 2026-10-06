@@ -156,7 +156,9 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                           child: Icon(
                             Icons.hourglass_empty_outlined,
                             size: 18,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       if (!hasStructure) const SizedBox(width: 8),
