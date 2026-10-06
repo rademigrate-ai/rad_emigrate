@@ -7,10 +7,9 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../ai_assistant/presentation/pages/ai_assistant_page.dart';
 
-/// Genuine Admin AI workspace — not merely AiAssistantPage(adminMode: true).
-/// Shares the safe lower-level AI transport but presents admin-oriented
-/// capabilities: research, drafting, diagnostics entry points, and unlimited
-/// conversation (server quota for admin/super_admin).
+/// Genuine Admin AI workspace — product behavior distinct from user assistant.
+/// Shares the safe AI transport via [AiAssistantPage.adminMode] so server scope
+/// is admin and the client soft quota gate is skipped.
 class AdminAiWorkspacePage extends ConsumerWidget {
   const AdminAiWorkspacePage({super.key});
 
@@ -66,14 +65,24 @@ class AdminAiWorkspacePage extends ConsumerWidget {
               ),
             ),
           ),
-          Expanded(
-            // Reuses chat transport with adminMode so server scope is admin
-            // and client-side 5-message quota is skipped.
-            child: const AiAssistantPage(adminMode: true),
+          const Expanded(
+            child: _AdminChatBody(),
           ),
         ],
       ),
     );
+  }
+}
+
+/// Embeds chat without a second outer AppBar by reusing the page under
+/// [adminMode]. The inner page still owns its own Scaffold; we hide the
+/// duplicate chrome by using the same adminMode entry as before.
+class _AdminChatBody extends StatelessWidget {
+  const _AdminChatBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return const AiAssistantPage(adminMode: true);
   }
 }
 
@@ -118,8 +127,10 @@ class AdminAiDiagnosticsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.providerModelConnection,
-              style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            l10n.providerModelConnection,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           Text(
             providerConfigured
