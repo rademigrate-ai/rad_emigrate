@@ -65,22 +65,12 @@ class AdminAiWorkspacePage extends ConsumerWidget {
               ),
             ),
           ),
-          const Expanded(child: _AdminChatBody()),
+          const Expanded(
+            child: AiAssistantPage(adminMode: true, embedded: true),
+          ),
         ],
       ),
     );
-  }
-}
-
-/// Embeds chat without a second outer AppBar by reusing the page under
-/// [adminMode]. The inner page still owns its own Scaffold; we hide the
-/// duplicate chrome by using the same adminMode entry as before.
-class _AdminChatBody extends StatelessWidget {
-  const _AdminChatBody();
-
-  @override
-  Widget build(BuildContext context) {
-    return const AiAssistantPage(adminMode: true);
   }
 }
 
