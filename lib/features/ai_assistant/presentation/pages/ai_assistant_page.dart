@@ -181,9 +181,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
           ? 'The AI provider credential was rejected. An Admin must re-enter a valid API key under Admin → AI configuration.'
           : l10n.aiUnavailableResponse(text);
       setState(() {
-        _messages.add(
-          _ChatMessage(isUser: false, text: message),
-        );
+        _messages.add(_ChatMessage(isUser: false, text: message));
         _loading = false;
       });
     }
