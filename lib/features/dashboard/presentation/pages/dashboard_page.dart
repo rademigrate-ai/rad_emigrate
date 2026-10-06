@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/directional_icons.dart';
+import '../../../../core/widgets/rad_brand.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -55,11 +57,16 @@ class DashboardPage extends ConsumerWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
             children: [
-              _JourneyHero(
-                name: name,
-                needsAction: needsAction,
-                onPrimaryAction: () => context.go(
-                  !profileDone ? '/profile-completion' : '/documents',
+              AnimatedOpacity(
+                opacity: 1,
+                duration: AppMotion.duration(context, AppMotion.standard),
+                curve: AppMotion.curve(context),
+                child: _JourneyHero(
+                  name: name,
+                  needsAction: needsAction,
+                  onPrimaryAction: () => context.go(
+                    !profileDone ? '/profile-completion' : '/documents',
+                  ),
                 ),
               ),
               const SizedBox(height: 28),
@@ -208,6 +215,11 @@ class _JourneyHero extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const RadBrand(
+                      size: RadBrandSize.small,
+                      showInstituteName: false,
+                    ),
+                    const SizedBox(height: 12),
                     Text(
                       l10n.helloName(name),
                       style: Theme.of(context).textTheme.headlineMedium,
