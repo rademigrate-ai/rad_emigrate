@@ -31,4 +31,9 @@ void main() {
     expect(body.contains('content_drafts'), isTrue);
     expect(body.contains('feed_items'), isFalse);
   });
+
+  test('Feed repository only loads published items', () {
+    final repo = read('lib/features/feed/data/feed_repository.dart');
+    expect(repo.contains(".eq('status', 'published')"), isTrue);
+  });
 }
