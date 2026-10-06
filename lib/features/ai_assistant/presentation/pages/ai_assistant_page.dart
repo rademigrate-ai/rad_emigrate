@@ -94,9 +94,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     // Soft gate for normal users only. Admin workspace sets adminMode.
     // Server returns 429 if daily limits are exceeded.
     if (!_isPrivilegedAdmin && _used >= _userDisplayHintLimit) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
       return;
     }
 
@@ -114,9 +113,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
@@ -324,9 +322,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                   (s) => Text(
                                     '${l10n.sourceLabel}: ${s.title}'
                                     '${s.authority != null ? ' (${s.authority})' : ''}',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodySmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall,
                                   ),
                                 ),
                               ],
