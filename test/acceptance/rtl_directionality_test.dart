@@ -36,61 +36,63 @@ void main() {
     expect(icons, contains('Icons.chevron_right'));
   });
 
-  testWidgets('directionalChevron resolves from ambient Directionality', (
-    tester,
-  ) async {
-    IconData? ltr;
-    IconData? rtl;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            ltr = directionalChevron(context);
-            return Directionality(
-              textDirection: TextDirection.rtl,
-              child: Builder(
-                builder: (rtlContext) {
-                  rtl = directionalChevron(rtlContext);
-                  return const SizedBox.shrink();
-                },
-              ),
-            );
-          },
+  testWidgets(
+    'directionalChevron resolves from ambient Directionality',
+    (tester) async {
+      IconData? ltr;
+      IconData? rtl;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ltr = directionalChevron(context);
+              return Directionality(
+                textDirection: TextDirection.rtl,
+                child: Builder(
+                  builder: (rtlContext) {
+                    rtl = directionalChevron(rtlContext);
+                    return const SizedBox.shrink();
+                  },
+                ),
+              );
+            },
+          ),
         ),
-      ),
-    );
-    expect(ltr, Icons.chevron_right);
-    expect(rtl, Icons.chevron_left);
-  });
+      );
+      expect(ltr, Icons.chevron_right);
+      expect(rtl, Icons.chevron_left);
+    },
+  );
 
   test('primary product pages use directional helpers not fixed arrows', () {
-    final pages = [
+    final pages = <String>[
       'lib/features/dashboard/presentation/pages/dashboard_page.dart',
       'lib/features/visa/presentation/pages/visa_page.dart',
       'lib/features/profile/presentation/pages/profile_page.dart',
     ];
     for (final path in pages) {
       final source = read(path);
-      expect(
-        source.contains('directionalChevron') ||
-            source.contains('directionalBack') ||
-            source.contains('directionalForward'),
-        isTrue,
-        reason: '$path should use directional_* helpers',
-      );
+      final usesDirectional =
+          source.contains('directionalChevron') ||
+          source.contains('directionalBack') ||
+          source.contains('directionalForward');
+      expect(usesDirectional, isTrue, reason: path);
       expect(source, isNot(contains('Icons.chevron_right')));
       expect(source, isNot(contains('Icons.arrow_back,')));
     }
   });
 
-  test('EN and FA localizations remain non-empty and distinct for core keys', () {
-    final en = lookupAppLocalizations(const Locale('en'));
-    final fa = lookupAppLocalizations(const Locale('fa'));
-    expect(en.appTitle.trim(), isNotEmpty);
-    expect(fa.appTitle.trim(), isNotEmpty);
-    expect(en.visaPathways, isNot(fa.visaPathways));
-    expect(en.feedTitle, isNot(fa.feedTitle));
-    expect(en.structuredDetailsPending.trim(), isNotEmpty);
-    expect(fa.structuredDetailsPending.trim(), isNotEmpty);
-  });
+  test(
+    'EN and FA localizations remain non-empty and distinct for core keys',
+    () {
+      final en = lookupAppLocalizations(const Locale('en'));
+      final fa = lookupAppLocalizations(const Locale('fa'));
+      expect(en.appTitle.trim(), isNotEmpty);
+      expect(fa.appTitle.trim(), isNotEmpty);
+      expect(en.visaPathways, isNot(fa.visaPathways));
+      expect(en.feedTitle, isNot(fa.feedTitle));
+      expect(en.structuredDetailsPending.trim(), isNotEmpty);
+      expect(fa.structuredDetailsPending.trim(), isNotEmpty);
+    },
+  );
 }
