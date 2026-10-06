@@ -175,11 +175,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         _loading = false;
       });
       _scrollToEnd();
-    } catch (_) {
+    } catch (error) {
       if (!mounted) return;
+      final message = error.toString().contains('provider_unauthorized')
+          ? 'The AI provider credential was rejected. An Admin must re-enter a valid API key under Admin → AI configuration.'
+          : l10n.aiUnavailableResponse(text);
       setState(() {
         _messages.add(
-          _ChatMessage(isUser: false, text: l10n.aiUnavailableResponse(text)),
+          _ChatMessage(isUser: false, text: message),
         );
         _loading = false;
       });
