@@ -7,7 +7,6 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/section_card.dart';
-import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
 import '../providers/visa_catalog_provider.dart';
@@ -152,13 +151,15 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (!hasStructure)
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(end: 8),
-                          child: StatusBadge(
-                            label: l10n.structuredDetailsPending,
-                            tone: StatusTone.neutral,
+                        Tooltip(
+                          message: l10n.structuredDetailsPending,
+                          child: Icon(
+                            Icons.hourglass_empty_outlined,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
+                      if (!hasStructure) const SizedBox(width: 8),
                       Icon(directionalChevron(context)),
                     ],
                   ),
