@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
@@ -35,9 +36,10 @@ on:
 permissions:
   contents: read
 
+# Per-SHA group so rapid pushes do not cancel a healthy runner mid-setup.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
 
 jobs:
   flutter:
