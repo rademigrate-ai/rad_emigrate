@@ -156,5 +156,19 @@
   "categoryEvent": "رویداد",
   "categoryAnnouncement": "اطلاعیه",
   "structuredDetailsPending": "جزئیات ساختاریافته در انتظار بازبینی است",
-  "structuredDetailsPendingBody": "هنوز الزامات یا مراحل اقدامِ تأییدشده‌ای برای این برنامه منتشر نشده است. منبع ذکرشده را ببینید و مقررات روز را با مرجع رسمی تطبیق دهید."
+  "structuredDetailsPendingBody": "هنوز الزامات یا مراحل اقدامِ تأییدشده‌ای برای این برنامه منتشر نشده است. منبع ذکرشده را ببینید و مقررات روز را با مرجع رسمی تطبیق دهید.",
+  "addSource": "افزودن منبع",
+  "requiredField": "این فیلد الزامی است",
+  "invalidUrl": "یک نشانی معتبر http(s) وارد کنید",
+  "titleLabel": "عنوان",
+  "sourceType": "نوع منبع",
+  "researchPipelineSummary": "خط لوله تحقیق",
+  "findingsCount": "{count} یافته در انتظار بررسی",
+  "@findingsCount": {"placeholders": {"count": {"type": "int"}}},
+  "draftsInReview": "{count} پیش‌نویس در بررسی",
+  "@draftsInReview": {"placeholders": {"count": {"type": "int"}}},
+  "feedPublishedOnly": "فید فقط موارد منتشرشده را نشان می‌دهد",
+  "lastResearchRun": "آخرین اجرا",
+  "researchNeverAutoPublishes": "تحقیق و هوش مصنوعی هرگز به‌صورت خودکار در فید منتشر نمی‌شوند. ادمین باید صریحاً بررسی و منتشر کند.",
+  "researchQueued": "اجرای تحقیق در صف قرار گرفت"
 }
