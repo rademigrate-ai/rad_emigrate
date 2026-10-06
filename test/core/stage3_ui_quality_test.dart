@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/constrained_content.dart';
 import 'package:rad_emigrate/core/widgets/empty_state.dart';
@@ -42,14 +41,7 @@ void main() {
       ),
     );
 
-    final constrainedBoxFinder = find.descendant(
-      of: find.byType(ConstrainedContent),
-      matching: find.byType(ConstrainedBox),
-    );
-    final constrainedBox = tester.renderObject<RenderConstrainedBox>(
-      constrainedBoxFinder,
-    );
-    expect(constrainedBox.additionalConstraints.maxWidth, 320);
+    expect(tester.getSize(find.byType(ConstrainedContent)).width, 320);
     expect(tester.getSize(find.byKey(childKey)).width, 320);
   });
 }
