@@ -116,7 +116,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       final priorName = (session?.fullName ?? current?.fullName ?? '').trim();
       if (profile.fullName.isNotEmpty && profile.fullName.trim() != priorName) {
         try {
-          await ref.read(authControllerProvider.notifier).completeProfile(
+          await ref
+              .read(authControllerProvider.notifier)
+              .completeProfile(
                 fullName: profile.fullName,
                 nationality: profile.nationality,
               );
