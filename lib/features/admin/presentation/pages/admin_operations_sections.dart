@@ -187,26 +187,24 @@ class _Sources extends ConsumerWidget {
     }
 
     try {
-      await ref
-          .read(adminOperationsRepositoryProvider)
-          .createResearchSource(
-            displayName: nameCtrl.text.trim(),
-            baseUrl: urlCtrl.text.trim(),
-            sourceType: sourceType,
-            trustClass: trustClass,
-            runtimeScope: 'both',
-          );
+      await ref.read(adminOperationsRepositoryProvider).createResearchSource(
+        displayName: nameCtrl.text.trim(),
+        baseUrl: urlCtrl.text.trim(),
+        sourceType: sourceType,
+        trustClass: trustClass,
+        runtimeScope: 'both',
+      );
       ref.invalidate(adminConsoleProvider);
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.changesSaved)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.changesSaved)),
+        );
       }
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.errorGeneric)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.errorGeneric)),
+        );
       }
     } finally {
       nameCtrl.dispose();
