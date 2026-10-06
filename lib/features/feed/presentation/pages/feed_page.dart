@@ -53,12 +53,16 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                       const SizedBox(height: AppSpacing.md),
                   itemBuilder: (context, index) {
                     final item = items[index];
+                    final theme = Theme.of(context);
                     final published = item.publishedAt;
                     final dateLabel = published
                         ?.toLocal()
                         .toIso8601String()
                         .split('T')
                         .first;
+                    final categoryStyle = theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                    );
                     return AnimatedOpacity(
                       opacity: 1,
                       duration: AppMotion.duration(context, AppMotion.fast),
@@ -80,7 +84,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                               item.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: theme.textTheme.titleMedium,
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,30 +99,18 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                                   const SizedBox(height: 8),
                                   Text(
                                     dateLabel,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelSmall,
+                                    style: theme.textTheme.labelSmall,
                                   ),
                                 ],
                                 if (item.category.isNotEmpty) ...[
                                   const SizedBox(height: 4),
-                                  Text(
-                                    item.category,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                  ),
+                                  Text(item.category, style: categoryStyle),
                                 ],
                               ],
                             ),
                             leading: Icon(
                               Icons.article_outlined,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.primary,
                             ),
                             trailing: IconButton(
                               tooltip: item.saved
