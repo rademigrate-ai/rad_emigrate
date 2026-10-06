@@ -54,6 +54,13 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final published = item.publishedAt;
+                    final dateLabel = published == null
+                        ? null
+                        : published
+                              .toLocal()
+                              .toIso8601String()
+                              .split('T')
+                              .first;
                     return AnimatedOpacity(
                       opacity: 1,
                       duration: AppMotion.duration(context, AppMotion.fast),
@@ -81,16 +88,14 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              if (published != null) ...[
+                              if (dateLabel != null) ...[
                                 const SizedBox(height: 8),
                                 Text(
-                                  published.toLocal().toIso8601String().split(
-                                    'T',
-                                  ).first,
+                                  dateLabel,
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                               ],
-                              if ((item.category).isNotEmpty) ...[
+                              if (item.category.isNotEmpty) ...[
                                 const SizedBox(height: 4),
                                 Text(
                                   item.category,
