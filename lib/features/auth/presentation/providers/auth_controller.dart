@@ -128,7 +128,9 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
     required String fullName,
     String? nationality,
   }) async {
-    state = const AsyncValue.loading();
+    // Do not force global auth into loading — that makes isAuthenticated
+    // false and GoRouter redirects to /login (profile phone update logout bug).
+    final previous = state;
     try {
       state = AsyncValue.data(
         await _repository.completeProfile(
@@ -137,8 +139,8 @@ class AuthController extends StateNotifier<AsyncValue<UserSession>> {
         ),
       );
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
-      rethrow;
+      state = previous;
+      Error.throwWithStackTrace(e, st);
     }
   }
 
