@@ -27,6 +27,7 @@ class EmptyState extends StatelessWidget {
         padding: const EdgeInsets.all(32),
         child: Semantics(
           label: description,
+          explicitChildNodes: true,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -42,17 +43,21 @@ class EmptyState extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
+              ExcludeSemantics(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
               if (subtitle != null) ...[
                 const SizedBox(height: 8),
-                Text(
-                  subtitle!,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                ExcludeSemantics(
+                  child: Text(
+                    subtitle!,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
               ],
               if (actionLabel != null && onAction != null) ...[

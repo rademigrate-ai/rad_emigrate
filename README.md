@@ -26,22 +26,12 @@ Each feature follows:
 
 `presentation → domain → data`
 
-## Features (PROJECT 01)
+## Product areas
 
-| Module | Status |
-|--------|--------|
-| Authentication (login / register / OTP / profile completion / logout) | ✅ |
-| Session restore + secure storage | ✅ |
-| Router guards (public / protected) | ✅ |
-| Responsive shell (NavigationRail + NavigationBar) | ✅ |
-| Dashboard + quick actions + AI entry | ✅ |
-| Visa programs (countries, categories, details) | ✅ |
-| Applications list + detail + statuses | ✅ |
-| Documents checklist + status | ✅ |
-| Profile + logout | ✅ |
-| AI service foundation | ✅ |
-| Reusable UI (loading / error / empty / cards) | ✅ |
-| Unit tests (auth + session) | ✅ |
+Authentication, bilingual Visa catalogue, reviewed Feed, applications,
+documents, grounded User AI, and role-gated Admin/Super Admin operations are
+implemented against Supabase. Research and AI create review candidates only;
+publishing to Feed is always an explicit Admin action.
 
 ## Getting Started
 
@@ -86,7 +76,7 @@ validates compilation and does not contain production credentials.
 
 Web builds use the same two Supabase defines.
 
-### Render staging (Flutter Web)
+### Render production (Flutter Web)
 
 Static Site settings:
 
@@ -102,9 +92,11 @@ Environment variables (available at **build** time):
 |------|--------|------|
 | `SUPABASE_URL` | `https://inshddthftkhcdosoqcn.supabase.co` | Normal |
 | `SUPABASE_PUBLISHABLE_KEY` | Publishable or legacy **anon** public key from Supabase API settings | Normal |
-| `APP_ENV` | `staging` | Normal |
+| `APP_ENV` | `production` | Normal |
 
-Full checklist: [docs/RENDER_STAGING.md](docs/RENDER_STAGING.md). Blueprint: [render.yaml](render.yaml).
+Full release, activation, rollback, and smoke-test procedure:
+[Stage 5 production handover](docs/STAGE5_PRODUCTION_HANDOVER.md). Blueprint:
+[render.yaml](render.yaml).
 
 ### Authentication
 
@@ -114,14 +106,5 @@ Authentication requires a real RAD Emigrate account and a valid Supabase session
 
 - [Architecture](docs/architecture.md)
 - [Development](docs/development.md)
-- [Render staging](docs/RENDER_STAGING.md)
-- [PROJECT 01 Implementation](docs/PROJECT01_IMPLEMENTATION.md)
-
-## Next (beyond PROJECT 01)
-
-- Real backend API integration
-- Knowledge Base + RAG for User AI
-- Admin CMS + Admin AI Research Assistant
-- Payments, CRM, notifications
-- Full immigration profile forms
-- Document upload + OCR
+- [Stage 5 production handover](docs/STAGE5_PRODUCTION_HANDOVER.md)
+- [Migration lineage reconciliation](docs/SUPABASE_MIGRATION_LINEAGE_RECONCILIATION.md)

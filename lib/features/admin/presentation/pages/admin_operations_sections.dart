@@ -7,10 +7,11 @@ class _Providers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return _SectionList(
-      title: 'AI Configuration · Providers & Models',
-      emptyTitle: 'No AI provider is configured yet.',
-      emptySubtitle: 'Provider credentials remain server-side. Existing secrets are never displayed.',
+      title: '${l10n.adminAiConfig} · ${l10n.providerModelConnection}',
+      emptyTitle: l10n.noProviderConfigured,
+      emptySubtitle: l10n.credentialsServerOnly,
       children: [
         for (final provider in data.providers)
           Card(
@@ -28,7 +29,7 @@ class _Providers extends StatelessWidget {
                         ),
                       ),
                       _StatusBadge(
-                        '${provider.healthStatus} · ${provider.enabled ? 'enabled' : 'disabled'}',
+                        '${provider.healthStatus} · ${provider.enabled ? l10n.enabled : l10n.disabled}',
                       ),
                     ],
                   ),
@@ -36,7 +37,7 @@ class _Providers extends StatelessWidget {
                   _LtrValue('${provider.adapter} · ${provider.baseUrl}'),
                   const SizedBox(height: 8),
                   Text(
-                    'Credential: ${provider.credentialConfigured ? 'Configured' : 'Not configured'} · Priority ${provider.priority}',
+                    '${provider.credentialConfigured ? l10n.credentialConfigured : l10n.credentialMissing} · ${l10n.priority} ${provider.priority}',
                   ),
                 ],
               ),
@@ -57,8 +58,8 @@ class _Sources extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     return _SectionList(
       title: l10n.source,
-      emptyTitle: 'No content sources are configured.',
-      emptySubtitle: 'RAD official sources and approved authoritative sources appear here.',
+      emptyTitle: l10n.noContentSources,
+      emptySubtitle: l10n.approvedSourcesAppearHere,
       children: [
         for (final source in data.sources)
           Card(
@@ -78,7 +79,9 @@ class _Sources extends ConsumerWidget {
                   _LtrValue(source.url),
                 ],
               ),
-              trailing: _StatusBadge(source.active ? 'active' : 'inactive'),
+              trailing: _StatusBadge(
+                source.active ? l10n.active : l10n.inactive,
+              ),
             ),
           ),
         for (final source in data.researchSources)
@@ -96,7 +99,7 @@ class _Sources extends ConsumerWidget {
                 ],
               ),
               trailing: _StatusBadge(
-                source.enabled ? source.authority : 'disabled',
+                source.enabled ? source.authority : l10n.disabled,
               ),
             ),
           ),
@@ -115,7 +118,7 @@ class _Research extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     return _SectionList(
       title: l10n.researchJobs,
-      emptyTitle: 'No research jobs yet.',
+      emptyTitle: l10n.noResearchJobs,
       emptySubtitle: l10n.untrustedResearchDisclaimer,
       children: [
         Align(
@@ -228,10 +231,11 @@ class _Health extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return _SectionList(
-      title: 'Operations / Health',
-      emptyTitle: 'No operational components are registered.',
-      emptySubtitle: 'Component inventory is unavailable.',
+      title: l10n.operationsHealth,
+      emptyTitle: l10n.noOperationalComponents,
+      emptySubtitle: l10n.componentInventoryUnavailable,
       children: [
         for (final item in data.health)
           Card(
@@ -244,7 +248,7 @@ class _Health extends StatelessWidget {
               title: Text(item.displayName),
               subtitle: _LtrValue(item.slug),
               trailing: _StatusBadge(
-                '${item.enabled ? 'enabled' : 'disabled'}${item.critical ? ' · critical' : ''}',
+                '${item.enabled ? l10n.enabled : l10n.disabled}${item.critical ? ' · ${l10n.critical}' : ''}',
               ),
             ),
           ),
@@ -260,10 +264,11 @@ class _Audit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return _SectionList(
-      title: 'Audit / Security',
-      emptyTitle: 'No audit events are visible.',
-      emptySubtitle: 'Audit history is restricted to Super Admin.',
+      title: l10n.auditSecurity,
+      emptyTitle: l10n.noAuditEvents,
+      emptySubtitle: l10n.auditRestricted,
       children: [
         for (final item in data.audit)
           Card(

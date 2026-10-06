@@ -174,17 +174,26 @@ Future<void> showAdminReviewDetail(
                   DropdownButtonFormField<String>(
                     initialValue: category,
                     decoration: InputDecoration(labelText: l10n.category),
-                    items: const [
-                      DropdownMenuItem(value: 'update', child: Text('update')),
-                      DropdownMenuItem(value: 'guide', child: Text('guide')),
+                    items: [
+                      DropdownMenuItem(
+                        value: 'update',
+                        child: Text(l10n.categoryUpdate),
+                      ),
+                      DropdownMenuItem(
+                        value: 'guide',
+                        child: Text(l10n.categoryGuide),
+                      ),
                       DropdownMenuItem(
                         value: 'deadline',
-                        child: Text('deadline'),
+                        child: Text(l10n.categoryDeadline),
                       ),
-                      DropdownMenuItem(value: 'event', child: Text('event')),
+                      DropdownMenuItem(
+                        value: 'event',
+                        child: Text(l10n.categoryEvent),
+                      ),
                       DropdownMenuItem(
                         value: 'announcement',
-                        child: Text('announcement'),
+                        child: Text(l10n.categoryAnnouncement),
                       ),
                     ],
                     onChanged: busy

@@ -288,8 +288,8 @@ class AdminOperationsRepository {
       if (statusColumn != null) {
         query = query.neq(statusColumn, 'done');
       }
-      final rows = await query;
-      return rows.length;
+      final response = await query.limit(1).count();
+      return response.count;
     }
 
     final results = await Future.wait([
@@ -326,28 +326,32 @@ class AdminOperationsRepository {
           'runtime_scope,'
           'ai_provider_health(status,last_success_at,last_failure_at)',
         )
-        .order('priority');
+        .order('priority')
+        .limit(100);
     final modelsFuture = client
         .from('ai_models')
         .select(
           'id,provider_id,slug,display_name,capability,enabled,max_output_tokens,'
           'runtime_scope,priority,available',
         )
-        .order('display_name');
+        .order('display_name')
+        .limit(200);
     final sourcesFuture = client
         .from('content_sources')
         .select(
           'id,title,publisher,url,source_type,language_code,is_active,retrieved_at',
         )
         .order('source_type')
-        .order('publisher');
+        .order('publisher')
+        .limit(100);
     final researchSourcesFuture = client
         .from('research_sources')
         .select(
           'id,base_url,allowed_host,authority,enabled,last_attempt_at,last_success_at,'
           'display_name,runtime_scope,trust_class,source_type,last_error_code',
         )
-        .order('authority');
+        .order('authority')
+        .limit(100);
     final researchJobsFuture = client
         .from('research_jobs')
         .select('id,job_type,status,trigger_type,created_at,safe_error')
@@ -373,7 +377,8 @@ class AdminOperationsRepository {
     final healthFuture = client
         .from('system_components')
         .select('slug,display_name,enabled,critical')
-        .order('display_name');
+        .order('display_name')
+        .limit(100);
     final auditFuture = role == 'super_admin'
         ? client
               .from('admin_audit_logs')

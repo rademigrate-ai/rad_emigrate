@@ -91,6 +91,15 @@ jobs:
             fi
           done
           echo "Release packaging remains blocked until owner-provided signing values are configured."
+      - name: Verify placeholder Android identity blocks release packaging
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ./android/gradlew -p android :app:verifyReleaseSigning >release-check.log 2>&1; then
+            echo "Release verification unexpectedly accepted placeholder identity/signing." >&2
+            exit 1
+          fi
+          grep -F "RAD_ANDROID_APPLICATION_ID" release-check.log
       - run: git diff --check
 
   repository-keyword-scan:

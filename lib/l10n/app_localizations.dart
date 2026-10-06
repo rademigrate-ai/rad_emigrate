@@ -208,6 +208,8 @@ abstract class AppLocalizations {
   String get publishedTimeline;
   String get publishedFee;
   String get publishedRequirements;
+  String get structuredDetailsPending;
+  String get structuredDetailsPendingBody;
   String get source;
   String get visaDisclaimer;
   String get feedTitle;
@@ -280,6 +282,29 @@ abstract class AppLocalizations {
   String get providerSaveFailed;
   String get providerTestFailed;
   String get modelDiscoveryFailed;
+  String get disabled;
+  String get active;
+  String get inactive;
+  String get critical;
+  String get unavailable;
+  String get baseUrl;
+  String get lowercaseSlugHint;
+  String providerReachable(int count);
+  String modelDiscoveryCompleted(int discovered, int added);
+  String get noContentSources;
+  String get approvedSourcesAppearHere;
+  String get noResearchJobs;
+  String get operationsHealth;
+  String get noOperationalComponents;
+  String get componentInventoryUnavailable;
+  String get auditSecurity;
+  String get noAuditEvents;
+  String get auditRestricted;
+  String get categoryUpdate;
+  String get categoryGuide;
+  String get categoryDeadline;
+  String get categoryEvent;
+  String get categoryAnnouncement;
 
   // Stage 2 review / feed / visa
   String get reviewQueueTitle;
