@@ -54,13 +54,11 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final published = item.publishedAt;
-                    final dateLabel = published == null
-                        ? null
-                        : published
-                              .toLocal()
-                              .toIso8601String()
-                              .split('T')
-                              .first;
+                    final dateLabel = published
+                        ?.toLocal()
+                        .toIso8601String()
+                        .split('T')
+                        .first;
                     return AnimatedOpacity(
                       opacity: 1,
                       duration: AppMotion.duration(context, AppMotion.fast),
