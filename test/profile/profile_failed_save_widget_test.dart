@@ -48,6 +48,7 @@ void main() {
         ..applySession(
           const UserSession(
             userId: 'user',
+            token: 'fixture-only-token',
             authenticated: true,
             fullName: 'RAD Test',
           ),

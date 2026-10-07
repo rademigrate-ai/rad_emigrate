@@ -22,14 +22,26 @@ class _Backend implements SupabaseClientService {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-_Backend _backend(Future<http.Response> Function(http.Request) callback) =>
-    _Backend(
-      SupabaseClient(
-        'https://local-fixture.invalid',
-        'fixture-public-key',
-        httpClient: MockClient(callback),
-      ),
-    );
+_Backend _backend(Future<http.Response> Function(http.Request) callback) {
+  final client = SupabaseClient(
+    'https://local-fixture.invalid',
+    'fixture-public-key',
+    authOptions: const AuthClientOptions(autoRefreshToken: false),
+    httpClient: MockClient((request) async {
+      final response = await callback(request);
+      // PostgREST inspects the originating request method for response decoding.
+      return http.Response.bytes(
+        response.bodyBytes,
+        response.statusCode,
+        headers: response.headers,
+        request: request,
+        reasonPhrase: response.reasonPhrase,
+      );
+    }),
+  );
+  addTearDown(client.dispose);
+  return _Backend(client);
+}
 
 http.Response _json(Object body, int status) => http.Response(
   jsonEncode(body),
@@ -90,7 +102,10 @@ void main() {
     'history retrieves latest bounded page and returns chronological turns',
     () async {
       final backend = _backend((request) async {
-        expect(request.url.queryParameters['order'], 'created_at.desc');
+        expect(
+          request.url.queryParameters['order'],
+          'created_at.desc.nullslast',
+        );
         expect(request.url.queryParameters['limit'], '200');
         return _json([
           {

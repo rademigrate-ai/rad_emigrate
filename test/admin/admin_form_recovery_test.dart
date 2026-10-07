@@ -166,6 +166,11 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('example-model'));
       await tester.pumpAndSettle();
+      expect(
+        find.byType(CircularProgressIndicator),
+        findsNothing,
+        reason: 'Opening model settings must not start provider submission',
+      );
       await tester.tap(find.byType(Switch));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Save'));

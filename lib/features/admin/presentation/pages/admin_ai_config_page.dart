@@ -27,6 +27,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
   bool _enabled = true;
   int _priority = 10;
   bool _submitting = false;
+  bool _modelDialogOpen = false;
   bool _editingExisting = false;
   String? _status;
   String? _error;
@@ -89,14 +90,14 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
   }
 
   Future<void> _configureModel(AdminModelRecord model) async {
-    if (_submitting) return;
+    if (_submitting || _modelDialogOpen) return;
     final l10n = AppLocalizations.of(context);
     var enabled = model.enabled;
     var scope = model.runtimeScope;
     var priority = model.priority.toDouble();
     var saving = false;
     String? error;
-    setState(() => _submitting = true);
+    setState(() => _modelDialogOpen = true);
     try {
       await showDialog<void>(
         context: context,
@@ -213,7 +214,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
         ),
       );
     } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (mounted) setState(() => _modelDialogOpen = false);
     }
   }
 
