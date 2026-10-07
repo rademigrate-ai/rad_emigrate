@@ -40,7 +40,8 @@ class SupabaseAiService implements AiService {
       guestKey = await AiGuestIdentity.getOrCreate();
     }
 
-    final locale = request.locale ??
+    final locale =
+        request.locale ??
         (request.metadata['locale'] is String
             ? request.metadata['locale']
             : null);
