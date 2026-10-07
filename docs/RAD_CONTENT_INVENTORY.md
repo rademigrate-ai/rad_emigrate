@@ -1,19 +1,20 @@
-# RAD Content Inventory (Stage 3)
+# RAD Content Inventory (Stage 3 Closeout)
 
-Full structured inventory was generated from live discovery.
+## Canonical artifacts
 
-- **Summary metrics:** `docs/RAD_CONTENT_INVENTORY_SUMMARY.json`
-- **Representative sample:** `docs/RAD_CONTENT_INVENTORY_SAMPLE.json`
-- **Source of truth for radmohajer.ir:** `https://radmohajer.ir/sitemap.xml` (740 locs)
+- **`docs/RAD_CONTENT_INVENTORY.jsonl.gz`** — full machine-readable inventory (gzip JSONL)
+- **`docs/inventory/*.jsonl`** — per-site JSONL (compact keys)
+- **`docs/RAD_CONTENT_INVENTORY_METRICS.json`** — metrics generated from the inventory
 
-## Metrics
+## Terminal states
 
-| Site | Discovered | Notes |
-|------|----------:|-------|
-| radmohajer.ir | 740 | Full sitemap; FA 733 / EN 7 |
-| digivisa.ir | 1 (home) | Host timeout from Stage 3 runner; prior snapshot retained |
-| radvisa.com | 1 (home) | Host timeout from Stage 3 runner; prior snapshot retained |
+`FETCHED_AND_CAPTURED` | `DUPLICATE_OF:` | `REDIRECTED_TO:` | `EXCLUDED:` | `FAILED:` | `REVIEW_REQUIRED:` | `UNREACHABLE:`
 
-## Promotion gate
+## Counts
 
-Only `safe_first_party` pages were eligible for automatic approved promotion in Stage 3. All immigration/study/work/investment/visa pages remain `review_required_regulatory`.
+| Site | Rows | Terminal primary |
+|------|-----:|------------------|
+| radmohajer.ir | 740 | 6 captured, 734 review_required |
+| radvisa.com | 296 | 296 unreachable (live) |
+| digivisa.ir | 239 | 239 unreachable (live) |
+| **Total** | **1275** | |

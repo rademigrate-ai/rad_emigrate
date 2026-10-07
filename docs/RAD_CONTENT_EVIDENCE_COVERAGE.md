@@ -1,24 +1,19 @@
-# RAD Content Evidence Coverage (Stage 3)
+# RAD Content Evidence Coverage (Stage 3 Closeout)
 
-## Covered with fresh fetch (Stage 3)
+## Live captured (production snapshots)
 
-- radmohajer.ir/fa/contacts
-- radmohajer.ir/en/contact-us
-- radmohajer.ir/en/about-us
-- radmohajer.ir/fa and /en homes (fetched for inventory)
+- radmohajer.ir/fa/contacts, /en/contact-us, /en/about-us, /fa, /en (+ prior home)
+- Prior production: radvisa.com/, digivisa.ir/, radmohajer.ir/fa/
 
-## Covered via prior production snapshots
+## Inventoried only (terminal REVIEW_REQUIRED)
 
-- https://radvisa.com/
-- https://digivisa.ir/
-- https://radmohajer.ir/fa/
+- 731+ radmohajer regulatory guidance URLs (sitemap)
 
-## Inventoried only (not bulk-fetched in Stage 3)
+## Live unreachable (terminal UNREACHABLE; archive-indexed)
 
-- 732+ radmohajer immigration/study/work pages — requires_verification
+- radvisa.com ~296 unique URLs (Wayback CDX)
+- digivisa.ir ~239 unique URLs (Wayback CDX)
 
-## Gaps
+## Gaps blocking COMPLETE
 
-- digivisa.ir full site tree (host timeout)
-- radvisa.com full site tree (host timeout)
-- Instagram (deferred)
+Live TCP/HTTP to radvisa.com and digivisa.ir from Stage 3 authorized environments.

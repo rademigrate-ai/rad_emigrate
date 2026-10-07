@@ -1,113 +1,82 @@
-# Finalization Stage 3 Report — RAD Content Migration
+# Finalization Stage 3 Report — RAD Content Migration (Closeout)
 
 ## Result
 
-**COMPLETE with external host reachability limitation** for digivisa.ir and radvisa.com from the Stage 3 runner network. radmohajer.ir fully discovered (740 URLs). Safe first-party contact/organization claims promoted. Regulatory immigration pages inventoried and classified as `requires_verification` — **not** blindly promoted.
+**INCOMPLETE — EXTERNAL DEPENDENCY**
+
+Live HTTP fetch of **radvisa.com** and **digivisa.ir** remains blocked from authorized Stage 3 runtimes (DNS resolves to `185.192.112.58`, TCP/HTTP connect timeout). Both sites are inventoried via Wayback CDX (public URL inventory) and prior production homepage snapshots. **radmohajer.ir** is fully discovered (740 sitemap URLs) with terminal states for every URL and selective live capture.
+
+This closeout deliberately does **not** claim COMPLETE while two canonical live sites cannot be fetched.
 
 ## Starting baseline
 
-- Branch base: `feature/stage2-knowledge-completion`
-- SHA: `235475e2dcf4837ced16e9d1e21b56c4fa088abc`
-- Stage 2 **not** merged to `main` at Stage 3 start
+- Stage 2 SHA: `235475e2dcf4837ced16e9d1e21b56c4fa088abc` (not in main at start)
 - Stage 3 branch: `feature/stage3-rad-content-migration`
 
-## Site discovery
+## Canonical inventory
+
+| Artifact | Path |
+|----------|------|
+| Machine-readable inventory (gzip JSONL) | `docs/RAD_CONTENT_INVENTORY.jsonl.gz` |
+| Per-site JSONL | `docs/inventory/*.jsonl` |
+| Metrics (generated from inventory) | `docs/RAD_CONTENT_INVENTORY_METRICS.json` |
+| Format | JSONL rows of public metadata only (no article bodies) |
+| Generation | sitemap (radmohajer) + Wayback CDX (radvisa, digivisa) + production retention |
+
+**Total rows: 1275** (radmohajer 740 + radvisa 296 + digivisa 239)
+
+## Three-site coverage
 
 ### radmohajer.ir
-- Sitemap: `https://radmohajer.ir/sitemap.xml` (HTTP 200)
-- Discovered URLs: **740** (normalized unique)
-- Languages: FA 733, EN 7
-- Sample fetched: home FA/EN, contacts FA/EN, about EN (HTTP 200)
-- About FA path `/fa/درباره-ما` returned 404 for that slug
-
-### digivisa.ir
-- Status from Stage 3 runner: **connection timeout** (browser + curl)
-- Existing production `source_documents` row retained for homepage
-- Inventory records homepage as `unreachable_from_stage3_runner`
-- Operator re-fetch required when host is reachable
+- Discovered: 740 (sitemap HTTP 200)
+- FETCHED_AND_CAPTURED: 6
+- REVIEW_REQUIRED: 734
+- UNREACHABLE: 0
+- Live host: reachable (`88.99.68.25`)
 
 ### radvisa.com
-- Status from Stage 3 runner: **connection timeout**
-- Existing production homepage snapshot retained
-- Same treatment as digivisa.ir
+- Discovered (archive CDX unique): 296
+- FETCHED_AND_CAPTURED (live): 0
+- UNREACHABLE (live): 296
+- Production homepage snapshot retained
+- DNS A: 185.192.112.58 — multi-attempt timeout
 
-## Classification (radmohajer)
+### digivisa.ir
+- Discovered (archive CDX unique): 239
+- FETCHED_AND_CAPTURED (live): 0
+- UNREACHABLE (live): 239
+- Production homepage snapshot retained
+- DNS A: 185.192.112.58 (same IP as radvisa.com)
 
-| Category | Count |
-|----------|------:|
-| study_guidance | 215 |
-| work_guidance | 76 |
-| investment_guidance | 46 |
-| immigration_guidance | 42 |
-| visa_visitor | 25 |
-| legal | 13 |
-| organization_about | 4 |
-| contact | 2 |
-| home | 2 |
-| other | 315 |
+## Snapshot policy
 
-Freshness: **404** pages `requires_verification` (mostly immigration/study/work with sitemap lastmod ~2020); **8** `likely_current` (contact/about/home/service).
+Stage 3 does **not** bulk-write 700+ regulatory snapshots into production. Rule:
+1. Safe first-party pages may be snapshotted + promoted via `promote_knowledge_from_evidence`.
+2. Regulatory pages stay `REVIEW_REQUIRED` with inventory provenance until official verification.
+3. Idempotency: `source_documents.canonical_url` unique; `source_snapshots (document_id, content_hash)` unique.
 
-Promotion policy: **8** safe_first_party; **732** review_required_regulatory.
+## Knowledge production (production)
 
-## Ingestion
+Safe contact/organization/brand claims only. No regulatory auto-approval. feed_items = 0.
 
-- New source_documents: contact FA, contact EN, about EN
-- New snapshots with content hashes (idempotent on document_id+content_hash)
-- Re-used existing homepage documents/snapshots for radvisa/digivisa/radmohajer home
+## Official verification
 
-## Knowledge promotion (approved, evidence-backed only)
-
-Safe first-party only:
-- Tehran phone numbers FA (`rad-tehran-phones-fa`)
-- Tehran phone numbers EN (`rad-tehran-phones-en`)
-- Institute operated in Tehran since 2006 EN (`rad-institute-founded-tehran-en`)
-- Prior Stage 2 items retained (contact/services/brand)
-
-**Not promoted:** study/work/investment/visa eligibility, fees, processing times, program availability (stale risk; sitemap dates 2020).
-
-## Official-source verification
-
-No regulatory claim was approved as current law. External government verification is required before promoting any inventoried immigration guidance pages.
-
-## Stale / superseded
-
-All radmohajer immigration/study/work/investment/visa pages flagged `requires_verification` due to sitemap `lastmod` clustering at 2020-03-09 and topics that change under government policy. Evidence is **preserved in inventory**, not deleted.
-
-## Conflicts
-
-No fabricated conflicts. No material RAD-vs-official conflict rows created because regulatory claims were not approved.
-
-## Duplicates
-
-- URL normalization: http→https, strip www, trailing slash, tracking params, fragments
-- Sitemap raw 740 → unique 740 after normalization
-- Cross-site: radvisa/digivisa currently unreachable; relationship mapping deferred to re-fetch
+Not performed for regulatory claims. Correct: leave review-required.
 
 ## Feed safety
 
-`feed_items = 0` after Stage 3. Promote path does not write Feed.
+feed_items unchanged by Stage 3 paths.
 
-## Production Knowledge state (post Stage 3)
+## Tests executed
 
-- knowledge_items: 7
-- knowledge_claims: 7
-- knowledge_citations: 7
-- source_documents: 6
-- source_snapshots: 11
-- feed_items: 0
+```
+python3 tools/stage3_content_migration/test_url_normalize.py  → PASS
+inventory terminal-state reconciliation → PASS (1275 rows)
+metrics total_rows match → PASS
+```
 
-## Repeatable process
+## External dependency evidence
 
-- `tools/stage3_content_migration/url_normalize.py`
-- `docs/RAD_CONTENT_INVENTORY.json` full inventory
-- research-sync edge function remains the production fetch path (SSRF-safe)
-- Future: enable hosts → research-sync → snapshot → promote only under trust policy
+See `docs/RAD_CONTENT_INVENTORY_METRICS.json` → `live_connectivity_evidence`.
 
-## Instagram
-
-Deferred. No unauthorized Instagram scraping.
-
-## Migration lineage
-
-No ledger rewrite. No destructive schema change. Additive data only.
+Operator action: restore live HTTP reachability to 185.192.112.58 hosts, then re-run discover→fetch→snapshot for radvisa/digivisa.
