@@ -731,4 +731,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aiResponseNotSaved =>
       "This response could not be saved. It may not appear after reloading.";
+
+  @override
+  String get scopeUser => "User";
+
+  @override
+  String get scopeBoth => "User and Admin";
+
+  @override
+  String get healthOffline => "Offline";
+
+  @override
+  String get healthHealthy => "Healthy";
+
+  @override
+  String get healthDegraded => "Degraded";
+
+  @override
+  String get healthUnknown => "Not checked";
+
+  @override
+  String get modelSaveFailed =>
+      "Could not save model settings. Your changes are retained; try again.";
+
+  @override
+  String get sourceQueryRejected =>
+      "Use a public HTTPS page without a query string. Query-based source addresses are not supported yet.";
+
+  @override
+  String get lastProviderCheck => "Last provider check";
 }

@@ -38,6 +38,12 @@ class SupabaseAiService implements AiService {
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
           'messages': [
+            ...request.history.map(
+              (message) => {
+                'role': message.isUser ? 'user' : 'assistant',
+                'content': message.text,
+              },
+            ),
             {'role': 'user', 'content': prompt},
           ],
         },

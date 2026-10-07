@@ -42,6 +42,7 @@ class AdminProviderRecord {
     required this.healthStatus,
     required this.lastSuccessAt,
     required this.lastFailureAt,
+    this.credentialRejected = false,
   });
 
   final String id;
@@ -56,6 +57,7 @@ class AdminProviderRecord {
   final String healthStatus;
   final DateTime? lastSuccessAt;
   final DateTime? lastFailureAt;
+  final bool credentialRejected;
 }
 
 class AdminModelRecord {
@@ -324,7 +326,7 @@ class AdminOperationsRepository {
         .select(
           'id,slug,display_name,adapter,base_url,secret_id,enabled,priority,'
           'runtime_scope,'
-          'ai_provider_health(status,last_success_at,last_failure_at)',
+          'ai_provider_health(status,last_success_at,last_failure_at,credential_rejected)',
         )
         .order('priority')
         .limit(100);
@@ -452,6 +454,7 @@ class AdminOperationsRepository {
           healthStatus: health?['status'] as String? ?? 'unknown',
           lastSuccessAt: _date(health?['last_success_at']),
           lastFailureAt: _date(health?['last_failure_at']),
+          credentialRejected: health?['credential_rejected'] as bool? ?? false,
         );
       }).toList(),
       models: rows(1)

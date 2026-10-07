@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
+import '../../domain/research_source_url.dart';
 
 Future<void> showAdminSourceDialog(BuildContext context) => showDialog<void>(
   context: context,
@@ -34,28 +35,21 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
     final l10n = AppLocalizations.of(context);
     final uri = Uri.tryParse(value?.trim() ?? '');
     if (uri?.scheme == 'http') return l10n.sourceHttpRejected;
-    if (uri == null ||
-        uri.scheme != 'https' ||
-        uri.host.isEmpty ||
-        uri.userInfo.isNotEmpty ||
-        uri.fragment.isNotEmpty) {
-      return l10n.invalidUrl;
-    }
-    final host = uri.host.toLowerCase();
-    if (host == 'localhost' ||
-        host.endsWith('.local') ||
-        host.endsWith('.localhost')) {
-      return l10n.invalidUrl;
-    }
-    return null;
+    if (uri?.hasQuery == true) return l10n.sourceQueryRejected;
+    return parseResearchSourceUrl(value ?? '') == null ? l10n.invalidUrl : null;
   }
 
   Future<void> _save() async {
     if (_saving || !_form.currentState!.validate()) return;
     final l10n = AppLocalizations.of(context);
-    final address = _url.text.trim().replaceFirst(RegExp(r'/+$'), '');
+    final address = canonicalResearchSourceUrl(
+      parseResearchSourceUrl(_url.text)!,
+    );
     final data = ref.read(adminConsoleProvider).valueOrNull;
-    if (data?.researchSources.any((source) => source.baseUrl == address) ==
+    if (data?.researchSources.any((source) {
+          final uri = parseResearchSourceUrl(source.baseUrl);
+          return uri != null && canonicalResearchSourceUrl(uri) == address;
+        }) ==
         true) {
       setState(() => _error = l10n.sourceDuplicate);
       return;

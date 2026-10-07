@@ -179,6 +179,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ],
       ),
       body: profileState.when(
+        skipError: true,
         loading: () => _saving
             ? _ProfileContent(
                 child: _buildProfileContent(

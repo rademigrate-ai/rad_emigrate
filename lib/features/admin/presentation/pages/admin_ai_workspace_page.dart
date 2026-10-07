@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../ai_assistant/presentation/pages/ai_assistant_page.dart';
+import '../admin_ai_labels.dart';
 
 /// Genuine Admin AI workspace — product behavior distinct from user assistant.
 /// Shares the safe AI transport via [AiAssistantPage.adminMode] so server scope
@@ -126,12 +127,14 @@ class AdminAiDiagnosticsCard extends StatelessWidget {
                 : l10n.credentialMissing,
           ),
           Text('${l10n.discoverModels}: $modelCount'),
-          Text('Status: $healthStatus'),
+          Text('${l10n.status}: ${adminHealthLabel(healthStatus, l10n)}'),
           if (lastCheck != null)
-            Text('Last check: ${lastCheck!.toUtc().toIso8601String()}'),
+            Text(
+              '${l10n.lastProviderCheck}: ${MaterialLocalizations.of(context).formatMediumDate(lastCheck!.toLocal())} · ${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(lastCheck!.toLocal()))}',
+            ),
           if (sanitizedError != null && sanitizedError!.isNotEmpty)
             Text(
-              sanitizedError!,
+              adminAiErrorLabel(sanitizedError, l10n),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
         ],

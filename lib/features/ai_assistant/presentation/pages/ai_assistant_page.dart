@@ -14,11 +14,17 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class _ChatMessage {
-  _ChatMessage({required this.isUser, required this.text, this.sources});
+  _ChatMessage({
+    required this.isUser,
+    required this.text,
+    this.sources,
+    this.retryPrompt,
+  });
 
   final bool isUser;
   final String text;
   final List<AiSource>? sources;
+  final String? retryPrompt;
 }
 
 class AiAssistantPage extends ConsumerStatefulWidget {
@@ -44,11 +50,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   var _loading = false;
 
   String? _sessionId;
+  late final Future<void> _historyRestore;
 
   @override
   void initState() {
     super.initState();
-    _restoreHistory();
+    _historyRestore = _restoreHistory();
   }
 
   Future<void> _restoreHistory() async {
@@ -63,7 +70,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       if (sessions.isEmpty || !mounted) return;
       final session = sessions.first;
       final history = await repository.history(session.id);
-      if (!mounted || _loading || _messages.isNotEmpty) return;
+      if (!mounted || _messages.isNotEmpty) return;
       setState(() {
         _sessionId = session.id;
         _messages
@@ -92,11 +99,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _send([String? preset]) async {
     final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
     setState(() => _loading = true);
+    // A send during initial history loading must use the restored session.
+    await _historyRestore;
+    if (!mounted) return;
     final userId = ref.read(authControllerProvider).valueOrNull?.userId;
     try {
       if (userId != null && userId.isNotEmpty) {
@@ -129,6 +138,31 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     });
     _scrollToEnd();
 
+    await _complete(text, userId);
+  }
+
+  Future<void> _retry(_ChatMessage failure) async {
+    final prompt = failure.retryPrompt;
+    if (_loading || prompt == null || _messages.last != failure) return;
+    setState(() => _loading = true);
+    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    await _complete(prompt, userId, replacing: failure);
+  }
+
+  Future<void> _complete(
+    String text,
+    String? userId, {
+    _ChatMessage? replacing,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    // The latest user turn is sent as prompt; failures are UI notices only.
+    final turns = _messages.where((m) => m.retryPrompt == null).toList();
+    final history = turns
+        .take(math.max(0, turns.length - 1))
+        .map((m) => AiConversationMessage(isUser: m.isUser, text: m.text))
+        .toList(growable: false);
+
     try {
       final ai = ref.read(aiServiceProvider);
       final response = ai.isAvailable
@@ -138,10 +172,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 kind: AiRequestKind.immigrationQuestion,
                 conversationId: _sessionId,
                 locale: locale,
+                history: history,
                 metadata: {if (widget.adminMode) 'scope': 'admin'},
               ),
             )
-          : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
+          : AiResponse(
+              text: l10n.aiUnavailableResponse(text),
+              uncertain: true,
+              errorCode: 'ai_unavailable',
+            );
       if (response.errorCode == null &&
           userId != null &&
           userId.isNotEmpty &&
@@ -164,11 +203,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
       if (!mounted) return;
       setState(() {
+        if (replacing != null) _messages.remove(replacing);
         _messages.add(
           _ChatMessage(
             isUser: false,
             text: response.text,
             sources: response.sources,
+            retryPrompt: response.errorCode == null ? null : text,
           ),
         );
         _loading = false;
@@ -178,11 +219,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       if (!mounted) return;
       final message = error.toString().contains('provider_unauthorized')
           ? l10n.aiCredentialRejected
-          : l10n.aiUnavailableResponse(text);
+          : l10n.aiRequestFailed;
       setState(() {
-        _messages.add(_ChatMessage(isUser: false, text: message));
+        if (replacing != null) _messages.remove(replacing);
+        _messages.add(
+          _ChatMessage(isUser: false, text: message, retryPrompt: text),
+        );
         _loading = false;
       });
+      _scrollToEnd();
     }
   }
 
@@ -301,6 +346,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                               m.text,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
+                            if (m.retryPrompt != null &&
+                                index == _messages.length - 1)
+                              TextButton.icon(
+                                onPressed: _loading ? null : () => _retry(m),
+                                icon: const Icon(Icons.refresh),
+                                label: Text(l10n.retry),
+                              ),
                             if (m.sources != null && m.sources!.isNotEmpty) ...[
                               const SizedBox(height: 8),
                               ...m.sources!.map(

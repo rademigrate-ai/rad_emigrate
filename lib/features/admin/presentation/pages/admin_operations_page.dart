@@ -5,6 +5,7 @@ import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
+import '../admin_ai_labels.dart';
 import 'admin_review_detail_sheet.dart';
 import 'admin_source_dialog.dart';
 

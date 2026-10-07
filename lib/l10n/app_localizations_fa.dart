@@ -734,4 +734,33 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get aiResponseNotSaved =>
       "این پاسخ ذخیره نشد و ممکن است پس از بارگذاری دوباره نمایش داده نشود.";
+
+  @override
+  String get scopeUser => "کاربر";
+
+  @override
+  String get scopeBoth => "کاربر و مدیر";
+
+  @override
+  String get healthOffline => "قطع ارتباط";
+
+  @override
+  String get healthHealthy => "سالم";
+
+  @override
+  String get healthDegraded => "اختلال در ارتباط";
+
+  @override
+  String get healthUnknown => "بررسی نشده";
+
+  @override
+  String get modelSaveFailed =>
+      "تنظیمات مدل ذخیره نشد. تغییرات شما حفظ شده است؛ دوباره تلاش کنید.";
+
+  @override
+  String get sourceQueryRejected =>
+      "از نشانی عمومی HTTPS بدون پارامتر پرس‌وجو استفاده کنید. نشانی‌های منبع دارای پارامتر پرس‌وجو هنوز پشتیبانی نمی‌شوند.";
+
+  @override
+  String get lastProviderCheck => "آخرین بررسی ارائه‌دهنده";
 }

@@ -1,7 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/supabase/supabase_client.dart';
 import '../../../core/supabase/supabase_providers.dart';
+
+class AdminAiOperationException implements Exception {
+  const AdminAiOperationException(this.code);
+  final String? code;
+}
 
 class AdminAiConfigRepository {
   const AdminAiConfigRepository(this._supabase);
@@ -37,19 +43,26 @@ class AdminAiConfigRepository {
   }
 
   Future<Map<String, dynamic>> testProvider(String providerId) async {
-    final response = await _supabase.client.functions.invoke(
-      'ai-orchestrator',
-      body: {'action': 'test_provider', 'provider_id': providerId},
-    );
-    return _responseMap(response.data);
+    return _invoke('test_provider', providerId);
   }
 
   Future<Map<String, dynamic>> discoverModels(String providerId) async {
-    final response = await _supabase.client.functions.invoke(
-      'ai-orchestrator',
-      body: {'action': 'discover_models', 'provider_id': providerId},
-    );
-    return _responseMap(response.data);
+    return _invoke('discover_models', providerId);
+  }
+
+  Future<Map<String, dynamic>> _invoke(String action, String providerId) async {
+    try {
+      final response = await _supabase.client.functions.invoke(
+        'ai-orchestrator',
+        body: {'action': action, 'provider_id': providerId},
+      );
+      return _responseMap(response.data);
+    } on FunctionException catch (error) {
+      final details = error.details;
+      throw AdminAiOperationException(
+        details is Map ? details['error'] as String? : null,
+      );
+    }
   }
 
   Future<void> configureModel({
@@ -74,7 +87,10 @@ class AdminAiConfigRepository {
   Map<String, dynamic> _responseMap(Object? value) {
     if (value is! Map) throw const FormatException('invalid_ai_response');
     final result = value.cast<String, dynamic>();
-    if (result['error'] != null) throw StateError(result['error'].toString());
+    if (result['error'] != null)
+      throw AdminAiOperationException(
+        result['error'] is String ? result['error'] as String : null,
+      );
     return result;
   }
 }

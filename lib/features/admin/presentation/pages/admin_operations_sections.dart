@@ -29,7 +29,7 @@ class _Providers extends StatelessWidget {
                         ),
                       ),
                       _StatusBadge(
-                        '${provider.healthStatus} · ${provider.enabled ? l10n.enabled : l10n.disabled}',
+                        '${adminHealthLabel(provider.healthStatus, l10n)} · ${provider.enabled ? l10n.enabled : l10n.disabled}',
                       ),
                     ],
                   ),
@@ -39,6 +39,13 @@ class _Providers extends StatelessWidget {
                   Text(
                     '${provider.credentialConfigured ? l10n.credentialConfigured : l10n.credentialMissing} · ${l10n.priority} ${provider.priority}',
                   ),
+                  if (provider.credentialRejected)
+                    Text(
+                      l10n.aiCredentialRejected,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
                 ],
               ),
             ),

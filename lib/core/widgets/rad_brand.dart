@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 
 enum RadBrandSize { small, medium, large }
 
-/// Shared RAD identity mark and wordmark.
+/// The owner-supplied RAD emblem, with its original square proportions.
 ///
-/// Keeping the asset selection here prevents screens from drifting into
-/// one-off logo treatments and leaves room for future dark/light branding.
+/// All surfaces use the same unmodified artwork. A white backing provides
+/// consistent contrast on dark surfaces without recoloring the logo.
 class RadBrand extends StatelessWidget {
   const RadBrand({
     super.key,
@@ -44,42 +43,10 @@ class RadBrand extends StatelessWidget {
         child: Image.asset(
           asset,
           height: _height,
-          width: _height * 1.94,
+          width: _height,
           fit: BoxFit.contain,
           filterQuality: FilterQuality.medium,
-          errorBuilder: (context, error, stackTrace) =>
-              _FallbackMark(size: _height, label: label),
-        ),
-      ),
-    );
-  }
-}
-
-class _FallbackMark extends StatelessWidget {
-  const _FallbackMark({required this.size, required this.label});
-
-  final double size;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: label,
-      child: Container(
-        width: size,
-        height: size,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColors.primaryRed,
-          borderRadius: BorderRadius.circular(size * 0.24),
-        ),
-        child: Text(
-          'R',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: size * 0.55,
-            fontWeight: FontWeight.w800,
-          ),
+          excludeFromSemantics: true,
         ),
       ),
     );

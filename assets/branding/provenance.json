@@ -1,0 +1,134 @@
+{
+  "canonical_source": {
+    "path": "assets/branding/rad_owner_supplied_logo.webp",
+    "supplied_filename": "RAD LOGO.webp",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 95420,
+    "sha256": "f421a6887fcc07d4b8ba7529d99c9bc5f95114a8ee14942e0776159e5bbca048",
+    "preservation": "Byte-for-byte copy of the owner-uploaded transparent WebP."
+  },
+  "derivation": "Pillow RGBA decoding, uniform square LANCZOS resize, PNG optimize=True. No crop, redraw, recoloring, alpha cleanup, stretching, or SVG tracing. Opaque launcher/touch/maskable icons composite the unmodified logo onto a white canvas; maskable artwork occupies at most 56% of the canvas so all source pixels remain inside the central 80%-diameter safe circle.",
+  "outputs": [
+    {
+      "path": "assets/branding/rad_official_logo.png",
+      "width": 512,
+      "height": 512,
+      "logo_extent": 512,
+      "offset": 0,
+      "canvas": "transparent",
+      "bytes": 60096,
+      "sha256": "50499703e2006090822a38be1d419f4a9c4bde5ca04974a63550dd602f1ee0b5"
+    },
+    {
+      "path": "web/favicon.png",
+      "width": 32,
+      "height": 32,
+      "logo_extent": 32,
+      "offset": 0,
+      "canvas": "transparent",
+      "bytes": 1468,
+      "sha256": "ff816f7ec8d3cd325380a897f5a5c01e84aa6cca72b8e0770af3349142374c21"
+    },
+    {
+      "path": "web/icons/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "logo_extent": 130,
+      "offset": 25,
+      "canvas": "opaque white",
+      "bytes": 11021,
+      "sha256": "f2b20d97dc8db0cf0c705cd5216d2c2c957975e38f7fd58a573453346bda9b1a"
+    },
+    {
+      "path": "web/icons/Icon-192.png",
+      "width": 192,
+      "height": 192,
+      "logo_extent": 192,
+      "offset": 0,
+      "canvas": "transparent",
+      "bytes": 18455,
+      "sha256": "3efe45f1c55ace686c41846afccfdc739ede5c80aeb0022c7f08e6915dbf2b63"
+    },
+    {
+      "path": "web/icons/Icon-maskable-192.png",
+      "width": 192,
+      "height": 192,
+      "logo_extent": 108,
+      "offset": 42,
+      "canvas": "opaque white",
+      "bytes": 8762,
+      "sha256": "54f3aec4e348ceaf8090bb58bc01d1b44a29d484bc686e84dd1b8d59c56cd3b5"
+    },
+    {
+      "path": "web/icons/Icon-512.png",
+      "width": 512,
+      "height": 512,
+      "logo_extent": 512,
+      "offset": 0,
+      "canvas": "transparent",
+      "bytes": 60096,
+      "sha256": "50499703e2006090822a38be1d419f4a9c4bde5ca04974a63550dd602f1ee0b5"
+    },
+    {
+      "path": "web/icons/Icon-maskable-512.png",
+      "width": 512,
+      "height": 512,
+      "logo_extent": 287,
+      "offset": 112,
+      "canvas": "opaque white",
+      "bytes": 34482,
+      "sha256": "72a376863a6ded2cf75e20b2027644b68758d391d6c4e6bcd92cc5042470e50c"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "width": 48,
+      "height": 48,
+      "logo_extent": 35,
+      "offset": 6,
+      "canvas": "opaque white",
+      "bytes": 1820,
+      "sha256": "5a4a92e777942daa4f77e932ee153654e454a916a1c7cd18d116280cce3b8fbd"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "width": 72,
+      "height": 72,
+      "logo_extent": 52,
+      "offset": 10,
+      "canvas": "opaque white",
+      "bytes": 3070,
+      "sha256": "fc77e9b060bf4a055f72c549f0a887cc0b5db93829bfc378bd553053ad66ffb2"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "width": 96,
+      "height": 96,
+      "logo_extent": 69,
+      "offset": 13,
+      "canvas": "opaque white",
+      "bytes": 4504,
+      "sha256": "fc42ee0374b9dede9783ec5c1dbf1c76b04bf00f62b9760217a061c15fa44e10"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "width": 144,
+      "height": 144,
+      "logo_extent": 104,
+      "offset": 20,
+      "canvas": "opaque white",
+      "bytes": 7992,
+      "sha256": "f6b9c53142ca1bf9d03aa48a796983b6bd7b8dd767778f61d5e7fd166b5bfb99"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "width": 192,
+      "height": 192,
+      "logo_extent": 138,
+      "offset": 27,
+      "canvas": "opaque white",
+      "bytes": 11967,
+      "sha256": "96c8dc74f6f4e00ade25133a991823fb5c84ee1def490810c342a1919de60542"
+    }
+  ]
+}

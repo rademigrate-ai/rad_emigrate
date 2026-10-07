@@ -237,5 +237,14 @@
   "aiNoEligibleModel": "No eligible AI model is available. Please try later or contact RAD support.",
   "aiRateLimited": "The AI service is busy. Please try again shortly.",
   "aiRequestFailed": "Your AI request could not be completed. Please try again.",
-  "aiResponseNotSaved": "This response could not be saved. It may not appear after reloading."
+  "aiResponseNotSaved": "This response could not be saved. It may not appear after reloading.",
+  "scopeUser": "User",
+  "scopeBoth": "User and Admin",
+  "healthOffline": "Offline",
+  "healthHealthy": "Healthy",
+  "healthDegraded": "Degraded",
+  "healthUnknown": "Not checked",
+  "modelSaveFailed": "Could not save model settings. Your changes are retained; try again.",
+  "sourceQueryRejected": "Use a public HTTPS page without a query string. Query-based source addresses are not supported yet.",
+  "lastProviderCheck": "Last provider check"
 }

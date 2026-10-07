@@ -181,6 +181,8 @@ abstract final class AppTheme {
         labelStyle: TextStyle(color: labelColor),
         hintStyle: TextStyle(color: hintColor),
       ),
+      // Button and rail theme styles replace the Material text defaults rather
+      // than merging them, so each must retain the bundled shaping font.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primaryRed,
@@ -190,7 +192,12 @@ abstract final class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_radius),
           ),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -201,14 +208,22 @@ abstract final class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_radius),
           ),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: colorScheme.secondary,
           minimumSize: const Size(48, 44),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -236,8 +251,14 @@ abstract final class AppTheme {
         selectedLabelTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w700,
+          fontFamily: 'Vazirmatn',
+          letterSpacing: 0,
         ),
-        unselectedLabelTextStyle: const TextStyle(color: Color(0xFFBCC7D6)),
+        unselectedLabelTextStyle: const TextStyle(
+          color: Color(0xFFBCC7D6),
+          fontFamily: 'Vazirmatn',
+          letterSpacing: 0,
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: dividerColor,

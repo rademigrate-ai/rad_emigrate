@@ -359,6 +359,15 @@ abstract class AppLocalizations {
   String get publishedStatus;
   String get draftStatusLabel;
   String get reviewStatusLabel;
+  String get scopeUser;
+  String get scopeBoth;
+  String get healthOffline;
+  String get healthHealthy;
+  String get healthDegraded;
+  String get healthUnknown;
+  String get modelSaveFailed;
+  String get sourceQueryRejected;
+  String get lastProviderCheck;
 }
 
 class _AppLocalizationsDelegate
