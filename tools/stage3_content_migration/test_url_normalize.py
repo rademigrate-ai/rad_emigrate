@@ -9,8 +9,12 @@ def test_trailing_slash():
 def test_fragment_dropped():
     assert normalize_url("https://radmohajer.ir/fa/#top") == "https://radmohajer.ir/fa"
 
+def test_port80_stripped():
+    assert normalize_url("http://digivisa.ir:80/") in ("https://digivisa.ir", "https://digivisa.ir/")
+
 if __name__ == "__main__":
     test_https_and_strip_www_and_tracking()
     test_trailing_slash()
     test_fragment_dropped()
+    test_port80_stripped()
     print("url_normalize OK")
