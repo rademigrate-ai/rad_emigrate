@@ -87,10 +87,11 @@ class AdminAiConfigRepository {
   Map<String, dynamic> _responseMap(Object? value) {
     if (value is! Map) throw const FormatException('invalid_ai_response');
     final result = value.cast<String, dynamic>();
-    if (result['error'] != null)
+    if (result['error'] != null) {
       throw AdminAiOperationException(
         result['error'] is String ? result['error'] as String : null,
       );
+    }
     return result;
   }
 }

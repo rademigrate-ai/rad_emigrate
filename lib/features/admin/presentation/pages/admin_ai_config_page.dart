@@ -131,8 +131,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                       onChanged: saving
                           ? null
                           : (value) {
-                              if (value != null)
+                              if (value != null) {
                                 setDialogState(() => scope = value);
+                              }
                             },
                     ),
                     const SizedBox(height: 12),
@@ -183,16 +184,19 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                                   maxOutputTokens: model.maxOutputTokens,
                                 );
                             ref.invalidate(adminConsoleProvider);
-                            if (dialogContext.mounted)
+                            if (dialogContext.mounted) {
                               Navigator.pop(dialogContext);
+                            }
                           } catch (_) {
-                            if (dialogContext.mounted)
+                            if (dialogContext.mounted) {
                               setDialogState(
                                 () => error = l10n.modelSaveFailed,
                               );
+                            }
                           } finally {
-                            if (dialogContext.mounted)
+                            if (dialogContext.mounted) {
                               setDialogState(() => saving = false);
+                            }
                           }
                         },
                   child: saving

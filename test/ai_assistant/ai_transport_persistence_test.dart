@@ -124,13 +124,15 @@ void main() {
         final calls = <String>[];
         final backend = _backend((request) async {
           calls.add('${request.method} ${request.url.path}');
-          if (request.url.path.endsWith('/ai_session_messages'))
+          if (request.url.path.endsWith('/ai_session_messages')) {
             return http.Response('', 201);
-          if (request.method == failure)
+          }
+          if (request.method == failure) {
             return _json({
               'message': 'fixture count failure',
               'code': '42501',
             }, 403);
+          }
           return _json({'question_count': 2}, 200);
         });
         await AiSessionRepository(backend).saveMessage(
