@@ -291,7 +291,7 @@ def main() -> None:
     )
     # Stage 7 contract: ordinary users may only transition draft → submitted.
     # Other status changes must be forbidden (42501) and leave DB status unchanged.
-    forbidden_status, forbidden_body = request(
+    forbidden_status, forbidden_body, _forbidden_headers = request(
         "PATCH",
         f"/rest/v1/applications?id=eq.{application_id}&select=id,status",
         token_a,
