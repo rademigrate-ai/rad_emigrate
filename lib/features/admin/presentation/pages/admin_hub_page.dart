@@ -39,6 +39,12 @@ class AdminHubPage extends StatelessWidget {
                   onTap: () => context.go('/admin/operations'),
                 ),
                 _AdminTile(
+                  icon: Icons.support_agent_outlined,
+                  title: l10n.adminConsultations,
+                  subtitle: l10n.noAdminConsultations,
+                  onTap: () => context.go('/admin/consultations'),
+                ),
+                _AdminTile(
                   icon: Icons.travel_explore_outlined,
                   title: l10n.adminResearchAssistant,
                   subtitle: l10n.adminResearchSubtitle,
