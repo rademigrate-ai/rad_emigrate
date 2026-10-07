@@ -13,6 +13,8 @@ const Set<String> _protectedRoutes = {
   '/documents',
   '/profile',
   '/ai-assistant',
+  '/consultation',
+  '/notifications',
   '/profile-completion',
   '/admin',
   '/admin/ai-config',
@@ -78,5 +80,5 @@ String restoredProtectedDestination(String? value) {
       !_protectedRoutes.contains(uri.path)) {
     return '/dashboard';
   }
-  return uri.toString();
+  return uri.path;
 }
