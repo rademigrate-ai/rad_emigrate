@@ -5,6 +5,7 @@ import '../../../l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../supabase/supabase_client.dart';
+import 'ai_guest_identity.dart';
 import 'ai_request.dart';
 import 'ai_response.dart';
 import 'ai_service.dart';
@@ -30,6 +31,20 @@ class SupabaseAiService implements AiService {
     if (prompt.isEmpty) {
       return const AiResponse(text: '', uncertain: true);
     }
+
+    // Guest key when not authenticated (server enforces 5-question limit).
+    final session = _supabase.client.auth.currentSession;
+    final isAuthed = session != null && session.user.id.isNotEmpty;
+    String? guestKey = request.metadata['guest_key'];
+    if (!isAuthed && (guestKey == null || guestKey.isEmpty)) {
+      guestKey = await AiGuestIdentity.getOrCreate();
+    }
+
+    final locale = request.locale ??
+        (request.metadata['locale'] is String
+            ? request.metadata['locale']
+            : null);
+
     try {
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
@@ -37,11 +52,8 @@ class SupabaseAiService implements AiService {
           'action': 'chat',
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
-          if (request.metadata['guest_key'] is String &&
-              (request.metadata['guest_key'] as String).isNotEmpty)
-            'guest_key': request.metadata['guest_key'],
-          if (request.metadata['locale'] is String)
-            'locale': request.metadata['locale'],
+          if (guestKey != null && guestKey.isNotEmpty) 'guest_key': guestKey,
+          if (locale != null && locale.isNotEmpty) 'locale': locale,
           'messages': [
             ...request.history.map(
               (message) => {
@@ -79,9 +91,47 @@ class SupabaseAiService implements AiService {
         );
       }
       final code = (map['code'] ?? map['error'] ?? 'ai_failed').toString();
-      throw Exception(code);
-    } catch (e) {
-      rethrow;
+      return AiResponse(
+        text: _messageForCode(code, locale),
+        uncertain: true,
+        errorCode: code,
+        conversationId: request.conversationId,
+      );
+    } on FunctionException catch (e) {
+      final details = e.details;
+      String code = 'ai_failed';
+      if (details is Map) {
+        code = (details['code'] ?? details['error'] ?? code).toString();
+      } else if (e.reasonPhrase != null && e.reasonPhrase!.isNotEmpty) {
+        code = e.reasonPhrase!;
+      }
+      return AiResponse(
+        text: _messageForCode(code, locale),
+        uncertain: true,
+        errorCode: code,
+        conversationId: request.conversationId,
+      );
+    }
+  }
+
+  static String _messageForCode(String code, String? locale) {
+    final l10n = lookupAppLocalizations(Locale(locale == 'fa' ? 'fa' : 'en'));
+    switch (code) {
+      case 'provider_unauthorized':
+      case 'provider_auth_failed':
+        return l10n.aiCredentialRejected;
+      case 'no_eligible_model':
+      case 'provider_not_configured':
+        return l10n.aiNoEligibleModel;
+      case 'daily_limit_reached':
+        return l10n.aiQuotaExhausted;
+      case 'anonymous_quota_exceeded':
+      case 'authentication_required':
+        return l10n.aiQuotaExhausted;
+      case 'provider_rate_limited':
+        return l10n.aiRateLimited;
+      default:
+        return l10n.aiRequestFailed;
     }
   }
 }
