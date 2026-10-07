@@ -1,50 +1,48 @@
-# Finalization Stage 4 Report — Production User AI (Closeout)
+# Finalization Stage 4 Report — Production User AI
 
-## Result
+## STAGE 4 CLOSEOUT RESULT
 
-**COMPLETE** for Stage 4 engineering path. **Edge Function production deploy** requires owner CLI/dashboard (no deploy connector in this session).
+**INCOMPLETE** — production Edge version 7 has a proven routing defect; fix is on branch and **requires redeploy**.
 
-Stage 3 remains **INCOMPLETE — EXTERNAL DEPENDENCY**.
+## FINAL BRANCH / HEAD
 
-## Handler regression audit
+- Branch: `feature/stage4-user-ai-finalization`
+- Fix HEAD: `589cf63a4c6ca3e4e284336c366ac3cd463d41b5`
+- Prior deploy SHA (v7): `8a2897a3c2d137bd9a0c947ec521d476405006b3`
 
-Full Stage 2 lineage capabilities preserved and Stage 4 features added:
-- chat, test_provider, discover_models (super_admin)
-- openai_compatible, anthropic, gemini adapters
-- provider failover / attempt logging
-- loadGrounding → retrieve_knowledge (approved only)
-- consume_ai_guest_quota (5, advisory-locked)
-- consume_ai_daily_quota
-- immigration-safe system prompt / UNTRUSTED_RETRIEVED_CONTENT
+## Production acceptance (Edge v7)
 
-## Flutter anonymous flow
+| # | Test | Result |
+|---|------|--------|
+| 1 | Authenticated EN | BLOCKED (routing_unavailable) |
+| 2 | Authenticated FA | BLOCKED |
+| 3 | Approved Knowledge grounding | BLOCKED |
+| 4 | Citations | BLOCKED |
+| 5 | No-Knowledge uncertainty | BLOCKED |
+| 6 | Multi-turn | BLOCKED |
+| 7 | Guest Q1–Q5 | BLOCKED after quota path |
+| 8 | Guest Q6 login funnel | BLOCKED |
+| 9 | Real provider inference | FAIL |
+| 10 | Provider fallback | BLOCKED |
+| 11 | Served by version 7 | PASS (ACTIVE v7 confirmed) |
+| 12 | feed_items unchanged | PASS (0) |
 
-- `AiGuestIdentity` via SharedPreferences key `rad_ai_guest_key_v1`
-- Survives refresh/restart; storage clear = new identity
-- `SupabaseAiService` sends guest_key when unauthenticated
-- Q6 → anonymous_quota_exceeded → message + `/login`
+## Defect
 
-## Quota concurrency
+Wrong RPC parameter names for `get_ai_runtime_chain_versioned` (see `docs/USER_AI_PRODUCTION_EVIDENCE.md`).
 
-Burst 12 sequential/locked calls: **5 allowed, 7 blocked** (PASS).
-
-## Quota semantics
-
-Guest quota consumed at request start (before provider) for abuse control.
-
-## Tests executed
-
-- 5-then-block PASS
-- burst PASS
-- retrieve_knowledge injection-style query PASS
-- feed_items=0 PASS
-
-## Edge deploy (owner)
+## Redeploy required
 
 ```bash
 supabase functions deploy ai-orchestrator --project-ref inshddthftkhcdosoqcn
 ```
 
+From HEAD `589cf63` or later.
+
 ## Stage 3
 
-OPEN.
+OPEN / INCOMPLETE.
+
+## Stage 5
+
+Not started.
