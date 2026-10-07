@@ -7,6 +7,7 @@ import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
 import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
+import '../../features/admin/presentation/pages/admin_consultations_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -112,6 +113,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/operations',
             builder: (_, _) => const AdminOperationsPage(),
+          ),
+          GoRoute(
+            path: '/admin/consultations',
+            builder: (_, _) => const AdminConsultationsPage(),
           ),
           GoRoute(
             path: '/admin/ai-research',
