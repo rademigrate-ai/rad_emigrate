@@ -102,32 +102,34 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(child: Text(_error!))
-              : _items.isEmpty
-                  ? Center(child: Text(l10n.noNotifications))
-                  : ListView.separated(
-                      itemCount: _items.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
-                      itemBuilder: (context, i) {
-                        final n = _items[i];
-                        final unread = n['read_at'] == null;
-                        return ListTile(
-                          leading: Icon(
-                            unread ? Icons.notifications_active : Icons.notifications_none,
-                          ),
-                          title: Text('${n['title'] ?? ''}'),
-                          subtitle: Text('${n['body'] ?? ''}'),
-                          onTap: () async {
-                            final id = n['id'] as String?;
-                            if (id != null && unread) await _markRead(id);
-                            final path = n['action_path'] as String?;
-                            if (path != null && path.startsWith('/')) {
-                              if (context.mounted) context.go(path);
-                            }
-                          },
-                        );
-                      },
-                    ),
+          ? Center(child: Text(_error!))
+          : _items.isEmpty
+          ? Center(child: Text(l10n.noNotifications))
+          : ListView.separated(
+              itemCount: _items.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, i) {
+                final n = _items[i];
+                final unread = n['read_at'] == null;
+                return ListTile(
+                  leading: Icon(
+                    unread
+                        ? Icons.notifications_active
+                        : Icons.notifications_none,
+                  ),
+                  title: Text('${n['title'] ?? ''}'),
+                  subtitle: Text('${n['body'] ?? ''}'),
+                  onTap: () async {
+                    final id = n['id'] as String?;
+                    if (id != null && unread) await _markRead(id);
+                    final path = n['action_path'] as String?;
+                    if (path != null && path.startsWith('/')) {
+                      if (context.mounted) context.go(path);
+                    }
+                  },
+                );
+              },
+            ),
     );
   }
 }
