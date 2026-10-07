@@ -8,16 +8,86 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get signIn => 'Sign in';
 
   @override
-  String get signInSubtitle => 'Access your RAD Emigrate workspace';
+  String get adminConsultations => 'Consultations';
 
   @override
-  String get signUpSubtitle => 'Create your RAD Emigrate account';
+  String get noAdminConsultations => 'No consultation requests.';
 
   @override
-  String get passwordResetSubtitle => 'We will email a secure reset link';
+  String get consultationTitle => 'Request consultation';
 
   @override
-  String get passwordResetFailed => 'Password reset failed. Please try again.';
+  String get consultationIntro =>
+      'Submit a request and a RAD advisor will follow up. This does not create a visa application automatically.';
+
+  @override
+  String get consultationTopic => 'Topic';
+
+  @override
+  String get consultationMessage => 'Message';
+
+  @override
+  String get consultationFieldsRequired => 'Topic and message are required.';
+
+  @override
+  String get consultationSubmitted =>
+      'Your consultation request was submitted.';
+
+  @override
+  String get consultationSubmitFailed =>
+      'Could not submit the consultation request.';
+
+  @override
+  String get submitConsultation => 'Submit request';
+
+  @override
+  String get myConsultations => 'Your requests';
+
+  @override
+  String get noConsultations => 'No consultation requests yet.';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get noNotifications => 'No notifications yet.';
+
+  @override
+  String get markAllRead => 'Mark all read';
+
+  @override
+  String get notificationLoadFailed => 'Could not load notifications.';
+
+  @override
+  String get requestConsultation => 'Request consultation';
+
+  @override
+  String get smsAuthUnavailable =>
+      'Phone verification is not available right now. Use email or password instead.';
+
+  @override
+  String get consultationStatus => 'Status';
+
+  @override
+  String get consultationAdminNote => 'Internal note';
+
+  @override
+  String get saveConsultation => 'Update';
+
+  @override
+  String get consultationUpdated => 'Consultation updated.';
+
+  @override
+  String get consultationUpdateFailed => 'Could not update consultation.';
+
+  @override
+  String get openNotifications => 'Notifications';
+
+  @override
+  String get openConsultation => 'Consultation';
+
+  @override
+  String get lastProviderCheck => 'Last provider check';
 
   @override
   String get email => 'Email';
@@ -26,73 +96,34 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get password => 'Password';
 
   @override
-  String get showPassword => 'Show password';
-
-  @override
-  String get hidePassword => 'Hide password';
-
-  @override
   String get required => 'Required';
 
   @override
-  String get createAccount => 'Create account';
+  String get loading => 'Loading…';
 
   @override
-  String get continueWithOtp => 'Continue with OTP';
+  String get retry => 'Retry';
 
   @override
-  String get forgotPassword => 'Forgot password?';
+  String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override
-  String get signUp => 'Sign up';
+  String get cancel => 'Cancel';
 
   @override
-  String get alreadyHaveAccount => 'Already have an account? Sign in';
+  String get save => 'Save';
 
   @override
-  String get fullName => 'Full name';
+  String get delete => 'Delete';
 
   @override
-  String get phone => 'Phone';
+  String get confirm => 'Confirm';
 
   @override
-  String get confirmPassword => 'Confirm password';
+  String get back => 'Back';
 
   @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
-
-  @override
-  String get passwordTooShort => 'Password must be at least 8 characters';
-
-  @override
-  String get invalidEmail => 'Enter a valid email address';
-
-  @override
-  String get otpTitle => 'Enter verification code';
-
-  @override
-  String get otpSubtitle => 'We sent a code to your email';
-
-  @override
-  String get otpCode => 'Verification code';
-
-  @override
-  String get verify => 'Verify';
-
-  @override
-  String get resendCode => 'Resend code';
-
-  @override
-  String resendIn(int seconds) => 'Resend in ${seconds}s';
-
-  @override
-  String get profileCompletionTitle => 'Complete your profile';
-
-  @override
-  String get profileCompletionSubtitle => 'A few details help us personalise your journey';
-
-  @override
-  String get saveAndContinue => 'Save and continue';
+  String get next => 'Next';
 
   @override
   String get home => 'Home';
@@ -149,43 +180,100 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get persian => 'Persian';
 
   @override
-  String get loading => 'Loading…';
+  String get signInSubtitle => 'Sign in to manage your immigration case';
 
   @override
-  String get retry => 'Retry';
+  String get signUpSubtitle =>
+      'Create an account to organize your documents and follow your immigration case.';
 
   @override
-  String get errorGeneric => 'Something went wrong. Please try again.';
+  String get passwordResetSubtitle =>
+      'Enter your account email to request a password reset link.';
 
   @override
-  String get errorNetwork => 'Network error. Check your connection.';
+  String get passwordResetFailed =>
+      "We couldn't request a reset link. Please try again.";
 
   @override
-  String get errorAuthInvalid => 'Invalid credentials.';
+  String get showPassword => 'Show password';
 
   @override
-  String get errorAuthSession => 'Session expired. Please sign in again.';
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get createAccount => 'Create an account';
+
+  @override
+  String get continueWithOtp => 'Continue with OTP';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get signUp => 'Sign up';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account? Sign in';
+
+  @override
+  String get fullName => 'Full name';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get confirmPassword => 'Confirm password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get invalidEmail => 'Enter a valid email address';
+
+  @override
+  String get otpTitle => 'Enter verification code';
+
+  @override
+  String get otpSubtitle => 'We sent a 6-digit code to your email';
+
+  @override
+  String get otpCode => 'Verification code';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String resendIn(int seconds) => 'Resend in ${seconds}s';
+
+  @override
+  String get profileCompletionTitle => 'Complete your profile';
+
+  @override
+  String get profileCompletionSubtitle =>
+      'A few details help us personalize your experience';
+
+  @override
+  String get saveAndContinue => 'Save and continue';
+
+  @override
+  String get errorNetwork =>
+      'Network error. Check your connection and try again.';
+
+  @override
+  String get errorAuthInvalid => 'Invalid email or password.';
+
+  @override
+  String get errorAuthSession =>
+      'Your session has expired. Please sign in again.';
 
   @override
   String get emptyState => 'Nothing here yet';
-
-  @override
-  String get cancel => 'Cancel';
-
-  @override
-  String get save => 'Save';
-
-  @override
-  String get delete => 'Delete';
-
-  @override
-  String get confirm => 'Confirm';
-
-  @override
-  String get back => 'Back';
-
-  @override
-  String get next => 'Next';
 
   @override
   String get search => 'Search';
@@ -224,10 +312,12 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get newPassword => 'New password';
 
   @override
-  String get passwordResetSent => 'If an account exists for this email, a link was sent.';
+  String get passwordResetSent =>
+      'If an account exists for that email, we sent a reset link.';
 
   @override
-  String get passwordUpdated => 'Password updated. You can sign in now.';
+  String get passwordUpdated =>
+      'Password updated successfully. You can now sign in.';
 
   @override
   String get sendResetLink => 'Send reset link';
@@ -242,19 +332,20 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String helloName(String name) => 'Hello, $name';
 
   @override
-  String get travelerFallback => 'Traveller';
+  String get travelerFallback => 'Traveler';
 
   @override
   String get needsYourAction => 'Needs your action';
 
   @override
-  String get needsActionSubtitle => 'Complete these items to keep your application moving';
+  String get needsActionSubtitle =>
+      'Complete these items to keep your case moving';
 
   @override
   String get completeProfileTitle => 'Complete your profile';
 
   @override
-  String get completeProfileSubtitle => 'Add the remaining details';
+  String get completeProfileSubtitle => 'Add your name and basic details';
 
   @override
   String documentsMissingCount(int count) => '$count documents missing';
@@ -263,7 +354,7 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get documentMissingOne => '1 document missing';
 
   @override
-  String get reviewRequiredFiles => 'Review required files';
+  String get reviewRequiredFiles => 'Review the required files for your case';
 
   @override
   String get actionBadge => 'Action';
@@ -272,7 +363,7 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get caseOverview => 'Case overview';
 
   @override
-  String get caseOverviewSubtitle => 'Status of your applications';
+  String get caseOverviewSubtitle => 'A quick view of your active work';
 
   @override
   String get allCases => 'All cases';
@@ -287,10 +378,10 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get quickActions => 'Quick actions';
 
   @override
-  String get quickActionsSubtitle => 'Jump to common tasks';
+  String get quickActionsSubtitle => 'Start where you need help today';
 
   @override
-  String get visaPrograms => 'Visa programmes';
+  String get visaPrograms => 'Visa programs';
 
   @override
   String get radUpdates => 'RAD updates';
@@ -299,25 +390,28 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get shortcuts => 'Shortcuts';
 
   @override
-  String get profileShortcutSubtitle => 'Account and preferences';
+  String get profileShortcutSubtitle => 'Personal and immigration details';
 
   @override
   String get askAssistant => 'Ask the assistant';
 
   @override
-  String get askAssistantSubtitle => 'Visas, documents, and process guidance';
+  String get askAssistantSubtitle =>
+      'Visas, documents, and process guidance';
 
   @override
   String get nextStepReady => 'Your next step is ready';
 
   @override
-  String get onTrack => 'On track';
+  String get onTrack => 'You are on track';
 
   @override
-  String get nextStepDescription => 'Review the recommended action for your case';
+  String get nextStepDescription =>
+      'A few items need your attention before your case can move forward.';
 
   @override
-  String get onTrackDescription => 'No urgent actions right now';
+  String get onTrackDescription =>
+      'Your current case information is up to date. Review your progress or ask for guidance.';
 
   @override
   String get reviewNextStep => 'Review next step';
@@ -335,7 +429,8 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get updateStatus => 'Update status';
 
   @override
-  String get updateStatusHint => 'Move this application to the next stage';
+  String get updateStatusHint =>
+      'Use this only to reflect the latest confirmed case state.';
 
   @override
   String get newDraft => 'New draft';
@@ -347,7 +442,8 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get loadingApplications => 'Loading applications…';
 
   @override
-  String get noApplicationsSubtitle => 'Start a draft when you are ready';
+  String get noApplicationsSubtitle =>
+      'Start a draft or explore visa programs.';
 
   @override
   String get statusDraft => 'Draft';
@@ -380,7 +476,8 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get missingSection => 'Missing';
 
   @override
-  String get missingSectionSubtitle => 'These documents are still needed';
+  String get missingSectionSubtitle =>
+      'Upload these to continue your application';
 
   @override
   String get allDocuments => 'All documents';
@@ -389,31 +486,34 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get submittedSection => 'Submitted';
 
   @override
-  String get noDocumentsSubtitle => 'Upload required documents when ready';
+  String get noDocumentsSubtitle =>
+      'Add required document types for your case.';
 
   @override
-  String get chooseFileUpload => 'Choose a file to upload';
+  String get chooseFileUpload => 'Choose file and upload';
 
   @override
   String get deleteDocument => 'Delete document';
 
   @override
-  String get deleteDocumentTitle => 'Delete this document?';
+  String get deleteDocumentTitle => 'Delete document?';
 
   @override
-  String get deleteDocumentBody => 'This cannot be undone.';
+  String get deleteDocumentBody =>
+      'This removes the document record and its private file.';
 
   @override
   String get close => 'Close';
 
   @override
-  String get acceptedFormats => 'Accepted formats: PDF, JPG, PNG';
+  String get acceptedFormats =>
+      'Accepted formats: PDF, JPG, JPEG, and PNG. Maximum size: 10 MB.';
 
   @override
-  String get couldNotReadFile => 'Could not read file';
+  String get couldNotReadFile => 'Could not read that file.';
 
   @override
-  String get fileTooLarge => 'File is too large';
+  String get fileTooLarge => 'Files must be 10 MB or smaller.';
 
   @override
   String get uploadFailed => 'Upload failed. Please try again.';
@@ -428,25 +528,28 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get statusLabel => 'Status';
 
   @override
-  String get aiDisclaimer => 'AI responses are informational and do not replace professional advice.';
+  String get aiDisclaimer =>
+      'Sourced answers are unavailable until the RAD Knowledge Base is configured. Nothing here is an official immigration decision.';
 
   @override
   String get howCanWeHelp => 'How can we help?';
 
   @override
-  String get askAboutVisas => 'Ask about visas, documents, or process';
+  String get askAboutVisas =>
+      'Ask about visas, documents, or process. Try a suggestion:';
 
   @override
-  String get askQuestionHint => 'Type your question…';
+  String get askQuestionHint => 'Ask a question…';
 
   @override
   String freeQuota(int used, int limit) => '$used / $limit free';
 
   @override
-  String get aiQuotaExhausted => 'Free quota for this session is exhausted.';
+  String get aiQuotaExhausted => 'Free AI questions used for this session.';
 
   @override
-  String get couldNotSaveQuestion => 'Could not save question.';
+  String get couldNotSaveQuestion =>
+      'Could not save this question. Please try again.';
 
   @override
   String get sourceLabel => 'Source';
