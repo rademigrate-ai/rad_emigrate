@@ -18,25 +18,44 @@
   <meta property="og:description" content="مدیریت امن پرونده و مدارک، محتوای ساختاریافته ویزا و دستیار هوشمند RAD.">
   <meta property="og:locale" content="fa_IR">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="icons/Icon-512.png">
+  <meta property="og:image" content="assets/assets/branding/rad_official_logo.png">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="RAD Emigrate">
   <meta name="twitter:description" content="Secure immigration case management, structured visa guidance and RAD AI assistance.">
-  <meta name="twitter:image" content="icons/Icon-512.png">
+  <meta name="twitter:image" content="assets/assets/branding/rad_official_logo.png">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="RAD Emigrate">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="favicon.png">
 
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="manifest" href="manifest.json">
 
   <title>RAD Emigrate | مهاجرت، ویزا و مدیریت پرونده</title>
+  <style>
+    @font-face{font-family:Vazirmatn;src:url("assets/assets/fonts/Vazirmatn-Regular.ttf") format("truetype");font-display:swap}
+    body{margin:0;background:#172235}
+    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:16px;padding:24px;background:#172235;color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
+    #rad-startup img{background:#fff;border-radius:8px;padding:8px;object-fit:contain;max-width:calc(100vw - 64px)}
+    #rad-startup p{margin:0}
+    #rad-startup .en{color:#bcc7d6;font-size:14px}
+    #rad-startup-spinner{width:24px;height:24px;border:3px solid #47546a;border-top-color:#fff;border-radius:50%;animation:rad-turn 1s linear infinite}
+    #rad-startup-retry{font:inherit;color:#172235;background:#fff;border:0;border-radius:12px;min-height:48px;padding:8px 24px;cursor:pointer}
+    @keyframes rad-turn{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){#rad-startup-spinner{animation:none}}
+  </style>
 </head>
 <body>
+  <div id="rad-startup" role="status" aria-live="polite">
+    <img src="assets/assets/branding/rad_official_logo.png" width="220" height="114" alt="RAD International Institute">
+    <div id="rad-startup-spinner" aria-hidden="true"></div>
+    <p id="rad-startup-fa" lang="fa" dir="rtl">در حال بارگذاری راد…</p>
+    <p id="rad-startup-en" class="en" lang="en" dir="ltr">Loading RAD…</p>
+    <button id="rad-startup-retry" type="button" hidden>تلاش دوباره / Retry</button>
+  </div>
   <noscript>برای استفاده از RAD Emigrate باید JavaScript در مرورگر فعال باشد.</noscript>
   <script src="flutter_bootstrap.js" async></script>
 </body>
