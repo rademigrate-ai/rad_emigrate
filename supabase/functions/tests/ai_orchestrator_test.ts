@@ -118,6 +118,16 @@ Deno.test("16 secrets never reach client responses, including failure responses"
     equal(/test-only-credential|test-only-service|private upstream|api_key|Authorization/.test(JSON.stringify(x.body)), false);
   }
 });
+Deno.test("17 provider A and B unavailable then provider C succeeds", async () => {
+  const x = await exercise({
+    chain: [runtime("a", "a1"), runtime("b", "b1"), runtime("c", "c1")],
+    status: [503, 503, 200],
+  });
+  equal(x.body.provider, "c");
+  equal(x.body.model, "c1");
+  equal(x.body.failover, true);
+  equal(x.providerCalls, 3);
+});
 Deno.test("public discovery cannot clear rejected credentials", async () => {
   const x = await exercise({}, { action: "discover_models", provider_id: "a" });
   equal(x.calls.filter(c => c.path.endsWith("record_ai_provider_outcome")).length, 0);

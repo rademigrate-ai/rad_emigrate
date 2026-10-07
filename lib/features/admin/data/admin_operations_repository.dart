@@ -43,6 +43,9 @@ class AdminProviderRecord {
     required this.lastSuccessAt,
     required this.lastFailureAt,
     this.credentialRejected = false,
+    this.safeErrorCode,
+    this.eligibleModelCount = 0,
+    this.discoveredModelCount = 0,
   });
 
   final String id;
@@ -58,6 +61,9 @@ class AdminProviderRecord {
   final DateTime? lastSuccessAt;
   final DateTime? lastFailureAt;
   final bool credentialRejected;
+  final String? safeErrorCode;
+  final int eligibleModelCount;
+  final int discoveredModelCount;
 }
 
 class AdminModelRecord {
@@ -72,6 +78,8 @@ class AdminModelRecord {
     required this.runtimeScope,
     required this.priority,
     required this.available,
+    this.discoveryStatus = 'active',
+    this.lastErrorCode,
   });
 
   final String id;
@@ -84,6 +92,8 @@ class AdminModelRecord {
   final String runtimeScope;
   final int priority;
   final bool available;
+  final String discoveryStatus;
+  final String? lastErrorCode;
 }
 
 class AdminSourceRecord {
@@ -326,18 +336,25 @@ class AdminOperationsRepository {
         .select(
           'id,slug,display_name,adapter,base_url,secret_id,enabled,priority,'
           'runtime_scope,'
-          'ai_provider_health(status,last_success_at,last_failure_at,credential_rejected)',
+          'ai_provider_health(status,last_success_at,last_failure_at,credential_rejected,safe_error_code)',
         )
         .order('priority')
         .limit(100);
+    // Prefer enabled/available chat models so Admin sees the live pool first.
     final modelsFuture = client
         .from('ai_models')
         .select(
           'id,provider_id,slug,display_name,capability,enabled,max_output_tokens,'
-          'runtime_scope,priority,available',
+          'runtime_scope,priority,available,discovery_status,last_error_code',
         )
-        .order('display_name')
-        .limit(200);
+        .eq('capability', 'chat')
+        .order('enabled', ascending: false)
+        .order('available', ascending: false)
+        .order('priority')
+        .limit(300);
+    final modelCountsFuture = client
+        .from('ai_models')
+        .select('provider_id,enabled,available,capability,discovery_status');
     final sourcesFuture = client
         .from('content_sources')
         .select(
@@ -400,9 +417,27 @@ class AdminOperationsRepository {
       feedFuture,
       healthFuture,
       auditFuture,
+      modelCountsFuture,
     ]);
     List<Map<String, dynamic>> rows(int index) =>
         (results[index] as List).cast<Map<String, dynamic>>();
+
+    final eligibleByProvider = <String, int>{};
+    final discoveredByProvider = <String, int>{};
+    for (final row in rows(10)) {
+      final providerId = row['provider_id'] as String?;
+      if (providerId == null) continue;
+      discoveredByProvider[providerId] =
+          (discoveredByProvider[providerId] ?? 0) + 1;
+      final chat = row['capability'] == 'chat';
+      final enabled = row['enabled'] as bool? ?? false;
+      final available = row['available'] as bool? ?? false;
+      final active = (row['discovery_status'] as String? ?? 'active') == 'active';
+      if (chat && enabled && available && active) {
+        eligibleByProvider[providerId] =
+            (eligibleByProvider[providerId] ?? 0) + 1;
+      }
+    }
 
     final reviews =
         <AdminReviewRecord>[
@@ -441,8 +476,9 @@ class AdminOperationsRepository {
         } else if (relation is Map) {
           health = relation.cast<String, dynamic>();
         }
+        final id = row['id'] as String;
         return AdminProviderRecord(
-          id: row['id'] as String,
+          id: id,
           slug: row['slug'] as String,
           displayName: row['display_name'] as String,
           adapter: row['adapter'] as String,
@@ -455,6 +491,9 @@ class AdminOperationsRepository {
           lastSuccessAt: _date(health?['last_success_at']),
           lastFailureAt: _date(health?['last_failure_at']),
           credentialRejected: health?['credential_rejected'] as bool? ?? false,
+          safeErrorCode: health?['safe_error_code'] as String?,
+          eligibleModelCount: eligibleByProvider[id] ?? 0,
+          discoveredModelCount: discoveredByProvider[id] ?? 0,
         );
       }).toList(),
       models: rows(1)
@@ -470,6 +509,8 @@ class AdminOperationsRepository {
               runtimeScope: row['runtime_scope'] as String? ?? 'both',
               priority: row['priority'] as int? ?? 100,
               available: row['available'] as bool? ?? true,
+              discoveryStatus: row['discovery_status'] as String? ?? 'active',
+              lastErrorCode: row['last_error_code'] as String?,
             ),
           )
           .toList(),
