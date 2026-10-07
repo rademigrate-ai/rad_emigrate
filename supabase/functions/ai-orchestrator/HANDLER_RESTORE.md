@@ -1,20 +1,10 @@
-# Stage 4 Handler Restore
+# Stage 4 Orchestrator Layout
 
-Remote `handler.ts` imports `./handler_providers.ts`.
+Canonical modules on branch:
 
-**Self-contained full handler (Stage 2 adapters + Stage 4 guest quota):**
-project artifacts path:
-`artifacts/ai-orchestrator-handler-stage4.ts`
+- `handler.ts` — chat, guest/auth quota, admin test_provider/discover_models, grounding orchestration
+- `handler_providers.ts` — OpenAI-compatible/OpenRouter, Anthropic, Gemini adapters, discover, health
+- `knowledge_grounding.ts` — approved-only retrieve_knowledge grounding
+- `index.ts` — Deno.serve entry
 
-**Providers module:**
-`artifacts/handler_providers.ts`
-
-Owner actions:
-1. Copy self-contained handler to `supabase/functions/ai-orchestrator/handler.ts` OR add `handler_providers.ts` from artifact.
-2. `supabase functions deploy ai-orchestrator --project-ref inshddthftkhcdosoqcn`
-
-Verified markers in artifact handler:
-- test_provider, discover_models
-- openai_compatible, anthropic, gemini
-- consume_ai_guest_quota, consume_ai_daily_quota
-- loadGrounding + hasApprovedEvidence
+Do not use local artifacts as source of truth.
