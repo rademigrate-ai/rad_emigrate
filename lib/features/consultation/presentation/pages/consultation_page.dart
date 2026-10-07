@@ -116,7 +116,10 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text(l10n.consultationIntro, style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            l10n.consultationIntro,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 16),
           TextField(
             controller: _topic,
@@ -132,11 +135,17 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
           ),
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            Text(
+              _error!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ],
           if (_success != null) ...[
             const SizedBox(height: 8),
-            Text(_success!, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+            Text(
+              _success!,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            ),
           ],
           const SizedBox(height: 16),
           FilledButton(
@@ -144,7 +153,10 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
             child: Text(_submitting ? l10n.loading : l10n.submitConsultation),
           ),
           const SizedBox(height: 28),
-          Text(l10n.myConsultations, style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            l10n.myConsultations,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           if (_mine.isEmpty)
             Text(l10n.noConsultations)
@@ -152,7 +164,9 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
             ..._mine.map(
               (r) => ListTile(
                 title: Text('${r['topic'] ?? ''}'),
-                subtitle: Text('${r['status'] ?? ''} · ${r['created_at'] ?? ''}'),
+                subtitle: Text(
+                  '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
+                ),
               ),
             ),
         ],
