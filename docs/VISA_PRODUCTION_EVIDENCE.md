@@ -1,22 +1,20 @@
-# Visa Production Evidence — Stage 5
+# Visa Production Evidence — Stage 5 Acceptance
 
-## Counts after Stage 5
-- destinations: 22 published
-- destination_localizations with summary: 44/44
-- visa_programs: 10 published
-- program_localizations with description (>20 chars): 20/20
-- requirements: 8 (study-canada)
-- steps: 18 (study-canada + work-germany)
+## Final counts
+- destinations: 22
+- destination_localizations: 44
+- safe populated destination summaries (class C): 44
+- regulatory-verified destination summaries (class B): 0
+- programs: 10
+- program_localizations: 20
+- safe populated descriptions (A/C hybrid): 20
+- regulatory-verified program descriptions (class B): 0
+- requirements: 8 (all REVIEW_REQUIRED)
+- steps: 18 (RAD workflow + REVIEW_REQUIRED; 0 official-verified)
 - feed_items: 0
 
-## Integrity
-- No orphan requirements/steps observed at Stage 5 start
-- No duplicate destination codes or program slugs observed
-- EN+FA localization present for all destinations and programs
+## Integrity (executed)
+orphan_req=0 orphan_step=0 orphan_prog=0 dup_slug=0 dest_locale_gap=0 prog_locale_gap=0 parent_child=0 order_dups=0
 
-## Official authority references (description caveats)
-- Canada: IRCC (study/visitor)
-- Germany: federal authorities / competent recognition bodies
-- UK: UK immigration and professional regulators
-- Australia: Australian Government student rules
-- Sweden: Swedish licensing/residence authorities
+## Idempotency second run
+before=after: dest 22, dest_loc 44, dest_sum 44, prog 10, prog_loc 20, prog_desc 20, req 8, step 18, feed 0

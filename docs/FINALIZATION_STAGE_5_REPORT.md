@@ -1,37 +1,38 @@
-# Finalization Stage 5 Report — Visa Editorial Completion
+# Finalization Stage 5 Report — Visa Editorial Completion (Acceptance)
 
 ## RESULT: COMPLETE
 
 ## Starting SHA
-bcd08a9a6bc7934a81c571e6b8fa82d60497e32b (Stage 4 final)
+bcd08a9a6bc7934a81c571e6b8fa82d60497e32b
 
-## Final branch
-feature/stage5-visa-editorial-completion
+## Coverage terminology (corrected)
+| Metric | Meaning |
+|--------|---------|
+| STRUCTURAL | Rows exist, FKs valid, EN/FA present |
+| SAFE CATALOG COPY | Neutral navigation/catalog text (class C) |
+| RAD-VERIFIED WORKFLOW | RAD consultation workflow steps (class A) |
+| OFFICIAL REGULATORY VERIFICATION | Per-claim official authority evidence (class B) |
+| REVIEW_REQUIRED | High-level or procedure-adjacent content without full official verification |
 
-## Production baseline (pre-Stage-5)
-- destinations: 22 published, EN+FA names, **0 summaries**
-- programs: 10 published, EN+FA titles/summaries, **0 descriptions**
-- requirements: 8 (study-canada only, EN+FA)
-- steps: 18 (study-canada 10 + work-germany 8)
-- orphans/duplicates: none detected
-- feed_items: 0
+Stage 5 populated **safe catalog copy**, not official regulatory verification.
 
-## What Stage 5 changed
-1. Idempotent destination summaries for all 22 destinations × EN/FA (neutral catalog framing + official-rules caveat).
-2. Idempotent program descriptions for all 10 programs × EN/FA (purpose + authority caveat; no fees/scores/times invented).
-3. Migration mirror: `20261007220000_stage5_visa_editorial_summaries.sql`
-4. Integrity SQL tests: `supabase/tests/stage5_visa_integrity.sql`
-5. Documentation set (architecture, evidence matrix, editorial policy, initialization, production evidence).
+## Evidence classification
+- Destination summaries: **44 × class C** (neutral catalog + official-rules caveat)
+- Program descriptions: **20 × class A/C hybrid** (RAD framing + identity + authority attribution; **not** class B regulatory verification)
+- Unsupported class D Stage-5 text: **0**
 
-## What Stage 5 did NOT do
-- Did not fabricate requirements/steps for programs lacking evidence.
-- Did not claim 100% verified regulatory coverage.
-- Did not close Stage 3 corpus gaps.
-- Did not rewrite migration history.
-- Did not publish Feed.
+## Requirements / steps states
+- Requirements (8 study-canada): **REVIEW_REQUIRED** (high-level document categories; no per-claim official URL verification)
+- Steps study-canada consultation: **VERIFIED_RAD_WORKFLOW**
+- Steps study-canada procedure-adjacent: **REVIEW_REQUIRED**
+- Steps work-germany: **VERIFIED_RAD_WORKFLOW** / **REVIEW_REQUIRED** mix
+- Official regulatory verified requirements/steps: **0**
 
-## Classification summary
-- Destinations: 22 structural complete; 22 neutral summaries (editorial safe, not regulatory guarantees).
-- Programs: 10 structural complete; 10 purpose descriptions with official-authority caveats.
-- Requirements: study-canada high-level categories only (not numeric eligibility); others empty + UI pending state.
-- Steps: study-canada + work-germany RAD consultation workflow style; others empty + UI pending state.
+## Acceptance executed
+- SQL integrity suite: all n=0
+- Initialization second run: counts unchanged
+- RLS: anon read OK / write denied; user read OK / write denied; admin mutation OK
+- Empty req/steps path (study-australia): pending UI eligible
+- Paths: study-canada, work-germany, study-united-kingdom, study-australia
+- Feed: 0
+- Stage 3 remains OPEN
