@@ -1,4 +1,4 @@
--- Stage 4: atomic AI quota consumption + anonymous guest quota (5 questions)
+-- Stage 4: atomic AI quota + anonymous guest quota (5) with advisory lock
 create table if not exists public.ai_guest_quota (
   guest_key_hash text primary key,
   question_count integer not null default 0 check (question_count >= 0),
@@ -11,23 +11,23 @@ grant all on table public.ai_guest_quota to service_role;
 
 create or replace function public.consume_ai_guest_quota(p_guest_key_hash text, p_limit integer default 5)
 returns jsonb language plpgsql security definer set search_path = public as $$
-declare v_count integer;
+declare v_count integer; v_limit integer;
 begin
   if p_guest_key_hash is null or length(p_guest_key_hash) < 16 or length(p_guest_key_hash) > 128 then
     raise exception 'invalid_guest_key' using errcode = '22023';
   end if;
-  if p_limit is null or p_limit < 1 or p_limit > 20 then p_limit := 5; end if;
-  insert into public.ai_guest_quota (guest_key_hash, question_count)
-  values (p_guest_key_hash, 1)
-  on conflict (guest_key_hash) do update
-    set question_count = public.ai_guest_quota.question_count + 1, last_seen_at = now()
-    where public.ai_guest_quota.question_count < p_limit
-  returning question_count into v_count;
-  if v_count is null then
-    select question_count into v_count from public.ai_guest_quota where guest_key_hash = p_guest_key_hash;
-    return jsonb_build_object('allowed', false, 'count', coalesce(v_count, p_limit), 'limit', p_limit, 'error', 'anonymous_quota_exceeded');
+  v_limit := coalesce(p_limit, 5);
+  if v_limit < 1 or v_limit > 20 then v_limit := 5; end if;
+  perform pg_advisory_xact_lock(hashtext(p_guest_key_hash));
+  insert into public.ai_guest_quota (guest_key_hash, question_count) values (p_guest_key_hash, 0)
+  on conflict (guest_key_hash) do nothing;
+  select question_count into v_count from public.ai_guest_quota where guest_key_hash = p_guest_key_hash for update;
+  if v_count >= v_limit then
+    return jsonb_build_object('allowed', false, 'count', v_count, 'limit', v_limit, 'error', 'anonymous_quota_exceeded');
   end if;
-  return jsonb_build_object('allowed', true, 'count', v_count, 'limit', p_limit);
+  update public.ai_guest_quota set question_count = question_count + 1, last_seen_at = now()
+  where guest_key_hash = p_guest_key_hash returning question_count into v_count;
+  return jsonb_build_object('allowed', true, 'count', v_count, 'limit', v_limit);
 end; $$;
 revoke all on function public.consume_ai_guest_quota(text, integer) from public, anon, authenticated;
 grant execute on function public.consume_ai_guest_quota(text, integer) to service_role;
