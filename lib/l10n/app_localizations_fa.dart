@@ -10,6 +10,15 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get signInSubtitle => 'برای مدیریت پرونده مهاجرتی خود وارد شوید';
   @override
+  String get signUpSubtitle =>
+      'برای سامان‌دهی مدارک و پیگیری پرونده مهاجرتی خود حساب کاربری ایجاد کنید.';
+  @override
+  String get passwordResetSubtitle =>
+      'برای درخواست پیوند بازنشانی رمز عبور، ایمیل حساب خود را وارد کنید.';
+  @override
+  String get passwordResetFailed =>
+      'درخواست پیوند بازنشانی ارسال نشد. دوباره تلاش کنید.';
+  @override
   String get email => 'ایمیل';
   @override
   String get password => 'رمز عبور';
@@ -479,24 +488,24 @@ class AppLocalizationsFa extends AppLocalizations {
   String get credentialsServerOnly =>
       'کلیدهای دسترسی فقط در سرور نگهداری می‌شوند و مقدار ذخیره‌شده هرگز به مرورگر بازگردانده نمی‌شود.';
   @override
-  String get configurationUnavailable => 'دریافت تنظیمات ممکن نشد.';
+  String get configurationUnavailable => 'دریافت تنظیمات ممکن نیست.';
   @override
   String get noProviderConfigured =>
-      'هنوز ارائه‌دهنده‌ای پیکربندی نشده است. از فرم زیر برای راه‌اندازی اولیه استفاده کنید.';
+      'هنوز ارائه‌دهنده‌ای ثبت نشده است. فرم زیر را برای پیکربندی اولیه تکمیل کنید.';
   @override
   String get addOrUpdateProvider => 'افزودن یا به‌روزرسانی ارائه‌دهنده';
   @override
-  String get slugLabel => 'شناسه';
+  String get slugLabel => 'شناسه (slug)';
   @override
   String get displayName => 'نام نمایشی';
   @override
-  String get adapterType => 'آداپتر';
+  String get adapterType => 'نوع Adapter';
   @override
-  String get publicHttpsOnly => 'باید یک نشانی HTTPS عمومی معتبر باشد';
+  String get publicHttpsOnly => 'فقط نشانی معتبر و عمومی HTTPS مجاز است';
   @override
   String get apiKeyWriteOnly => 'کلید API (فقط نوشتنی)';
   @override
-  String get keyMinimumEight => 'کلید باید حداقل ۸ کاراکتر باشد';
+  String get keyMinimumEight => 'کلید باید حداقل ۸ نویسه باشد';
   @override
   String get keepCurrentCredential =>
       'برای حفظ کلید فعلی، این بخش را خالی بگذارید.';
@@ -594,27 +603,51 @@ class AppLocalizationsFa extends AppLocalizations {
   String get categoryEvent => 'رویداد';
   @override
   String get categoryAnnouncement => 'اطلاعیه';
-
   @override
-  String get reviewQueueTitle => 'صف بررسی';
+  String get addSource => 'افزودن منبع';
   @override
-  String get reviewDraftTitle => 'پیش‌نویس تحریریه';
+  String get requiredField => 'این فیلد الزامی است';
+  @override
+  String get invalidUrl => 'یک نشانی عمومی و معتبر HTTPS وارد کنید';
+  @override
+  String get titleLabel => 'عنوان';
+  @override
+  String get sourceType => 'نوع منبع';
+  @override
+  String get researchPipelineSummary => 'خط لوله تحقیق';
+  @override
+  String findingsCount(int count) => '$count یافته در انتظار بررسی';
+  @override
+  String draftsInReview(int count) => '$count پیش‌نویس در بررسی';
+  @override
+  String get feedPublishedOnly => 'فید فقط موارد منتشرشده را نشان می‌دهد';
+  @override
+  String get lastResearchRun => 'آخرین اجرا';
+  @override
+  String get researchNeverAutoPublishes =>
+      'تحقیق و هوش مصنوعی هرگز به‌صورت خودکار در فید منتشر نمی‌شوند. ادمین باید صریحاً بررسی و منتشر کند.';
+  @override
+  String get researchQueued => 'اجرای تحقیق در صف قرار گرفت';
+  @override
+  String get reviewQueueTitle => 'صف بازبینی';
+  @override
+  String get reviewDraftTitle => 'پیش‌نویس محتوا';
   @override
   String get reviewFindingTitle => 'یافته پژوهشی';
   @override
   String get reject => 'رد';
   @override
-  String get keepPending => 'نگه‌داشتن در انتظار';
+  String get keepPending => 'در انتظار نگه دار';
   @override
   String get approve => 'تأیید';
   @override
-  String get publishExplicit => 'انتشار در فید';
+  String get publishExplicit => 'انتشار';
   @override
   String get publishRequiresHuman =>
-      'انتشار یک اقدام عمدی مدیر است. پژوهش و هوش مصنوعی هرگز به‌صورت خودکار منتشر نمی‌کنند.';
+      'انتشار نیازمند بازبینی صریح ادمین است. هوش مصنوعی و پژوهش هرگز خودکار منتشر نمی‌کنند.';
   @override
   String get findingPublishNote =>
-      'تأیید یافته به‌تنهایی مطلب را در فید عمومی منتشر نمی‌کند. برای انتشار، پیش‌نویس تحریریه بسازید یا ارتقا دهید.';
+      'یافته‌ها فقط پس از بازبینی انسانی به پیش‌نویس تبدیل می‌شوند. هیچ‌چیز خودکار منتشر نمی‌شود.';
   @override
   String get editTitle => 'عنوان';
   @override
@@ -624,12 +657,119 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get applicationSteps => 'مراحل اقدام';
   @override
-  String get structuredSourceNote =>
-      'اطلاعات بالا از محتوای ساختاریافته و منبع ثبت‌شده تهیه شده است؛ لینک خام به‌جای محتوا نمایش داده نمی‌شود.';
+  String get structuredSourceNote => 'یادداشت منبع';
   @override
   String get publishedStatus => 'منتشرشده';
   @override
   String get draftStatusLabel => 'پیش‌نویس';
   @override
   String get reviewStatusLabel => 'در حال بررسی';
+  @override
+  String get sourceAddress => 'نشانی منبع';
+
+  @override
+  String get sourceSavedDisabled =>
+      'منبع ذخیره شد. پس از بررسی انتساب و محدودهٔ استفاده، آن را فعال کنید.';
+
+  @override
+  String get sourceDuplicate => 'این نشانی منبع قبلاً ثبت شده است.';
+
+  @override
+  String get sourceSaveFailed =>
+      'ذخیرهٔ منبع انجام نشد. نشانی و دسترسی مدیریت را بررسی و دوباره تلاش کنید.';
+
+  @override
+  String get sourceEnable => 'فعال‌سازی منبع';
+
+  @override
+  String get sourceDisable => 'غیرفعال‌سازی منبع';
+
+  @override
+  String get researchSourcesTitle => 'منابع پژوهش';
+
+  @override
+  String get researchRunning =>
+      'پژوهش در حال اجراست. نتیجهٔ کارها در پایین نمایش داده می‌شود.';
+
+  @override
+  String get researchRunFailed =>
+      'پژوهش کامل نشد. پیش از تلاش دوباره، خطاهای منبع و کار را در پایین بررسی کنید.';
+
+  @override
+  String get openReviewQueue => 'باز کردن صف بررسی انسانی';
+
+  @override
+  String get brandIntroTitle => 'گام بعدی شما، همراه راد';
+
+  @override
+  String get brandIntroBody =>
+      'مسیرهای ویزا را بررسی کنید، مدارک خود را سامان دهید و پرونده‌تان را در یک جا پیگیری کنید.';
+
+  @override
+  String get exploreVisa => 'بررسی مسیرهای ویزا';
+
+  @override
+  String get reviewQueueEmpty => 'یافته یا پیش‌نویسی در انتظار بررسی نیست.';
+
+  @override
+  String get sourceStateUnknown => 'هنوز اجرا نشده';
+
+  @override
+  String get sourceLastSuccess => 'آخرین دریافت موفق';
+
+  @override
+  String get sourceHttpRejected =>
+      'از نشانی عمومی HTTPS استفاده کنید. منابع HTTP به‌صورت امن قابل دریافت نیستند.';
+  @override
+  String get providerSavedDiscoveryFailed =>
+      "ارائه‌دهنده ذخیره شد. کشف مدل‌ها ناموفق بود؛ برای تلاش دوباره «کشف مدل‌ها» را انتخاب کنید.";
+
+  @override
+  String get aiCredentialRejected =>
+      "برای استفاده از هوش مصنوعی، مدیر باید اطلاعات دسترسی ارائه‌دهنده را به‌روزرسانی یا دوباره تأیید کند.";
+
+  @override
+  String get aiNoEligibleModel =>
+      "در حال حاضر مدل مناسبی برای هوش مصنوعی در دسترس نیست. بعداً دوباره تلاش کنید یا با پشتیبانی راد تماس بگیرید.";
+
+  @override
+  String get aiRateLimited =>
+      "سرویس هوش مصنوعی مشغول است. کمی بعد دوباره تلاش کنید.";
+
+  @override
+  String get aiRequestFailed =>
+      "درخواست هوش مصنوعی انجام نشد. لطفاً دوباره تلاش کنید.";
+
+  @override
+  String get aiResponseNotSaved =>
+      "این پاسخ ذخیره نشد و ممکن است پس از بارگذاری دوباره نمایش داده نشود.";
+
+  @override
+  String get scopeUser => "کاربر";
+
+  @override
+  String get scopeBoth => "کاربر و مدیر";
+
+  @override
+  String get healthOffline => "قطع ارتباط";
+
+  @override
+  String get healthHealthy => "سالم";
+
+  @override
+  String get healthDegraded => "اختلال در ارتباط";
+
+  @override
+  String get healthUnknown => "بررسی نشده";
+
+  @override
+  String get modelSaveFailed =>
+      "تنظیمات مدل ذخیره نشد. تغییرات شما حفظ شده است؛ دوباره تلاش کنید.";
+
+  @override
+  String get sourceQueryRejected =>
+      "از نشانی عمومی HTTPS بدون پارامتر پرس‌وجو استفاده کنید. نشانی‌های منبع دارای پارامتر پرس‌وجو هنوز پشتیبانی نمی‌شوند.";
+
+  @override
+  String get lastProviderCheck => "آخرین بررسی ارائه‌دهنده";
 }

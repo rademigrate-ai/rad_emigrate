@@ -280,9 +280,11 @@ class AuthRemoteDataSource {
         if (profileName != null && profileName.trim().isNotEmpty) {
           resolvedName = profileName;
         }
-      } on PostgrestException {
+      } catch (_) {
         // Route protection should fail closed on auth, but a temporarily
-        // unavailable profile row should not invalidate an otherwise valid session.
+        // unavailable profile/name lookup (including network failure) should
+        // not invalidate an otherwise valid session. No auth operation is
+        // caught here; those retain their normal failure behavior.
       }
     }
 

@@ -38,6 +38,9 @@ abstract class AppLocalizations {
   String get appTitle;
   String get signIn;
   String get signInSubtitle;
+  String get signUpSubtitle;
+  String get passwordResetSubtitle;
+  String get passwordResetFailed;
   String get email;
   String get password;
   String get showPassword;
@@ -305,6 +308,41 @@ abstract class AppLocalizations {
   String get categoryDeadline;
   String get categoryEvent;
   String get categoryAnnouncement;
+  String get sourceAddress;
+  String get sourceSavedDisabled;
+  String get sourceDuplicate;
+  String get sourceSaveFailed;
+  String get sourceEnable;
+  String get sourceDisable;
+  String get researchSourcesTitle;
+  String get researchRunning;
+  String get researchRunFailed;
+  String get openReviewQueue;
+  String get brandIntroTitle;
+  String get brandIntroBody;
+  String get exploreVisa;
+  String get reviewQueueEmpty;
+  String get sourceStateUnknown;
+  String get sourceLastSuccess;
+  String get sourceHttpRejected;
+  String get providerSavedDiscoveryFailed;
+  String get aiCredentialRejected;
+  String get aiNoEligibleModel;
+  String get aiRateLimited;
+  String get aiRequestFailed;
+  String get aiResponseNotSaved;
+  String get addSource;
+  String get requiredField;
+  String get invalidUrl;
+  String get titleLabel;
+  String get sourceType;
+  String get researchPipelineSummary;
+  String findingsCount(int count);
+  String draftsInReview(int count);
+  String get feedPublishedOnly;
+  String get lastResearchRun;
+  String get researchNeverAutoPublishes;
+  String get researchQueued;
 
   // Stage 2 review / feed / visa
   String get reviewQueueTitle;
@@ -324,6 +362,15 @@ abstract class AppLocalizations {
   String get publishedStatus;
   String get draftStatusLabel;
   String get reviewStatusLabel;
+  String get scopeUser;
+  String get scopeBoth;
+  String get healthOffline;
+  String get healthHealthy;
+  String get healthDegraded;
+  String get healthUnknown;
+  String get modelSaveFailed;
+  String get sourceQueryRejected;
+  String get lastProviderCheck;
 }
 
 class _AppLocalizationsDelegate

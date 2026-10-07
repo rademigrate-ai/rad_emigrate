@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/theme/app_motion.dart';
+import '../../../../core/widgets/app_entrance.dart';
+import '../../../feed/data/feed_repository.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/directional_icons.dart';
@@ -27,8 +28,12 @@ class DashboardPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
     final name = session?.fullName ?? l10n.travelerFallback;
-    final apps = ref.watch(applicationControllerProvider).valueOrNull ?? [];
-    final docs = ref.watch(documentControllerProvider).valueOrNull ?? [];
+    final appsState = ref.watch(applicationControllerProvider);
+    final docsState = ref.watch(documentControllerProvider);
+    final apps = appsState.valueOrNull ?? [];
+    final locale = Localizations.localeOf(context).languageCode;
+    final updates = ref.watch(feedProvider(locale));
+    final docs = docsState.valueOrNull ?? [];
     final activeApps = apps
         .where((a) => a.status != ApplicationStatus.completed)
         .length;
@@ -57,15 +62,16 @@ class DashboardPage extends ConsumerWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
             children: [
-              AnimatedOpacity(
-                opacity: 1,
-                duration: AppMotion.duration(context, AppMotion.standard),
-                curve: AppMotion.curve(context),
+              AppEntrance(
                 child: _JourneyHero(
                   name: name,
                   needsAction: needsAction,
                   onPrimaryAction: () => context.go(
-                    !profileDone ? '/profile-completion' : '/documents',
+                    !profileDone
+                        ? '/profile-completion'
+                        : needsAction
+                        ? '/documents'
+                        : '/applications',
                   ),
                 ),
               ),
@@ -109,7 +115,7 @@ class DashboardPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: _MetricTile(
-                      value: '$activeApps',
+                      value: appsState.hasValue ? '$activeApps' : '—',
                       label: l10n.activeCases,
                       icon: Icons.assignment_outlined,
                       onTap: () => context.go('/applications'),
@@ -118,7 +124,7 @@ class DashboardPage extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _MetricTile(
-                      value: '$missingDocs',
+                      value: docsState.hasValue ? '$missingDocs' : '—',
                       label: l10n.documentsMissing,
                       icon: Icons.folder_outlined,
                       onTap: () => context.go('/documents'),
@@ -163,6 +169,46 @@ class DashboardPage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 28),
+              SectionHeader(
+                title: l10n.radUpdates,
+                actionLabel: l10n.feed,
+                onAction: () => context.go('/feed'),
+              ),
+              updates.when(
+                loading: () => const LinearProgressIndicator(),
+                error: (_, _) => _ShortcutRow(
+                  icon: Icons.refresh,
+                  title: l10n.updatesLoadFailed,
+                  subtitle: l10n.retry,
+                  onTap: () => ref.invalidate(feedProvider(locale)),
+                ),
+                data: (items) => items.isEmpty
+                    ? AppCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.noReviewedUpdates,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(l10n.catalogueDisclaimer),
+                          ],
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          for (final item in items.take(3))
+                            _ShortcutRow(
+                              icon: Icons.article_outlined,
+                              title: item.title,
+                              subtitle: item.summary,
+                              onTap: () => context.go('/feed'),
+                            ),
+                        ],
+                      ),
+              ),
+              const SizedBox(height: 28),
               SectionHeader(title: l10n.shortcuts),
               _ShortcutRow(
                 icon: Icons.person_outline,
@@ -198,10 +244,8 @@ class _JourneyHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final title = needsAction ? l10n.nextStepReady : l10n.onTrack;
-    final description = needsAction
-        ? l10n.nextStepDescription
-        : l10n.onTrackDescription;
+    final title = l10n.brandIntroTitle;
+    final description = l10n.brandIntroBody;
     return AppCard(
       emphasized: true,
       padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
@@ -243,16 +287,28 @@ class _JourneyHero extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 18),
-          AppButton(
-            label: needsAction ? l10n.reviewNextStep : l10n.viewApplications,
-            icon: needsAction
-                ? directionalForward(context)
-                : Icons.assignment_outlined,
-            expanded: false,
-            variant: needsAction
-                ? AppButtonVariant.primary
-                : AppButtonVariant.secondary,
-            onPressed: onPrimaryAction,
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              AppButton(
+                label: l10n.exploreVisa,
+                icon: Icons.public_outlined,
+                expanded: false,
+                onPressed: () => context.go('/visa'),
+              ),
+              AppButton(
+                label: needsAction
+                    ? l10n.reviewNextStep
+                    : l10n.viewApplications,
+                icon: needsAction
+                    ? directionalForward(context)
+                    : Icons.assignment_outlined,
+                expanded: false,
+                variant: AppButtonVariant.secondary,
+                onPressed: onPrimaryAction,
+              ),
+            ],
           ),
         ],
       ),

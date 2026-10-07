@@ -6,6 +6,7 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_ai_config_repository.dart';
 import '../../data/admin_operations_repository.dart';
+import '../admin_ai_labels.dart';
 
 class AdminAiConfigPage extends ConsumerStatefulWidget {
   const AdminAiConfigPage({super.key});
@@ -26,6 +27,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
   bool _enabled = true;
   int _priority = 10;
   bool _submitting = false;
+  bool _modelDialogOpen = false;
   bool _editingExisting = false;
   String? _status;
   String? _error;
@@ -71,10 +73,13 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
               : l10n.providerReachable(result['model_count'] as int? ?? 0);
         });
       }
-    } catch (_) {
+    } catch (error) {
+      ref.invalidate(adminConsoleProvider);
       if (mounted) {
         setState(
-          () => _error = discover
+          () => _error = error is AdminAiOperationException
+              ? adminAiErrorLabel(error.code, l10n)
+              : discover
               ? l10n.modelDiscoveryFailed
               : l10n.providerTestFailed,
         );
@@ -85,71 +90,132 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
   }
 
   Future<void> _configureModel(AdminModelRecord model) async {
+    if (_submitting || _modelDialogOpen) return;
     final l10n = AppLocalizations.of(context);
     var enabled = model.enabled;
     var scope = model.runtimeScope;
     var priority = model.priority.toDouble();
-    final save = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(model.displayName),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.enabled),
-                value: enabled,
-                onChanged: (value) => setDialogState(() => enabled = value),
+    var saving = false;
+    String? error;
+    setState(() => _modelDialogOpen = true);
+    try {
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => StatefulBuilder(
+          builder: (dialogContext, setDialogState) => PopScope(
+            canPop: !saving,
+            child: AlertDialog(
+              title: Text(model.displayName),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(l10n.enabled),
+                      value: enabled,
+                      onChanged: saving
+                          ? null
+                          : (value) => setDialogState(() => enabled = value),
+                    ),
+                    DropdownButtonFormField<String>(
+                      initialValue: scope,
+                      decoration: InputDecoration(labelText: l10n.runtimeScope),
+                      items: [
+                        for (final value in ['user', 'admin', 'both'])
+                          DropdownMenuItem(
+                            value: value,
+                            child: Text(adminRuntimeScopeLabel(value, l10n)),
+                          ),
+                      ],
+                      onChanged: saving
+                          ? null
+                          : (value) {
+                              if (value != null) {
+                                setDialogState(() => scope = value);
+                              }
+                            },
+                    ),
+                    const SizedBox(height: 12),
+                    Text('${l10n.priority} ${priority.round()}'),
+                    Slider(
+                      value: priority,
+                      min: 0,
+                      max: 1000,
+                      divisions: 100,
+                      onChanged: saving
+                          ? null
+                          : (value) => setDialogState(() => priority = value),
+                    ),
+                    if (error != null)
+                      Semantics(
+                        liveRegion: true,
+                        child: Text(
+                          error!,
+                          style: TextStyle(
+                            color: Theme.of(dialogContext).colorScheme.error,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-              DropdownButtonFormField<String>(
-                initialValue: scope,
-                decoration: InputDecoration(labelText: l10n.runtimeScope),
-                items: const [
-                  DropdownMenuItem(value: 'user', child: Text('USER')),
-                  DropdownMenuItem(value: 'admin', child: Text('ADMIN')),
-                  DropdownMenuItem(value: 'both', child: Text('BOTH')),
-                ],
-                onChanged: (value) {
-                  if (value != null) setDialogState(() => scope = value);
-                },
-              ),
-              const SizedBox(height: 12),
-              Text('${l10n.priority} ${priority.round()}'),
-              Slider(
-                value: priority,
-                min: 0,
-                max: 1000,
-                divisions: 100,
-                onChanged: (value) => setDialogState(() => priority = value),
-              ),
-            ],
+              actions: [
+                TextButton(
+                  onPressed: saving ? null : () => Navigator.pop(dialogContext),
+                  child: Text(l10n.cancel),
+                ),
+                FilledButton(
+                  onPressed: saving
+                      ? null
+                      : () async {
+                          setDialogState(() {
+                            saving = true;
+                            error = null;
+                          });
+                          try {
+                            await ref
+                                .read(adminAiConfigRepositoryProvider)
+                                .configureModel(
+                                  modelId: model.id,
+                                  enabled: enabled,
+                                  runtimeScope: scope,
+                                  priority: priority.round(),
+                                  maxOutputTokens: model.maxOutputTokens,
+                                );
+                            ref.invalidate(adminConsoleProvider);
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          } catch (_) {
+                            if (dialogContext.mounted) {
+                              setDialogState(
+                                () => error = l10n.modelSaveFailed,
+                              );
+                            }
+                          } finally {
+                            if (dialogContext.mounted) {
+                              setDialogState(() => saving = false);
+                            }
+                          }
+                        },
+                  child: saving
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(l10n.save),
+                ),
+              ],
+            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(l10n.save),
-            ),
-          ],
         ),
-      ),
-    );
-    if (save != true) return;
-    await ref
-        .read(adminAiConfigRepositoryProvider)
-        .configureModel(
-          modelId: model.id,
-          enabled: enabled,
-          runtimeScope: scope,
-          priority: priority.round(),
-          maxOutputTokens: model.maxOutputTokens,
-        );
-    ref.invalidate(adminConsoleProvider);
+      );
+    } finally {
+      if (mounted) setState(() => _modelDialogOpen = false);
+    }
   }
 
   @override
@@ -171,22 +237,31 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       _status = null;
     });
     try {
-      await ref
-          .read(adminAiConfigRepositoryProvider)
-          .configureProvider(
-            slug: _slugCtrl.text.trim(),
-            displayName: _displayNameCtrl.text.trim(),
-            adapter: _adapter,
-            baseUrl: _baseUrlCtrl.text.trim(),
-            apiKey: _apiKeyCtrl.text.trim(),
-            enabled: _enabled,
-            priority: _priority,
-          );
+      final repository = ref.read(adminAiConfigRepositoryProvider);
+      final providerId = await repository.configureProvider(
+        slug: _slugCtrl.text.trim(),
+        displayName: _displayNameCtrl.text.trim(),
+        adapter: _adapter,
+        baseUrl: _baseUrlCtrl.text.trim(),
+        apiKey: _apiKeyCtrl.text.trim(),
+        enabled: _enabled,
+        priority: _priority,
+      );
       _apiKeyCtrl.clear();
+      // Saving is successful even if upstream discovery fails; preserve that
+      // distinction so credentials are not repeatedly submitted.
+      var discoveryFailed = false;
+      try {
+        await repository.discoverModels(providerId);
+      } catch (_) {
+        discoveryFailed = true;
+      }
       ref.invalidate(adminConsoleProvider);
       if (mounted) {
         setState(() {
-          _status = AppLocalizations.of(context).providerSaved;
+          _status = discoveryFailed
+              ? AppLocalizations.of(context).providerSavedDiscoveryFailed
+              : AppLocalizations.of(context).providerSaved;
         });
       }
     } catch (e) {
@@ -250,16 +325,20 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                                       subtitle: Directionality(
                                         textDirection: TextDirection.ltr,
                                         child: Text(
-                                          '${provider.adapter}\n${provider.baseUrl}\nScope: ${provider.runtimeScope.toUpperCase()}',
+                                          '${provider.adapter}\n${provider.baseUrl}\n${l10n.runtimeScope}: ${adminRuntimeScopeLabel(provider.runtimeScope, l10n)}',
                                         ),
                                       ),
                                       trailing: Tooltip(
-                                        message: provider.credentialConfigured
+                                        message: provider.credentialRejected
+                                            ? l10n.aiCredentialRejected
+                                            : provider.credentialConfigured
                                             ? l10n.credentialConfigured
                                             : l10n.credentialMissing,
                                         child: Icon(
-                                          provider.credentialConfigured
-                                              ? Icons.verified_user_outlined
+                                          provider.credentialRejected
+                                              ? Icons.warning_amber_outlined
+                                              : provider.credentialConfigured
+                                              ? Icons.key_outlined
                                               : Icons.key_off_outlined,
                                         ),
                                       ),
@@ -311,7 +390,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                                           child: Text(model.slug),
                                         ),
                                         subtitle: Text(
-                                          '${model.runtimeScope.toUpperCase()} · ${l10n.priority} ${model.priority}${model.available ? '' : ' · ${l10n.unavailable}'}',
+                                          '${adminRuntimeScopeLabel(model.runtimeScope, l10n)} · ${l10n.priority} ${model.priority}${model.available ? '' : ' · ${l10n.unavailable}'}',
                                         ),
                                         trailing: const Icon(Icons.tune),
                                       ),

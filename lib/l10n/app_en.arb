@@ -6,6 +6,9 @@
   },
   "signIn": "Sign in",
   "signInSubtitle": "Sign in to manage your immigration case",
+  "signUpSubtitle": "Create an account to organize your documents and follow your immigration case.",
+  "passwordResetSubtitle": "Enter your account email to request a password reset link.",
+  "passwordResetFailed": "We couldn't request a reset link. Please try again.",
   "email": "Email",
   "password": "Password",
   "showPassword": "Show password",
@@ -155,9 +158,24 @@
   "baseUrl": "Base URL",
   "lowercaseSlugHint": "Use lowercase letters, digits, and underscores only",
   "providerReachable": "Provider is reachable ({count} models visible).",
-  "@providerReachable": {"placeholders": {"count": {"type": "int"}}},
+  "@providerReachable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "modelDiscoveryCompleted": "Model discovery completed: {discovered} found, {added} added.",
-  "@modelDiscoveryCompleted": {"placeholders": {"discovered": {"type": "int"}, "added": {"type": "int"}}},
+  "@modelDiscoveryCompleted": {
+    "placeholders": {
+      "discovered": {
+        "type": "int"
+      },
+      "added": {
+        "type": "int"
+      }
+    }
+  },
   "noContentSources": "No content sources are configured.",
   "approvedSourcesAppearHere": "RAD official sources and approved authoritative sources appear here.",
   "noResearchJobs": "No research jobs yet.",
@@ -173,5 +191,63 @@
   "categoryEvent": "Event",
   "categoryAnnouncement": "Announcement",
   "structuredDetailsPending": "Structured details are awaiting review",
-  "structuredDetailsPendingBody": "No verified requirements or application steps have been published for this programme yet. Use the cited source and confirm current rules with the official authority."
+  "structuredDetailsPendingBody": "No verified requirements or application steps have been published for this programme yet. Use the cited source and confirm current rules with the official authority.",
+  "addSource": "Add source",
+  "requiredField": "This field is required",
+  "invalidUrl": "Enter a valid public HTTPS address",
+  "titleLabel": "Title",
+  "sourceType": "Source type",
+  "researchPipelineSummary": "Research pipeline",
+  "findingsCount": "{count} findings awaiting review",
+  "@findingsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "draftsInReview": "{count} drafts in review",
+  "@draftsInReview": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "feedPublishedOnly": "Feed shows published items only",
+  "lastResearchRun": "Last run",
+  "researchNeverAutoPublishes": "Research and AI never publish to Feed automatically. An Admin must review and publish explicitly.",
+  "researchQueued": "Research run queued",
+  "sourceAddress": "Source address",
+  "sourceSavedDisabled": "Source saved. Enable it after checking its attribution and scope.",
+  "sourceDuplicate": "This source address is already registered.",
+  "sourceSaveFailed": "Could not save the source. Check the address and your Admin access, then try again.",
+  "sourceEnable": "Enable source",
+  "sourceDisable": "Disable source",
+  "researchSourcesTitle": "Research sources",
+  "researchRunning": "Research is running. Job results appear below.",
+  "researchRunFailed": "Research did not finish. Review source and job errors below before retrying.",
+  "openReviewQueue": "Open human review",
+  "brandIntroTitle": "Your next step, with RAD",
+  "brandIntroBody": "Explore visa pathways, organize your documents, and follow your case in one place.",
+  "exploreVisa": "Explore visa pathways",
+  "reviewQueueEmpty": "No findings or drafts await review.",
+  "sourceStateUnknown": "Not run yet",
+  "sourceLastSuccess": "Last successful fetch",
+  "sourceHttpRejected": "Use a public HTTPS address. HTTP sources cannot be fetched securely.",
+  "providerSavedDiscoveryFailed": "Provider saved. Model discovery failed; use Discover Models to retry.",
+  "aiCredentialRejected": "The AI service needs an Admin to update or revalidate its provider credential.",
+  "aiNoEligibleModel": "No eligible AI model is available. Please try later or contact RAD support.",
+  "aiRateLimited": "The AI service is busy. Please try again shortly.",
+  "aiRequestFailed": "Your AI request could not be completed. Please try again.",
+  "aiResponseNotSaved": "This response could not be saved. It may not appear after reloading.",
+  "scopeUser": "User",
+  "scopeBoth": "User and Admin",
+  "healthOffline": "Offline",
+  "healthHealthy": "Healthy",
+  "healthDegraded": "Degraded",
+  "healthUnknown": "Not checked",
+  "modelSaveFailed": "Could not save model settings. Your changes are retained; try again.",
+  "sourceQueryRejected": "Use a public HTTPS page without a query string. Query-based source addresses are not supported yet.",
+  "lastProviderCheck": "Last provider check"
 }

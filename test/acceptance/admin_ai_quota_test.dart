@@ -12,9 +12,9 @@ void main() {
       'lib/features/ai_assistant/presentation/pages/ai_assistant_page.dart',
     );
     expect(page.contains('static const _freeLimit = 5'), isFalse);
-    expect(page.contains('_isPrivilegedAdmin'), isTrue);
+    expect(page.contains('_used >= '), isFalse);
     expect(page.contains('widget.adminMode'), isTrue);
-    expect(page.contains('_userDisplayHintLimit'), isTrue);
+    expect(page.contains("scope: widget.adminMode ? 'admin' : 'user'"), isTrue);
   });
 
   test('Admin AI workspace is a dedicated page, not only adminMode flag', () {
@@ -31,7 +31,7 @@ void main() {
   });
 
   test('ai-orchestrator enforces server-side daily limits by role', () {
-    final fn = read('supabase/functions/ai-orchestrator/index.ts');
+    final fn = read('supabase/functions/ai-orchestrator/handler.ts');
     expect(fn.contains('ai_usage_limits'), isTrue);
     expect(fn.contains('daily_limit_reached'), isTrue);
     expect(fn.contains('daily_requests'), isTrue);

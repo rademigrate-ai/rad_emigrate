@@ -67,7 +67,7 @@ BEGIN
   SELECT count(*) INTO trigger_count FROM information_schema.triggers WHERE (event_object_schema='auth' AND event_object_table='users' AND trigger_name='on_auth_user_created') OR (event_object_schema='public' AND event_object_table IN ('content_sources','destinations','program_categories','visa_programs'));
   SELECT count(*) INTO bucket_count FROM storage.buckets WHERE id='documents' AND public=false AND file_size_limit=10485760 AND allowed_mime_types=ARRAY['application/pdf','image/jpeg','image/png']::text[];
   IF table_count <> 15 THEN RAISE EXCEPTION 'Expected 15 public RAD tables, got %',table_count; END IF;
-  IF column_count <> 113 THEN RAISE EXCEPTION 'Expected 113 public RAD columns, got %',column_count; END IF;
+  IF column_count <> 114 THEN RAISE EXCEPTION 'Expected 114 public RAD columns, got %',column_count; END IF;
   IF primary_key_count <> 15 THEN RAISE EXCEPTION 'Expected 15 primary keys, got %',primary_key_count; END IF;
   IF foreign_key_count <> 22 THEN RAISE EXCEPTION 'Expected 22 foreign keys, got %',foreign_key_count; END IF;
   -- Stage 3 added 9 justified FK covering indexes on these tables (37 → 46).
@@ -84,7 +84,8 @@ SQL
 
 # Fingerprints after profile UPDATE RLS simplification (ownership WITH CHECK) +
 # role-escalation trigger. Policies/triggers hashes updated; indexes Stage 3.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"4cb165bb35113539b9f0784afffcb2ea","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"c52042a2489e9129526327c3fa0933b9","triggers":"bff0bdc38fbafeae5fea6b8ad8be3f35","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"dc92252b3c76792ba111f39572be43aa"}'
+# Additive ai_sessions.scope changes only columns and constraints (CI #346).
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"c52042a2489e9129526327c3fa0933b9","triggers":"bff0bdc38fbafeae5fea6b8ad8be3f35","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2

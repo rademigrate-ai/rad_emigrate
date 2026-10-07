@@ -10,6 +10,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signInSubtitle => 'Sign in to manage your immigration case';
   @override
+  String get signUpSubtitle =>
+      'Create an account to organize your documents and follow your immigration case.';
+  @override
+  String get passwordResetSubtitle =>
+      'Enter your account email to request a password reset link.';
+  @override
+  String get passwordResetFailed =>
+      'We couldn\'t request a reset link. Please try again.';
+  @override
   String get email => 'Email';
   @override
   String get password => 'Password';
@@ -578,9 +587,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get auditSecurity => 'Audit / Security';
   @override
-  String get noAuditEvents => 'No audit events are visible.';
+  String get noAuditEvents => 'No audit events to show.';
   @override
-  String get auditRestricted => 'Audit history is restricted to Super Admin.';
+  String get auditRestricted => 'Audit access is restricted.';
   @override
   String get categoryUpdate => 'Update';
   @override
@@ -591,13 +600,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryEvent => 'Event';
   @override
   String get categoryAnnouncement => 'Announcement';
-
+  @override
+  String get addSource => 'Add source';
+  @override
+  String get requiredField => 'This field is required';
+  @override
+  String get invalidUrl => 'Enter a valid public HTTPS address';
+  @override
+  String get titleLabel => 'Title';
+  @override
+  String get sourceType => 'Source type';
+  @override
+  String get researchPipelineSummary => 'Research pipeline';
+  @override
+  String findingsCount(int count) => '$count findings awaiting review';
+  @override
+  String draftsInReview(int count) => '$count drafts in review';
+  @override
+  String get feedPublishedOnly => 'Feed shows published items only';
+  @override
+  String get lastResearchRun => 'Last run';
+  @override
+  String get researchNeverAutoPublishes =>
+      'Research never auto-publishes. Human review is required before publish.';
+  @override
+  String get researchQueued => 'Research run queued';
   @override
   String get reviewQueueTitle => 'Review queue';
   @override
-  String get reviewDraftTitle => 'Editorial draft';
+  String get reviewDraftTitle => 'Draft';
   @override
-  String get reviewFindingTitle => 'Research finding';
+  String get reviewFindingTitle => 'Finding';
   @override
   String get reject => 'Reject';
   @override
@@ -605,13 +638,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get approve => 'Approve';
   @override
-  String get publishExplicit => 'Publish to Feed';
+  String get publishExplicit => 'Publish';
   @override
   String get publishRequiresHuman =>
-      'Publishing is an intentional admin action. Research and AI never publish automatically.';
+      'Publishing requires an explicit human decision.';
   @override
   String get findingPublishNote =>
-      'Approving a finding does not publish to the public Feed. Create or promote an editorial draft to publish.';
+      'Findings inform drafts; they are not published to the feed.';
   @override
   String get editTitle => 'Title';
   @override
@@ -621,12 +654,119 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get applicationSteps => 'Application steps';
   @override
-  String get structuredSourceNote =>
-      'The guidance above is rendered from structured content and its recorded source; a raw link is not used as the content.';
+  String get structuredSourceNote => 'Structured from reviewed source';
   @override
   String get publishedStatus => 'Published';
   @override
   String get draftStatusLabel => 'Draft';
   @override
   String get reviewStatusLabel => 'In review';
+  @override
+  String get sourceAddress => 'Source address';
+
+  @override
+  String get sourceSavedDisabled =>
+      'Source saved. Enable it after checking its attribution and scope.';
+
+  @override
+  String get sourceDuplicate => 'This source address is already registered.';
+
+  @override
+  String get sourceSaveFailed =>
+      'Could not save the source. Check the address and your Admin access, then try again.';
+
+  @override
+  String get sourceEnable => 'Enable source';
+
+  @override
+  String get sourceDisable => 'Disable source';
+
+  @override
+  String get researchSourcesTitle => 'Research sources';
+
+  @override
+  String get researchRunning =>
+      'Research is running. Job results appear below.';
+
+  @override
+  String get researchRunFailed =>
+      'Research did not finish. Review source and job errors below before retrying.';
+
+  @override
+  String get openReviewQueue => 'Open human review';
+
+  @override
+  String get brandIntroTitle => 'Your next step, with RAD';
+
+  @override
+  String get brandIntroBody =>
+      'Explore visa pathways, organize your documents, and follow your case in one place.';
+
+  @override
+  String get exploreVisa => 'Explore visa pathways';
+
+  @override
+  String get reviewQueueEmpty => 'No findings or drafts await review.';
+
+  @override
+  String get sourceStateUnknown => 'Not run yet';
+
+  @override
+  String get sourceLastSuccess => 'Last successful fetch';
+
+  @override
+  String get sourceHttpRejected =>
+      'Use a public HTTPS address. HTTP sources cannot be fetched securely.';
+  @override
+  String get providerSavedDiscoveryFailed =>
+      "Provider saved. Model discovery failed; use Discover Models to retry.";
+
+  @override
+  String get aiCredentialRejected =>
+      "The AI service needs an Admin to update or revalidate its provider credential.";
+
+  @override
+  String get aiNoEligibleModel =>
+      "No eligible AI model is available. Please try later or contact RAD support.";
+
+  @override
+  String get aiRateLimited =>
+      "The AI service is busy. Please try again shortly.";
+
+  @override
+  String get aiRequestFailed =>
+      "Your AI request could not be completed. Please try again.";
+
+  @override
+  String get aiResponseNotSaved =>
+      "This response could not be saved. It may not appear after reloading.";
+
+  @override
+  String get scopeUser => "User";
+
+  @override
+  String get scopeBoth => "User and Admin";
+
+  @override
+  String get healthOffline => "Offline";
+
+  @override
+  String get healthHealthy => "Healthy";
+
+  @override
+  String get healthDegraded => "Degraded";
+
+  @override
+  String get healthUnknown => "Not checked";
+
+  @override
+  String get modelSaveFailed =>
+      "Could not save model settings. Your changes are retained; try again.";
+
+  @override
+  String get sourceQueryRejected =>
+      "Use a public HTTPS page without a query string. Query-based source addresses are not supported yet.";
+
+  @override
+  String get lastProviderCheck => "Last provider check";
 }

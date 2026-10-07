@@ -5,7 +5,9 @@ import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
+import '../admin_ai_labels.dart';
 import 'admin_review_detail_sheet.dart';
+import 'admin_source_dialog.dart';
 
 part 'admin_operations_sections.dart';
 
@@ -107,7 +109,7 @@ class _AdminConsole extends StatelessWidget {
       0 => _Overview(summary: summary, data: data),
       1 => _Providers(data: data),
       2 => _Sources(data: data),
-      3 => _Research(data: data),
+      3 => _Research(data: data, onReview: () => onSectionChanged(4)),
       4 => _Reviews(data: data),
       5 => _Feed(data: data),
       6 => _Health(data: data),

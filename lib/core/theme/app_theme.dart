@@ -10,10 +10,10 @@ abstract final class AppTheme {
     final base = ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      fontFamily: null,
+      fontFamily: 'Vazirmatn',
       visualDensity: VisualDensity.standard,
     );
-    final colorScheme = ColorScheme.light(
+    final colorScheme = const ColorScheme.light(
       primary: AppColors.primaryRed,
       onPrimary: AppColors.white,
       secondary: AppColors.navy,
@@ -62,17 +62,17 @@ abstract final class AppTheme {
     final base = ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      fontFamily: null,
+      fontFamily: 'Vazirmatn',
       visualDensity: VisualDensity.standard,
     );
-    final colorScheme = ColorScheme.dark(
+    final colorScheme = const ColorScheme.dark(
       primary: AppColors.primaryRed,
       onPrimary: AppColors.white,
-      secondary: const Color(0xFF5B8DEF),
+      secondary: Color(0xFF5B8DEF),
       onSecondary: AppColors.white,
       surface: darkSurface,
       onSurface: darkTextPrimary,
-      error: const Color(0xFFE85A64),
+      error: Color(0xFFE85A64),
       onError: AppColors.white,
       outline: darkBorder,
     );
@@ -125,6 +125,7 @@ abstract final class AppTheme {
     required Color textTertiary,
   }) {
     return base.copyWith(
+      splashFactory: InkRipple.splashFactory,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: scaffoldBackground,
       appBarTheme: AppBarTheme(
@@ -137,7 +138,8 @@ abstract final class AppTheme {
           color: appBarForeground,
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          letterSpacing: -0.4,
+          fontFamily: 'Vazirmatn',
+          letterSpacing: 0,
         ),
         systemOverlayStyle: systemOverlay,
       ),
@@ -179,6 +181,8 @@ abstract final class AppTheme {
         labelStyle: TextStyle(color: labelColor),
         hintStyle: TextStyle(color: hintColor),
       ),
+      // Button and rail theme styles replace the Material text defaults rather
+      // than merging them, so each must retain the bundled shaping font.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primaryRed,
@@ -188,7 +192,12 @@ abstract final class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_radius),
           ),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -199,14 +208,22 @@ abstract final class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(_radius),
           ),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: colorScheme.secondary,
           minimumSize: const Size(48, 44),
-          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+          ),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -228,57 +245,97 @@ abstract final class AppTheme {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: railBackground,
-        selectedIconTheme: const IconThemeData(color: AppColors.primaryRed),
-        unselectedIconTheme: IconThemeData(
-          color: textSecondary.withValues(alpha: 0.85),
-        ),
-        selectedLabelTextStyle: TextStyle(
-          color: textPrimary,
+        indicatorColor: AppColors.primaryRed,
+        selectedIconTheme: const IconThemeData(color: Colors.white),
+        unselectedIconTheme: IconThemeData(color: const Color(0xFFBCC7D6)),
+        selectedLabelTextStyle: const TextStyle(
+          color: Colors.white,
           fontWeight: FontWeight.w700,
+          fontFamily: 'Vazirmatn',
+          letterSpacing: 0,
         ),
-        unselectedLabelTextStyle: TextStyle(color: textSecondary),
+        unselectedLabelTextStyle: const TextStyle(
+          color: Color(0xFFBCC7D6),
+          fontFamily: 'Vazirmatn',
+          letterSpacing: 0,
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: dividerColor,
         thickness: 1,
         space: 1,
       ),
-      textTheme: TextTheme(
-        headlineLarge: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -1,
-          color: textPrimary,
-          height: 1.12,
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.7,
-          color: textPrimary,
-          height: 1.18,
-        ),
-        titleLarge: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.3,
-          color: textPrimary,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.1,
-          color: textPrimary,
-        ),
-        bodyLarge: TextStyle(fontSize: 16, color: textPrimary, height: 1.5),
-        bodyMedium: TextStyle(fontSize: 14, color: textSecondary, height: 1.5),
-        bodySmall: TextStyle(fontSize: 12, color: textTertiary, height: 1.45),
-        labelLarge: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: textPrimary,
-        ),
+      textTheme: _connectedTextTheme(
+        TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+            height: 1.12,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+            height: 1.18,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+          ),
+          bodyLarge: TextStyle(fontSize: 16, color: textPrimary, height: 1.5),
+          bodyMedium: TextStyle(
+            fontSize: 14,
+            color: textSecondary,
+            height: 1.5,
+          ),
+          bodySmall: TextStyle(fontSize: 12, color: textTertiary, height: 1.45),
+          labelLarge: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: textPrimary,
+          ),
+        ).apply(fontFamily: 'Vazirmatn'),
+        base.textTheme,
       ),
+    );
+  }
+
+  // Explicit copyWith works for both nullable custom styles and Material's
+  // defaults. TextStyle.apply cannot multiply a null letterSpacing.
+  static TextTheme _connectedTextTheme(TextTheme custom, TextTheme defaults) {
+    final text = defaults.merge(custom);
+    TextStyle? connected(TextStyle? style) => style?.copyWith(letterSpacing: 0);
+    return text.copyWith(
+      displayLarge: connected(text.displayLarge),
+      displayMedium: connected(text.displayMedium),
+      displaySmall: connected(text.displaySmall),
+      headlineLarge: connected(text.headlineLarge),
+      headlineMedium: connected(text.headlineMedium),
+      headlineSmall: connected(text.headlineSmall),
+      titleLarge: connected(text.titleLarge),
+      titleMedium: connected(text.titleMedium),
+      titleSmall: connected(text.titleSmall),
+      bodyLarge: connected(text.bodyLarge),
+      bodyMedium: connected(text.bodyMedium),
+      bodySmall: connected(text.bodySmall),
+      labelLarge: connected(text.labelLarge),
+      labelMedium: connected(text.labelMedium),
+      labelSmall: connected(text.labelSmall),
     );
   }
 }

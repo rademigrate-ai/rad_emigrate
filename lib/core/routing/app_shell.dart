@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../constants/app_colors.dart';
 import '../widgets/rad_brand.dart';
+import '../widgets/app_entrance.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
 
@@ -92,8 +93,8 @@ class AppShell extends ConsumerWidget {
                 color:
                     Theme.of(context).navigationRailTheme.backgroundColor ??
                     AppColors.navy,
-                border: Border(
-                  right: BorderSide(
+                border: BorderDirectional(
+                  end: BorderSide(
                     color: Theme.of(context).dividerColor
                         .withValues(alpha: 0.4),
                   ),
@@ -105,7 +106,7 @@ class AppShell extends ConsumerWidget {
                 labelType: NavigationRailLabelType.all,
                 backgroundColor: Colors.transparent,
                 groupAlignment: -0.55,
-                minWidth: 104,
+                minWidth: 116,
                 leading: const Padding(
                   padding: EdgeInsets.only(top: 18, bottom: 28),
                   child: RadBrand(
@@ -126,7 +127,7 @@ class AppShell extends ConsumerWidget {
           Expanded(
             child: ColoredBox(
               color: Theme.of(context).scaffoldBackgroundColor,
-              child: child,
+              child: AppEntrance(key: ValueKey(location), child: child),
             ),
           ),
         ],

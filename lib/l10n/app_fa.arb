@@ -3,6 +3,9 @@
   "appTitle": "موسسه بین‌المللی راد",
   "signIn": "ورود",
   "signInSubtitle": "برای مدیریت پرونده مهاجرتی خود وارد شوید",
+  "signUpSubtitle": "برای سامان‌دهی مدارک و پیگیری پرونده مهاجرتی خود حساب کاربری ایجاد کنید.",
+  "passwordResetSubtitle": "برای درخواست پیوند بازنشانی رمز عبور، ایمیل حساب خود را وارد کنید.",
+  "passwordResetFailed": "درخواست پیوند بازنشانی ارسال نشد. دوباره تلاش کنید.",
   "email": "ایمیل",
   "password": "رمز عبور",
   "showPassword": "نمایش رمز عبور",
@@ -138,9 +141,24 @@
   "baseUrl": "نشانی پایه",
   "lowercaseSlugHint": "فقط از حروف کوچک انگلیسی، رقم و زیرخط استفاده کنید",
   "providerReachable": "ارائه‌دهنده در دسترس است ({count} مدل قابل مشاهده).",
-  "@providerReachable": {"placeholders": {"count": {"type": "int"}}},
+  "@providerReachable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "modelDiscoveryCompleted": "کشف مدل‌ها انجام شد: {discovered} مدل پیدا و {added} مدل افزوده شد.",
-  "@modelDiscoveryCompleted": {"placeholders": {"discovered": {"type": "int"}, "added": {"type": "int"}}},
+  "@modelDiscoveryCompleted": {
+    "placeholders": {
+      "discovered": {
+        "type": "int"
+      },
+      "added": {
+        "type": "int"
+      }
+    }
+  },
   "noContentSources": "هنوز منبع محتوایی پیکربندی نشده است.",
   "approvedSourcesAppearHere": "منابع رسمی راد و منابع معتبر تأییدشده در این بخش نمایش داده می‌شوند.",
   "noResearchJobs": "هنوز پژوهشی در صف قرار نگرفته است.",
@@ -156,5 +174,63 @@
   "categoryEvent": "رویداد",
   "categoryAnnouncement": "اطلاعیه",
   "structuredDetailsPending": "جزئیات ساختاریافته در انتظار بازبینی است",
-  "structuredDetailsPendingBody": "هنوز الزامات یا مراحل اقدامِ تأییدشده‌ای برای این برنامه منتشر نشده است. منبع ذکرشده را ببینید و مقررات روز را با مرجع رسمی تطبیق دهید."
+  "structuredDetailsPendingBody": "هنوز الزامات یا مراحل اقدامِ تأییدشده‌ای برای این برنامه منتشر نشده است. منبع ذکرشده را ببینید و مقررات روز را با مرجع رسمی تطبیق دهید.",
+  "addSource": "افزودن منبع",
+  "requiredField": "این فیلد الزامی است",
+  "invalidUrl": "یک نشانی عمومی و معتبر HTTPS وارد کنید",
+  "titleLabel": "عنوان",
+  "sourceType": "نوع منبع",
+  "researchPipelineSummary": "خط لوله تحقیق",
+  "findingsCount": "{count} یافته در انتظار بررسی",
+  "@findingsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "draftsInReview": "{count} پیش‌نویس در بررسی",
+  "@draftsInReview": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "feedPublishedOnly": "فید فقط موارد منتشرشده را نشان می‌دهد",
+  "lastResearchRun": "آخرین اجرا",
+  "researchNeverAutoPublishes": "تحقیق و هوش مصنوعی هرگز به‌صورت خودکار در فید منتشر نمی‌شوند. ادمین باید صریحاً بررسی و منتشر کند.",
+  "researchQueued": "اجرای تحقیق در صف قرار گرفت",
+  "sourceAddress": "نشانی منبع",
+  "sourceSavedDisabled": "منبع ذخیره شد. پس از بررسی انتساب و محدودهٔ استفاده، آن را فعال کنید.",
+  "sourceDuplicate": "این نشانی منبع قبلاً ثبت شده است.",
+  "sourceSaveFailed": "ذخیرهٔ منبع انجام نشد. نشانی و دسترسی مدیریت را بررسی و دوباره تلاش کنید.",
+  "sourceEnable": "فعال‌سازی منبع",
+  "sourceDisable": "غیرفعال‌سازی منبع",
+  "researchSourcesTitle": "منابع پژوهش",
+  "researchRunning": "پژوهش در حال اجراست. نتیجهٔ کارها در پایین نمایش داده می‌شود.",
+  "researchRunFailed": "پژوهش کامل نشد. پیش از تلاش دوباره، خطاهای منبع و کار را در پایین بررسی کنید.",
+  "openReviewQueue": "باز کردن صف بررسی انسانی",
+  "brandIntroTitle": "گام بعدی شما، همراه راد",
+  "brandIntroBody": "مسیرهای ویزا را بررسی کنید، مدارک خود را سامان دهید و پرونده‌تان را در یک جا پیگیری کنید.",
+  "exploreVisa": "بررسی مسیرهای ویزا",
+  "reviewQueueEmpty": "یافته یا پیش‌نویسی در انتظار بررسی نیست.",
+  "sourceStateUnknown": "هنوز اجرا نشده",
+  "sourceLastSuccess": "آخرین دریافت موفق",
+  "sourceHttpRejected": "از نشانی عمومی HTTPS استفاده کنید. منابع HTTP به‌صورت امن قابل دریافت نیستند.",
+  "providerSavedDiscoveryFailed": "ارائه‌دهنده ذخیره شد. کشف مدل‌ها ناموفق بود؛ برای تلاش دوباره «کشف مدل‌ها» را انتخاب کنید.",
+  "aiCredentialRejected": "برای استفاده از هوش مصنوعی، مدیر باید اطلاعات دسترسی ارائه‌دهنده را به‌روزرسانی یا دوباره تأیید کند.",
+  "aiNoEligibleModel": "در حال حاضر مدل مناسبی برای هوش مصنوعی در دسترس نیست. بعداً دوباره تلاش کنید یا با پشتیبانی راد تماس بگیرید.",
+  "aiRateLimited": "سرویس هوش مصنوعی مشغول است. کمی بعد دوباره تلاش کنید.",
+  "aiRequestFailed": "درخواست هوش مصنوعی انجام نشد. لطفاً دوباره تلاش کنید.",
+  "aiResponseNotSaved": "این پاسخ ذخیره نشد و ممکن است پس از بارگذاری دوباره نمایش داده نشود.",
+  "scopeUser": "کاربر",
+  "scopeBoth": "کاربر و مدیر",
+  "healthOffline": "قطع ارتباط",
+  "healthHealthy": "سالم",
+  "healthDegraded": "اختلال در ارتباط",
+  "healthUnknown": "بررسی نشده",
+  "modelSaveFailed": "تنظیمات مدل ذخیره نشد. تغییرات شما حفظ شده است؛ دوباره تلاش کنید.",
+  "sourceQueryRejected": "از نشانی عمومی HTTPS بدون پارامتر پرس‌وجو استفاده کنید. نشانی‌های منبع دارای پارامتر پرس‌وجو هنوز پشتیبانی نمی‌شوند.",
+  "lastProviderCheck": "آخرین بررسی ارائه‌دهنده"
 }

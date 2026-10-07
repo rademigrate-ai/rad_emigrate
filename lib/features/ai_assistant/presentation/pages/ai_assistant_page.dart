@@ -9,15 +9,22 @@ import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/rad_brand.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class _ChatMessage {
-  _ChatMessage({required this.isUser, required this.text, this.sources});
+  _ChatMessage({
+    required this.isUser,
+    required this.text,
+    this.sources,
+    this.retryPrompt,
+  });
 
   final bool isUser;
   final String text;
   final List<AiSource>? sources;
+  final String? retryPrompt;
 }
 
 class AiAssistantPage extends ConsumerStatefulWidget {
@@ -42,18 +49,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _messages = <_ChatMessage>[];
   var _loading = false;
 
-  /// Client-side display only. Server (ai-orchestrator + ai_usage_limits) is
-  /// the authority. Admin routes pass [adminMode] so the soft gate is skipped.
-  static const _userDisplayHintLimit = 5;
-  var _used = 0;
   String? _sessionId;
-
-  bool get _isPrivilegedAdmin => widget.adminMode;
+  late final Future<void> _historyRestore;
 
   @override
   void initState() {
     super.initState();
-    _restoreHistory();
+    _historyRestore = _restoreHistory();
   }
 
   Future<void> _restoreHistory() async {
@@ -61,14 +63,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     if (userId == null || userId.isEmpty) return;
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
-      final sessions = await repository.listSessions(userId);
+      final sessions = await repository.listSessions(
+        userId,
+        scope: widget.adminMode ? 'admin' : 'user',
+      );
       if (sessions.isEmpty || !mounted) return;
       final session = sessions.first;
       final history = await repository.history(session.id);
-      if (!mounted) return;
+      if (!mounted || _messages.isNotEmpty) return;
       setState(() {
         _sessionId = session.id;
-        _used = session.questionCount;
         _messages
           ..clear()
           ..addAll(
@@ -95,23 +99,21 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _send([String? preset]) async {
     final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
-    // Soft gate for normal users only. Admin workspace sets adminMode.
-    // Server returns 429 if daily limits are exceeded.
-    if (!_isPrivilegedAdmin && _used >= _userDisplayHintLimit) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
-      return;
-    }
-
+    setState(() => _loading = true);
+    // A send during initial history loading must use the restored session.
+    await _historyRestore;
+    if (!mounted) return;
     final userId = ref.read(authControllerProvider).valueOrNull?.userId;
     try {
       if (userId != null && userId.isNotEmpty) {
         final repository = ref.read(aiSessionRepositoryProvider);
-        _sessionId ??= (await repository.createSession(userId)).id;
+        _sessionId ??= (await repository.createSession(
+          userId,
+          scope: widget.adminMode ? 'admin' : 'user',
+        )).id;
         await repository.saveMessage(
           sessionId: _sessionId!,
           userId: userId,
@@ -121,19 +123,45 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (_) {
       if (mounted) {
+        setState(() => _loading = false);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
 
+    if (!mounted) return;
     setState(() {
       _messages.add(_ChatMessage(isUser: true, text: text));
       _loading = true;
       _controller.clear();
-      _used++;
     });
     _scrollToEnd();
+
+    await _complete(text, userId);
+  }
+
+  Future<void> _retry(_ChatMessage failure) async {
+    final prompt = failure.retryPrompt;
+    if (_loading || prompt == null || _messages.last != failure) return;
+    setState(() => _loading = true);
+    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    await _complete(prompt, userId, replacing: failure);
+  }
+
+  Future<void> _complete(
+    String text,
+    String? userId, {
+    _ChatMessage? replacing,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    // The latest user turn is sent as prompt; failures are UI notices only.
+    final turns = _messages.where((m) => m.retryPrompt == null).toList();
+    final history = turns
+        .take(math.max(0, turns.length - 1))
+        .map((m) => AiConversationMessage(isUser: m.isUser, text: m.text))
+        .toList(growable: false);
 
     try {
       final ai = ref.read(aiServiceProvider);
@@ -144,11 +172,19 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 kind: AiRequestKind.immigrationQuestion,
                 conversationId: _sessionId,
                 locale: locale,
+                history: history,
                 metadata: {if (widget.adminMode) 'scope': 'admin'},
               ),
             )
-          : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
-      if (userId != null && userId.isNotEmpty && _sessionId != null) {
+          : AiResponse(
+              text: l10n.aiUnavailableResponse(text),
+              uncertain: true,
+              errorCode: 'ai_unavailable',
+            );
+      if (response.errorCode == null &&
+          userId != null &&
+          userId.isNotEmpty &&
+          _sessionId != null) {
         try {
           await ref
               .read(aiSessionRepositoryProvider)
@@ -159,30 +195,39 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 content: response.text,
               );
         } catch (_) {
-          // Conversation persistence is supplementary once a sourced response
-          // has been produced; do not replace that response with an error.
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(l10n.aiResponseNotSaved)));
+          }
         }
       }
       if (!mounted) return;
       setState(() {
+        if (replacing != null) _messages.remove(replacing);
         _messages.add(
           _ChatMessage(
             isUser: false,
             text: response.text,
             sources: response.sources,
+            retryPrompt: response.errorCode == null ? null : text,
           ),
         );
         _loading = false;
       });
       _scrollToEnd();
-    } catch (_) {
+    } catch (error) {
       if (!mounted) return;
+      final message = error.toString().contains('provider_unauthorized')
+          ? l10n.aiCredentialRejected
+          : l10n.aiRequestFailed;
       setState(() {
+        if (replacing != null) _messages.remove(replacing);
         _messages.add(
-          _ChatMessage(isUser: false, text: l10n.aiUnavailableResponse(text)),
+          _ChatMessage(isUser: false, text: message, retryPrompt: text),
         );
         _loading = false;
       });
+      _scrollToEnd();
     }
   }
 
@@ -228,6 +273,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               ? ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
+                    const Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: RadBrand(size: RadBrandSize.medium),
+                    ),
+                    const SizedBox(height: 28),
                     Text(
                       l10n.howCanWeHelp,
                       style: Theme.of(context).textTheme.titleLarge,
@@ -296,6 +346,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                               m.text,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
+                            if (m.retryPrompt != null &&
+                                index == _messages.length - 1)
+                              TextButton.icon(
+                                onPressed: _loading ? null : () => _retry(m),
+                                icon: const Icon(Icons.refresh),
+                                label: Text(l10n.retry),
+                              ),
                             if (m.sources != null && m.sources!.isNotEmpty) ...[
                               const SizedBox(height: 8),
                               ...m.sources!.map(
@@ -358,30 +415,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         title: Text(
           widget.adminMode ? l10n.adminResearchAssistant : l10n.aiAssistant,
         ),
-        actions: [
-          if (!_isPrivilegedAdmin)
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text(
-                  l10n.freeQuota(_used, _userDisplayHintLimit),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            )
-          else
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text(
-                  l10n.adminResearchAssistant,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ),
-        ],
       ),
-      body: body,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 920),
+          child: body,
+        ),
+      ),
     );
   }
 }

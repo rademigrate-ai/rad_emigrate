@@ -12,40 +12,42 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Semantics(
-          label: message,
-          liveRegion: true,
-          explicitChildNodes: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ExcludeSemantics(
-                child: Icon(
-                  Icons.error_outline,
-                  size: 40,
-                  color: Theme.of(context).colorScheme.error,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Semantics(
+            label: message,
+            liveRegion: true,
+            explicitChildNodes: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ExcludeSemantics(
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 40,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              ExcludeSemantics(
-                child: Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                const SizedBox(height: 12),
+                ExcludeSemantics(
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
-              ),
-              if (onRetry != null) ...[
-                const SizedBox(height: 16),
-                AppButton(
-                  label: AppLocalizations.of(context).retry,
-                  onPressed: onRetry,
-                  expanded: false,
-                  variant: AppButtonVariant.secondary,
-                ),
+                if (onRetry != null) ...[
+                  const SizedBox(height: 16),
+                  AppButton(
+                    label: AppLocalizations.of(context).retry,
+                    onPressed: onRetry,
+                    expanded: false,
+                    variant: AppButtonVariant.secondary,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

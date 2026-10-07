@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 
 enum RadBrandSize { small, medium, large }
 
-/// Shared RAD identity mark and wordmark.
+/// The owner-supplied RAD emblem, with its original square proportions.
 ///
-/// Keeping the asset selection here prevents screens from drifting into
-/// one-off logo treatments and leaves room for future dark/light branding.
+/// All surfaces use the same unmodified artwork. A white backing provides
+/// consistent contrast on dark surfaces without recoloring the logo.
 class RadBrand extends StatelessWidget {
   const RadBrand({
     super.key,
@@ -22,62 +21,32 @@ class RadBrand extends StatelessWidget {
   final bool darkSurface;
 
   double get _height => switch (size) {
-    RadBrandSize.small => 32,
-    RadBrandSize.medium => 46,
-    RadBrandSize.large => 68,
+    RadBrandSize.small => 48,
+    RadBrandSize.medium => 84,
+    RadBrandSize.large => 116,
   };
 
   @override
   Widget build(BuildContext context) {
-    final dark = darkSurface || Theme.of(context).brightness == Brightness.dark;
-    final asset = showInstituteName
-        ? (dark
-              ? 'assets/branding/rad_logo_dark.png'
-              : 'assets/branding/rad_logo.png')
-        : 'assets/branding/rad_logo_mark.png';
+    const asset = 'assets/branding/rad_official_logo.png';
     final label = AppLocalizations.of(context).appTitle;
 
     return Semantics(
       label: label,
       image: true,
-      child: Image.asset(
-        asset,
-        height: _height,
-        width: showInstituteName ? null : _height,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.medium,
-        errorBuilder: (context, error, stackTrace) =>
-            _FallbackMark(size: _height, label: label),
-      ),
-    );
-  }
-}
-
-class _FallbackMark extends StatelessWidget {
-  const _FallbackMark({required this.size, required this.label});
-
-  final double size;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: label,
       child: Container(
-        width: size,
-        height: size,
-        alignment: Alignment.center,
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: AppColors.primaryRed,
-          borderRadius: BorderRadius.circular(size * 0.24),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          'R',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: size * 0.55,
-            fontWeight: FontWeight.w800,
-          ),
+        child: Image.asset(
+          asset,
+          height: _height,
+          width: _height,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.medium,
+          excludeFromSemantics: true,
         ),
       ),
     );
