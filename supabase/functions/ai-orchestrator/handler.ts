@@ -140,8 +140,13 @@ export async function handler(req: Request): Promise<Response> {
   try {
     chain = await db("rpc/get_ai_runtime_chain_versioned", {
       method: "POST",
-      body: JSON.stringify({ p_capability: "chat", p_scope: requestedScope,
-        p_require_tools: false, p_require_structured_output: false, p_min_context_window: null }),
+      body: JSON.stringify({
+        p_capability: "chat",
+        p_scope: requestedScope,
+        p_require_tools: false,
+        p_require_structured: false,
+        p_min_context: null,
+      }),
     });
   } catch {
     if (requestId) await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({ status: "failed", error_code: "routing_unavailable", finished_at: new Date().toISOString() }) });
