@@ -38,6 +38,9 @@ abstract class AppLocalizations {
   String get appTitle;
   String get signIn;
   String get signInSubtitle;
+  String get signUpSubtitle;
+  String get passwordResetSubtitle;
+  String get passwordResetFailed;
   String get email;
   String get password;
   String get showPassword;

@@ -10,6 +10,15 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get signInSubtitle => 'برای مدیریت پرونده مهاجرتی خود وارد شوید';
   @override
+  String get signUpSubtitle =>
+      'برای سامان‌دهی مدارک و پیگیری پرونده مهاجرتی خود حساب کاربری ایجاد کنید.';
+  @override
+  String get passwordResetSubtitle =>
+      'برای درخواست پیوند بازنشانی رمز عبور، ایمیل حساب خود را وارد کنید.';
+  @override
+  String get passwordResetFailed =>
+      'درخواست پیوند بازنشانی ارسال نشد. دوباره تلاش کنید.';
+  @override
   String get email => 'ایمیل';
   @override
   String get password => 'رمز عبور';

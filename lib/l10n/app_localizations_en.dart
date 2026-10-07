@@ -10,6 +10,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signInSubtitle => 'Sign in to manage your immigration case';
   @override
+  String get signUpSubtitle =>
+      'Create an account to organize your documents and follow your immigration case.';
+  @override
+  String get passwordResetSubtitle =>
+      'Enter your account email to request a password reset link.';
+  @override
+  String get passwordResetFailed =>
+      'We couldn\'t request a reset link. Please try again.';
+  @override
   String get email => 'Email';
   @override
   String get password => 'Password';

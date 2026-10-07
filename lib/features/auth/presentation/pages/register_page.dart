@@ -92,7 +92,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     Text(l10n.signUp, style: theme.textTheme.headlineMedium),
                     const SizedBox(height: 8),
                     Text(
-                      l10n.signInSubtitle,
+                      l10n.signUpSubtitle,
                       style: theme.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 20),

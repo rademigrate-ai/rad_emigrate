@@ -30,6 +30,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
 
   Future<void> _submit() async {
     if (_loading || !_formKey.currentState!.validate()) return;
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _loading = true;
       _error = null;
@@ -44,14 +45,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
           _loading = false;
         });
       }
-    } catch (e) {
-      // Avoid account enumeration: still show generic success-style message
-      // when the backend does not distinguish missing accounts.
+    } catch (_) {
+      // A failed request must remain retryable. Keep the message account-neutral
+      // and never show backend details or claim that an email was sent.
       if (mounted) {
         setState(() {
-          _sent = true;
           _loading = false;
-          _error = null;
+          _error = l10n.passwordResetFailed;
         });
       }
     }
@@ -92,7 +92,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       )
                     else ...[
                       Text(
-                        l10n.signInSubtitle,
+                        l10n.passwordResetSubtitle,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyMedium,
                       ),
@@ -116,9 +116,14 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       ),
                       if (_error != null) ...[
                         const SizedBox(height: 12),
-                        Text(
-                          _error!,
-                          style: TextStyle(color: theme.colorScheme.error),
+                        Semantics(
+                          liveRegion: true,
+                          child: Text(
+                            _error!,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.error,
+                            ),
+                          ),
                         ),
                       ],
                       const SizedBox(height: 24),
