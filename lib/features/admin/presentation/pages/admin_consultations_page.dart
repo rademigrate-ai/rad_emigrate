@@ -15,7 +15,8 @@ class AdminConsultationsPage extends ConsumerStatefulWidget {
       _AdminConsultationsPageState();
 }
 
-class _AdminConsultationsPageState extends ConsumerState<AdminConsultationsPage> {
+class _AdminConsultationsPageState
+    extends ConsumerState<AdminConsultationsPage> {
   List<Map<String, dynamic>> _rows = const [];
   bool _loading = true;
   String? _error;
@@ -59,11 +60,14 @@ class _AdminConsultationsPageState extends ConsumerState<AdminConsultationsPage>
     final l10n = AppLocalizations.of(context);
     try {
       final client = ref.read(supabaseClientServiceProvider).client;
-      await client.from('consultation_requests').update({
-        'status': status,
-        if (note != null) 'admin_note': note,
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('id', id);
+      await client
+          .from('consultation_requests')
+          .update({
+            'status': status,
+            if (note != null) 'admin_note': note,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', id);
       if (mounted) {
         setState(() => _notice = l10n.consultationUpdated);
         await _load();
@@ -104,7 +108,9 @@ class _AdminConsultationsPageState extends ConsumerState<AdminConsultationsPage>
             Card(
               child: ExpansionTile(
                 title: Text('${r['topic'] ?? ''}'),
-                subtitle: Text('${r['status'] ?? ''} · ${r['created_at'] ?? ''}'),
+                subtitle: Text(
+                  '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
+                ),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -115,26 +121,49 @@ class _AdminConsultationsPageState extends ConsumerState<AdminConsultationsPage>
                         const SizedBox(height: 8),
                         DropdownButtonFormField<String>(
                           value: '${r['status'] ?? 'submitted'}',
-                          decoration: InputDecoration(labelText: l10n.consultationStatus),
+                          decoration: InputDecoration(
+                            labelText: l10n.consultationStatus,
+                          ),
                           items: const [
-                            DropdownMenuItem(value: 'submitted', child: Text('submitted')),
-                            DropdownMenuItem(value: 'in_review', child: Text('in_review')),
-                            DropdownMenuItem(value: 'contacted', child: Text('contacted')),
-                            DropdownMenuItem(value: 'closed', child: Text('closed')),
+                            DropdownMenuItem(
+                              value: 'submitted',
+                              child: Text('submitted'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'in_review',
+                              child: Text('in_review'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'contacted',
+                              child: Text('contacted'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'closed',
+                              child: Text('closed'),
+                            ),
                           ],
                           onChanged: (v) {
                             if (v != null) {
-                              _update(r['id'] as String, v, r['admin_note'] as String?);
+                              _update(
+                                r['id'] as String,
+                                v,
+                                r['admin_note'] as String?,
+                              );
                             }
                           },
                         ),
                         TextFormField(
                           initialValue: r['admin_note'] as String? ?? '',
-                          decoration: InputDecoration(labelText: l10n.consultationAdminNote),
+                          decoration: InputDecoration(
+                            labelText: l10n.consultationAdminNote,
+                          ),
                           minLines: 2,
                           maxLines: 4,
-                          onFieldSubmitted: (note) =>
-                              _update(r['id'] as String, '${r['status']}', note),
+                          onFieldSubmitted: (note) => _update(
+                            r['id'] as String,
+                            '${r['status']}',
+                            note,
+                          ),
                         ),
                       ],
                     ),
