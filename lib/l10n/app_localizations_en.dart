@@ -845,4 +845,164 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustClass => 'Trust class';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get models => 'Models';
+
+  @override
+  String get noModelsYet => 'No models discovered yet.';
+
+  @override
+  String get modelId => 'Model ID';
+
+  @override
+  String get supportsTools => 'Supports tools';
+
+  @override
+  String get structuredOutput => 'Structured output';
+
+  @override
+  String get vision => 'Vision';
+
+  @override
+  String get streaming => 'Streaming';
+
+  @override
+  String get providerHealth => 'Provider health';
+
+  @override
+  String get noHealthEvents => 'No health events yet.';
+
+  @override
+  String get latency => 'Latency';
+
+  @override
+  String get okStatus => 'OK';
+
+  @override
+  String get failStatus => 'Fail';
+
+  @override
+  String get providerSaved => 'Provider saved.';
+
+  @override
+  String get providerSaveFailed => 'Could not save provider.';
+
+  @override
+  String get testCompleted => 'Provider test completed.';
+
+  @override
+  String get testFailed => 'Provider test failed.';
+
+  @override
+  String get modelDiscoveryCompleted => 'Model discovery completed.';
+
+  @override
+  String get modelDiscoveryFailed => 'Model discovery failed.';
+
+  @override
+  String get baseUrl => 'Base URL';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get categoryUpdate => 'Update';
+
+  @override
+  String get categoryDeadline => 'Deadline';
+
+  @override
+  String get categoryEvent => 'Event';
+
+  @override
+  String get categoryGuide => 'Guide';
+
+  @override
+  String get categoryAnnouncement => 'Announcement';
+
+  @override
+  String get brandIntroTitle => 'Your next step, with RAD';
+
+  @override
+  String get brandIntroBody =>
+      'Explore visa pathways, organize your documents, and follow your case in one place.';
+
+  @override
+  String get aiCredentialRejected =>
+      'The AI service needs an Admin to update or revalidate its provider credential.';
+
+  @override
+  String get aiNoEligibleModel =>
+      'No eligible AI model is available. Please try later or contact RAD support.';
+
+  @override
+  String get aiRateLimited =>
+      'The AI service is busy. Please try again shortly.';
+
+  @override
+  String get aiRequestFailed =>
+      'The AI request could not be completed. Please try again.';
+
+  @override
+  String get aiResponseNotSaved =>
+      'The answer was generated but could not be saved to your session.';
+
+  @override
+  String get applicationSteps => 'Application steps';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get approvedSourcesAppearHere =>
+      'Approved sources appear here after editorial review.';
+
+  @override
+  String get auditRestricted => 'Audit access is restricted.';
+
+  @override
+  String get auditSecurity => 'Security audit';
+
+  @override
+  String get componentInventoryUnavailable =>
+      'Component inventory is unavailable.';
+
+  @override
+  String get critical => 'Critical';
+
+  @override
+  String get draftStatusLabel => 'Draft';
+
+  @override
+  String draftsInReview(int count) => '$count drafts in review';
+
+  @override
+  String get editBody => 'Body';
+
+  @override
+  String get editTitle => 'Title';
+
+  @override
+  String get findingsCount => 'Findings';
+
+  @override
+  String get adminResearchAssistant => 'Research assistant';
+
+  @override
+  String get adminResearchSubtitle =>
+      'Review candidates and publish only approved content.';
+
+  @override
+  String get addSource => 'Add source';
+
+  @override
+  String get sourceQueryRejected =>
+      'Use a public HTTPS address without a query string. Query-based source addresses are not supported yet.';
 }
