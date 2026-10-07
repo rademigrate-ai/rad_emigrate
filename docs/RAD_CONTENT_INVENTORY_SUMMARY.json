@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-10-07T20:00:00+03:00",
+  "baseline_sha": "235475e2dcf4837ced16e9d1e21b56c4fa088abc",
+  "item_count": 742,
+  "sites": {
+    "radmohajer.ir": {
+      "discovered": 740,
+      "fetched_sample": 5,
+      "categories": {
+        "home": 2,
+        "immigration_guidance": 42,
+        "study_guidance": 215,
+        "work_guidance": 76,
+        "investment_guidance": 46,
+        "other": 315,
+        "visa_visitor": 25,
+        "organization_about": 4,
+        "contact": 2,
+        "legal": 13
+      },
+      "languages": { "fa": 733, "en": 7 },
+      "freshness": {
+        "likely_current": 8,
+        "requires_verification": 404,
+        "unknown": 328
+      },
+      "promotion_policy": {
+        "safe_first_party": 8,
+        "review_required_regulatory": 732
+      }
+    },
+    "digivisa.ir": {
+      "discovered": 1,
+      "status": "unreachable_from_runner",
+      "existing_source_document": true
+    },
+    "radvisa.com": {
+      "discovered": 1,
+      "status": "unreachable_from_runner",
+      "existing_source_document": true
+    }
+  }
+}
