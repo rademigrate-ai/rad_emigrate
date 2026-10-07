@@ -1,24 +1,22 @@
-# Finalization Stage 6 Report — Auth / Entitlement / Payment
+# Stage 6 Final Acceptance Report
 
-## RESULT: COMPLETE (Layer A foundation; Layer B payment EXTERNAL)
+## RESULT: INCOMPLETE
 
-## Starting SHA
-2081e1d953bb6faf0fb087e85ba4486b839e0f6d
+### Email OTP
+- Production send: PASS (HTTP 200)
+- Invalid OTP: PASS (otp_expired/invalid)
+- Successful verify + session: BLOCKED — OTP delivered as email; token only stored hashed; controlled mailbox retrieval required for one-time code
 
-## Branch
-feature/stage6-auth-entitlement-payment
+### SMS application
+- IMPLEMENTED: method selection, E.164, signInWithOtp(phone), verifyOTP(sms), error codes
+- Production provider: BLOCKED — Auth returns otp_disabled for phone
 
-## Layer A — Auth + entitlement security foundation
-- Stage 4 guest 5-question + authenticated daily quota preserved
-- Canonical `get_ai_access_decision` + `get_ai_daily_quota_status` RPCs
-- `ai_entitlements` table with RLS (no active paid rows; payment_available=false)
-- Profile trigger + role default `user` + escalation prevention
-- Email OTP code path implemented (signInWithOtp / verifyOTP)
-- SMS OTP: not production-configured (email-only OTP UI)
-- Payment provider: none — honest unavailable state
+### Payment
+- OWNER/COMMERCIAL dependency; payment_available=false
 
-## Layer B — Live commercial payment
-EXTERNAL/OWNER dependency (no provider, plans, or prices established)
-
-## Stage 3
-OPEN / INCOMPLETE
+### Other gates
+- Authenticated quota boundary executed PASS
+- Entitlement active/expired/revoked/pending PASS
+- Guest Q6 PASS; Stage 4 regression PASS
+- Session ownership validation in handler IMPLEMENTED (redeploy required for Edge)
+- Feed = 0

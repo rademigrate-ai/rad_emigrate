@@ -1,11 +1,15 @@
-# Auth OTP Production
+# Auth OTP Production (Acceptance)
 
-## Email OTP
-- IMPLEMENTATION: present in AuthRemoteDataSource + OtpPage
-- CONFIGURATION: relies on Supabase Auth email provider
-- PRODUCTION VERIFICATION: password auth verified; live OTP send not mass-tested (abuse/rate limits)
+## Email
+| Step | Status |
+|------|--------|
+| Send OTP | PRODUCTION-VERIFIED (HTTP 200) |
+| Invalid code | PRODUCTION-VERIFIED (403 otp_expired) |
+| Valid verify | BLOCKED — requires controlled inbox access to delivered OTP |
 
-## SMS OTP
-- IMPLEMENTATION: phone field on register metadata only; verifyOTP requires email
-- CONFIGURATION: phone auth provider not evidenced in product path
-- STATUS: EXTERNAL/OWNER dependency — not PASS
+## SMS
+| Step | Status |
+|------|--------|
+| Application path | IMPLEMENTED |
+| E.164 | TESTED |
+| Production send | BLOCKED — otp_disabled (provider/config not enabled) |
