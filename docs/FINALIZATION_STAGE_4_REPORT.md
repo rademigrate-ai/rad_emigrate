@@ -1,39 +1,9 @@
-# Finalization Stage 4 Report — Production User AI
+# Stage 4 Final Report
 
-## STAGE 4 CLOSEOUT RESULT
+## RESULT: COMPLETE
 
-**COMPLETE**
+Authenticated EN/FA production inference on Edge v8 evidenced.
+Fallback fixture PASS. LIMIT 8 parity PASS. feed_items=0.
+Stage 3 remains OPEN.
 
-## FINAL BRANCH / HEAD
-
-- Branch: `feature/stage4-user-ai-finalization`
-- Production Edge: **version 8 ACTIVE**
-- Deploy source SHA: `3a36e59f62040d495566ab0853f6bba86b7c2f32`
-- Follow-up commits may include chain-limit migration mirroring production SQL
-
-## Production acceptance (Edge v8)
-
-All critical smoke paths evidenced:
-
-- Real provider inference (`kiroai` / Cohere models)
-- EN + FA replies
-- Approved knowledge grounding + citations (sources_n=5)
-- No-fabrication on missing regulatory facts
-- Multi-turn
-- Guest quota 5 then `anonymous_quota_exceeded`
-- `feed_items` = 0
-- Prior `routing_unavailable` gone
-
-## Ops fixes applied during acceptance
-
-1. RPC param names (code, redeployed as v8)
-2. Runtime chain `LIMIT 8` (SQL, live)
-3. Stale provider health reset (credential_rejected/offline)
-
-## Stage 3
-
-**OPEN / INCOMPLETE**
-
-## Stage 5
-
-Not started. Do not merge Stage 4 until product owner review.
+Optional redeploy for session_id FK resilience + safe_error_code column name alignment.
