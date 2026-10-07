@@ -123,9 +123,20 @@ export async function handler(req: Request): Promise<Response> {
   let requestId: string | null = null;
   if (user) {
     const sessionCandidate = typeof payload.session_id === "string" ? payload.session_id.trim() : "";
-    const sessionId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionCandidate)
+    let sessionId: string | null = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionCandidate)
       ? sessionCandidate
       : null;
+    // Service-role writes bypass RLS — validate session ownership before attach.
+    if (sessionId) {
+      try {
+        const owned = await db(
+          `ai_sessions?select=id&id=eq.${encodeURIComponent(sessionId)}&user_id=eq.${encodeURIComponent(user.id)}&limit=1`,
+        );
+        if (!owned?.length) sessionId = null;
+      } catch {
+        sessionId = null;
+      }
+    }
     const bodyBase = {
       user_id: user.id,
       capability: "chat",
