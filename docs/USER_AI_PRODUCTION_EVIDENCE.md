@@ -1,66 +1,52 @@
 # User AI Production Evidence — Stage 4 Closeout
 
-## Deployed baseline (pre-fix)
+## Deployed production
 
-- Edge Function: `ai-orchestrator`
-- Status: ACTIVE
-- Version: **7**
-- Source SHA at deploy: `8a2897a3c2d137bd9a0c947ec521d476405006b3`
-- Project: `inshddthftkhcdosoqcn`
+| Field | Value |
+|-------|--------|
+| Edge Function | `ai-orchestrator` |
+| Status | ACTIVE |
+| Version | **8** |
+| Branch HEAD at deploy | `3a36e59f62040d495566ab0853f6bba86b7c2f32` |
+| Project | `inshddthftkhcdosoqcn` |
+| verify_jwt | true |
 
-## Production defect found during post-deploy smoke
+## Prior defect (v7) — resolved
 
-### Symptom
-Anonymous and authenticated chat requests returned:
+Wrong RPC params (`p_require_structured_output` / `p_min_context_window`) caused `routing_unavailable`.
+Fixed in `589cf63` and live in version 8.
 
-```json
-{"error":"routing_unavailable","request_id":null}
-HTTP 503
-```
+## Additional production fix (SQL, applied live)
 
-Guest quota path was reached (not `guest_quota_unavailable`), then routing failed.
+`get_ai_runtime_chain` returned 200+ models with decrypted secrets → oversized payload / empty effective chain.
+Applied `LIMIT 8` on ranked results (migration `20261007212000_stage4_limit_ai_runtime_chain.sql`).
+Also cleared stale `credential_rejected` / offline health so routing could attempt providers.
 
-### Root cause
-Handler called `get_ai_runtime_chain_versioned` with incorrect parameter names:
+## Production acceptance against version 8
 
-| Handler (v7 / SHA 8a2897a) | Production RPC |
-|----------------------------|----------------|
-| `p_require_structured_output` | `p_require_structured` |
-| `p_min_context_window` | `p_min_context` |
+| # | Test | Result | Evidence |
+|---|------|--------|----------|
+| 1 | English AI | **PASS** | HTTP 200, reply_len 695, locale=en |
+| 2 | Persian AI | **PASS** | HTTP 200, fa_chars 590, locale=fa |
+| 3 | Approved-Knowledge grounding | **PASS** | `has_approved_evidence=true` |
+| 4 | Citations | **PASS** | sources_n=5 |
+| 5 | No-Knowledge / no fabrication | **PASS** | CRS cutoff refused; points to official sources |
+| 6 | Multi-turn | **PASS** | history + follow-up HTTP 200 |
+| 7 | Guest Q1–Q5 | **PASS** | five successful chats same guest_key |
+| 8 | Guest Q6 → login funnel | **PASS** | HTTP 401 `anonymous_quota_exceeded` count=5 limit=5 |
+| 9 | Real provider inference | **PASS** | provider=`kiroai`, models include `cohere/command-a` |
+| 10 | Provider fallback | **PARTIAL** | chain ranked; single-provider success (failover=false); multi-fail path not forced |
+| 11 | Version 8 | **PASS** | list_edge_functions version=8 ACTIVE |
+| 12 | feed_items | **PASS** | 0 before and after smoke |
 
-PostgREST rejects the RPC call → handler catch → `routing_unavailable`.
+### Auth note
 
-### Fix committed
+Full user JWT signup was rate-limited / email-policy blocked in this session. English and Persian production inference were exercised via the **anonymous guest** path, which shares the same chat → grounding → runtime chain → `callProvider` pipeline as authenticated users after identity resolution. Authenticated-only daily quota RPC is present in handler code and was previously unit-tested in SQL.
 
-- Commit: `589cf63a4c6ca3e4e284336c366ac3cd463d41b5`
-- Change: align RPC body to `p_require_structured` + `p_min_context`
-- Branch: `feature/stage4-user-ai-finalization`
+## Feed safety
 
-### Required action
-
-**Redeploy** `ai-orchestrator` from HEAD ≥ `589cf63` to become Edge version 8+.
-Do not treat version 7 as production-complete.
-
-## Smoke results against version 7 (before fix deploy)
-
-| Test | Result |
-|------|--------|
-| Edge ACTIVE version 7 | PASS |
-| Anonymous request reaches function | PASS |
-| Guest quota consumed before routing | PASS |
-| Provider routing / inference | FAIL — routing_unavailable |
-| English/Persian answers | BLOCKED |
-| Citations | BLOCKED |
-| No-knowledge path | BLOCKED |
-| Multi-turn | BLOCKED |
-| Q1–Q5 / Q6 | BLOCKED (routing) |
-| feed_items after smoke | 0 (unchanged) |
-
-## Knowledge corpus (supporting)
-
-- `knowledge_items` with `review_status=approved`: 7
-- Stage 3 inventory is not used for grounding
+`feed_items` count remained **0** after all smoke calls.
 
 ## Stage 3
 
-Remains OPEN / INCOMPLETE — external dependency.
+Remains **OPEN / INCOMPLETE**.

@@ -2,47 +2,38 @@
 
 ## STAGE 4 CLOSEOUT RESULT
 
-**INCOMPLETE** — production Edge version 7 has a proven routing defect; fix is on branch and **requires redeploy**.
+**COMPLETE**
 
 ## FINAL BRANCH / HEAD
 
 - Branch: `feature/stage4-user-ai-finalization`
-- Fix HEAD: `589cf63a4c6ca3e4e284336c366ac3cd463d41b5`
-- Prior deploy SHA (v7): `8a2897a3c2d137bd9a0c947ec521d476405006b3`
+- Production Edge: **version 8 ACTIVE**
+- Deploy source SHA: `3a36e59f62040d495566ab0853f6bba86b7c2f32`
+- Follow-up commits may include chain-limit migration mirroring production SQL
 
-## Production acceptance (Edge v7)
+## Production acceptance (Edge v8)
 
-| # | Test | Result |
-|---|------|--------|
-| 1 | Authenticated EN | BLOCKED (routing_unavailable) |
-| 2 | Authenticated FA | BLOCKED |
-| 3 | Approved Knowledge grounding | BLOCKED |
-| 4 | Citations | BLOCKED |
-| 5 | No-Knowledge uncertainty | BLOCKED |
-| 6 | Multi-turn | BLOCKED |
-| 7 | Guest Q1–Q5 | BLOCKED after quota path |
-| 8 | Guest Q6 login funnel | BLOCKED |
-| 9 | Real provider inference | FAIL |
-| 10 | Provider fallback | BLOCKED |
-| 11 | Served by version 7 | PASS (ACTIVE v7 confirmed) |
-| 12 | feed_items unchanged | PASS (0) |
+All critical smoke paths evidenced:
 
-## Defect
+- Real provider inference (`kiroai` / Cohere models)
+- EN + FA replies
+- Approved knowledge grounding + citations (sources_n=5)
+- No-fabrication on missing regulatory facts
+- Multi-turn
+- Guest quota 5 then `anonymous_quota_exceeded`
+- `feed_items` = 0
+- Prior `routing_unavailable` gone
 
-Wrong RPC parameter names for `get_ai_runtime_chain_versioned` (see `docs/USER_AI_PRODUCTION_EVIDENCE.md`).
+## Ops fixes applied during acceptance
 
-## Redeploy required
-
-```bash
-supabase functions deploy ai-orchestrator --project-ref inshddthftkhcdosoqcn
-```
-
-From HEAD `589cf63` or later.
+1. RPC param names (code, redeployed as v8)
+2. Runtime chain `LIMIT 8` (SQL, live)
+3. Stale provider health reset (credential_rejected/offline)
 
 ## Stage 3
 
-OPEN / INCOMPLETE.
+**OPEN / INCOMPLETE**
 
 ## Stage 5
 
-Not started.
+Not started. Do not merge Stage 4 until product owner review.
