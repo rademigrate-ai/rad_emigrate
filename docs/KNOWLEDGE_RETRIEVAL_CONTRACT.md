@@ -18,4 +18,6 @@ Citation-ready ranked results with claims, citations, source authority, open_con
 
 Ranking: FTS relevance + locale match + destination/program + inverse authority_priority + approved status.
 
-AI orchestrator `loadGrounding` calls this RPC and falls back to direct approved reads if unavailable.
+## Orchestrator integration
+
+`ai-orchestrator` `loadGrounding` calls `rpc/retrieve_knowledge` first; falls back to approved `knowledge_items` select only if the RPC fails.

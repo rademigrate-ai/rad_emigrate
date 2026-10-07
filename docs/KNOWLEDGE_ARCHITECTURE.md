@@ -45,3 +45,7 @@ Ranking prefers lower `authority_priority` (government=10 … other=50) while st
 
 - Snapshot `fetched_at`, item `freshness_checked_at`, `effective_date`.
 - Newest timestamp does not always win; authority is ranked explicitly.
+
+## Stage 2 migration
+
+Canonical file: `supabase/migrations/20261007180000_stage2_knowledge_completion.sql`.
