@@ -244,46 +244,77 @@ abstract final class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      textTheme: TextTheme(
-        headlineLarge: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.w800,
-          fontFamily: 'Vazirmatn',
-          letterSpacing: 0,
-          color: textPrimary,
-          height: 1.12,
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.w800,
-          fontFamily: 'Vazirmatn',
-          letterSpacing: 0,
-          color: textPrimary,
-          height: 1.18,
-        ),
-        titleLarge: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          fontFamily: 'Vazirmatn',
-          letterSpacing: 0,
-          color: textPrimary,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          fontFamily: 'Vazirmatn',
-          letterSpacing: 0,
-          color: textPrimary,
-        ),
-        bodyLarge: TextStyle(fontSize: 16, color: textPrimary, height: 1.5),
-        bodyMedium: TextStyle(fontSize: 14, color: textSecondary, height: 1.5),
-        bodySmall: TextStyle(fontSize: 12, color: textTertiary, height: 1.45),
-        labelLarge: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: textPrimary,
-        ),
-      ).apply(fontFamily: 'Vazirmatn', letterSpacingFactor: 0),
+      textTheme: _connectedTextTheme(
+        TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+            height: 1.12,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+            height: 1.18,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Vazirmatn',
+            letterSpacing: 0,
+            color: textPrimary,
+          ),
+          bodyLarge: TextStyle(fontSize: 16, color: textPrimary, height: 1.5),
+          bodyMedium: TextStyle(
+            fontSize: 14,
+            color: textSecondary,
+            height: 1.5,
+          ),
+          bodySmall: TextStyle(fontSize: 12, color: textTertiary, height: 1.45),
+          labelLarge: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: textPrimary,
+          ),
+        ).apply(fontFamily: 'Vazirmatn'),
+        base.textTheme,
+      ),
+    );
+  }
+
+  // Explicit copyWith works for both nullable custom styles and Material's
+  // defaults. TextStyle.apply cannot multiply a null letterSpacing.
+  static TextTheme _connectedTextTheme(TextTheme custom, TextTheme defaults) {
+    final text = defaults.merge(custom);
+    TextStyle? connected(TextStyle? style) => style?.copyWith(letterSpacing: 0);
+    return text.copyWith(
+      displayLarge: connected(text.displayLarge),
+      displayMedium: connected(text.displayMedium),
+      displaySmall: connected(text.displaySmall),
+      headlineLarge: connected(text.headlineLarge),
+      headlineMedium: connected(text.headlineMedium),
+      headlineSmall: connected(text.headlineSmall),
+      titleLarge: connected(text.titleLarge),
+      titleMedium: connected(text.titleMedium),
+      titleSmall: connected(text.titleSmall),
+      bodyLarge: connected(text.bodyLarge),
+      bodyMedium: connected(text.bodyMedium),
+      bodySmall: connected(text.bodySmall),
+      labelLarge: connected(text.labelLarge),
+      labelMedium: connected(text.labelMedium),
+      labelSmall: connected(text.labelSmall),
     );
   }
 }

@@ -3,7 +3,7 @@ begin;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
 do $$
 declare a uuid; b uuid; m uuid; n uuid; secret uuid; doc uuid; job uuid; finding uuid;
- v_count int; v_score int; old_score int; feed_count int;
+ v_count int; v_score int; old_score int; feed_count int; actor uuid := gen_random_uuid();
 begin
  secret:=vault.create_secret('test-only-routing-credential');
  insert into public.ai_providers(slug,display_name,adapter,base_url,secret_id,enabled,priority)
@@ -46,6 +46,37 @@ begin
  or has_function_privilege('anon','public.get_ai_provider_runtime_versioned(uuid)','execute')
  or has_function_privilege('authenticated','public.record_ai_provider_outcome(uuid,bigint,text,boolean)','execute')
  or has_function_privilege('authenticated','public.ingest_research_snapshot(uuid,uuid,text,text,integer,jsonb)','execute') then raise exception '16 privileged RPC exposed'; end if;
+ -- Exercise catalogue upsert against real SQL, preserving configured facts.
+ update public.ai_models set runtime_scope='admin',priority=7,capability_source='configured',
+  context_window=64000,supports_tools=true,cost_source='configured',cost_input_per_million=3 where id=m;
+ perform public.ingest_ai_model_catalogue(a,2,
+  '[{"slug":"first","capability":"chat","context_window":1000,"supports_tools":false,"supports_structured_output":false,"capability_source":"discovered","cost_input_per_million":9,"cost_source":"discovered"},
+    {"slug":"new-model","capability":"chat","context_window":8000,"supports_tools":false,"supports_structured_output":false,"capability_source":"discovered","cost_input_per_million":null,"cost_source":"unknown"}]'::jsonb);
+ if not exists(select from public.ai_models where id=m and enabled and runtime_scope='admin' and priority=7
+  and context_window=64000 and supports_tools and capability_source='configured' and cost_input_per_million=3 and cost_source='configured')
+ then raise exception 'Discovery overwrote configured capabilities or preferences'; end if;
+ if not exists(select from public.ai_models where provider_id=a and slug='new-model' and not enabled and available)
+ then raise exception 'Discovery did not safely add disabled model'; end if;
+ perform public.ingest_ai_model_catalogue(a,2,'[]'::jsonb);
+ if not exists(select from public.ai_models where id=m and enabled and not available and discovery_status='stale')
+ then raise exception 'Missing discovered model was deleted or remained eligible'; end if;
+ -- Disposable trusted-role fixture; no JWT metadata authorizes this role.
+ insert into auth.users(id,email) values(actor,'corrective-regression@example.invalid');
+ delete from public.profiles where id=actor;
+ insert into public.profiles(id,email,role) values(actor,'corrective-regression@example.invalid','super_admin');
+ perform set_config('request.jwt.claims',jsonb_build_object('role','service_role','sub',actor)::text,true);
+ perform public.record_ai_provider_outcome(a,2,'provider_unauthorized',false);
+ perform public.configure_ai_provider('regression_a','Regression A','openai_compatible','https://a.example.com','',true,100);
+ if not (select credential_rejected from public.ai_provider_health where provider_id=a)
+ then raise exception 'Blank key cleared rejection latch'; end if;
+ perform public.configure_ai_provider('regression_a','Regression A','openai_compatible','https://a.example.com','test-only-routing-credential',true,100);
+ if not (select credential_rejected from public.ai_provider_health where provider_id=a)
+  or (select credential_version from public.ai_providers where id=a)<>2
+ then raise exception 'Unchanged key cleared rejection latch or changed version'; end if;
+ perform public.configure_ai_provider('regression_a','Regression A','openai_compatible','https://a.example.com','test-only-new-credential',true,100);
+ if (select credential_rejected from public.ai_provider_health where provider_id=a)
+  or (select credential_version from public.ai_providers where id=a)<>3
+ then raise exception 'Changed key failed to renew eligibility'; end if;
  select count(*) into feed_count from public.feed_items;
  insert into public.source_documents(canonical_url,source_authority,title,language_code)
  values('https://evidence.example.com/test','other','Regression evidence','en') returning id into doc;

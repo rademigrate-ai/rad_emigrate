@@ -54,7 +54,7 @@ void main() {
   });
 
   test('research-sync worker does not publish feed', () {
-    final worker = read('supabase/functions/research-sync/index.ts');
+    final worker = read('supabase/functions/research-sync/handler.ts');
     expect(worker.toLowerCase().contains('feed_items'), isFalse);
     expect(worker.contains('publish_content_draft'), isFalse);
     expect(worker.contains("status: 'published'"), isFalse);

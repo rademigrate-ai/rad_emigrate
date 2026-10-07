@@ -13,15 +13,9 @@ void main() {
       ),
     );
 
-    final semantics = tester.widget<Semantics>(
-      find
-          .descendant(
-            of: find.byType(EmptyState),
-            matching: find.byType(Semantics),
-          )
-          .first,
-    );
-    expect(semantics.properties.label, 'No items. Try again later');
+    final handle = tester.ensureSemantics();
+    expect(find.bySemanticsLabel('No items. Try again later'), findsOneWidget);
+    handle.dispose();
   });
 
   testWidgets('ConstrainedContent applies max width constraint', (

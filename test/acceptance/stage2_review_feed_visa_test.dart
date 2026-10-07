@@ -28,7 +28,7 @@ void main() {
     });
 
     test('research worker never publishes feed', () {
-      final worker = read('supabase/functions/research-sync/index.ts');
+      final worker = read('supabase/functions/research-sync/handler.ts');
       expect(worker.contains('publish_content_draft'), isFalse);
       expect(worker.toLowerCase().contains('feed_items'), isFalse);
     });

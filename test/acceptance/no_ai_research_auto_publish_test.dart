@@ -8,13 +8,13 @@ void main() {
   String read(String relative) => File('$root/$relative').readAsStringSync();
 
   test('ai-orchestrator never writes feed_items or publish_content_draft', () {
-    final fn = read('supabase/functions/ai-orchestrator/index.ts');
+    final fn = read('supabase/functions/ai-orchestrator/handler.ts');
     expect(fn.toLowerCase().contains('feed_items'), isFalse);
     expect(fn.contains('publish_content_draft'), isFalse);
   });
 
   test('research-sync never publishes feed', () {
-    final worker = read('supabase/functions/research-sync/index.ts');
+    final worker = read('supabase/functions/research-sync/handler.ts');
     expect(worker.toLowerCase().contains('feed_items'), isFalse);
     expect(worker.contains('publish_content_draft'), isFalse);
   });

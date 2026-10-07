@@ -1,6 +1,6 @@
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
-const { handler } = await import("../ai-orchestrator/index.ts");
+const { handler } = await import("../ai-orchestrator/handler.ts");
 
 function equal(actual: unknown, expected: unknown) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);

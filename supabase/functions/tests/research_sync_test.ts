@@ -1,6 +1,6 @@
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
-const { handler } = await import("../research-sync/index.ts");
+const { handler } = await import("../research-sync/handler.ts");
 const json = (value: unknown, status=200) => new Response(JSON.stringify(value), {status});
 function assert(value: unknown) { if (!value) throw new Error("Research assertion failed"); }
 async function run(role="admin", sourceStatus=200, changed: unknown="finding-one") {

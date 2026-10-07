@@ -10,18 +10,24 @@ void main() {
   String read(String relative) => File('$root/$relative').readAsStringSync();
 
   group('research findings remain review-only', () {
-    test(
-      'worker creates one review candidate from the inserted finding id',
-      () {
-        final worker = read('supabase/functions/research-sync/index.ts');
+    test('worker ingests evidence atomically into one review candidate', () {
+      final worker = read('supabase/functions/research-sync/handler.ts');
 
-        expect(worker, contains('research_findings?select=id'));
-        expect(worker, contains('rpc/create_research_review_candidate'));
-        expect(worker, contains('p_finding_id: findings[0].id'));
-        expect(worker, isNot(contains('publish_content_draft')));
-        expect(worker.toLowerCase(), isNot(contains('feed_items')));
-      },
-    );
+      expect(worker, contains('rpc/ingest_research_snapshot'));
+      final sql = read(
+        'supabase/migrations/20261007080002_research_atomic_review_candidate.sql',
+      );
+      expect(sql, contains('after insert on public.research_findings'));
+      expect(
+        sql,
+        contains(
+          'public.create_research_review_candidate(new.research_job_id,new.id',
+        ),
+      );
+      expect(sql, isNot(contains('insert into public.feed_items')));
+      expect(worker, isNot(contains('publish_content_draft')));
+      expect(worker.toLowerCase(), isNot(contains('feed_items')));
+    });
 
     test('Stage 5 backfill is idempotent and never publishes', () {
       final migration = read(
@@ -99,7 +105,10 @@ void main() {
         'document-intelligence',
         'research-sync',
       ]) {
-        final source = read('supabase/functions/$functionName/index.ts');
+        final entrypoint = functionName == 'document-intelligence'
+            ? 'index.ts'
+            : 'handler.ts';
+        final source = read('supabase/functions/$functionName/$entrypoint');
         expect(source, contains('../_shared/cors.ts'));
       }
     });
