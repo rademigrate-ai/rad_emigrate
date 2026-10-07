@@ -122,18 +122,31 @@ export async function handler(req: Request): Promise<Response> {
 
   let requestId: string | null = null;
   if (user) {
-    const created = await db("ai_requests?select=id", {
-      method: "POST",
-      headers: { Prefer: "return=representation" },
-      body: JSON.stringify({
-        user_id: user.id,
-        session_id: typeof payload.session_id === "string" ? payload.session_id : null,
-        capability: "chat",
-        status: "running",
-        routing_reason: "ranked_eligible_pool",
-      }),
-    });
-    requestId = created[0].id;
+    const sessionCandidate = typeof payload.session_id === "string" ? payload.session_id.trim() : "";
+    const sessionId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionCandidate)
+      ? sessionCandidate
+      : null;
+    const bodyBase = {
+      user_id: user.id,
+      capability: "chat",
+      status: "running",
+      routing_reason: "ranked_eligible_pool",
+    };
+    try {
+      const created = await db("ai_requests?select=id", {
+        method: "POST",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify(sessionId ? { ...bodyBase, session_id: sessionId } : bodyBase),
+      });
+      requestId = created[0].id;
+    } catch {
+      const created = await db("ai_requests?select=id", {
+        method: "POST",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify(bodyBase),
+      });
+      requestId = created[0].id;
+    }
   }
 
   let chain: Runtime[];
@@ -149,11 +162,11 @@ export async function handler(req: Request): Promise<Response> {
       }),
     });
   } catch {
-    if (requestId) await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({ status: "failed", error_code: "routing_unavailable", finished_at: new Date().toISOString() }) });
+    if (requestId) await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({ status: "failed", safe_error_code: "routing_unavailable", finished_at: new Date().toISOString() }) });
     return safeJson(503, { error: "routing_unavailable", request_id: requestId });
   }
   if (!chain?.length) {
-    if (requestId) await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({ status: "failed", error_code: "no_eligible_model", finished_at: new Date().toISOString() }) });
+    if (requestId) await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({ status: "failed", safe_error_code: "no_eligible_model", finished_at: new Date().toISOString() }) });
     return safeJson(503, { error: "no_eligible_model", request_id: requestId });
   }
 
@@ -210,7 +223,7 @@ export async function handler(req: Request): Promise<Response> {
     method: "PATCH",
     body: JSON.stringify({
       status: "failed",
-      error_code: lastCode,
+      safe_error_code: lastCode,
       attempt_log: attemptLog,
       latency_ms: Date.now() - started,
       finished_at: new Date().toISOString(),
