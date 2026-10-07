@@ -20,6 +20,7 @@ const Set<String> _protectedRoutes = {
   '/admin/ai-config',
   '/admin/operations',
   '/admin/ai-research',
+  '/admin/consultations',
   '/feed',
 };
 
