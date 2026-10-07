@@ -15,6 +15,23 @@ class AuthRemoteDataSource {
 
   final Object _backend;
 
+  /// Returns E.164 phone or null if invalid.
+  static String? normalizeE164(String raw) {
+    final cleaned = raw.trim().replaceAll(RegExp(r'[\s()-]'), '');
+    if (cleaned.isEmpty) return null;
+    if (RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(cleaned)) return cleaned;
+    // Iran local 09xxxxxxxxx → +989xxxxxxxxx
+    if (RegExp(r'^09\d{9}$').hasMatch(cleaned)) {
+      return '+98${cleaned.substring(1)}';
+    }
+    if (RegExp(r'^9\d{9}$').hasMatch(cleaned)) {
+      return '+98$cleaned';
+    }
+    return null;
+  }
+
+  static bool isEmail(String value) => value.contains('@');
+
   Future<UserSession> login({
     required String identifier,
     required String password,
@@ -82,30 +99,38 @@ class AuthRemoteDataSource {
     required String identifier,
     bool signup = false,
   }) async {
-    final email = identifier.trim();
-    if (!email.contains('@')) {
-      throw const ApiException(
-        message: 'Supabase email authentication requires an email address.',
-        code: 'invalid_email',
-      );
-    }
+    final raw = identifier.trim();
     if (_backend is ApiClient) {
       await (_backend).post<void>(
         '/auth/otp/resend',
-        data: {'identifier': email},
+        data: {'identifier': raw},
       );
       return;
     }
     _ensureSupabaseReady();
     try {
-      if (signup) {
-        await _service.client.auth.resend(type: OtpType.signup, email: email);
-      } else {
-        await _service.client.auth.signInWithOtp(
-          email: email,
-          shouldCreateUser: false,
+      if (isEmail(raw)) {
+        if (signup) {
+          await _service.client.auth.resend(type: OtpType.signup, email: raw);
+        } else {
+          await _service.client.auth.signInWithOtp(
+            email: raw,
+            shouldCreateUser: false,
+          );
+        }
+        return;
+      }
+      final phone = normalizeE164(raw);
+      if (phone == null) {
+        throw const ApiException(
+          message: 'Invalid phone number. Use international format.',
+          code: 'invalid_phone',
         );
       }
+      await _service.client.auth.signInWithOtp(
+        phone: phone,
+        shouldCreateUser: !signup ? false : true,
+      );
     } catch (error) {
       throw _apiException(error);
     }
@@ -124,17 +149,27 @@ class AuthRemoteDataSource {
       return _mapLegacySession(response.data);
     }
     _ensureSupabaseReady();
-    if (!identifier.contains('@')) {
-      throw const ApiException(
-        message: 'Supabase email OTP requires an email address.',
-        code: 'invalid_email',
-      );
-    }
+    final raw = identifier.trim();
     try {
+      if (isEmail(raw)) {
+        final response = await _service.client.auth.verifyOTP(
+          email: raw,
+          token: otp,
+          type: signup ? OtpType.signup : OtpType.email,
+        );
+        return await _mapSupabaseSession(response.session, user: response.user);
+      }
+      final phone = normalizeE164(raw);
+      if (phone == null) {
+        throw const ApiException(
+          message: 'Invalid phone number. Use international format.',
+          code: 'invalid_phone',
+        );
+      }
       final response = await _service.client.auth.verifyOTP(
-        email: identifier.trim(),
+        phone: phone,
         token: otp,
-        type: signup ? OtpType.signup : OtpType.email,
+        type: OtpType.sms,
       );
       return await _mapSupabaseSession(response.session, user: response.user);
     } catch (error) {
@@ -178,10 +213,6 @@ class AuthRemoteDataSource {
     }
   }
 
-  /// Sends a password-recovery email via Supabase Auth.
-  ///
-  /// On web, [redirectTo] points at `/reset-password` on the current origin so
-  /// Render SPA routing can deliver the recovery session to the set-password UI.
   Future<void> requestPasswordReset({required String email}) async {
     final trimmed = email.trim();
     if (!trimmed.contains('@')) {
@@ -280,12 +311,7 @@ class AuthRemoteDataSource {
         if (profileName != null && profileName.trim().isNotEmpty) {
           resolvedName = profileName;
         }
-      } catch (_) {
-        // Route protection should fail closed on auth, but a temporarily
-        // unavailable profile/name lookup (including network failure) should
-        // not invalidate an otherwise valid session. No auth operation is
-        // caught here; those retain their normal failure behavior.
-      }
+      } catch (_) {}
     }
 
     return UserSession(
