@@ -24,14 +24,17 @@ esac
 
 # Install Flutter if not already on PATH (Render static build environment).
 if ! command -v flutter >/dev/null 2>&1; then
-  FLUTTER_DIR="${FLUTTER_ROOT:-$HOME/flutter}"
-  if [[ ! -x "$FLUTTER_DIR/bin/flutter" ]]; then
-    git clone https://github.com/flutter/flutter.git -b stable --depth 1 "$FLUTTER_DIR"
+  RAD_FLUTTER_DIR="${FLUTTER_ROOT:-$HOME/flutter}"
+  if [[ ! -x "$RAD_FLUTTER_DIR/bin/flutter" ]]; then
+    git clone https://github.com/flutter/flutter.git -b 3.47.6 --depth 1 "$RAD_FLUTTER_DIR"
   fi
-  export PATH="$FLUTTER_DIR/bin:$PATH"
+  export PATH="$RAD_FLUTTER_DIR/bin:$PATH"
 fi
 
-flutter --version
+if ! flutter --version | grep -F 'Flutter 3.47.6'; then
+  echo "ERROR: Flutter 3.47.6 is required to match CI." >&2
+  exit 1
+fi
 flutter config --no-analytics
 flutter pub get
 
@@ -39,6 +42,14 @@ flutter build web --release --no-pub \
   --dart-define="APP_ENV=${APP_ENV_VALUE}" \
   --dart-define="SUPABASE_URL=${SUPABASE_URL}" \
   --dart-define="SUPABASE_PUBLISHABLE_KEY=${PUBLISHABLE_KEY}"
+
+# Public deployment identity, independent of browser/service-worker cache.
+python3 - <<'DEPLOYMENT'
+import json, os, subprocess
+from pathlib import Path
+sha = os.environ.get('RENDER_GIT_COMMIT') or subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+Path('build/web/version.json').write_text(json.dumps({'git_sha': sha, 'flutter': '3.47.6'}) + '\n')
+DEPLOYMENT
 
 # SPA fallback helpers for hosts that serve 404.html on unknown paths.
 cp -f build/web/index.html build/web/404.html

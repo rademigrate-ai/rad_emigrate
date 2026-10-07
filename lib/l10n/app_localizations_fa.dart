@@ -599,7 +599,7 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get requiredField => 'این فیلد الزامی است';
   @override
-  String get invalidUrl => 'یک نشانی معتبر http(s) وارد کنید';
+  String get invalidUrl => 'یک نشانی عمومی و معتبر HTTPS وارد کنید';
   @override
   String get titleLabel => 'عنوان';
   @override
@@ -655,4 +655,83 @@ class AppLocalizationsFa extends AppLocalizations {
   String get draftStatusLabel => 'پیش‌نویس';
   @override
   String get reviewStatusLabel => 'در حال بررسی';
+  @override
+  String get sourceAddress => 'نشانی منبع';
+
+  @override
+  String get sourceSavedDisabled =>
+      'منبع ذخیره شد. پس از بررسی انتساب و محدودهٔ استفاده، آن را فعال کنید.';
+
+  @override
+  String get sourceDuplicate => 'این نشانی منبع قبلاً ثبت شده است.';
+
+  @override
+  String get sourceSaveFailed =>
+      'ذخیرهٔ منبع انجام نشد. نشانی و دسترسی مدیریت را بررسی و دوباره تلاش کنید.';
+
+  @override
+  String get sourceEnable => 'فعال‌سازی منبع';
+
+  @override
+  String get sourceDisable => 'غیرفعال‌سازی منبع';
+
+  @override
+  String get researchSourcesTitle => 'منابع پژوهش';
+
+  @override
+  String get researchRunning =>
+      'پژوهش در حال اجراست. نتیجهٔ کارها در پایین نمایش داده می‌شود.';
+
+  @override
+  String get researchRunFailed =>
+      'پژوهش کامل نشد. پیش از تلاش دوباره، خطاهای منبع و کار را در پایین بررسی کنید.';
+
+  @override
+  String get openReviewQueue => 'باز کردن صف بررسی انسانی';
+
+  @override
+  String get brandIntroTitle => 'گام بعدی شما، همراه راد';
+
+  @override
+  String get brandIntroBody =>
+      'مسیرهای ویزا را بررسی کنید، مدارک خود را سامان دهید و پرونده‌تان را در یک جا پیگیری کنید.';
+
+  @override
+  String get exploreVisa => 'بررسی مسیرهای ویزا';
+
+  @override
+  String get reviewQueueEmpty => 'یافته یا پیش‌نویسی در انتظار بررسی نیست.';
+
+  @override
+  String get sourceStateUnknown => 'هنوز اجرا نشده';
+
+  @override
+  String get sourceLastSuccess => 'آخرین دریافت موفق';
+
+  @override
+  String get sourceHttpRejected =>
+      'از نشانی عمومی HTTPS استفاده کنید. منابع HTTP به‌صورت امن قابل دریافت نیستند.';
+  @override
+  String get providerSavedDiscoveryFailed =>
+      "ارائه‌دهنده ذخیره شد. کشف مدل‌ها ناموفق بود؛ برای تلاش دوباره «کشف مدل‌ها» را انتخاب کنید.";
+
+  @override
+  String get aiCredentialRejected =>
+      "برای استفاده از هوش مصنوعی، مدیر باید اطلاعات دسترسی ارائه‌دهنده را به‌روزرسانی یا دوباره تأیید کند.";
+
+  @override
+  String get aiNoEligibleModel =>
+      "در حال حاضر مدل مناسبی برای هوش مصنوعی در دسترس نیست. بعداً دوباره تلاش کنید یا با پشتیبانی راد تماس بگیرید.";
+
+  @override
+  String get aiRateLimited =>
+      "سرویس هوش مصنوعی مشغول است. کمی بعد دوباره تلاش کنید.";
+
+  @override
+  String get aiRequestFailed =>
+      "درخواست هوش مصنوعی انجام نشد. لطفاً دوباره تلاش کنید.";
+
+  @override
+  String get aiResponseNotSaved =>
+      "این پاسخ ذخیره نشد و ممکن است پس از بارگذاری دوباره نمایش داده نشود.";
 }

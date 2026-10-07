@@ -67,7 +67,7 @@ BEGIN
   SELECT count(*) INTO trigger_count FROM information_schema.triggers WHERE (event_object_schema='auth' AND event_object_table='users' AND trigger_name='on_auth_user_created') OR (event_object_schema='public' AND event_object_table IN ('content_sources','destinations','program_categories','visa_programs'));
   SELECT count(*) INTO bucket_count FROM storage.buckets WHERE id='documents' AND public=false AND file_size_limit=10485760 AND allowed_mime_types=ARRAY['application/pdf','image/jpeg','image/png']::text[];
   IF table_count <> 15 THEN RAISE EXCEPTION 'Expected 15 public RAD tables, got %',table_count; END IF;
-  IF column_count <> 113 THEN RAISE EXCEPTION 'Expected 113 public RAD columns, got %',column_count; END IF;
+  IF column_count <> 114 THEN RAISE EXCEPTION 'Expected 114 public RAD columns, got %',column_count; END IF;
   IF primary_key_count <> 15 THEN RAISE EXCEPTION 'Expected 15 primary keys, got %',primary_key_count; END IF;
   IF foreign_key_count <> 22 THEN RAISE EXCEPTION 'Expected 22 foreign keys, got %',foreign_key_count; END IF;
   -- Stage 3 added 9 justified FK covering indexes on these tables (37 → 46).

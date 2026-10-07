@@ -12,9 +12,9 @@ void main() {
       'lib/features/ai_assistant/presentation/pages/ai_assistant_page.dart',
     );
     expect(page.contains('static const _freeLimit = 5'), isFalse);
-    expect(page.contains('_isPrivilegedAdmin'), isTrue);
+    expect(page.contains('_used >= '), isFalse);
     expect(page.contains('widget.adminMode'), isTrue);
-    expect(page.contains('_userDisplayHintLimit'), isTrue);
+    expect(page.contains("scope: widget.adminMode ? 'admin' : 'user'"), isTrue);
   });
 
   test('Admin AI workspace is a dedicated page, not only adminMode flag', () {

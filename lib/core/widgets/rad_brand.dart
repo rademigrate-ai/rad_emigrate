@@ -22,32 +22,34 @@ class RadBrand extends StatelessWidget {
   final bool darkSurface;
 
   double get _height => switch (size) {
-    RadBrandSize.small => 32,
-    RadBrandSize.medium => 46,
-    RadBrandSize.large => 68,
+    RadBrandSize.small => 48,
+    RadBrandSize.medium => 84,
+    RadBrandSize.large => 116,
   };
 
   @override
   Widget build(BuildContext context) {
-    final dark = darkSurface || Theme.of(context).brightness == Brightness.dark;
-    final asset = showInstituteName
-        ? (dark
-              ? 'assets/branding/rad_logo_dark.png'
-              : 'assets/branding/rad_logo.png')
-        : 'assets/branding/rad_logo_mark.png';
+    const asset = 'assets/branding/rad_official_logo.png';
     final label = AppLocalizations.of(context).appTitle;
 
     return Semantics(
       label: label,
       image: true,
-      child: Image.asset(
-        asset,
-        height: _height,
-        width: showInstituteName ? null : _height,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.medium,
-        errorBuilder: (context, error, stackTrace) =>
-            _FallbackMark(size: _height, label: label),
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Image.asset(
+          asset,
+          height: _height,
+          width: _height * 1.94,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.medium,
+          errorBuilder: (context, error, stackTrace) =>
+              _FallbackMark(size: _height, label: label),
+        ),
       ),
     );
   }

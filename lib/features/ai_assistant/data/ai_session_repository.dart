@@ -38,20 +38,27 @@ class AiSessionRepository {
   static const int _sessionPageSize = 40;
   static const int _messagePageSize = 200;
 
-  Future<AiSession> createSession(String userId) async {
+  Future<AiSession> createSession(
+    String userId, {
+    String scope = 'user',
+  }) async {
     final row = await _service.client
         .from('ai_sessions')
-        .insert({'user_id': userId})
+        .insert({'user_id': userId, 'scope': scope})
         .select()
         .single();
     return _sessionFromRow(row);
   }
 
-  Future<List<AiSession>> listSessions(String userId) async {
+  Future<List<AiSession>> listSessions(
+    String userId, {
+    String scope = 'user',
+  }) async {
     final rows = await _service.client
         .from('ai_sessions')
         .select()
         .eq('user_id', userId)
+        .eq('scope', scope)
         .order('created_at', ascending: false)
         .limit(_sessionPageSize);
     return (rows as List<dynamic>)

@@ -6,6 +6,9 @@ import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rad_brand.dart';
+import '../../../../core/widgets/app_entrance.dart';
+import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
@@ -96,119 +99,207 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final wide = MediaQuery.sizeOf(context).width >= 800;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: wide ? 440 : 480),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 12),
-                    const Center(child: RadBrand(size: RadBrandSize.medium)),
-                    const SizedBox(height: 20),
-                    Text(
-                      l10n.signInSubtitle,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 36),
-                    AppTextField(
-                      controller: _identifierCtrl,
-                      label: l10n.email,
-                      prefixIcon: Icons.person_outline,
-                      keyboardType: TextInputType.emailAddress,
-                      textDirection: TextDirection.ltr,
-                      autofillHints: const [AutofillHints.email],
-                      textInputAction: TextInputAction.next,
-                      validator: (v) {
-                        final value = v?.trim() ?? '';
-                        if (value.isEmpty) return l10n.required;
-                        if (!value.contains('@')) return l10n.invalidEmail;
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 14),
-                    AppTextField(
-                      controller: _passwordCtrl,
-                      label: l10n.password,
-                      prefixIcon: Icons.lock_outline,
-                      obscureText: _obscure,
-                      autofillHints: const [AutofillHints.password],
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _submit(),
-                      validator: (v) =>
-                          (v == null || v.isEmpty) ? l10n.required : null,
-                      suffixIcon: IconButton(
-                        tooltip: _obscure
-                            ? l10n.showPassword
-                            : l10n.hidePassword,
-                        icon: Icon(
-                          _obscure
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
-                        onPressed: () => setState(() => _obscure = !_obscure),
-                      ),
-                    ),
-                    if (_error != null) ...[
-                      const SizedBox(height: 12),
-                      Semantics(
-                        liveRegion: true,
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.error.withValues(
-                              alpha: 0.08,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            _error!,
-                            style: TextStyle(
-                              color: theme.colorScheme.error,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: TextButton(
-                        onPressed: () => context.go('/forgot-password'),
-                        child: Text(l10n.forgotPassword),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppButton(
-                      label: l10n.signIn,
-                      loading: loading,
-                      onPressed: loading ? null : _submit,
-                    ),
-                    const SizedBox(height: 12),
-                    AppButton(
-                      label: l10n.createAccount,
-                      variant: AppButtonVariant.secondary,
-                      onPressed: () => context.go('/register'),
-                    ),
-                    TextButton(
-                      onPressed: loading ? null : _continueWithOtp,
-                      child: Text(l10n.continueWithOtp),
-                    ),
-                  ],
+    final form = Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.signIn, style: theme.textTheme.headlineMedium),
+          const SizedBox(height: 12),
+          Text(l10n.signInSubtitle, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: 36),
+          AppTextField(
+            controller: _identifierCtrl,
+            label: l10n.email,
+            prefixIcon: Icons.person_outline,
+            keyboardType: TextInputType.emailAddress,
+            textDirection: TextDirection.ltr,
+            autofillHints: const [AutofillHints.email],
+            textInputAction: TextInputAction.next,
+            validator: (v) {
+              final value = v?.trim() ?? '';
+              if (value.isEmpty) return l10n.required;
+              if (!value.contains('@')) return l10n.invalidEmail;
+              return null;
+            },
+          ),
+          const SizedBox(height: 14),
+          AppTextField(
+            controller: _passwordCtrl,
+            label: l10n.password,
+            prefixIcon: Icons.lock_outline,
+            obscureText: _obscure,
+            autofillHints: const [AutofillHints.password],
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) => _submit(),
+            validator: (v) => (v == null || v.isEmpty) ? l10n.required : null,
+            suffixIcon: IconButton(
+              tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
+              icon: Icon(
+                _obscure
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+              onPressed: () => setState(() => _obscure = !_obscure),
+            ),
+          ),
+          if (_error != null) ...[
+            const SizedBox(height: 12),
+            Semantics(
+              liveRegion: true,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.error.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  _error!,
+                  style: TextStyle(
+                    color: theme.colorScheme.error,
+                    fontSize: 13,
+                  ),
                 ),
               ),
             ),
+          ],
+          const SizedBox(height: 8),
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: TextButton(
+              onPressed: () => context.go('/forgot-password'),
+              child: Text(l10n.forgotPassword),
+            ),
           ),
+          const SizedBox(height: 8),
+          AppButton(
+            label: l10n.signIn,
+            loading: loading,
+            onPressed: loading ? null : _submit,
+          ),
+          const SizedBox(height: 12),
+          AppButton(
+            label: l10n.createAccount,
+            variant: AppButtonVariant.secondary,
+            onPressed: () => context.go('/register'),
+          ),
+          TextButton(
+            onPressed: loading ? null : _continueWithOtp,
+            child: Text(l10n.continueWithOtp),
+          ),
+        ],
+      ),
+    );
+    final brand = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const RadBrand(size: RadBrandSize.large, darkSurface: true),
+        const SizedBox(height: 40),
+        Text(
+          l10n.brandIntroTitle,
+          style: theme.textTheme.headlineLarge?.copyWith(
+            color: Colors.white,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          l10n.brandIntroBody,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: const Color(0xFFBCC7D6),
+          ),
+        ),
+        const SizedBox(height: 32),
+        Wrap(
+          spacing: 20,
+          runSpacing: 12,
+          children: [
+            _BrandFeature(icon: Icons.public_outlined, label: l10n.visa),
+            _BrandFeature(icon: Icons.assignment_outlined, label: l10n.cases),
+            _BrandFeature(icon: Icons.newspaper_outlined, label: l10n.feed),
+          ],
+        ),
+      ],
+    );
+    return Scaffold(
+      body: SafeArea(
+        child: Row(
+          children: [
+            if (wide)
+              Expanded(
+                child: ColoredBox(
+                  color: AppColors.navy,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(48),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 460),
+                        child: brand,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: wide ? 40 : 24,
+                    vertical: 32,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: AppEntrance(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: TextButton.icon(
+                              icon: const Icon(Icons.language),
+                              label: Text(
+                                ref.watch(localeControllerProvider).isRtl
+                                    ? 'English'
+                                    : 'فارسی',
+                              ),
+                              onPressed: () => ref
+                                  .read(localeControllerProvider.notifier)
+                                  .toggle(),
+                            ),
+                          ),
+                          if (!wide) ...[
+                            const Center(
+                              child: RadBrand(size: RadBrandSize.medium),
+                            ),
+                            const SizedBox(height: 36),
+                          ],
+                          form,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+class _BrandFeature extends StatelessWidget {
+  const _BrandFeature({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(icon, size: 20, color: Colors.white),
+      const SizedBox(width: 8),
+      Text(label, style: const TextStyle(color: Colors.white)),
+    ],
+  );
 }

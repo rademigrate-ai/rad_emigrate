@@ -1,4 +1,3 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { researchCorsHeaders } from "../_shared/cors.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -53,21 +52,43 @@ async function fetchSource(start: string, allowedHost: string, timeout: number) 
     if (!response.ok) throw new Error(`source_http_${response.status}`);
     const length = Number(response.headers.get("content-length") ?? 0);
     if (length > 1_000_000) throw new Error("source_too_large");
-    const bytes = new Uint8Array(await response.arrayBuffer());
-    if (bytes.byteLength > 1_000_000) throw new Error("source_too_large");
+    const reader = response.body?.getReader();
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    if (reader) {
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          size += value.byteLength;
+          if (size > 1_000_000) throw new Error("source_too_large");
+          chunks.push(value);
+        }
+      } finally { await reader.cancel().catch(() => undefined); }
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk,offset); offset += chunk.byteLength; }
     return { text: new TextDecoder().decode(bytes), status: response.status, finalUrl: current };
   }
   throw new Error("unsafe_source_redirect");
 }
 
-Deno.serve(async (req: Request) => {
+function safeError(error: unknown) {
+  const message = error instanceof Error ? error.message : "";
+  return /^(source_http_[45][0-9]{2}|database_[45][0-9]{2}|unsafe_source_url|unsafe_source_redirect|source_too_large|source_empty)$/.test(message)
+    ? message : error instanceof DOMException && error.name === "TimeoutError" ? "source_timeout" : "source_fetch_failed";
+}
+
+export async function handler(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+  let claimedJob: string | undefined;
   try {
     const config = await rest("research_worker_config?select=invocation_token,max_sources_per_run,request_timeout_ms&singleton=eq.true");
     const worker = config?.[0];
     if (!worker) return json({ error: "forbidden" }, 403);
-    let authorized = req.headers.get("x-rad-research-token") === worker.invocation_token;
+    let authorized = typeof worker.invocation_token === "string" && worker.invocation_token.length > 0 && req.headers.get("x-rad-research-token") === worker.invocation_token;
     if (!authorized) {
       const authorization = req.headers.get("authorization") ?? "";
       const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { apikey: SERVICE_KEY, Authorization: authorization } });
@@ -83,6 +104,7 @@ Deno.serve(async (req: Request) => {
     if (!job) return json({ processed: 0 });
     const claimed = await rest(`research_jobs?id=eq.${job.id}&status=eq.queued&select=id`, { method: "PATCH", headers: { Prefer: "return=representation" }, body: JSON.stringify({ status: "running", started_at: new Date().toISOString(), attempts: job.attempts + 1 }) });
     if (!claimed?.length) return json({ processed: 0 });
+    claimedJob = job.id;
     const sources = await rest(`research_sources?select=*&enabled=eq.true&order=created_at.asc&limit=${worker.max_sources_per_run}`);
     let changed = 0;
     let failed = 0;
@@ -99,20 +121,19 @@ Deno.serve(async (req: Request) => {
           const created = await rest("source_documents", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ canonical_url: source.base_url, source_authority: source.authority, title: source.display_name || source.allowed_host, language_code: language }) });
           documentId = created[0].id;
         }
-        const prior = await rest(`source_snapshots?select=id,content_hash&document_id=eq.${documentId}&order=fetched_at.desc&limit=1`);
-        if (prior?.[0]?.content_hash !== hash) {
-          const snapshots = await rest("source_snapshots", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ document_id: documentId, content_hash: hash, normalized_text: text, http_status: fetched.status, metadata: { final_url: fetched.finalUrl, trust_class: source.trust_class, source_type: source.source_type } }) });
-          const findingType = prior?.length ? "changed" : "new";
-          const summary = `${findingType === "new" ? "New content" : "Material content change"} detected at ${source.base_url}. Evidence is preserved for admin review.`;
-          const findings = await rest("research_findings?select=id", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ research_job_id: job.id, snapshot_id: snapshots[0].id, finding_type: findingType, summary }) });
-          await rest("rpc/create_research_review_candidate", { method: "POST", body: JSON.stringify({ p_job_id: job.id, p_finding_id: findings[0].id, p_title: `${source.display_name || source.allowed_host}: ${findingType}`, p_summary: summary, p_language_code: language }) });
-          changed++;
-        }
+        const finding = await rest("rpc/ingest_research_snapshot", {
+          method: "POST", body: JSON.stringify({ p_job_id: job.id,
+            p_document_id: documentId, p_content_hash: hash, p_normalized_text: text,
+            p_http_status: fetched.status, p_metadata: { final_url: fetched.finalUrl,
+              trust_class: source.trust_class, source_type: source.source_type } }),
+        });
+        // create_research_review_candidate runs inside the atomic database ingest.
+        if (finding) changed++;
         await rest(`source_documents?id=eq.${documentId}`, { method: "PATCH", body: JSON.stringify({ last_seen_at: new Date().toISOString(), removed_at: null }) });
         await rest(`research_sources?id=eq.${source.id}`, { method: "PATCH", body: JSON.stringify({ last_attempt_at: new Date().toISOString(), last_success_at: new Date().toISOString(), last_error_code: null }) });
       } catch (error) {
         failed++;
-        const code = String(error instanceof Error ? error.message : "source_fetch_failed").replace(/[^a-zA-Z0-9_]/g, "_").slice(0, 80);
+        const code = safeError(error);
         await rest(`research_sources?id=eq.${source.id}`, { method: "PATCH", body: JSON.stringify({ last_attempt_at: new Date().toISOString(), last_error_code: code }) }).catch(() => undefined);
       }
     }
@@ -120,7 +141,10 @@ Deno.serve(async (req: Request) => {
     await rest(`research_jobs?id=eq.${job.id}`, { method: "PATCH", body: JSON.stringify({ status, safe_error: failed ? `${failed}_source_failures` : null, error_code: failed ? "source_failures" : null, finished_at: new Date().toISOString() }) });
     return json({ processed: 1, changed, failed });
   } catch (error) {
-    const code = String(error instanceof Error ? error.message : "research_sync_failed").replace(/[^a-zA-Z0-9_]/g, "_").slice(0, 80);
+    const code = safeError(error);
+    if (claimedJob) await rest(`research_jobs?id=eq.${claimedJob}`, { method: "PATCH", body: JSON.stringify({ status: "failed", error_code: code, safe_error: code, finished_at: new Date().toISOString() }) }).catch(() => undefined);
     return json({ error: code }, 500);
   }
-});
+}
+
+if (import.meta.main) Deno.serve(handler);

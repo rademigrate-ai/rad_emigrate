@@ -205,7 +205,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                           ],
                           style: const TextStyle(
                             fontSize: 24,
-                            letterSpacing: 8,
+                            letterSpacing: 0,
                             fontWeight: FontWeight.w700,
                           ),
                           decoration: InputDecoration(

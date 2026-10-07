@@ -1,4 +1,3 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -38,9 +37,9 @@ type Runtime = {
   provider_id: string; provider_slug: string; adapter: string; base_url: string;
   model_id: string; model_slug: string; max_output_tokens: number;
   request_timeout_seconds: number; max_retries: number; api_key: string;
-  routing_score?: number; capability_source?: string;
+  routing_score?: number; capability_source?: string; credential_version: number;
 };
-type ProviderRuntime = Pick<Runtime, "provider_id" | "provider_slug" | "adapter" | "base_url" | "request_timeout_seconds" | "api_key">;
+type ProviderRuntime = Pick<Runtime, "provider_id" | "provider_slug" | "adapter" | "base_url" | "request_timeout_seconds" | "api_key" | "credential_version">;
 
 type AttemptLog = {
   attempt: number;
@@ -51,7 +50,8 @@ type AttemptLog = {
   latency_ms?: number;
 };
 
-function providerHeaders(runtime: ProviderRuntime) {
+function providerHeaders(runtime: ProviderRuntime): Record<string, string> {
+  if (runtime.adapter === "gemini") return { "x-goog-api-key": runtime.api_key, "Content-Type": "application/json" };
   return runtime.adapter === "anthropic"
     ? { "x-api-key": runtime.api_key, "anthropic-version": "2023-06-01", "Content-Type": "application/json" }
     : { Authorization: `Bearer ${runtime.api_key}`, "Content-Type": "application/json" };
@@ -68,20 +68,57 @@ async function providerFetch(url: string, init: RequestInit, timeoutSeconds: num
   }
   if (response.status >= 300 && response.status < 400) throw new ProviderError("unsafe_redirect", 400);
   if (response.status === 401 || response.status === 403) throw new ProviderError("provider_unauthorized", 401);
+  if (response.status === 404) throw new ProviderError("provider_model_unavailable", 404);
   if (response.status === 429) throw new ProviderError("provider_rate_limited", 429);
   if (response.status >= 500) throw new ProviderError("provider_unavailable", 503);
   if (!response.ok) throw new ProviderError("provider_invalid_request");
   return response;
 }
 
-async function discover(runtime: ProviderRuntime): Promise<string[]> {
+type DiscoveredModel = { slug: string; capability: string; context_window: number | null;
+  supports_tools: boolean; supports_structured_output: boolean; capability_source: string;
+  cost_input_per_million: number | null; cost_source: string };
+async function discover(runtime: ProviderRuntime): Promise<DiscoveredModel[]> {
   const url = runtime.adapter === "gemini"
-    ? `${runtime.base_url}/v1beta/models?key=${encodeURIComponent(runtime.api_key)}`
+    ? `${runtime.base_url}/v1beta/models`
     : `${runtime.base_url}${runtime.adapter === "anthropic" ? "/v1/models" : "/models"}`;
-  const response = await providerFetch(url, { headers: providerHeaders(runtime) }, runtime.request_timeout_seconds);
-  const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
-  const rows = Array.isArray(data?.data) ? data.data : Array.isArray(data?.models) ? data.models : [];
-  return [...new Set<string>(rows.map((item: { id?: unknown; name?: unknown }) => String(item.id ?? item.name ?? "").replace(/^models\//, "").trim()).filter(Boolean))].sort();
+  const rows: Array<Record<string, any>> = [];
+  let nextUrl = url;
+  for (let page = 0; page < 10; page++) {
+    const response = await providerFetch(nextUrl, { headers: providerHeaders(runtime) }, Math.min(runtime.request_timeout_seconds,10));
+    const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
+    const current = Array.isArray(data?.data) ? data.data : Array.isArray(data?.models) ? data.models : null;
+    if (!current || rows.length + current.length > 5000) throw new ProviderError("provider_malformed_response");
+    rows.push(...current);
+    const token = runtime.adapter === "gemini" ? data.nextPageToken : runtime.adapter === "anthropic" && data.has_more ? data.last_id : null;
+    if (!token) break;
+    if (page === 9) throw new ProviderError("catalogue_incomplete");
+    const next = new URL(url);
+    next.searchParams.set(runtime.adapter === "gemini" ? "pageToken" : "after_id", String(token));
+    nextUrl = next.toString();
+  }
+  const catalogue = new Map<string, DiscoveredModel>();
+  for (const item of rows) {
+    const slug = String(item.id ?? item.name ?? "").replace(/^models\//, "").trim();
+    if (!slug || slug.length > 300 || !/^[a-zA-Z0-9_./:@+-]+$/.test(slug)) continue;
+    const context = Number(item.context_length ?? item.inputTokenLimit);
+    const parameters = Array.isArray(item.supported_parameters) ? item.supported_parameters : null;
+    // OpenRouter's documented pricing is USD/token. Accept only its explicit
+    // numeric metadata; never estimate capabilities or cost from model names.
+    const price = new URL(runtime.base_url).hostname === "openrouter.ai" && item.pricing?.prompt != null
+      ? Number(item.pricing.prompt) * 1000000 : NaN;
+    const methods = Array.isArray(item.supportedGenerationMethods) ? item.supportedGenerationMethods : null;
+    const capability = methods?.includes("embedContent") && !methods.includes("generateContent") ? "embedding" : "chat";
+    catalogue.set(slug, { slug, capability,
+      context_window: Number.isSafeInteger(context) && context > 0 ? context : null,
+      supports_tools: parameters?.includes("tools") ?? false,
+      supports_structured_output: parameters?.includes("structured_outputs") ?? false,
+      capability_source: parameters || Number.isSafeInteger(context) && context > 0 ? "discovered" : "unknown",
+      cost_input_per_million: Number.isFinite(price) && price >= 0 && price < 100000 ? price : null,
+      cost_source: Number.isFinite(price) && price >= 0 && price < 100000 ? "discovered" : "unknown",
+    });
+  }
+  return [...catalogue.values()].sort((a,b) => a.slug.localeCompare(b.slug));
 }
 
 async function callProvider(runtime: Runtime, messages: Array<{ role: string; content: string }>) {
@@ -111,10 +148,10 @@ async function callProvider(runtime: Runtime, messages: Array<{ role: string; co
       role: message.role === "assistant" ? "model" : "user",
       parts: [{ text: message.content }],
     }));
-    const url = `${runtime.base_url}/v1beta/models/${encodeURIComponent(runtime.model_slug)}:generateContent?key=${encodeURIComponent(runtime.api_key)}`;
+    const url = `${runtime.base_url}/v1beta/models/${encodeURIComponent(runtime.model_slug)}:generateContent`;
     const response = await providerFetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: providerHeaders(runtime),
       body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: runtime.max_output_tokens, temperature: 0.2 } }),
     }, runtime.request_timeout_seconds);
     const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
@@ -130,55 +167,17 @@ async function callProvider(runtime: Runtime, messages: Array<{ role: string; co
 }
 
 async function providerRuntime(providerId: string): Promise<ProviderRuntime> {
-  const rows = await db("rpc/get_ai_provider_runtime", { method: "POST", body: JSON.stringify({ p_provider_id: providerId }) });
+  const rows = await db("rpc/get_ai_provider_runtime_versioned", { method: "POST", body: JSON.stringify({ p_provider_id: providerId }) });
   if (!rows?.length) throw new ProviderError("provider_not_configured", 404);
   return rows[0];
 }
 
-async function recordHealth(providerId: string, code?: string) {
-  const now = new Date().toISOString();
-  if (!code) {
-    await db(`ai_provider_health?provider_id=eq.${providerId}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        status: "healthy",
-        consecutive_failures: 0,
-        last_success_at: now,
-        cooldown_until: null,
-        safe_error_code: null,
-        updated_at: now,
-      }),
-    });
-    return;
-  }
-  // Do not retry-storm the same invalid credential.
-  if (code === "provider_unauthorized") {
-    await db(`ai_provider_health?provider_id=eq.${providerId}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        status: "offline",
-        consecutive_failures: 999,
-        last_failure_at: now,
-        cooldown_until: new Date(Date.now() + 3600000).toISOString(),
-        safe_error_code: code,
-        updated_at: now,
-      }),
-    });
-    return;
-  }
-  const rows = await db(`ai_provider_health?select=consecutive_failures&provider_id=eq.${providerId}&limit=1`);
-  const failures = Math.min(Number(rows?.[0]?.consecutive_failures ?? 0) + 1, 1000);
-  const cooldown = code === "provider_rate_limited" || failures >= 3;
-  await db(`ai_provider_health?provider_id=eq.${providerId}`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      status: cooldown ? "cooldown" : "degraded",
-      consecutive_failures: failures,
-      last_failure_at: now,
-      cooldown_until: cooldown ? new Date(Date.now() + 300000).toISOString() : null,
-      safe_error_code: code,
-      updated_at: now,
-    }),
+async function recordHealth(runtime: ProviderRuntime, code?: string, revalidated = false) {
+  await db("rpc/record_ai_provider_outcome", {
+    method: "POST",
+    body: JSON.stringify({ p_provider_id: runtime.provider_id,
+      p_credential_version: runtime.credential_version,
+      p_error_code: code ?? null, p_revalidated: revalidated }),
   });
 }
 
@@ -246,7 +245,7 @@ async function loadGrounding(scope: "user" | "admin") {
   };
 }
 
-Deno.serve(async (req: Request) => {
+export async function handler(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return safeJson(405, { error: "method_not_allowed" });
   const authorization = req.headers.get("authorization") ?? "";
@@ -265,63 +264,28 @@ Deno.serve(async (req: Request) => {
     if (role !== "super_admin") return safeJson(403, { error: "forbidden" });
     const providerId = typeof payload.provider_id === "string" ? payload.provider_id : "";
     if (!providerId) return safeJson(400, { error: "provider_required" });
+    let runtime: ProviderRuntime | undefined;
     try {
-      const runtime = await providerRuntime(providerId);
+      runtime = await providerRuntime(providerId);
       const models = await discover(runtime);
-      await recordHealth(providerId);
-      if (action === "test_provider") return safeJson(200, { status: "reachable", model_count: models.length });
-      const existing = await db(`ai_models?select=id,slug&provider_id=eq.${providerId}`);
-      const bySlug = new Map((existing ?? []).map((model: { slug: string }) => [model.slug, model]));
-      const now = new Date().toISOString();
-      for (const slug of models) {
-        const old = bySlug.get(slug) as { id?: string } | undefined;
-        if (old?.id) {
-          await db(`ai_models?id=eq.${old.id}`, {
-            method: "PATCH",
-            body: JSON.stringify({
-              available: true,
-              last_seen_at: now,
-              discovery_status: "active",
-            }),
-          });
-        } else {
-          await db("ai_models", {
-            method: "POST",
-            body: JSON.stringify({
-              provider_id: providerId,
-              slug,
-              display_name: slug,
-              capability: "chat",
-              enabled: false,
-              available: true,
-              runtime_scope: "both",
-              priority: 100,
-              discovered_at: now,
-              last_seen_at: now,
-              capability_source: "discovered",
-              discovery_status: "active",
-            }),
-          });
-        }
+      if (action === "test_provider") {
+        // Public model catalogues (e.g. OpenRouter) do not validate credentials.
+        // Revalidation must exercise an authenticated inference endpoint.
+        const configured = await db(`ai_models?select=id,slug,max_output_tokens&provider_id=eq.${providerId}&enabled=eq.true&available=eq.true&capability=eq.chat&order=priority.asc&limit=1`);
+        if (!configured?.length) return safeJson(409, { error: "revalidation_model_required", model_count: models.length });
+        const model = configured[0];
+        const result = await callProvider({ ...runtime, model_id: model.id, model_slug: model.slug,
+          max_output_tokens: 16, max_retries: 0 }, [{ role: "user", content: "Reply OK." }]);
+        if (!result.text.trim()) throw new ProviderError("provider_malformed_response");
+        await recordHealth(runtime, undefined, true);
+        return safeJson(200, { status: "reachable", model_count: models.length });
       }
-      // Mark missing as stale/unavailable — never hard-delete historical catalogue rows.
-      for (const old of existing ?? []) {
-        if (!models.includes(old.slug)) {
-          await db(`ai_models?id=eq.${old.id}`, {
-            method: "PATCH",
-            body: JSON.stringify({ available: false, discovery_status: "stale" }),
-          });
-        }
-      }
-      return safeJson(200, {
-        status: "discovered",
-        discovered: models.length,
-        added: models.filter((slug) => !bySlug.has(slug)).length,
-        removed: (existing ?? []).filter((model: { slug: string }) => !models.includes(model.slug)).length,
-      });
+      const summary = await db("rpc/ingest_ai_model_catalogue", { method: "POST",
+        body: JSON.stringify({ p_provider_id: providerId, p_credential_version: runtime.credential_version, p_models: models }) });
+      return safeJson(200, { status: "discovered", ...summary });
     } catch (error) {
       const code = error instanceof ProviderError ? error.code : "provider_test_failed";
-      await recordHealth(providerId, code).catch(() => undefined);
+      if (runtime) await recordHealth(runtime, code).catch(() => undefined);
       return safeJson(error instanceof ProviderError ? error.status : 502, { error: code });
     }
   }
@@ -379,24 +343,21 @@ Deno.serve(async (req: Request) => {
   });
   const requestId = created[0].id;
 
-  // Prefer enhanced RPC; fall back to 2-arg overload if migration not yet applied.
-  let chain: Runtime[] = [];
+  // Fail closed when the required capability-aware contract is unavailable.
+  // Never silently fall back to a weaker capability filter.
+  let chain: Runtime[];
   try {
-    chain = await db("rpc/get_ai_runtime_chain", {
+    chain = await db("rpc/get_ai_runtime_chain_versioned", {
       method: "POST",
-      body: JSON.stringify({
-        p_capability: "chat",
-        p_scope: requestedScope,
-        p_require_tools: requireTools,
-        p_require_structured: requireStructured,
-        p_min_context: minContext,
-      }),
+      body: JSON.stringify({ p_capability: "chat", p_scope: requestedScope,
+        p_require_tools: requireTools, p_require_structured: requireStructured,
+        p_min_context: minContext }),
     });
   } catch {
-    chain = await db("rpc/get_ai_runtime_chain", {
-      method: "POST",
-      body: JSON.stringify({ p_capability: "chat", p_scope: requestedScope }),
-    });
+    await db(`ai_requests?id=eq.${requestId}`, { method: "PATCH", body: JSON.stringify({
+      status: "failed", safe_error_code: "routing_unavailable", finished_at: new Date().toISOString(),
+    }) }).catch(() => undefined);
+    return safeJson(503, { error: "ai_temporarily_unavailable", code: "routing_unavailable", request_id: requestId });
   }
 
   if (!chain?.length) {
@@ -413,73 +374,60 @@ Deno.serve(async (req: Request) => {
   }
 
   const attempts: AttemptLog[] = [];
+  const blockedProviders = new Set<string>();
   let lastCode = "all_providers_failed";
   const started = Date.now();
-  const maxAttempts = Math.min(chain.length, 5);
+  const maxAttempts = 5;
+  // Reserve an attempt for each configured provider before taking third choices.
+  const providerCounts = new Map<string, number>();
+  const ranked = chain.map((runtime, index) => {
+    const ordinal = providerCounts.get(runtime.provider_id) ?? 0;
+    providerCounts.set(runtime.provider_id, ordinal + 1);
+    return { runtime, index, ordinal };
+  }).sort((a,b) => Math.floor(a.ordinal / 2) - Math.floor(b.ordinal / 2) || a.index - b.index);
 
-  for (const [index, runtime] of chain.slice(0, maxAttempts).entries()) {
+  for (const { runtime } of ranked) {
+    if (blockedProviders.has(runtime.provider_id)) continue;
+    if (attempts.length >= maxAttempts || Date.now() - started >= 45000) break;
     const attemptStarted = Date.now();
+    let result: Awaited<ReturnType<typeof callProvider>>;
     try {
-      const result = await callProvider(runtime, messages);
+      result = await callProvider({ ...runtime,
+        request_timeout_seconds: Math.min(runtime.request_timeout_seconds, 15, Math.max(5, (45000 - (Date.now() - started)) / 1000)),
+      }, messages);
       if (!result.text.trim()) throw new ProviderError("provider_malformed_response");
-      const latency = Date.now() - attemptStarted;
-      attempts.push({
-        attempt: index + 1,
-        provider: runtime.provider_slug,
-        model: runtime.model_slug,
-        result: "success",
-        latency_ms: latency,
-      });
-      await recordHealth(runtime.provider_id);
-      await recordModelOutcome(runtime.model_id, true, latency);
-      await db(`ai_requests?id=eq.${requestId}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          status: "succeeded",
-          provider_id: runtime.provider_id,
-          model_id: runtime.model_id,
-          selected_provider_slug: runtime.provider_slug,
-          selected_model_slug: runtime.model_slug,
-          attempt_count: index + 1,
-          failover_occurred: index > 0,
-          routing_reason: index === 0 ? "preferred_eligible" : "failover_after_failure",
-          attempt_log: attempts,
-          input_tokens: result.usage?.prompt_tokens ?? null,
-          output_tokens: result.usage?.completion_tokens ?? null,
-          latency_ms: Date.now() - started,
-          finished_at: new Date().toISOString(),
-        }),
-      });
-      // Ordinary users see a normal reply; no technical failover noise.
-      return safeJson(200, {
-        reply: result.text,
-        sources: grounding.sources,
-        uncertain: grounding.sources.length === 0,
-        provider: runtime.provider_slug,
-        model: runtime.model_slug,
-        request_id: requestId,
-        failover: index > 0,
-      });
     } catch (error) {
       lastCode = error instanceof ProviderError ? error.code : "provider_failed";
       const latency = Date.now() - attemptStarted;
-      attempts.push({
-        attempt: index + 1,
-        provider: runtime.provider_slug,
-        model: runtime.model_slug,
-        result: "failure",
-        code: lastCode,
-        latency_ms: latency,
-      });
-      await recordHealth(runtime.provider_id, lastCode).catch(() => undefined);
+      attempts.push({ attempt: attempts.length + 1, provider: runtime.provider_slug,
+        model: runtime.model_slug, result: "failure", code: lastCode, latency_ms: latency });
+      await recordHealth(runtime, lastCode).catch(() => undefined);
       await recordModelOutcome(runtime.model_id, false, latency, lastCode);
-
-      // Auth failure on this provider: skip remaining models from the same provider.
-      if (lastCode === "provider_unauthorized") {
-        // continue loop; chain may include other providers
-        continue;
+      if (lastCode === "provider_unauthorized" || lastCode === "unsafe_base_url" || lastCode === "unsafe_redirect") {
+        blockedProviders.add(runtime.provider_id);
       }
+      continue;
     }
+    const latency = Date.now() - attemptStarted;
+    attempts.push({ attempt: attempts.length + 1, provider: runtime.provider_slug,
+      model: runtime.model_slug, result: "success", latency_ms: latency });
+    await recordHealth(runtime).catch(() => undefined);
+    await recordModelOutcome(runtime.model_id, true, latency);
+    await db(`ai_requests?id=eq.${requestId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "succeeded", provider_id: runtime.provider_id,
+        model_id: runtime.model_id, selected_provider_slug: runtime.provider_slug,
+        selected_model_slug: runtime.model_slug, attempt_count: attempts.length,
+        failover_occurred: attempts.length > 1,
+        routing_reason: attempts.length === 1 ? "preferred_eligible" : "failover_after_failure",
+        attempt_log: attempts, input_tokens: result.usage?.prompt_tokens ?? null,
+        output_tokens: result.usage?.completion_tokens ?? null, latency_ms: Date.now() - started,
+        finished_at: new Date().toISOString(),
+      }),
+    }).catch(() => undefined);
+    return safeJson(200, { reply: result.text, sources: grounding.sources,
+      uncertain: grounding.sources.length === 0, provider: runtime.provider_slug,
+      model: runtime.model_slug, request_id: requestId, failover: attempts.length > 1 });
   }
 
   await db(`ai_requests?id=eq.${requestId}`, {
@@ -499,4 +447,6 @@ Deno.serve(async (req: Request) => {
     code: lastCode,
     request_id: requestId,
   });
-});
+}
+
+if (import.meta.main) Deno.serve(handler);

@@ -13,10 +13,12 @@ class AiResponse {
     this.sources = const [],
     this.uncertain = false,
     this.conversationId,
+    this.errorCode,
   });
 
   final String text;
   final List<AiSource> sources;
   final bool uncertain;
   final String? conversationId;
+  final String? errorCode;
 }

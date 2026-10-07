@@ -596,7 +596,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get requiredField => 'This field is required';
   @override
-  String get invalidUrl => 'Enter a valid http(s) URL';
+  String get invalidUrl => 'Enter a valid public HTTPS address';
   @override
   String get titleLabel => 'Title';
   @override
@@ -652,4 +652,83 @@ class AppLocalizationsEn extends AppLocalizations {
   String get draftStatusLabel => 'Draft';
   @override
   String get reviewStatusLabel => 'In review';
+  @override
+  String get sourceAddress => 'Source address';
+
+  @override
+  String get sourceSavedDisabled =>
+      'Source saved. Enable it after checking its attribution and scope.';
+
+  @override
+  String get sourceDuplicate => 'This source address is already registered.';
+
+  @override
+  String get sourceSaveFailed =>
+      'Could not save the source. Check the address and your Admin access, then try again.';
+
+  @override
+  String get sourceEnable => 'Enable source';
+
+  @override
+  String get sourceDisable => 'Disable source';
+
+  @override
+  String get researchSourcesTitle => 'Research sources';
+
+  @override
+  String get researchRunning =>
+      'Research is running. Job results appear below.';
+
+  @override
+  String get researchRunFailed =>
+      'Research did not finish. Review source and job errors below before retrying.';
+
+  @override
+  String get openReviewQueue => 'Open human review';
+
+  @override
+  String get brandIntroTitle => 'Your next step, with RAD';
+
+  @override
+  String get brandIntroBody =>
+      'Explore visa pathways, organize your documents, and follow your case in one place.';
+
+  @override
+  String get exploreVisa => 'Explore visa pathways';
+
+  @override
+  String get reviewQueueEmpty => 'No findings or drafts await review.';
+
+  @override
+  String get sourceStateUnknown => 'Not run yet';
+
+  @override
+  String get sourceLastSuccess => 'Last successful fetch';
+
+  @override
+  String get sourceHttpRejected =>
+      'Use a public HTTPS address. HTTP sources cannot be fetched securely.';
+  @override
+  String get providerSavedDiscoveryFailed =>
+      "Provider saved. Model discovery failed; use Discover Models to retry.";
+
+  @override
+  String get aiCredentialRejected =>
+      "The AI service needs an Admin to update or revalidate its provider credential.";
+
+  @override
+  String get aiNoEligibleModel =>
+      "No eligible AI model is available. Please try later or contact RAD support.";
+
+  @override
+  String get aiRateLimited =>
+      "The AI service is busy. Please try again shortly.";
+
+  @override
+  String get aiRequestFailed =>
+      "Your AI request could not be completed. Please try again.";
+
+  @override
+  String get aiResponseNotSaved =>
+      "This response could not be saved. It may not appear after reloading.";
 }

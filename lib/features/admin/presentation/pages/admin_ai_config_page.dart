@@ -171,22 +171,31 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       _status = null;
     });
     try {
-      await ref
-          .read(adminAiConfigRepositoryProvider)
-          .configureProvider(
-            slug: _slugCtrl.text.trim(),
-            displayName: _displayNameCtrl.text.trim(),
-            adapter: _adapter,
-            baseUrl: _baseUrlCtrl.text.trim(),
-            apiKey: _apiKeyCtrl.text.trim(),
-            enabled: _enabled,
-            priority: _priority,
-          );
+      final repository = ref.read(adminAiConfigRepositoryProvider);
+      final providerId = await repository.configureProvider(
+        slug: _slugCtrl.text.trim(),
+        displayName: _displayNameCtrl.text.trim(),
+        adapter: _adapter,
+        baseUrl: _baseUrlCtrl.text.trim(),
+        apiKey: _apiKeyCtrl.text.trim(),
+        enabled: _enabled,
+        priority: _priority,
+      );
       _apiKeyCtrl.clear();
+      // Saving is successful even if upstream discovery fails; preserve that
+      // distinction so credentials are not repeatedly submitted.
+      var discoveryFailed = false;
+      try {
+        await repository.discoverModels(providerId);
+      } catch (_) {
+        discoveryFailed = true;
+      }
       ref.invalidate(adminConsoleProvider);
       if (mounted) {
         setState(() {
-          _status = AppLocalizations.of(context).providerSaved;
+          _status = discoveryFailed
+              ? AppLocalizations.of(context).providerSavedDiscoveryFailed
+              : AppLocalizations.of(context).providerSaved;
         });
       }
     } catch (e) {

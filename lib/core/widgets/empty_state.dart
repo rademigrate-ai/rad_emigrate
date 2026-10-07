@@ -23,52 +23,54 @@ class EmptyState extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final description = subtitle == null ? title : '$title. $subtitle';
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Semantics(
-          label: description,
-          explicitChildNodes: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ExcludeSemantics(
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: scheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(20),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Semantics(
+            label: description,
+            explicitChildNodes: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ExcludeSemantics(
+                  child: Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
                   ),
-                  child: Icon(icon, size: 32, color: scheme.onSurfaceVariant),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ExcludeSemantics(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 20),
                 ExcludeSemantics(
                   child: Text(
-                    subtitle!,
+                    title,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 8),
+                  ExcludeSemantics(
+                    child: Text(
+                      subtitle!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+                if (actionLabel != null && onAction != null) ...[
+                  const SizedBox(height: 20),
+                  AppButton(
+                    label: actionLabel!,
+                    onPressed: onAction,
+                    expanded: false,
+                  ),
+                ],
               ],
-              if (actionLabel != null && onAction != null) ...[
-                const SizedBox(height: 20),
-                AppButton(
-                  label: actionLabel!,
-                  onPressed: onAction,
-                  expanded: false,
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),

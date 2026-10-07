@@ -46,10 +46,13 @@ void main() {
     });
 
     test('discovery preserves configuration and disables new models', () {
-      expect(orchestrator, contains('enabled: false'));
-      expect(orchestrator, contains('available: false'));
-      expect(orchestrator, contains('last_seen_at'));
-      expect(orchestrator, contains('new Set<string>'));
+      final catalogue = File(
+        'supabase/migrations/20261007080001_ai_credential_failure_routing.sql',
+      ).readAsStringSync();
+      expect(orchestrator, contains('rpc/ingest_ai_model_catalogue'));
+      expect(catalogue, contains("x.capability,false,true"));
+      expect(catalogue, contains("available=false,discovery_status='stale'"));
+      expect(catalogue, contains('last_seen_at'));
     });
 
     test('provider errors are classified and sanitized', () {
@@ -96,7 +99,7 @@ void main() {
     });
 
     test('meaningful change creates review candidate but never Feed', () {
-      expect(research, contains("prior?.[0]?.content_hash !== hash"));
+      expect(research, contains('rpc/ingest_research_snapshot'));
       expect(research, contains('create_research_review_candidate'));
       expect(migration, contains('p_summary'));
       expect(migration, contains("'review'"));

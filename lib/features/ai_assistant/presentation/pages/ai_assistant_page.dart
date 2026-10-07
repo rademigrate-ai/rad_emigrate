@@ -9,6 +9,7 @@ import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/rad_brand.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -42,13 +43,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _messages = <_ChatMessage>[];
   var _loading = false;
 
-  /// Client-side display only. Server (ai-orchestrator + ai_usage_limits) is
-  /// the authority. Admin routes pass [adminMode] so the soft gate is skipped.
-  static const _userDisplayHintLimit = 5;
-  var _used = 0;
   String? _sessionId;
-
-  bool get _isPrivilegedAdmin => widget.adminMode;
 
   @override
   void initState() {
@@ -61,14 +56,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     if (userId == null || userId.isEmpty) return;
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
-      final sessions = await repository.listSessions(userId);
+      final sessions = await repository.listSessions(
+        userId,
+        scope: widget.adminMode ? 'admin' : 'user',
+      );
       if (sessions.isEmpty || !mounted) return;
       final session = sessions.first;
       final history = await repository.history(session.id);
-      if (!mounted) return;
+      if (!mounted || _loading || _messages.isNotEmpty) return;
       setState(() {
         _sessionId = session.id;
-        _used = session.questionCount;
         _messages
           ..clear()
           ..addAll(
@@ -99,19 +96,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
-    // Soft gate for normal users only. Admin workspace sets adminMode.
-    // Server returns 429 if daily limits are exceeded.
-    if (!_isPrivilegedAdmin && _used >= _userDisplayHintLimit) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.aiQuotaExhausted)));
-      return;
-    }
-
+    setState(() => _loading = true);
     final userId = ref.read(authControllerProvider).valueOrNull?.userId;
     try {
       if (userId != null && userId.isNotEmpty) {
         final repository = ref.read(aiSessionRepositoryProvider);
-        _sessionId ??= (await repository.createSession(userId)).id;
+        _sessionId ??= (await repository.createSession(
+          userId,
+          scope: widget.adminMode ? 'admin' : 'user',
+        )).id;
         await repository.saveMessage(
           sessionId: _sessionId!,
           userId: userId,
@@ -121,17 +114,18 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (_) {
       if (mounted) {
+        setState(() => _loading = false);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
       return;
     }
 
+    if (!mounted) return;
     setState(() {
       _messages.add(_ChatMessage(isUser: true, text: text));
       _loading = true;
       _controller.clear();
-      _used++;
     });
     _scrollToEnd();
 
@@ -148,7 +142,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               ),
             )
           : AiResponse(text: l10n.aiUnavailableResponse(text), uncertain: true);
-      if (userId != null && userId.isNotEmpty && _sessionId != null) {
+      if (response.errorCode == null &&
+          userId != null &&
+          userId.isNotEmpty &&
+          _sessionId != null) {
         try {
           await ref
               .read(aiSessionRepositoryProvider)
@@ -159,8 +156,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 content: response.text,
               );
         } catch (_) {
-          // Conversation persistence is supplementary once a sourced response
-          // has been produced; do not replace that response with an error.
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(l10n.aiResponseNotSaved)));
+          }
         }
       }
       if (!mounted) return;
@@ -178,7 +177,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     } catch (error) {
       if (!mounted) return;
       final message = error.toString().contains('provider_unauthorized')
-          ? 'The AI provider credential was rejected. An Admin must re-enter a valid API key under Admin → AI configuration.'
+          ? l10n.aiCredentialRejected
           : l10n.aiUnavailableResponse(text);
       setState(() {
         _messages.add(_ChatMessage(isUser: false, text: message));
@@ -229,6 +228,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               ? ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
+                    const Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: RadBrand(size: RadBrandSize.medium),
+                    ),
+                    const SizedBox(height: 28),
                     Text(
                       l10n.howCanWeHelp,
                       style: Theme.of(context).textTheme.titleLarge,
@@ -359,30 +363,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         title: Text(
           widget.adminMode ? l10n.adminResearchAssistant : l10n.aiAssistant,
         ),
-        actions: [
-          if (!_isPrivilegedAdmin)
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text(
-                  l10n.freeQuota(_used, _userDisplayHintLimit),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            )
-          else
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text(
-                  l10n.adminResearchAssistant,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ),
-        ],
       ),
-      body: body,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 920),
+          child: body,
+        ),
+      ),
     );
   }
 }

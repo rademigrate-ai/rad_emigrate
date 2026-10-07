@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import '../../../l10n/app_localizations.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../supabase/supabase_client.dart';
@@ -65,8 +69,9 @@ class SupabaseAiService implements AiService {
       }
       final code = (map['code'] ?? map['error'] ?? 'ai_failed').toString();
       return AiResponse(
-        text: _messageForCode(code, prompt),
+        text: _messageForCode(code, request.locale),
         uncertain: true,
+        errorCode: code,
         conversationId: request.conversationId,
       );
     } on FunctionException catch (e) {
@@ -78,37 +83,29 @@ class SupabaseAiService implements AiService {
         code = e.reasonPhrase!;
       }
       return AiResponse(
-        text: _messageForCode(code, prompt),
+        text: _messageForCode(code, request.locale),
         uncertain: true,
+        errorCode: code,
         conversationId: request.conversationId,
       );
     }
   }
 
-  static String _messageForCode(String code, String prompt) {
+  static String _messageForCode(String code, String? locale) {
+    final l10n = lookupAppLocalizations(Locale(locale == 'fa' ? 'fa' : 'en'));
     switch (code) {
       case 'provider_unauthorized':
       case 'provider_auth_failed':
-        return 'The AI provider credential was rejected (unauthorized). '
-            'An Admin must re-enter a valid OpenRouter API key under Admin → AI configuration, then Test the provider.\n\n'
-            'Your question: "$prompt"\n\n'
-            'No immigration requirements are inferred here.';
+        return l10n.aiCredentialRejected;
       case 'no_eligible_model':
       case 'provider_not_configured':
-        return 'No eligible AI model is currently available for this scope. '
-            'Confirm the provider is enabled, a model is enabled with matching runtime scope, and the provider is not in cooldown.\n\n'
-            'Your question: "$prompt"\n\n'
-            'No immigration requirements are inferred here.';
+        return l10n.aiNoEligibleModel;
+      case 'daily_limit_reached':
+        return l10n.aiQuotaExhausted;
       case 'provider_rate_limited':
-        return 'The AI provider rate-limited this request. Please try again shortly.\n\n'
-            'Your question: "$prompt"';
-      case 'ai_temporarily_unavailable':
-        return 'The AI service is temporarily unavailable. Please try again in a moment.\n\n'
-            'Your question: "$prompt"';
+        return l10n.aiRateLimited;
       default:
-        return 'The AI request could not be completed ($code).\n\n'
-            'Your question: "$prompt"\n\n'
-            'No immigration requirements are inferred here.';
+        return l10n.aiRequestFailed;
     }
   }
 }
