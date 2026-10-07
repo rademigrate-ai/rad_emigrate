@@ -138,7 +138,7 @@ mixin AppLocalizationsEnB2 on AppLocalizations {
   String get inactive => 'Inactive';
 
   @override
-  String get providerReachable => 'Reachable';
+  String providerReachable(int count) => '$count providers reachable';
 
   @override
   String get providerTestFailed => 'Provider test failed.';
