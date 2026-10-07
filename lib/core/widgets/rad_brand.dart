@@ -4,10 +4,10 @@ import '../../l10n/app_localizations.dart';
 
 enum RadBrandSize { small, medium, large }
 
-/// The owner-supplied RAD emblem, with its original square proportions.
+/// The owner-supplied RAD emblem with its original proportions and transparency.
 ///
-/// All surfaces use the same unmodified artwork. A white backing provides
-/// consistent contrast on dark surfaces without recoloring the logo.
+/// Renders the asset without an artificial opaque backing so the transparent
+/// WebP/PNG background is preserved on application surfaces.
 class RadBrand extends StatelessWidget {
   const RadBrand({
     super.key,
@@ -21,10 +21,10 @@ class RadBrand extends StatelessWidget {
   final bool darkSurface;
 
   double get _height => switch (size) {
-    RadBrandSize.small => 48,
-    RadBrandSize.medium => 84,
-    RadBrandSize.large => 116,
-  };
+        RadBrandSize.small => 48,
+        RadBrandSize.medium => 84,
+        RadBrandSize.large => 116,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +34,13 @@ class RadBrand extends StatelessWidget {
     return Semantics(
       label: label,
       image: true,
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Image.asset(
-          asset,
-          height: _height,
-          width: _height,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.medium,
-          excludeFromSemantics: true,
-        ),
+      child: Image.asset(
+        asset,
+        height: _height,
+        width: _height,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.medium,
+        excludeFromSemantics: true,
       ),
     );
   }
