@@ -37,6 +37,11 @@ class SupabaseAiService implements AiService {
           'action': 'chat',
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
+          if (request.metadata['guest_key'] is String &&
+              (request.metadata['guest_key'] as String).isNotEmpty)
+            'guest_key': request.metadata['guest_key'],
+          if (request.metadata['locale'] is String)
+            'locale': request.metadata['locale'],
           'messages': [
             ...request.history.map(
               (message) => {
@@ -74,44 +79,9 @@ class SupabaseAiService implements AiService {
         );
       }
       final code = (map['code'] ?? map['error'] ?? 'ai_failed').toString();
-      return AiResponse(
-        text: _messageForCode(code, request.locale),
-        uncertain: true,
-        errorCode: code,
-        conversationId: request.conversationId,
-      );
-    } on FunctionException catch (e) {
-      final details = e.details;
-      String code = 'ai_failed';
-      if (details is Map) {
-        code = (details['code'] ?? details['error'] ?? code).toString();
-      } else if (e.reasonPhrase != null && e.reasonPhrase!.isNotEmpty) {
-        code = e.reasonPhrase!;
-      }
-      return AiResponse(
-        text: _messageForCode(code, request.locale),
-        uncertain: true,
-        errorCode: code,
-        conversationId: request.conversationId,
-      );
-    }
-  }
-
-  static String _messageForCode(String code, String? locale) {
-    final l10n = lookupAppLocalizations(Locale(locale == 'fa' ? 'fa' : 'en'));
-    switch (code) {
-      case 'provider_unauthorized':
-      case 'provider_auth_failed':
-        return l10n.aiCredentialRejected;
-      case 'no_eligible_model':
-      case 'provider_not_configured':
-        return l10n.aiNoEligibleModel;
-      case 'daily_limit_reached':
-        return l10n.aiQuotaExhausted;
-      case 'provider_rate_limited':
-        return l10n.aiRateLimited;
-      default:
-        return l10n.aiRequestFailed;
+      throw Exception(code);
+    } catch (e) {
+      rethrow;
     }
   }
 }
