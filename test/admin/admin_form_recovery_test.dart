@@ -171,7 +171,12 @@ void main() {
         findsNothing,
         reason: 'Opening model settings must not start provider submission',
       );
-      await tester.tap(find.byType(Switch));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.byType(Switch),
+        ),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
