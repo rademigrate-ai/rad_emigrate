@@ -64,7 +64,7 @@ class _AdminConsultationsPageState
           .from('consultation_requests')
           .update({
             'status': status,
-            if (note != null) 'admin_note': note,
+            'admin_note': ?note,
             'updated_at': DateTime.now().toIso8601String(),
           })
           .eq('id', id);
@@ -120,7 +120,7 @@ class _AdminConsultationsPageState
                         Text('${r['message'] ?? ''}'),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<String>(
-                          value: '${r['status'] ?? 'submitted'}',
+                          initialValue: '${r['status'] ?? 'submitted'}',
                           decoration: InputDecoration(
                             labelText: l10n.consultationStatus,
                           ),
