@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -111,22 +113,28 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
               itemBuilder: (context, i) {
                 final n = _items[i];
                 final unread = n['read_at'] == null;
-                return ListTile(
-                  leading: Icon(
-                    unread
-                        ? Icons.notifications_active
-                        : Icons.notifications_none,
+                return MotionStagger(
+                  index: i,
+                  child: AppCard(
+                    padding: EdgeInsets.zero,
+                    onTap: () async {
+                      final id = n['id'] as String?;
+                      if (id != null && unread) await _markRead(id);
+                      final path = n['action_path'] as String?;
+                      if (path != null && path.startsWith('/')) {
+                        if (context.mounted) context.go(path);
+                      }
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        unread
+                            ? Icons.notifications_active
+                            : Icons.notifications_none,
+                      ),
+                      title: Text('${n['title'] ?? ''}'),
+                      subtitle: Text('${n['body'] ?? ''}'),
+                    ),
                   ),
-                  title: Text('${n['title'] ?? ''}'),
-                  subtitle: Text('${n['body'] ?? ''}'),
-                  onTap: () async {
-                    final id = n['id'] as String?;
-                    if (id != null && unread) await _markRead(id);
-                    final path = n['action_path'] as String?;
-                    if (path != null && path.startsWith('/')) {
-                      if (context.mounted) context.go(path);
-                    }
-                  },
                 );
               },
             ),

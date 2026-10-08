@@ -7,6 +7,7 @@ import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/progress_steps.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -317,28 +318,31 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                 separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final app = apps[index];
-                  return AppCard(
-                    onTap: () => setState(() => _selected = app),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          app.title,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${app.programName} · ${app.country}',
-                          style: Theme.of(context).textTheme.bodySmall,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 10),
-                        StatusBadge(
-                          label: _statusLabel(app.status, l10n),
-                          tone: _tone(app.status),
-                        ),
-                      ],
+                  return MotionStagger(
+                    index: index,
+                    child: AppCard(
+                      onTap: () => setState(() => _selected = app),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            app.title,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${app.programName} · ${app.country}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 10),
+                          StatusBadge(
+                            label: _statusLabel(app.status, l10n),
+                            tone: _tone(app.status),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

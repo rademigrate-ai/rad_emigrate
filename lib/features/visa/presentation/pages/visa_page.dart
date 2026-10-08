@@ -6,6 +6,7 @@ import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
@@ -134,35 +135,39 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                 subtitle: l10n.tryChangingFilters,
                 icon: Icons.public_off_outlined,
               ),
-            ...programs.map((program) {
+            ...programs.asMap().entries.map((entry) {
+              final program = entry.value;
               final country = catalog.countries.firstWhere(
                 (item) => item.id == program.countryId,
               );
               final hasStructure =
                   program.requirements.isNotEmpty || program.steps.isNotEmpty;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: SectionCard(
-                  title: program.title,
-                  subtitle:
-                      '${country.flagEmoji} ${country.name}\n${program.summary}',
-                  icon: Icons.flight_takeoff,
-                  onTap: () => setState(() => _selected = program),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (!hasStructure)
-                        Tooltip(
-                          message: l10n.structuredDetailsPending,
-                          child: Icon(
-                            Icons.hourglass_empty_outlined,
-                            size: 18,
-                            color: pendingColor,
+              return MotionStagger(
+                index: entry.key,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: SectionCard(
+                    title: program.title,
+                    subtitle:
+                        '${country.flagEmoji} ${country.name}\n${program.summary}',
+                    icon: Icons.flight_takeoff,
+                    onTap: () => setState(() => _selected = program),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!hasStructure)
+                          Tooltip(
+                            message: l10n.structuredDetailsPending,
+                            child: Icon(
+                              Icons.hourglass_empty_outlined,
+                              size: 18,
+                              color: pendingColor,
+                            ),
                           ),
-                        ),
-                      if (!hasStructure) const SizedBox(width: 8),
-                      Icon(directionalChevron(context)),
-                    ],
+                        if (!hasStructure) const SizedBox(width: 8),
+                        Icon(directionalChevron(context)),
+                      ],
+                    ),
                   ),
                 ),
               );

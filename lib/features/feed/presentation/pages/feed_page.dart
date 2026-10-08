@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/widgets/app_entrance.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
@@ -63,12 +64,23 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     final categoryStyle = theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.primary,
                     );
-                    return AppEntrance(
+                    return MotionStagger(
                       key: ValueKey(item.id),
+                      index: index,
                       child: Semantics(
                         button: true,
                         label: item.title,
-                        child: Card(
+                        child: AppCard(
+                          onTap: () async {
+                            try {
+                              await ref
+                                  .read(feedRepositoryProvider)
+                                  .markRead(item.id);
+                            } catch (_) {
+                              // Read tracking is supplementary.
+                            }
+                          },
+                          padding: EdgeInsets.zero,
                           child: ListTile(
                             isThreeLine: true,
                             contentPadding:
@@ -136,15 +148,6 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                                 }
                               },
                             ),
-                            onTap: () async {
-                              try {
-                                await ref
-                                    .read(feedRepositoryProvider)
-                                    .markRead(item.id);
-                              } catch (_) {
-                                // Read tracking is supplementary.
-                              }
-                            },
                           ),
                         ),
                       ),

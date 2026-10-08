@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_entrance.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../feed/data/feed_repository.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -119,20 +120,26 @@ class DashboardPage extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _MetricTile(
-                      value: appsState.hasValue ? '$activeApps' : '—',
-                      label: l10n.activeCases,
-                      icon: Icons.assignment_outlined,
-                      onTap: () => context.go('/applications'),
+                    child: MotionStagger(
+                      index: 0,
+                      child: _MetricTile(
+                        value: appsState.hasValue ? activeApps : null,
+                        label: l10n.activeCases,
+                        icon: Icons.assignment_outlined,
+                        onTap: () => context.go('/applications'),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _MetricTile(
-                      value: docsState.hasValue ? '$missingDocs' : '—',
-                      label: l10n.documentsMissing,
-                      icon: Icons.folder_outlined,
-                      onTap: () => context.go('/documents'),
+                    child: MotionStagger(
+                      index: 1,
+                      child: _MetricTile(
+                        value: docsState.hasValue ? missingDocs : null,
+                        label: l10n.documentsMissing,
+                        icon: Icons.folder_outlined,
+                        onTap: () => context.go('/documents'),
+                      ),
                     ),
                   ),
                 ],
@@ -399,7 +406,7 @@ class _MetricTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final String value;
+  final int? value;
   final String label;
   final IconData icon;
   final VoidCallback onTap;
@@ -415,8 +422,9 @@ class _MetricTile extends StatelessWidget {
         children: [
           Icon(icon, size: 20, color: colorScheme.primary),
           const SizedBox(height: 12),
-          Text(
-            value,
+          MotionCount(
+            value: value,
+            placeholder: '—',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: colorScheme.primary,
               fontFeatures: const [ui.FontFeature.tabularFigures()],

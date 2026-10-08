@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/directional_icons.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class AdminHubPage extends StatelessWidget {
@@ -26,29 +28,41 @@ class AdminHubPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(l10n.serverEnforcedAccessBody),
                 const SizedBox(height: 20),
-                _AdminTile(
-                  icon: Icons.key_outlined,
-                  title: l10n.adminAiConfig,
-                  subtitle: l10n.providerModelConnection,
-                  onTap: () => context.go('/admin/ai-config'),
+                MotionStagger(
+                  index: 0,
+                  child: _AdminTile(
+                    icon: Icons.key_outlined,
+                    title: l10n.adminAiConfig,
+                    subtitle: l10n.providerModelConnection,
+                    onTap: () => context.go('/admin/ai-config'),
+                  ),
                 ),
-                _AdminTile(
-                  icon: Icons.dashboard_customize_outlined,
-                  title: l10n.adminOperations,
-                  subtitle: l10n.operationalOverview,
-                  onTap: () => context.go('/admin/operations'),
+                MotionStagger(
+                  index: 1,
+                  child: _AdminTile(
+                    icon: Icons.dashboard_customize_outlined,
+                    title: l10n.adminOperations,
+                    subtitle: l10n.operationalOverview,
+                    onTap: () => context.go('/admin/operations'),
+                  ),
                 ),
-                _AdminTile(
-                  icon: Icons.support_agent_outlined,
-                  title: l10n.adminConsultations,
-                  subtitle: l10n.noAdminConsultations,
-                  onTap: () => context.go('/admin/consultations'),
+                MotionStagger(
+                  index: 2,
+                  child: _AdminTile(
+                    icon: Icons.support_agent_outlined,
+                    title: l10n.adminConsultations,
+                    subtitle: l10n.noAdminConsultations,
+                    onTap: () => context.go('/admin/consultations'),
+                  ),
                 ),
-                _AdminTile(
-                  icon: Icons.travel_explore_outlined,
-                  title: l10n.adminResearchAssistant,
-                  subtitle: l10n.adminResearchSubtitle,
-                  onTap: () => context.go('/admin/ai-research'),
+                MotionStagger(
+                  index: 3,
+                  child: _AdminTile(
+                    icon: Icons.travel_explore_outlined,
+                    title: l10n.adminResearchAssistant,
+                    subtitle: l10n.adminResearchSubtitle,
+                    onTap: () => context.go('/admin/ai-research'),
+                  ),
                 ),
               ],
             ),
@@ -73,7 +87,9 @@ class _AdminTile extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => Card(
+  Widget build(BuildContext context) => AppCard(
+    onTap: onTap,
+    padding: EdgeInsets.zero,
     child: ListTile(
       contentPadding: const EdgeInsets.all(16),
       leading: Icon(icon, size: 30),
@@ -83,7 +99,6 @@ class _AdminTile extends StatelessWidget {
         child: Text(subtitle),
       ),
       trailing: Icon(directionalChevron(context)),
-      onTap: onTap,
     ),
   );
 }
