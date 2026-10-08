@@ -4,12 +4,19 @@ import 'package:rad_emigrate/core/network/api_exception.dart';
 
 void main() {
   group('password recovery helpers', () {
-    test('keeps the Flutter hash route in the recovery redirect', () {
+    test('builds a path-based recovery redirect for path URL strategy', () {
+      expect(
+        passwordRecoveryRedirectTo(
+          Uri.parse('https://rad-emigrate.onrender.com/forgot-password'),
+        ),
+        'https://rad-emigrate.onrender.com/reset-password',
+      );
+      // Origin is still derived correctly when the current page uses a hash.
       expect(
         passwordRecoveryRedirectTo(
           Uri.parse('https://rad-emigrate.onrender.com/#/forgot-password'),
         ),
-        'https://rad-emigrate.onrender.com/#/reset-password',
+        'https://rad-emigrate.onrender.com/reset-password',
       );
     });
 
