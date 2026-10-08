@@ -1,30 +1,32 @@
-import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'city.dart';
+import 'geo_bootstrap.dart';
 
 /// Accurate IANA timezone conversions for RAD Global Time.
-///
-/// Uses `latest_all` so link identifiers required by timezone_finder boundaries
-/// are present.
 abstract final class TimezoneEngine {
   static bool _initialized = false;
 
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
-    tz_data.initializeTimeZones();
+    await bootstrapGeoTimezone();
+    _initialized = true;
+  }
+
+  static void markInitialized() {
     _initialized = true;
   }
 
   static tz.Location locationOf(String ianaId) {
-    if (!_initialized) {
-      tz_data.initializeTimeZones();
-      _initialized = true;
-    }
     try {
       return tz.getLocation(ianaId);
     } catch (_) {
-      return tz.getLocation('UTC');
+      try {
+        return tz.getLocation('UTC');
+      } catch (_) {
+        // Extremely defensive: database not loaded yet.
+        rethrow;
+      }
     }
   }
 
@@ -35,9 +37,6 @@ abstract final class TimezoneEngine {
 
   static tz.TZDateTime nowInCity(City city) => nowIn(city.timezone);
 
-  /// Convert a civil time in [fromIana] to the equivalent instant in [toIana].
-  /// Uses timezone package rules; ambiguous/nonexistent local times follow
-  /// package defaults (typically the earlier offset / skip forward).
   static tz.TZDateTime convert({
     required String fromIana,
     required String toIana,
