@@ -102,6 +102,9 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get loading => 'Loading…';
 
   @override
+  String get splashLoadingStatus => 'Preparing your secure RAD workspace';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -193,6 +196,14 @@ mixin AppLocalizationsEnA on AppLocalizations {
   @override
   String get passwordResetFailed =>
       "We couldn't request a reset link. Please try again.";
+
+  @override
+  String get passwordResetRateLimited =>
+      'Too many reset requests. Please wait a minute, then try again.';
+
+  @override
+  String get passwordResetLinkInvalid =>
+      'This reset link is invalid or has expired. Request a new link.';
 
   @override
   String get showPassword => 'Show password';

@@ -83,7 +83,7 @@ class _AdminConsultationsPageState
     if (_loading) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.adminConsultations)),
-        body: LoadingState(message: l10n.loadingOperational),
+        body: LoadingState.section(message: l10n.loadingOperational),
       );
     }
     if (_error != null) {

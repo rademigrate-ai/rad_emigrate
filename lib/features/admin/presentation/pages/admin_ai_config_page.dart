@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_ai_config_repository.dart';
 import '../../data/admin_operations_repository.dart';
@@ -297,7 +298,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
               Text(l10n.credentialsServerOnly),
               const SizedBox(height: 20),
               console.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => Center(
+                  child: RadInlineLoading(label: l10n.loadingOperational),
+                ),
                 error: (_, _) => Text(l10n.configurationUnavailable),
                 data: (data) => data.providers.isEmpty
                     ? Card(

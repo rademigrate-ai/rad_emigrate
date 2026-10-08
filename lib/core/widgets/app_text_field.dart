@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AppTextField extends StatelessWidget {
+import '../theme/app_motion.dart';
+
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.controller,
@@ -18,6 +20,7 @@ class AppTextField extends StatelessWidget {
     this.textInputAction,
     this.autofillHints,
     this.textDirection,
+    this.focusNode,
   });
 
   final TextEditingController controller;
@@ -35,26 +38,91 @@ class AppTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
   final TextDirection? textDirection;
+  final FocusNode? focusNode;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  late FocusNode _focusNode;
+  late bool _ownsFocusNode;
+  bool _focused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _attachFocusNode();
+  }
+
+  void _attachFocusNode() {
+    _ownsFocusNode = widget.focusNode == null;
+    _focusNode = widget.focusNode ?? FocusNode();
+    _focused = _focusNode.hasFocus;
+    _focusNode.addListener(_onFocusChanged);
+  }
+
+  void _onFocusChanged() {
+    if (mounted) setState(() => _focused = _focusNode.hasFocus);
+  }
+
+  @override
+  void didUpdateWidget(covariant AppTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.focusNode != widget.focusNode) {
+      _focusNode.removeListener(_onFocusChanged);
+      if (_ownsFocusNode) _focusNode.dispose();
+      _attachFocusNode();
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChanged);
+    if (_ownsFocusNode) _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      validator: validator,
-      minLines: minLines,
-      maxLines: maxLines,
-      enabled: enabled,
-      onFieldSubmitted: onSubmitted,
-      textInputAction: textInputAction,
-      autofillHints: autofillHints,
-      textDirection: textDirection,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-        suffixIcon: suffixIcon,
+    final theme = Theme.of(context);
+    final duration = AppMotion.duration(context, AppMotion.fast);
+    return AnimatedContainer(
+      duration: duration,
+      curve: AppMotion.curve(context),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: _focused
+            ? [
+                BoxShadow(
+                  color: theme.colorScheme.secondary.withValues(alpha: 0.11),
+                  blurRadius: 14,
+                  spreadRadius: 1,
+                ),
+              ]
+            : const [],
+      ),
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        obscureText: widget.obscureText,
+        keyboardType: widget.keyboardType,
+        validator: widget.validator,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
+        enabled: widget.enabled,
+        onFieldSubmitted: widget.onSubmitted,
+        textInputAction: widget.textInputAction,
+        autofillHints: widget.autofillHints,
+        textDirection: widget.textDirection,
+        decoration: InputDecoration(
+          labelText: widget.label,
+          hintText: widget.hint,
+          prefixIcon: widget.prefixIcon != null
+              ? Icon(widget.prefixIcon)
+              : null,
+          suffixIcon: widget.suffixIcon,
+        ),
       ),
     );
   }

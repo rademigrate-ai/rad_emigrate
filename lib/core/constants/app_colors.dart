@@ -6,6 +6,9 @@ abstract final class AppColors {
   static const darkRed = Color(0xFFB71823);
   static const navy = Color(0xFF172235);
   static const navyMuted = Color(0xFF314057);
+  static const midnight = Color(0xFF071620);
+  static const teal = Color(0xFF25B7B3);
+  static const cyan = Color(0xFF3ACBC5);
   static const charcoal = Color(0xFF20252D);
   static const background = Color(0xFFF5F7FA);
   static const surface = Color(0xFFFFFFFF);

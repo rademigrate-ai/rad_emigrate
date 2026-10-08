@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -113,63 +117,84 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     }
     return Scaffold(
       appBar: AppBar(title: Text(l10n.consultationTitle)),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Text(
-            l10n.consultationIntro,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _topic,
-            decoration: InputDecoration(labelText: l10n.consultationTopic),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _message,
-            decoration: InputDecoration(labelText: l10n.consultationMessage),
-            minLines: 4,
-            maxLines: 8,
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 8),
+      body: MotionReveal(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
             Text(
-              _error!,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              l10n.consultationIntro,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-          ],
-          if (_success != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              _success!,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-          ],
-          const SizedBox(height: 16),
-          FilledButton(
-            onPressed: _submitting ? null : _submit,
-            child: Text(_submitting ? l10n.loading : l10n.submitConsultation),
-          ),
-          const SizedBox(height: 28),
-          Text(
-            l10n.myConsultations,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          if (_mine.isEmpty)
-            Text(l10n.noConsultations)
-          else
-            ..._mine.map(
-              (r) => ListTile(
-                title: Text('${r['topic'] ?? ''}'),
-                subtitle: Text(
-                  '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
-                ),
+            const SizedBox(height: 16),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppTextField(
+                    controller: _topic,
+                    label: l10n.consultationTopic,
+                    prefixIcon: Icons.topic_outlined,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 12),
+                  AppTextField(
+                    controller: _message,
+                    label: l10n.consultationMessage,
+                    prefixIcon: Icons.message_outlined,
+                    minLines: 4,
+                    maxLines: 8,
+                  ),
+                ],
               ),
             ),
-        ],
+            if (_error != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ],
+            if (_success != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                _success!,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+            ],
+            const SizedBox(height: 16),
+            AppButton(
+              label: l10n.submitConsultation,
+              icon: Icons.send_outlined,
+              loading: _submitting,
+              onPressed: _submitting ? null : _submit,
+            ),
+            const SizedBox(height: 28),
+            Text(
+              l10n.myConsultations,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            if (_mine.isEmpty)
+              Text(l10n.noConsultations)
+            else
+              ..._mine.asMap().entries.map((entry) {
+                final r = entry.value;
+                return MotionStagger(
+                  index: entry.key,
+                  child: AppCard(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text('${r['topic'] ?? ''}'),
+                      subtitle: Text(
+                        '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
+                      ),
+                    ),
+                  ),
+                );
+              }),
+          ],
+        ),
       ),
     );
   }

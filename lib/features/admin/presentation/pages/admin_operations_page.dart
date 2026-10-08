@@ -42,7 +42,7 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
         ],
       ),
       body: snapshot.when(
-        loading: () => LoadingState(message: l10n.loadingOperational),
+        loading: () => LoadingState.section(message: l10n.loadingOperational),
         error: (error, _) => ErrorState(
           message: l10n.adminLoadFailed,
           onRetry: () => ref.invalidate(adminSnapshotProvider),
@@ -57,7 +57,8 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
             );
           }
           return console.when(
-            loading: () => LoadingState(message: l10n.loadingOperational),
+            loading: () =>
+                LoadingState.section(message: l10n.loadingOperational),
             error: (error, _) => ErrorState(
               message: l10n.adminLoadFailed,
               onRetry: () => ref.invalidate(adminConsoleProvider),

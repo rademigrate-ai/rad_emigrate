@@ -3,11 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../app/dependencies.dart';
+import '../../../../core/auth/password_recovery.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rad_brand.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../providers/password_recovery_controller.dart';
 
 /// Completes the Supabase recovery deep-link by setting a new password.
 ///
@@ -44,7 +47,15 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       _error = null;
     });
     try {
-      final client = ref.read(supabaseClientServiceProvider).client;
+      final service = ref.read(supabaseClientServiceProvider);
+      final recovery = ref.read(passwordRecoveryControllerProvider);
+      final activeUserId = service.isInitialized
+          ? service.client.auth.currentUser?.id
+          : null;
+      if (!recovery.isReadyFor(activeUserId)) {
+        throw const _MissingRecoverySessionException();
+      }
+      final client = service.client;
       await client.auth.updateUser(
         UserAttributes(password: _passwordCtrl.text),
       );
@@ -53,12 +64,17 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
           _done = true;
           _loading = false;
         });
+        await ref.read(passwordRecoveryControllerProvider.notifier).clear();
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _loading = false;
-          _error = l10n.errorGeneric;
+          _error =
+              e is _MissingRecoverySessionException ||
+                  isPasswordRecoverySessionError(e)
+              ? l10n.passwordResetLinkInvalid
+              : l10n.errorGeneric;
         });
       }
     }
@@ -69,6 +85,14 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final wide = MediaQuery.sizeOf(context).width >= 800;
+    final bootstrap = ref.watch(appBootstrapProvider);
+    final service = ref.watch(supabaseClientServiceProvider);
+    final activeUserId = service.isInitialized
+        ? service.client.auth.currentUser?.id
+        : null;
+    final hasRecoverySession = ref
+        .watch(passwordRecoveryControllerProvider)
+        .isReadyFor(activeUserId);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -101,6 +125,23 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                       AppButton(
                         label: l10n.signIn,
                         onPressed: () => context.go('/login'),
+                      ),
+                    ] else if (bootstrap.isLoading) ...[
+                      const Center(child: CircularProgressIndicator()),
+                    ] else if (!hasRecoverySession) ...[
+                      Text(
+                        l10n.passwordResetLinkInvalid,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 24),
+                      AppButton(
+                        label: l10n.sendResetLink,
+                        onPressed: () => context.go('/forgot-password'),
+                      ),
+                      TextButton(
+                        onPressed: () => context.go('/login'),
+                        child: Text(l10n.backToSignIn),
                       ),
                     ] else ...[
                       AppTextField(
@@ -170,4 +211,8 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       ),
     );
   }
+}
+
+class _MissingRecoverySessionException implements Exception {
+  const _MissingRecoverySessionException();
 }

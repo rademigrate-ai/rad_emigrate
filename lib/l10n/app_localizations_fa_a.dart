@@ -16,6 +16,8 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get loading => 'در حال بارگذاری…';
   @override
+  String get splashLoadingStatus => 'در حال آماده‌سازی فضای امن راد';
+  @override
   String get retry => 'تلاش مجدد';
   @override
   String get errorGeneric => 'مشکلی پیش آمد. دوباره تلاش کنید.';
@@ -129,6 +131,15 @@ mixin AppLocalizationsFaA on AppLocalizations {
       'ایمیل حساب خود را وارد کنید تا لینک بازنشانی ارسال شود.';
   @override
   String get passwordResetFailed => 'ارسال لینک ممکن نشد. دوباره تلاش کنید.';
+
+  @override
+  String get passwordResetRateLimited =>
+      'درخواست‌های بازنشانی بیش از حد مجاز است. یک دقیقه صبر کنید و دوباره تلاش کنید.';
+
+  @override
+  String get passwordResetLinkInvalid =>
+      'این پیوند بازنشانی نامعتبر است یا اعتبار آن تمام شده است. پیوند جدیدی درخواست کنید.';
+
   @override
   String get showPassword => 'نمایش رمز';
   @override

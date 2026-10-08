@@ -20,6 +20,10 @@ class SupabaseClientService {
       await Supabase.initialize(
         url: SupabaseConfig.url,
         publishableKey: SupabaseConfig.publishableKey,
+        authOptions: const FlutterAuthClientOptions(
+          authFlowType: AuthFlowType.pkce,
+          detectSessionInUri: true,
+        ),
         debug: false,
       );
       _initialized = true;

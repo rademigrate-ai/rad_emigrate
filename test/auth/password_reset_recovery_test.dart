@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rad_emigrate/core/network/api_exception.dart';
 import 'package:rad_emigrate/features/auth/domain/repositories/auth_repository.dart';
 import 'package:rad_emigrate/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
@@ -105,5 +106,29 @@ void main() {
     repository.pending!.complete();
     await tester.pumpAndSettle();
     expect(find.text(l10n.passwordResetSent), findsOneWidget);
+  });
+
+  testWidgets('rate-limited recovery shows retry guidance and blocks resends', (
+    tester,
+  ) async {
+    final repository = _RecoveryRepository()
+      ..error = const ApiException(
+        message: 'Email rate limit exceeded',
+        statusCode: 429,
+        code: 'over_email_send_rate_limit',
+      );
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    await _showRecovery(tester, repository, const Locale('en'));
+    await tester.enterText(find.byType(TextFormField), 'recovery@example.test');
+
+    await tester.tap(find.text(l10n.sendResetLink));
+    await tester.pump();
+
+    expect(find.text(l10n.passwordResetRateLimited), findsOneWidget);
+    expect(repository.emails, ['recovery@example.test']);
+
+    await tester.tap(find.text(l10n.sendResetLink));
+    await tester.pump();
+    expect(repository.emails, ['recovery@example.test']);
   });
 }
