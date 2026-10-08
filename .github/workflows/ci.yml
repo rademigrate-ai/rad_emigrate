@@ -72,6 +72,7 @@ jobs:
             dart format lib test
             git --no-pager diff --name-only
             git --no-pager diff --stat
+            git --no-pager diff -- lib/l10n/app_localizations_en_a.dart lib/l10n/app_localizations_fa_a.dart
             exit 1
           fi
       - run: flutter analyze
