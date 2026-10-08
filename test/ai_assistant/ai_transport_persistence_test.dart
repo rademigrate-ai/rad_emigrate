@@ -50,6 +50,7 @@ http.Response _json(Object body, int status) => http.Response(
 );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('AI payload includes history and current prompt once, retaining admin scope', () async {
     Map<String, dynamic>? sent;
     final backend = _backend((request) async {
