@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rad_emigrate/core/widgets/loading_state.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
 
 void main() {
@@ -106,5 +107,52 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
 
     expect(find.bySemanticsLabel('Saving profile'), findsOneWidget);
+  });
+
+  testWidgets('shared loading states select their declared RAD tier', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              Expanded(
+                child: LoadingState.fullScreen(message: 'Bootstrapping RAD'),
+              ),
+              Expanded(
+                child: LoadingState.section(message: 'Loading applications'),
+              ),
+              LoadingState.compact(message: 'Updating application'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadLoadingIndicator &&
+            widget.size == RadLoadingSize.fullScreen,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadLoadingIndicator &&
+            widget.size == RadLoadingSize.section,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadLoadingIndicator &&
+            widget.size == RadLoadingSize.compact,
+      ),
+      findsOneWidget,
+    );
   });
 }

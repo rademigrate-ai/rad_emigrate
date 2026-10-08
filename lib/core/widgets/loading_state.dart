@@ -2,56 +2,79 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import 'motion_primitives.dart';
+import 'rad_loading.dart';
 
+/// Branded loading feedback for page, section, and inline pending states.
+///
+/// Existing data providers own whether this widget exists. The constructors
+/// only select visual density, so pending/error control flow remains unchanged.
 class LoadingState extends StatelessWidget {
-  const LoadingState({super.key, this.message});
+  const LoadingState({super.key, this.message, this.dark = false})
+    : size = RadLoadingSize.section;
+
+  const LoadingState.fullScreen({super.key, this.message, this.dark = false})
+    : size = RadLoadingSize.fullScreen;
+
+  const LoadingState.section({super.key, this.message, this.dark = false})
+    : size = RadLoadingSize.section;
+
+  const LoadingState.compact({super.key, this.message, this.dark = false})
+    : size = RadLoadingSize.compact;
 
   final String? message;
+  final bool dark;
+  final RadLoadingSize size;
 
   @override
   Widget build(BuildContext context) {
     final label = message ?? AppLocalizations.of(context).loading;
+    if (size == RadLoadingSize.compact) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: RadInlineLoading(label: label, dark: dark),
+      );
+    }
+
+    final isFullScreen = size == RadLoadingSize.fullScreen;
     return Center(
-      child: Semantics(
-        label: label,
-        liveRegion: true,
-        excludeSemantics: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 320),
+          constraints: BoxConstraints(maxWidth: isFullScreen ? 360 : 300),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AppSkeleton(height: 16, width: 148),
-              const SizedBox(height: 12),
-              const AppSkeleton(height: 12),
-              const SizedBox(height: 8),
-              const AppSkeleton(height: 12, width: 236),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.25,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  if (message != null) ...[
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        message!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                  ],
-                ],
+              RadLoadingIndicator(
+                size: size,
+                label: label,
+                message: message,
+                dark: dark,
               ),
+              SizedBox(height: isFullScreen ? 30 : 22),
+              const _LoadingSkeletonPreview(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LoadingSkeletonPreview extends StatelessWidget {
+  const _LoadingSkeletonPreview();
+
+  @override
+  Widget build(BuildContext context) {
+    return const ExcludeSemantics(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSkeleton(height: 14, width: 136),
+          SizedBox(height: 12),
+          AppSkeleton(height: 11),
+          SizedBox(height: 8),
+          AppSkeleton(height: 11, width: 224),
+        ],
       ),
     );
   }

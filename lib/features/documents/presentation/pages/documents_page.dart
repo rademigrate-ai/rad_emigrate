@@ -90,7 +90,7 @@ class DocumentsPage extends ConsumerWidget {
         },
       ),
       body: state.when(
-        loading: () => LoadingState(message: l10n.loadingDocuments),
+        loading: () => LoadingState.section(message: l10n.loadingDocuments),
         error: (e, _) => ErrorState(
           message: l10n.errorGeneric,
           onRetry: () => ref.read(documentControllerProvider.notifier).load(),

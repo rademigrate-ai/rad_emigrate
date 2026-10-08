@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -102,7 +103,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         ],
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? LoadingState.section(message: l10n.loading)
           : _error != null
           ? Center(child: Text(_error!))
           : _items.isEmpty

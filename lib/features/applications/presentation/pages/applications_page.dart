@@ -296,7 +296,8 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: state.when(
-          loading: () => LoadingState(message: l10n.loadingApplications),
+          loading: () =>
+              LoadingState.section(message: l10n.loadingApplications),
           error: (e, _) => ErrorState(
             message: l10n.errorGeneric,
             onRetry: () =>

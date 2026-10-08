@@ -46,7 +46,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: catalog.when(
-          loading: () => LoadingState(message: l10n.loadingCatalogue),
+          loading: () => LoadingState.section(message: l10n.loadingCatalogue),
           error: (_, _) => ErrorState(
             message: l10n.catalogueUnavailable,
             onRetry: () => ref.invalidate(visaCatalogProvider(locale)),

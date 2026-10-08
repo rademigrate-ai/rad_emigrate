@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -192,7 +193,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   l10n,
                 ),
               )
-            : const Center(child: CircularProgressIndicator()),
+            : LoadingState.section(message: l10n.loading),
         error: (e, _) => ErrorState(
           message: l10n.errorGeneric,
           onRetry: () => ref.read(profileControllerProvider.notifier).load(),

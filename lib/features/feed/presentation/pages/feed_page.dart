@@ -31,7 +31,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: feed.when(
-          loading: () => LoadingState(message: l10n.loadingUpdates),
+          loading: () => LoadingState.section(message: l10n.loadingUpdates),
           error: (error, _) => ErrorState(
             message: l10n.updatesLoadFailed,
             onRetry: () => ref.invalidate(feedProvider(locale)),
