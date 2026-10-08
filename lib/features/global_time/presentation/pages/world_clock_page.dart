@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/rad_brand.dart';
+import '../../domain/city.dart';
+import '../../domain/geo_timezone_resolver.dart';
 import '../../domain/timezone_engine.dart';
 import '../providers/global_time_controller.dart';
 import '../widgets/city_clock_card.dart';
@@ -25,12 +27,112 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
   void initState() {
     super.initState();
     TimezoneEngine.ensureInitialized();
+    GeoTimezoneResolver.ensureReady();
   }
 
   @override
   void dispose() {
     _searchCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _onMapTap(double lat, double lng, String lang) async {
+    final ctrl = ref.read(globalTimeControllerProvider.notifier);
+    final result = await ctrl.resolveCoordinate(lat, lng);
+    if (!mounted) return;
+
+    if (result.isResolved) {
+      final city = result.toCity()!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            lang == 'fa'
+                ? 'منطقه زمانی: ${result.ianaId}'
+                : 'Timezone: ${result.ianaId}',
+          ),
+          action: SnackBarAction(
+            label: lang == 'fa' ? 'افزودن' : 'Add',
+            onPressed: () => ctrl.addFavorite(city),
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Unresolved or unavailable — never invent a timezone.
+    final message = result.status == GeoResolveStatus.unresolved
+        ? (lang == 'fa'
+            ? 'منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).'
+            : 'No timezone for this point (ocean or outside land zones).')
+        : (lang == 'fa'
+            ? 'داده‌های مرز زمانی در دسترس نیست.'
+            : 'Timezone boundary data unavailable.');
+
+    final manual = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: const Color(0xFF1A222D),
+      showDragHandle: true,
+      builder: (ctx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  message,
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ),
+              Text(
+                lang == 'fa'
+                    ? 'انتخاب دستی منطقه زمانی'
+                    : 'Select timezone manually',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final id in GeoTimezoneResolver.commonIanaIds)
+                      ListTile(
+                        title: Text(id,
+                            style: const TextStyle(color: Colors.white)),
+                        onTap: () => Navigator.pop(ctx, id),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (manual != null && mounted) {
+      ctrl.applyManualTimezone(
+        latitude: lat,
+        longitude: lng,
+        ianaId: manual,
+      );
+      final city = ref.read(globalTimeControllerProvider).selectedCity;
+      if (city != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              lang == 'fa' ? 'انتخاب دستی: $manual' : 'Manual: $manual',
+            ),
+            action: SnackBarAction(
+              label: lang == 'fa' ? 'افزودن' : 'Add',
+              onPressed: () => ctrl.addFavorite(city),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -48,7 +150,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
           : CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _HeroHeader(languageCode: lang)),
-                SliverPadding(
+                asySliverPadding(
                   padding: EdgeInsets.symmetric(
                     horizontal: wide ? 28 : 16,
                     vertical: 12,
@@ -57,7 +159,6 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Search
                         TextField(
                           controller: _searchCtrl,
                           style: const TextStyle(color: Colors.white),
@@ -103,8 +204,6 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                               ),
                         ],
                         const SizedBox(height: 20),
-
-                        // Map + cards layout
                         if (wide)
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,32 +211,12 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                               Expanded(
                                 flex: 5,
                                 child: SizedBox(
-                                  height: 340,
+                                  height: 360,
                                   child: WorldMapPanel(
                                     cities: state.favorites,
                                     selected: state.selectedCity,
-                                    onTapCoordinate: (lat, lng) {
-                                      final city =
-                                          ctrl.resolveCoordinate(lat, lng);
-                                      // Offer add
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            lang == 'fa'
-                                                ? 'انتخاب: ${city.localizedName(lang)}'
-                                                : 'Selected: ${city.localizedName(lang)}',
-                                          ),
-                                          action: SnackBarAction(
-                                            label: lang == 'fa'
-                                                ? 'افزودن'
-                                                : 'Add',
-                                            onPressed: () =>
-                                                ctrl.addFavorite(city),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                    onTapCoordinate: (lat, lng) =>
+                                        _onMapTap(lat, lng, lang),
                                     onSelectCity: ctrl.selectCity,
                                   ),
                                 ),
@@ -166,48 +245,30 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                           ),
                           const SizedBox(height: 16),
                           SizedBox(
-                            height: 260,
+                            height: 280,
                             child: WorldMapPanel(
                               cities: state.favorites,
                               selected: state.selectedCity,
-                              onTapCoordinate: (lat, lng) {
-                                final city = ctrl.resolveCoordinate(lat, lng);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      lang == 'fa'
-                                          ? 'انتخاب: ${city.localizedName(lang)}'
-                                          : 'Selected: ${city.localizedName(lang)}',
-                                    ),
-                                    action: SnackBarAction(
-                                      label:
-                                          lang == 'fa' ? 'افزودن' : 'Add',
-                                      onPressed: () =>
-                                          ctrl.addFavorite(city),
-                                    ),
-                                  ),
-                                );
-                              },
+                              onTapCoordinate: (lat, lng) =>
+                                  _onMapTap(lat, lng, lang),
                               onSelectCity: ctrl.selectCity,
                             ),
                           ),
                         ],
-
                         const SizedBox(height: 24),
                         MeetingPlannerPanel(
                           cities: state.favorites,
                           languageCode: lang,
                         ),
                         const SizedBox(height: 24),
-
-                        // Timeline
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: const Color(0xFF141C28),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: AppColors.primaryRed.withValues(alpha: 0.2),
+                              color:
+                                  AppColors.primaryRed.withValues(alpha: 0.2),
                             ),
                           ),
                           child: Column(
@@ -268,6 +329,20 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
             ),
     );
   }
+}
+
+// typo guard — use SliverPadding
+class asySliverPadding extends StatelessWidget {
+  const asySliverPadding({super.key, required this.padding, required this.sliver});
+  final EdgeInsetsGeometry padding;
+  final Widget sliver;
+  @override
+  Widget build(BuildContext context) =>
+      MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: SliverPadding(padding: padding, sliver: sliver),
+      );
 }
 
 class _HeroHeader extends StatelessWidget {
@@ -351,15 +426,10 @@ class _CityGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.35,
-      ),
+      gridDelegate: moreGridDelegate(columns),
       itemCount: cities.length,
       itemBuilder: (context, i) {
-        final city = cities[i];
+        final city = cities[i] as City;
         return CityClockCard(
           city: city,
           languageCode: languageCode,
@@ -370,4 +440,12 @@ class _CityGrid extends StatelessWidget {
       },
     );
   }
+
+  SliverGridDelegate moreGridDelegate(int columns) =>
+      SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: columns,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1.35,
+      );
 }
