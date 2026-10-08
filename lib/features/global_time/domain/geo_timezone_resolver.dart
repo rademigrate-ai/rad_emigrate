@@ -4,11 +4,7 @@ import 'geo_bootstrap.dart';
 import 'geo_lookup.dart';
 
 /// Result of resolving geographic coordinates to an IANA timezone.
-enum GeoResolveStatus {
-  resolved,
-  unresolved,
-  unavailable,
-}
+enum GeoResolveStatus { resolved, unresolved, unavailable }
 
 class GeoResolveResult {
   const GeoResolveResult({
@@ -52,8 +48,9 @@ class GeoResolveResult {
       );
     }
 
-    final short =
-        id.contains('/') ? id.split('/').last.replaceAll('_', ' ') : id;
+    final short = id.contains('/')
+        ? id.split('/').last.replaceAll('_', ' ')
+        : id;
     return City(
       id: 'geo_${lat.toStringAsFixed(4)}_${lng.toStringAsFixed(4)}',
       nameEn: short,
@@ -158,7 +155,6 @@ abstract final class GeoTimezoneResolver {
       'America/Denver',
       'Europe/Istanbul',
       'Asia/Shanghai',
-    ].toSet().toList()
-      ..sort();
+    ].toSet().toList()..sort();
   }
 }
