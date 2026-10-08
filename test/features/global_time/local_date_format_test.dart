@@ -5,7 +5,8 @@ void main() {
   test('FA uses Jalali weekday and month names', () {
     final dt = DateTime(2026, 10, 8, 12, 0);
     final s = formatLocalDate(dt, 'fa');
-    expect(s.contains('۱۴'), isTrue); // Jalali year digits or day
+    expect(s, contains('مهر'));
+    expect(RegExp(r'(1405|۱۴۰۵)').hasMatch(s), isTrue);
     expect(s, isNot(contains('Oct')));
   });
 
