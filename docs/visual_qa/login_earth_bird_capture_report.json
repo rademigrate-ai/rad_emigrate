@@ -1,0 +1,35 @@
+{
+  "source": "production Flutter web entrypoint",
+  "url": "http://127.0.0.1:8086/#/login",
+  "desktopViewport": "1280x800",
+  "mobileViewport": "390x844",
+  "captureSeconds": 14.002258587999677,
+  "rawRecordingSeconds": 21.28,
+  "trimStartSeconds": 7.277741412000324,
+  "console": [
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback."
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x2e740098b600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x2e740098b600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x2e740098b600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x2e740098b600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback."
+    }
+  ]
+}
