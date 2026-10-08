@@ -102,7 +102,9 @@ class AppShell extends ConsumerWidget {
                     AppColors.navy,
                 border: BorderDirectional(
                   end: BorderSide(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.4),
+                    color: Theme.of(
+                      context,
+                    ).dividerColor.withValues(alpha: 0.4),
                   ),
                 ),
               ),
