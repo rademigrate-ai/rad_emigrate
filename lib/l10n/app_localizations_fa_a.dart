@@ -166,7 +166,7 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get resendCode => 'ارسال مجدد';
   @override
-  String resendIn(int seconds) => 'ارسال مجدد تا ${seconds}ث';
+  String resendIn(int seconds) => 'ارسال مجدد تا $secondsث';
   @override
   String get profileCompletionTitle => 'تکمیل پروفایل';
   @override
