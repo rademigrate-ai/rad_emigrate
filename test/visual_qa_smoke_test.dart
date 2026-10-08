@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
+import 'package:rad_emigrate/core/widgets/premium_visuals.dart';
 import 'package:rad_emigrate/features/splash/presentation/pages/splash_page.dart';
 import 'package:rad_emigrate/visual_qa_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,6 +101,55 @@ void main() {
               widget is RadEarthBirdScene && widget.variant == entry.value,
         ),
         findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets(
+    'full-screen visual QA is clean and uses the enlarged Earth scene',
+    (tester) async {
+      await _pump(tester, 'loading-full');
+
+      expect(find.byType(Banner), findsNothing);
+      expect(
+        tester
+            .widget<PremiumCanvas>(find.byType(PremiumCanvas))
+            .showEditorialRule,
+        isFalse,
+      );
+      final scene = find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+      );
+      expect(
+        find.descendant(
+          of: scene,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.width == 280 &&
+                widget.height == 280,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final screen in ['splash', 'loading-full']) {
+    testWidgets('visual QA $screen loader suppresses the editorial red rule', (
+      tester,
+    ) async {
+      await _pump(tester, screen);
+
+      expect(
+        tester
+            .widget<PremiumCanvas>(find.byType(PremiumCanvas))
+            .showEditorialRule,
+        isFalse,
       );
       expect(tester.takeException(), isNull);
     });

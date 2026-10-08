@@ -201,8 +201,8 @@ class _SceneDimensions {
         bird: 64,
       ),
       RadEarthBirdVariant.fullScreenLoading => const _SceneDimensions(
-        scene: 238,
-        bird: 58,
+        scene: 280,
+        bird: 68,
       ),
       RadEarthBirdVariant.sectionLoading => const _SceneDimensions(
         scene: 168,

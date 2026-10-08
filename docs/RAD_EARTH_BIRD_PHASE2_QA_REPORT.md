@@ -7,7 +7,7 @@
 
 | Requirement | Delivered implementation |
 | --- | --- |
-| Preserve Login and approved scene | `LoginPage`, `premium_visuals.dart`, Login layout/auth behavior, and `RadEarthBirdScene(loginHero)` were not modified in Phase 2. |
+| Preserve Login and approved scene | `LoginPage`, Login layout/auth behavior, and `RadEarthBirdScene(loginHero)` remain unchanged. `PremiumCanvas` retains its existing default visual treatment for Login and non-loader product surfaces. |
 | One shared architecture | `RadLoadingIndicator` delegates to the already-approved `RadEarthBirdScene`; the former duplicate loader controller/painters/orbit code was removed. |
 | Splash | `SplashPage` uses new `LoadingState.splash`, which selects the prominent `splash` scene on the existing dark premium canvas and removes only the generic skeleton preview. |
 | Full-screen | Existing `RadLoadingSize.fullScreen` maps to `fullScreenLoading`. |
@@ -47,6 +47,16 @@ The capture tool now records console observations for every desktop/mobile targe
 
 The recorded non-error entries are only Playwright's script-injection debug message and Chromium WebGL `GL_CLOSE_PATH_NV` / `ReadPixels` performance warnings while taking screenshots. Those warnings arise in the headless capture environment and do not identify an application exception.
 
+## Final release visual refinement
+
+The conditional full-screen review requested a moderate scale increase and investigation of the clipped top-left copy and isolated red horizontal rule. The root-cause investigation found:
+
+1. The clipped top-left copy was the `SYNTHETIC VISUAL QA` `Banner` in the non-production `visual_qa_main.dart` entrypoint; it was not present in production routes. The QA wrapper has been removed so evidence contains the real loading composition without an overlay.
+2. The isolated red line was the editorial rule painted by `PremiumCanvas` on production-backed Splash/full-loading canvases. `PremiumCanvas` now keeps that treatment by default (preserving Login and all existing editorial surfaces) and exposes `showEditorialRule`; Splash and the full-loading evidence surface set it to `false` because a standalone pending-state canvas has no accompanying editorial label.
+3. The approved full-screen Earth-and-bird scene increased from **238 px to 280 px** (**+17.6%**); its official bird mark increased proportionally from 58 px to 68 px. Orbit geometry, Earth painting, occlusion, animation duration, semantic behavior, Reduced Motion, and `TickerMode` handling are unchanged.
+
+Fresh Splash, full-screen, section (light and dark), compact, and mobile evidence was generated after these changes. The red bird, cyan orbital treatment, and dimensional Earth scene remain unchanged apart from the approved full-screen scale.
+
 ## Independent review remediation
 
 A fresh-context review identified two Important evidence gaps: compact QA covered only the dark surface, and the capture code did not enforce zero browser errors or record dark-section console events. The remediation adds light-and-dark compact QA surfaces and smoke coverage, enforces `error`-level console failure across every captured surface, and writes dark-section console observations into the JSON report. It also removes the compact cyan node so compact rendering is precisely the official red bird plus one cyan ellipse. Follow-up reviews hardened publication further: the capture set now has an exact manifest validator and rollback-safe replacement, with focused tests for console-error cleanup, successful-but-incomplete capture, and a failure during the second candidate file replacement.
@@ -59,10 +69,10 @@ All commands below were run after the Phase 2 implementation and evidence captur
 | --- | --- |
 | `dart format --set-exit-if-changed lib test` | PASS — 179 files already formatted. |
 | `flutter analyze` | PASS — “No issues found!” |
-| `flutter test` | PASS — **225 tests**. |
+| `flutter test` | PASS — **228 tests**, including the full-screen clean-evidence, enlarged-scene, and Splash/full-loading editorial-rule regression coverage. |
 | `python3 tools/test_capture_phase2_loading_motion.py` | PASS — 3 tests covering console-error cleanup, incomplete-manifest rejection, and mid-publication replacement rollback. |
-| Production `flutter build web --no-web-resources-cdn ...` | PASS — 82.1 s. |
-| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 77.1 s. |
+| Production `flutter build web --no-web-resources-cdn ...` | PASS — 88.7 s. |
+| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 79.0 s. |
 | `flutter build apk --debug ...` | PASS — debug APK produced at `build/app/outputs/flutter-apk/app-debug.apk` (185 MB). |
 | Capture script `python3 tools/capture_phase2_loading_motion.py` | PASS — 4 recordings, 10 screenshots, JSON diagnostics. |
 
@@ -75,8 +85,8 @@ The production web output was measured with the identical build configuration be
 | Measure | Bytes |
 | --- | ---: |
 | Pre-migration output | 44,192,558 |
-| Phase 2 output | 44,187,977 |
-| Delta | **−4,581** |
+| Final refined Phase 2 output | 44,188,050 |
+| Delta | **−4,508** |
 
 The small decrease is consistent with removing the duplicate loader painter/controller while reusing the Login-approved renderer.
 

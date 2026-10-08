@@ -48,6 +48,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       body: PremiumCanvas(
         dark: true,
         accent: AppColors.teal,
+        showEditorialRule: false,
         child: SafeArea(
           child: Stack(
             children: [

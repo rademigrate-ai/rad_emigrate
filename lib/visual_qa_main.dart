@@ -107,12 +107,7 @@ class _QaFrame extends StatelessWidget {
       'loading-compact' => const _CompactLoadingQaPage(),
       _ => const LoginPage(),
     };
-    return Banner(
-      message: 'SYNTHETIC VISUAL QA',
-      location: BannerLocation.topStart,
-      color: const Color(0xFF0B5260),
-      child: page,
-    );
+    return page;
   }
 }
 
@@ -192,6 +187,7 @@ class _FullLoadingQaPage extends StatelessWidget {
       body: PremiumCanvas(
         dark: true,
         accent: AppColors.teal,
+        showEditorialRule: false,
         child: const SafeArea(
           child: LoadingState.fullScreen(
             message: 'Preparing your RAD workspace',

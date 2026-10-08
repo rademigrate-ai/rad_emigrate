@@ -18,12 +18,14 @@ class PremiumCanvas extends StatelessWidget {
     this.dark = false,
     this.accent = AppColors.teal,
     this.compact = false,
+    this.showEditorialRule = true,
   });
 
   final Widget child;
   final bool dark;
   final Color accent;
   final bool compact;
+  final bool showEditorialRule;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class PremiumCanvas extends StatelessWidget {
                   dark: dark,
                   accent: accent,
                   compact: compact,
+                  showEditorialRule: showEditorialRule,
                 ),
               ),
             ),
@@ -481,11 +484,13 @@ class _CanvasGridPainter extends CustomPainter {
     required this.dark,
     required this.accent,
     required this.compact,
+    required this.showEditorialRule,
   });
 
   final bool dark;
   final Color accent;
   final bool compact;
+  final bool showEditorialRule;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -516,21 +521,24 @@ class _CanvasGridPainter extends CustomPainter {
       math.max(size.width, size.height) * 0.48,
       glow,
     );
-    final red = Paint()
-      ..color = AppColors.primaryRed.withValues(alpha: dark ? 0.38 : 0.24)
-      ..strokeWidth = 2;
-    canvas.drawLine(
-      Offset(size.width * 0.06, size.height * 0.87),
-      Offset(size.width * 0.46, size.height * 0.87),
-      red,
-    );
+    if (showEditorialRule) {
+      final red = Paint()
+        ..color = AppColors.primaryRed.withValues(alpha: dark ? 0.38 : 0.24)
+        ..strokeWidth = 2;
+      canvas.drawLine(
+        Offset(size.width * 0.06, size.height * 0.87),
+        Offset(size.width * 0.46, size.height * 0.87),
+        red,
+      );
+    }
   }
 
   @override
   bool shouldRepaint(covariant _CanvasGridPainter oldDelegate) =>
       oldDelegate.dark != dark ||
       oldDelegate.accent != accent ||
-      oldDelegate.compact != compact;
+      oldDelegate.compact != compact ||
+      oldDelegate.showEditorialRule != showEditorialRule;
 }
 
 class _OrbitPainter extends CustomPainter {
