@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/city.dart';
+import '../../domain/local_date_format.dart';
 import '../../domain/timezone_engine.dart';
 
 class CityClockCard extends StatelessWidget {
@@ -35,8 +35,8 @@ class CityClockCard extends StatelessWidget {
 
     final isDay = TimezoneEngine.isDaytime(city.timezone, at: atUtc);
     final offset = TimezoneEngine.offsetLabel(city.timezone, at: atUtc);
-    final timeStr = DateFormat('HH:mm').format(now);
-    final dateStr = DateFormat('EEE, d MMM').format(now);
+    final timeStr = formatLocalTime(now);
+    final dateStr = formatLocalDate(now, languageCode);
     final name = city.localizedName(languageCode);
 
     return AnimatedContainer(
