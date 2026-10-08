@@ -43,13 +43,13 @@ Therefore the initial analyzer descriptions are recorded as conservative automat
 
 ## Browser observations
 
-The capture tool now records console observations for every desktop/mobile target, including the additional dark-section capture, and fails the capture when any console entry has type `error`. The final report contains zero error entries for Splash, full, section, compact, dark-section desktop, and dark-section mobile.
+The capture tool now records console observations for every desktop/mobile target, including the additional dark-section capture, and fails the capture when any console entry has type `error`. It stages the complete evidence set and JSON report in a temporary directory, publishing only after every target has passed; exceptions discard the staging directory and preserve the prior published evidence. The final report contains zero error entries for Splash, full, section, compact, dark-section desktop, and dark-section mobile.
 
 The recorded non-error entries are only Playwright's script-injection debug message and Chromium WebGL `GL_CLOSE_PATH_NV` / `ReadPixels` performance warnings while taking screenshots. Those warnings arise in the headless capture environment and do not identify an application exception.
 
 ## Independent review remediation
 
-A fresh-context review identified two Important evidence gaps: compact QA covered only the dark surface, and the capture code did not enforce zero browser errors or record dark-section console events. The remediation adds light-and-dark compact QA surfaces and smoke coverage, enforces `error`-level console failure across every captured surface, and writes dark-section console observations into the JSON report. It also removes the compact cyan node so compact rendering is precisely the official red bird plus one cyan ellipse.
+A fresh-context review identified two Important evidence gaps: compact QA covered only the dark surface, and the capture code did not enforce zero browser errors or record dark-section console events. The remediation adds light-and-dark compact QA surfaces and smoke coverage, enforces `error`-level console failure across every captured surface, and writes dark-section console observations into the JSON report. It also removes the compact cyan node so compact rendering is precisely the official red bird plus one cyan ellipse. A follow-up review found failure-path cleanup risk; the capture set is now staged and published only as a fully validated set, with a focused injected-failure test proving staging cleanup and preservation of earlier evidence.
 
 ## Automated verification
 
@@ -60,8 +60,9 @@ All commands below were run after the Phase 2 implementation and evidence captur
 | `dart format --set-exit-if-changed lib test` | PASS — 179 files already formatted. |
 | `flutter analyze` | PASS — “No issues found!” |
 | `flutter test` | PASS — **225 tests**. |
-| Production `flutter build web --no-web-resources-cdn ...` | PASS — 88.0 s. |
-| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 84.1 s. |
+| `python3 tools/test_capture_phase2_loading_motion.py` | PASS — injected console-error failure leaves no partial published/staging artifacts and preserves previous evidence. |
+| Production `flutter build web --no-web-resources-cdn ...` | PASS — 84.3 s. |
+| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 76.0 s. |
 | `flutter build apk --debug ...` | PASS — debug APK produced at `build/app/outputs/flutter-apk/app-debug.apk` (185 MB). |
 | Capture script `python3 tools/capture_phase2_loading_motion.py` | PASS — 4 recordings, 10 screenshots, JSON diagnostics. |
 

@@ -14,9 +14,11 @@ import json
 import os
 import shutil
 import subprocess
+import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Awaitable, Callable
 
 from playwright.async_api import ConsoleMessage, Page, async_playwright
 
@@ -128,11 +130,15 @@ def raise_for_console_errors(label: str, messages: list[dict[str, str]]) -> None
         raise RuntimeError(f"Browser console error(s) for {label}:\n{joined}")
 
 
-async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]:
+async def capture_target(
+    playwright,
+    target: CaptureTarget,
+    output_dir: Path,
+) -> dict[str, object]:
     console: list[dict[str, str]] = []
-    recording_dir = OUT / f"phase2_{target.slug}_recording_tmp"
-    raw_video = OUT / f"phase2_{target.slug}_orbit.webm"
-    final_video = OUT / f"phase2_{target.slug}_orbit.mp4"
+    recording_dir = output_dir / f"phase2_{target.slug}_recording_tmp"
+    raw_video = output_dir / f"phase2_{target.slug}_orbit.webm"
+    final_video = output_dir / f"phase2_{target.slug}_orbit.mp4"
 
     shutil.rmtree(recording_dir, ignore_errors=True)
     recording_dir.mkdir(parents=True, exist_ok=True)
@@ -155,7 +161,9 @@ async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]
         attach_console_capture(desktop, console)
         await desktop.goto(url_for(target.screen), wait_until="networkidle", timeout=60000)
         await desktop.wait_for_timeout(SETTLE_MS)
-        await desktop.screenshot(path=str(OUT / f"phase2_{target.slug}_desktop.png"))
+        await desktop.screenshot(
+            path=str(output_dir / f"phase2_{target.slug}_desktop.png")
+        )
 
         video = desktop.video
         assert video is not None
@@ -174,7 +182,9 @@ async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]
         attach_console_capture(mobile, console)
         await mobile.goto(url_for(target.screen), wait_until="networkidle", timeout=60000)
         await mobile.wait_for_timeout(SETTLE_MS)
-        await mobile.screenshot(path=str(OUT / f"phase2_{target.slug}_mobile.png"))
+        await mobile.screenshot(
+            path=str(output_dir / f"phase2_{target.slug}_mobile.png")
+        )
         await mobile_context.close()
     finally:
         await browser.close()
@@ -202,7 +212,10 @@ async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]
     }
 
 
-async def capture_section_dark_contrast(playwright) -> dict[str, list[dict[str, str]]]:
+async def capture_section_dark_contrast(
+    playwright,
+    output_dir: Path,
+) -> dict[str, list[dict[str, str]]]:
     browser = await playwright.chromium.launch(
         executable_path="/usr/bin/chromium",
         headless=True,
@@ -221,7 +234,7 @@ async def capture_section_dark_contrast(playwright) -> dict[str, list[dict[str, 
             )
             await page.wait_for_timeout(SETTLE_MS)
             await page.screenshot(
-                path=str(OUT / f"phase2_section_loading_dark_{suffix}.png")
+                path=str(output_dir / f"phase2_section_loading_dark_{suffix}.png")
             )
             await page.close()
             raise_for_console_errors(f"section-loading-dark-{suffix}", console)
@@ -231,26 +244,57 @@ async def capture_section_dark_contrast(playwright) -> dict[str, list[dict[str, 
     return reports
 
 
-async def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    reports: dict[str, object] = {}
-    async with async_playwright() as playwright:
-        for target in TARGETS:
-            reports[target.slug] = await capture_target(playwright, target)
-        dark_section_reports = await capture_section_dark_contrast(playwright)
+CaptureToStaging = Callable[[Path], Awaitable[dict[str, object]]]
 
-    (OUT / "phase2_loading_capture_report.json").write_text(
-        json.dumps(
-            {
-                "source": "Flutter visual-QA entrypoint with actual shared loading widgets",
-                "baseUrl": BASE_URL,
-                "targets": reports,
-                "darkSectionContrast": dark_section_reports,
-            },
-            indent=2,
+
+async def capture_and_publish(
+    *,
+    output_dir: Path,
+    capture_to_staging: CaptureToStaging,
+) -> None:
+    """Publishes a complete evidence set only after every capture succeeds."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(
+        prefix=".phase2_loading_capture_",
+        dir=output_dir,
+    ) as temporary:
+        staging = Path(temporary)
+        report = await capture_to_staging(staging)
+        (staging / "phase2_loading_capture_report.json").write_text(
+            json.dumps(report, indent=2) + "\n",
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
+        artifacts = sorted(path for path in staging.iterdir() if path.is_file())
+        if not artifacts:
+            raise RuntimeError("Phase 2 capture produced no publishable evidence")
+        for artifact in artifacts:
+            os.replace(artifact, output_dir / artifact.name)
+
+
+async def main() -> None:
+    async def capture_to_staging(staging: Path) -> dict[str, object]:
+        reports: dict[str, object] = {}
+        async with async_playwright() as playwright:
+            for target in TARGETS:
+                reports[target.slug] = await capture_target(
+                    playwright,
+                    target,
+                    staging,
+                )
+            dark_section_reports = await capture_section_dark_contrast(
+                playwright,
+                staging,
+            )
+        return {
+            "source": "Flutter visual-QA entrypoint with actual shared loading widgets",
+            "baseUrl": BASE_URL,
+            "targets": reports,
+            "darkSectionContrast": dark_section_reports,
+        }
+
+    await capture_and_publish(
+        output_dir=OUT,
+        capture_to_staging=capture_to_staging,
     )
 
 
