@@ -21,6 +21,7 @@ import '../../../applications/presentation/providers/application_controller.dart
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../documents/domain/entities/document.dart';
 import '../../../documents/presentation/providers/document_controller.dart';
+import '../../../global_time/presentation/widgets/home_global_time_widget.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -191,8 +192,15 @@ class DashboardPage extends ConsumerWidget {
                       label: l10n.aiAssistant,
                       onTap: () => context.go('/ai-assistant'),
                     ),
+                    _ActionChip(
+                      icon: Icons.schedule_outlined,
+                      label: locale == 'fa' ? 'ساعت جهانی' : 'World Time',
+                      onTap: () => context.go('/world-clock'),
+                    ),
                   ],
                 ),
+                const SizedBox(height: 28),
+                const HomeGlobalTimeWidget(),
                 const SizedBox(height: 28),
                 SectionHeader(
                   title: l10n.radUpdates,

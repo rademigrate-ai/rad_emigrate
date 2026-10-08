@@ -6,8 +6,8 @@ enum RadBrandSize { small, medium, large }
 
 /// The owner-supplied RAD emblem, with its original square proportions.
 ///
-/// All surfaces use the same unmodified artwork. A white backing provides
-/// consistent contrast on dark surfaces without recoloring the logo.
+/// By default a white backing provides contrast. Set [darkSurface] to true
+/// on premium dark screens (e.g. Global Time) to render without the white box.
 class RadBrand extends StatelessWidget {
   const RadBrand({
     super.key,
@@ -31,24 +31,28 @@ class RadBrand extends StatelessWidget {
     const asset = 'assets/branding/rad_official_logo.png';
     final label = AppLocalizations.of(context).appTitle;
 
+    final image = Image.asset(
+      asset,
+      height: _height,
+      width: _height,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.medium,
+      excludeFromSemantics: true,
+    );
+
     return Semantics(
       label: label,
       image: true,
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Image.asset(
-          asset,
-          height: _height,
-          width: _height,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.medium,
-          excludeFromSemantics: true,
-        ),
-      ),
+      child: darkSurface
+          ? image
+          : Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: image,
+            ),
     );
   }
 }
