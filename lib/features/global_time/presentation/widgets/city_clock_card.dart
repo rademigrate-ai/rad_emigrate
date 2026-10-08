@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/city.dart';
@@ -26,21 +27,19 @@ class CityClockCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = atUtc != null
-        ? TimezoneEngine.locationOf(city.timezone).let((loc) {
-            // Use TZDateTime.from for scrubbed instant.
-            return importTz(atUtc!, city.timezone);
-          })
+        ? tz.TZDateTime.from(
+            atUtc!.toUtc(),
+            TimezoneEngine.locationOf(city.timezone),
+          )
         : TimezoneEngine.nowInCity(city);
 
     final isDay = TimezoneEngine.isDaytime(city.timezone, at: atUtc);
     final offset = TimezoneEngine.offsetLabel(city.timezone, at: atUtc);
     final timeStr = DateFormat('HH:mm').format(now);
-    final dateStr = languageCode == 'fa'
-        ? _faDate(now)
-        : DateFormat('EEE, d MMM').format(now);
+    final dateStr = DateFormat('EEE, d MMM').format(now);
     final name = city.localizedName(languageCode);
 
-    final card = AnimatedContainer(
+    return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
@@ -49,14 +48,8 @@ class CityClockCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isDay
-              ? [
-                  const Color(0xFF1E3A5F),
-                  const Color(0xFF0F1C2E),
-                ]
-              : [
-                  const Color(0xFF0A0F18),
-                  const Color(0xFF121A28),
-                ],
+              ? const [Color(0xFF1E3A5F), Color(0xFF0F1C2E)]
+              : const [Color(0xFF0A0F18), Color(0xFF121A28)],
         ),
         border: Border.all(
           color: AppColors.primaryRed.withValues(alpha: 0.25),
@@ -83,7 +76,10 @@ class CityClockCard extends StatelessWidget {
                 Row(
                   children: [
                     if (city.flagEmoji != null) ...[
-                      Text(city.flagEmoji!, style: const TextStyle(fontSize: 18)),
+                      Text(
+                        city.flagEmoji!,
+                        style: const TextStyle(fontSize: 18),
+                      ),
                       const SizedBox(width: 8),
                     ],
                     Expanded(
@@ -152,23 +148,5 @@ class CityClockCard extends StatelessWidget {
         ),
       ),
     );
-
-    return card;
   }
-
-  String _faDate(DateTime dt) {
-    // Simple Gregorian display; full Jalali can be added later if needed.
-    return DateFormat('EEE, d MMM', 'en').format(dt);
-  }
-}
-
-extension _LocX on dynamic {
-  T let<T>(T Function(dynamic) f) => f(this);
-}
-
-import 'package:timezone/timezone.dart' as tz;
-
-tz.TZDateTime importTz(DateTime utc, String iana) {
-  final loc = TimezoneEngine.locationOf(iana);
-  return tz.TZDateTime.from(utc.toUtc(), loc);
 }
