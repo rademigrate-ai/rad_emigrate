@@ -222,7 +222,7 @@ void main() {
     await _pump(tester, ai, sessions, admin: true);
     await _send(tester, 'Research question');
     expect(
-      find.text('Your AI request could not be completed. Please try again.'),
+      find.text('The AI request could not be completed. Please try again.'),
       findsOneWidget,
     );
     expect(find.text('Retry'), findsOneWidget);
