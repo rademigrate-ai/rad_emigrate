@@ -130,6 +130,7 @@ void main() {
     expect(tester.hasRunningAnimations, isFalse);
     expect(tester.takeException(), isNull);
   });
+
   for (final variant in [
     RadEarthBirdVariant.loginHero,
     RadEarthBirdVariant.splash,
@@ -166,6 +167,4 @@ void main() {
       expect(find.bySemanticsLabel('RAD flight'), findsOneWidget);
     });
   }
-
-
 }
