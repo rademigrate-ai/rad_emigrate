@@ -51,9 +51,7 @@ class CityClockCard extends StatelessWidget {
               ? const [Color(0xFF1E3A5F), Color(0xFF0F1C2E)]
               : const [Color(0xFF0A0F18), Color(0xFF121A28)],
         ),
-        border: Border.all(
-          color: AppColors.primaryRed.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.primaryRed.withValues(alpha: 0.25)),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryRed.withValues(alpha: 0.08),
@@ -85,7 +83,8 @@ class CityClockCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                             ),
@@ -94,7 +93,9 @@ class CityClockCard extends StatelessWidget {
                       ),
                     ),
                     Icon(
-                      isDay ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
+                      isDay
+                          ? Icons.wb_sunny_rounded
+                          : Icons.nights_stay_rounded,
                       size: 18,
                       color: isDay
                           ? const Color(0xFFFFC857)
@@ -121,26 +122,25 @@ class CityClockCard extends StatelessWidget {
                 Text(
                   timeStr,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                        letterSpacing: -0.5,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                    letterSpacing: -0.5,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   dateStr,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white70,
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: Colors.white70),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   offset,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.primaryRed.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: AppColors.primaryRed.withValues(alpha: 0.9),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
