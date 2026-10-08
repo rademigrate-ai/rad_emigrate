@@ -105,7 +105,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
-    final wide = MediaQuery.sizeOf(context).width >= 860;
+    final viewport = MediaQuery.sizeOf(context);
+    final wide = viewport.width >= 860;
+    // Keep the dimensional Earth prominent without overflowing short laptops.
+    final heroSize = wide
+        ? (viewport.height * 0.43).clamp(240.0, 400.0)
+        : 174.0;
     return AuthCinematicFrame(
       eyebrow: 'RAD • IMMIGRATION JOURNEY',
       title: l10n.brandIntroTitle,
@@ -113,7 +118,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       heroVisual: RadEarthBirdScene(
         variant: RadEarthBirdVariant.loginHero,
         semanticLabel: l10n.appTitle,
-        size: wide ? 330 : 132,
+        size: heroSize,
       ),
       localeControl: TextButton.icon(
         icon: const Icon(Icons.language_outlined, size: 18),
