@@ -396,8 +396,7 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get askAssistant => 'Ask the assistant';
 
   @override
-  String get askAssistantSubtitle =>
-      'Visas, documents, and process guidance';
+  String get askAssistantSubtitle => 'Visas, documents, and process guidance';
 
   @override
   String get nextStepReady => 'Your next step is ready';
