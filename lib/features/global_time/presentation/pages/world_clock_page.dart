@@ -61,11 +61,11 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
 
     final message = result.status == GeoResolveStatus.unresolved
         ? (lang == 'fa'
-            ? 'منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).'
-            : 'No timezone for this point (ocean or outside land zones).')
+              ? 'منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).'
+              : 'No timezone for this point (ocean or outside land zones).')
         : (lang == 'fa'
-            ? 'داده‌های مرز زمانی در دسترس نیست.'
-            : 'Timezone boundary data unavailable.');
+              ? 'داده‌های مرز زمانی در دسترس نیست.'
+              : 'Timezone boundary data unavailable.');
 
     final manual = await showModalBottomSheet<String>(
       context: context,
@@ -78,7 +78,10 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(message, style: const TextStyle(color: Colors.white70)),
+                child: Text(
+                  message,
+                  style: const TextStyle(color: Colors.white70),
+                ),
               ),
               Text(
                 lang == 'fa'
@@ -95,7 +98,10 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                   children: [
                     for (final id in GeoTimezoneResolver.commonIanaIds)
                       ListTile(
-                        title: Text(id, style: const TextStyle(color: Colors.white)),
+                        title: Text(
+                          id,
+                          style: const TextStyle(color: Colors.white),
+                        ),
                         onTap: () => Navigator.pop(ctx, id),
                       ),
                   ],
@@ -108,11 +114,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
     );
 
     if (manual != null && mounted) {
-      ctrl.applyManualTimezone(
-        latitude: lat,
-        longitude: lng,
-        ianaId: manual,
-      );
+      ctrl.applyManualTimezone(latitude: lat, longitude: lng, ianaId: manual);
       final city = ref.read(globalTimeControllerProvider).selectedCity;
       if (city != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -162,8 +164,10 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                 ? 'جستجوی شهر، کشور یا منطقه زمانی…'
                                 : 'Search city, country, or timezone…',
                             hintStyle: const TextStyle(color: Colors.white38),
-                            prefixIcon:
-                                const Icon(Icons.search, color: Colors.white54),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              color: Colors.white54,
+                            ),
                             filled: true,
                             fillColor: const Color(0xFF141C28),
                             border: OutlineInputBorder(
@@ -176,7 +180,9 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                         ),
                         if (state.searchResults.isNotEmpty) ...[
                           const SizedBox(height: 8),
-                          ...state.searchResults.take(6).map(
+                          ...state.searchResults
+                              .take(6)
+                              .map(
                                 (c) => ListTile(
                                   dense: true,
                                   tileColor: const Color(0xFF141C28),
@@ -266,8 +272,9 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                             color: const Color(0xFF141C28),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color:
-                                  AppColors.primaryRed.withValues(alpha: 0.2),
+                              color: AppColors.primaryRed.withValues(
+                                alpha: 0.2,
+                              ),
                             ),
                           ),
                           child: Column(
@@ -277,9 +284,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                 lang == 'fa'
                                     ? 'خط زمانی ۲۴ ساعته'
                                     : '24-Hour Timeline',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
@@ -306,7 +311,8 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                 child: TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      _scrubHour = DateTime.now().hour +
+                                      _scrubHour =
+                                          DateTime.now().hour +
                                           DateTime.now().minute / 60.0;
                                     });
                                     ctrl.setScrubUtc(null);
@@ -357,28 +363,24 @@ class _HeroHeader extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'RAD Global Time',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
+              style: Theme.of(context).textTheme.headlineMedium
+                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 6),
             Text(
               languageCode == 'fa'
                   ? 'زمان جهان، هماهنگ با مسیر شما'
                   : 'World time, aligned with your journey',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white70,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(color: Colors.white70),
             ),
             const SizedBox(height: 4),
             Text(
               languageCode == 'fa'
                   ? 'ساعت شهرهای مهم، مقایسه زمان و برنامه‌ریزی جلسات بین‌المللی'
                   : 'Key city clocks, timezone comparison, and international meeting planning',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white54,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Colors.white54),
             ),
           ],
         ),

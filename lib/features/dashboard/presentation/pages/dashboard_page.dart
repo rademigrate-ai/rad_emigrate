@@ -428,9 +428,8 @@ class _MetricTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     label,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFFBFD1D6),
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: const Color(0xFFBFD1D6)),
                   ),
                 ],
               ),

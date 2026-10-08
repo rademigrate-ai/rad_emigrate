@@ -67,9 +67,7 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
       decoration: BoxDecoration(
         color: const Color(0xFF141C28),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.primaryRed.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppColors.primaryRed.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -79,11 +77,13 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
               const Icon(Icons.event_available, color: AppColors.primaryRed),
               const SizedBox(width: 8),
               Text(
-                lang == 'fa' ? 'برنامه‌ریزی تماس بین‌المللی' : 'International Meeting Planner',
+                lang == 'fa'
+                    ? 'برنامه‌ریزی تماس بین‌المللی'
+                    : 'International Meeting Planner',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),
@@ -92,9 +92,8 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
             lang == 'fa'
                 ? 'پنجره‌های پیشنهادی همپوشانی ساعات کاری (نه تأیید دسترسی)'
                 : 'Suggested overlapping working-hour windows (not confirmed availability)',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white60,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Colors.white60),
           ),
           const SizedBox(height: 16),
           Row(
@@ -132,7 +131,9 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
                     final picked = await showDatePicker(
                       context: context,
                       initialDate: _date,
-                      firstDate: DateTime.now().subtract(const Duration(days: 1)),
+                      firstDate: DateTime.now().subtract(
+                        const Duration(days: 1),
+                      ),
                       lastDate: DateTime.now().add(const Duration(days: 365)),
                     );
                     if (picked != null) setState(() => _date = picked);
@@ -166,9 +167,8 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
             const SizedBox(height: 16),
             Text(
               lang == 'fa' ? 'پنجره‌های پیشنهادی' : 'Suggested windows',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Colors.white,
-                  ),
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(color: Colors.white),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -251,9 +251,7 @@ class _WindowChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: good
-            ? AppColors.success.withValues(alpha: 0.2)
-            : Colors.white10,
+        color: good ? AppColors.success.withValues(alpha: 0.2) : Colors.white10,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: good
@@ -264,8 +262,17 @@ class _WindowChip extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(origin, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-          Text(dest, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(
+            origin,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            dest,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
+          ),
           Text(
             good
                 ? (languageCode == 'fa' ? 'مناسب' : 'Suitable')
