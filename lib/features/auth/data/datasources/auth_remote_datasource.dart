@@ -234,7 +234,7 @@ class AuthRemoteDataSource {
       if (kIsWeb) {
         final origin = Uri.base.origin;
         if (origin.isNotEmpty && origin != 'null') {
-          redirectTo = '$origin/reset-password';
+          // Flutter Web uses hash-based GoRouter URLs. A path redirect\n          // would land outside the app route after Supabase recovery.\n          redirectTo = '$origin/#/reset-password';
         }
       }
       await _service.client.auth.resetPasswordForEmail(
