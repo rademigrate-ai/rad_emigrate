@@ -2,13 +2,18 @@ import '../network/api_exception.dart';
 
 /// Builds the exact Flutter Web route used after a Supabase recovery callback.
 ///
-/// Supabase adds PKCE parameters before the URL fragment, preserving the
-/// hash-based GoRouter route in the returned browser URL.
+/// Uses a path-based route to match [usePathUrlStrategy]. Supabase still
+/// appends the recovery session fragment/query parameters; with
+/// `detectSessionInUri: true` the client establishes the recovery session
+/// before GoRouter settles on `/reset-password`.
+///
+/// `/reset-password` remains a public route in [authRedirect] so an active
+/// recovery session is never bounced to the dashboard.
 String? passwordRecoveryRedirectTo(Uri currentUri) {
   if (!currentUri.hasScheme || currentUri.host.isEmpty) return null;
   final origin = currentUri.origin;
   if (origin.isEmpty || origin == 'null') return null;
-  return '$origin/#/reset-password';
+  return '$origin/reset-password';
 }
 
 /// Identifies the safe, retryable error returned when Auth mail is throttled.
