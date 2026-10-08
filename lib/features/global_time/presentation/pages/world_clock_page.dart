@@ -59,7 +59,6 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
       return;
     }
 
-    // Unresolved or unavailable — never invent a timezone.
     final message = result.status == GeoResolveStatus.unresolved
         ? (lang == 'fa'
             ? 'منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).'
@@ -79,10 +78,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  message,
-                  style: const TextStyle(color: Colors.white70),
-                ),
+                child: Text(message, style: const TextStyle(color: Colors.white70)),
               ),
               Text(
                 lang == 'fa'
@@ -99,8 +95,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                   children: [
                     for (final id in GeoTimezoneResolver.commonIanaIds)
                       ListTile(
-                        title: Text(id,
-                            style: const TextStyle(color: Colors.white)),
+                        title: Text(id, style: const TextStyle(color: Colors.white)),
                         onTap: () => Navigator.pop(ctx, id),
                       ),
                   ],
@@ -150,7 +145,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
           : CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _HeroHeader(languageCode: lang)),
-                asySliverPadding(
+                SliverPadding(
                   padding: EdgeInsets.symmetric(
                     horizontal: wide ? 28 : 16,
                     vertical: 12,
@@ -167,8 +162,8 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                 ? 'جستجوی شهر، کشور یا منطقه زمانی…'
                                 : 'Search city, country, or timezone…',
                             hintStyle: const TextStyle(color: Colors.white38),
-                            prefixIcon: const Icon(Icons.search,
-                                color: Colors.white54),
+                            prefixIcon:
+                                const Icon(Icons.search, color: Colors.white54),
                             filled: true,
                             fillColor: const Color(0xFF141C28),
                             border: OutlineInputBorder(
@@ -192,11 +187,15 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                   subtitle: Text(
                                     c.timezone,
                                     style: const TextStyle(
-                                        color: Colors.white54, fontSize: 12),
+                                      color: Colors.white54,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                   trailing: IconButton(
-                                    icon: const Icon(Icons.add_circle_outline,
-                                        color: AppColors.primaryRed),
+                                    icon: const Icon(
+                                      Icons.add_circle_outline,
+                                      color: AppColors.primaryRed,
+                                    ),
                                     onPressed: () => ctrl.addFavorite(c),
                                   ),
                                   onTap: () => ctrl.selectCity(c),
@@ -312,9 +311,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                     });
                                     ctrl.setScrubUtc(null);
                                   },
-                                  child: Text(
-                                    lang == 'fa' ? 'اکنون' : 'Now',
-                                  ),
+                                  child: Text(lang == 'fa' ? 'اکنون' : 'Now'),
                                 ),
                               ),
                             ],
@@ -329,20 +326,6 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
             ),
     );
   }
-}
-
-// typo guard — use SliverPadding
-class asySliverPadding extends StatelessWidget {
-  const asySliverPadding({super.key, required this.padding, required this.sliver});
-  final EdgeInsetsGeometry padding;
-  final Widget sliver;
-  @override
-  Widget build(BuildContext context) =>
-      MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: SliverPadding(padding: padding, sliver: sliver),
-      );
 }
 
 class _HeroHeader extends StatelessWidget {
@@ -414,11 +397,11 @@ class _CityGrid extends StatelessWidget {
     this.columns = 2,
   });
 
-  final List cities;
+  final List<City> cities;
   final String languageCode;
   final DateTime? atUtc;
   final void Function(String id)? onRemove;
-  final void Function(dynamic city)? onTap;
+  final void Function(City city)? onTap;
   final int columns;
 
   @override
@@ -426,10 +409,15 @@ class _CityGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: moreGridDelegate(columns),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: columns,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1.35,
+      ),
       itemCount: cities.length,
       itemBuilder: (context, i) {
-        final city = cities[i] as City;
+        final city = cities[i];
         return CityClockCard(
           city: city,
           languageCode: languageCode,
@@ -440,12 +428,4 @@ class _CityGrid extends StatelessWidget {
       },
     );
   }
-
-  SliverGridDelegate moreGridDelegate(int columns) =>
-      SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.35,
-      );
 }
