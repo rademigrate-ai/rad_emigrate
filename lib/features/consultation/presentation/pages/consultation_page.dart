@@ -106,7 +106,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
         body: Center(
           child: TextButton(
             onPressed: () => context.go('/login'),
-            child: Text(l10n.login),
+            child: Text(l10n.signIn),
           ),
         ),
       );
