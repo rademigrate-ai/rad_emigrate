@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // Supabase's HTTP transport is exercised with its own transitive test client.
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
@@ -51,6 +52,7 @@ http.Response _json(Object body, int status) => http.Response(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
   test('AI payload includes history and current prompt once, retaining admin scope', () async {
     Map<String, dynamic>? sent;
     final backend = _backend((request) async {
