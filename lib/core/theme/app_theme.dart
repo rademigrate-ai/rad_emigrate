@@ -50,14 +50,14 @@ abstract final class AppTheme {
   }
 
   static ThemeData dark() {
-    const darkBg = Color(0xFF0F1419);
-    const darkSurface = Color(0xFF1A222D);
-    const darkSurfaceMuted = Color(0xFF243041);
-    const darkTextPrimary = Color(0xFFF0F3F7);
-    const darkTextSecondary = Color(0xFFA8B3C1);
-    const darkTextTertiary = Color(0xFF7A8694);
-    const darkBorder = Color(0xFF2E3A4A);
-    const darkBorderSubtle = Color(0xFF243041);
+    const darkBg = Color(0xFF071620);
+    const darkSurface = Color(0xFF0D2130);
+    const darkSurfaceMuted = Color(0xFF132C3D);
+    const darkTextPrimary = Color(0xFFF0F7FA);
+    const darkTextSecondary = Color(0xFFAABDC8);
+    const darkTextTertiary = Color(0xFF78909F);
+    const darkBorder = Color(0xFF244558);
+    const darkBorderSubtle = Color(0xFF173344);
 
     final base = ThemeData(
       useMaterial3: true,
@@ -68,8 +68,8 @@ abstract final class AppTheme {
     final colorScheme = const ColorScheme.dark(
       primary: AppColors.primaryRed,
       onPrimary: AppColors.white,
-      secondary: Color(0xFF5B8DEF),
-      onSecondary: AppColors.white,
+      secondary: Color(0xFF3ACBC5),
+      onSecondary: Color(0xFF071620),
       surface: darkSurface,
       onSurface: darkTextPrimary,
       error: Color(0xFFE85A64),
@@ -86,14 +86,14 @@ abstract final class AppTheme {
       cardColor: darkSurface,
       inputFill: darkSurfaceMuted,
       borderColor: darkBorder,
-      focusedBorder: AppColors.primaryRed,
+      focusedBorder: const Color(0xFF4BD6CF),
       labelColor: darkTextSecondary,
       hintColor: darkTextTertiary,
       navBarBackground: darkSurface,
-      navIndicator: AppColors.primaryRed.withValues(alpha: 0.18),
-      navSelected: AppColors.primaryRed,
+      navIndicator: const Color(0xFF3ACBC5).withValues(alpha: 0.18),
+      navSelected: const Color(0xFF72E3DC),
       navUnselected: darkTextSecondary,
-      railBackground: const Color(0xFF121820),
+      railBackground: const Color(0xFF091B29),
       dividerColor: darkBorderSubtle,
       textPrimary: darkTextPrimary,
       textSecondary: darkTextSecondary,

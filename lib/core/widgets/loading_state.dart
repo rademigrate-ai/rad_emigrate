@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import 'motion_primitives.dart';
 
 class LoadingState extends StatelessWidget {
   const LoadingState({super.key, this.message});
@@ -15,22 +16,41 @@ class LoadingState extends StatelessWidget {
         label: label,
         liveRegion: true,
         excludeSemantics: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: Theme.of(context).colorScheme.primary,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 320),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AppSkeleton(height: 16, width: 148),
+              const SizedBox(height: 12),
+              const AppSkeleton(height: 12),
+              const SizedBox(height: 8),
+              const AppSkeleton(height: 12, width: 236),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.25,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  if (message != null) ...[
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        message!,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-            ),
-            if (message != null) ...[
-              const SizedBox(height: 16),
-              Text(message!, style: Theme.of(context).textTheme.bodyMedium),
             ],
-          ],
+          ),
         ),
       ),
     );

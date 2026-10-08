@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/rad_brand.dart';
 import '../../../../core/routing/auth_redirect.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/rad_brand.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -25,6 +27,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   Future<void> _bootstrap() async {
+    // Visual animation is strictly decorative: routing begins immediately and
+    // never waits for a minimum display time.
     try {
       await ref.read(appBootstrapProvider.future);
     } catch (_) {
@@ -43,22 +47,45 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.navy,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const RadBrand(size: RadBrandSize.large, darkSurface: true),
-            const SizedBox(height: 40),
-            const SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: AppColors.primaryRed,
-              ),
+      backgroundColor: AppColors.midnight,
+      body: AmbientBackdrop(
+        primary: AppColors.teal,
+        secondary: AppColors.primaryRed,
+        child: Center(
+          child: MotionReveal(
+            duration: AppMotion.emphasized,
+            offset: const Offset(0, 0.05),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const RadBrand(size: RadBrandSize.large, darkSurface: true),
+                const SizedBox(height: 32),
+                Container(
+                  width: 96,
+                  height: 2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(99),
+                    gradient: const LinearGradient(
+                      colors: [AppColors.teal, AppColors.primaryRed],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Semantics(
+                  label: 'Loading',
+                  liveRegion: true,
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.25,
+                      color: AppColors.cyan,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
