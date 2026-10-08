@@ -60,6 +60,7 @@
   "english": "English",
   "persian": "Persian",
   "loading": "Loading…",
+  "splashLoadingStatus": "Preparing your secure RAD workspace",
   "retry": "Retry",
   "errorGeneric": "Something went wrong. Please try again.",
   "errorNetwork": "Network error. Check your connection and try again.",

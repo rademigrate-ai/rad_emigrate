@@ -39,13 +39,15 @@ The loader starts only while a real page/provider/operation pending branch rende
 
 The component checks both `MediaQuery.disableAnimations` and `TickerMode.valuesOf(context).enabled`. If a user requests reduced motion or the loader is not in an active ticker subtree, the controller stops and a static branded composition remains visible. Its single `Semantics` container is a live region using the localized or operation-specific loading label; decorative painted layers and the bird asset are excluded from the accessibility tree.
 
+`LoadingState` deliberately separates `message` (visible contextual copy) from `semanticsLabel` (the live loading announcement). Its default announcement is the localized `loading` string, so marketing or explanatory visual copy cannot become an unclear or untranslated screen-reader status. The splash uses localized `splashLoadingStatus` display copy in both English and Persian while retaining the standard localized loading announcement.
+
 ## Performance constraints
 
 The full and section variants use vector painting for the Earth, trails, atmosphere, and cloud/continent shapes. The only image is the small transparent RAD bird PNG. The compact variant does not paint an Earth. No package, network call, video, 3D runtime, or shader asset has been added.
 
 ## Verification record
 
-- `test/core/rad_loading_test.dart` covers all visual tiers, live labels, reduced motion, inactive/static behavior, and shared `LoadingState` constructor selection.
+- `test/core/rad_loading_test.dart` covers all visual tiers, one live label, reduced motion, active-to-inactive updates, disabled `TickerMode`, disposal after removal, and the separation of `LoadingState` display copy from its announcement.
 - `test/visual_qa_smoke_test.dart` verifies that the isolated visual QA entrypoint renders all three loading tiers.
 - Visual evidence: `docs/visual_qa/loading_motion_desktop.png`, `docs/visual_qa/loading_motion_mobile.png`, and `docs/visual_qa/loading_motion.gif`.
 - The Flutter animation lifecycle pattern is based on the official [Flutter animation tutorial](https://docs.flutter.dev/ui/animations/tutorial), and current ticker-state usage follows [`TickerMode.valuesOf`](https://api.flutter.dev/flutter/widgets/TickerMode/valuesOf.html).

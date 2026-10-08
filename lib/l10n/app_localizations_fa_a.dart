@@ -16,6 +16,8 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get loading => 'در حال بارگذاری…';
   @override
+  String get splashLoadingStatus => 'در حال آماده‌سازی فضای امن راد';
+  @override
   String get retry => 'تلاش مجدد';
   @override
   String get errorGeneric => 'مشکلی پیش آمد. دوباره تلاش کنید.';

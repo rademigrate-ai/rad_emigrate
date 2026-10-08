@@ -51,8 +51,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         child: SafeArea(
           child: Stack(
             children: [
-              const LoadingState.fullScreen(
-                message: 'Immigration journey, made visible',
+              LoadingState.fullScreen(
+                message: l10n.splashLoadingStatus,
                 dark: true,
               ),
               Semantics(

@@ -9,25 +9,42 @@ import 'rad_loading.dart';
 /// Existing data providers own whether this widget exists. The constructors
 /// only select visual density, so pending/error control flow remains unchanged.
 class LoadingState extends StatelessWidget {
-  const LoadingState({super.key, this.message, this.dark = false})
-    : size = RadLoadingSize.section;
+  const LoadingState({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.section;
 
-  const LoadingState.fullScreen({super.key, this.message, this.dark = false})
-    : size = RadLoadingSize.fullScreen;
+  const LoadingState.fullScreen({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.fullScreen;
 
-  const LoadingState.section({super.key, this.message, this.dark = false})
-    : size = RadLoadingSize.section;
+  const LoadingState.section({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.section;
 
-  const LoadingState.compact({super.key, this.message, this.dark = false})
-    : size = RadLoadingSize.compact;
+  const LoadingState.compact({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.compact;
 
   final String? message;
+  final String? semanticsLabel;
   final bool dark;
   final RadLoadingSize size;
 
   @override
   Widget build(BuildContext context) {
-    final label = message ?? AppLocalizations.of(context).loading;
+    final label = semanticsLabel ?? AppLocalizations.of(context).loading;
     final child = _buildVisual(context, label);
     return Semantics(
       label: label,
