@@ -14,33 +14,53 @@ class LoadingState extends StatelessWidget {
     this.message,
     this.semanticsLabel,
     this.dark = false,
-  }) : size = RadLoadingSize.section;
+  }) : size = RadLoadingSize.section,
+       showSkeleton = true,
+       _isSplash = false;
 
   const LoadingState.fullScreen({
     super.key,
     this.message,
     this.semanticsLabel,
     this.dark = false,
-  }) : size = RadLoadingSize.fullScreen;
+  }) : size = RadLoadingSize.fullScreen,
+       showSkeleton = true,
+       _isSplash = false;
 
   const LoadingState.section({
     super.key,
     this.message,
     this.semanticsLabel,
     this.dark = false,
-  }) : size = RadLoadingSize.section;
+  }) : size = RadLoadingSize.section,
+       showSkeleton = true,
+       _isSplash = false;
 
   const LoadingState.compact({
     super.key,
     this.message,
     this.semanticsLabel,
     this.dark = false,
-  }) : size = RadLoadingSize.compact;
+  }) : size = RadLoadingSize.compact,
+       showSkeleton = true,
+       _isSplash = false;
+
+  /// App-bootstrap feedback with the approved prominent Splash scene.
+  const LoadingState.splash({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = true,
+  }) : size = RadLoadingSize.fullScreen,
+       showSkeleton = false,
+       _isSplash = true;
 
   final String? message;
   final String? semanticsLabel;
   final bool dark;
   final RadLoadingSize size;
+  final bool showSkeleton;
+  final bool _isSplash;
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +92,23 @@ class LoadingState extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RadLoadingIndicator(
-                size: size,
-                label: label,
-                message: message,
-                dark: dark,
-              ),
-              SizedBox(height: isFullScreen ? 30 : 22),
-              const _LoadingSkeletonPreview(),
+              if (_isSplash)
+                RadLoadingIndicator.splash(
+                  label: label,
+                  message: message,
+                  dark: dark,
+                )
+              else
+                RadLoadingIndicator(
+                  size: size,
+                  label: label,
+                  message: message,
+                  dark: dark,
+                ),
+              if (showSkeleton) ...[
+                SizedBox(height: isFullScreen ? 30 : 22),
+                const _LoadingSkeletonPreview(),
+              ],
             ],
           ),
         ),

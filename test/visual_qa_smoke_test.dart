@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
+import 'package:rad_emigrate/features/splash/presentation/pages/splash_page.dart';
 import 'package:rad_emigrate/visual_qa_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,4 +66,42 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('visual QA Splash route holds the real Splash page pending', (
+    tester,
+  ) async {
+    await _pump(tester, 'splash');
+
+    expect(find.byType(SplashPage), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.splash,
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final entry in {
+    'loading-full': RadEarthBirdVariant.fullScreenLoading,
+    'loading-section': RadEarthBirdVariant.sectionLoading,
+    'loading-compact': RadEarthBirdVariant.compactLoading,
+  }.entries) {
+    testWidgets('visual QA ${entry.key} route presents its approved scene', (
+      tester,
+    ) async {
+      await _pump(tester, entry.key);
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is RadEarthBirdScene && widget.variant == entry.value,
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

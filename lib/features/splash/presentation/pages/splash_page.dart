@@ -51,7 +51,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         child: SafeArea(
           child: Stack(
             children: [
-              LoadingState.fullScreen(
+              LoadingState.splash(
                 message: l10n.splashLoadingStatus,
                 dark: true,
               ),

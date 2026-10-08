@@ -20,19 +20,32 @@ class RadLoadingIndicator extends StatelessWidget {
     this.message,
     this.active = true,
     this.dark = false,
-  });
+  }) : _sceneVariantOverride = null;
+
+  /// Prominent app-bootstrap feedback using the approved Splash visual tier.
+  const RadLoadingIndicator.splash({
+    super.key,
+    required this.label,
+    this.message,
+    this.active = true,
+    this.dark = true,
+  }) : size = RadLoadingSize.fullScreen,
+       _sceneVariantOverride = RadEarthBirdVariant.splash;
 
   final RadLoadingSize size;
   final String label;
   final String? message;
   final bool active;
   final bool dark;
+  final RadEarthBirdVariant? _sceneVariantOverride;
 
-  RadEarthBirdVariant get _sceneVariant => switch (size) {
-    RadLoadingSize.fullScreen => RadEarthBirdVariant.fullScreenLoading,
-    RadLoadingSize.section => RadEarthBirdVariant.sectionLoading,
-    RadLoadingSize.compact => RadEarthBirdVariant.compactLoading,
-  };
+  RadEarthBirdVariant get _sceneVariant =>
+      _sceneVariantOverride ??
+      switch (size) {
+        RadLoadingSize.fullScreen => RadEarthBirdVariant.fullScreenLoading,
+        RadLoadingSize.section => RadEarthBirdVariant.sectionLoading,
+        RadLoadingSize.compact => RadEarthBirdVariant.compactLoading,
+      };
 
   @override
   Widget build(BuildContext context) {

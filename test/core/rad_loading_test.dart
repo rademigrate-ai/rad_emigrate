@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/loading_state.dart';
+import 'package:rad_emigrate/core/widgets/motion_primitives.dart';
 import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
 
@@ -329,4 +330,31 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets(
+    'Splash loading selects the premium splash scene without a skeleton',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: LoadingState.splash(
+              message: 'Preparing your RAD workspace',
+              semanticsLabel: 'Loading RAD workspace',
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is RadEarthBirdScene &&
+              widget.variant == RadEarthBirdVariant.splash,
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Preparing your RAD workspace'), findsOneWidget);
+      expect(find.byType(AppSkeleton), findsNothing);
+    },
+  );
 }
