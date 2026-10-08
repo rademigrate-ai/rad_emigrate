@@ -22,6 +22,7 @@ import '../../features/documents/presentation/pages/documents_page.dart';
 import '../../features/consultation/presentation/pages/consultation_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
+import '../../features/global_time/presentation/pages/world_clock_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/pages/visa_page.dart';
@@ -104,6 +105,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/ai-assistant',
             builder: (_, _) => const AiAssistantPage(),
+          ),
+          GoRoute(
+            path: '/world-clock',
+            builder: (_, _) => const WorldClockPage(),
           ),
           GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
           GoRoute(
