@@ -146,7 +146,7 @@ abstract final class GeoTimezoneResolver {
   }
 
   static List<String> get commonIanaIds {
-    return [
+    return <String>{
       for (final c in CityCatalog.all) c.timezone,
       'UTC',
       'Etc/UTC',
@@ -156,6 +156,6 @@ abstract final class GeoTimezoneResolver {
       'America/Denver',
       'Europe/Istanbul',
       'Asia/Shanghai',
-    ].toSet().toList()..sort();
+    }.toList()..sort();
   }
 }
