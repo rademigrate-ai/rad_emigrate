@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/rad_brand.dart';
 import '../../../../core/routing/auth_redirect.dart';
+import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -28,10 +30,9 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     try {
       await ref.read(appBootstrapProvider.future);
     } catch (_) {
-      // Bootstrap failures are reflected as an unauthenticated route.
+      // Routing still proceeds to the safe unauthenticated path.
     }
     if (!mounted) return;
-
     final session = ref.read(authControllerProvider).valueOrNull;
     if (session != null && session.isAuthenticated) {
       context.go(restoredProtectedDestination(widget.destination));
@@ -42,23 +43,25 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.navy,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const RadBrand(size: RadBrandSize.large, darkSurface: true),
-            const SizedBox(height: 40),
-            const SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: AppColors.primaryRed,
+      body: PremiumCanvas(
+        dark: true,
+        accent: AppColors.teal,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              LoadingState.fullScreen(
+                message: l10n.splashLoadingStatus,
+                dark: true,
               ),
-            ),
-          ],
+              Semantics(
+                label: l10n.appTitle,
+                image: true,
+                child: const SizedBox.shrink(),
+              ),
+            ],
+          ),
         ),
       ),
     );

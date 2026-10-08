@@ -102,6 +102,9 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get loading => 'Loading…';
 
   @override
+  String get splashLoadingStatus => 'Preparing your secure RAD workspace';
+
+  @override
   String get retry => 'Retry';
 
   @override

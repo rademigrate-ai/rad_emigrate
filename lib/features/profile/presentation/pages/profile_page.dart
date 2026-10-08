@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/theme_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -191,7 +193,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   l10n,
                 ),
               )
-            : const Center(child: CircularProgressIndicator()),
+            : LoadingState.section(message: l10n.loading),
         error: (e, _) => ErrorState(
           message: l10n.errorGeneric,
           onRetry: () => ref.read(profileControllerProvider.notifier).load(),
@@ -274,23 +276,31 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         ),
         const SizedBox(height: 20),
-        if (_editing) ...[
-          _buildEditForm(l10n),
-        ] else ...[
-          SectionCard(
-            title: l10n.profile,
-            subtitle: l10n.profileCompletionSubtitle,
-            icon: Icons.badge_outlined,
-            onTap: () => setState(() => _editing = true),
-            trailing: Icon(directionalChevron(context)),
-            child: Text(
-              profile == null
-                  ? l10n.profileCompletionSubtitle
-                  : '${l10n.fullName}: $displayName',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-        ],
+        AnimatedSwitcher(
+          duration: AppMotion.duration(context, AppMotion.modal),
+          switchInCurve: AppMotion.curve(context),
+          child: _editing
+              ? KeyedSubtree(
+                  key: const ValueKey('profile-edit'),
+                  child: _buildEditForm(l10n),
+                )
+              : KeyedSubtree(
+                  key: const ValueKey('profile-summary'),
+                  child: SectionCard(
+                    title: l10n.profile,
+                    subtitle: l10n.profileCompletionSubtitle,
+                    icon: Icons.badge_outlined,
+                    onTap: () => setState(() => _editing = true),
+                    trailing: Icon(directionalChevron(context)),
+                    child: Text(
+                      profile == null
+                          ? l10n.profileCompletionSubtitle
+                          : '${l10n.fullName}: $displayName',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ),
+        ),
         const SizedBox(height: 8),
         SectionCard(
           title: l10n.applications,

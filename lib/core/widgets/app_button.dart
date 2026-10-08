@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../theme/app_motion.dart';
 
 enum AppButtonVariant { primary, secondary, ghost }
 
-class AppButton extends StatelessWidget {
+class AppButton extends StatefulWidget {
   const AppButton({
     super.key,
     required this.label,
@@ -25,11 +26,22 @@ class AppButton extends StatelessWidget {
   final String? tooltip;
 
   @override
+  State<AppButton> createState() => _AppButtonState();
+}
+
+class _AppButtonState extends State<AppButton> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final enabled = !widget.loading && widget.onPressed != null;
+    final duration = AppMotion.duration(context, AppMotion.buttonFeedback);
     final child = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 180),
-      child: loading
+      duration: duration,
+      switchInCurve: AppMotion.curve(context),
+      switchOutCurve: AppMotion.exitCurve,
+      child: widget.loading
           ? const SizedBox(
               key: ValueKey('loading'),
               height: 20,
@@ -44,27 +56,29 @@ class AppButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 18),
+                if (widget.icon != null) ...[
+                  Icon(widget.icon, size: 18),
                   const SizedBox(width: 8),
                 ],
-                Text(label),
+                Text(widget.label),
               ],
             ),
     );
 
-    final button = switch (variant) {
+    final button = switch (widget.variant) {
       AppButtonVariant.primary => FilledButton(
-        onPressed: loading ? null : onPressed,
+        onPressed: widget.loading ? null : widget.onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primaryRed,
           disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.45),
           foregroundColor: AppColors.white,
+          animationDuration: duration,
         ),
         child: child,
       ),
       AppButtonVariant.secondary => OutlinedButton(
-        onPressed: loading ? null : onPressed,
+        onPressed: widget.loading ? null : widget.onPressed,
+        style: OutlinedButton.styleFrom(animationDuration: duration),
         child: DefaultTextStyle.merge(
           style: TextStyle(color: scheme.secondary),
           child: IconTheme(
@@ -74,14 +88,28 @@ class AppButton extends StatelessWidget {
         ),
       ),
       AppButtonVariant.ghost => TextButton(
-        onPressed: loading ? null : onPressed,
+        onPressed: widget.loading ? null : widget.onPressed,
+        style: TextButton.styleFrom(animationDuration: duration),
         child: child,
       ),
     };
 
-    final result = expanded
+    final result = widget.expanded
         ? SizedBox(width: double.infinity, child: button)
         : button;
-    return tooltip == null ? result : Tooltip(message: tooltip!, child: result);
+    final interactive = MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
+      onExit: enabled ? (_) => setState(() => _hovered = false) : null,
+      child: AnimatedScale(
+        duration: duration,
+        curve: AppMotion.curve(context, preferred: AppMotion.emphasizedCurve),
+        scale: _hovered ? 1.015 : 1,
+        child: result,
+      ),
+    );
+    return widget.tooltip == null
+        ? interactive
+        : Tooltip(message: widget.tooltip!, child: interactive);
   }
 }

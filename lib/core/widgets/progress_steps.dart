@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../theme/app_motion.dart';
 
 /// Application timeline step state (avoids clash with Material StepState).
 enum ProgressStepState { done, current, upcoming }
@@ -12,7 +13,8 @@ class ProgressStep {
   final ProgressStepState state;
 }
 
-/// Vertical application timeline (clear hierarchy).
+/// Vertical application timeline. State changes animate only when supplied by
+/// actual backend data; no visual state is synthesized by this widget.
 class ProgressSteps extends StatelessWidget {
   const ProgressSteps({super.key, required this.steps});
 
@@ -22,9 +24,8 @@ class ProgressSteps extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (var i = 0; i < steps.length; i++) ...[
+        for (var i = 0; i < steps.length; i++)
           _StepRow(step: steps[i], isLast: i == steps.length - 1),
-        ],
       ],
     );
   }
@@ -45,67 +46,93 @@ class _StepRow extends StatelessWidget {
     final color = done
         ? AppColors.success
         : current
-        ? AppColors.primaryRed
+        ? scheme.secondary
         : scheme.onSurfaceVariant;
+    final duration = AppMotion.duration(context, AppMotion.progress);
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 22,
-                height: 22,
-                decoration: BoxDecoration(
-                  color: done || current ? color : scheme.surface,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: color, width: 2),
-                ),
-                child: done
-                    ? const Icon(Icons.check, size: 14, color: Colors.white)
-                    : current
-                    ? Center(
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      )
-                    : null,
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    color: done
-                        ? AppColors.success.withValues(alpha: 0.4)
-                        : theme.dividerColor,
+    return Semantics(
+      label: step.label,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                AnimatedScale(
+                  duration: duration,
+                  curve: AppMotion.curve(
+                    context,
+                    preferred: AppMotion.emphasizedCurve,
+                  ),
+                  scale: current ? 1.1 : 1,
+                  child: AnimatedContainer(
+                    duration: duration,
+                    curve: AppMotion.curve(context),
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: done || current ? color : scheme.surface,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: color, width: 2),
+                      boxShadow: current
+                          ? [
+                              BoxShadow(
+                                color: color.withValues(alpha: 0.2),
+                                blurRadius: 12,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          : const [],
+                    ),
+                    child: done
+                        ? const Icon(Icons.check, size: 14, color: Colors.white)
+                        : current
+                        ? const Center(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: SizedBox(width: 8, height: 8),
+                            ),
+                          )
+                        : null,
                   ),
                 ),
-            ],
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 20),
-              child: Text(
-                step.label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: current ? FontWeight.w600 : FontWeight.w400,
-                  color: current || done
-                      ? scheme.onSurface
-                      : scheme.onSurfaceVariant,
+                if (!isLast)
+                  Expanded(
+                    child: AnimatedContainer(
+                      duration: duration,
+                      curve: AppMotion.curve(context),
+                      width: 2,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      color: done
+                          ? AppColors.success.withValues(alpha: 0.55)
+                          : theme.dividerColor,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: isLast ? 0 : 20),
+                child: AnimatedDefaultTextStyle(
+                  duration: duration,
+                  curve: AppMotion.curve(context),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: current ? FontWeight.w700 : FontWeight.w400,
+                    color: current || done
+                        ? scheme.onSurface
+                        : scheme.onSurfaceVariant,
+                  ),
+                  child: Text(step.label),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -85,6 +85,7 @@ abstract class AppLocalizations {
   String get english;
   String get persian;
   String get loading;
+  String get splashLoadingStatus;
   String get retry;
   String get errorGeneric;
   String get errorNetwork;

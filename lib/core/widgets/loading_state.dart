@@ -1,37 +1,108 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import 'motion_primitives.dart';
+import 'rad_loading.dart';
 
+/// Branded loading feedback for page, section, and inline pending states.
+///
+/// Existing data providers own whether this widget exists. The constructors
+/// only select visual density, so pending/error control flow remains unchanged.
 class LoadingState extends StatelessWidget {
-  const LoadingState({super.key, this.message});
+  const LoadingState({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.section;
+
+  const LoadingState.fullScreen({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.fullScreen;
+
+  const LoadingState.section({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.section;
+
+  const LoadingState.compact({
+    super.key,
+    this.message,
+    this.semanticsLabel,
+    this.dark = false,
+  }) : size = RadLoadingSize.compact;
 
   final String? message;
+  final String? semanticsLabel;
+  final bool dark;
+  final RadLoadingSize size;
 
   @override
   Widget build(BuildContext context) {
-    final label = message ?? AppLocalizations.of(context).loading;
+    final label = semanticsLabel ?? AppLocalizations.of(context).loading;
+    final child = _buildVisual(context, label);
+    return Semantics(
+      label: label,
+      liveRegion: true,
+      container: true,
+      excludeSemantics: true,
+      child: child,
+    );
+  }
+
+  Widget _buildVisual(BuildContext context, String label) {
+    if (size == RadLoadingSize.compact) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: RadInlineLoading(label: label, dark: dark),
+      );
+    }
+
+    final isFullScreen = size == RadLoadingSize.fullScreen;
     return Center(
-      child: Semantics(
-        label: label,
-        liveRegion: true,
-        excludeSemantics: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: Theme.of(context).colorScheme.primary,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: isFullScreen ? 360 : 300),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadLoadingIndicator(
+                size: size,
+                label: label,
+                message: message,
+                dark: dark,
               ),
-            ),
-            if (message != null) ...[
-              const SizedBox(height: 16),
-              Text(message!, style: Theme.of(context).textTheme.bodyMedium),
+              SizedBox(height: isFullScreen ? 30 : 22),
+              const _LoadingSkeletonPreview(),
             ],
-          ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class _LoadingSkeletonPreview extends StatelessWidget {
+  const _LoadingSkeletonPreview();
+
+  @override
+  Widget build(BuildContext context) {
+    return const ExcludeSemantics(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSkeleton(height: 14, width: 136),
+          SizedBox(height: 12),
+          AppSkeleton(height: 11),
+          SizedBox(height: 8),
+          AppSkeleton(height: 11, width: 224),
+        ],
       ),
     );
   }
