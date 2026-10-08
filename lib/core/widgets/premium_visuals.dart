@@ -194,6 +194,7 @@ class AuthCinematicFrame extends StatelessWidget {
     required this.title,
     required this.body,
     required this.localeControl,
+    this.heroVisual,
   });
 
   final Widget form;
@@ -201,6 +202,7 @@ class AuthCinematicFrame extends StatelessWidget {
   final String title;
   final String body;
   final Widget localeControl;
+  final Widget? heroVisual;
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +224,7 @@ class AuthCinematicFrame extends StatelessWidget {
                 child: MotionReveal(
                   duration: AppMotion.emphasized,
                   offset: const Offset(0, 0.06),
-                  child: const RadOrbit(size: 330),
+                  child: heroVisual ?? const RadOrbit(size: 330),
                 ),
               ),
               const Spacer(),
@@ -256,9 +258,9 @@ class AuthCinematicFrame extends StatelessWidget {
               const _RouteLegend(),
             ] else ...[
               const Spacer(),
-              const Align(
+              Align(
                 alignment: AlignmentDirectional.center,
-                child: RadOrbit(size: 132),
+                child: heroVisual ?? const RadOrbit(size: 132),
               ),
               const Spacer(),
             ],
