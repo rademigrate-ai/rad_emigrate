@@ -36,10 +36,10 @@ on:
 permissions:
   contents: read
 
-# Per-SHA group so rapid pushes do not cancel a healthy runner mid-setup.
+# Cancel superseded PR runs; keep main-branch runs intact.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   routing:
@@ -60,8 +60,6 @@ jobs:
           flutter-version: '3.47.6'
           channel: stable
           cache: true
-      - name: Set up Gradle cache
-        uses: gradle/actions/setup-gradle@v4
       - run: flutter --version
       - run: flutter pub get
       - name: Dart format gate
@@ -72,6 +70,7 @@ jobs:
             dart format lib test
             git --no-pager diff --name-only
             git --no-pager diff --stat
+            git --no-pager diff -- lib/l10n/app_localizations_en_a.dart lib/l10n/app_localizations_fa_a.dart
             exit 1
           fi
       - run: flutter analyze
@@ -81,6 +80,8 @@ jobs:
           flutter build web --no-pub
           --dart-define=SUPABASE_URL=https://example.supabase.co
           --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
       - name: Build Android debug variant
         run: >-
           flutter build apk --debug --no-pub

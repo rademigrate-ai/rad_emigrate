@@ -5,6 +5,7 @@ import '../../../l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../supabase/supabase_client.dart';
+import 'ai_guest_identity.dart';
 import 'ai_request.dart';
 import 'ai_response.dart';
 import 'ai_service.dart';
@@ -30,6 +31,21 @@ class SupabaseAiService implements AiService {
     if (prompt.isEmpty) {
       return const AiResponse(text: '', uncertain: true);
     }
+
+    // Guest key when not authenticated (server enforces 5-question limit).
+    final session = _supabase.client.auth.currentSession;
+    final isAuthed = session != null && session.user.id.isNotEmpty;
+    String? guestKey = request.metadata['guest_key'];
+    if (!isAuthed && (guestKey == null || guestKey.isEmpty)) {
+      guestKey = await AiGuestIdentity.getOrCreate();
+    }
+
+    final locale =
+        request.locale ??
+        (request.metadata['locale'] is String
+            ? request.metadata['locale']
+            : null);
+
     try {
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
@@ -37,6 +53,8 @@ class SupabaseAiService implements AiService {
           'action': 'chat',
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
+          if (guestKey != null && guestKey.isNotEmpty) 'guest_key': guestKey,
+          if (locale != null && locale.isNotEmpty) 'locale': locale,
           'messages': [
             ...request.history.map(
               (message) => {
@@ -75,7 +93,7 @@ class SupabaseAiService implements AiService {
       }
       final code = (map['code'] ?? map['error'] ?? 'ai_failed').toString();
       return AiResponse(
-        text: _messageForCode(code, request.locale),
+        text: _messageForCode(code, locale),
         uncertain: true,
         errorCode: code,
         conversationId: request.conversationId,
@@ -89,7 +107,7 @@ class SupabaseAiService implements AiService {
         code = e.reasonPhrase!;
       }
       return AiResponse(
-        text: _messageForCode(code, request.locale),
+        text: _messageForCode(code, locale),
         uncertain: true,
         errorCode: code,
         conversationId: request.conversationId,
@@ -107,6 +125,9 @@ class SupabaseAiService implements AiService {
       case 'provider_not_configured':
         return l10n.aiNoEligibleModel;
       case 'daily_limit_reached':
+        return l10n.aiQuotaExhausted;
+      case 'anonymous_quota_exceeded':
+      case 'authentication_required':
         return l10n.aiQuotaExhausted;
       case 'provider_rate_limited':
         return l10n.aiRateLimited;

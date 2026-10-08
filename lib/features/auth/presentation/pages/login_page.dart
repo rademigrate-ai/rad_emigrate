@@ -79,13 +79,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (error) {
       if (mounted) {
-        setState(
-          () => _error = localizedAuthError(
-            error,
-            l10n,
-            context: AuthErrorContext.otp,
-          ),
+        final msg = error.toString().toLowerCase();
+        String mapped = localizedAuthError(
+          error,
+          l10n,
+          context: AuthErrorContext.otp,
         );
+        try {
+          final c = '${(error as dynamic).code ?? ''}'.toLowerCase();
+          if (c.contains('otp_disabled') || msg.contains('otp_disabled')) {
+            mapped = l10n.smsAuthUnavailable;
+          }
+        } catch (_) {
+          if (msg.contains('otp_disabled')) {
+            mapped = l10n.smsAuthUnavailable;
+          }
+        }
+        setState(() => _error = mapped);
       }
     } finally {
       if (mounted) setState(() => _submitting = false);

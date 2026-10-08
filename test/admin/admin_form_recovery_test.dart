@@ -201,7 +201,7 @@ void main() {
     'Admin labels localize known categories and suppress arbitrary diagnostics',
     () {
       final fa = AppLocalizationsFa();
-      expect(adminHealthLabel('offline', fa), 'قطع ارتباط');
+      expect(adminHealthLabel('offline', fa), fa.healthOffline);
       expect(adminRuntimeScopeLabel('both', fa), 'کاربر و مدیر');
       expect(
         adminAiErrorLabel('provider_unauthorized', fa),

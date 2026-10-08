@@ -7,6 +7,7 @@ import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
 import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
+import '../../features/admin/presentation/pages/admin_consultations_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -18,6 +19,8 @@ import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/documents/presentation/pages/documents_page.dart';
+import '../../features/consultation/presentation/pages/consultation_page.dart';
+import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -87,6 +90,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const ApplicationsPage(),
           ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
+          GoRoute(
+            path: '/consultation',
+            builder: (context, state) => ConsultationPage(
+              initialTopic: state.uri.queryParameters['topic'],
+            ),
+          ),
+          GoRoute(
+            path: '/notifications',
+            builder: (_, _) => const NotificationsPage(),
+          ),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
           GoRoute(
             path: '/ai-assistant',
@@ -100,6 +113,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/operations',
             builder: (_, _) => const AdminOperationsPage(),
+          ),
+          GoRoute(
+            path: '/admin/consultations',
+            builder: (_, _) => const AdminConsultationsPage(),
           ),
           GoRoute(
             path: '/admin/ai-research',

@@ -49,6 +49,11 @@ class DashboardPage extends ConsumerWidget {
         title: Text(l10n.yourJourney),
         actions: [
           IconButton(
+            tooltip: l10n.notificationsTitle,
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () => context.go('/notifications'),
+          ),
+          IconButton(
             tooltip: l10n.aiAssistant,
             icon: const Icon(Icons.smart_toy_outlined),
             onPressed: () => context.go('/ai-assistant'),
@@ -162,6 +167,16 @@ class DashboardPage extends ConsumerWidget {
                     onTap: () => context.go('/documents'),
                   ),
                   _ActionChip(
+                    icon: Icons.support_agent_outlined,
+                    label: l10n.openConsultation,
+                    onTap: () => context.go('/consultation'),
+                  ),
+                  _ActionChip(
+                    icon: Icons.notifications_outlined,
+                    label: l10n.openNotifications,
+                    onTap: () => context.go('/notifications'),
+                  ),
+                  _ActionChip(
                     icon: Icons.smart_toy_outlined,
                     label: l10n.aiAssistant,
                     onTap: () => context.go('/ai-assistant'),
@@ -221,6 +236,18 @@ class DashboardPage extends ConsumerWidget {
                 title: l10n.askAssistant,
                 subtitle: l10n.askAssistantSubtitle,
                 onTap: () => context.go('/ai-assistant'),
+              ),
+              _ShortcutRow(
+                icon: Icons.support_agent_outlined,
+                title: l10n.openConsultation,
+                subtitle: l10n.consultationIntro,
+                onTap: () => context.go('/consultation'),
+              ),
+              _ShortcutRow(
+                icon: Icons.notifications_outlined,
+                title: l10n.openNotifications,
+                subtitle: l10n.noNotifications,
+                onTap: () => context.go('/notifications'),
               ),
             ],
           ),

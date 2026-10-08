@@ -13,11 +13,14 @@ const Set<String> _protectedRoutes = {
   '/documents',
   '/profile',
   '/ai-assistant',
+  '/consultation',
+  '/notifications',
   '/profile-completion',
   '/admin',
   '/admin/ai-config',
   '/admin/operations',
   '/admin/ai-research',
+  '/admin/consultations',
   '/feed',
 };
 

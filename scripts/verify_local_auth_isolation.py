@@ -289,15 +289,40 @@ def main() -> None:
         == 1,
         "owner application read",
     )
-    app_update = rows(
+    # Stage 7 contract: ordinary users may only transition draft → submitted.
+    # Other status changes must be forbidden (42501) and leave DB status unchanged.
+    forbidden_status, forbidden_body, _forbidden_headers = request(
         "PATCH",
         f"/rest/v1/applications?id=eq.{application_id}&select=id,status",
         token_a,
         {"status": "in_progress"},
+        extra_headers={"Prefer": "return=representation"},
+    )
+    require(forbidden_status >= 400, "owner forbidden status transition denied")
+    detail = forbidden_body.decode("utf-8", "replace").lower()
+    require(
+        "42501" in detail or "forbidden" in detail or "application status" in detail,
+        "owner forbidden status transition reports application status change forbidden",
+    )
+    still_draft = rows(
+        "GET",
+        f"/rest/v1/applications?select=id,status&id=eq.{application_id}",
+        token_a,
     )
     require(
-        len(app_update) == 1 and app_update[0]["status"] == "in_progress",
-        "owner application update",
+        len(still_draft) == 1 and still_draft[0]["status"] == "draft",
+        "owner forbidden status transition leaves draft unchanged",
+    )
+    # Permitted user transition: draft → submitted
+    app_submit = rows(
+        "PATCH",
+        f"/rest/v1/applications?id=eq.{application_id}&select=id,status",
+        token_a,
+        {"status": "submitted"},
+    )
+    require(
+        len(app_submit) == 1 and app_submit[0]["status"] == "submitted",
+        "owner application draft to submitted",
     )
     require(
         rows(

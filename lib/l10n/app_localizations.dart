@@ -371,6 +371,33 @@ abstract class AppLocalizations {
   String get modelSaveFailed;
   String get sourceQueryRejected;
   String get lastProviderCheck;
+
+  // Stage 7/8 product surfaces
+  String get consultationTitle;
+  String get consultationIntro;
+  String get consultationTopic;
+  String get consultationMessage;
+  String get consultationFieldsRequired;
+  String get consultationSubmitted;
+  String get consultationSubmitFailed;
+  String get submitConsultation;
+  String get myConsultations;
+  String get noConsultations;
+  String get notificationsTitle;
+  String get noNotifications;
+  String get markAllRead;
+  String get notificationLoadFailed;
+  String get requestConsultation;
+  String get smsAuthUnavailable;
+  String get adminConsultations;
+  String get noAdminConsultations;
+  String get consultationStatus;
+  String get consultationAdminNote;
+  String get saveConsultation;
+  String get consultationUpdated;
+  String get consultationUpdateFailed;
+  String get openNotifications;
+  String get openConsultation;
 }
 
 class _AppLocalizationsDelegate

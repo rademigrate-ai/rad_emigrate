@@ -109,7 +109,10 @@ void main() {
             ? 'index.ts'
             : 'handler.ts';
         final source = read('supabase/functions/$functionName/$entrypoint');
-        expect(source, contains('../_shared/cors.ts'));
+        final sharedSource = functionName == 'ai-orchestrator'
+            ? read('supabase/functions/ai-orchestrator/handler_providers.ts')
+            : source;
+        expect(sharedSource, contains('../_shared/cors.ts'));
       }
     });
 

@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-10-07T18:24:55.988816+00:00",
+  "total_rows": 1275,
+  "sites": {
+    "radmohajer.ir": {
+      "total_rows": 740,
+      "unique_canonical": 740,
+      "terminal_states": {
+        "FETCHED_AND_CAPTURED": 6,
+        "REVIEW_REQUIRED:regulatory_not_verified": 731,
+        "REVIEW_REQUIRED:safe_page_not_yet_snapshotted": 3
+      },
+      "languages": {"fa": 733, "en": 7},
+      "fetched_and_captured": 6,
+      "review_required": 734,
+      "unreachable": 0,
+      "duplicates": 0
+    },
+    "radvisa.com": {
+      "total_rows": 296,
+      "unique_canonical": 296,
+      "terminal_states": {"UNREACHABLE:live_host_timeout": 296},
+      "languages": {"fa": 295, "en": 1},
+      "fetched_and_captured": 0,
+      "review_required": 0,
+      "unreachable": 296,
+      "duplicates": 0
+    },
+    "digivisa.ir": {
+      "total_rows": 239,
+      "unique_canonical": 239,
+      "terminal_states": {"UNREACHABLE:live_host_timeout": 239},
+      "languages": {"fa": 239},
+      "fetched_and_captured": 0,
+      "review_required": 0,
+      "unreachable": 239,
+      "duplicates": 0
+    }
+  },
+  "live_connectivity_evidence": {
+    "radvisa.com": {
+      "dns_a": "185.192.112.58",
+      "same_ip_as": "digivisa.ir",
+      "attempts": [
+        {"url": "https://radvisa.com/", "result": "HTTP 000 connect_timeout ~10s", "env": "stage3_runner"},
+        {"url": "https://www.radvisa.com/", "result": "HTTP 000 connect_timeout", "env": "stage3_runner"},
+        {"url": "http://radvisa.com/", "result": "timeout", "env": "stage3_runner"},
+        {"url": "https://radvisa.com/robots.txt", "result": "timeout", "env": "stage3_runner"},
+        {"url": "https://radvisa.com/sitemap.xml", "result": "timeout", "env": "stage3_runner"}
+      ],
+      "archive": "wayback CDX collapsed inventory; live fetch blocked"
+    },
+    "digivisa.ir": {
+      "dns_a": "185.192.112.58",
+      "attempts": [
+        {"url": "https://digivisa.ir/", "result": "ERR_CONNECTION_TIMED_OUT", "env": "browser+curl"},
+        {"url": "https://www.digivisa.ir/", "result": "timeout", "env": "stage3_runner"}
+      ],
+      "archive": "wayback CDX domain inventory; live fetch blocked"
+    },
+    "radmohajer.ir": {
+      "dns_a": "88.99.68.25",
+      "sitemap": "https://radmohajer.ir/sitemap.xml HTTP 200 740 locs",
+      "live_fetches_captured": [
+        "https://radmohajer.ir/en",
+        "https://radmohajer.ir/en/about-us",
+        "https://radmohajer.ir/en/contact-us",
+        "https://radmohajer.ir/fa",
+        "https://radmohajer.ir/fa/contacts",
+        "https://radmohajer.ir/fa/emg"
+      ]
+    }
+  },
+  "snapshot_policy": "Stage 3 does not bulk-snapshot all regulatory pages into production. Safe first-party pages may be snapshotted and promoted. Regulatory URLs remain REVIEW_REQUIRED with inventory provenance."
+}

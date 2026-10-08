@@ -56,12 +56,21 @@ current_unapplied = [
     '20261007080000_ai_dynamic_routing_architecture.sql',
     '20261007080001_ai_credential_failure_routing.sql',
     '20261007080002_research_atomic_review_candidate.sql',
+    '20261007180000_stage2_knowledge_completion.sql',
+    '20261007180001_stage2_knowledge_promote.sql',
+    '20261007180002_stage2_knowledge_retrieve_conflict.sql',
+    '20261007210000_stage4_user_ai_quota_grounding.sql',
+    '20261007212000_stage4_limit_ai_runtime_chain.sql',
+    '20261007220000_stage5_visa_editorial_summaries.sql',
+    '20261007230000_stage6_entitlement_access_decision.sql',
+    '20261008010000_stage7_ops_consultation_app_status.sql',
+    '20261008020000_stage9_security_grant_hardening.sql',
 ]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
 assert actual_names == sorted(expected_names + current_unapplied), actual_names
 for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
-print('Canonical active lineage: PASS (25 authoritative + 12 current additive migrations).')
+print('Canonical active lineage: PASS (25 authoritative + 21 current additive migrations).')
 PY
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004190000_fix_profile_update_rls_recursion.sql"
@@ -75,5 +84,14 @@ psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261006180000_fix_profile_upda
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080000_ai_dynamic_routing_architecture.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080001_ai_credential_failure_routing.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080002_research_atomic_review_candidate.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180000_stage2_knowledge_completion.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180001_stage2_knowledge_promote.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180002_stage2_knowledge_retrieve_conflict.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007210000_stage4_user_ai_quota_grounding.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007212000_stage4_limit_ai_runtime_chain.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007220000_stage5_visa_editorial_summaries.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007230000_stage6_entitlement_access_decision.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261008010000_stage7_ops_consultation_app_status.sql"
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261008020000_stage9_security_grant_hardening.sql"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrective_routing_research.sql
