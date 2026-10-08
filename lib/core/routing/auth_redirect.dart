@@ -81,5 +81,5 @@ String restoredProtectedDestination(String? value) {
       !_protectedRoutes.contains(uri.path)) {
     return '/dashboard';
   }
-  return uri.path;
+  return uri.toString();
 }
