@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/config/app_config.dart';
 import '../core/network/api_client.dart';
@@ -12,6 +13,7 @@ import '../core/storage/session_storage.dart';
 import '../core/supabase/supabase_providers.dart';
 import '../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../features/auth/presentation/providers/auth_controller.dart';
+import '../features/auth/presentation/providers/password_recovery_controller.dart';
 import '../features/ai_assistant/data/ai_session_repository.dart';
 
 // ── Config ──────────────────────────────────────────────────────────
@@ -81,9 +83,11 @@ final aiSessionRepositoryProvider = Provider<AiSessionRepository>((ref) {
 
 final appBootstrapProvider = FutureProvider<void>((ref) async {
   final supabase = ref.read(supabaseClientServiceProvider);
+  final recovery = ref.read(passwordRecoveryControllerProvider.notifier);
   await supabase.initialize();
 
   if (!supabase.isInitialized) {
+    await recovery.clear();
     await ref.read(authControllerProvider.notifier).restoreSession();
     return;
   }
@@ -93,6 +97,7 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
 
   final currentSession = supabase.client.auth.currentSession;
   if (currentSession != null) {
+    await recovery.reconcileActiveSession(currentSession.user.id);
     try {
       authController.applySession(
         await authDatasource.sessionFromAuthSession(currentSession),
@@ -102,6 +107,7 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
       authController.clearSession();
     }
   } else {
+    await recovery.clear();
     authController.clearSession();
   }
 
@@ -110,8 +116,17 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
   ) async {
     final session = data.session;
     if (session == null) {
+      await recovery.clear();
       authController.clearSession();
       return;
+    }
+    if (data.event == AuthChangeEvent.passwordRecovery) {
+      await recovery.markRecovery(session.user.id);
+    } else if (data.event == AuthChangeEvent.signedIn ||
+        data.event == AuthChangeEvent.userUpdated) {
+      await recovery.clear();
+    } else {
+      await recovery.reconcileActiveSession(session.user.id);
     }
     try {
       authController.applySession(

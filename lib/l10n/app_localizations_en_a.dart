@@ -195,6 +195,14 @@ mixin AppLocalizationsEnA on AppLocalizations {
       "We couldn't request a reset link. Please try again.";
 
   @override
+  String get passwordResetRateLimited =>
+      'Too many reset requests. Please wait a minute, then try again.';
+
+  @override
+  String get passwordResetLinkInvalid =>
+      'This reset link is invalid or has expired. Request a new link.';
+
+  @override
   String get showPassword => 'Show password';
 
   @override
