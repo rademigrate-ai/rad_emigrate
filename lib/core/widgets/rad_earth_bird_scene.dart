@@ -135,6 +135,7 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
                     );
                     final birdLayer = _PositionedBird(
                       geometry: orbit,
+                      dimension: birdSize,
                       child: bird!,
                     );
 
@@ -281,15 +282,18 @@ class _OrbitGeometry {
 }
 
 class _PositionedBird extends StatelessWidget {
-  const _PositionedBird({required this.geometry, required this.child});
+  const _PositionedBird({
+    required this.geometry,
+    required this.dimension,
+    required this.child,
+  });
 
   final _OrbitGeometry geometry;
+  final double dimension;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final renderBox = child is SizedBox ? child as SizedBox : null;
-    final dimension = renderBox?.width ?? 48.0;
     return Positioned(
       left: geometry.position.dx - (dimension / 2),
       top: geometry.position.dy - (dimension / 2),
