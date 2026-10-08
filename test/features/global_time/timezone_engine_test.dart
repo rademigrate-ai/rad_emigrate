@@ -1,25 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/features/global_time/domain/city_catalog.dart';
-import 'package:rad_emigrate/features/global_time/domain/timezone_engine.dart';
 import 'package:rad_emigrate/features/global_time/domain/meeting_planner.dart';
+import 'package:rad_emigrate/features/global_time/domain/timezone_engine.dart';
 
 void main() {
   setUpAll(() async {
     await TimezoneEngine.ensureInitialized();
   });
 
-  group('TimezoneEngine',
-      () {
-    test('Tehran offset is +3:30 or +4:30 depending on DST rules',
-        () {
+  group('TimezoneEngine', () {
+    test('Tehran offset is +3:30 or +4:30 depending on DST rules', () {
       final offset = TimezoneEngine.offsetFromUtc('Asia/Tehran');
       final minutes = offset.inMinutes;
-      expect(minutes == 210 || minutes == 270, isTrue,
-          reason: 'unexpected Tehran offset minutes=$minutes');
+      expect(
+        minutes == 210 || minutes == 270,
+        isTrue,
+        reason: 'unexpected Tehran offset minutes=$minutes',
+      );
     });
 
-    test('Toronto, London, Berlin, Dubai, Sydney resolve',
-        () {
+    test('Toronto, London, Berlin, Dubai, Sydney resolve', () {
       for (final city in CityCatalog.defaults) {
         final now = TimezoneEngine.nowInCity(city);
         expect(now.timeZoneName, isNotEmpty);
@@ -27,8 +27,7 @@ void main() {
       }
     });
 
-    test('convert preserves instant across zones',
-        () {
+    test('convert preserves instant across zones', () {
       final converted = TimezoneEngine.convert(
         fromIana: 'Asia/Tehran',
         toIana: 'America/Toronto',
@@ -41,20 +40,14 @@ void main() {
       expect(converted.hour, isNot(equals(14)));
     });
 
-    test('isDaytime around noon is true',
-        () {
+    test('isDaytime around noon is true', () {
       final noon = DateTime.utc(2026, 6, 15, 9, 0);
-      expect(
-        TimezoneEngine.isDaytime('Asia/Tehran', at: noon),
-        isTrue,
-      );
+      expect(TimezoneEngine.isDaytime('Asia/Tehran', at: noon), isTrue);
     });
   });
 
-  group('MeetingPlanner',
-      () {
-    test('suggests windows for Tehran–Toronto',
-        () {
+  group('MeetingPlanner', () {
+    test('suggests windows for Tehran–Toronto', () {
       final tehran = CityCatalog.defaults[0];
       final toronto = CityCatalog.defaults[1];
       final windows = MeetingPlanner.suggestWindows(
@@ -69,8 +62,7 @@ void main() {
       expect(windows.any((w) => w.quality >= 0.5), isTrue);
     });
 
-    test('no crash when zones are far apart',
-        () {
+    test('no crash when zones are far apart', () {
       final tehran = CityCatalog.defaults[0];
       final sydney = CityCatalog.defaults[5];
       final windows = MeetingPlanner.suggestWindows(
@@ -83,8 +75,7 @@ void main() {
       expect(windows, isA<List>());
     });
 
-    test('DST spring-forward date still returns list',
-        () {
+    test('DST spring-forward date still returns list', () {
       // US spring forward 2026-03-08 — planner must not throw.
       final toronto = CityCatalog.defaults[1];
       final london = CityCatalog.defaults[2];
@@ -100,16 +91,13 @@ void main() {
     });
   });
 
-  group('CityCatalog',
-      () {
-    test('search finds Tehran in English and Persian',
-        () {
+  group('CityCatalog', () {
+    test('search finds Tehran in English and Persian', () {
       expect(CityCatalog.search('Teh'), isNotEmpty);
       expect(CityCatalog.search('تهر', languageCode: 'fa'), isNotEmpty);
     });
 
-    test('nearest returns a city for a known coordinate',
-        () {
+    test('nearest returns a city for a known coordinate', () {
       final near = CityCatalog.nearest(35.7, 51.4);
       expect(near.id, 'tehran');
     });

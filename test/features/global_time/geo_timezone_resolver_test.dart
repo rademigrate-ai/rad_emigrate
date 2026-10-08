@@ -8,10 +8,8 @@ void main() {
     await GeoTimezoneResolver.ensureReady();
   });
 
-  group('GeoTimezoneResolver boundary lookup',
-      () {
-    test('Tehran center resolves to Asia/Tehran',
-        () async {
+  group('GeoTimezoneResolver boundary lookup', () {
+    test('Tehran center resolves to Asia/Tehran', () async {
       final r = await GeoTimezoneResolver.resolve(
         latitude: 35.6892,
         longitude: 51.3890,
@@ -23,32 +21,21 @@ void main() {
       } else {
         expect(
           r.status,
-          anyOf(
-            GeoResolveStatus.unresolved,
-            GeoResolveStatus.unavailable,
-          ),
+          anyOf(GeoResolveStatus.unresolved, GeoResolveStatus.unavailable),
         );
       }
     });
 
-    test('mid-Atlantic ocean is unresolved or unavailable',
-        () async {
-      final r = await GeoTimezoneResolver.resolve(
-        latitude: 0,
-        longitude: -30,
-      );
+    test('mid-Atlantic ocean is unresolved or unavailable', () async {
+      final r = await GeoTimezoneResolver.resolve(latitude: 0, longitude: -30);
       expect(
         r.status,
-        anyOf(
-          GeoResolveStatus.unresolved,
-          GeoResolveStatus.unavailable,
-        ),
+        anyOf(GeoResolveStatus.unresolved, GeoResolveStatus.unavailable),
       );
       expect(r.toCity(), isNull);
     });
 
-    test('manual override never invents silently',
-        () {
+    test('manual override never invents silently', () {
       final city = GeoTimezoneResolver.cityWithManualTimezone(
         latitude: 0,
         longitude: -30,
@@ -57,8 +44,7 @@ void main() {
       expect(city.timezone, 'UTC');
     });
 
-    test('Dubai non-hour offset zone still has clocks',
-        () async {
+    test('Dubai non-hour offset zone still has clocks', () async {
       await TimezoneEngine.ensureInitialized();
       final now = TimezoneEngine.nowIn('Asia/Dubai');
       expect(now.timeZoneOffset.inMinutes % 60, 0); // Dubai is +4:00
