@@ -28,6 +28,17 @@ class LoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = message ?? AppLocalizations.of(context).loading;
+    final child = _buildVisual(context, label);
+    return Semantics(
+      label: label,
+      liveRegion: true,
+      container: true,
+      excludeSemantics: true,
+      child: child,
+    );
+  }
+
+  Widget _buildVisual(BuildContext context, String label) {
     if (size == RadLoadingSize.compact) {
       return Align(
         alignment: AlignmentDirectional.centerStart,

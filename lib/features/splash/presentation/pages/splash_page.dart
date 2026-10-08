@@ -7,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -42,14 +43,24 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: PremiumCanvas(
         dark: true,
         accent: AppColors.teal,
-        child: const SafeArea(
-          child: LoadingState.fullScreen(
-            message: 'Immigration journey, made visible',
-            dark: true,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              const LoadingState.fullScreen(
+                message: 'Immigration journey, made visible',
+                dark: true,
+              ),
+              Semantics(
+                label: l10n.appTitle,
+                image: true,
+                child: const SizedBox.shrink(),
+              ),
+            ],
           ),
         ),
       ),
