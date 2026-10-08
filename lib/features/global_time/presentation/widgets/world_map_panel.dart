@@ -52,8 +52,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+                urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.rad.emigrate',
                 retinaMode: true,
@@ -138,10 +137,14 @@ class _CityMarker extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: selected ? AppColors.primaryRed : AppColors.primaryRed.withValues(alpha: 0.7),
+        color: selected
+            ? AppColors.primaryRed
+            : AppColors.primaryRed.withValues(alpha: 0.7),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryRed.withValues(alpha: selected ? 0.7 : 0.35),
+            color: AppColors.primaryRed.withValues(
+              alpha: selected ? 0.7 : 0.35,
+            ),
             blurRadius: selected ? 14 : 8,
             spreadRadius: selected ? 2 : 0,
           ),
