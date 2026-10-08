@@ -266,16 +266,14 @@ class _OrbitGeometry {
     final y = (math.sin(flightPhase) + altitude) * verticalRadius;
     // Tangent-based banking follows turns smoothly, with no flips.
     final phaseRate = 1 + (compact ? 0.0 : math.cos(time * 3 + 0.65) * 0.255);
-    final dx = -math.sin(flightPhase) * phaseRate * horizontalRadius;
-    final dy = (math.cos(flightPhase) * phaseRate +
-            (compact ? 0.0 : math.cos(time * 2 - 0.4) * 0.13)) *
-        verticalRadius;
-    final turn = math.atan2(dy, dx);
+    // Tangent curvature is reflected in a restrained bank; no full rotations.
     return _OrbitGeometry(
       position: Offset((side / 2) + x, (side / 2) + y),
       // Preserve the bird's original forward-facing silhouette.
-      bank: compact ? -0.12 + math.cos(phase) * 0.24
-          : (math.sin(turn) * 0.20 + math.sin(time * 2) * 0.035),
+      bank: compact
+          ? -0.12 + math.cos(phase) * 0.24
+          : (math.cos(flightPhase) * phaseRate * 0.19 +
+              math.sin(time * 2) * 0.035),
       scale: compact ? 1 : 0.8 + ((depth + 1) * 0.13),
       isForeground: compact || depth >= 0,
     );
