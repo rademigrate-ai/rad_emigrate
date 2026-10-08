@@ -1,11 +1,16 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app/dependencies.dart';
+import 'core/constants/app_colors.dart';
 import 'core/theme/theme_controller.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/loading_state.dart';
+import 'core/widgets/premium_visuals.dart';
 import 'core/widgets/rad_loading.dart';
 import 'features/admin/presentation/pages/admin_hub_page.dart';
 import 'features/ai_assistant/presentation/pages/ai_assistant_page.dart';
@@ -24,6 +29,7 @@ import 'features/documents/domain/repositories/document_repository.dart';
 import 'features/documents/presentation/providers/document_controller.dart';
 import 'features/feed/data/feed_repository.dart';
 import 'features/feed/presentation/pages/feed_page.dart';
+import 'features/splash/presentation/pages/splash_page.dart';
 import 'features/visa/domain/entities/visa_entities.dart';
 import 'features/visa/presentation/pages/visa_page.dart';
 import 'features/visa/presentation/providers/visa_catalog_provider.dart';
@@ -52,6 +58,11 @@ class VisualQaApp extends StatelessWidget {
     return ProviderScope(
       overrides: [
         authControllerProvider.overrideWith((ref) => _visualAuthController()),
+        appBootstrapProvider.overrideWith((ref) {
+          final bootstrap = Completer<void>();
+          ref.onDispose(bootstrap.complete);
+          return bootstrap.future;
+        }),
         sharedPreferencesProvider.overrideWithValue(preferences),
         applicationControllerProvider.overrideWith(
           (ref) => ApplicationController(_VisualApplications(), 'visual-qa'),
@@ -88,15 +99,15 @@ class _QaFrame extends StatelessWidget {
       'ai' => const AiAssistantPage(visualQaDemo: true),
       'feed' => const FeedPage(),
       'admin' => const AdminHubPage(),
+      'splash' => const SplashPage(),
       'loading' => const _LoadingMotionQaPage(),
+      'loading-full' => const _FullLoadingQaPage(),
+      'loading-section' => const _SectionLoadingQaPage(),
+      'loading-section-dark' => const _SectionLoadingQaPage(dark: true),
+      'loading-compact' => const _CompactLoadingQaPage(),
       _ => const LoginPage(),
     };
-    return Banner(
-      message: 'SYNTHETIC VISUAL QA',
-      location: BannerLocation.topStart,
-      color: const Color(0xFF0B5260),
-      child: page,
-    );
+    return page;
   }
 }
 
@@ -153,6 +164,123 @@ class _LoadingMotionQaPage extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Compact pending-operation feedback',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FullLoadingQaPage extends StatelessWidget {
+  const _FullLoadingQaPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PremiumCanvas(
+        dark: true,
+        accent: AppColors.teal,
+        showEditorialRule: false,
+        child: const SafeArea(
+          child: LoadingState.fullScreen(
+            message: 'Preparing your RAD workspace',
+            semanticsLabel: 'Loading RAD workspace',
+            dark: true,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionLoadingQaPage extends StatelessWidget {
+  const _SectionLoadingQaPage({this.dark = false});
+
+  final bool dark;
+
+  @override
+  Widget build(BuildContext context) {
+    final surface = dark ? const Color(0xFF071D28) : const Color(0xFFF4FBFC);
+    final foreground = dark ? Colors.white : const Color(0xFF102B35);
+    return Scaffold(
+      backgroundColor: surface,
+      appBar: AppBar(
+        title: Text('Section loading', style: TextStyle(color: foreground)),
+        backgroundColor: surface,
+        foregroundColor: foreground,
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: LoadingState.section(
+            message: 'Loading case information',
+            semanticsLabel: 'Loading case information',
+            dark: dark,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompactLoadingQaPage extends StatelessWidget {
+  const _CompactLoadingQaPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF4FBFC),
+      appBar: AppBar(
+        title: const Text('Compact loading'),
+        backgroundColor: const Color(0xFFF4FBFC),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xFFB9D9DE)),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Row(
+                  children: [
+                    RadInlineLoading(label: 'Updating application'),
+                    SizedBox(width: 14),
+                    Expanded(child: Text('Updating your application')),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0B2430),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Row(
+                  children: [
+                    RadInlineLoading(
+                      label: 'Updating application on dark surface',
+                      dark: true,
+                    ),
+                    SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        'Updating your application',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

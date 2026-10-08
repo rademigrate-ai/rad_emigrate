@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/loading_state.dart';
+import 'package:rad_emigrate/core/widgets/motion_primitives.dart';
+import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
 
 void main() {
@@ -27,6 +29,68 @@ void main() {
     expect(
       tester.getSemantics(find.byType(RadLoadingIndicator)),
       matchesSemantics(label: 'Loading your RAD journey', isLiveRegion: true),
+    );
+    semantics.dispose();
+  });
+
+  testWidgets('loading adapter maps every tier to the approved Earth scene', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              RadLoadingIndicator(
+                size: RadLoadingSize.fullScreen,
+                label: 'Loading RAD workspace',
+              ),
+              RadLoadingIndicator(
+                size: RadLoadingSize.section,
+                label: 'Loading applications',
+              ),
+              RadInlineLoading(label: 'Updating application'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.sectionLoading,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.compactLoading,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSemantics(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is RadLoadingIndicator &&
+              widget.size == RadLoadingSize.fullScreen,
+        ),
+      ),
+      matchesSemantics(label: 'Loading RAD workspace', isLiveRegion: true),
     );
     semantics.dispose();
   });
@@ -266,4 +330,31 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets(
+    'Splash loading selects the premium splash scene without a skeleton',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: LoadingState.splash(
+              message: 'Preparing your RAD workspace',
+              semanticsLabel: 'Loading RAD workspace',
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is RadEarthBirdScene &&
+              widget.variant == RadEarthBirdVariant.splash,
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Preparing your RAD workspace'), findsOneWidget);
+      expect(find.byType(AppSkeleton), findsNothing);
+    },
+  );
 }

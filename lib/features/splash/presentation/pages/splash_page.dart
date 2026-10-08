@@ -48,10 +48,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       body: PremiumCanvas(
         dark: true,
         accent: AppColors.teal,
+        showEditorialRule: false,
         child: SafeArea(
           child: Stack(
             children: [
-              LoadingState.fullScreen(
+              LoadingState.splash(
                 message: l10n.splashLoadingStatus,
                 dark: true,
               ),

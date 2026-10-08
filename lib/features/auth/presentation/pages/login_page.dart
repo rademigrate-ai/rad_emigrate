@@ -9,6 +9,7 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_earth_bird_scene.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
@@ -104,10 +105,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
+    final wide = MediaQuery.sizeOf(context).width >= 860;
     return AuthCinematicFrame(
       eyebrow: 'RAD • IMMIGRATION JOURNEY',
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
+      heroVisual: RadEarthBirdScene(
+        variant: RadEarthBirdVariant.loginHero,
+        semanticLabel: l10n.appTitle,
+        size: wide ? 330 : 132,
+      ),
       localeControl: TextButton.icon(
         icon: const Icon(Icons.language_outlined, size: 18),
         label: Text(
