@@ -406,17 +406,6 @@ class _BackdropOrbitPainter extends CustomPainter {
         ..strokeWidth = 1.25
         ..color = AppColors.teal.withValues(alpha: 0.72),
     );
-    final node = Offset(
-      center.dx + (math.cos(phase + 1.25) * side * 0.31),
-      center.dy + (math.sin(phase + 1.25) * side * 0.15),
-    );
-    _paintGlowDot(
-      canvas,
-      node,
-      radius: 1.7,
-      color: const Color(0xFF8CFAF2),
-      glowAlpha: 0.2,
-    );
   }
 
   @override

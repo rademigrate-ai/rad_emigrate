@@ -87,7 +87,7 @@ void main() {
   for (final entry in {
     'loading-full': RadEarthBirdVariant.fullScreenLoading,
     'loading-section': RadEarthBirdVariant.sectionLoading,
-    'loading-compact': RadEarthBirdVariant.compactLoading,
+    'loading-section-dark': RadEarthBirdVariant.sectionLoading,
   }.entries) {
     testWidgets('visual QA ${entry.key} route presents its approved scene', (
       tester,
@@ -104,4 +104,33 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets(
+    'visual QA compact route presents light and dark loading states',
+    (tester) async {
+      await _pump(tester, 'loading-compact');
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadInlineLoading && !widget.dark,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadInlineLoading && widget.dark,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is RadEarthBirdScene &&
+              widget.variant == RadEarthBirdVariant.compactLoading,
+        ),
+        findsNWidgets(2),
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

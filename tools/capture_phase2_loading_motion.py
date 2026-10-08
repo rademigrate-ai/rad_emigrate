@@ -121,6 +121,13 @@ def attach_console_capture(page: Page, messages: list[dict[str, str]]) -> None:
     page.on("console", record)
 
 
+def raise_for_console_errors(label: str, messages: list[dict[str, str]]) -> None:
+    errors = [message["text"] for message in messages if message["type"] == "error"]
+    if errors:
+        joined = "\n".join(f"- {message}" for message in errors)
+        raise RuntimeError(f"Browser console error(s) for {label}:\n{joined}")
+
+
 async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]:
     console: list[dict[str, str]] = []
     recording_dir = OUT / f"phase2_{target.slug}_recording_tmp"
@@ -172,6 +179,7 @@ async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]
     finally:
         await browser.close()
 
+    raise_for_console_errors(target.slug, console)
     raw_duration, trim_start = transcode_exact_orbit(raw_video, final_video)
     raw_video.unlink(missing_ok=True)
     shutil.rmtree(recording_dir, ignore_errors=True)
@@ -194,15 +202,18 @@ async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]
     }
 
 
-async def capture_section_dark_contrast(playwright) -> None:
+async def capture_section_dark_contrast(playwright) -> dict[str, list[dict[str, str]]]:
     browser = await playwright.chromium.launch(
         executable_path="/usr/bin/chromium",
         headless=True,
         args=["--no-sandbox"],
     )
+    reports: dict[str, list[dict[str, str]]] = {}
     try:
         for suffix, viewport in (("desktop", DESKTOP), ("mobile", MOBILE)):
             page = await browser.new_page(viewport=viewport, device_scale_factor=1)
+            console: list[dict[str, str]] = []
+            attach_console_capture(page, console)
             await page.goto(
                 url_for("loading-section-dark"),
                 wait_until="networkidle",
@@ -213,8 +224,11 @@ async def capture_section_dark_contrast(playwright) -> None:
                 path=str(OUT / f"phase2_section_loading_dark_{suffix}.png")
             )
             await page.close()
+            raise_for_console_errors(f"section-loading-dark-{suffix}", console)
+            reports[suffix] = console
     finally:
         await browser.close()
+    return reports
 
 
 async def main() -> None:
@@ -223,7 +237,7 @@ async def main() -> None:
     async with async_playwright() as playwright:
         for target in TARGETS:
             reports[target.slug] = await capture_target(playwright, target)
-        await capture_section_dark_contrast(playwright)
+        dark_section_reports = await capture_section_dark_contrast(playwright)
 
     (OUT / "phase2_loading_capture_report.json").write_text(
         json.dumps(
@@ -231,6 +245,7 @@ async def main() -> None:
                 "source": "Flutter visual-QA entrypoint with actual shared loading widgets",
                 "baseUrl": BASE_URL,
                 "targets": reports,
+                "darkSectionContrast": dark_section_reports,
             },
             indent=2,
         )

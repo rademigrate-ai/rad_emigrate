@@ -52,6 +52,7 @@ The dimensional Earth and orbital layers are Flutter vector paint with one small
 
 - `test/core/rad_loading_test.dart` covers all visual tiers, one live label, Splash selection without a skeleton, Reduced Motion, active-to-inactive updates, disabled `TickerMode`, disposal after removal, and the separation of display copy from its announcement.
 - `test/core/rad_earth_bird_scene_test.dart` covers direct scene lifecycle and semantics.
-- `test/visual_qa_smoke_test.dart` verifies the actual pending `SplashPage` visual-QA route and isolated full/section/compact scenes.
+- `test/visual_qa_smoke_test.dart` verifies the actual pending `SplashPage` visual-QA route, light/dark section states, and light/dark compact states.
+- The Phase 2 capture tool fails if any captured browser route emits a console `error`, and records console observations for both dark-section contrast captures.
 - Phase 2 visual evidence and exact verification results: [`RAD_EARTH_BIRD_PHASE2_QA_REPORT.md`](RAD_EARTH_BIRD_PHASE2_QA_REPORT.md).
 - Flutter lifecycle sources: [AnimationController](https://api.flutter.dev/flutter/animation/AnimationController-class.html), [`TickerMode.valuesOf`](https://api.flutter.dev/flutter/widgets/TickerMode/valuesOf.html), and [`CustomPaint`](https://api.flutter.dev/flutter/widgets/CustomPaint-class.html).

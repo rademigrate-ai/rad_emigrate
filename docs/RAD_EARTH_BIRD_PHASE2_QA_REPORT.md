@@ -27,7 +27,7 @@ All evidence is generated from a local `flutter build web -t lib/visual_qa_main.
 | Section loading | [`phase2_section_loading_desktop.png`](visual_qa/phase2_section_loading_desktop.png) | [`phase2_section_loading_mobile.png`](visual_qa/phase2_section_loading_mobile.png) | [`phase2_section_loading_orbit.mp4`](visual_qa/phase2_section_loading_orbit.mp4) |
 | Compact loading | [`phase2_compact_loading_desktop.png`](visual_qa/phase2_compact_loading_desktop.png) | [`phase2_compact_loading_mobile.png`](visual_qa/phase2_compact_loading_mobile.png) | [`phase2_compact_loading_orbit.mp4`](visual_qa/phase2_compact_loading_orbit.mp4) |
 
-Additional dark-section contrast captures: [`desktop`](visual_qa/phase2_section_loading_dark_desktop.png) and [`mobile`](visual_qa/phase2_section_loading_dark_mobile.png).
+Additional dark-section contrast captures: [`desktop`](visual_qa/phase2_section_loading_dark_desktop.png) and [`mobile`](visual_qa/phase2_section_loading_dark_mobile.png). The compact screenshots each contain the actual compact loader on **both** a light surface (`dark: false`) and a dark surface (`dark: true`).
 
 Each MP4 is H.264, 1280×800, 25 fps, silent, and exactly **14.000 seconds**. The reproducible capture implementation and exact file metadata/console observations are in [`tools/capture_phase2_loading_motion.py`](../tools/capture_phase2_loading_motion.py) and [`phase2_loading_capture_report.json`](visual_qa/phase2_loading_capture_report.json).
 
@@ -43,7 +43,13 @@ Therefore the initial analyzer descriptions are recorded as conservative automat
 
 ## Browser observations
 
-The capture report contains no `error` console entries. It records only Playwright's script-injection debug message and Chromium WebGL `GL_CLOSE_PATH_NV` / `ReadPixels` performance warnings while taking screenshots. Those warnings arise in the headless capture environment and do not identify an application exception.
+The capture tool now records console observations for every desktop/mobile target, including the additional dark-section capture, and fails the capture when any console entry has type `error`. The final report contains zero error entries for Splash, full, section, compact, dark-section desktop, and dark-section mobile.
+
+The recorded non-error entries are only Playwright's script-injection debug message and Chromium WebGL `GL_CLOSE_PATH_NV` / `ReadPixels` performance warnings while taking screenshots. Those warnings arise in the headless capture environment and do not identify an application exception.
+
+## Independent review remediation
+
+A fresh-context review identified two Important evidence gaps: compact QA covered only the dark surface, and the capture code did not enforce zero browser errors or record dark-section console events. The remediation adds light-and-dark compact QA surfaces and smoke coverage, enforces `error`-level console failure across every captured surface, and writes dark-section console observations into the JSON report. It also removes the compact cyan node so compact rendering is precisely the official red bird plus one cyan ellipse.
 
 ## Automated verification
 
@@ -53,9 +59,9 @@ All commands below were run after the Phase 2 implementation and evidence captur
 | --- | --- |
 | `dart format --set-exit-if-changed lib test` | PASS — 179 files already formatted. |
 | `flutter analyze` | PASS — “No issues found!” |
-| `flutter test` | PASS — **224 tests**. |
-| Production `flutter build web --no-web-resources-cdn ...` | PASS — 88.7 s. |
-| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 81.5 s. |
+| `flutter test` | PASS — **225 tests**. |
+| Production `flutter build web --no-web-resources-cdn ...` | PASS — 88.0 s. |
+| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 84.1 s. |
 | `flutter build apk --debug ...` | PASS — debug APK produced at `build/app/outputs/flutter-apk/app-debug.apk` (185 MB). |
 | Capture script `python3 tools/capture_phase2_loading_motion.py` | PASS — 4 recordings, 10 screenshots, JSON diagnostics. |
 
@@ -68,8 +74,8 @@ The production web output was measured with the identical build configuration be
 | Measure | Bytes |
 | --- | ---: |
 | Pre-migration output | 44,192,558 |
-| Phase 2 output | 44,188,145 |
-| Delta | **−4,413** |
+| Phase 2 output | 44,187,977 |
+| Delta | **−4,581** |
 
 The small decrease is consistent with removing the duplicate loader painter/controller while reusing the Login-approved renderer.
 

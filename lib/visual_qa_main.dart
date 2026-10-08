@@ -247,25 +247,51 @@ class _CompactLoadingQaPage extends StatelessWidget {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 420),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0B2430),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Row(
-              children: [
-                RadInlineLoading(label: 'Updating application', dark: true),
-                SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    'Updating your application',
-                    style: TextStyle(color: Colors.white),
-                  ),
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xFFB9D9DE)),
+                  borderRadius: BorderRadius.circular(18),
                 ),
-              ],
-            ),
+                child: const Row(
+                  children: [
+                    RadInlineLoading(label: 'Updating application'),
+                    SizedBox(width: 14),
+                    Expanded(child: Text('Updating your application')),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0B2430),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Row(
+                  children: [
+                    RadInlineLoading(
+                      label: 'Updating application on dark surface',
+                      dark: true,
+                    ),
+                    SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        'Updating your application',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
