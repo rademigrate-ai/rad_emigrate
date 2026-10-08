@@ -98,6 +98,7 @@ abstract final class GeoTimezoneResolver {
     }
 
     try {
+      // Resolve from geographic boundaries, never from the nearest catalog city.
       final name = lookupIanaTimezone(longitude: longitude, latitude: latitude);
       if (name == null) {
         return GeoResolveResult(
