@@ -206,8 +206,7 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get newPassword => 'رمز جدید';
   @override
-  String get passwordResetSent =>
-      'اگر حسابی با این ایمیل باشد، لینک ارسال شد.';
+  String get passwordResetSent => 'اگر حسابی با این ایمیل باشد، لینک ارسال شد.';
   @override
   String get passwordUpdated => 'رمز به‌روز شد. اکنون می‌توانید وارد شوید.';
   @override
