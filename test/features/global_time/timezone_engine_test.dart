@@ -14,7 +14,6 @@ void main() {
         () {
       final offset = TimezoneEngine.offsetFromUtc('Asia/Tehran');
       final minutes = offset.inMinutes;
-      // Iran has used +3:30 historically; accept +3:30 or +4:30.
       expect(minutes == 210 || minutes == 270, isTrue,
           reason: 'unexpected Tehran offset minutes=$minutes');
     });
@@ -39,12 +38,12 @@ void main() {
         hour: 14,
         minute: 0,
       );
-      expect(converted.hour, isNot(equals(14))); // different zone
+      expect(converted.hour, isNot(equals(14)));
     });
 
     test('isDaytime around noon is true',
         () {
-      final noon = DateTime.utc(2026, 6, 15, 9, 0); // ~12:30 Tehran
+      final noon = DateTime.utc(2026, 6, 15, 9, 0);
       expect(
         TimezoneEngine.isDaytime('Asia/Tehran', at: noon),
         isTrue,
@@ -67,7 +66,6 @@ void main() {
         durationMinutes: 60,
       );
       expect(windows, isNotEmpty);
-      // At least one high-quality window expected on a normal weekday.
       expect(windows.any((w) => w.quality >= 0.5), isTrue);
     });
 
@@ -81,6 +79,22 @@ void main() {
         year: 2026,
         month: 1,
         day: 10,
+      );
+      expect(windows, isA<List>());
+    });
+
+    test('DST spring-forward date still returns list',
+        () {
+      // US spring forward 2026-03-08 — planner must not throw.
+      final toronto = CityCatalog.defaults[1];
+      final london = CityCatalog.defaults[2];
+      final windows = MeetingPlanner.suggestWindows(
+        origin: toronto,
+        destination: london,
+        year: 2026,
+        month: 3,
+        day: 8,
+        durationMinutes: 60,
       );
       expect(windows, isA<List>());
     });
