@@ -32,8 +32,8 @@ void main() {
 
   test('ai-orchestrator enforces server-side daily limits by role', () {
     final fn = read('supabase/functions/ai-orchestrator/handler.ts');
-    expect(fn.contains('ai_usage_limits'), isTrue);
+    expect(fn.contains('rpc/consume_ai_daily_quota'), isTrue);
     expect(fn.contains('daily_limit_reached'), isTrue);
-    expect(fn.contains('daily_requests'), isTrue);
+    expect(fn.contains('p_role: role'), isTrue);
   });
 }
