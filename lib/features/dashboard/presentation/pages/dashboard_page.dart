@@ -6,11 +6,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_entrance.dart';
+import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../feed/data/feed_repository.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/directional_icons.dart';
-import '../../../../core/widgets/rad_brand.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -62,202 +64,214 @@ class DashboardPage extends ConsumerWidget {
           const SizedBox(width: 8),
         ],
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1120),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
-            children: [
-              AppEntrance(
-                child: _JourneyHero(
-                  name: name,
-                  needsAction: needsAction,
-                  onPrimaryAction: () => context.go(
-                    !profileDone
-                        ? '/profile-completion'
-                        : needsAction
-                        ? '/documents'
-                        : '/applications',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 28),
-              if (needsAction) ...[
-                SectionHeader(
-                  title: l10n.needsYourAction,
-                  subtitle: l10n.needsActionSubtitle,
-                ),
-                if (!profileDone)
-                  _ActionRow(
-                    icon: Icons.badge_outlined,
-                    title: l10n.completeProfileTitle,
-                    subtitle: l10n.completeProfileSubtitle,
-                    tone: AppColors.warning,
-                    onTap: () => context.go('/profile-completion'),
-                  ),
-                if (missingDocs > 0)
-                  _ActionRow(
-                    icon: Icons.folder_outlined,
-                    title: missingDocs == 1
-                        ? l10n.documentMissingOne
-                        : l10n.documentsMissingCount(missingDocs),
-                    subtitle: l10n.reviewRequiredFiles,
-                    tone: AppColors.warning,
-                    badge: StatusBadge(
-                      label: l10n.actionBadge,
-                      tone: StatusTone.warning,
-                    ),
-                    onTap: () => context.go('/documents'),
-                  ),
-                const SizedBox(height: 16),
-              ],
-              SectionHeader(
-                title: l10n.caseOverview,
-                subtitle: l10n.caseOverviewSubtitle,
-                actionLabel: l10n.allCases,
-                onAction: () => context.go('/applications'),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: _MetricTile(
-                      value: appsState.hasValue ? '$activeApps' : '—',
-                      label: l10n.activeCases,
-                      icon: Icons.assignment_outlined,
-                      onTap: () => context.go('/applications'),
+      body: PremiumCanvas(
+        accent: AppColors.teal,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1120),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
+              children: [
+                AppEntrance(
+                  child: _JourneyHero(
+                    name: name,
+                    needsAction: needsAction,
+                    onPrimaryAction: () => context.go(
+                      !profileDone
+                          ? '/profile-completion'
+                          : needsAction
+                          ? '/documents'
+                          : '/applications',
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _MetricTile(
-                      value: docsState.hasValue ? '$missingDocs' : '—',
-                      label: l10n.documentsMissing,
+                ),
+                const SizedBox(height: 28),
+                if (needsAction) ...[
+                  SectionHeader(
+                    title: l10n.needsYourAction,
+                    subtitle: l10n.needsActionSubtitle,
+                  ),
+                  if (!profileDone)
+                    _ActionRow(
+                      icon: Icons.badge_outlined,
+                      title: l10n.completeProfileTitle,
+                      subtitle: l10n.completeProfileSubtitle,
+                      tone: AppColors.warning,
+                      onTap: () => context.go('/profile-completion'),
+                    ),
+                  if (missingDocs > 0)
+                    _ActionRow(
                       icon: Icons.folder_outlined,
+                      title: missingDocs == 1
+                          ? l10n.documentMissingOne
+                          : l10n.documentsMissingCount(missingDocs),
+                      subtitle: l10n.reviewRequiredFiles,
+                      tone: AppColors.warning,
+                      badge: StatusBadge(
+                        label: l10n.actionBadge,
+                        tone: StatusTone.warning,
+                      ),
                       onTap: () => context.go('/documents'),
                     ),
-                  ),
+                  const SizedBox(height: 16),
                 ],
-              ),
-              const SizedBox(height: 28),
-              SectionHeader(
-                title: l10n.quickActions,
-                subtitle: l10n.quickActionsSubtitle,
-              ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ActionChip(
-                    icon: Icons.public_outlined,
-                    label: l10n.visaPrograms,
-                    onTap: () => context.go('/visa'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.article_outlined,
-                    label: l10n.radUpdates,
-                    onTap: () => context.go('/feed'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.assignment_outlined,
-                    label: l10n.applications,
-                    onTap: () => context.go('/applications'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.folder_outlined,
-                    label: l10n.documents,
-                    onTap: () => context.go('/documents'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.support_agent_outlined,
-                    label: l10n.openConsultation,
-                    onTap: () => context.go('/consultation'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.notifications_outlined,
-                    label: l10n.openNotifications,
-                    onTap: () => context.go('/notifications'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.smart_toy_outlined,
-                    label: l10n.aiAssistant,
-                    onTap: () => context.go('/ai-assistant'),
-                  ),
-                  _ActionChip(
-                    icon: Icons.schedule_outlined,
-                    label: locale == 'fa' ? 'ساعت جهانی' : 'World Time',
-                    onTap: () => context.go('/world-clock'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-              const HomeGlobalTimeWidget(),
-              const SizedBox(height: 28),
-              SectionHeader(
-                title: l10n.radUpdates,
-                actionLabel: l10n.feed,
-                onAction: () => context.go('/feed'),
-              ),
-              updates.when(
-                loading: () => const LinearProgressIndicator(),
-                error: (_, _) => _ShortcutRow(
-                  icon: Icons.refresh,
-                  title: l10n.updatesLoadFailed,
-                  subtitle: l10n.retry,
-                  onTap: () => ref.invalidate(feedProvider(locale)),
+                SectionHeader(
+                  title: l10n.caseOverview,
+                  subtitle: l10n.caseOverviewSubtitle,
+                  actionLabel: l10n.allCases,
+                  onAction: () => context.go('/applications'),
                 ),
-                data: (items) => items.isEmpty
-                    ? AppCard(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  children: [
+                    Expanded(
+                      child: MotionStagger(
+                        index: 0,
+                        child: _MetricTile(
+                          value: appsState.hasValue ? activeApps : null,
+                          label: l10n.activeCases,
+                          icon: Icons.assignment_outlined,
+                          onTap: () => context.go('/applications'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: MotionStagger(
+                        index: 1,
+                        child: _MetricTile(
+                          value: docsState.hasValue ? missingDocs : null,
+                          label: l10n.documentsMissing,
+                          icon: Icons.folder_outlined,
+                          onTap: () => context.go('/documents'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 28),
+                SectionHeader(
+                  title: l10n.quickActions,
+                  subtitle: l10n.quickActionsSubtitle,
+                ),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _ActionChip(
+                      icon: Icons.public_outlined,
+                      label: l10n.visaPrograms,
+                      onTap: () => context.go('/visa'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.article_outlined,
+                      label: l10n.radUpdates,
+                      onTap: () => context.go('/feed'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.assignment_outlined,
+                      label: l10n.applications,
+                      onTap: () => context.go('/applications'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.folder_outlined,
+                      label: l10n.documents,
+                      onTap: () => context.go('/documents'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.support_agent_outlined,
+                      label: l10n.openConsultation,
+                      onTap: () => context.go('/consultation'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.notifications_outlined,
+                      label: l10n.openNotifications,
+                      onTap: () => context.go('/notifications'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.smart_toy_outlined,
+                      label: l10n.aiAssistant,
+                      onTap: () => context.go('/ai-assistant'),
+                    ),
+                    _ActionChip(
+                      icon: Icons.schedule_outlined,
+                      label: locale == 'fa' ? 'ساعت جهانی' : 'World Time',
+                      onTap: () => context.go('/world-clock'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 28),
+                const HomeGlobalTimeWidget(),
+                const SizedBox(height: 28),
+                SectionHeader(
+                  title: l10n.radUpdates,
+                  actionLabel: l10n.feed,
+                  onAction: () => context.go('/feed'),
+                ),
+                updates.when(
+                  loading: () => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: RadInlineLoading(label: l10n.loadingUpdates),
+                  ),
+                  error: (_, _) => _ShortcutRow(
+                    icon: Icons.refresh,
+                    title: l10n.updatesLoadFailed,
+                    subtitle: l10n.retry,
+                    onTap: () => ref.invalidate(feedProvider(locale)),
+                  ),
+                  data: (items) => items.isEmpty
+                      ? AppCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.noReviewedUpdates,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(l10n.catalogueDisclaimer),
+                            ],
+                          ),
+                        )
+                      : Column(
                           children: [
-                            Text(
-                              l10n.noReviewedUpdates,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(l10n.catalogueDisclaimer),
+                            for (final item in items.take(3))
+                              _ShortcutRow(
+                                icon: Icons.article_outlined,
+                                title: item.title,
+                                subtitle: item.summary,
+                                onTap: () => context.go('/feed'),
+                              ),
                           ],
                         ),
-                      )
-                    : Column(
-                        children: [
-                          for (final item in items.take(3))
-                            _ShortcutRow(
-                              icon: Icons.article_outlined,
-                              title: item.title,
-                              subtitle: item.summary,
-                              onTap: () => context.go('/feed'),
-                            ),
-                        ],
-                      ),
-              ),
-              const SizedBox(height: 28),
-              SectionHeader(title: l10n.shortcuts),
-              _ShortcutRow(
-                icon: Icons.person_outline,
-                title: l10n.profile,
-                subtitle: l10n.profileShortcutSubtitle,
-                onTap: () => context.go('/profile'),
-              ),
-              _ShortcutRow(
-                icon: Icons.smart_toy_outlined,
-                title: l10n.askAssistant,
-                subtitle: l10n.askAssistantSubtitle,
-                onTap: () => context.go('/ai-assistant'),
-              ),
-              _ShortcutRow(
-                icon: Icons.support_agent_outlined,
-                title: l10n.openConsultation,
-                subtitle: l10n.consultationIntro,
-                onTap: () => context.go('/consultation'),
-              ),
-              _ShortcutRow(
-                icon: Icons.notifications_outlined,
-                title: l10n.openNotifications,
-                subtitle: l10n.noNotifications,
-                onTap: () => context.go('/notifications'),
-              ),
-            ],
+                ),
+                const SizedBox(height: 28),
+                SectionHeader(title: l10n.shortcuts),
+                _ShortcutRow(
+                  icon: Icons.person_outline,
+                  title: l10n.profile,
+                  subtitle: l10n.profileShortcutSubtitle,
+                  onTap: () => context.go('/profile'),
+                ),
+                _ShortcutRow(
+                  icon: Icons.smart_toy_outlined,
+                  title: l10n.askAssistant,
+                  subtitle: l10n.askAssistantSubtitle,
+                  onTap: () => context.go('/ai-assistant'),
+                ),
+                _ShortcutRow(
+                  icon: Icons.support_agent_outlined,
+                  title: l10n.openConsultation,
+                  subtitle: l10n.consultationIntro,
+                  onTap: () => context.go('/consultation'),
+                ),
+                _ShortcutRow(
+                  icon: Icons.notifications_outlined,
+                  title: l10n.openNotifications,
+                  subtitle: l10n.noNotifications,
+                  onTap: () => context.go('/notifications'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -279,71 +293,41 @@ class _JourneyHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final title = l10n.brandIntroTitle;
-    final description = l10n.brandIntroBody;
-    return AppCard(
-      emphasized: true,
-      padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return PremiumHeroPanel(
+      kicker: const EditorialKicker(
+        index: '01',
+        label: 'YOUR JOURNEY',
+        dark: true,
+      ),
+      title: l10n.helloName(name),
+      body: l10n.brandIntroBody,
+      trailing: const RadOrbit(size: 250, showBrand: true),
+      footer: Wrap(
+        spacing: 12,
+        runSpacing: 12,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const RadBrand(
-                      size: RadBrandSize.small,
-                      showInstituteName: false,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      l10n.helloName(name),
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(title, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 6),
-                    Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Icon(
-                needsAction ? Icons.flag_outlined : Icons.check_circle_outline,
-                size: 28,
-                color: needsAction ? AppColors.warning : AppColors.success,
-              ),
-            ],
+          AppButton(
+            label: l10n.exploreVisa,
+            icon: Icons.public_outlined,
+            expanded: false,
+            onPressed: () => context.go('/visa'),
           ),
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              AppButton(
-                label: l10n.exploreVisa,
-                icon: Icons.public_outlined,
-                expanded: false,
-                onPressed: () => context.go('/visa'),
-              ),
-              AppButton(
-                label: needsAction
-                    ? l10n.reviewNextStep
-                    : l10n.viewApplications,
-                icon: needsAction
-                    ? directionalForward(context)
-                    : Icons.assignment_outlined,
-                expanded: false,
-                variant: AppButtonVariant.secondary,
-                onPressed: onPrimaryAction,
-              ),
-            ],
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white,
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.58)),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            ),
+            icon: Icon(
+              needsAction
+                  ? directionalForward(context)
+                  : Icons.assignment_outlined,
+              size: 18,
+            ),
+            label: Text(
+              needsAction ? l10n.reviewNextStep : l10n.viewApplications,
+            ),
+            onPressed: onPrimaryAction,
           ),
         ],
       ),
@@ -407,32 +391,52 @@ class _MetricTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final String value;
+  final int? value;
   final String label;
   final IconData icon;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return AppCard(
-      onTap: onTap,
-      padding: const EdgeInsets.fromLTRB(18, 17, 18, 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 20, color: colorScheme.primary),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colorScheme.primary,
-              fontFeatures: const [ui.FontFeature.tabularFigures()],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: PremiumCanvas(
+            dark: true,
+            accent: icon == Icons.folder_outlined
+                ? AppColors.primaryRed
+                : AppColors.teal,
+            compact: true,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 19, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, size: 22, color: const Color(0xFF70E4DE)),
+                  const SizedBox(height: 12),
+                  MotionCount(
+                    value: value,
+                    placeholder: '—',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: Colors.white,
+                      fontFeatures: const [ui.FontFeature.tabularFigures()],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: const Color(0xFFBFD1D6),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-        ],
+        ),
       ),
     );
   }
