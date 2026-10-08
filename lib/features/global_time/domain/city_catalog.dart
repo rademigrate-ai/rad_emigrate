@@ -275,7 +275,8 @@ abstract final class CityCatalog {
     const r = 6371.0;
     final dLat = _rad(lat2 - lat1);
     final dLon = _rad(lon2 - lon1);
-    final a = (dLat / 2).sin() * (dLat / 2).sin() +
+    final a =
+        (dLat / 2).sin() * (dLat / 2).sin() +
         _rad(lat1).cos() *
             _rad(lat2).cos() *
             (dLon / 2).sin() *
