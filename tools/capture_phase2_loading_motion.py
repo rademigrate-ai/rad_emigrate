@@ -245,14 +245,107 @@ async def capture_section_dark_contrast(
 
 
 CaptureToStaging = Callable[[Path], Awaitable[dict[str, object]]]
+ReplaceFile = Callable[[Path, Path], None]
+
+
+def expected_evidence_names() -> set[str]:
+    names = {
+        "phase2_loading_capture_report.json",
+        "phase2_section_loading_dark_desktop.png",
+        "phase2_section_loading_dark_mobile.png",
+    }
+    for target in TARGETS:
+        names.update(
+            {
+                f"phase2_{target.slug}_desktop.png",
+                f"phase2_{target.slug}_mobile.png",
+                f"phase2_{target.slug}_orbit.mp4",
+            }
+        )
+    return names
+
+
+def validate_staged_evidence(
+    staging: Path,
+    report: dict[str, object],
+) -> list[Path]:
+    expected = expected_evidence_names()
+    entries = list(staging.iterdir())
+    unexpected_directories = [entry.name for entry in entries if entry.is_dir()]
+    artifact_names = {entry.name for entry in entries if entry.is_file()}
+    missing = sorted(expected - artifact_names)
+    unexpected = sorted(artifact_names - expected)
+    if missing or unexpected or unexpected_directories:
+        raise RuntimeError(
+            "Phase 2 evidence manifest mismatch: "
+            f"missing={missing}, unexpected={unexpected}, "
+            f"directories={sorted(unexpected_directories)}"
+        )
+
+    targets = report.get("targets")
+    if not isinstance(targets, dict) or set(targets) != {
+        target.slug for target in TARGETS
+    }:
+        raise RuntimeError("Phase 2 report target manifest mismatch")
+    for target in TARGETS:
+        target_report = targets.get(target.slug)
+        if not isinstance(target_report, dict) or target_report.get(
+            "finalVideo"
+        ) != f"phase2_{target.slug}_orbit.mp4":
+            raise RuntimeError(f"Phase 2 report video manifest mismatch for {target.slug}")
+
+    dark_section = report.get("darkSectionContrast")
+    if not isinstance(dark_section, dict) or set(dark_section) != {
+        "desktop",
+        "mobile",
+    }:
+        raise RuntimeError("Phase 2 dark-section report manifest mismatch")
+
+    return sorted(staging / name for name in expected)
+
+
+def publish_evidence_set(
+    *,
+    output_dir: Path,
+    artifacts: list[Path],
+    replace_file: ReplaceFile,
+) -> None:
+    """Replaces evidence as one rollback-safe set after staging validation."""
+    with tempfile.TemporaryDirectory(
+        prefix=".phase2_loading_backup_",
+        dir=output_dir,
+    ) as temporary:
+        backup = Path(temporary)
+        prior_artifacts: list[tuple[Path, Path]] = []
+        published: list[Path] = []
+        try:
+            for artifact in artifacts:
+                destination = output_dir / artifact.name
+                if destination.exists():
+                    archived = backup / artifact.name
+                    replace_file(destination, archived)
+                    prior_artifacts.append((destination, archived))
+
+            for artifact in artifacts:
+                destination = output_dir / artifact.name
+                replace_file(artifact, destination)
+                published.append(destination)
+        except Exception:
+            for destination in published:
+                destination.unlink(missing_ok=True)
+            for destination, archived in reversed(prior_artifacts):
+                if archived.exists():
+                    os.replace(archived, destination)
+            raise
 
 
 async def capture_and_publish(
     *,
     output_dir: Path,
     capture_to_staging: CaptureToStaging,
+    replace_file: ReplaceFile = os.replace,
 ) -> None:
-    """Publishes a complete evidence set only after every capture succeeds."""
+    """Validates and transactionally publishes one complete evidence generation."""
     output_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(
         prefix=".phase2_loading_capture_",
@@ -264,11 +357,12 @@ async def capture_and_publish(
             json.dumps(report, indent=2) + "\n",
             encoding="utf-8",
         )
-        artifacts = sorted(path for path in staging.iterdir() if path.is_file())
-        if not artifacts:
-            raise RuntimeError("Phase 2 capture produced no publishable evidence")
-        for artifact in artifacts:
-            os.replace(artifact, output_dir / artifact.name)
+        artifacts = validate_staged_evidence(staging, report)
+        publish_evidence_set(
+            output_dir=output_dir,
+            artifacts=artifacts,
+            replace_file=replace_file,
+        )
 
 
 async def main() -> None:
