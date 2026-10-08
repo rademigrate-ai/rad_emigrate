@@ -16,10 +16,12 @@ void main() {
     ).readAsStringSync();
     orchestrator = File('supabase/functions/ai-orchestrator/handler.ts')
         .readAsStringSync();
-    grounding = File('supabase/functions/ai-orchestrator/knowledge_grounding.ts')
-        .readAsStringSync();
-    providers = File('supabase/functions/ai-orchestrator/handler_providers.ts')
-        .readAsStringSync();
+    grounding = File(
+      'supabase/functions/ai-orchestrator/knowledge_grounding.ts',
+    ).readAsStringSync();
+    providers = File(
+      'supabase/functions/ai-orchestrator/handler_providers.ts',
+    ).readAsStringSync();
     research = File('supabase/functions/research-sync/handler.ts')
         .readAsStringSync();
     config = File('supabase/config.toml').readAsStringSync();
