@@ -50,8 +50,14 @@ abstract final class MeetingPlanner {
     // Slide candidate start times in origin local time across the day.
     for (var hour = 0; hour < 24; hour++) {
       for (var minute = 0; minute < 60; minute += 30) {
-        final startOrigin =
-            tz.TZDateTime(originLoc, year, month, day, hour, minute);
+        final startOrigin = tz.TZDateTime(
+          originLoc,
+          year,
+          month,
+          day,
+          hour,
+          minute,
+        );
         final endOrigin = startOrigin.add(Duration(minutes: durationMinutes));
 
         // Skip if end spills past midnight of the chosen day in origin.
