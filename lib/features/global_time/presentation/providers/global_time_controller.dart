@@ -91,7 +91,12 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
   Future<void> addFavorite(City city) async {
     final repo = _ref.read(favoritesRepositoryProvider);
     if (repo == null) {
-      if (state.favorites.any((c) => c.id == city.id || c.timezone == city.timezone && (c.latitude - city.latitude).abs() < 0.01)) {
+      if (state.favorites.any(
+        (c) =>
+            c.id == city.id ||
+            c.timezone == city.timezone &&
+                (c.latitude - city.latitude).abs() < 0.01,
+      )) {
         return;
       }
       state = state.copyWith(favorites: [...state.favorites, city]);
@@ -122,17 +127,11 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
   }
 
   void selectCity(City? city) {
-    state = state.copyWith(
-      selectedCity: city,
-      clearSelected: city == null,
-    );
+    state = state.copyWith(selectedCity: city, clearSelected: city == null);
   }
 
   void setScrubUtc(DateTime? utc) {
-    state = state.copyWith(
-      scrubUtc: utc,
-      clearScrub: utc == null,
-    );
+    state = state.copyWith(scrubUtc: utc, clearScrub: utc == null);
   }
 
   /// Map tap: genuine boundary lookup. Never assigns a wrong city timezone
@@ -178,5 +177,5 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
 
 final globalTimeControllerProvider =
     StateNotifierProvider<GlobalTimeController, GlobalTimeState>((ref) {
-  return GlobalTimeController(ref);
-});
+      return GlobalTimeController(ref);
+    });
