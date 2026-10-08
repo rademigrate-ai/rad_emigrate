@@ -107,7 +107,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
           ? Center(child: Text(l10n.noNotifications))
           : ListView.separated(
               itemCount: _items.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, i) {
                 final n = _items[i];
                 final unread = n['read_at'] == null;
