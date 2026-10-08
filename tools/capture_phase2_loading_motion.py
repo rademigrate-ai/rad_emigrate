@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+"""Capture Phase 2 RAD Earth-and-bird Flutter loading evidence.
+
+The visual-QA build must already be served locally. The `splash` route mounts
+an actual SplashPage held pending by a QA-only bootstrap override; all loading
+routes use the production shared widgets with synthetic state only. This script
+never enters credentials, triggers app actions, or accesses customer data.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import os
+import shutil
+import subprocess
+import time
+from dataclasses import dataclass
+from pathlib import Path
+
+from playwright.async_api import ConsoleMessage, Page, async_playwright
+
+OUT = Path("docs/visual_qa")
+BASE_URL = os.environ.get("RAD_PHASE2_CAPTURE_URL", "http://127.0.0.1:8087")
+CAPTURE_SECONDS = 14
+SETTLE_MS = 3200
+DESKTOP = {"width": 1280, "height": 800}
+MOBILE = {"width": 390, "height": 844}
+
+
+@dataclass(frozen=True)
+class CaptureTarget:
+    slug: str
+    screen: str
+
+
+TARGETS = (
+    CaptureTarget("splash", "splash"),
+    CaptureTarget("full_loading", "loading-full"),
+    CaptureTarget("section_loading", "loading-section"),
+    CaptureTarget("compact_loading", "loading-compact"),
+)
+
+
+def url_for(screen: str) -> str:
+    return f"{BASE_URL}/?screen={screen}&capture=1"
+
+
+def duration_seconds(path: Path) -> float:
+    output = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=nk=1:nw=1",
+            str(path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return float(output.stdout.strip())
+
+
+def video_metadata(path: Path) -> dict[str, object]:
+    output = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "stream=codec_name,width,height,r_frame_rate",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "json",
+            str(path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(output.stdout)
+
+
+def transcode_exact_orbit(raw: Path, final: Path) -> tuple[float, float]:
+    raw_duration = duration_seconds(raw)
+    trim_start = max(0.0, raw_duration - CAPTURE_SECONDS)
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(raw),
+            "-ss",
+            f"{trim_start:.3f}",
+            "-t",
+            str(CAPTURE_SECONDS),
+            "-c:v",
+            "libx264",
+            "-pix_fmt",
+            "yuv420p",
+            "-movflags",
+            "+faststart",
+            str(final),
+        ],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return raw_duration, trim_start
+
+
+def attach_console_capture(page: Page, messages: list[dict[str, str]]) -> None:
+    def record(message: ConsoleMessage) -> None:
+        messages.append({"type": message.type, "text": message.text})
+
+    page.on("console", record)
+
+
+async def capture_target(playwright, target: CaptureTarget) -> dict[str, object]:
+    console: list[dict[str, str]] = []
+    recording_dir = OUT / f"phase2_{target.slug}_recording_tmp"
+    raw_video = OUT / f"phase2_{target.slug}_orbit.webm"
+    final_video = OUT / f"phase2_{target.slug}_orbit.mp4"
+
+    shutil.rmtree(recording_dir, ignore_errors=True)
+    recording_dir.mkdir(parents=True, exist_ok=True)
+    raw_video.unlink(missing_ok=True)
+    final_video.unlink(missing_ok=True)
+
+    browser = await playwright.chromium.launch(
+        executable_path="/usr/bin/chromium",
+        headless=True,
+        args=["--no-sandbox"],
+    )
+    try:
+        desktop_context = await browser.new_context(
+            viewport=DESKTOP,
+            device_scale_factor=1,
+            record_video_dir=str(recording_dir),
+            record_video_size=DESKTOP,
+        )
+        desktop = await desktop_context.new_page()
+        attach_console_capture(desktop, console)
+        await desktop.goto(url_for(target.screen), wait_until="networkidle", timeout=60000)
+        await desktop.wait_for_timeout(SETTLE_MS)
+        await desktop.screenshot(path=str(OUT / f"phase2_{target.slug}_desktop.png"))
+
+        video = desktop.video
+        assert video is not None
+        started = time.monotonic()
+        await desktop.wait_for_timeout(CAPTURE_SECONDS * 1000)
+        capture_seconds = time.monotonic() - started
+        await desktop.close()
+        await desktop_context.close()
+        await video.save_as(str(raw_video))
+
+        mobile_context = await browser.new_context(
+            viewport=MOBILE,
+            device_scale_factor=1,
+        )
+        mobile = await mobile_context.new_page()
+        attach_console_capture(mobile, console)
+        await mobile.goto(url_for(target.screen), wait_until="networkidle", timeout=60000)
+        await mobile.wait_for_timeout(SETTLE_MS)
+        await mobile.screenshot(path=str(OUT / f"phase2_{target.slug}_mobile.png"))
+        await mobile_context.close()
+    finally:
+        await browser.close()
+
+    raw_duration, trim_start = transcode_exact_orbit(raw_video, final_video)
+    raw_video.unlink(missing_ok=True)
+    shutil.rmtree(recording_dir, ignore_errors=True)
+    final_duration = duration_seconds(final_video)
+    if not 12 <= final_duration <= 15:
+        raise RuntimeError(f"Unexpected final duration for {target.slug}: {final_duration}")
+
+    return {
+        "route": target.screen,
+        "url": url_for(target.screen),
+        "desktopViewport": "1280x800",
+        "mobileViewport": "390x844",
+        "requestedCaptureSeconds": CAPTURE_SECONDS,
+        "captureSeconds": capture_seconds,
+        "rawRecordingSeconds": raw_duration,
+        "trimStartSeconds": trim_start,
+        "finalVideo": final_video.name,
+        "finalVideoMetadata": video_metadata(final_video),
+        "console": console,
+    }
+
+
+async def capture_section_dark_contrast(playwright) -> None:
+    browser = await playwright.chromium.launch(
+        executable_path="/usr/bin/chromium",
+        headless=True,
+        args=["--no-sandbox"],
+    )
+    try:
+        for suffix, viewport in (("desktop", DESKTOP), ("mobile", MOBILE)):
+            page = await browser.new_page(viewport=viewport, device_scale_factor=1)
+            await page.goto(
+                url_for("loading-section-dark"),
+                wait_until="networkidle",
+                timeout=60000,
+            )
+            await page.wait_for_timeout(SETTLE_MS)
+            await page.screenshot(
+                path=str(OUT / f"phase2_section_loading_dark_{suffix}.png")
+            )
+            await page.close()
+    finally:
+        await browser.close()
+
+
+async def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    reports: dict[str, object] = {}
+    async with async_playwright() as playwright:
+        for target in TARGETS:
+            reports[target.slug] = await capture_target(playwright, target)
+        await capture_section_dark_contrast(playwright)
+
+    (OUT / "phase2_loading_capture_report.json").write_text(
+        json.dumps(
+            {
+                "source": "Flutter visual-QA entrypoint with actual shared loading widgets",
+                "baseUrl": BASE_URL,
+                "targets": reports,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
