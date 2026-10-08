@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'city.dart';
 
 /// Curated catalog of major cities for search, defaults, and nearest-city fallback.
@@ -276,12 +278,12 @@ abstract final class CityCatalog {
     final dLat = _rad(lat2 - lat1);
     final dLon = _rad(lon2 - lon1);
     final a =
-        (dLat / 2).sin() * (dLat / 2).sin() +
-        _rad(lat1).cos() *
-            _rad(lat2).cos() *
-            (dLon / 2).sin() *
-            (dLon / 2).sin();
-    final c = 2 * a.sqrt().asin();
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_rad(lat1)) *
+            math.cos(_rad(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+    final c = 2 * math.asin(math.sqrt(a.clamp(0.0, 1.0)));
     return r * c;
   }
 
