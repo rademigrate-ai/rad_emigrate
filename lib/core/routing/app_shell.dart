@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../widgets/rad_brand.dart';
 import '../widgets/app_entrance.dart';
+import '../theme/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
 
@@ -181,6 +182,10 @@ class AppShell extends ConsumerWidget {
     return showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
+      sheetAnimationStyle: AnimationStyle(
+        duration: AppMotion.duration(context, AppMotion.modal),
+        reverseDuration: AppMotion.duration(context, AppMotion.fast),
+      ),
       builder: (sheetContext) => SafeArea(
         child: ListView(
           shrinkWrap: true,
