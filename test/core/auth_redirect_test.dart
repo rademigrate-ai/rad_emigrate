@@ -142,6 +142,33 @@ void main() {
       expect(restoredProtectedDestination('/ai-assistant'), '/ai-assistant');
       expect(restoredProtectedDestination('/admin'), '/admin');
       expect(restoredProtectedDestination('/feed'), '/feed');
+      expect(restoredProtectedDestination('/world-clock'), '/world-clock');
+    });
+
+    test('world-clock is a protected route for deep-link restoration', () {
+      final uri = Uri.parse('/world-clock');
+      final redirected = authRedirect(
+        uri: uri,
+        isRestoring: true,
+        isAuthenticated: false,
+        profileComplete: false,
+      );
+      expect(redirected, isNotNull);
+      final splashUri = Uri.parse(redirected!);
+      expect(splashUri.path, '/splash');
+      expect(
+        restoredProtectedDestination(splashUri.queryParameters['from']),
+        uri.toString(),
+      );
+      expect(
+        authRedirect(
+          uri: uri,
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: true,
+        ),
+        isNull,
+      );
     });
   });
 }
