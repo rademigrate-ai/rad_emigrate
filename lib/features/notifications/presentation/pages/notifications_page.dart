@@ -86,7 +86,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         body: Center(
           child: TextButton(
             onPressed: () => context.go('/login'),
-            child: Text(l10n.login),
+            child: Text(l10n.signIn),
           ),
         ),
       );
