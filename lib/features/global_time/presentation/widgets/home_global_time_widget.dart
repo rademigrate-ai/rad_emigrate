@@ -35,7 +35,7 @@ class HomeGlobalTimeWidget extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 140,
+          height: 190,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: cities.length,
