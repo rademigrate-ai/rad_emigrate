@@ -1,19 +1,12 @@
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone_finder/timezone_finder.dart' as tf;
-
 import 'city.dart';
 import 'city_catalog.dart';
-import 'timezone_engine.dart';
+import 'geo_bootstrap.dart';
+import 'geo_lookup.dart';
 
 /// Result of resolving geographic coordinates to an IANA timezone.
 enum GeoResolveStatus {
-  /// Land polygon matched an IANA zone.
   resolved,
-
-  /// Ocean / no land zone covers this point.
   unresolved,
-
-  /// Boundary data not ready or lookup failed.
   unavailable,
 }
 
@@ -30,20 +23,16 @@ class GeoResolveResult {
   final String? ianaId;
   final double? latitude;
   final double? longitude;
-
-  /// Optional nearest catalog city for naming only — never used to invent TZ.
   final City? suggestedCity;
 
   bool get isResolved => status == GeoResolveStatus.resolved && ianaId != null;
 
-  /// Build a selectable City when resolved. Name prefers catalog match by TZ.
   City? toCity() {
     if (!isResolved) return null;
     final id = ianaId!;
     final lat = latitude ?? 0;
     final lng = longitude ?? 0;
 
-    // Prefer catalog city that shares the same IANA id (for localized name).
     final byTz = CityCatalog.all.where((c) => c.timezone == id).toList();
     if (byTz.isNotEmpty) {
       final best = byTz.reduce((a, b) {
@@ -63,8 +52,8 @@ class GeoResolveResult {
       );
     }
 
-    // Fallback: use IANA id as display name; user can rename via favorites later.
-    final short = id.contains('/') ? id.split('/').last.replaceAll('_', ' ') : id;
+    final short =
+        id.contains('/') ? id.split('/').last.replaceAll('_', ' ') : id;
     return City(
       id: 'geo_${lat.toStringAsFixed(4)}_${lng.toStringAsFixed(4)}',
       nameEn: short,
@@ -83,8 +72,6 @@ class GeoResolveResult {
   }
 }
 
-/// Latitude/longitude → IANA using Timezone Boundary Builder polygons
-/// via `timezone_finder` (not nearest-city guessing).
 abstract final class GeoTimezoneResolver {
   static bool _ready = false;
   static bool _failed = false;
@@ -92,17 +79,13 @@ abstract final class GeoTimezoneResolver {
   static Future<void> ensureReady() async {
     if (_ready || _failed) return;
     try {
-      await TimezoneEngine.ensureInitialized();
-      // On VM/native, boundaries are compiled in. On web, caller should
-      // install the .bin asset first; if not available we mark unavailable.
-      await tf.ensurePreloaded();
+      await bootstrapGeoTimezone();
       _ready = true;
     } catch (_) {
       _failed = true;
     }
   }
 
-  /// GeoJSON order: longitude, latitude.
   static Future<GeoResolveResult> resolve({
     required double latitude,
     required double longitude,
@@ -118,9 +101,8 @@ abstract final class GeoTimezoneResolver {
     }
 
     try {
-      // timezone_finder API: findLocation(longitude, latitude)
-      final loc = tf.findLocation(longitude, latitude);
-      if (loc == null) {
+      final name = lookupIanaTimezone(longitude: longitude, latitude: latitude);
+      if (name == null) {
         return GeoResolveResult(
           status: GeoResolveStatus.unresolved,
           latitude: latitude,
@@ -130,7 +112,7 @@ abstract final class GeoTimezoneResolver {
       }
       return GeoResolveResult(
         status: GeoResolveStatus.resolved,
-        ianaId: loc.name,
+        ianaId: name,
         latitude: latitude,
         longitude: longitude,
         suggestedCity: CityCatalog.nearest(latitude, longitude),
@@ -145,7 +127,6 @@ abstract final class GeoTimezoneResolver {
     }
   }
 
-  /// Manual override when automatic resolution fails.
   static City cityWithManualTimezone({
     required double latitude,
     required double longitude,
@@ -177,7 +158,7 @@ abstract final class GeoTimezoneResolver {
       'America/Denver',
       'Europe/Istanbul',
       'Asia/Shanghai',
-    ].toSet().toList()..
-sort();
+    ].toSet().toList()
+      ..sort();
   }
 }

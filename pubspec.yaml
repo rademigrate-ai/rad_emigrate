@@ -23,6 +23,9 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/flags/
+    # Timezone Boundary Builder polygons for Flutter Web (ODbL).
+    # Native platforms use the index embedded in timezone_finder.
+    - packages/timezone_finder/data/boundaries_2026c.bin
 
 dependencies:
   flutter:
@@ -44,6 +47,7 @@ dependencies:
   timezone_finder: ^0.2.0
   flutter_map: ^8.1.1
   latlong2: ^0.9.1
+  shamsi_date: ^1.1.1
 
 dev_dependencies:
   flutter_test:
