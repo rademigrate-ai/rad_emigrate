@@ -7,10 +7,14 @@ import 'package:rad_emigrate/features/splash/presentation/pages/splash_page.dart
 import 'package:rad_emigrate/visual_qa_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> _pump(WidgetTester tester, String screen) async {
+Future<void> _pump(
+  WidgetTester tester,
+  String screen, {
+  Size viewport = const Size(1280, 1000),
+}) async {
   SharedPreferences.setMockInitialValues({});
   final preferences = await SharedPreferences.getInstance();
-  tester.view.physicalSize = const Size(1280, 1000);
+  tester.view.physicalSize = viewport;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
@@ -40,6 +44,19 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('visual QA Login retains its default editorial rule', (
+    tester,
+  ) async {
+    await _pump(tester, 'login');
+
+    final canvases = tester.widgetList<PremiumCanvas>(
+      find.byType(PremiumCanvas),
+    );
+    expect(canvases, isNotEmpty);
+    expect(canvases.every((canvas) => canvas.showEditorialRule), isTrue);
     expect(tester.takeException(), isNull);
   });
 
@@ -154,6 +171,68 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets(
+    'full-screen loader scales down only when narrow width requires it',
+    (tester) async {
+      await _pump(tester, 'loading-full', viewport: const Size(320, 844));
+
+      final scene = find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+      );
+      expect(
+        find.descendant(
+          of: scene,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.width == 272 &&
+                widget.height == 272,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'full-screen loader preserves the 280 px scene at 390 px mobile',
+    (tester) async {
+      await _pump(tester, 'loading-full', viewport: const Size(390, 844));
+
+      final scene = find.byWidgetPredicate(
+        (widget) =>
+            widget is RadEarthBirdScene &&
+            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+      );
+      expect(
+        find.descendant(
+          of: scene,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.width == 280 &&
+                widget.height == 280,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('dark section QA title uses explicit readable foreground color', (
+    tester,
+  ) async {
+    await _pump(tester, 'loading-section-dark');
+
+    final title = tester.widget<Text>(find.text('Section loading'));
+    expect(title.style?.color, Colors.white);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'visual QA compact route presents light and dark loading states',

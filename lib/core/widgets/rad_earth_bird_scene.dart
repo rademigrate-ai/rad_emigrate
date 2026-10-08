@@ -109,7 +109,7 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
   @override
   Widget build(BuildContext context) {
     final dimensions = _SceneDimensions.forVariant(widget.variant);
-    final sceneSize = widget.size ?? dimensions.scene;
+    final targetSize = widget.size ?? dimensions.scene;
     final isCompact = widget.variant == RadEarthBirdVariant.compactLoading;
 
     return Semantics(
@@ -118,70 +118,87 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
       container: true,
       child: ExcludeSemantics(
         child: RepaintBoundary(
-          child: SizedBox.square(
-            dimension: sceneSize,
-            child: AnimatedBuilder(
-              animation: _controller,
-              child: _RadBirdMark(dimension: dimensions.bird),
-              builder: (context, bird) {
-                final orbit = _OrbitGeometry.fromProgress(
-                  progress: _controller.value,
-                  side: sceneSize,
-                  compact: isCompact,
-                );
-                final birdLayer = _PositionedBird(
-                  geometry: orbit,
-                  child: bird!,
-                );
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final sceneSize = _sceneSizeWithin(targetSize, constraints);
+              final birdSize = dimensions.bird * (sceneSize / targetSize);
+              return SizedBox.square(
+                dimension: sceneSize,
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  child: _RadBirdMark(dimension: birdSize),
+                  builder: (context, bird) {
+                    final orbit = _OrbitGeometry.fromProgress(
+                      progress: _controller.value,
+                      side: sceneSize,
+                      compact: isCompact,
+                    );
+                    final birdLayer = _PositionedBird(
+                      geometry: orbit,
+                      child: bird!,
+                    );
 
-                return Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: _BackdropOrbitPainter(
-                          progress: _controller,
-                          variant: widget.variant,
-                          dark: widget.dark,
-                        ),
-                        isComplex: !isCompact,
-                        willChange: !AppMotion.reduceMotion(context),
-                      ),
-                    ),
-                    if (!isCompact && !orbit.isForeground) birdLayer,
-                    if (!isCompact)
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: _EarthPainter(
-                            progress: _controller,
-                            variant: widget.variant,
-                            dark: widget.dark,
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: _BackdropOrbitPainter(
+                              progress: _controller,
+                              variant: widget.variant,
+                              dark: widget.dark,
+                            ),
+                            isComplex: !isCompact,
+                            willChange: !AppMotion.reduceMotion(context),
                           ),
-                          isComplex: true,
-                          willChange: !AppMotion.reduceMotion(context),
                         ),
-                      ),
-                    if (!isCompact)
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: _ForegroundOrbitPainter(
-                            progress: _controller,
-                            dark: widget.dark,
+                        if (!isCompact && !orbit.isForeground) birdLayer,
+                        if (!isCompact)
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: _EarthPainter(
+                                progress: _controller,
+                                variant: widget.variant,
+                                dark: widget.dark,
+                              ),
+                              isComplex: true,
+                              willChange: !AppMotion.reduceMotion(context),
+                            ),
                           ),
-                          willChange: !AppMotion.reduceMotion(context),
-                        ),
-                      ),
-                    if (isCompact || orbit.isForeground) birdLayer,
-                  ],
-                );
-              },
-            ),
+                        if (!isCompact)
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: _ForegroundOrbitPainter(
+                                progress: _controller,
+                                dark: widget.dark,
+                              ),
+                              willChange: !AppMotion.reduceMotion(context),
+                            ),
+                          ),
+                        if (isCompact || orbit.isForeground) birdLayer,
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
+}
+
+double _sceneSizeWithin(double targetSize, BoxConstraints constraints) {
+  var available = targetSize;
+  if (constraints.maxWidth.isFinite) {
+    available = math.min(available, constraints.maxWidth);
+  }
+  if (constraints.maxHeight.isFinite) {
+    available = math.min(available, constraints.maxHeight);
+  }
+  return math.max(0, available);
 }
 
 class _SceneDimensions {

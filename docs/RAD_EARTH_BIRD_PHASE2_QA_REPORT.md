@@ -57,6 +57,15 @@ The conditional full-screen review requested a moderate scale increase and inves
 
 Fresh Splash, full-screen, section (light and dark), compact, and mobile evidence was generated after these changes. The red bird, cyan orbital treatment, and dimensional Earth scene remain unchanged apart from the approved full-screen scale.
 
+### Final review remediation
+
+The independent review correctly identified two final evidence/readiness gaps, both corrected before final gates:
+
+1. `RadEarthBirdScene` now uses finite layout constraints to cap a requested scene size and proportionally scale the bird. The full loader remains **280 px** at the captured 390 px mobile viewport and desktop, while a 320 px viewport uses a contained **272 px** scene after its existing 24 px horizontal page padding. Widget regressions verify both sizes and no layout exception.
+2. The dark section visual-QA route now gives its AppBar title an explicit white `TextStyle`. This is a visual-QA-shell-only correction, not a production app-bar modification. Fresh dark desktop and mobile screenshots show the title and loader copy at readable contrast; a widget regression protects the explicit color.
+
+The Login visual-QA regression also now confirms the default editorial rule remains enabled on Login’s premium canvases. The loading-only opt-outs remain limited to Splash/full-loading surfaces.
+
 ## Independent review remediation
 
 A fresh-context review identified two Important evidence gaps: compact QA covered only the dark surface, and the capture code did not enforce zero browser errors or record dark-section console events. The remediation adds light-and-dark compact QA surfaces and smoke coverage, enforces `error`-level console failure across every captured surface, and writes dark-section console observations into the JSON report. It also removes the compact cyan node so compact rendering is precisely the official red bird plus one cyan ellipse. Follow-up reviews hardened publication further: the capture set now has an exact manifest validator and rollback-safe replacement, with focused tests for console-error cleanup, successful-but-incomplete capture, and a failure during the second candidate file replacement.
@@ -69,10 +78,10 @@ All commands below were run after the Phase 2 implementation and evidence captur
 | --- | --- |
 | `dart format --set-exit-if-changed lib test` | PASS — 179 files already formatted. |
 | `flutter analyze` | PASS — “No issues found!” |
-| `flutter test` | PASS — **228 tests**, including the full-screen clean-evidence, enlarged-scene, and Splash/full-loading editorial-rule regression coverage. |
+| `flutter test` | PASS — **232 tests**, including clean-evidence, enlarged-scene, Login-default, Splash/full-loading editorial-rule, 320 px/390 px responsive-scale, and dark-section contrast regressions. |
 | `python3 tools/test_capture_phase2_loading_motion.py` | PASS — 3 tests covering console-error cleanup, incomplete-manifest rejection, and mid-publication replacement rollback. |
-| Production `flutter build web --no-web-resources-cdn ...` | PASS — 88.7 s. |
-| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 79.0 s. |
+| Production `flutter build web --no-web-resources-cdn ...` | PASS — 91.2 s. |
+| Visual-QA `flutter build web -t lib/visual_qa_main.dart --no-web-resources-cdn ...` | PASS — 82.2 s. |
 | `flutter build apk --debug ...` | PASS — debug APK produced at `build/app/outputs/flutter-apk/app-debug.apk` (185 MB). |
 | Capture script `python3 tools/capture_phase2_loading_motion.py` | PASS — 4 recordings, 10 screenshots, JSON diagnostics. |
 
@@ -85,8 +94,8 @@ The production web output was measured with the identical build configuration be
 | Measure | Bytes |
 | --- | ---: |
 | Pre-migration output | 44,192,558 |
-| Final refined Phase 2 output | 44,188,050 |
-| Delta | **−4,508** |
+| Final refined Phase 2 output | 44,188,323 |
+| Delta | **−4,235** |
 
 The small decrease is consistent with removing the duplicate loader painter/controller while reusing the Login-approved renderer.
 

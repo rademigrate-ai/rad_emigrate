@@ -212,7 +212,7 @@ class _SectionLoadingQaPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: surface,
       appBar: AppBar(
-        title: const Text('Section loading'),
+        title: Text('Section loading', style: TextStyle(color: foreground)),
         backgroundColor: surface,
         foregroundColor: foreground,
       ),
