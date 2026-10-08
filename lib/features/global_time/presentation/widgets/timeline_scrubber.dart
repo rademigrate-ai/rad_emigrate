@@ -45,16 +45,26 @@ class TimelineScrubber extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('00:00',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
-                Text('06:00',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
-                Text('12:00',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
-                Text('18:00',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
-                Text('24:00',
-                    style: TextStyle(color: Colors.white54, fontSize: 11)),
+                Text(
+                  '00:00',
+                  style: TextStyle(color: Colors.white54, fontSize: 11),
+                ),
+                Text(
+                  '06:00',
+                  style: TextStyle(color: Colors.white54, fontSize: 11),
+                ),
+                Text(
+                  '12:00',
+                  style: TextStyle(color: Colors.white54, fontSize: 11),
+                ),
+                Text(
+                  '18:00',
+                  style: TextStyle(color: Colors.white54, fontSize: 11),
+                ),
+                Text(
+                  '24:00',
+                  style: TextStyle(color: Colors.white54, fontSize: 11),
+                ),
               ],
             ),
           ],
