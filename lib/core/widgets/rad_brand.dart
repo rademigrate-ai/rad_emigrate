@@ -21,10 +21,10 @@ class RadBrand extends StatelessWidget {
   final bool darkSurface;
 
   double get _height => switch (size) {
-        RadBrandSize.small => 48,
-        RadBrandSize.medium => 84,
-        RadBrandSize.large => 116,
-      };
+    RadBrandSize.small => 48,
+    RadBrandSize.medium => 84,
+    RadBrandSize.large => 116,
+  };
 
   @override
   Widget build(BuildContext context) {

@@ -6,5 +6,4 @@ import 'geo_lookup_stub.dart'
 String? lookupIanaTimezone({
   required double longitude,
   required double latitude,
-}) =>
-    impl.lookupIanaTimezone(longitude: longitude, latitude: latitude);
+}) => impl.lookupIanaTimezone(longitude: longitude, latitude: latitude);

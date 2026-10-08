@@ -50,26 +50,26 @@ class City {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'nameEn': nameEn,
-        'nameFa': nameFa,
-        'countryCode': countryCode,
-        'timezone': timezone,
-        'latitude': latitude,
-        'longitude': longitude,
-        'flagEmoji': flagEmoji,
-      };
+    'id': id,
+    'nameEn': nameEn,
+    'nameFa': nameFa,
+    'countryCode': countryCode,
+    'timezone': timezone,
+    'latitude': latitude,
+    'longitude': longitude,
+    'flagEmoji': flagEmoji,
+  };
 
   factory City.fromJson(Map<String, dynamic> json) => City(
-        id: json['id'] as String,
-        nameEn: json['nameEn'] as String,
-        nameFa: json['nameFa'] as String,
-        countryCode: json['countryCode'] as String,
-        timezone: json['timezone'] as String,
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-        flagEmoji: json['flagEmoji'] as String?,
-      );
+    id: json['id'] as String,
+    nameEn: json['nameEn'] as String,
+    nameFa: json['nameFa'] as String,
+    countryCode: json['countryCode'] as String,
+    timezone: json['timezone'] as String,
+    latitude: (json['latitude'] as num).toDouble(),
+    longitude: (json['longitude'] as num).toDouble(),
+    flagEmoji: json['flagEmoji'] as String?,
+  );
 
   @override
   bool operator ==(Object other) =>
