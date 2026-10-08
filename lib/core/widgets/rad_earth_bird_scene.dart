@@ -274,7 +274,7 @@ class _OrbitGeometry {
       bank: compact
           ? -0.12 + math.cos(phase) * 0.24
           : (math.cos(flightPhase) * phaseRate * 0.19 +
-              math.sin(time * 2) * 0.035),
+                math.sin(time * 2) * 0.035),
       scale: compact ? 1 : 0.8 + ((depth + 1) * 0.13),
       isForeground: compact || depth >= 0,
     );
