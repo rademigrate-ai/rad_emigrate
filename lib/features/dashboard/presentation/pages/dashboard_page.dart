@@ -8,6 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_entrance.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../feed/data/feed_repository.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -199,7 +200,10 @@ class DashboardPage extends ConsumerWidget {
                   onAction: () => context.go('/feed'),
                 ),
                 updates.when(
-                  loading: () => const LinearProgressIndicator(),
+                  loading: () => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: RadInlineLoading(label: l10n.loadingUpdates),
+                  ),
                   error: (_, _) => _ShortcutRow(
                     icon: Icons.refresh,
                     title: l10n.updatesLoadFailed,

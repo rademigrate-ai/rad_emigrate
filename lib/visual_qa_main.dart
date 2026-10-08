@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/theme/theme_controller.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/rad_loading.dart';
 import 'features/admin/presentation/pages/admin_hub_page.dart';
 import 'features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import 'features/applications/domain/entities/application_status.dart';
@@ -87,6 +88,7 @@ class _QaFrame extends StatelessWidget {
       'ai' => const AiAssistantPage(visualQaDemo: true),
       'feed' => const FeedPage(),
       'admin' => const AdminHubPage(),
+      'loading' => const _LoadingMotionQaPage(),
       _ => const LoginPage(),
     };
     return Banner(
@@ -94,6 +96,73 @@ class _QaFrame extends StatelessWidget {
       location: BannerLocation.topStart,
       color: const Color(0xFF0B5260),
       child: page,
+    );
+  }
+}
+
+class _LoadingMotionQaPage extends StatelessWidget {
+  const _LoadingMotionQaPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('RAD loading motion')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF071D28),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: const Center(
+                  child: RadLoadingIndicator(
+                    size: RadLoadingSize.fullScreen,
+                    label: 'Preparing your RAD workspace',
+                    message: 'Full-screen application initialization',
+                    dark: true,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              const Divider(),
+              const SizedBox(height: 24),
+              const RadLoadingIndicator(
+                size: RadLoadingSize.section,
+                label: 'Loading case data',
+                message: 'Section-level data loading',
+              ),
+              const SizedBox(height: 28),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0B2430),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Row(
+                  children: [
+                    RadInlineLoading(
+                      label: 'Updating an application',
+                      dark: true,
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Compact pending-operation feedback',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

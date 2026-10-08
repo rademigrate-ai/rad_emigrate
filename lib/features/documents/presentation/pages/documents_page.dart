@@ -8,6 +8,7 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -195,11 +196,7 @@ class DocumentsPage extends ConsumerWidget {
                   ),
                   if (isUploading) ...[
                     const SizedBox(height: 16),
-                    Semantics(
-                      label: sheetL10n.loading,
-                      liveRegion: true,
-                      child: const LinearProgressIndicator(minHeight: 3),
-                    ),
+                    RadInlineLoading(label: sheetL10n.loading),
                   ],
                   const SizedBox(height: 20),
                   if (doc.status == DocumentVerificationStatus.missing ||

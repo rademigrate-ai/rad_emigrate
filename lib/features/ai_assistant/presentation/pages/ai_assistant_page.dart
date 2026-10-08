@@ -11,6 +11,7 @@ import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -356,16 +357,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       itemCount: _messages.length + (_loading ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (_loading && index == _messages.length) {
-                          return const Padding(
+                          return Padding(
                             padding: EdgeInsets.all(8),
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
-                              child: SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
+                              child: RadInlineLoading(
+                                label: l10n.loading,
+                                dark: true,
                               ),
                             ),
                           );

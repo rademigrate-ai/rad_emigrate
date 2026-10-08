@@ -10,6 +10,7 @@ import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/progress_steps.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/application_status.dart';
@@ -253,7 +254,7 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                 ),
                 if (_updatingStatus) ...[
                   const SizedBox(height: 12),
-                  const LinearProgressIndicator(minHeight: 2),
+                  RadInlineLoading(label: l10n.loading),
                 ],
               ],
             ),
