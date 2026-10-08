@@ -7,7 +7,7 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
-import '../../../../core/widgets/section_card.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
 import '../providers/visa_catalog_provider.dart';
@@ -43,13 +43,16 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     }
     return Scaffold(
       appBar: AppBar(title: Text(l10n.visaPathways)),
-      body: catalog.when(
-        loading: () => LoadingState(message: l10n.loadingCatalogue),
-        error: (_, _) => ErrorState(
-          message: l10n.catalogueUnavailable,
-          onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
+      body: PremiumCanvas(
+        accent: AppColors.teal,
+        child: catalog.when(
+          loading: () => LoadingState(message: l10n.loadingCatalogue),
+          error: (_, _) => ErrorState(
+            message: l10n.catalogueUnavailable,
+            onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
+          ),
+          data: (value) => _catalog(context, value, l10n),
         ),
-        data: (value) => _catalog(context, value, l10n),
       ),
     );
   }
@@ -77,19 +80,37 @@ class _VisaPageState extends ConsumerState<VisaPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
-            Text(
-              l10n.findPathway,
-              style: Theme.of(context).textTheme.headlineMedium,
+            PremiumHeroPanel(
+              kicker: const EditorialKicker(
+                index: '02',
+                label: 'PATHWAY EXPLORER',
+                dark: true,
+              ),
+              title: l10n.findPathway,
+              body: l10n.catalogueDisclaimer,
+              trailing: const RadOrbit(size: 190, showBrand: false),
             ),
-            const SizedBox(height: 8),
-            Text(l10n.catalogueDisclaimer),
-            const SizedBox(height: 20),
-            SearchBar(
-              hintText: l10n.searchProgrammes,
-              leading: const Icon(Icons.search),
-              onChanged: (value) => setState(() => _query = value),
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.82),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: const Color(0xFFCBE0E1)),
+              ),
+              child: SearchBar(
+                hintText: l10n.searchProgrammes,
+                leading: const Icon(Icons.search),
+                elevation: const WidgetStatePropertyAll(0),
+                backgroundColor: const WidgetStatePropertyAll(
+                  Color(0xFFF5FAFA),
+                ),
+                onChanged: (value) => setState(() => _query = value),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
+            const EditorialKicker(index: '03', label: 'FILTER THE CATALOGUE'),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -146,33 +167,129 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                 index: entry.key,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: SectionCard(
-                    title: program.title,
-                    subtitle:
-                        '${country.flagEmoji} ${country.name}\n${program.summary}',
-                    icon: Icons.flight_takeoff,
+                  child: _ExplorerProgramCard(
+                    program: program,
+                    country: country,
+                    pending: !hasStructure,
+                    pendingColor: pendingColor,
+                    pendingMessage: l10n.structuredDetailsPending,
                     onTap: () => setState(() => _selected = program),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!hasStructure)
-                          Tooltip(
-                            message: l10n.structuredDetailsPending,
-                            child: Icon(
-                              Icons.hourglass_empty_outlined,
-                              size: 18,
-                              color: pendingColor,
-                            ),
-                          ),
-                        if (!hasStructure) const SizedBox(width: 8),
-                        Icon(directionalChevron(context)),
-                      ],
-                    ),
                   ),
                 ),
               );
             }),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ExplorerProgramCard extends StatelessWidget {
+  const _ExplorerProgramCard({
+    required this.program,
+    required this.country,
+    required this.pending,
+    required this.pendingColor,
+    required this.pendingMessage,
+    required this.onTap,
+  });
+
+  final VisaProgram program;
+  final Country country;
+  final bool pending;
+  final Color pendingColor;
+  final String pendingMessage;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(26),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0B2430),
+              border: Border.all(color: const Color(0xFF2E6872)),
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 54,
+                  height: 54,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.teal.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: AppColors.teal.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  child: Text(
+                    country.flagEmoji,
+                    style: const TextStyle(fontSize: 25),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        country.name.toUpperCase(),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: const Color(0xFF80E7E0),
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        program.title,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        program.summary,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: const Color(0xFFBDD2D8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  children: [
+                    if (pending)
+                      Tooltip(
+                        message: pendingMessage,
+                        child: Icon(
+                          Icons.hourglass_empty_outlined,
+                          color: pendingColor,
+                        ),
+                      ),
+                    const SizedBox(height: 14),
+                    const Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Color(0xFF80E7E0),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

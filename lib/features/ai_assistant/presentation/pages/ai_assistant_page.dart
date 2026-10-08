@@ -10,7 +10,7 @@ import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/motion_primitives.dart';
-import '../../../../core/widgets/rad_brand.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -33,12 +33,17 @@ class AiAssistantPage extends ConsumerStatefulWidget {
     super.key,
     this.adminMode = false,
     this.embedded = false,
+    this.visualQaDemo = false,
   });
 
   final bool adminMode;
 
   /// When true, omit AppBar and outer disclaimer (host provides chrome).
   final bool embedded;
+
+  /// Explicit synthetic state used only by the separate visual-QA entrypoint.
+  /// It is never enabled from the production router.
+  final bool visualQaDemo;
 
   @override
   ConsumerState<AiAssistantPage> createState() => _AiAssistantPageState();
@@ -56,6 +61,19 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.visualQaDemo) {
+      _messages.addAll([
+        _ChatMessage(
+          isUser: true,
+          text: 'What documents should I prepare for my visa pathway?',
+        ),
+        _ChatMessage(
+          isUser: false,
+          text: 'I can help you organize the published requirements. I will keep uncertain information clearly marked and point you to official sources when available.',
+        ),
+      ]);
+      _loading = true;
+    }
     _historyRestore = _restoreHistory();
   }
 
@@ -247,177 +265,218 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final suggestions = [
       l10n.suggestionStudyPermitDocuments,
       l10n.suggestionVisaProcessingTime,
       l10n.suggestionGteStatement,
     ];
 
-    final body = AmbientBackdrop(
-      active: _loading,
-      child: Column(
-        children: [
-          if (!widget.embedded)
-            Material(
-              color: colorScheme.surfaceContainerHighest,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-                child: Text(
-                  widget.adminMode
-                      ? l10n.untrustedResearchDisclaimer
-                      : l10n.aiDisclaimer,
-                  style: Theme.of(context).textTheme.bodySmall,
+    final body = PremiumCanvas(
+      dark: true,
+      accent: AppColors.teal,
+      child: AmbientBackdrop(
+        active: _loading,
+        child: Column(
+          children: [
+            if (!widget.embedded)
+              Material(
+                color: const Color(0xFF0D2A35),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    widget.adminMode
+                        ? l10n.untrustedResearchDisclaimer
+                        : l10n.aiDisclaimer,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: const Color(0xFFC2D7DB)),
+                  ),
                 ),
               ),
-            ),
-          Expanded(
-            child: _messages.isEmpty
-                ? ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      const Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: RadBrand(size: RadBrandSize.medium),
-                      ),
-                      const SizedBox(height: 28),
-                      Text(
-                        l10n.howCanWeHelp,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.askAboutVisas,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 16),
-                      ...suggestions.map(
-                        (s) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: AppCard(onTap: () => _send(s), child: Text(s)),
+            Expanded(
+              child: _messages.isEmpty
+                  ? ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+                      children: [
+                        PremiumHeroPanel(
+                          kicker: const EditorialKicker(
+                            index: '04',
+                            label: 'RAD INTELLIGENCE',
+                            dark: true,
+                          ),
+                          title: l10n.howCanWeHelp,
+                          body: l10n.askAboutVisas,
+                          trailing: const RadOrbit(
+                            size: 180,
+                            showBrand: false,
+                            active: false,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : ListView.builder(
-                    controller: _scroll,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length + (_loading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (_loading && index == _messages.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(8),
+                        const SizedBox(height: 20),
+                        ...suggestions.asMap().entries.map(
+                          (entry) => MotionStagger(
+                            index: entry.key,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: AppCard(
+                                onTap: () => _send(entry.value),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.teal.withValues(
+                                          alpha: 0.15,
+                                        ),
+                                        borderRadius: BorderRadius.circular(11),
+                                      ),
+                                      child: const Icon(
+                                        Icons.auto_awesome,
+                                        size: 17,
+                                        color: AppColors.teal,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(child: Text(entry.value)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : ListView.builder(
+                      controller: _scroll,
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _messages.length + (_loading ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (_loading && index == _messages.length) {
+                          return const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        final m = _messages[index];
+                        return MotionStagger(
+                          index: index,
                           child: Align(
-                            alignment: AlignmentDirectional.centerStart,
-                            child: SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                            alignment: m.isUser
+                                ? AlignmentDirectional.centerEnd
+                                : AlignmentDirectional.centerStart,
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.all(14),
+                              constraints: BoxConstraints(
+                                maxWidth: math.min(
+                                  680,
+                                  MediaQuery.sizeOf(context).width * 0.85,
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                color: m.isUser
+                                    ? AppColors.primaryRed.withValues(
+                                        alpha: 0.92,
+                                      )
+                                    : const Color(0xFF10313D),
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: m.isUser
+                                      ? const Color(0xFFFF848C)
+                                      : const Color(0xFF337988),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    m.text,
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                  if (m.retryPrompt != null &&
+                                      index == _messages.length - 1)
+                                    TextButton.icon(
+                                      onPressed: _loading
+                                          ? null
+                                          : () => _retry(m),
+                                      icon: const Icon(Icons.refresh),
+                                      label: Text(l10n.retry),
+                                    ),
+                                  if (m.sources != null &&
+                                      m.sources!.isNotEmpty) ...[
+                                    const SizedBox(height: 8),
+                                    ...m.sources!.map(
+                                      (s) => Text(
+                                        '${l10n.sourceLabel}: ${s.title}'
+                                        '${s.authority != null ? ' (${s.authority})' : ''}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
                           ),
                         );
-                      }
-                      final m = _messages[index];
-                      return MotionStagger(
-                        index: index,
-                        child: Align(
-                          alignment: m.isUser
-                              ? AlignmentDirectional.centerEnd
-                              : AlignmentDirectional.centerStart,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            padding: const EdgeInsets.all(14),
-                            constraints: BoxConstraints(
-                              maxWidth: math.min(
-                                680,
-                                MediaQuery.sizeOf(context).width * 0.85,
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              color: m.isUser
-                                  ? AppColors.primaryRed.withValues(alpha: 0.1)
-                                  : colorScheme.surface,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: m.isUser
-                                    ? AppColors.primaryRed.withValues(
-                                        alpha: 0.2,
-                                      )
-                                    : Theme.of(context).dividerColor,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  m.text,
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                if (m.retryPrompt != null &&
-                                    index == _messages.length - 1)
-                                  TextButton.icon(
-                                    onPressed: _loading
-                                        ? null
-                                        : () => _retry(m),
-                                    icon: const Icon(Icons.refresh),
-                                    label: Text(l10n.retry),
-                                  ),
-                                if (m.sources != null &&
-                                    m.sources!.isNotEmpty) ...[
-                                  const SizedBox(height: 8),
-                                  ...m.sources!.map(
-                                    (s) => Text(
-                                      '${l10n.sourceLabel}: ${s.title}'
-                                      '${s.authority != null ? ' (${s.authority})' : ''}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
-                                    ),
-                                  ),
-                                ],
-                              ],
+                      },
+                    ),
+            ),
+            SafeArea(
+              child: Container(
+                color: const Color(0xFF081D28).withValues(alpha: 0.94),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          minLines: 1,
+                          maxLines: 4,
+                          textInputAction: TextInputAction.send,
+                          onSubmitted: (_) => _send(),
+                          decoration: InputDecoration(
+                            hintText: l10n.askQuestionHint,
+                            fillColor: const Color(0xFF123440),
+                            hintStyle: const TextStyle(
+                              color: Color(0xFF9DB9C0),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      minLines: 1,
-                      maxLines: 4,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => _send(),
-                      decoration: InputDecoration(
-                        hintText: l10n.askQuestionHint,
                       ),
-                    ),
+                      const SizedBox(width: 8),
+                      IconButton.filled(
+                        tooltip: l10n.sendMessage,
+                        style: IconButton.styleFrom(
+                          backgroundColor: AppColors.primaryRed,
+                          minimumSize: const Size(48, 48),
+                        ),
+                        onPressed: _loading ? null : () => _send(),
+                        icon: const Icon(Icons.send, color: Colors.white),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  IconButton.filled(
-                    tooltip: l10n.sendMessage,
-                    style: IconButton.styleFrom(
-                      backgroundColor: AppColors.primaryRed,
-                      minimumSize: const Size(48, 48),
-                    ),
-                    onPressed: _loading ? null : () => _send(),
-                    icon: const Icon(Icons.send, color: Colors.white),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
 

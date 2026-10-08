@@ -8,6 +8,7 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/progress_steps.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -292,65 +293,119 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         label: Text(_creatingDraft ? l10n.creating : l10n.newDraft),
         onPressed: _creatingDraft ? null : _createDraft,
       ),
-      body: state.when(
-        loading: () => LoadingState(message: l10n.loadingApplications),
-        error: (e, _) => ErrorState(
-          message: l10n.errorGeneric,
-          onRetry: () =>
-              ref.read(applicationControllerProvider.notifier).load(),
-        ),
-        data: (apps) {
-          if (apps.isEmpty) {
-            return EmptyState(
-              title: l10n.noApplications,
-              subtitle: l10n.noApplicationsSubtitle,
-              icon: Icons.assignment_outlined,
-              actionLabel: l10n.newDraft,
-              onAction: _createDraft,
-            );
-          }
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 880),
-              child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-                itemCount: apps.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 10),
-                itemBuilder: (context, index) {
-                  final app = apps[index];
-                  return MotionStagger(
-                    index: index,
-                    child: AppCard(
-                      onTap: () => setState(() => _selected = app),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            app.title,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${app.programName} · ${app.country}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 10),
-                          StatusBadge(
-                            label: _statusLabel(app.status, l10n),
-                            tone: _tone(app.status),
-                          ),
-                        ],
+      body: PremiumCanvas(
+        accent: AppColors.teal,
+        child: state.when(
+          loading: () => LoadingState(message: l10n.loadingApplications),
+          error: (e, _) => ErrorState(
+            message: l10n.errorGeneric,
+            onRetry: () =>
+                ref.read(applicationControllerProvider.notifier).load(),
+          ),
+          data: (apps) {
+            if (apps.isEmpty) {
+              return EmptyState(
+                title: l10n.noApplications,
+                subtitle: l10n.noApplicationsSubtitle,
+                icon: Icons.assignment_outlined,
+                actionLabel: l10n.newDraft,
+                onAction: _createDraft,
+              );
+            }
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 880),
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
+                  itemCount: apps.length + 1,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return PremiumHeroPanel(
+                        kicker: const EditorialKicker(
+                          index: '03',
+                          label: 'CASE ROOM',
+                          dark: true,
+                        ),
+                        title: l10n.applications,
+                        body: l10n.caseOverviewSubtitle,
+                        trailing: const RadOrbit(size: 180, showBrand: false),
+                      );
+                    }
+                    final app = apps[index - 1];
+                    return MotionStagger(
+                      index: index - 1,
+                      child: AppCard(
+                        onTap: () => setState(() => _selected = app),
+                        padding: EdgeInsets.zero,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              width: 8,
+                              color: _toneColor(_tone(app.status)),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'CASE ${(index).toString().padLeft(2, '0')}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall
+                                          ?.copyWith(
+                                            color: AppColors.teal,
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: 1,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 7),
+                                    Text(
+                                      app.title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      '${app.programName} · ${app.country}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 14),
+                                    StatusBadge(
+                                      label: _statusLabel(app.status, l10n),
+                                      tone: _tone(app.status),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 }
+
+Color _toneColor(StatusTone tone) => switch (tone) {
+  StatusTone.success => AppColors.success,
+  StatusTone.warning => AppColors.warning,
+  StatusTone.danger => AppColors.error,
+  StatusTone.info => AppColors.teal,
+  StatusTone.neutral => AppColors.navyMuted,
+};

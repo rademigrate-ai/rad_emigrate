@@ -7,7 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/motion_primitives.dart';
-import '../../../../core/widgets/rad_brand.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -27,15 +27,12 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   Future<void> _bootstrap() async {
-    // Visual animation is strictly decorative: routing begins immediately and
-    // never waits for a minimum display time.
     try {
       await ref.read(appBootstrapProvider.future);
     } catch (_) {
-      // Bootstrap failures are reflected as an unauthenticated route.
+      // Routing still proceeds to the safe unauthenticated path.
     }
     if (!mounted) return;
-
     final session = ref.read(authControllerProvider).valueOrNull;
     if (session != null && session.isAuthenticated) {
       context.go(restoredProtectedDestination(widget.destination));
@@ -47,43 +44,57 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.midnight,
-      body: AmbientBackdrop(
-        primary: AppColors.teal,
-        secondary: AppColors.primaryRed,
-        child: Center(
-          child: MotionReveal(
-            duration: AppMotion.emphasized,
-            offset: const Offset(0, 0.05),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const RadBrand(size: RadBrandSize.large, darkSurface: true),
-                const SizedBox(height: 32),
-                Container(
-                  width: 96,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(99),
-                    gradient: const LinearGradient(
-                      colors: [AppColors.teal, AppColors.primaryRed],
+      body: PremiumCanvas(
+        dark: true,
+        accent: AppColors.teal,
+        child: SafeArea(
+          child: Center(
+            child: MotionReveal(
+              duration: AppMotion.emphasized,
+              offset: const Offset(0, 0.05),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const EditorialKicker(
+                    index: '00',
+                    label: 'RAD JOURNEY',
+                    dark: true,
+                  ),
+                  const SizedBox(height: 30),
+                  const RadOrbit(size: 250),
+                  const SizedBox(height: 30),
+                  Text(
+                    'RAD',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: Colors.white,
+                      fontSize: 38,
+                      letterSpacing: 4,
                     ),
                   ),
-                ),
-                const SizedBox(height: 18),
-                Semantics(
-                  label: 'Loading',
-                  liveRegion: true,
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.25,
-                      color: AppColors.cyan,
+                  const SizedBox(height: 8),
+                  Text(
+                    'Immigration journey, made visible',
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: const Color(0xFFBED1D6)),
+                  ),
+                  const SizedBox(height: 28),
+                  Semantics(
+                    label: 'Loading',
+                    liveRegion: true,
+                    child: SizedBox(
+                      width: 132,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(99),
+                        child: const LinearProgressIndicator(
+                          minHeight: 3,
+                          color: AppColors.primaryRed,
+                          backgroundColor: Color(0xFF1D4450),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

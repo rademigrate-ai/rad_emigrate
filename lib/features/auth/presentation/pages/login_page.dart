@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
-import '../../../../core/widgets/rad_brand.dart';
-import '../../../../core/widgets/app_entrance.dart';
-import '../../../../core/l10n/locale_controller.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
@@ -50,9 +50,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           );
       if (mounted) context.go('/dashboard');
     } catch (e) {
-      if (mounted) {
-        setState(() => _error = localizedAuthError(e, l10n));
-      }
+      if (mounted) setState(() => _error = localizedAuthError(e, l10n));
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
@@ -74,24 +72,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await ref
           .read(authControllerProvider.notifier)
           .resendOtp(identifier: email);
-      if (mounted) {
-        context.go('/otp?identifier=${Uri.encodeComponent(email)}');
-      }
+      if (mounted) context.go('/otp?identifier=${Uri.encodeComponent(email)}');
     } catch (error) {
       if (mounted) {
-        final msg = error.toString().toLowerCase();
-        String mapped = localizedAuthError(
+        final message = error.toString().toLowerCase();
+        var mapped = localizedAuthError(
           error,
           l10n,
           context: AuthErrorContext.otp,
         );
         try {
-          final c = '${(error as dynamic).code ?? ''}'.toLowerCase();
-          if (c.contains('otp_disabled') || msg.contains('otp_disabled')) {
+          final code = '${(error as dynamic).code ?? ''}'.toLowerCase();
+          if (code.contains('otp_disabled') ||
+              message.contains('otp_disabled')) {
             mapped = l10n.smsAuthUnavailable;
           }
         } catch (_) {
-          if (msg.contains('otp_disabled')) {
+          if (message.contains('otp_disabled')) {
             mapped = l10n.smsAuthUnavailable;
           }
         }
@@ -105,211 +102,123 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final loading = ref.watch(authControllerProvider).isLoading || _submitting;
-    final wide = MediaQuery.sizeOf(context).width >= 800;
     final theme = Theme.of(context);
-
-    final form = Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(l10n.signIn, style: theme.textTheme.headlineMedium),
-          const SizedBox(height: 12),
-          Text(l10n.signInSubtitle, style: theme.textTheme.bodyMedium),
-          const SizedBox(height: 36),
-          AppTextField(
-            controller: _identifierCtrl,
-            label: l10n.email,
-            prefixIcon: Icons.person_outline,
-            keyboardType: TextInputType.emailAddress,
-            textDirection: TextDirection.ltr,
-            autofillHints: const [AutofillHints.email],
-            textInputAction: TextInputAction.next,
-            validator: (v) {
-              final value = v?.trim() ?? '';
-              if (value.isEmpty) return l10n.required;
-              if (!value.contains('@')) return l10n.invalidEmail;
-              return null;
-            },
-          ),
-          const SizedBox(height: 14),
-          AppTextField(
-            controller: _passwordCtrl,
-            label: l10n.password,
-            prefixIcon: Icons.lock_outline,
-            obscureText: _obscure,
-            autofillHints: const [AutofillHints.password],
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _submit(),
-            validator: (v) => (v == null || v.isEmpty) ? l10n.required : null,
-            suffixIcon: IconButton(
-              tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
-              icon: Icon(
-                _obscure
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-              ),
-              onPressed: () => setState(() => _obscure = !_obscure),
-            ),
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 12),
-            Semantics(
-              liveRegion: true,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.error.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _error!,
-                  style: TextStyle(
-                    color: theme.colorScheme.error,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ),
-          ],
-          const SizedBox(height: 8),
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: TextButton(
-              onPressed: () => context.go('/forgot-password'),
-              child: Text(l10n.forgotPassword),
-            ),
-          ),
-          const SizedBox(height: 8),
-          AppButton(
-            label: l10n.signIn,
-            loading: loading,
-            onPressed: loading ? null : _submit,
-          ),
-          const SizedBox(height: 12),
-          AppButton(
-            label: l10n.createAccount,
-            variant: AppButtonVariant.secondary,
-            onPressed: () => context.go('/register'),
-          ),
-          TextButton(
-            onPressed: loading ? null : _continueWithOtp,
-            child: Text(l10n.continueWithOtp),
-          ),
-        ],
+    final loading = ref.watch(authControllerProvider).isLoading || _submitting;
+    return AuthCinematicFrame(
+      eyebrow: 'RAD • IMMIGRATION JOURNEY',
+      title: l10n.brandIntroTitle,
+      body: l10n.brandIntroBody,
+      localeControl: TextButton.icon(
+        icon: const Icon(Icons.language_outlined, size: 18),
+        label: Text(
+          ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
+        ),
+        onPressed: () => ref.read(localeControllerProvider.notifier).toggle(),
       ),
-    );
-    final brand = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const RadBrand(size: RadBrandSize.large, darkSurface: true),
-        const SizedBox(height: 40),
-        Text(
-          l10n.brandIntroTitle,
-          style: theme.textTheme.headlineLarge?.copyWith(
-            color: Colors.white,
-            height: 1.5,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          l10n.brandIntroBody,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: const Color(0xFFBCC7D6),
-          ),
-        ),
-        const SizedBox(height: 32),
-        Wrap(
-          spacing: 20,
-          runSpacing: 12,
-          children: [
-            _BrandFeature(icon: Icons.public_outlined, label: l10n.visa),
-            _BrandFeature(icon: Icons.assignment_outlined, label: l10n.cases),
-            _BrandFeature(icon: Icons.newspaper_outlined, label: l10n.feed),
-          ],
-        ),
-      ],
-    );
-    return Scaffold(
-      body: SafeArea(
-        child: Row(
-          children: [
-            if (wide)
-              Expanded(
-                child: ColoredBox(
+      form: MotionReveal(
+        offset: const Offset(0, 0.04),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const EditorialKicker(index: '02', label: 'ACCESS PORTAL'),
+              const SizedBox(height: 16),
+              Text(
+                l10n.signIn,
+                style: theme.textTheme.headlineLarge?.copyWith(
                   color: AppColors.navy,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(48),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 460),
-                        child: brand,
+                  fontSize: 34,
+                  letterSpacing: -0.45,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(l10n.signInSubtitle, style: theme.textTheme.bodyMedium),
+              const SizedBox(height: 30),
+              AppTextField(
+                controller: _identifierCtrl,
+                label: l10n.email,
+                prefixIcon: Icons.alternate_email_rounded,
+                keyboardType: TextInputType.emailAddress,
+                textDirection: TextDirection.ltr,
+                autofillHints: const [AutofillHints.email],
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  final email = value?.trim() ?? '';
+                  if (email.isEmpty) return l10n.required;
+                  return email.contains('@') ? null : l10n.invalidEmail;
+                },
+              ),
+              const SizedBox(height: 14),
+              AppTextField(
+                controller: _passwordCtrl,
+                label: l10n.password,
+                prefixIcon: Icons.lock_outline_rounded,
+                obscureText: _obscure,
+                autofillHints: const [AutofillHints.password],
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _submit(),
+                validator: (value) =>
+                    value == null || value.isEmpty ? l10n.required : null,
+                suffixIcon: IconButton(
+                  tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
+                  icon: Icon(
+                    _obscure
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              if (_error case final error?) ...[
+                const SizedBox(height: 14),
+                Semantics(
+                  liveRegion: true,
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.error.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: theme.colorScheme.error.withValues(alpha: 0.22),
                       ),
+                    ),
+                    child: Text(
+                      error,
+                      style: TextStyle(color: theme.colorScheme.error),
                     ),
                   ),
                 ),
-              ),
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: wide ? 40 : 24,
-                    vertical: 32,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: AppEntrance(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: TextButton.icon(
-                              icon: const Icon(Icons.language),
-                              label: Text(
-                                ref.watch(localeControllerProvider).isRtl
-                                    ? 'English'
-                                    : 'فارسی',
-                              ),
-                              onPressed: () => ref
-                                  .read(localeControllerProvider.notifier)
-                                  .toggle(),
-                            ),
-                          ),
-                          if (!wide) ...[
-                            const Center(
-                              child: RadBrand(size: RadBrandSize.medium),
-                            ),
-                            const SizedBox(height: 36),
-                          ],
-                          form,
-                        ],
-                      ),
-                    ),
-                  ),
+              ],
+              const SizedBox(height: 6),
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: TextButton(
+                  onPressed: () => context.go('/forgot-password'),
+                  child: Text(l10n.forgotPassword),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              AppButton(
+                label: l10n.signIn,
+                icon: Icons.arrow_forward_rounded,
+                loading: loading,
+                onPressed: loading ? null : _submit,
+              ),
+              const SizedBox(height: 12),
+              AppButton(
+                label: l10n.createAccount,
+                variant: AppButtonVariant.secondary,
+                onPressed: () => context.go('/register'),
+              ),
+              TextButton(
+                onPressed: loading ? null : _continueWithOtp,
+                child: Text(l10n.continueWithOtp),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-class _BrandFeature extends StatelessWidget {
-  const _BrandFeature({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
-  @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Icon(icon, size: 20, color: Colors.white),
-      const SizedBox(width: 8),
-      Text(label, style: const TextStyle(color: Colors.white)),
-    ],
-  );
 }

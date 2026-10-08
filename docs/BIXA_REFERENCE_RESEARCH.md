@@ -1,65 +1,35 @@
 # Bixa Reference Research — RAD Motion Redesign
 
-**Reference reviewed:** https://bixa.ai/
-**Review date:** 2026-10-08
-**Method:** live browser observation at the public landing page; visual screenshots were captured for internal analysis only and are not committed to this repository.
+**Reference reviewed:** https://bixa.ai/  
+**Review date:** 2026-10-08  
+**Method:** live browser observation at the public landing page, including hero and two editorial scroll positions. Visual screenshots were captured for internal design analysis only; no Bixa assets or code are included in this repository.
 
 ## Scope and provenance
 
-This document records visual and interaction observations from the live Bixa landing page. It does not copy Bixa source code, branding, illustration assets, copy, or proprietary visual assets. The RAD implementation uses an original design system, its owner-supplied logo, and the existing product’s verified data and content.
+This document records visual and interaction observations from the live Bixa landing page. It does not copy Bixa source code, branding, illustration assets, copy, or proprietary visual assets. The RAD implementation uses the owner-supplied logo, existing verified content, and original Flutter-rendered visual language.
 
-## Observed design characteristics
+## Directly observed characteristics
 
-- A **very dark, near-black surface** establishes a cinematic presentation while preserving high-contrast Persian typography.
-- The hero is deliberately sparse: oversized brand mark at one side, a compact navigation bar, strong two-line editorial heading, restrained supporting copy, and two clear CTA styles.
-- Warm multicolour gradients are confined to focal accents (brand / CTA), rather than spread across every surface.
-- Content is sequenced as a long-form narrative with a small uppercase-style section index, large headline, short explanation, then a structured interaction or card group.
-- A thin multi-colour divider and low-contrast background texture create visual depth without obscuring content.
-- Cards and rows use thin borders, muted fills, generous whitespace, and a single active/highlighted state.
-- The layout makes individual ideas easy to scan through numbered steps, short headings, factual callouts, and compact badges.
+The public page uses a near-black base with high-contrast editorial Persian typography. The first view is deliberately asymmetrical: an oversized white brand mark fills the left visual mass while a concise headline and warm focal CTA occupy a restrained right column. A very thin multicolour rule separates hero and subsequent content. The navigation is compact and visually quiet compared with the display type.
 
-## Observed motion and interaction patterns
+The two observed scroll positions establish a repeated editorial rhythm. Sections start with compact indexed metadata such as `01 / LEARN BY BUILDING`, move into large two-line display headlines and narrow body text, then resolve into structured rows or numbered paths. On the second observed position, the page places a dark low-contrast stacked/numbered panel opposite a large heading instead of using a uniform grid of cards. This creates an intentionally asymmetric composition with one active item carrying the visual focus.
 
-- The sticky header was visibly restyled after scrolling. Live computed styles reported a `transform` transition of **0.6s** using `cubic-bezier(0.16, 1, 0.3, 1)`, plus **0.4s** background and border-colour transitions.
-- Primary CTA elements expose transform, shadow, and filter transitions around **0.3–0.35s** with the same expressive ease-out curve. A live pointer hover over the visible header CTA produced the observed brighter highlighted CTA state.
-- Sequential path articles use opacity and translate transitions of **0.9s**, staggered by **0.13s** increments.
-- Timeline nodes transition border, box-shadow, background, and transform over **0.6s**.
-- The visual brand mark includes a slow, continuous `brandFloat` animation with a **7s** ease-in-out cycle.
-- A scrolling section visibly switched an item to a highlighted “current” state rather than animating all content at once.
-- The page presents a semantic skip link, standard links/buttons, native text input, and native `summary` disclosure controls.
+Visual depth comes from low-contrast textured/gradient fields, thin borders, large negative space, and small localized warm glows. The page does not spread broad glass blur panels across the interface. It uses compact labels, restrained badges, and explicit ordinal numbers to organize reading.
 
-## Visual depth techniques
+## Directly observed interaction and motion signals
 
-- Low-contrast layered backgrounds and fine border lines provide depth instead of broad blur panels.
-- Small, localised glow/gradient accents give important actions and timeline states hierarchy.
-- Motion is concentrated around entrances, selected states, and navigation changes; it is not used as a permanent full-page spectacle.
-- The focal hero brand has a slow ambient movement, while reading surfaces remain visually stable.
+The header visibly restyles after scrolling. Earlier live computed-style inspection reported a `transform` transition of **0.6s** using `cubic-bezier(0.16, 1, 0.3, 1)`, together with **0.4s** background and border-colour transitions. A visible header CTA brightened under pointer hover; the CTA exposed transform, shadow, and filter transitions around **0.3–0.35s** using the same expressive ease-out curve.
 
-## Typography and composition
+Sequential path articles expose opacity and translate transitions of **0.9s** with **0.13s** stagger increments. Timeline nodes transition border, box-shadow, background, and transform over **0.6s**. The focal brand mark includes a slow `brandFloat` animation with a **7s** ease-in-out cycle. At the observed scroll position, an individual stacked item becomes visibly current instead of animating all content with equal emphasis.
 
-- Right-to-left Persian composition uses compact navigation, asymmetrical hero balance, large display type, and deliberate line breaks.
-- Section metadata, numbers, and product labels establish rhythm before headings.
-- Body copy is narrower and lower contrast than headings, preserving hierarchy and reading comfort.
-- The page alternates editorial sections with structured, utilitarian content blocks.
+The public page includes a semantic skip link, standard links/buttons, native text input, and native disclosure summaries. The direct review did not establish full mobile gesture behavior or a reference reduced-motion implementation.
 
-## Responsive and accessibility observations
+## Original RAD interpretation
 
-- The live page uses semantic anchors, buttons, input controls, and disclosure summaries.
-- The reviewed live viewport presented a persistent header and a readable stacked long-form layout.
-- The reference’s rich motion is not a requirement for RAD: the product must prioritize keyboard use, touch input, form safety, and system reduced-motion preferences.
-- The review did not establish all mobile-specific gesture behaviour or an explicit reduced-motion stylesheet; RAD will not claim parity where it was not directly observed.
+RAD retains its red primary action colour and owner-supplied logo. It will use an original midnight-navy canvas, teal/cyan navigation and data accents, and red only for brand/action emphasis. The transformation will use Flutter-rendered vector geometry—not Bixa art—through a cinematic path/orbit motif, thin coordinate lines, editorial section indexing, asymmetric panels, and large display typography.
 
-## Original RAD reinterpretation
-
-RAD will use an original **midnight-navy / teal-cyan** motion language, retaining the existing red as the authoritative brand/action colour:
-
-1. **Motion tokens:** centralized, reduced-motion-aware timing and curves for entrances, feedback, hover, progress, content reveal, and modal transitions.
-2. **Layered product surfaces:** subtle navy/teal ambient gradients only in hero, splash, and AI surfaces; operational data screens remain neutral and high-contrast.
-3. **Interactive cards:** keyboard-focusable, touch-safe elevation/scale feedback and a controlled border highlight, applied through shared Flutter widgets.
-4. **Progress and status:** data-driven transitions only; no synthetic approvals, statistics, uploads, bookings, or AI-processing states.
-5. **Loading experience:** semantic skeletons and restrained spinners instead of blocking decorative effects.
-6. **RTL/LTR discipline:** use directional geometry/alignments and direction-aware entrances rather than fixed left/right motion.
+The redesign intentionally differs from the reference in application purpose and behavior. It uses only verified user/application/document data in operational surfaces; it does not invent approval claims, immigration outcomes, destination facts, testimonials, or statistics. Continuous motion remains limited to focal illustration surfaces and actual processing states, with static alternatives for reduced-motion users.
 
 ## Implementation boundary
 
-No authentication provider, token handling, database schema, Supabase configuration, production data, Render settings, deployment configuration, or existing authentication-hotfix branch is modified by this work.
+No authentication provider, token handling, database schema, Supabase configuration, production data, Render settings, deployment configuration, or existing authentication-hotfix branch is modified by the visual redesign.
