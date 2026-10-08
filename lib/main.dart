@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,6 +10,8 @@ import 'features/global_time/domain/geo_timezone_resolver.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Path-based URLs so /world-clock, /register, etc. work on refresh and direct links.
+  usePathUrlStrategy();
   await RadSupabaseClient.initialize();
 
   // IANA tzdata + timezone boundary polygons (native embedded / web asset).
