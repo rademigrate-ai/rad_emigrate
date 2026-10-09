@@ -58,25 +58,47 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     }
   }
 
-  Future<void> _markRead(String id) async {
-    final client = ref.read(supabaseClientServiceProvider).client;
-    await client
-        .from('notifications')
-        .update({'read_at': DateTime.now().toIso8601String()})
-        .eq('id', id);
-    await _load();
+  Future<bool> _markRead(String id) async {
+    try {
+      final client = ref.read(supabaseClientServiceProvider).client;
+      final uid = client.auth.currentUser?.id;
+      if (uid == null) return false;
+      await client
+          .from('notifications')
+          .update({'read_at': DateTime.now().toIso8601String()})
+          .eq('user_id', uid)
+          .eq('id', id);
+      await _load();
+      return _error == null;
+    } catch (_) {
+      if (mounted) _showUpdateError();
+      return false;
+    }
   }
 
   Future<void> _markAllRead() async {
-    final client = ref.read(supabaseClientServiceProvider).client;
-    final uid = client.auth.currentUser?.id;
-    if (uid == null) return;
-    await client
-        .from('notifications')
-        .update({'read_at': DateTime.now().toIso8601String()})
-        .eq('user_id', uid)
-        .filter('read_at', 'is', null);
-    await _load();
+    try {
+      final client = ref.read(supabaseClientServiceProvider).client;
+      final uid = client.auth.currentUser?.id;
+      if (uid == null) return;
+      await client
+          .from('notifications')
+          .update({'read_at': DateTime.now().toIso8601String()})
+          .eq('user_id', uid)
+          .filter('read_at', 'is', null);
+      await _load();
+      if (_error != null && mounted) _showUpdateError();
+    } catch (_) {
+      if (mounted) _showUpdateError();
+    }
+  }
+
+  void _showUpdateError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context).notificationLoadFailed),
+      ),
+    );
   }
 
   @override
@@ -120,7 +142,10 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     padding: EdgeInsets.zero,
                     onTap: () async {
                       final id = n['id'] as String?;
-                      if (id != null && unread) await _markRead(id);
+                      if (id != null && unread && !await _markRead(id)) {
+                        if (context.mounted) _showUpdateError();
+                        return;
+                      }
                       final path = n['action_path'] as String?;
                       if (path != null && path.startsWith('/')) {
                         if (context.mounted) context.go(path);
