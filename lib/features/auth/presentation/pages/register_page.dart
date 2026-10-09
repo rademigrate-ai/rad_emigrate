@@ -99,7 +99,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               Text(
                 l10n.signUp,
                 style: theme.textTheme.headlineLarge?.copyWith(
-                  color: AppColors.navy,
+                  color: theme.colorScheme.onSurface,
                   fontSize: 34,
                   letterSpacing: -0.45,
                 ),
@@ -109,11 +109,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               const SizedBox(height: 24),
               ClipRRect(
                 borderRadius: BorderRadius.circular(99),
-                child: const LinearProgressIndicator(
+                child: LinearProgressIndicator(
                   value: 0.33,
                   minHeight: 5,
                   color: AppColors.primaryRed,
-                  backgroundColor: Color(0xFFE1ECEE),
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
                 ),
               ),
               const SizedBox(height: 26),

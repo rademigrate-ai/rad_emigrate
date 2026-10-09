@@ -5,9 +5,8 @@ import 'package:latlong2/latlong.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/city.dart';
 
-/// Interactive dark world map. Tapping resolves a coordinate via the
-/// controller's nearest-city fallback (documented limitation when full
-/// boundary polygons are not bundled).
+/// Interactive world map. Uses free OSM tiles (no API key).
+/// Tile style follows the active app theme.
 class WorldMapPanel extends StatefulWidget {
   const WorldMapPanel({
     super.key,
@@ -31,6 +30,14 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final bg = isDark ? const Color(0xFF0A1018) : const Color(0xFFE8EEF4);
+    // Free OSM / Carto tiles — no API key required.
+    final tileUrl = isDark
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Stack(
@@ -42,7 +49,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
               initialZoom: 1.6,
               minZoom: 1.0,
               maxZoom: 8,
-              backgroundColor: const Color(0xFF0A1018),
+              backgroundColor: bg,
               onTap: (tapPos, latLng) {
                 widget.onTapCoordinate(latLng.latitude, latLng.longitude);
               },
@@ -52,10 +59,11 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+                urlTemplate: tileUrl,
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.rad.emigrate',
                 retinaMode: true,
+                errorTileCallback: (tile, error, stackTrace) {},
               ),
               MarkerLayer(
                 markers: [
@@ -71,21 +79,13 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
                         ),
                       ),
                     ),
-                  if (widget.selected != null &&
-                      !widget.cities.any((c) => c.id == widget.selected!.id))
-                    Marker(
-                      point: widget.selected!.latLng,
-                      width: 32,
-                      height: 32,
-                      child: const _CityMarker(selected: true),
-                    ),
                 ],
               ),
             ],
           ),
           Positioned(
             right: 12,
-            bottom: 12,
+            top: 12,
             child: Column(
               children: [
                 _MapBtn(
@@ -112,12 +112,13 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.black54,
+                color: theme.colorScheme.surface.withValues(alpha: 0.88),
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: theme.dividerColor),
               ),
-              child: const Text(
+              child: Text(
                 '© CARTO / OSM',
-                style: TextStyle(color: Colors.white70, fontSize: 10),
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
               ),
             ),
           ),
@@ -149,7 +150,10 @@ class _CityMarker extends StatelessWidget {
             spreadRadius: selected ? 2 : 0,
           ),
         ],
-        border: Border.all(color: Colors.white, width: selected ? 2.5 : 1.5),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.onPrimary,
+          width: selected ? 2.5 : 1.5,
+        ),
       ),
     );
   }
@@ -162,8 +166,10 @@ class _MapBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
-      color: const Color(0xFF1A222D),
+      color: theme.colorScheme.surface.withValues(alpha: 0.92),
+      elevation: 2,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         onTap: onTap,
@@ -171,7 +177,7 @@ class _MapBtn extends StatelessWidget {
         child: SizedBox(
           width: 36,
           height: 36,
-          child: Icon(icon, color: Colors.white, size: 18),
+          child: Icon(icon, color: theme.colorScheme.onSurface, size: 18),
         ),
       ),
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -139,7 +138,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Text(
                 l10n.signIn,
                 style: theme.textTheme.headlineLarge?.copyWith(
-                  color: AppColors.navy,
+                  color: theme.colorScheme.onSurface,
                   fontSize: 34,
                   letterSpacing: -0.45,
                 ),
