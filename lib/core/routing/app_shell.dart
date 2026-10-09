@@ -26,7 +26,6 @@ class AppShell extends ConsumerWidget {
     final location = GoRouterState.of(context).matchedLocation;
     final canAccessAdmin =
         ref.watch(adminSnapshotProvider).valueOrNull?.canAccess == true;
-    final isFa = Localizations.localeOf(context).languageCode == 'fa';
     final items = [
       _NavItem(
         label: l10n.home,
@@ -47,6 +46,12 @@ class AppShell extends ConsumerWidget {
         selectedIcon: Icons.assignment,
       ),
       _NavItem(
+        label: l10n.worldTimeTitle,
+        path: '/world-clock',
+        icon: Icons.schedule_outlined,
+        selectedIcon: Icons.schedule,
+      ),
+      _NavItem(
         label: l10n.feed,
         path: '/feed',
         icon: Icons.newspaper_outlined,
@@ -57,12 +62,6 @@ class AppShell extends ConsumerWidget {
         path: '/documents',
         icon: Icons.folder_outlined,
         selectedIcon: Icons.folder,
-      ),
-      _NavItem(
-        label: isFa ? 'ساعت جهانی' : 'World Time',
-        path: '/world-clock',
-        icon: Icons.schedule_outlined,
-        selectedIcon: Icons.schedule,
       ),
       _NavItem(
         label: l10n.aiAssistant,
