@@ -60,11 +60,26 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
   Timer? _ticker;
 
   Future<void> _init() async {
-    await TimezoneEngine.ensureInitialized();
-    await GeoTimezoneResolver.ensureReady();
-    final repo = _ref.read(favoritesRepositoryProvider);
-    final favs = repo?.load() ?? List<City>.from(CityCatalog.defaults);
-    state = state.copyWith(favorites: favs, isLoading: false);
+    try {
+      await TimezoneEngine.ensureInitialized();
+      // Geographic boundaries are optional for the clock itself. A missing
+      // map dataset must never trap the entire page behind a loading spinner.
+      await GeoTimezoneResolver.ensureReady();
+    } catch (_) {
+      // Continue with city clocks and report unavailable boundary data
+      // through GeoTimezoneResolver.resolve when the map is tapped.
+    }
+    if (!mounted) return;
+    try {
+      final repo = _ref.read(favoritesRepositoryProvider);
+      final favs = repo?.load() ?? List<City>.from(CityCatalog.defaults);
+      state = state.copyWith(favorites: favs, isLoading: false);
+    } catch (_) {
+      state = state.copyWith(
+        favorites: List<City>.from(CityCatalog.defaults),
+        isLoading: false,
+      );
+    }
     _startTicker();
   }
 
