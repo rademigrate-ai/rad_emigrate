@@ -62,7 +62,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/login',
-        builder: (_, state) => LoginPage(destination: state.uri.queryParameters['from']),
+        builder: (_, state) =>
+            LoginPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(
@@ -82,7 +83,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/profile-completion',
-        builder: (_, state) => ProfileCompletionPage(destination: state.uri.queryParameters['from']),
+        builder: (_, state) => ProfileCompletionPage(
+          destination: state.uri.queryParameters['from'],
+        ),
       ),
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
