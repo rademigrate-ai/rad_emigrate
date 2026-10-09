@@ -74,7 +74,7 @@ jobs:
             exit 1
           fi
       - run: flutter analyze
-      - run: flutter test
+      - run: flutter test --no-pub
       - run: git diff --check
 
   web-build:
