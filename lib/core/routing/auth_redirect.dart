@@ -22,6 +22,7 @@ const Set<String> _protectedRoutes = {
   '/admin/ai-research',
   '/admin/consultations',
   '/feed',
+  '/world-clock',
 };
 
 /// Resolves auth routing while distinguishing session restoration from logout.

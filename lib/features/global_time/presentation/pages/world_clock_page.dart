@@ -92,7 +92,10 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Flexible(
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(ctx).height * 0.45,
+                ),
                 child: ListView(
                   shrinkWrap: true,
                   children: [
