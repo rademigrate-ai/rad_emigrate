@@ -60,11 +60,23 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
   Timer? _ticker;
 
   Future<void> _init() async {
-    await TimezoneEngine.ensureInitialized();
-    await GeoTimezoneResolver.ensureReady();
-    final repo = _ref.read(favoritesRepositoryProvider);
-    final favs = repo?.load() ?? List<City>.from(CityCatalog.defaults);
-    state = state.copyWith(favorites: favs, isLoading: false);
+    try {
+      await TimezoneEngine.ensureInitialized();
+      await GeoTimezoneResolver.ensureReady();
+    } catch (_) {
+      // Still show the page with catalog defaults if tz bootstrap fails
+      // (e.g. missing web asset). Map resolve may be unavailable.
+    }
+    try {
+      final repo = _ref.read(favoritesRepositoryProvider);
+      final favs = repo?.load() ?? List<City>.from(CityCatalog.defaults);
+      state = state.copyWith(favorites: favs, isLoading: false);
+    } catch (_) {
+      state = state.copyWith(
+        favorites: List<City>.from(CityCatalog.defaults),
+        isLoading: false,
+      );
+    }
     _startTicker();
   }
 
