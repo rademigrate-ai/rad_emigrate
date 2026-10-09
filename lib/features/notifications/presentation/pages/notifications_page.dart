@@ -71,7 +71,6 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
       await _load();
       return _error == null;
     } catch (_) {
-      if (mounted) _showUpdateError();
       return false;
     }
   }
