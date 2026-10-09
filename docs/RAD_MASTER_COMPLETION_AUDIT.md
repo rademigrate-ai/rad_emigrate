@@ -110,3 +110,38 @@ Source: `lib/core/routing/app_router.dart`, `lib/core/routing/auth_redirect.dart
 - **P0:** production role/RLS isolation, no AI auto-publish, Auth recovery and document privacy; prove deployed version matches audited SHA.
 - **P1:** Visa verified content and research-to-draft chain; real AI citations/quotas; broken page journeys and device responsiveness.
 - **P2:** payment/provider integration, notification channels, full CRM handoff, advanced tools and app-store readiness, sequenced by owner dependencies.
+
+## Stage 1 — research ingestion and publication contract pass
+
+Code evidence: `supabase/migrations/20261007080002_research_atomic_review_candidate.sql`, `supabase/functions/research-sync/handler.ts`, `supabase/tests/corrective_routing_research.sql`.
+
+- `public.ingest_research_snapshot` is restricted to `service_role`, validates HTTP 2xx and normalized text, deduplicates by document/hash, and writes snapshots/findings transactionally.
+- `private.research_finding_review_candidate` is an AFTER INSERT trigger on `public.research_findings`, calling `public.create_research_review_candidate` within the same transaction. This is explicit code evidence of finding → human review candidate generation.
+- The migration explicitly states **No Feed writes**. This is a design and regression-review gate; never relax it.
+- `research-sync/handler.ts` implements HTTPS/host constraints, manual redirect validation, response size cap and timeouts. Full deployed SSRF/DNS rebinding and source-content quality acceptance is **not** established by reading code.
+- Existing `supabase/tests/corrective_routing_research.sql` is a disposable CI fixture; production pipeline success and current deployment version remain unverified.
+- **Caution:** This contract addresses review candidate creation, not the entire user-facing editorial journey; manually verify draft editing, approvals, publication and authorization.
+
+## Stage 1 — executable phase backlog / gates
+
+| Next phase | Must-have deliverables | Exit gate / evidence |
+| --- | --- | --- |
+| 2. Core Web/Admin | Route-by-route desktop/mobile smoke, auth/recovery, admin authorization, errors/loading, documents/consultations | Browser E2E artifacts + no open P0/P1 regression + single green CI HEAD |
+| 3. Visa/CMS content | Source-backed localized country/program text, review-required official regulatory content, editorial ownership and freshness | Coverage report, content reviewer sign-off, no invented requirements |
+| 4. Knowledge/User AI | RAD corpus inventory, source snapshots, current official sources, retrieval eval, guest/auth quota and citations | Reviewed bilingual eval dataset + live provider/quota checks |
+| 5. Research/Editorial | Scheduled sync, change/conflict detection, finding→candidate→review→publish and audit trail | Disposable DB regression + production authorized smoke; zero auto-publish |
+| 6. CRM/Commercial | Lead/consultant workflow, notification delivery, entitlements, approved payment provider | Two-user journey + payment sandbox/webhook + owner/legal sign-off |
+| 7. Intelligence tools | Profile/pathway comparisons, source-backed checklist/timeline, document AI and privacy | Product acceptance fixtures + source provenance + isolation/deletion tests |
+| 8. Release | Production SHA, real Web/Android/iOS E2E, signing, accessibility, security, privacy, rollback | Owner-approved release evidence; stores/deploy external actions complete |
+
+### Stage 1 exit checklist (current status)
+- [x] Establish original vision vs current product acceptance matrix
+- [x] Inventory Flutter feature folders, Edge Functions and test file coverage
+- [x] Map primary GoRouter routes to representative tests
+- [x] Distinguish historical CI and production evidence from current status
+- [x] Review research finding → review candidate SQL contract and explicit no-auto-publish boundary
+- [x] Create phases 2–8 dependency and acceptance backlog
+- [ ] Verify production deployment SHA, active Edge versions, live role/RLS and full research-to-publish journey (requires authorized live verification)
+- [ ] Obtain owner/content/legal confirmations for external gates
+
+**Engineering audit documentation is complete for the repository-level Stage 1 scope. Full Stage 1 production acceptance remains BLOCKED by live verification and owner inputs. Do not mark the whole stage completed or start Phase 2 under the user's condition until the missing gates are satisfied.**
