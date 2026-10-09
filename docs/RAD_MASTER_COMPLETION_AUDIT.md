@@ -30,13 +30,13 @@ Status: IN PROGRESS — documentary baseline, not production acceptance.
 | iOS app | Unverified / external blocker | iOS target exists; Apple bundle ID/signing and device/store acceptance required |
 | User Auth and protected routes | Partial | Supabase-backed routes exist; real email OTP, SMS and two-user E2E need evidence |
 | Admin / Super Admin | Partial | Role-gated operations described; actual role journey and audit acceptance needed |
-| Country and visa catalog | Partial | Schema/catalog exist; completeness, sourced summaries/steps and current requirements unverified |
+| Country and visa catalog | Partial / documented seeded | `docs/VISA_PRODUCTION_EVIDENCE.md` records 22 destinations, 44 localized summaries, 10 programs, 20 descriptions, 8 review-required requirements and 18 review-required steps; 0 official-regulatory verified steps/descriptions; verify current production |
 | Content CMS and human review | Partial | Reviewed Feed model exists; full original content types and editorial UX require mapping |
 | RAD 3-site ingestion | Unverified | Verify URL inventory, approved ingestion, provenance, update frequency and live corpus |
 | User AI with citations | Partial | Grounded orchestration described; source-level accuracy, freshness, cost and latency acceptance needed |
-| Five free anonymous questions | Unverified | Server-side anonymous identity/quota + account merge must be tested; not inferred from signed-in quotas |
+| Five free anonymous questions | Documented pass / current runtime unverified | `docs/USER_AI_PRODUCTION_EVIDENCE.md` records Q1–Q5 allowed, Q6 rejected; retest against current deployed version and validate guest-to-account behavior |
 | Email/SMS OTP | External blocker | Owner email E2E and SMS provider documented as outstanding |
-| Subscription and payment | External blocker / partial | Payment provider and plans owner-owned; real purchase/refund/entitlement E2E unverified |
+| Subscription and payment | External blocker / partial | `docs/PAYMENT_PRODUCTION_READINESS.md` explicitly NOT READY; owner must supply provider, credentials, plans/prices, webhook secrets and legal copy |
 | Knowledge search / RAG / conflict | Partial | Knowledge foundation exists; corpus, semantic retrieval, stale/conflict regression need evaluation |
 | Research Agent and change monitoring | Partial | Research sync exists; end-to-end detection, review-candidate creation and alerts must be tested |
 | Research-to-Feed publishing | Partial | Explicit Admin approval required; verify no automated publication path |
@@ -62,3 +62,20 @@ Status: IN PROGRESS — documentary baseline, not production acceptance.
 
 ## Non-goals
 No production mutations, no Render changes, no automatic AI publication, no unsourced immigration content, no declaring release complete from green CI.
+
+## Stage 1 — repository evidence pass (2026-10-09)
+
+GitHub `main` recursive tree inventory: **1,789 tracked blobs**, **13 Flutter feature directories**, **57 test files**, **159 documentation files**. Edge Functions: `ai-orchestrator`, `document-intelligence`, `research-sync` (plus shared code and tests). These are repository counts, not coverage metrics or runtime proof.
+
+### Corrections to preliminary classifications
+- Visa: latest documented production evidence shows **44 localized destination summaries**, **20 localized program descriptions**, **8 requirements** and **18 steps**; the steps and requirements are review-required, and **zero official-regulatory verification** is documented. Do not repeat the older claim that all summaries/steps are empty without checking the timestamp and live database.
+- Guest AI: `docs/USER_AI_PRODUCTION_EVIDENCE.md` reports Q1–Q5 allowed and Q6 blocked. The report also documents authenticated Persian/English responses with citations. This is evidence of a past smoke test, not confirmation of current deployment.
+- Payment: `docs/PAYMENT_PRODUCTION_READINESS.md` explicitly says NOT READY pending owner payment provider, plans/prices, webhook secrets and legal/commercial copy.
+- Historical `docs/FINAL_ACCEPTANCE_REPORT.md` states CI NO-GO; that report is stale relative to GitHub Actions success at `8a7fce25c`. Do not silently use it as current CI status.
+- Original blueprint recommends Next.js/React Native/NestJS, but the actual project uses Flutter + Supabase. Acceptance should assess required **capabilities**, not assume an unapproved framework rewrite.
+
+### Next evidence collection
+- Map each GoRouter route to screens and tests, including protected/admin route behavior.
+- Inventory SQL/RPCs and Edge authorization contracts for research, publication, quotas, payments and documents.
+- Establish current deployed build SHA and repeat owner-authorized live E2E checks before declaring production readiness.
+- Validate corpus coverage and official source freshness, especially regulatory claims.
