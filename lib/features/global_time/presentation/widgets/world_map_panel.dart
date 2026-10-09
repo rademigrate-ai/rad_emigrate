@@ -5,7 +5,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/city.dart';
 
-/// Interactive world map. Uses free OSM tiles (no API key).
+/// Interactive world map. Uses free Esri Canvas tiles (no API key).
 /// Tile style follows the active app theme.
 class WorldMapPanel extends StatefulWidget {
   const WorldMapPanel({
@@ -33,10 +33,11 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final bg = isDark ? const Color(0xFF0A1018) : const Color(0xFFE8EEF4);
-    // Free OSM / Carto tiles — no API key required.
+    // Free Esri Canvas tiles — no API key, no watermark.
+    // Note: Esri uses {z}/{y}/{x} order (not z/x/y).
     final tileUrl = isDark
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+        : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -60,9 +61,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
             children: [
               TileLayer(
                 urlTemplate: tileUrl,
-                subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.rad.emigrate',
-                retinaMode: true,
                 errorTileCallback: (tile, error, stackTrace) {},
               ),
               MarkerLayer(
@@ -117,7 +116,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
                 border: Border.all(color: theme.dividerColor),
               ),
               child: Text(
-                '© CARTO / OSM',
+                '© Esri',
                 style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
               ),
             ),
