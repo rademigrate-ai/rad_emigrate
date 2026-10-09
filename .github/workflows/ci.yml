@@ -105,6 +105,9 @@ jobs:
       - run: flutter pub get
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+          cache-cleanup: on-success
       - name: Build Android debug variant
         run: >-
           flutter build apk --debug --no-pub
