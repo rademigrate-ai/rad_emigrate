@@ -60,7 +60,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             SplashPage(destination: state.uri.queryParameters['from']),
       ),
-      GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
+      GoRoute(
+        path: '/login',
+        builder: (_, state) =>
+            LoginPage(destination: state.uri.queryParameters['from']),
+      ),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
       GoRoute(
         path: '/forgot-password',
@@ -79,7 +83,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/profile-completion',
-        builder: (_, _) => const ProfileCompletionPage(),
+        builder: (_, state) => ProfileCompletionPage(
+          destination: state.uri.queryParameters['from'],
+        ),
       ),
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),

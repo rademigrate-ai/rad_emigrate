@@ -37,7 +37,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     if (session != null && session.isAuthenticated) {
       context.go(restoredProtectedDestination(widget.destination));
     } else {
-      context.go('/login');
+      context.go(
+        Uri(
+          path: '/login',
+          queryParameters: {
+            'from': restoredProtectedDestination(widget.destination),
+          },
+        ).toString(),
+      );
     }
   }
 

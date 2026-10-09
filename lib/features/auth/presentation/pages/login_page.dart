@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
@@ -13,7 +14,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, this.destination});
+
+  final String? destination;
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
@@ -48,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             identifier: _identifierCtrl.text.trim(),
             password: _passwordCtrl.text,
           );
-      if (mounted) context.go('/dashboard');
+      if (mounted) context.go(restoredProtectedDestination(widget.destination));
     } catch (e) {
       if (mounted) setState(() => _error = localizedAuthError(e, l10n));
     } finally {

@@ -56,18 +56,32 @@ String? authRedirect({
   if (location == '/reset-password') return null;
 
   if (!isAuthenticated && !_publicRoutes.contains(location)) {
-    return '/login';
+    return Uri(
+      path: '/login',
+      queryParameters: {'from': restoredProtectedDestination(uri.toString())},
+    ).toString();
   }
 
   if (isAuthenticated && _publicRoutes.contains(location)) {
-    return profileComplete ? '/dashboard' : '/profile-completion';
+    final destination = restoredProtectedDestination(
+      uri.queryParameters['from'],
+    );
+    return profileComplete
+        ? destination
+        : Uri(
+            path: '/profile-completion',
+            queryParameters: {'from': destination},
+          ).toString();
   }
 
   if (isAuthenticated &&
       !profileComplete &&
       location != '/profile-completion' &&
       location != '/profile') {
-    return '/profile-completion';
+    return Uri(
+      path: '/profile-completion',
+      queryParameters: {'from': restoredProtectedDestination(uri.toString())},
+    ).toString();
   }
 
   return null;

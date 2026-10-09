@@ -16,6 +16,14 @@ void main() {
           '/ai-assistant',
           '/profile-completion',
           '/admin',
+          '/admin/ai-config',
+          '/admin/operations',
+          '/admin/ai-research',
+          '/admin/consultations',
+          '/consultation',
+          '/notifications',
+          '/feed',
+          '/world-clock',
         ];
         for (final path in protected) {
           expect(
@@ -25,7 +33,7 @@ void main() {
               isAuthenticated: false,
               profileComplete: false,
             ),
-            '/login',
+            Uri(path: '/login', queryParameters: {'from': path}).toString(),
             reason: path,
           );
         }
@@ -42,7 +50,7 @@ void main() {
             isAuthenticated: true,
             profileComplete: false,
           ),
-          '/profile-completion',
+          '/profile-completion?from=%2Fadmin',
         );
         expect(
           authRedirect(
@@ -51,7 +59,7 @@ void main() {
             isAuthenticated: true,
             profileComplete: false,
           ),
-          '/profile-completion',
+          '/profile-completion?from=%2Fai-assistant',
         );
       },
     );
@@ -109,7 +117,7 @@ void main() {
           isAuthenticated: false,
           profileComplete: false,
         ),
-        '/login',
+        '/login?from=%2Fadmin',
       );
     });
   });
