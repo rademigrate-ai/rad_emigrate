@@ -13,23 +13,23 @@ void main() {
       // Admin: B.rad14@yahoo.com
       // Must be elevated only after Auth user existence is verified;
       // never via client-side email checks alone.
-      expect(true, isTrue, reason: 'EXTERNAL ACTION');
-    });
+      // This gate needs owner-verified production evidence, not a passing assertion.
+    }, skip: 'External/deferred gate — not implemented or verified');
 
     test('Full Flutter ARB locale service beyond bilingual content model', () {
       // Feed/knowledge already model fa/en. Global ARB package is optional
       // for the web engineering gate.
-      expect(true, isTrue, reason: 'DEFERRED OPTIONAL');
+      // Optional scope; intentionally not counted as an accepted feature.
     });
 
     test('Data export / account deletion product UI', () {
       // Legal policy text and host-specific flows remain external;
       // schema isolation already owner-scoped for user data.
-      expect(true, isTrue, reason: 'DEFERRED / EXTERNAL POLICY');
+      // Requires a policy decision and a real product acceptance test.
     });
 
     test('Production domain, DNS, Auth redirect URLs, app signing', () {
-      expect(true, isTrue, reason: 'EXTERNAL ACTION');
-    });
+      // This gate needs owner-verified production evidence, not a passing assertion.
+    }, skip: 'External/deferred gate — not implemented or verified');
   });
 }
