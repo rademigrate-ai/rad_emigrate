@@ -72,26 +72,35 @@ for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
 print('Canonical active lineage: PASS (25 authoritative + 21 current additive migrations).')
 PY
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004190000_fix_profile_update_rls_recursion.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261004203000_client_delivery_ai_scopes.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005102000_stage1_ai_research_completion.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005120000_stage2_review_feed_publish.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005130000_stage2_visa_structured_steps.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261005190000_stage3_fk_covering_indexes.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261006132931_stage5_research_review_candidate_backfill.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261006180000_fix_profile_update_with_check_role_escalation.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080000_ai_dynamic_routing_architecture.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080001_ai_credential_failure_routing.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007080002_research_atomic_review_candidate.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180000_stage2_knowledge_completion.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180001_stage2_knowledge_promote.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007180002_stage2_knowledge_retrieve_conflict.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007210000_stage4_user_ai_quota_grounding.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007212000_stage4_limit_ai_runtime_chain.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007220000_stage5_visa_editorial_summaries.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261007230000_stage6_entitlement_access_decision.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261008010000_stage7_ops_consultation_app_status.sql"
-psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "$backup/20261008020000_stage9_security_grant_hardening.sql"
+# Apply the same ordered additive SQL files through one psql session.
+# ON_ERROR_STOP still fails the job at the first SQL error; no SQL is skipped.
+additive_sql_files=(
+  "$backup/20261003235000_ai_base_url_ssrf_hardening.sql"
+  "$backup/20261004190000_fix_profile_update_rls_recursion.sql"
+  "$backup/20261004203000_client_delivery_ai_scopes.sql"
+  "$backup/20261005102000_stage1_ai_research_completion.sql"
+  "$backup/20261005120000_stage2_review_feed_publish.sql"
+  "$backup/20261005130000_stage2_visa_structured_steps.sql"
+  "$backup/20261005190000_stage3_fk_covering_indexes.sql"
+  "$backup/20261006132931_stage5_research_review_candidate_backfill.sql"
+  "$backup/20261006180000_fix_profile_update_with_check_role_escalation.sql"
+  "$backup/20261007080000_ai_dynamic_routing_architecture.sql"
+  "$backup/20261007080001_ai_credential_failure_routing.sql"
+  "$backup/20261007080002_research_atomic_review_candidate.sql"
+  "$backup/20261007180000_stage2_knowledge_completion.sql"
+  "$backup/20261007180001_stage2_knowledge_promote.sql"
+  "$backup/20261007180002_stage2_knowledge_retrieve_conflict.sql"
+  "$backup/20261007210000_stage4_user_ai_quota_grounding.sql"
+  "$backup/20261007212000_stage4_limit_ai_runtime_chain.sql"
+  "$backup/20261007220000_stage5_visa_editorial_summaries.sql"
+  "$backup/20261007230000_stage6_entitlement_access_decision.sql"
+  "$backup/20261008010000_stage7_ops_consultation_app_status.sql"
+  "$backup/20261008020000_stage9_security_grant_hardening.sql"
+)
+psql_args=(-X -v ON_ERROR_STOP=1)
+for sql_file in "${additive_sql_files[@]}"; do
+  psql_args+=(-f "$sql_file")
+done
+psql "$DB_URL" "${psql_args[@]}"
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrective_routing_research.sql
