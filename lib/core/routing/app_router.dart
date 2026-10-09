@@ -82,7 +82,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/profile-completion',
-        builder: (_, _) => const ProfileCompletionPage(),
+        builder: (_, state) => ProfileCompletionPage(destination: state.uri.queryParameters['from']),
       ),
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
