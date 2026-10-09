@@ -27,6 +27,8 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   String? _error;
   String? _success;
   List<Map<String, dynamic>> _mine = const [];
+  bool _historyLoading = true;
+  bool _historyFailed = false;
 
   @override
   void initState() {
@@ -46,7 +48,16 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   Future<void> _loadMine() async {
     final client = ref.read(supabaseClientServiceProvider).client;
     final uid = client.auth.currentUser?.id;
-    if (uid == null) return;
+    if (uid == null) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    if (mounted) {
+      setState(() {
+        _historyLoading = true;
+        _historyFailed = false;
+      });
+    }
     try {
       final rows = await client
           .from('consultation_requests')
@@ -55,9 +66,19 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
           .order('created_at', ascending: false)
           .limit(20);
       if (mounted) {
-        setState(() => _mine = List<Map<String, dynamic>>.from(rows as List));
+        setState(() {
+          _mine = List<Map<String, dynamic>>.from(rows as List);
+          _historyLoading = false;
+        });
       }
-    } catch (_) {}
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _historyLoading = false;
+          _historyFailed = true;
+        });
+      }
+    }
   }
 
   Future<void> _submit() async {
@@ -174,7 +195,15 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            if (_mine.isEmpty)
+            if (_historyLoading)
+              const Center(child: CircularProgressIndicator())
+            else if (_historyFailed)
+              TextButton.icon(
+                onPressed: _loadMine,
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.refresh),
+              )
+            else if (_mine.isEmpty)
               Text(l10n.noConsultations)
             else
               ..._mine.asMap().entries.map((entry) {
