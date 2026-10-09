@@ -20,7 +20,7 @@ void main() {
           isAuthenticated: false,
           profileComplete: false,
         ),
-        '/login',
+        '/login?from=%2Fapplications',
       );
     });
 
@@ -62,7 +62,7 @@ void main() {
           isAuthenticated: false,
           profileComplete: false,
         ),
-        '/login',
+        '/login?from=%2Fdocuments',
       );
     });
 
@@ -74,7 +74,7 @@ void main() {
           isAuthenticated: true,
           profileComplete: false,
         ),
-        '/profile-completion',
+        '/profile-completion?from=%2Fapplications',
       );
     });
 
@@ -97,7 +97,7 @@ void main() {
             isAuthenticated: true,
             profileComplete: false,
           ),
-          '/profile-completion',
+          '/profile-completion?from=%2Fdashboard',
         );
       },
     );
