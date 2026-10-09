@@ -9,8 +9,13 @@ abstract final class TimezoneEngine {
 
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
-    await bootstrapGeoTimezone();
-    _initialized = true;
+    try {
+      await bootstrapGeoTimezone();
+      _initialized = true;
+    } catch (_) {
+      // Do not rethrow: page must still render catalog clocks.
+      // markInitialized may already have run for the tz db portion.
+    }
   }
 
   static void markInitialized() {
