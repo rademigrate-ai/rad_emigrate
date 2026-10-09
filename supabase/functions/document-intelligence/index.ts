@@ -21,6 +21,11 @@ Deno.serve(async(req:Request)=>{
  if(typeof body.document_id!=="string") return json(400,{error:"document_id_required"});
  const docs=await db(`documents?select=id,user_id,file_path,name&id=eq.${encodeURIComponent(body.document_id)}&user_id=eq.${encodeURIComponent(user.id)}&limit=1`);
  if(!docs.length) return json(404,{error:"document_not_found"});
+ // Service-role Storage access must never trust a client-mutable database path.
+ const filePath=docs[0].file_path;
+ if(typeof filePath!=="string" || !filePath.startsWith(`${user.id}/`) || filePath.includes("\\\\") || filePath.split("/").some((segment:string)=>!segment || segment==="." || segment==="..")) {
+  return json(403,{error:"document_path_forbidden"});
+ }
  const jobs=await db("document_processing_jobs?select=id",{method:"POST",headers:{Prefer:"return=representation"},body:JSON.stringify({
   document_id:docs[0].id,user_id:user.id,status:"running",attempt_count:1,started_at:new Date().toISOString()
  })});
