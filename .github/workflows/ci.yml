@@ -73,7 +73,7 @@ jobs:
             git --no-pager diff -- lib/l10n/app_localizations_en_a.dart lib/l10n/app_localizations_fa_a.dart
             exit 1
           fi
-      - run: flutter analyze
+      - run: flutter analyze --no-pub
       - run: flutter test --no-pub
       - run: git diff --check
 
