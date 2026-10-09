@@ -145,3 +145,29 @@ Code evidence: `supabase/migrations/20261007080002_research_atomic_review_candid
 - [ ] Obtain owner/content/legal confirmations for external gates
 
 **Engineering audit documentation is complete for the repository-level Stage 1 scope. Full Stage 1 production acceptance remains BLOCKED by live verification and owner inputs. Do not mark the whole stage completed or start Phase 2 under the user's condition until the missing gates are satisfied.**
+
+
+## Stage 1 — live read-only production evidence (2026-10-09)
+
+Target Supabase project: `inshddthftkhcdosoqcn` (RAD account). Queries were SELECT/catalog inspection only; no migrations, writes, Auth changes, deployments or production fixtures.
+
+- Active deployed Edge Functions: `research-sync` version 2 (`verify_jwt=false`), `ai-orchestrator` version 9 (`verify_jwt=true`), and `document-intelligence` version 1 (`verify_jwt=true`). These are live version identifiers, **not** source-commit equivalence or authorization verification. In particular, inspect `research-sync` application-level authentication before accepting its JWT-disabled configuration.
+- `public.research_findings`: **11** rows; `public.content_drafts`: **11** rows.
+- **11** drafts reference a `research_finding_id`; **0** orphaned references; **0** findings lack a corresponding draft; **0** drafts have a non-null `feed_item_id`. This confirms the current data-level finding→draft relationship, **not** successful publication or approval flows. The older 5 findings/0 drafts snapshot is superseded for these counts.
+- PostgreSQL catalog shows RLS enabled on `public.research_findings`, `public.content_drafts`, `public.profiles`, and `public.visa_programs`. RLS enabled is **not** proof of correct policy enforcement or two-account isolation.
+- Render service inspection could not proceed: connector requires a workspace selected by the owner. Therefore current deployed Web SHA remains unverified.
+
+### Remaining Stage 1 acceptance blockers — do not mark production accepted
+1. Owner selects/confirms Render workspace and authorizes production SHA/browser smoke checks.
+2. Verify deployed Edge source equivalence, `research-sync` authentication/secret boundary, and staff/nonstaff RLS isolation with safe authorized test sessions.
+3. Exercise the human editorial workflow (draft edit → approval → Feed publication) with approved disposable test content; confirm no AI/research auto-publication. Current production evidence is read-only and cannot prove this journey.
+4. Obtain owner/provider/content/legal decisions for email/SMS OTP, payments, signing, official Visa content approval and privacy terms.
+
+### Consolidation into the agreed five-stage delivery plan
+- **Stage 1:** Master Audit + Core Stabilization (this baseline plus core UX/auth/admin fixes and live acceptance).
+- **Stage 2:** Visa + CMS + evidence-backed content.
+- **Stage 3:** User AI + Knowledge/RAG + Research/Editorial, preserving human Feed approval.
+- **Stage 4:** CRM + Payments + Notifications + scoped smart tools.
+- **Stage 5:** Full QA + Production + Web/Android/iOS Release.
+
+**Current Stage 1 result:** repository audit documented; live database relationship and Edge inventory checked; **Stage 1 NOT YET ACCEPTED** because production deployment identity, live authorization/E2E and external sign-offs remain unverified. Never reinterpret the five-stage consolidation as evidence that these gates passed.
