@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../providers/global_time_controller.dart';
 import 'city_clock_card.dart';
 
@@ -23,13 +24,13 @@ class HomeGlobalTimeWidget extends ConsumerWidget {
         Row(
           children: [
             Text(
-              lang == 'fa' ? 'ساعت جهانی' : 'World Time',
+              AppLocalizations.of(context).worldTimeTitle,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Spacer(),
             TextButton(
               onPressed: () => context.go('/world-clock'),
-              child: Text(lang == 'fa' ? 'مشاهده همه' : 'View all'),
+              child: Text(AppLocalizations.of(context).worldTimeViewAll),
             ),
           ],
         ),

@@ -401,6 +401,27 @@ abstract class AppLocalizations {
   String get consultationUpdateFailed;
   String get openNotifications;
   String get openConsultation;
+
+  // World Time / Global Time
+  String get worldTimeTitle;
+  String get worldTimeSubtitle;
+  String get worldTimeSearchHint;
+  String get worldTimeAdd;
+  String get worldTimeNow;
+  String get worldTimeTimeline;
+  String get worldTimeSelectManual;
+  String get worldTimeUnresolvedOcean;
+  String get worldTimeBoundaryUnavailable;
+  String worldTimeManualSelected(String id);
+  String worldTimeTimezoneLabel(String id);
+  String get worldTimeViewAll;
+  String get meetingPlannerOrigin;
+  String get meetingPlannerDestination;
+  String get meetingPlannerShow;
+  String get meetingPlannerSuggested;
+  String get meetingPlannerTitle;
+  String get meetingPlannerHint;
+  String get consultationLoadFailed;
 }
 
 class _AppLocalizationsDelegate

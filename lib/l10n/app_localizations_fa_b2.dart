@@ -188,4 +188,65 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get sourceQueryRejected =>
       'آدرس بدون query و با HTTPS عمومی استفاده کنید.';
+
+  @override
+  String get worldTimeTitle => 'ساعت جهانی';
+
+  @override
+  String get worldTimeSubtitle => 'ساعت جهانی، هماهنگ با مسیر مهاجرت شما';
+
+  @override
+  String get worldTimeSearchHint => 'جستجوی شهر، کشور یا منطقه زمانی…';
+
+  @override
+  String get worldTimeAdd => 'افزودن';
+
+  @override
+  String get worldTimeNow => 'اکنون';
+
+  @override
+  String get worldTimeTimeline => 'خط زمانی ۲۴ ساعته';
+
+  @override
+  String get worldTimeSelectManual => 'انتخاب دستی منطقه زمانی';
+
+  @override
+  String get worldTimeUnresolvedOcean =>
+      'منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).';
+
+  @override
+  String get worldTimeBoundaryUnavailable =>
+      'داده‌های مرز زمانی در دسترس نیست.';
+
+  @override
+  String worldTimeManualSelected(String id) => 'انتخاب دستی: $id';
+
+  @override
+  String worldTimeTimezoneLabel(String id) => 'منطقه زمانی: $id';
+
+  @override
+  String get worldTimeViewAll => 'مشاهده همه';
+
+  @override
+  String get meetingPlannerOrigin => 'مبدأ';
+
+  @override
+  String get meetingPlannerDestination => 'مقصد';
+
+  @override
+  String get meetingPlannerShow => 'نمایش';
+
+  @override
+  String get meetingPlannerSuggested => 'پنجره‌های پیشنهادی';
+
+  @override
+  String get meetingPlannerTitle => 'برنامه‌ریزی تماس بین‌المللی';
+
+  @override
+  String get meetingPlannerHint =>
+      'پنجره‌های پیشنهادی همپوشانی ساعات کاری (نه تأیید دسترسی)';
+
+  @override
+  String get consultationLoadFailed =>
+      'بارگذاری درخواست‌های مشاوره ممکن نشد. لطفاً دوباره تلاش کنید.';
 }

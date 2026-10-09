@@ -287,4 +287,65 @@ mixin AppLocalizationsEnB2 on AppLocalizations {
   @override
   String get sourceQueryRejected =>
       'Use a public HTTPS address without a query string. Query-based source addresses are not supported yet.';
+
+  @override
+  String get worldTimeTitle => 'World Time';
+
+  @override
+  String get worldTimeSubtitle => 'World time, aligned with your journey';
+
+  @override
+  String get worldTimeSearchHint => 'Search city, country, or timezone…';
+
+  @override
+  String get worldTimeAdd => 'Add';
+
+  @override
+  String get worldTimeNow => 'Now';
+
+  @override
+  String get worldTimeTimeline => '24-Hour Timeline';
+
+  @override
+  String get worldTimeSelectManual => 'Select timezone manually';
+
+  @override
+  String get worldTimeUnresolvedOcean =>
+      'No timezone for this point (ocean or outside land zones).';
+
+  @override
+  String get worldTimeBoundaryUnavailable =>
+      'Timezone boundary data unavailable.';
+
+  @override
+  String worldTimeManualSelected(String id) => 'Manual: $id';
+
+  @override
+  String worldTimeTimezoneLabel(String id) => 'Timezone: $id';
+
+  @override
+  String get worldTimeViewAll => 'View all';
+
+  @override
+  String get meetingPlannerOrigin => 'Origin';
+
+  @override
+  String get meetingPlannerDestination => 'Destination';
+
+  @override
+  String get meetingPlannerShow => 'Show';
+
+  @override
+  String get meetingPlannerSuggested => 'Suggested windows';
+
+  @override
+  String get meetingPlannerTitle => 'International Meeting Planner';
+
+  @override
+  String get meetingPlannerHint =>
+      'Suggested overlapping working-hour windows (not confirmed availability)';
+
+  @override
+  String get consultationLoadFailed =>
+      'Could not load your consultation requests. Please try again.';
 }
