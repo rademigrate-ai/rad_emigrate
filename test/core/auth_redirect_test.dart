@@ -54,6 +54,30 @@ void main() {
       },
     );
 
+    test('login preserves query-bearing destination and rejects external from', () {
+      final target = Uri.parse('/documents?kind=passport');
+      final login = Uri.parse(authRedirect(
+        uri: target,
+        isRestoring: false,
+        isAuthenticated: false,
+        profileComplete: false,
+      )!);
+      expect(login.path, '/login');
+      expect(login.queryParameters['from'], target.toString());
+      expect(authRedirect(
+        uri: login,
+        isRestoring: false,
+        isAuthenticated: true,
+        profileComplete: true,
+      ), target.toString());
+      expect(authRedirect(
+        uri: Uri.parse('/login?from=https%3A%2F%2Fevil.example'),
+        isRestoring: false,
+        isAuthenticated: true,
+        profileComplete: true,
+      ), '/dashboard');
+    });
+
     test('expired session redirects to login after restoration', () {
       expect(
         authRedirect(
