@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/routing/auth_redirect.dart';
 import '../providers/auth_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -10,7 +11,9 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class ProfileCompletionPage extends ConsumerStatefulWidget {
-  const ProfileCompletionPage({super.key});
+  const ProfileCompletionPage({super.key, this.destination});
+
+  final String? destination;
 
   @override
   ConsumerState<ProfileCompletionPage> createState() =>
@@ -47,7 +50,7 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                 ? null
                 : _nationalityCtrl.text.trim(),
           );
-      if (mounted) context.go('/dashboard');
+      if (mounted) context.go(restoredProtectedDestination(widget.destination));
     } catch (e) {
       if (mounted) {
         setState(() => _error = localizedAuthError(e, l10n));
