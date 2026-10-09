@@ -263,7 +263,7 @@ class AuthCinematicFrame extends StatelessWidget {
               const Spacer(),
               Align(
                 alignment: AlignmentDirectional.center,
-                child: heroVisual ?? const RadOrbit(size: 132),
+                child: heroVisual ?? const RadOrbit(size: 174),
               ),
               const Spacer(),
             ],
@@ -310,7 +310,7 @@ class AuthCinematicFrame extends StatelessWidget {
                     child: form,
                   ),
                   if (!wide) ...[
-                    const SizedBox(height: 26),
+                    const SizedBox(height: 18),
                     Center(
                       child: Text(
                         eyebrow,
@@ -339,7 +339,7 @@ class AuthCinematicFrame extends StatelessWidget {
             )
           : Column(
               children: [
-                SizedBox(height: 288, child: visual),
+                SizedBox(height: 264, child: visual),
                 Expanded(child: formSurface),
               ],
             ),

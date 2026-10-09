@@ -52,9 +52,31 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         child: SafeArea(
           child: Stack(
             children: [
+              const PositionedDirectional(
+                top: 28,
+                start: 24,
+                child: EditorialKicker(
+                  index: '01',
+                  label: 'IMMIGRATION JOURNEY',
+                  dark: true,
+                ),
+              ),
               LoadingState.splash(
                 message: l10n.splashLoadingStatus,
                 dark: true,
+              ),
+              PositionedDirectional(
+                bottom: 28,
+                start: 24,
+                end: 24,
+                child: Text(
+                  l10n.brandIntroTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
               Semantics(
                 label: l10n.appTitle,

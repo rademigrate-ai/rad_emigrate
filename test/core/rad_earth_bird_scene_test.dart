@@ -130,4 +130,41 @@ void main() {
     expect(tester.hasRunningAnimations, isFalse);
     expect(tester.takeException(), isNull);
   });
+
+  for (final variant in [
+    RadEarthBirdVariant.loginHero,
+    RadEarthBirdVariant.splash,
+    RadEarthBirdVariant.fullScreenLoading,
+    RadEarthBirdVariant.sectionLoading,
+    RadEarthBirdVariant.compactLoading,
+  ]) {
+    testWidgets('$variant animates without layout exceptions at narrow width', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 120,
+              height: 120,
+              child: RadEarthBirdScene(
+                variant: variant,
+                semanticLabel: 'RAD flight',
+                size: 330,
+              ),
+            ),
+          ),
+        ),
+      );
+      for (final elapsed in [
+        const Duration(milliseconds: 16),
+        const Duration(milliseconds: 350),
+        const Duration(seconds: 2),
+      ]) {
+        await tester.pump(elapsed);
+        expect(tester.takeException(), isNull);
+      }
+      expect(find.bySemanticsLabel('RAD flight'), findsOneWidget);
+    });
+  }
 }
