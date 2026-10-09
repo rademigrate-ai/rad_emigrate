@@ -79,3 +79,34 @@ GitHub `main` recursive tree inventory: **1,789 tracked blobs**, **13 Flutter fe
 - Inventory SQL/RPCs and Edge authorization contracts for research, publication, quotas, payments and documents.
 - Establish current deployed build SHA and repeat owner-authorized live E2E checks before declaring production readiness.
 - Validate corpus coverage and official source freshness, especially regulatory claims.
+
+## Stage 1 — route and test traceability pass
+
+Source: `lib/core/routing/app_router.dart`, `lib/core/routing/auth_redirect.dart`, and repository `test/` inventory on main.
+
+### User-facing route inventory
+- Public/auth: `/splash`, `/login`, `/register`, `/forgot-password`, `/reset-password`, `/otp`.
+- Onboarding: `/profile-completion`.
+- Authenticated shell: `/dashboard`, `/visa`, `/applications`, `/documents`, `/consultation`, `/notifications`, `/profile`, `/ai-assistant`, `/world-clock`, `/feed`.
+- Staff: `/admin`, `/admin/ai-config`, `/admin/operations`, `/admin/consultations`, `/admin/ai-research`.
+
+**Important:** `auth_redirect.dart` only enforces authentication and onboarding navigation. The file explicitly says admin authorization is server-side via role/RLS; route presence does not establish privilege enforcement.
+
+### Test-to-feature traceability (representative)
+| Journey | Existing test files | Missing acceptance evidence |
+| --- | --- | --- |
+| Auth/recovery/redirect | `test/acceptance/auth_redirect_acceptance_test.dart`, `test/auth/password_reset_recovery_test.dart`, `test/core/session_manager_test.dart` | Real email/SMS OTP and browser recovery |
+| Admin authorization | `test/acceptance/admin_role_authorization_test.dart`, `test/acceptance/schema_policy_acceptance_test.dart` | Staff/nonstaff real-session checks |
+| User AI / quotas / safety | `test/ai_assistant/ai_assistant_page_test.dart`, `test/acceptance/ai_safety_grounding_test.dart`, `test/acceptance/admin_ai_quota_test.dart` | Current live provider, guest quota and citations |
+| Research / Feed | `test/acceptance/stage1_ai_research_completion_test.dart`, `test/acceptance/stage2_review_feed_publish_test.dart`, `test/acceptance/no_ai_research_auto_publish_test.dart` | Research finding → draft → manual approval → publication E2E |
+| Applications / documents | `test/acceptance/application_status_acceptance_test.dart`, `test/acceptance/document_acceptance_test.dart`, `test/documents/document_storage_test.dart` | Two-account isolation and real file upload/deletion |
+| Visa | `test/visa/visa_entities_test.dart`, `test/acceptance/stage2_review_feed_visa_test.dart` | Content completeness and official evidence approval |
+| World Time / UX | `test/features/global_time/timezone_engine_test.dart`, `test/core/app_shell_navigation_test.dart`, `test/visual_qa_smoke_test.dart` | Browser/device visual and timezone-map smoke |
+
+### False-positive acceptance tests
+`test/acceptance/pending_implementation_gates_test.dart` contains four tests with `expect(true, isTrue)` placeholders for **external/deferred** work: Super Admin account bootstrap, optional global ARB localization, data export/account deletion UI, and production domain/DNS/Auth redirects/signing. These are not evidence that the named capabilities work. Retain explicit external-blocker classification; do not count them as accepted features.
+
+### Prioritized next checks
+- **P0:** production role/RLS isolation, no AI auto-publish, Auth recovery and document privacy; prove deployed version matches audited SHA.
+- **P1:** Visa verified content and research-to-draft chain; real AI citations/quotas; broken page journeys and device responsiveness.
+- **P2:** payment/provider integration, notification channels, full CRM handoff, advanced tools and app-store readiness, sequenced by owner dependencies.
