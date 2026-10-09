@@ -162,10 +162,14 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.119.0
-      - name: Install PostgreSQL client
+      - name: Ensure PostgreSQL client is available
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-client
+          if command -v psql >/dev/null 2>&1; then
+            echo "Using preinstalled PostgreSQL client: $(psql --version)"
+          else
+            sudo apt-get update
+            sudo apt-get install --yes postgresql-client
+          fi
       - name: Rebuild clean Supabase schema
         run: KEEP_SUPABASE_RUNNING=1 bash scripts/verify_clean_schema.sh
       - name: Test local Auth, RLS, and Storage with two JWTs
@@ -181,10 +185,14 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.119.0
-      - name: Install PostgreSQL client
+      - name: Ensure PostgreSQL client is available
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-client
+          if command -v psql >/dev/null 2>&1; then
+            echo "Using preinstalled PostgreSQL client: $(psql --version)"
+          else
+            sudo apt-get update
+            sudo apt-get install --yes postgresql-client
+          fi
       - name: Reconstruct authoritative lineage and compare production metadata
         run: bash scripts/verify_migration_reconstruction.sh
       - name: Upload metadata-only reconciliation proof
