@@ -26,6 +26,8 @@ flutter:
     # Timezone Boundary Builder polygons for Flutter Web (ODbL).
     # Native platforms use the index embedded in timezone_finder.
     - packages/timezone_finder/data/boundaries_2026c.bin
+    # IANA timezone database for Flutter Web (timezone package).
+    - packages/timezone/data/latest_all.tzf
 
 dependencies:
   flutter:

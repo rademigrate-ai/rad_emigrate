@@ -9,8 +9,13 @@ abstract final class TimezoneEngine {
 
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
-    await bootstrapGeoTimezone();
-    _initialized = true;
+    try {
+      await bootstrapGeoTimezone();
+      _initialized = true;
+    } catch (_) {
+      // Leave _initialized false so callers know bootstrap failed,
+      // but do not rethrow — UI must still render city clocks via fallback.
+    }
   }
 
   static void markInitialized() {
@@ -71,11 +76,5 @@ abstract final class TimezoneEngine {
     return 'GMT$sign$h:${m.toString().padLeft(2, '0')}';
   }
 
-  static bool isDaytime(String ianaId, {DateTime? at}) {
-    final now = at != null
-        ? tz.TZDateTime.from(at.toUtc(), locationOf(ianaId))
-        : nowIn(ianaId);
-    final hour = now.hour;
-    return hour >= 6 && hour < 20;
-  }
+  static bool get isInitialized => _initialized;
 }
