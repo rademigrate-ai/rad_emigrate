@@ -23,7 +23,7 @@ Deno.serve(async(req:Request)=>{
  if(!docs.length) return json(404,{error:"document_not_found"});
  // Service-role Storage access must never trust a client-mutable database path.
  const filePath=docs[0].file_path;
- if(typeof filePath!=="string" || !filePath.startsWith(`${user.id}/`) || filePath.includes("\\\\") || filePath.split("/").some((segment:string)=>!segment || segment==="." || segment==="..")) {
+ if(typeof filePath!=="string" || !filePath.startsWith(`${user.id}/`) || filePath.includes("\\") || filePath.split("/").some((segment:string)=>!segment || segment==="." || segment==="..")) {
   return json(403,{error:"document_path_forbidden"});
  }
  const jobs=await db("document_processing_jobs?select=id",{method:"POST",headers:{Prefer:"return=representation"},body:JSON.stringify({
