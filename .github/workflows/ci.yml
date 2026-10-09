@@ -75,11 +75,34 @@ jobs:
           fi
       - run: flutter analyze
       - run: flutter test
+      - run: git diff --check
+
+  web-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+      - run: flutter pub get
       - name: Build web with non-production configuration
         run: >-
           flutter build web --no-pub
           --dart-define=SUPABASE_URL=https://example.supabase.co
           --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
+
+  android-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+      - run: flutter pub get
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
       - name: Build Android debug variant
@@ -112,7 +135,6 @@ jobs:
             exit 1
           fi
           grep -F "RAD_ANDROID_APPLICATION_ID" release-check.log
-      - run: git diff --check
 
   repository-keyword-scan:
     runs-on: ubuntu-latest
