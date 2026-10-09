@@ -56,7 +56,7 @@ String? authRedirect({
   if (location == '/reset-password') return null;
 
   if (!isAuthenticated && !_publicRoutes.contains(location)) {
-    return '/login';
+    return Uri(path: '/login', queryParameters: {'from': restoredProtectedDestination(uri.toString())}).toString();
   }
 
   if (isAuthenticated && _publicRoutes.contains(location)) {
