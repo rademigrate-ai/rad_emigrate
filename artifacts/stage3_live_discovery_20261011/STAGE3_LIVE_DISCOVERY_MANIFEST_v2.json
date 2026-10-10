@@ -1,0 +1,98 @@
+{
+ "schema_version": "stage3-live-discovery-v2-full-sitemap",
+ "generated_at_utc": "2026-10-10T21:59:25Z",
+ "prior_artifacts": {
+  "manifest_v1_sha256": "81cf5f7cdae323a6fa4a93e4ae328900cdf675d6818e5c714411b946737f551b",
+  "note": "v1 artifacts untouched; v2 completes the sitemap dimension (200-loc cap removed)"
+ },
+ "robots": "allow-all (verified 2026-10-10T21:43Z)",
+ "normalization": "tools/stage3_content_migration/normalize_url",
+ "http_requests_this_task": [
+  {
+   "url": "https://radvisa.com/sitemap.xml",
+   "status": 200,
+   "final": "https://radvisa.com/sitemap.xml",
+   "ctype": "text/xml",
+   "bytes": 59507,
+   "at": "2026-10-10T21:59:25Z",
+   "error": null
+  },
+  {
+   "url": "https://digivisa.ir/sitemap.xml",
+   "status": 200,
+   "final": "https://digivisa.ir/sitemap.xml",
+   "ctype": "text/xml",
+   "bytes": 84215,
+   "at": "2026-10-10T21:59:28Z",
+   "error": null
+  }
+ ],
+ "domains": {
+  "radvisa.com": {
+   "sitemap": {
+    "status": 200,
+    "is_index": false,
+    "raw_locs_total": 380,
+    "wrong_host": 0,
+    "excluded_non_content": 15,
+    "content_urls_normalized_unique": 364,
+    "raw_file": "radvisa_com_sitemap_full.xml",
+    "raw_sha256": "802864cb51aeceb15591d91e467349afa83171e024262c24004b4c9f08785c4b",
+    "normalized_duplicates_removed": 1,
+    "duplicate_examples": [
+     "https://radvisa.com/en"
+    ],
+    "loc_accounting": "content(364) + excluded(15) + wrong_host(0) + normalized_dupes(1) = 380"
+   },
+   "v1_sample_comparison": {
+    "v1_capped_loc_sample": 200,
+    "v1_content_urls": 200,
+    "v2_full_content_urls": 364,
+    "cap_removed_delta": 164
+   },
+   "nav_content_urls": 36,
+   "http_verified": 8,
+   "union_live_content_urls": 399,
+   "sitemap_and_nav": 1,
+   "sitemap_only": 363,
+   "nav_only": 35,
+   "overlap_with_archive_evidence": 33,
+   "overlap_pct": 14.4,
+   "archived_only_not_live": 196,
+   "live_only_not_in_archive": 366,
+   "category_note": "sitemap-listed != live-verified; only the 16 HEAD-checked URLs (v1 task) are http_verified"
+  },
+  "digivisa.ir": {
+   "sitemap": {
+    "status": 200,
+    "is_index": false,
+    "raw_locs_total": 565,
+    "wrong_host": 0,
+    "excluded_non_content": 0,
+    "content_urls_normalized_unique": 565,
+    "raw_file": "digivisa_ir_sitemap_full.xml",
+    "raw_sha256": "d5effa328e0c8cb98d54a939e617e4394e8cf54c730b547eba3294adf8a75df0",
+    "normalized_duplicates_removed": 0,
+    "duplicate_examples": [],
+    "loc_accounting": "content(565) + excluded(0) + wrong_host(0) + normalized_dupes(0) = 565"
+   },
+   "v1_sample_comparison": {
+    "v1_capped_loc_sample": 200,
+    "v1_content_urls": 200,
+    "v2_full_content_urls": 565,
+    "cap_removed_delta": 365
+   },
+   "nav_content_urls": 44,
+   "http_verified": 8,
+   "union_live_content_urls": 608,
+   "sitemap_and_nav": 1,
+   "sitemap_only": 564,
+   "nav_only": 43,
+   "overlap_with_archive_evidence": 8,
+   "overlap_pct": 1.9,
+   "archived_only_not_live": 405,
+   "live_only_not_in_archive": 600,
+   "category_note": "sitemap-listed != live-verified; only the 16 HEAD-checked URLs (v1 task) are http_verified"
+  }
+ }
+}
