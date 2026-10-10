@@ -9,7 +9,7 @@ void main() {
 
   test('publish_content_draft RPC exists and is admin-gated', () {
     final sql = read(
-      'supabase/migrations/20261005120000_stage2_review_feed_publish.sql',
+      'supabase/migrations/20261010010000_stage1_p0_security_completion.sql',
     );
     expect(
       sql.contains('create or replace function public.publish_content_draft'),
@@ -20,11 +20,10 @@ void main() {
       isTrue,
     );
     expect(sql.contains("raise exception 'forbidden'"), isTrue);
-    expect(
-      sql.contains("raise exception 'rejected draft cannot be published'"),
-      isTrue,
-    );
-    expect(sql.contains('Idempotent'), isTrue);
+    expect(sql.contains('draft requires explicit approval'), isTrue);
+    expect(sql.contains('rad.human_publish_actor'), isTrue);
+    expect(sql.contains('trg_guard_human_feed_item_mutation'), isTrue);
+    expect(sql.contains('revoke insert, update, delete'), isTrue);
     expect(sql.contains("status = 'published'"), isTrue);
     expect(sql.contains('feed_item_localizations'), isTrue);
   });

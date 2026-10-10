@@ -36,4 +36,22 @@ void main() {
     final repo = read('lib/features/feed/data/feed_repository.dart');
     expect(repo.contains(".eq('status', 'published')"), isTrue);
   });
+
+  test(
+    'database requires approved human RPC and blocks direct Feed writes',
+    () {
+      final security = read(
+        'supabase/migrations/20261010010000_stage1_p0_security_completion.sql',
+      );
+      expect(security, contains("v_draft.status <> 'approved'"));
+      expect(security, contains('guard_human_feed_mutation'));
+      expect(security, contains('rad.human_publish_actor'));
+      expect(
+        security,
+        contains(
+          'revoke insert, update, delete on table public.feed_items, public.feed_item_localizations',
+        ),
+      );
+    },
+  );
 }

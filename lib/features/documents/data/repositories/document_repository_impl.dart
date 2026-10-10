@@ -10,11 +10,13 @@ class DocumentRepositoryImpl implements DocumentRepository {
   DocumentRepositoryImpl({
     required this.remote,
     required this.local,
+    required this.userId,
     this.allowOfflineFallback = true,
   });
 
   final DocumentRemoteDataSource remote;
   final DocumentLocalDataSource local;
+  final String userId;
   final bool allowOfflineFallback;
 
   Future<List<Document>> _ensureLocal() async {
@@ -23,12 +25,26 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<List<Document>> listDocuments({String? userId}) async {
+    if (userId != null && userId != this.userId) {
+      throw const ApiException(
+        message: 'A document cache cannot be read for another account.',
+        code: 'document_owner_mismatch',
+      );
+    }
     try {
-      final remoteList = await remote.list(userId: userId);
+      final remoteList = await remote.list(userId: this.userId);
+      if (remoteList.any((document) => document.userId != this.userId)) {
+        throw const ApiException(
+          message: 'The document response contained another account.',
+          code: 'document_owner_mismatch',
+        );
+      }
       await local.writeAll(remoteList);
       return remoteList;
-    } on ApiException {
-      if (!allowOfflineFallback) rethrow;
+    } on ApiException catch (error) {
+      if (!allowOfflineFallback || error.code == 'document_owner_mismatch') {
+        rethrow;
+      }
       return _ensureLocal();
     }
   }
@@ -44,8 +60,9 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<Document> upsertDocument(Document document) async {
+    final ownedDocument = _forCurrentUser(document);
     try {
-      final saved = await remote.upsert(document);
+      final saved = _requireOwned(await remote.upsert(ownedDocument));
       final cached = await local.readAll();
       final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
@@ -55,10 +72,12 @@ class DocumentRepositoryImpl implements DocumentRepository {
       }
       await local.writeAll(cached);
       return saved;
-    } on ApiException {
-      if (!allowOfflineFallback) rethrow;
+    } on ApiException catch (error) {
+      if (!allowOfflineFallback || error.code == 'document_owner_mismatch') {
+        rethrow;
+      }
       final cached = await _ensureLocal();
-      final saved = document.copyWith(updatedAt: DateTime.now());
+      final saved = ownedDocument.copyWith(updatedAt: DateTime.now());
       final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
         cached[idx] = saved;
@@ -77,11 +96,13 @@ class DocumentRepositoryImpl implements DocumentRepository {
     required String fileName,
     required String contentType,
   }) async {
-    final uploaded = await remote.upload(
-      document: document,
-      bytes: bytes,
-      fileName: fileName,
-      contentType: contentType,
+    final uploaded = _requireOwned(
+      await remote.upload(
+        document: _forCurrentUser(document),
+        bytes: bytes,
+        fileName: fileName,
+        contentType: contentType,
+      ),
     );
     final cached = await local.readAll();
     final index = cached.indexWhere((item) => item.id == uploaded.id);
@@ -96,9 +117,32 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<void> deleteDocument(Document document) async {
-    await remote.delete(document);
+    final ownedDocument = _forCurrentUser(document);
+    await remote.delete(ownedDocument);
     final cached = await local.readAll();
     cached.removeWhere((item) => item.id == document.id);
     await local.writeAll(cached);
+  }
+
+  Document _forCurrentUser(Document document) {
+    if (document.userId != null && document.userId != userId) {
+      throw const ApiException(
+        message: 'A document cannot be changed by another account.',
+        code: 'document_owner_mismatch',
+      );
+    }
+    return document.userId == userId
+        ? document
+        : document.copyWith(userId: userId);
+  }
+
+  Document _requireOwned(Document document) {
+    if (document.userId != userId) {
+      throw const ApiException(
+        message: 'The document response contained another account.',
+        code: 'document_owner_mismatch',
+      );
+    }
+    return document;
   }
 }

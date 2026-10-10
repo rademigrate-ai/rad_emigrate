@@ -9,6 +9,7 @@ export const corsHeaders = {
 
 export const researchCorsHeaders = {
   ...corsHeaders,
-  "Access-Control-Allow-Headers":
-    `${corsHeaders["Access-Control-Allow-Headers"]}, x-rad-research-token`,
+  "Access-Control-Allow-Headers": `${
+    corsHeaders["Access-Control-Allow-Headers"]
+  }, x-rad-research-token`,
 };

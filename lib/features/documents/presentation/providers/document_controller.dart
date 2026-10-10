@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,15 +20,37 @@ final _prefsProvider = FutureProvider<SharedPreferences>((ref) {
 
 final documentRepositoryProvider = Provider<DocumentRepository>((ref) {
   final prefs = ref.watch(_prefsProvider).valueOrNull;
-  if (prefs == null) return _EmptyDocumentRepository();
+  final userId = ref.watch(
+    authControllerProvider.select((state) => state.valueOrNull?.userId),
+  );
+  if (prefs == null || userId == null || userId.isEmpty) {
+    return _EmptyDocumentRepository();
+  }
   final config = ref.watch(appConfigProvider);
   return DocumentRepositoryImpl(
     remote: DocumentRemoteDataSource(
       ref.watch(supabaseClientServiceProvider),
       storage: ref.watch(supabaseStorageServiceProvider),
     ),
-    local: DocumentLocalDataSource(prefs),
+    local: DocumentLocalDataSource(prefs, userId: userId),
+    userId: userId,
     allowOfflineFallback: !config.isProduction,
+  );
+});
+
+/// Removes the departing account's cache on logout or account switch.
+final documentCacheLifecycleProvider = Provider<void>((ref) {
+  ref.listen<String?>(
+    authControllerProvider.select((state) => state.valueOrNull?.userId),
+    (previousUserId, nextUserId) {
+      if (previousUserId == null || previousUserId == nextUserId) return;
+      unawaited(
+        SharedPreferences.getInstance().then(
+          (prefs) =>
+              DocumentLocalDataSource(prefs, userId: previousUserId).clear(),
+        ),
+      );
+    },
   );
 });
 
@@ -35,6 +58,7 @@ final documentControllerProvider =
     StateNotifierProvider<DocumentController, AsyncValue<List<Document>>>((
       ref,
     ) {
+      ref.watch(documentCacheLifecycleProvider);
       final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
       return DocumentController(ref.watch(documentRepositoryProvider), userId);
     });

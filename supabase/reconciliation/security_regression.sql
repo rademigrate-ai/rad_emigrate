@@ -45,8 +45,41 @@ begin
   if not exists (select 1 from pg_proc where oid='public.publish_content_draft(uuid,text,text)'::regprocedure
                  and prosecdef and proconfig @> array['search_path=""']
                  and position('admin' in prosrc)>0
-                 and position('rejected draft cannot be published' in prosrc)>0) then
-    raise exception 'Stage 2 publish RPC lost admin gate or rejection guard';
+                 and position('explicit approval' in prosrc)>0
+                 and position('rad.human_publish_actor' in prosrc)>0) then
+    raise exception 'Publish RPC lost human approval or mutation guard';
+  end if;
+  if has_table_privilege('authenticated','public.feed_items','INSERT')
+     or has_table_privilege('authenticated','public.feed_items','UPDATE')
+     or has_table_privilege('authenticated','public.feed_item_localizations','INSERT')
+     or has_table_privilege('authenticated','public.content_drafts','UPDATE') then
+    raise exception 'Direct draft approval or Feed mutation privilege remains';
+  end if;
+  if not exists (select 1 from pg_trigger
+                 where tgrelid='public.feed_items'::regclass
+                   and tgname='trg_guard_human_feed_item_mutation'
+                   and not tgisinternal) then
+    raise exception 'Feed human mutation trigger missing';
+  end if;
+  if has_column_privilege('authenticated','public.consultation_requests','admin_note','SELECT')
+     or has_column_privilege('authenticated','public.consultation_requests','assigned_to','SELECT')
+     or not has_column_privilege('authenticated','public.consultation_requests','status','SELECT') then
+    raise exception 'Consultation internal/public column privilege boundary invalid';
+  end if;
+  if not exists (select 1 from pg_proc
+                 where oid='public.get_ai_access_decision(uuid,text)'::regprocedure
+                   and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0)
+     or not exists (select 1 from pg_proc
+                    where oid='public.get_ai_daily_quota_status(uuid,text)'::regprocedure
+                      and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0) then
+    raise exception 'Entitlement or quota RPC accepts arbitrary target user';
+  end if;
+  if not exists (select 1 from pg_proc
+                 where oid='private.prevent_profile_role_escalation()'::regprocedure
+                   and prosecdef
+                   and position('service_role' in prosrc)>0
+                   and position('super_admin' in prosrc)>0) then
+    raise exception 'Role bootstrap or authenticated escalation guard missing';
   end if;
   if private.is_safe_public_https_url('https://127.0.0.1/')
      or private.is_safe_public_https_url('https://10.0.0.1/')

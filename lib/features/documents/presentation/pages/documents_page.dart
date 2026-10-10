@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -199,6 +200,30 @@ class DocumentsPage extends ConsumerWidget {
                     RadInlineLoading(label: sheetL10n.loading),
                   ],
                   const SizedBox(height: 20),
+                  if (doc.fileUrl != null)
+                    OutlinedButton.icon(
+                      icon: const Icon(Icons.open_in_new),
+                      label: Text(sheetL10n.viewDetails),
+                      onPressed: isUploading
+                          ? null
+                          : () async {
+                              final uri = Uri.tryParse(doc.fileUrl!);
+                              final opened =
+                                  uri != null &&
+                                  await launchUrl(
+                                    uri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                              if (!opened && ctx.mounted) {
+                                ScaffoldMessenger.of(ctx).showSnackBar(
+                                  SnackBar(
+                                    content: Text(sheetL10n.errorGeneric),
+                                  ),
+                                );
+                              }
+                            },
+                    ),
+                  if (doc.fileUrl != null) const SizedBox(height: 8),
                   if (doc.status == DocumentVerificationStatus.missing ||
                       doc.status == DocumentVerificationStatus.rejected)
                     FilledButton.icon(

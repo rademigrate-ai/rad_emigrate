@@ -8,6 +8,8 @@ export type Source = {
   claim_label?: string;
 };
 
+// PostgREST returns heterogeneous, nested JSON selected dynamically by path.
+// deno-lint-ignore no-explicit-any
 type DbFn = (path: string, init?: RequestInit) => Promise<any>;
 
 function detectLocale(queryHint?: string): string {
@@ -22,10 +24,19 @@ export async function loadGrounding(
   scope: "user" | "admin",
   queryHint?: string,
   localeHint?: string,
-): Promise<{ text: string; sources: Source[]; locale: string; hasApprovedEvidence: boolean }> {
+): Promise<
+  {
+    text: string;
+    sources: Source[];
+    locale: string;
+    hasApprovedEvidence: boolean;
+  }
+> {
   const sources: Source[] = [];
   const excerpts: string[] = [];
-  const locale = localeHint === "fa" || localeHint === "en" ? localeHint : detectLocale(queryHint);
+  const locale = localeHint === "fa" || localeHint === "en"
+    ? localeHint
+    : detectLocale(queryHint);
   let usedRpc = false;
   let hasApprovedEvidence = false;
 
@@ -53,7 +64,9 @@ export async function loadGrounding(
         for (const claim of item?.claims ?? []) {
           const claimStatus = claim?.review_status ?? "approved";
           if (claimStatus === "conflicting") {
-            excerpts.push(`[CONFLICT — do not resolve unilaterally] ${claim.claim_text}`);
+            excerpts.push(
+              `[CONFLICT — do not resolve unilaterally] ${claim.claim_text}`,
+            );
             hasApprovedEvidence = true;
             continue;
           }
@@ -71,14 +84,18 @@ export async function loadGrounding(
                 authority: src.source_authority ?? "other",
                 retrieved_at: citation.fetched_at,
                 excerpt: citation.excerpt,
-                claim_label: claim?.claim_text ? String(claim.claim_text).slice(0, 120) : undefined,
+                claim_label: claim?.claim_text
+                  ? String(claim.claim_text).slice(0, 120)
+                  : undefined,
               });
             }
           }
         }
         for (const conf of item?.open_conflicts ?? []) {
           excerpts.push(
-            `[OPEN CONFLICT] A: ${conf.statement_a ?? conf.claim_a ?? ""} | B: ${conf.statement_b ?? conf.claim_b ?? ""}`,
+            `[OPEN CONFLICT] A: ${
+              conf.statement_a ?? conf.claim_a ?? ""
+            } | B: ${conf.statement_b ?? conf.claim_b ?? ""}`,
           );
         }
       }
@@ -97,7 +114,9 @@ export async function loadGrounding(
       hasApprovedEvidence = true;
       for (const claim of item.knowledge_claims ?? []) {
         if (claim.review_status && claim.review_status !== "approved") continue;
-        if (claim.claim_text) excerpts.push(`[APPROVED CLAIM] ${claim.claim_text}`);
+        if (claim.claim_text) {
+          excerpts.push(`[APPROVED CLAIM] ${claim.claim_text}`);
+        }
         for (const citation of claim.knowledge_citations ?? []) {
           const doc = citation?.source_snapshots?.source_documents;
           if (doc?.canonical_url) {
@@ -107,7 +126,9 @@ export async function loadGrounding(
               authority: doc.source_authority ?? "other",
               retrieved_at: citation?.source_snapshots?.fetched_at,
               excerpt: citation.excerpt,
-              claim_label: claim.claim_text ? String(claim.claim_text).slice(0, 120) : undefined,
+              claim_label: claim.claim_text
+                ? String(claim.claim_text).slice(0, 120)
+                : undefined,
             });
           }
         }
@@ -122,10 +143,9 @@ export async function loadGrounding(
     return true;
   });
 
-  const header =
-    scope === "admin"
-      ? "ADMIN RESEARCH CONTEXT — approved Knowledge only; preserve disagreements; never invent."
-      : "USER AI GROUNDING — approved/current Knowledge only. Unverified website inventory is NOT included.";
+  const header = scope === "admin"
+    ? "ADMIN RESEARCH CONTEXT — approved Knowledge only; preserve disagreements; never invent."
+    : "USER AI GROUNDING — approved/current Knowledge only. Unverified website inventory is NOT included.";
 
   const body = excerpts.length
     ? excerpts.slice(0, 40).join("\n")

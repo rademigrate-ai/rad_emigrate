@@ -18,6 +18,15 @@ def normalize(key, rows):
                 row[field] = sorted(row[field].strip('{}').split(','))
         if key == 'cron':
             row.pop('jobid', None)
+            if isinstance(row.get('command'), str):
+                # PostgreSQL preserves the host line endings embedded in a
+                # dollar-quoted cron command. CRLF and LF are the same SQL
+                # whitespace, so compare the command's semantic text.
+                row['command'] = row['command'].replace('\r\n', '\n')
+        if key == 'functions' and isinstance(row.get('definition'), str):
+            # pg_get_functiondef preserves CRLF from Windows migration files.
+            # Normalize only line endings; every SQL token remains strict.
+            row['definition'] = row['definition'].replace('\r\n', '\n')
         if key == 'extensions':
             row.pop('extversion', None)
         if key == 'sequences' and row.get('data_type') == 'bigint':

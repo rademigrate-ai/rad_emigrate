@@ -8,6 +8,7 @@ import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/admin/presentation/pages/admin_consultations_page.dart';
+import '../../features/admin/presentation/widgets/admin_route_guard.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -116,22 +117,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/world-clock',
             builder: (_, _) => const WorldClockPage(),
           ),
-          GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
+          GoRoute(
+            path: '/admin',
+            builder: (_, _) => const AdminRouteGuard(child: AdminHubPage()),
+          ),
           GoRoute(
             path: '/admin/ai-config',
-            builder: (_, _) => const AdminAiConfigPage(),
+            builder: (_, _) => const AdminRouteGuard(
+              superAdminOnly: true,
+              child: AdminAiConfigPage(),
+            ),
           ),
           GoRoute(
             path: '/admin/operations',
-            builder: (_, _) => const AdminOperationsPage(),
+            builder: (_, _) =>
+                const AdminRouteGuard(child: AdminOperationsPage()),
           ),
           GoRoute(
             path: '/admin/consultations',
-            builder: (_, _) => const AdminConsultationsPage(),
+            builder: (_, _) =>
+                const AdminRouteGuard(child: AdminConsultationsPage()),
           ),
           GoRoute(
             path: '/admin/ai-research',
-            builder: (_, _) => const AdminAiWorkspacePage(),
+            builder: (_, _) =>
+                const AdminRouteGuard(child: AdminAiWorkspacePage()),
           ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],

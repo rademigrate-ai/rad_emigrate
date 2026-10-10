@@ -171,7 +171,7 @@ class DocumentRemoteDataSource {
       status: _statusFromDb(row['status'] as String? ?? 'missing'),
       kind: DocumentTypeKindX.fromString(row['name'] as String? ?? 'other'),
       userId: row['user_id'] as String?,
-      fileUrl: signedUrl ?? path,
+      fileUrl: signedUrl,
       storagePath: path,
       updatedAt: DateTime.tryParse(
         row['updated_at']?.toString() ?? row['created_at']?.toString() ?? '',
