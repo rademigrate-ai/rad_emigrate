@@ -68,12 +68,13 @@ current_unapplied = [
     '20261008010000_stage7_ops_consultation_app_status.sql',
     '20261008020000_stage9_security_grant_hardening.sql',
     '20261010010000_stage1_p0_security_completion.sql',
+    '20261010055013_stage1_atomic_ai_quota_reservation.sql',
 ]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
 assert actual_names == sorted(expected_names + current_unapplied), actual_names
 for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
-print('Canonical active lineage: PASS (25 authoritative + 22 current additive migrations).')
+print('Canonical active lineage: PASS (25 authoritative + 23 current additive migrations).')
 PY
 # Apply the same ordered additive SQL files through one psql session.
 # ON_ERROR_STOP still fails the job at the first SQL error; no SQL is skipped.
@@ -100,6 +101,7 @@ additive_sql_files=(
   "$backup/20261008010000_stage7_ops_consultation_app_status.sql"
   "$backup/20261008020000_stage9_security_grant_hardening.sql"
   "$backup/20261010010000_stage1_p0_security_completion.sql"
+  "$backup/20261010055013_stage1_atomic_ai_quota_reservation.sql"
 )
 psql_args=(-X -v ON_ERROR_STOP=1)
 for sql_file in "${additive_sql_files[@]}"; do

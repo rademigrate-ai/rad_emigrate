@@ -32,6 +32,8 @@ type Options = {
   discovery?: string[];
   persistFails?: boolean;
   chainFails?: boolean;
+  quotaFails?: boolean;
+  quotaDenied?: boolean;
   role?: string;
 };
 async function exercise(
@@ -66,8 +68,17 @@ async function exercise(
       if (path.startsWith("ai_usage_limits?")) {
         return response([{ daily_requests: 50, daily_output_tokens: 1000 }]);
       }
-      if (path === "ai_requests?select=id") {
-        return response([{ id: "request-one" }]);
+      if (path === "rpc/consume_ai_daily_quota") {
+        if (options.quotaFails) return response({}, 500);
+        if (options.quotaDenied) {
+          return response({ allowed: false, count: 50, limit: 50 });
+        }
+        return response({
+          allowed: true,
+          count: 1,
+          limit: 50,
+          request_id: "request-one",
+        });
       }
       if (path.startsWith("ai_requests?id=")) {
         return options.persistFails ? response({}, 500) : response(null);
@@ -297,4 +308,18 @@ Deno.test("ordinary users cannot discover providers or use Admin AI", async () =
     equal(x.status, 403);
     equal(x.providerCalls, 0);
   }
+});
+
+Deno.test("authenticated quota denial makes no provider request", async () => {
+  const x = await exercise({ quotaDenied: true });
+  equal(x.status, 429);
+  equal(x.body.code, "daily_limit_reached");
+  equal(x.providerCalls, 0);
+});
+
+Deno.test("authenticated quota reservation failure is fail closed", async () => {
+  const x = await exercise({ quotaFails: true });
+  equal(x.status, 503);
+  equal(x.body.code, "quota_reservation_failed");
+  equal(x.providerCalls, 0);
 });

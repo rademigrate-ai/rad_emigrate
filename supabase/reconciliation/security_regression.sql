@@ -74,6 +74,16 @@ begin
                       and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0) then
     raise exception 'Entitlement or quota RPC accepts arbitrary target user';
   end if;
+  if not exists (
+    select 1
+    from pg_proc
+    where oid = 'public.consume_ai_daily_quota(uuid,text)'::regprocedure
+      and prosecdef
+      and position('pg_advisory_xact_lock' in prosrc) > 0
+      and position('insert into public.ai_requests' in lower(prosrc)) > 0
+  ) then
+    raise exception 'Authenticated AI quota reservation is not atomic';
+  end if;
   if not exists (select 1 from pg_proc
                  where oid='private.prevent_profile_role_escalation()'::regprocedure
                    and prosecdef

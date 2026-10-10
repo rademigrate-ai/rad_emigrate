@@ -168,6 +168,7 @@ export async function handler(req: Request): Promise<Response> {
     ? payload.min_context
     : null;
 
+  let requestId: string | null = null;
   if (user) {
     try {
       const quota = await db("rpc/consume_ai_daily_quota", {
@@ -182,8 +183,20 @@ export async function handler(req: Request): Promise<Response> {
           count: quota.count,
         });
       }
+      requestId = typeof quota?.request_id === "string"
+        ? quota.request_id
+        : null;
+      if (!requestId) {
+        return safeJson(503, {
+          error: "ai_temporarily_unavailable",
+          code: "quota_reservation_failed",
+        });
+      }
     } catch {
-      /* fallback omitted: RPC is production source of truth */
+      return safeJson(503, {
+        error: "ai_temporarily_unavailable",
+        code: "quota_reservation_failed",
+      });
     }
   }
 
@@ -209,7 +222,6 @@ export async function handler(req: Request): Promise<Response> {
       }\n</UNTRUSTED_RETRIEVED_CONTENT>`,
   });
 
-  let requestId: string | null = null;
   if (user) {
     const sessionCandidate = typeof payload.session_id === "string"
       ? payload.session_id.trim()
@@ -232,28 +244,14 @@ export async function handler(req: Request): Promise<Response> {
         sessionId = null;
       }
     }
-    const bodyBase = {
-      user_id: user.id,
-      capability: "chat",
-      status: "running",
-      routing_reason: "ranked_eligible_pool",
-    };
-    try {
-      const created = await db("ai_requests?select=id", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(
-          sessionId ? { ...bodyBase, session_id: sessionId } : bodyBase,
-        ),
-      });
-      requestId = created[0].id;
-    } catch {
-      const created = await db("ai_requests?select=id", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(bodyBase),
-      });
-      requestId = created[0].id;
+    if (requestId) {
+      await db(`ai_requests?id=eq.${requestId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          routing_reason: "ranked_eligible_pool",
+          ...(sessionId ? { session_id: sessionId } : {}),
+        }),
+      }).catch(() => undefined);
     }
   }
 

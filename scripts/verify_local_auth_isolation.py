@@ -17,6 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 
 def fail(label: str, detail: str = "") -> None:
@@ -623,6 +624,75 @@ def main() -> None:
         label="arbitrary target quota and role",
     )
 
+    # F-04 regression: the service-side quota RPC must reserve at most the
+    # database-configured number of authenticated requests even when more calls
+    # arrive concurrently.  A read-only count check is insufficient here: each
+    # successful RPC must return a unique request reservation created in the
+    # same transaction as the quota decision.
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/consume_ai_daily_quota",
+        token_a,
+        {"p_user_id": user_a, "p_role": "super_admin"},
+        label="authenticated client cannot invoke service quota reservation",
+    )
+    usage_limits = rows(
+        "GET",
+        "/rest/v1/ai_usage_limits?select=daily_requests&role=eq.user",
+        SERVICE_ROLE_KEY,
+    )
+    require(len(usage_limits) == 1, "user AI usage limit fixture")
+    daily_limit = int(usage_limits[0]["daily_requests"])
+    concurrency_calls = daily_limit + 16
+
+    def reserve_quota(_: int) -> object:
+        result, _ = expect_success(
+            "POST",
+            "/rest/v1/rpc/consume_ai_daily_quota",
+            SERVICE_ROLE_KEY,
+            {"p_user_id": user_a, "p_role": "super_admin"},
+            label="concurrent authenticated quota reservation",
+        )
+        return result
+
+    with ThreadPoolExecutor(max_workers=min(32, concurrency_calls)) as pool:
+        quota_results = list(pool.map(reserve_quota, range(concurrency_calls)))
+    allowed_results = [
+        result
+        for result in quota_results
+        if isinstance(result, dict) and result.get("allowed") is True
+    ]
+    denied_results = [
+        result
+        for result in quota_results
+        if isinstance(result, dict) and result.get("allowed") is False
+    ]
+    reservation_ids = [str(result.get("request_id")) for result in allowed_results]
+    require(len(allowed_results) == daily_limit, "atomic quota accepted exact limit")
+    require(
+        len(denied_results) == concurrency_calls - daily_limit,
+        "atomic quota rejected excess concurrent calls",
+    )
+    require(
+        len(reservation_ids) == len(set(reservation_ids))
+        and all(value and value != "None" for value in reservation_ids),
+        "atomic quota returned unique request reservations",
+    )
+    reserved_requests = rows(
+        "GET",
+        f"/rest/v1/ai_requests?select=id,status,routing_reason&user_id=eq.{user_a}",
+        SERVICE_ROLE_KEY,
+    )
+    require(
+        len(reserved_requests) == daily_limit
+        and all(
+            row.get("status") == "running"
+            and row.get("routing_reason") == "atomic_quota_reservation"
+            for row in reserved_requests
+        ),
+        "atomic quota persisted exactly the accepted reservations",
+    )
+
     # Promote the disposable second identity with service_role only after all
     # unrelated-user checks above have run. Authorization reads the DB role,
     # never an email or client-provided claim.
@@ -793,7 +863,10 @@ def main() -> None:
     print(
         "Local Supabase E2E passed: two authenticated users, password login/logout, "
         "profile/application/document/OCR/consultation/entitlement RLS, Storage "
-        "ownership, and explicit human Feed publication."
+        f"ownership, atomic authenticated AI quota reservation ({daily_limit} "
+        f"accepted/{concurrency_calls - daily_limit} rejected with "
+        f"{daily_limit} unique persisted reservations), and explicit human Feed "
+        "publication."
     )
 
 
