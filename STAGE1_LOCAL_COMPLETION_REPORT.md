@@ -4,14 +4,26 @@
 **Repository:** `rademigrate-ai/rad_emigrate`  
 **Authoritative remote base:** `origin/main` at `6d79f81` (`Merge pull request #46...`)
 **Preserved Stage 1 checkpoint:** `74d503334d9e2b684bc88c22e9f45c0614702adc` (`stage1-local-go-20261010`)
-**Reconciled/tested security tree:** `fb4f00cdb05817d2fe8ccd202476232c75c6c3a7`
+**Reconciled/tested security tree:** `3937b44ed83295161e337c1e7db422b89b5fc20e`
 **Final verdict:** **STAGE 1 — LOCAL GO**
 
 The confirmed Stage 1 P0/P1 implementation defects have been addressed in the local working tree. Docker/WSL was repaired without deleting existing volumes, and the clean-schema, migration-reconstruction, SQL/RLS/RPC/Storage, and multi-identity security suites now pass against isolated local Supabase stacks. Flutter, Android, Web, Deno, dependency, and secret gates also pass. This is local engineering acceptance only, not production release authorization.
 
 No production service was changed. No deployment, remote Supabase mutation, Git push, merge, destructive Git operation, or production data operation was performed.
 
-## Current-checkout reconciliation (Grok F-01 through F-05)
+## Current-checkout reconciliation (F-01 through F-05)
+
+This table uses the finding labels in the current reconciliation request and supersedes the legacy numbering retained immediately below for audit history.
+
+| Finding | Current-code result | Executable evidence |
+|---|---|---|
+| F-01 — cross-user entitlement/quota access | Fixed. Normal callers are bound to `auth.uid()` and their database role; cross-user and guest decisions remain service-only. | Clean and reconstructed two-identity suites rejected cross-user access and passed entitlement/RPC isolation. |
+| F-02 — Feed publication without approval | Fixed. Publication requires a separate human approval transition and is idempotent; research and AI flows do not publish. | SQL security regression plus both local identity suites proved pre-approval denial, post-approval success, idempotency, and direct Feed denial. |
+| F-03 — service-role bypass of the human publisher gate | Fixed. Feed mutation triggers require a transaction-local authenticated human publisher marker; direct service-role mutation is rejected. | Clean and reconstructed SQL/API runs passed the human-only publication cases. |
+| F-04 — non-atomic authenticated AI quota reservation | Fixed additively and fail-closed. One transaction locks per user/day, checks the cap, and persists a unique reservation before provider access. | On both isolated stacks, 66 parallel calls produced exactly 50 accepted, 16 rejected, and 50 unique persisted reservations. Deno tests also prove provider calls do not occur when reservation fails. |
+| F-05 — IPv4-mapped IPv6 SSRF bypass | Fixed in shared Edge validation and additive SQL migration `20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql`. Compatible/mapped IPv6, loopback, link-local, private/reserved ranges, credentials, zone IDs, redirects, and internal suffixes are rejected. | Deno: 31/31. Explicit SQL returned `false` for `::ffff:169.254.169.254`, `::ffff:127.0.0.1`, expanded mapped metadata, and IPv4-compatible loopback, while returning `true` for `https://api.openai.com/v1`. Clean-schema and reconstruction suites passed with the migration included. |
+
+## Legacy finding mapping retained for audit history
 
 The labels below were reconciled against the actual current source, not the older checkout used by the earlier review. The mapping is the same numbered defect sequence recorded in this report:
 
@@ -79,6 +91,8 @@ Legend: **PASS** = implemented and executed locally; **UNAVAILABLE** = a non-blo
 
 ### F. Database and migrations
 
+**Current F-05 reconciliation (supersedes the older counts below):** three Stage 1 security migrations are present, the clean tree contains 49 migrations, and reconstruction applies 25 authoritative plus 24 additive migrations. The third migration is `20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql`.
+
 - [x] **PASS** — Two minimal additive Stage 1 migrations exist: `supabase/migrations/20261010010000_stage1_p0_security_completion.sql` and the F-04 follow-up `supabase/migrations/20261010055013_stage1_atomic_ai_quota_reservation.sql`.
 - [x] **PASS** — The reconstruction manifest includes both and expects 25 authoritative production versions plus 23 current additive migrations.
 - [x] **PASS** — Stable schema fingerprints remain exact; additive security functions, constraints, and triggers have explicit fingerprint/behavior assertions.
@@ -95,6 +109,8 @@ Legend: **PASS** = implemented and executed locally; **UNAVAILABLE** = a non-blo
 - [x] **PASS** — The existing clean-schema and migration-reconstruction CI jobs remain configured to execute the database gates on capable runners.
 
 ### H. Full local validation
+
+- [x] **PASS — Browser E2E is now available and executed.** The disposable local suite passed 38 route artifacts across public, user desktop/mobile, Admin mobile, and Super Admin desktop flows. It includes password error/login/logout/session refresh, protected-route restoration, cross-user document rejection and retry, consultation creation, user Admin denial, and Super Admin-only AI configuration. The older unavailable entry below is retained only as historical evidence from the earlier checkpoint.
 
 - [x] Dart formatting
 - [x] Flutter static analysis
@@ -326,6 +342,72 @@ The clean rerun logs are under `C:\Users\Mehrshad\AppData\Local\Temp\rad-emigrat
 
 Both local Supabase stacks were stopped without `--no-backup`. Their database, Storage, and Edge-runtime volumes remain preserved. Re-downloadable temporary runtimes, sanitized logs, and reconstruction artifacts were moved out of the repository to `C:\Users\Mehrshad\AppData\Local\Temp\rad-emigrate-stage1-artifacts-20261010-0855`; no source or user-owned data was deleted.
 
+## Latest current-tree execution evidence (F-05 reconciliation)
+
+The following rerun used the current local source that includes the Manus F-05 changes. The Stage 1 security code is preserved in local-only commit `3937b44ed83295161e337c1e7db422b89b5fc20e`; nothing was pushed or deployed.
+
+```text
+docker version
+PASS — Docker Desktop 4.94.0, Linux client/server 29.8.2, context desktop-linux.
+
+# Clean isolated project: rad_emigrate_current_clean_20261010
+KEEP_SUPABASE_RUNNING=1 scripts/verify_clean_schema.sh
+PASS — all 49 migrations applied from an empty disposable database; structural, fingerprint, and SQL security assertions passed. The first invocation completed migration application but hit a stale portable-python wrapper; the no-start continuation used system Python 3.14.7 and passed without changing the database.
+
+python scripts/verify_local_auth_isolation.py
+PASS — two authenticated users, password login/logout, profiles, applications, documents, OCR, consultations, entitlements, Storage ownership, human-only Feed publication, and atomic quota concurrency (50 accepted, 16 rejected, 50 unique persisted reservations).
+
+npx.cmd --yes supabase@2.119.0 db advisors --local --type security --level error --fail-on error
+PASS — no issues found; results=[].
+
+# Independent reconstruction project: rad_emigrate_recon2_20261010
+KEEP_SUPABASE_RUNNING=1 scripts/verify_migration_reconstruction.sh
+PASS — production catalogue categories matched except documented environment-only differences; 25/25 authoritative versions; zero historical pending; exact 25 authoritative + 24 additive lineage; all additive SQL, security_regression.sql, and corrective routing/research SQL passed.
+
+python scripts/verify_local_auth_isolation.py
+PASS — the same two-user/RLS/RPC/Storage/OCR/Feed/concurrency suite passed after reconstruction.
+
+npx.cmd --yes supabase@2.119.0 db advisors --local --type security --level error --fail-on error
+PASS — no issues found; results=[].
+
+npx.cmd --yes deno@2.5.4 fmt --check supabase/functions
+PASS — 13 files checked.
+
+npx.cmd --yes deno@2.5.4 lint supabase/functions
+PASS — 12 files checked.
+
+npx.cmd --yes deno@2.5.4 test --allow-env --allow-net supabase/functions/tests
+PASS — 31 passed, 0 failed (22 orchestrator, 5 document-intelligence, 4 research-sync).
+
+scripts/verify_stage2_browser_e2e.py
+PASS — 38 local browser route artifacts and all authorization/recovery assertions passed against the disposable clean stack.
+```
+
+Explicit reconstructed-database F-05 results:
+
+```text
+https://[::ffff:169.254.169.254]/    false
+https://[::ffff:127.0.0.1]/          false
+https://[0:0:0:0:0:ffff:a9fe:a9fe]/ false
+https://[0:0:0:0:0:0:7f00:1]/       false
+https://api.openai.com/v1            true
+```
+
+Latest SHA-256 evidence:
+
+- clean application log: `E3FA72BECB053E34654D6F96D7FDA475407AA59FA68C8EC0F126500251A89733`
+- clean passing continuation: `F8BCAA71FF32D1F92AA5C4CDC278D25359824D9FA79384CA70828D428C8D56F6`
+- clean Auth/security: `CED5908F502CCFDB9A8A0C9F2E9ACC9AF1CA062DE5B8B02E900FC586D9E0DA4E`
+- clean security advisors: `56CF842CCAE18C05509E1920670BC7013007512EFB19A71CCFBB1D7AEF7459F6`
+- reconstruction: `C337BD1421FC45443A76A452BA699788F99F76E4C60DA676DD21D9322F3D32F4`
+- reconstructed Auth/security: `CED5908F502CCFDB9A8A0C9F2E9ACC9AF1CA062DE5B8B02E900FC586D9E0DA4E`
+- reconstructed security advisors: `BD28AF9BB87E3CDF36AF03090E9C168ABE184A1AC8F51948ED2C0947A458C8B5`
+- explicit SQL security regression: `2AC9CE904A5F48CB07BE76BA25EFCDEB7C8E516B35B5EE659D34ECF89860BC1A`
+- explicit F-05 URL regression: `2FB63F37E0B99EEECB4D342BD7980798C78F147CA5290707413C5FD00FC2207E`
+- browser manifest: `2928B153C4FC6A0F2CDA65CB5BE6677D0C941D97C9E091906C679D7C4CCF981B`
+
+Evidence roots are `C:\Users\Mehrshad\AppData\Local\Temp\rad-emigrate-current-clean-20261010-1415` and `C:\Users\Mehrshad\AppData\Local\Temp\rad-emigrate-recon2-20261010-1520`. Both stacks were stopped with backup preservation; their disposable volumes were not deleted.
+
 ## Security evidence and limitations
 
 - Client cache tests prove that a user namespace cannot read, retain, or clear another user's document cache.
@@ -339,6 +421,8 @@ Both local Supabase stacks were stopped without `--no-backup`. Their database, S
 
 ## Remaining limitations and non-blocking prerequisites
 
+The Browser E2E limitation in historical item 1 below is resolved for local acceptance by the 38-artifact disposable-stack run. A production-domain browser rehearsal remains an owner-controlled deployment prerequisite.
+
 1. **Browser E2E:** No browser E2E harness or authorized live test identities/configuration are present. Flutter routing, English LTR, Persian RTL, and real local Supabase Auth/API coverage passed instead.
 2. **Production infrastructure:** OCR egress still requires network-layer protection against DNS rebinding and access to private/link-local/metadata networks.
 3. **Advisor follow-up:** Multiple permissive owner/admin policies should be consolidated during a future performance pass. The local `pg_net` package is non-relocatable; its advisor warning should be reviewed against the target Supabase platform version before production migration, but no callable `pg_net` objects were found in `public`.
@@ -351,6 +435,8 @@ Both local Supabase stacks were stopped without `--no-backup`. Their database, S
 **Still required before production:** an owner-operated production-shaped staging rehearsal, reviewed backup/restore point, DNS/IP-pinned outbound egress controls for OCR, review of the target platform's non-blocking advisor warnings, controlled application of both Stage 1 additive migrations, Edge Function deployment, production secrets/configuration, and post-deployment multi-role verification. None of those external actions is implied or authorized by **LOCAL GO**.
 
 ## Deployment prerequisites and owner-operated sequence
+
+The current reviewed migration set is three files in order: `20261010010000_stage1_p0_security_completion.sql`, `20261010055013_stage1_atomic_ai_quota_reservation.sql`, and `20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql`. Any older reference below to “both” Stage 1 migrations predates F-05 and is superseded by this list.
 
 This local result is not deployment authorization. Before any production rollout, the owner should:
 
