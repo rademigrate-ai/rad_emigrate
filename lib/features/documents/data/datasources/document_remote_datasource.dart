@@ -142,11 +142,18 @@ class DocumentRemoteDataSource {
       if (path != null && path.startsWith('$userId/')) {
         await _storage?.delete(path);
       }
-      await _service.client
+      final deletedRows = await _service.client
           .from('documents')
           .delete()
           .eq('id', document.id)
-          .eq('user_id', userId);
+          .eq('user_id', userId)
+          .select('id');
+      if (deletedRows.length != 1) {
+        throw const ApiException(
+          message: 'The document could not be deleted.',
+          code: 'document_delete_failed',
+        );
+      }
     } catch (error) {
       throw _toApiException(error);
     }

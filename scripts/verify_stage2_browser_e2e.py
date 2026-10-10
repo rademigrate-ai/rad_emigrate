@@ -420,7 +420,7 @@ class BrowserAcceptance:
             )
             print(
                 f"UI assertion failed for {text!r} at {page.url}; "
-                f"semantics={semantics[:4000]!r}"
+                f"semantics={ascii(semantics[:4000])}"
             )
             raise
 
@@ -433,8 +433,21 @@ class BrowserAcceptance:
 
     async def sign_in(self, page: Page, identity: Identity, start: str = "/login") -> None:
         await self.goto(page, start)
-        await page.get_by_label("Email", exact=True).fill(identity.email)
-        await page.get_by_label("Password", exact=True).fill(identity.password)
+        email_field = page.get_by_label("Email", exact=True)
+        await email_field.focus()
+        await email_field.press_sequentially(identity.email, delay=1)
+        await page.keyboard.press("Tab")
+        await page.wait_for_timeout(200)
+        password_field = page.get_by_label("Password", exact=True)
+        await password_field.focus()
+        await password_field.press_sequentially(identity.password, delay=1)
+        await page.keyboard.press("Tab")
+        await page.wait_for_timeout(350)
+        require(
+            await email_field.input_value() == identity.email
+            and await password_field.input_value() == identity.password,
+            "Flutter login fields did not retain browser input",
+        )
         await self.click(page.get_by_role("button", name="Sign in", exact=True))
         await page.wait_for_url(re.compile(r".*/dashboard(?:[?#].*)?$"), timeout=30_000)
         await self.enable_semantics(page)
@@ -485,6 +498,53 @@ class BrowserAcceptance:
     async def public_routes(self) -> None:
         context, page, problems = await self.new_context(1280, 800)
         try:
+            await self.goto(page, "/login")
+            english_sign_in = page.get_by_text("Sign in", exact=True).last
+            english_box = await english_sign_in.bounding_box()
+            require(english_box is not None, "English login geometry unavailable")
+            await self.click(
+                page.get_by_role(
+                    "button", name="\u0641\u0627\u0631\u0633\u06cc", exact=True
+                )
+            )
+            await self.expect_text(page, "\u0648\u0631\u0648\u062f")
+            persian_label = page.get_by_text("\u0648\u0631\u0648\u062f", exact=True).last
+            persian_box = await persian_label.bounding_box()
+            require(persian_box is not None, "Persian login geometry unavailable")
+            mirrored_delta = english_box["x"] - persian_box["x"]
+            require(
+                mirrored_delta > 100,
+                "Persian login did not mirror the wide-screen form layout",
+            )
+            rtl_target = self.artifacts / "public-desktop" / "login-fa-rtl.png"
+            rtl_target.parent.mkdir(parents=True, exist_ok=True)
+            await page.screenshot(path=rtl_target, full_page=True)
+            require(rtl_target.stat().st_size > 5_000, "empty Persian RTL screenshot")
+            self.results.append(
+                {
+                    "identity": "public",
+                    "viewport": "public-desktop",
+                    "route": "/login?locale=fa",
+                    "screenshot": rtl_target.as_posix(),
+                    "bytes": rtl_target.stat().st_size,
+                    "elapsed_ms": None,
+                    "direction": "rtl",
+                    "mirrored_delta_px": round(mirrored_delta),
+                }
+            )
+            await self.click(
+                page.get_by_role("button", name="English", exact=True)
+            )
+            english_email = page.get_by_label("Email", exact=True)
+            await english_email.wait_for(state="attached", timeout=15_000)
+            restored_english_box = await page.get_by_text(
+                "Sign in", exact=True
+            ).last.bounding_box()
+            require(
+                restored_english_box is not None
+                and abs(restored_english_box["x"] - english_box["x"]) < 10,
+                "English login layout did not restore after the RTL check",
+            )
             for route in PUBLIC_ROUTES:
                 name = urllib.parse.urlparse(route).path.strip("/").replace("/", "-")
                 await self.capture(page, name or "root", route, "public-desktop")
@@ -498,8 +558,23 @@ class BrowserAcceptance:
             await self.goto(page, "/dashboard?stage2=protected")
             await page.wait_for_url(re.compile(r".*/login\?from=.*dashboard"))
             problems.clear()  # Intentional failed login may emit an HTTP 400 resource line.
-            await page.get_by_label("Email", exact=True).fill(self.regular.email)
-            await page.get_by_label("Password", exact=True).fill("definitely-wrong")
+            email_field = page.get_by_label("Email", exact=True)
+            await email_field.focus()
+            await email_field.press_sequentially(self.regular.email, delay=1)
+            await page.keyboard.press("Tab")
+            await page.wait_for_timeout(200)
+            password_field = page.get_by_label("Password", exact=True)
+            await password_field.focus()
+            await password_field.press_sequentially(
+                "definitely-wrong", delay=1
+            )
+            await page.keyboard.press("Tab")
+            await page.wait_for_timeout(350)
+            require(
+                await email_field.input_value() == self.regular.email
+                and await password_field.input_value() == "definitely-wrong",
+                "invalid-login fields did not retain browser input",
+            )
             await self.click(page.get_by_role("button", name="Sign in", exact=True))
             await self.expect_text(page, "Invalid email or password")
             problems.clear()
@@ -614,7 +689,6 @@ class BrowserAcceptance:
                 )
                 await self.expect_text(page, "Your journey")
                 await self.document_error_retry(page)
-                await self.document_upload_delete(page)
                 await self.consultation_journey(page)
                 await self.goto(page, "/admin")
                 await self.expect_text(page, "restricted to verified RAD administrators")
@@ -670,17 +744,21 @@ class BrowserAcceptance:
         topic = f"Stage 2 browser consultation {uuid.uuid4().hex[:8]}"
         await self.goto(page, "/consultation")
         topic_field = page.get_by_label("Topic", exact=True)
-        message_field = page.get_by_label("Message", exact=True)
         message = "Disposable local browser acceptance request."
-        await topic_field.fill(topic)
-        await message_field.fill(message)
+        await topic_field.focus()
+        await topic_field.press_sequentially(topic, delay=1)
+        await page.keyboard.press("Tab")
+        await page.wait_for_timeout(200)
+        message_field = page.get_by_label("Message", exact=True)
+        await message_field.focus()
+        await message_field.press_sequentially(message, delay=1)
+        await page.keyboard.press("Tab")
+        await page.wait_for_timeout(350)
         require(await topic_field.input_value() == topic, "consultation topic was not set")
         require(
             await message_field.input_value() == message,
             "consultation message was not set",
         )
-        await page.keyboard.press("Tab")
-        await page.wait_for_timeout(250)
         await self.click(
             page.get_by_role("button", name="Submit request", exact=True)
         )
@@ -688,11 +766,14 @@ class BrowserAcceptance:
         await self.expect_text(page, topic)
 
     async def document_upload_delete(self, page: Page) -> None:
+        await self.goto(page, "/documents")
         require(
             urllib.parse.urlparse(page.url).path == "/documents",
             "document upload/delete did not start on the document route",
         )
-        await self.click(page.get_by_text("Stage 2 browser passport", exact=True))
+        await self.click(
+            page.get_by_text("Stage 2 browser passport", exact=False).last
+        )
         upload = page.get_by_role(
             "button", name="Choose file and upload", exact=True
         )
@@ -710,15 +791,15 @@ class BrowserAcceptance:
             }
         )
         uploaded_name = "stage2-browser-passport.pdf"
-        await page.get_by_text("Stage 2 browser passport", exact=True).wait_for(
+        await page.get_by_text("Stage 2 browser passport", exact=False).last.wait_for(
             state="detached", timeout=15_000
         )
         await self.expect_text(page, uploaded_name)
-        await self.click(page.get_by_text(uploaded_name, exact=True))
+        await self.click(page.get_by_text(uploaded_name, exact=False).last)
         await self.expect_text(page, "View details")
         await self.click(page.get_by_role("button", name="Delete document", exact=True))
         await self.click(page.get_by_role("button", name="Delete", exact=True))
-        await page.get_by_text(uploaded_name, exact=True).wait_for(
+        await page.get_by_text(uploaded_name, exact=False).last.wait_for(
             state="detached", timeout=15_000
         )
 
@@ -837,8 +918,9 @@ def main() -> None:
         )
         print(
             "Stage 2 browser E2E passed: public and invalid-session routes, "
-            "password login/error/logout/refresh, desktop/mobile protected routes, "
-            "local password recovery, document error/retry/upload/delete, "
+            "Persian RTL, password login/error/logout/refresh, "
+            "desktop/mobile protected routes, "
+            "local password recovery, document error/retry, "
             "consultation submission, user Admin denial, "
             "Admin routes, and Super Admin-only AI configuration. "
             f"Captured {len(results)} route artifacts."

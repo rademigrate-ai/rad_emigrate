@@ -1,5 +1,11 @@
 project_id = "rad_emigrate"
 
+[auth]
+# Keep local browser/recovery verification on the disposable development
+# origin. Production redirect allow-lists remain owner-managed in Supabase.
+site_url = "http://127.0.0.1:3000"
+additional_redirect_urls = ["http://127.0.0.1:3000/reset-password"]
+
 [db]
 major_version = 17
 
