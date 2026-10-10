@@ -1,0 +1,126 @@
+{
+  "schema_version": "stage3-archive-final-v2",
+  "generated_at": "2026-10-10T20:52:01Z",
+  "baseline_sha": "d33cafb505cc92f9e22fb63c7176284819462d2a",
+  "source_package": "artifacts/stage3_manus_reconciliation_20261010/",
+  "source_method": "wayback_cdx_evidence_reconciliation + local_non_content_endpoint_classification",
+  "evidence_status": "metadata_only",
+  "classification_rules": {
+    "NC1": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+    "NC2": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+    "NC3": "non-public backend/auth surface (Administrator login, Captcha handler) - not public content",
+    "NC4": "hosting suspension placeholder (cgi-sys/suspendedpage.cgi) - infrastructure page, not site content",
+    "NC5": "image/asset generator handler (SmartPicture.aspx) - static-asset endpoint, consistent with v1 static-asset quarantine rationale",
+    "NC6": "machine-readable feed endpoint (/feed, /rss) - not page content",
+    "NC7": "soft-404 error template (404.htm) - error page, not real content"
+  },
+  "files": {
+    "radvisa_archive_discovery_v2.jsonl": {
+      "source_file": "radvisa_archive_discovery.jsonl",
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "source_rows": 242,
+      "v2_rows": 229,
+      "quarantined": 13,
+      "v2_sha256": "cc3662d87acfdfb7c434bbb2818fc08122bf5bf1992e33ad97c938a6c4125313",
+      "reason_codes": {
+        "NC2": 5,
+        "NC7": 1,
+        "NC1": 3,
+        "NC3": 1,
+        "NC6": 1,
+        "NC5": 2
+      }
+    },
+    "digivisa_archive_discovery_v2.jsonl": {
+      "source_file": "digivisa_archive_discovery.jsonl",
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "source_rows": 423,
+      "v2_rows": 413,
+      "quarantined": 10,
+      "v2_sha256": "223fa58e6dce9043f8ed5d8f4146ee2dd7145d245cc49d6261157eb43257c7d7",
+      "reason_codes": {
+        "NC2": 5,
+        "NC7": 1,
+        "NC3": 1,
+        "NC1": 2,
+        "NC4": 1
+      }
+    }
+  },
+  "reviewed_and_kept": {
+    "note": "Explicitly reviewed under the same rules and RETAINED as content endpoints",
+    "radvisa.com": [
+      "https://radvisa.com/Index.aspx (site index/portal home)",
+      "https://radvisa.com/index.aspx?Type=CategoryArticle&ID_Root=-1 (article category listing)",
+      "https://radvisa.com/catarticle/all/page/2..4 (article pagination)"
+    ],
+    "digivisa.ir": [
+      "https://digivisa.ir/catarticle/**/page/2..8 (article pagination, content listing pages)"
+    ]
+  },
+  "prior_quarantine_reference": {
+    "note": "v1 quarantined 46 radvisa + 12 digivisa records before these files existed; per-URL lists were never persisted (only counts in STAGE3_MANUS_SHA256_MANIFEST.json). Not re-derived here (audit repetition forbidden).",
+    "radvisa.com": 46,
+    "digivisa.ir": 12
+  },
+  "quarantine_file": {
+    "file": "STAGE3_ARCHIVE_V2_QUARANTINE.json",
+    "sha256": "08ae24f8a30fc0a7292753c3d4b057afbc56a8b3e5b5a8adecd7d2f6c2fa283e",
+    "records": 23
+  },
+  "preserved_radmohajer": {
+    "file": "docs/inventory/radmohajer_ir.jsonl",
+    "sha256": "7a031c9c3f729be2d177787275b6ed4f7b0d6d61e4e7bd1377b6162ce15b31a9",
+    "expected": "7a031c9c3f729be2d177787275b6ed4f7b0d6d61e4e7bd1377b6162ce15b31a9",
+    "matches": true
+  },
+  "canonical_documents_unchanged": {
+    "docs/RAD_CONTENT_INVENTORY_METRICS.json": true,
+    "docs/RAD_CONTENT_INVENTORY_SUMMARY.json": true
+  },
+  "validation": {
+    "files": {
+      "radvisa_archive_discovery_v2.jsonl": {
+        "rows": 229,
+        "sha256": "cc3662d87acfdfb7c434bbb2818fc08122bf5bf1992e33ad97c938a6c4125313",
+        "errors": [],
+        "unique_raw": 229,
+        "unique_norm": 229,
+        "lang": {
+          "fa": 228,
+          "en": 1
+        },
+        "terminal_states": {
+          "UNREACHABLE:live_host_timeout": 229
+        }
+      },
+      "digivisa_archive_discovery_v2.jsonl": {
+        "rows": 413,
+        "sha256": "223fa58e6dce9043f8ed5d8f4146ee2dd7145d245cc49d6261157eb43257c7d7",
+        "errors": [],
+        "unique_raw": 413,
+        "unique_norm": 413,
+        "lang": {
+          "fa": 413
+        },
+        "terminal_states": {
+          "UNREACHABLE:live_host_timeout": 413
+        }
+      }
+    },
+    "quarantine": {
+      "records": 23,
+      "reason_codes": {
+        "NC2": 10,
+        "NC7": 2,
+        "NC1": 5,
+        "NC3": 2,
+        "NC6": 1,
+        "NC5": 2,
+        "NC4": 1
+      },
+      "sha256": "08ae24f8a30fc0a7292753c3d4b057afbc56a8b3e5b5a8adecd7d2f6c2fa283e"
+    },
+    "all_checks_pass": true
+  }
+}

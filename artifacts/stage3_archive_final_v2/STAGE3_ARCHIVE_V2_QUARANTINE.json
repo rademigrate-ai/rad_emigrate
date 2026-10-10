@@ -1,0 +1,455 @@
+{
+  "schema_version": "stage3-archive-v2-quarantine",
+  "generated_at": "2026-10-10T20:52:01Z",
+  "baseline_sha": "d33cafb505cc92f9e22fb63c7176284819462d2a",
+  "policy": "Every URL excluded from the v2 outputs is recorded here with its exact reason and original source. Nothing is silently deleted.",
+  "classification_rules": {
+    "NC1": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+    "NC2": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+    "NC3": "non-public backend/auth surface (Administrator login, Captcha handler) - not public content",
+    "NC4": "hosting suspension placeholder (cgi-sys/suspendedpage.cgi) - infrastructure page, not site content",
+    "NC5": "image/asset generator handler (SmartPicture.aspx) - static-asset endpoint, consistent with v1 static-asset quarantine rationale",
+    "NC6": "machine-readable feed endpoint (/feed, /rss) - not page content",
+    "NC7": "soft-404 error template (404.htm) - error page, not real content"
+  },
+  "newly_quarantined_count": 23,
+  "records": [
+    {
+      "u": "https://radvisa.com/.well-known/dnt-policy.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 3,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/.well-known/dnt-policy.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/.well-known/nodeinfo",
+      "domain": "radvisa.com",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 4,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/.well-known/nodeinfo",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/.well-known/openid-configuration",
+      "domain": "radvisa.com",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 5,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/.well-known/openid-configuration",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/.well-known/security.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 6,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/.well-known/security.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/.well-known/trust.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 7,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/.well-known/trust.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/404.htm",
+      "domain": "radvisa.com",
+      "reason_code": "NC7",
+      "reason": "soft-404 error template (404.htm) - error page, not real content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 20,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/404.htm",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/ads.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC1",
+      "reason": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 21,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/ads.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/app-ads.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC1",
+      "reason": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 22,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/app-ads.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/Captcha.aspx",
+      "domain": "radvisa.com",
+      "reason_code": "NC3",
+      "reason": "non-public backend/auth surface (Administrator login, Captcha handler) - not public content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 66,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/Captcha.aspx",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/feed",
+      "domain": "radvisa.com",
+      "reason_code": "NC6",
+      "reason": "machine-readable feed endpoint (/feed, /rss) - not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 229,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/feed",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/robots.txt",
+      "domain": "radvisa.com",
+      "reason_code": "NC1",
+      "reason": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 240,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/robots.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/SmartPicture.aspx",
+      "domain": "radvisa.com",
+      "reason_code": "NC5",
+      "reason": "image/asset generator handler (SmartPicture.aspx) - static-asset endpoint, consistent with v1 static-asset quarantine rationale",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 241,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/SmartPicture.aspx",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://radvisa.com/SmartPicture.aspx?f=%7E",
+      "domain": "radvisa.com",
+      "reason_code": "NC5",
+      "reason": "image/asset generator handler (SmartPicture.aspx) - static-asset endpoint, consistent with v1 static-asset quarantine rationale",
+      "source": "radvisa_archive_discovery.jsonl",
+      "source_line": 242,
+      "source_sha256": "aa70f2d9eb87190676136969b6eb01ac96c872ead998d1f3617db9b606185966",
+      "original_row": {
+        "u": "https://radvisa.com/SmartPicture.aspx?f=%7E",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/.well-known/dnt-policy.txt",
+      "domain": "digivisa.ir",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 3,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/.well-known/dnt-policy.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/.well-known/nodeinfo",
+      "domain": "digivisa.ir",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 4,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/.well-known/nodeinfo",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/.well-known/openid-configuration",
+      "domain": "digivisa.ir",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 5,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/.well-known/openid-configuration",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/.well-known/security.txt",
+      "domain": "digivisa.ir",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 6,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/.well-known/security.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/.well-known/trust.txt",
+      "domain": "digivisa.ir",
+      "reason_code": "NC2",
+      "reason": "RFC 8615 /.well-known/ URI (security.txt, dnt-policy.txt, trust.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 7,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/.well-known/trust.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/404.htm",
+      "domain": "digivisa.ir",
+      "reason_code": "NC7",
+      "reason": "soft-404 error template (404.htm) - error page, not real content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 21,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/404.htm",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/Administrator/Login.aspx",
+      "domain": "digivisa.ir",
+      "reason_code": "NC3",
+      "reason": "non-public backend/auth surface (Administrator login, Captcha handler) - not public content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 22,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/Administrator/Login.aspx",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/ads.txt",
+      "domain": "digivisa.ir",
+      "reason_code": "NC1",
+      "reason": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 23,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/ads.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/app-ads.txt",
+      "domain": "digivisa.ir",
+      "reason_code": "NC1",
+      "reason": "reserved crawler/advertising declaration file (robots.txt / ads.txt / app-ads.txt) - machine endpoint, not page content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 24,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/app-ads.txt",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    },
+    {
+      "u": "https://digivisa.ir/cgi-sys/suspendedpage.cgi",
+      "domain": "digivisa.ir",
+      "reason_code": "NC4",
+      "reason": "hosting suspension placeholder (cgi-sys/suspendedpage.cgi) - infrastructure page, not site content",
+      "source": "digivisa_archive_discovery.jsonl",
+      "source_line": 386,
+      "source_sha256": "6195c15e659d69f1f8fccd650b4691c6414de5274e43511a22a9e781990de9cf",
+      "original_row": {
+        "u": "https://digivisa.ir/cgi-sys/suspendedpage.cgi",
+        "l": "fa",
+        "c": "other",
+        "t": "UNREACHABLE:live_host_timeout",
+        "f": "unknown",
+        "p": "review_required_regulatory",
+        "i": "metadata_only_regen",
+        "s": "wayback_cdx"
+      }
+    }
+  ]
+}
