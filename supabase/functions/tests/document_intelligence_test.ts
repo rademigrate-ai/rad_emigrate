@@ -134,7 +134,34 @@ Deno.test("public URL validation rejects loopback, private, and metadata hosts",
       "https://metadata.google.internal",
       "https://service.internal",
       "https://[::1]",
+      "https://[::ffff:169.254.169.254]",
+      "https://[::ffff:127.0.0.1]",
+      "https://[0:0:0:0:0:ffff:a9fe:a9fe]",
+      "https://[0:0:0:0:0:0:7f00:1]",
+      "https://[::ffff:8.8.8.8]",
     ]
   ) assert(!isSafePublicHttpsUrl(url), url);
   assert(isSafePublicHttpsUrl("https://ocr.example.com/v1"));
+});
+
+Deno.test("OCR blocks mapped IPv6 endpoints before provider fetch", async () => {
+  for (
+    const endpoint of [
+      "https://[::ffff:169.254.169.254]/latest/meta-data",
+      "https://[::ffff:127.0.0.1]/",
+    ]
+  ) {
+    const result = await exercise({
+      document: {
+        id: "document-one",
+        user_id: "user-a",
+        file_path: "user-a/document-one/passport.pdf",
+        name: "passport.pdf",
+      },
+      endpoint,
+    });
+    assert(result.status === 422, endpoint);
+    assert(result.body.code === "unsafe_provider_url", endpoint);
+    assert(result.providerCalls === 0, endpoint);
+  }
 });

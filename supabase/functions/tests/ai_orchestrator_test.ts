@@ -323,3 +323,10 @@ Deno.test("authenticated quota reservation failure is fail closed", async () => 
   equal(x.body.code, "quota_reservation_failed");
   equal(x.providerCalls, 0);
 });
+
+Deno.test("provider redirects are rejected and never followed", async () => {
+  const x = await exercise({ status: [302, 302, 302] });
+  equal(x.status, 503);
+  equal(x.body.code, "unsafe_redirect");
+  equal(x.providerCalls, 3);
+});

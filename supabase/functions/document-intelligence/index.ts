@@ -1,4 +1,7 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
+
+export { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -13,46 +16,6 @@ const json = (status: number, body: unknown) =>
     status,
     headers: { ...cors, "Content-Type": "application/json" },
   });
-export function isSafePublicHttpsUrl(value: string) {
-  let url: URL;
-  try {
-    url = new URL(value);
-  } catch {
-    return false;
-  }
-  if (url.protocol !== "https:" || url.username || url.password) return false;
-  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "").replace(
-    /\.$/,
-    "",
-  );
-  if (
-    !host ||
-    [
-      "localhost",
-      "localhost.localdomain",
-      "0.0.0.0",
-      "metadata",
-      "metadata.google.internal",
-    ].includes(host)
-  ) return false;
-  if (
-    host.endsWith(".localhost") || host.endsWith(".local") ||
-    host.endsWith(".internal") || host.endsWith(".home.arpa") ||
-    host === "::1" || /^(fe80:|fc|fd)/.test(host)
-  ) return false;
-  const match = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (match) {
-    const octets = match.slice(1).map(Number);
-    if (octets.some((part) => part > 255)) return false;
-    const [a, b] = octets;
-    if (
-      a === 0 || a === 10 || a === 127 || (a === 169 && b === 254) ||
-      (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) ||
-      (a === 100 && b >= 64 && b <= 127) || a >= 224
-    ) return false;
-  }
-  return true;
-}
 async function db(path: string, init: RequestInit = {}) {
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...init,

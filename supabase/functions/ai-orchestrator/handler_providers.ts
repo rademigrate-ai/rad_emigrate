@@ -1,4 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
 
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 export const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -23,45 +24,6 @@ export const safeJson = (status: number, body: unknown) =>
     status,
     headers: { ...cors, "Content-Type": "application/json" },
   });
-
-function isSafePublicHttpsUrl(value: string): boolean {
-  let parsed: URL;
-  try {
-    parsed = new URL(value);
-  } catch {
-    return false;
-  }
-  if (parsed.protocol !== "https:" || parsed.username || parsed.password) {
-    return false;
-  }
-  const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, "");
-  if (
-    !host ||
-    [
-      "localhost",
-      "localhost.localdomain",
-      "0.0.0.0",
-      "metadata",
-      "metadata.google.internal",
-    ].includes(host)
-  ) return false;
-  if (
-    host.endsWith(".localhost") || host.endsWith(".local") || host === "::1" ||
-    /^(fe80:|fc|fd)/.test(host)
-  ) return false;
-  const match = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (match) {
-    const octets = match.slice(1).map(Number);
-    if (octets.some((part) => part > 255)) return false;
-    const [a, b] = octets;
-    if (
-      a === 0 || a === 10 || a === 127 || (a === 169 && b === 254) ||
-      (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) ||
-      (a === 100 && b >= 64 && b <= 127) || a >= 224
-    ) return false;
-  }
-  return true;
-}
 
 export class ProviderError extends Error {
   constructor(readonly code: string, readonly status = 502) {

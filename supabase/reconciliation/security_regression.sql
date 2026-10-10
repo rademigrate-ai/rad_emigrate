@@ -95,6 +95,10 @@ begin
      or private.is_safe_public_https_url('https://10.0.0.1/')
      or private.is_safe_public_https_url('https://169.254.169.254/')
      or private.is_safe_public_https_url('https://metadata.google.internal/')
+     or private.is_safe_public_https_url('https://[::ffff:169.254.169.254]/')
+     or private.is_safe_public_https_url('https://[::ffff:127.0.0.1]/')
+     or private.is_safe_public_https_url('https://[0:0:0:0:0:ffff:a9fe:a9fe]/')
+     or private.is_safe_public_https_url('https://[0:0:0:0:0:0:7f00:1]/')
      or not private.is_safe_public_https_url('https://api.openai.com/v1') then
     raise exception 'Existing SSRF regression';
   end if;
