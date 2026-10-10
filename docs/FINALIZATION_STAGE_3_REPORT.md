@@ -80,3 +80,11 @@ metrics total_rows match → PASS
 See `docs/RAD_CONTENT_INVENTORY_METRICS.json` → `live_connectivity_evidence`.
 
 Operator action: restore live HTTP reachability to 185.192.112.58 hosts, then re-run discover→fetch→snapshot for radvisa/digivisa.
+## Post-closeout status (2026-10-11)
+
+This closeout report is retained as the historical record of the 2026-10-07 state; none of its historical content was altered. Current facts that supersede its artifact claims:
+
+- The canonical inventory gzip bundle and the `radvisa_com.jsonl` / `digivisa_ir.jsonl` per-site files listed above were never committed and no longer exist; only `docs/inventory/radmohajer_ir.jsonl` (740 rows, commit `b98699a`) is present and canonical.
+- The 1,275 total is a historical observation, not a recovered row set. Committed archive evidence now stands at radvisa 229 / digivisa 413 rows under `artifacts/stage3_archive_final_v2/` (commit `436c9eb`), with full quarantine traceability.
+- The external dependency recorded above (live HTTP to `185.192.112.58`) remains open; Stage 3 production readiness remains NO-GO.
+- Reconciliation decision record: `docs/STAGE3_INVENTORY_RECONCILIATION.md`.
