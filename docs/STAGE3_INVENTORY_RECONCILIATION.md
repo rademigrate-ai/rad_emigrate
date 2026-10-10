@@ -35,14 +35,25 @@ Every excluded URL is individually traceable with exact reason and original sour
 3. **The 229/413 archive-evidence sets are NOT declared canonical replacements for 296/239.** That requires an owner decision (below). They are committed, SHA-pinned evidence under `artifacts/`.
 4. `docs/inventory/radmohajer_ir.jsonl` is the only committed per-site canonical inventory file. The `radvisa_com.jsonl` / `digivisa_ir.jsonl` files referenced by pre-2026-10-10 documentation **never existed in git and are absent from disk**; the 1,275-row `docs/RAD_CONTENT_INVENTORY.jsonl.gz` bundle is likewise absent. Documentation claiming otherwise has been corrected by this change.
 
-## 4. OPEN OWNER DECISION (documented, not decided)
+## 4. OWNER DECISION — RESOLVED: **Option B selected** (2026-10-11)
 
-Adopt one of:
+Options considered:
 - **Option A** — accept 229/413 as the new canonical archive-evidence counts, with this record as the documented supersession of the 296/239 observations (METRICS stays historical).
 - **Option B** — keep METRICS 296/239 as the authoritative historical count source with explicit GAP annotation (status quo of this record; per-site row lists remain unavailable).
 - **Option C** — if the owner possesses the original 2026-10-07 CDX row lists on any machine, restore them per the recovery-package local-restore procedure, then re-reconcile.
 
-No agent may choose among these without explicit owner authorization.
+### Decision (owner-selected, 2026-10-11)
+
+**Option B is adopted.** Recorded terms:
+
+1. Historical observations are preserved unchanged: radmohajer 740, radvisa 296, digivisa 239 (total 1,275) — in `docs/RAD_CONTENT_INVENTORY_METRICS.json` and the closeout documentation.
+2. `docs/inventory/radmohajer_ir.jsonl` remains the committed canonical metadata inventory (740 records).
+3. The radvisa 229 / digivisa 413 archive-discovery records remain **evidence only**; archive evidence is **not** promoted into canonical inventory, and no per-site `radvisa_com.jsonl` / `digivisa_ir.jsonl` canonical files are created.
+4. The radvisa **−67** and digivisa **+174** differences are recorded as **unresolved historical row-set GAPs** (original 2026-10-07 row lists were never preserved; deltas are documented in §2).
+5. This decision resolves only the canonical-adoption question. It does **not** mark the underlying data reconciliation, live website verification, or content migration complete.
+6. Official Stage 3 production readiness remains **NO-GO** (see §5 blockers; §6 boundaries remain in force).
+
+Options A and C are closed without prejudice; they may be revisited only by a new explicit owner decision.
 
 ## 5. Remaining external blockers and acceptance criteria
 
