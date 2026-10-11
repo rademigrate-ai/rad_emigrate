@@ -1,0 +1,45 @@
+{
+  "schema_version": "rad-hosted-verification-v1",
+  "verified_at_utc": "2026-10-11",
+  "method": "GET-only Supabase REST queries using the publishable client key from the local gitignored dart_defines.json (key value never printed or stored); Prefer: count=exact; no writes, no mutations, no auth-admin access.",
+  "project_ref": "inshddthftkhcdosoqcn",
+  "results": {
+    "destinations": {
+      "count": 22,
+      "status_distribution": { "published": 22 }
+    },
+    "destination_localizations": {
+      "count": 44,
+      "non_empty_summaries": 44
+    },
+    "visa_programs": {
+      "count": 10,
+      "status_distribution": { "published": 10 }
+    },
+    "visa_program_localizations": {
+      "count": 20,
+      "non_empty_summaries": 20
+    },
+    "visa_program_requirements": {
+      "count": 8,
+      "distinct_programs_with_requirements": 1
+    },
+    "visa_program_steps": {
+      "count": 18
+    },
+    "content_sources": {
+      "count": 6,
+      "by_source_type": { "rad_official": 6 }
+    }
+  },
+  "comparison_with_historical_observations": {
+    "22 destinations": "CONFIRMED live (all published)",
+    "10 programs": "CONFIRMED live (all published)",
+    "no structured steps": "OUTDATED — 18 visa_program_steps rows now exist",
+    "empty destination summaries": "OUTDATED — 44/44 localization summaries non-empty",
+    "empty program descriptions": "OUTDATED — 20/20 program localization summaries non-empty",
+    "requirements concentrated in study-canada": "CONFIRMED — 8 requirement rows across exactly 1 program"
+  },
+  "rls_observation": "The publishable key can read published rows only; drafts are not exposed. Public-read behavior matches design.",
+  "writes_performed": 0
+}

@@ -2,7 +2,7 @@
   "schema_version": "rad-stage3-artifact-manifest-v1",
   "generated_utc": "2026-10-11",
   "note": "SHA-256 checksums of all committed Stage 3 derived artifacts and evidence manifests (raw bulk snapshots are pinned separately in RAW_EVIDENCE_SHA256_MANIFEST.json).",
-  "file_count": 21,
+  "file_count": 22,
   "files": [
     {
       "path": "artifacts/stage3_acquisition_20261011/manifests/acquire_manifest.jsonl",
@@ -100,14 +100,19 @@
       "sha256": "3efdb80cb9a99b55c753ebaeadb1702fbcfbd8103457261eb3ad3b15b9a3be90"
     },
     {
+      "path": "artifacts/stage3_hosted_verification_20261011/HOSTED_READ_ONLY_VERIFICATION.json",
+      "bytes": 1712,
+      "sha256": "e99a84d4874eb8a6975f9f27610a8c480a8d61082252cc75ca316f1e223e6fd3"
+    },
+    {
       "path": "artifacts/stage3_security_scan_20261011.json",
       "bytes": 5912,
       "sha256": "36484c986ed0731af187f21589e6d1c385dbd9b4e4c057dc2e69377b5fa0312d"
     },
     {
       "path": "STAGE3_READINESS_REPORT_20261011.md",
-      "bytes": 8488,
-      "sha256": "401cf26b21147ef6fd81ec46a487dbb0bc850d381acbafee996da8b5759e2c78"
+      "bytes": 9082,
+      "sha256": "f86a4a3b10630c7f5f06217f0720b65b3f1e86a819400b079d2850b43d419dea"
     }
   ]
 }

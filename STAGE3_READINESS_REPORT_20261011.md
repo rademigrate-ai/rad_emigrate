@@ -126,6 +126,14 @@ errors, 2,192 extracted (PASS 1,139 / REVIEW 1,048 / FAIL 5).
 - Remaining verification: every draft requires (1) human editorial review and
   (2) official-source sign-off before any production ingestion. No production
   writes were made; package is `status='draft'` only.
+- **Live production state independently verified** (GET-only, publishable
+  client key, 0 writes — `artifacts/stage3_hosted_verification_20261011/HOSTED_READ_ONLY_VERIFICATION.json`):
+  22 destinations + 10 programs, all `published`, confirmed. Three historical
+  observations are now **outdated**: 18 structured steps exist, all 44
+  destination-localization and 20 program-localization summaries are
+  non-empty. Confirmed live gap: requirements remain concentrated in a single
+  program (8 rows across 1 program), so the draft package is additive
+  enrichment, not gap-filling from empty.
 
 ## F. QA and security
 
