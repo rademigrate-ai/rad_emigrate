@@ -85,3 +85,52 @@ create table public.knowledge_citations (
   created_at timestamptz not null default now(),
   unique (claim_id, snapshot_id, locator)
 );
+
+-- Feed tables (project14 DDL, auth.users FKs omitted). The rehearsal adds a
+-- STRICT local stand-in for the Stage 1 guard trigger: production's trigger
+-- permits only the human-authorized publish RPC; locally ANY feed mutation
+-- raises, so an accidental Feed write by the ingestion package fails loudly
+-- instead of silently committing.
+create table public.feed_items (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique check (slug ~ '^[a-z0-9-]+$'),
+  category text not null check (category in ('update','guide','deadline','event','success_story','announcement')),
+  status text not null default 'draft' check (status in ('draft','review','published','archived')),
+  primary_source_id uuid references public.content_sources(id) on delete set null,
+  source_url text check (source_url is null or source_url like 'https://%'),
+  hero_image_url text check (hero_image_url is null or hero_image_url like 'https://%'),
+  effective_date date,
+  published_at timestamptz,
+  expires_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table public.feed_item_localizations (
+  feed_item_id uuid not null references public.feed_items(id) on delete cascade,
+  locale text not null check (locale in ('fa','en')),
+  title text not null,
+  summary text not null,
+  body text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (feed_item_id, locale)
+);
+
+create or replace function private_rehearsal_guard_feed_mutation()
+returns trigger
+language plpgsql
+as $function$
+begin
+  raise exception 'rehearsal guard: ingestion must never mutate feed tables'
+    using errcode = '42501';
+end
+$function$;
+
+create trigger trg_rehearsal_guard_feed_item
+before insert or update or delete on public.feed_items
+for each row execute function private_rehearsal_guard_feed_mutation();
+
+create trigger trg_rehearsal_guard_feed_localization
+before insert or update or delete on public.feed_item_localizations
+for each row execute function private_rehearsal_guard_feed_mutation();

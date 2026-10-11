@@ -6,7 +6,7 @@
     "DOC_UPDATE": 5,
     "SNAP_INSERT": 1618,
     "SKIP_URL_EQUIVALENT_DATASET_ROW": 574,
-    "DOC_INSERT": 1612
+    "DOC_INSERT": 1607
   },
   "per_site": {
     "digivisa.ir": {
@@ -16,7 +16,7 @@
       "DOC_INSERT": 569
     },
     "radmohajer.ir": {
-      "DOC_INSERT": 676,
+      "DOC_INSERT": 671,
       "SNAP_INSERT": 680,
       "DOC_UPDATE": 4
     },
@@ -40,6 +40,22 @@
   ],
   "url_equivalence_dataset_collapses": 574,
   "production_anomalies": [
+    {
+      "url": "https://digivisa.ir/article/ 9-تا-از-بهترین-دانشگاه-های-مهندسی-در-بریتانیا",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/ تحصیل در پرتغال و دانشگاه های کشور پرتغال",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/ تحصیل-در-دانشگاه-های-بین-المللی-به-زبان-انگلیسی",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/ دانشگاه-های-برتر-اتریش",
+      "note": "canonical form differs from URL-equivalence key"
+    },
     {
       "url": "https://digivisa.ir/article/آزمون-تافل-و-مزایا-و-معایب-آن ",
       "note": "canonical form differs from URL-equivalence key"
@@ -81,7 +97,43 @@
       "note": "canonical form differs from URL-equivalence key"
     },
     {
+      "url": "https://digivisa.ir/news/ لغو آزمایش های اجباری کووید-19",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
       "url": "https://radmohajer.ir/",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/1589-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D9%BE%D8%B2%D8%B4%DA%A9%DB%8C-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86-%D9%88-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D9%88%DB%8C%DA%98%D9%87-%D8%A2%D9%86",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/fa/component/content/article/181-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/ تحصیل-در-رشته-مهندسی-در-استرالیا",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/ تحصیل-روانشناسی-در-خارج-از-کشور",
       "note": "canonical form differs from URL-equivalence key"
     },
     {
@@ -141,7 +193,7 @@
     "dataset_rows": 2192,
     "production_documents": 5,
     "production_snapshots": 5,
-    "documents_final": 1617,
+    "documents_final": 1612,
     "distinct_url_hash_pairs": 1618
   },
   "content_source_linkage": {
@@ -158,6 +210,16 @@
     "anon": "SELECT grant only; INSERT/UPDATE/DELETE denied by grant and by RLS policies",
     "read_path": "anon reads only documents/snapshots cited by APPROVED knowledge claims (policy-enforced)",
     "verified_from": "committed migrations 20261003211635 (grants/policies, RLS enabled lines 175-176) + live REST probe (anon GET ok, anon GET on research_findings/content_drafts -> 401/42501)"
+  },
+  "triggers_and_publication_gates": {
+    "inspected_at": "2026-10-12",
+    "inspected_from": "committed migrations (supabase/migrations/*.sql)",
+    "source_documents": "NO triggers (no updated_at, no audit, no gate) and NO realtime/publication membership",
+    "source_snapshots": "NO triggers and NO realtime/publication membership",
+    "content_sources": "has updated_at trigger + AFTER audit trigger (private.audit_content_change -> admin_audit_logs); this package performs ZERO content_sources writes, so neither fires",
+    "feed_items": "Stage 1 migration 20261010010000 adds BEFORE-row guard trigger (trg_guard_human_feed_item_mutation) blocking ALL feed mutations unless an authorized human publish RPC sets the actor marker -- even service_role direct writes fail; this package writes zero feed rows (rehearsal enforced the same invariant with a local hard guard)",
+    "realtime_publication": "no alter publication statements exist in any migration; nothing in public schema is publication-gated, so the bulk ingestion cannot interact with Realtime replication gates",
+    "impact_on_ingest": "chunk inserts/updates touch only source_documents + source_snapshots; with no triggers on either table the only runtime gates are the unique indexes (idempotency) and the knowledge_citations FK RESTRICT (rollback safety)"
   },
   "writes_performed": 0
 }

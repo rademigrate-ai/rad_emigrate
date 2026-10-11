@@ -1,8 +1,7 @@
 {
   "scanned_paths": [
     "artifacts/stage3_ingestion_package_20261012",
-    "artifacts/stage3_review_queues_20261012",
-    "tools/stage3_content_migration"
+    "artifacts/stage3_review_queues_20261012"
   ],
   "block_findings": 0,
   "review_findings": 4,
@@ -10,32 +9,32 @@
     {
       "rule": "private_email",
       "severity": "review",
-      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0008.sql",
-      "offset": 93354,
+      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0019.sql",
+      "offset": 59714,
       "context": "ری پل های ارتباطی شرکت CKGS آدرس ایمیل: italyvisa.iran@ckgsir.com شماره های تماس: 22180701 22180702 22180",
       "note": null
     },
     {
       "rule": "private_email",
       "severity": "review",
-      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0008.sql",
-      "offset": 93607,
+      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0019.sql",
+      "offset": 59967,
       "context": ": تهران، خیابان نوفل لوشاتو آدرس ایمیل: visti.teheran@esteri.it شماره تماس: 69556672 شرکت CKGS در حاضر ",
       "note": null
     },
     {
       "rule": "private_email",
       "severity": "review",
-      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0008.sql",
-      "offset": 100088,
+      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0019.sql",
+      "offset": 66448,
       "context": " به این مرکز مراجعه نمایید. آدرس ایمیل: info@spainvisa-iran.com شماره تماس: 26253136 26253137 شرکت کارگ",
       "note": null
     },
     {
       "rule": "private_email",
       "severity": "review",
-      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0048.sql",
-      "offset": 95261,
+      "source": "artifacts\\stage3_ingestion_package_20261012\\sql\\10_ingest_0119.sql",
+      "offset": 57440,
       "context": "دهید، مهم است. همچنین می توانید از طریق office@iumcireland.com درخواست فرم درخواست دهید.متقاضیان وضعیت",
       "note": null
     }

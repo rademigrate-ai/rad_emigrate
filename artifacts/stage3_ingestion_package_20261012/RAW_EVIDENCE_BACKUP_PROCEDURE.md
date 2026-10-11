@@ -1,6 +1,23 @@
 # Raw-Evidence Backup & Recovery Procedure (247 MB local store)
 
-Status: **procedure prepared — NOT executed (no external upload authorized).**
+Status: **local backup bundle BUILT and VERIFIED 2026-10-12; external upload
+NOT performed (no owner-authorized destination exists).**
+
+## Backup status (2026-10-12)
+
+| Item | Result |
+|---|---|
+| Source verification | 1,627/1,627 files match `RAW_EVIDENCE_SHA256_MANIFEST.json`; 0 failures |
+| Local bundle | `backups/rad-raw-evidence-20261012.tar.gz` (30,142,258 bytes ≈ 28.7 MB, ~8.4x compression) |
+| Bundle checksum | `backups/rad-raw-evidence-20261012.tar.gz.sha256` |
+| Restore verification | bundle extracted to a clean directory: all 1,627 files re-hashed OK (0 failures) |
+| External copy | **NONE — an independent off-machine backup does not yet exist.** The bundle sits on the same disk as the original. |
+
+Owner action required to close F-08 fully: copy the two files in
+`backups/` to removable media or a second machine using Section
+"Backup (owner chooses destination)" below, then run
+`sha256sum -c rad-raw-evidence-20261012.tar.gz.sha256` on the destination.
+Note `backups/` is git-ignored on purpose (30 MB binary, local-only).
 
 ## What is being protected
 

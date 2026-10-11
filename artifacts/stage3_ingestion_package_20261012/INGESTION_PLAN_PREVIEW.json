@@ -11373,7 +11373,7 @@
     "DOC_UPDATE": 5,
     "SNAP_INSERT": 1618,
     "SKIP_URL_EQUIVALENT_DATASET_ROW": 574,
-    "DOC_INSERT": 1612
+    "DOC_INSERT": 1607
   },
   "notes": [
     "Re-running against the same live state after a successful ingest converts every INSERT/UPDATE into a SKIP (unique-key based).",

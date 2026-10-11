@@ -1,27 +1,32 @@
 {
   "schema_version": "rad-preprod-package-manifest-v1",
   "generated_utc": "2026-10-12",
-  "file_count": 74,
+  "file_count": 157,
   "files": [
     {
+      "path": "artifacts/stage3_ingestion_package_20261012/F-02_HASH_ANOMALY_INVESTIGATION.md",
+      "bytes": 3282,
+      "sha256": "7736b4767691c28f4d2547ab4da4b5574ab803832d95871617283f2d39d50654"
+    },
+    {
       "path": "artifacts/stage3_ingestion_package_20261012/FINAL_READINESS_ASSESSMENT.md",
-      "bytes": 5921,
-      "sha256": "127ed0e9f8078869adbf1bddba5492f68081424472e84cc0329ad968e06420a3"
+      "bytes": 7181,
+      "sha256": "8abaa2fa95c0b19269f8890c9637d3d44defc5c75ce20177ddf37d63867ba15a"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/INGEST_MANIFEST.json",
-      "bytes": 11486,
-      "sha256": "cef96d34582d1dc296bef28b6aa2f7cfe7c979c9831060c7f2e63dbaf767edba"
+      "bytes": 26610,
+      "sha256": "2d21cfab32e96553ec05732fc08cf03a475ffa97c8791ef5a04a912694dfdff2"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/INGESTION_IMPACT_REPORT.json",
-      "bytes": 6900,
-      "sha256": "76ce09847214f2a3e7680e49897b0295d061545d1a67515386c62d59ec215ab5"
+      "bytes": 11711,
+      "sha256": "dd29aede25ef54668540a62c001154e56a253cd34438b169bc8ceb580128a85b"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/INGESTION_PLAN_PREVIEW.json",
       "bytes": 499081,
-      "sha256": "5ed5595441004139852f0103e78d20a0961a984c6643b6750c3cb50000dafc74"
+      "sha256": "a5d5ce6cf10fd8e15e4b222e8bcea3d4fd7c493d391271c5b25fca8fd9db4a69"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/LIVE_STATE_SNAPSHOT.json",
@@ -30,13 +35,13 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/OPERATOR_RUNBOOK.md",
-      "bytes": 6768,
-      "sha256": "722dbdd7a71663c64302238b7452f9fa94b9c5c461f1812d19b0242c6a805188"
+      "bytes": 9987,
+      "sha256": "d75a41ea9da97a39a9d7e6df8ab54914d66c7a42ab9052f7d7ee5db30e0931b4"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/RAW_EVIDENCE_BACKUP_PROCEDURE.md",
-      "bytes": 3101,
-      "sha256": "0567ee4ba7cabf5f3cf3557979e53f6df182e776525dbbec40d226fd103b8431"
+      "bytes": 4070,
+      "sha256": "aa1f94a2f3b0ea77f07bb7218c6598565df5b7a7deee40d2846aad49018524e9"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/RAW_EVIDENCE_VERIFICATION.json",
@@ -45,8 +50,8 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/01_schema.sql",
-      "bytes": 3461,
-      "sha256": "cac3dd2771309fc4df2edd31bc0bfbf518af1c51dae8898a68ccae70323cda61"
+      "bytes": 5584,
+      "sha256": "7459e7a2c6b7d6ef00cc9a0f24bb00810d7d7bc66962774d68e46371bf35eb54"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/02_seed_production.sql",
@@ -60,8 +65,13 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/REHEARSAL_RESULTS.txt",
-      "bytes": 4394,
-      "sha256": "cb355b2f89524b8120d27b60230574ed4051562374690fe490c345722f8cafc9"
+      "bytes": 13493,
+      "sha256": "389e8c717f6a9a1bdf314e92b27e1dd3afad94f282121dce8e683c60a8c4c409"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/run_rehearsal_v3.sh",
+      "bytes": 16465,
+      "sha256": "17f472b449b30071b7b1c7d4ba1e1550dcae2563cacd85bc8b0b5ecf826bb3c8"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/00_preflight.sql",
@@ -70,273 +80,678 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0001.sql",
-      "bytes": 345985,
-      "sha256": "e9d143b2262e90d96366b2844f63dfac8e9873cf2dffd73e6cdf4c88d6624abf"
+      "bytes": 149786,
+      "sha256": "ff744c682a8cf4ac49cfa2015c1e8d392657ba5c2b72bb4ac3996947245a4da5"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0002.sql",
-      "bytes": 348082,
-      "sha256": "ee3df6437e2a47c989f5ebf667c5ad29658bee46b86e29d39e5afbfbdde077cf"
+      "bytes": 128904,
+      "sha256": "138f88356d14d540d3af3ee36208e977208a23fe0e70fcb81ccf8786c1e4bbf8"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0003.sql",
-      "bytes": 305549,
-      "sha256": "dacb7a1c32ef71b07523caf21f304d896006bfa49104d45a2f758596805ef4d9"
+      "bytes": 143038,
+      "sha256": "af98962d541c24dbcc7c84d3878a66907fece635bf0cc27f0552abfee8361ce3"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0004.sql",
-      "bytes": 340301,
-      "sha256": "21aae1c298f996ae8380e7029420af4aae881c9c2cbe37b793e99da86fa69c80"
+      "bytes": 106554,
+      "sha256": "a0e5070614a94eb3f49a18e4ad33053a0019a7e85e311ae409bb636e96c02ac6"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0005.sql",
-      "bytes": 379650,
-      "sha256": "f2f0fb280a2ec28dfe04451efa903b0389c8d728397f2908d05aa4a2b03c17c9"
+      "bytes": 168211,
+      "sha256": "573dcdbe45ef579fe1fbd484c2d0b19e7911669f110351cdc8a557f3cad3f6a4"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0006.sql",
-      "bytes": 285030,
-      "sha256": "ba4e0686bf4c0fedfcd0fc22c8778075daa70c20929845132d73b9ad977b55c6"
+      "bytes": 120461,
+      "sha256": "aa7afb15a1af848dd5c48280f7ac5f2413348ecd9e4df7fd3e2400f2182d7ef8"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0007.sql",
-      "bytes": 305408,
-      "sha256": "48f05a17fcb68ea7e0a583ff06c137415cbb6538a05834ea0bf88063b11f84a8"
+      "bytes": 131127,
+      "sha256": "f34653a7532516317179aefa53fe985fc534c81d1f2b88c9e8db3cb357886801"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0008.sql",
-      "bytes": 532978,
-      "sha256": "2ad33a65bfb79125f2e1a11cc5cb5cfc29a81995993af426d85874b5bfbab437"
+      "bytes": 135550,
+      "sha256": "d58700aa1dee32b49f2510d9d78f34ea5b079a88ecb2286f0b2bdf8c0526a696"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0009.sql",
-      "bytes": 741695,
-      "sha256": "f64b61a9f9959ee801d75cc13782fd473d349f7b908712af30bc4991a6ea8e1c"
+      "bytes": 110160,
+      "sha256": "db852ee45f2d43b40f506ade92e26f4c8c70616b3942434c16d686c7b9226093"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0010.sql",
-      "bytes": 488519,
-      "sha256": "dd1d161e30bfb1abdcfb0f94909854cbeb81bd25743714581eda7963b9cdc4f1"
+      "bytes": 150978,
+      "sha256": "6e896cfff7eebd1991df3ec3ac9fb4b3c62e6d44bfd946613da26c61837cdb91"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0011.sql",
-      "bytes": 328872,
-      "sha256": "bbfde7a68285342ab8e73bb732447c85bf148f5c92035333f1c7e547f9dbfad6"
+      "bytes": 91759,
+      "sha256": "788d54fed1d4241e857e357aacc55bddf1144988793802481de806ec7ca07730"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0012.sql",
-      "bytes": 272090,
-      "sha256": "0fd0cc5aa660e08feb19c60b4d38b5eb7764e914db3d8a8c897ffc126937ce60"
+      "bytes": 145768,
+      "sha256": "15eb4fcd955d1383d94782b6868c636b3b6b52110e21c806cd151bc525493b9d"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0013.sql",
-      "bytes": 356016,
-      "sha256": "df75d102fdc48178cbbe7b05a2d6d09e00e1e4ce847ed15b04baec1ae45e55e5"
+      "bytes": 217300,
+      "sha256": "9a0f20bd9e38eb3421c9fcd814e7e91f38cbfd4276f29f81e11b48215cc69667"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0014.sql",
-      "bytes": 312437,
-      "sha256": "7c8468b5bfd72d53f86b7d84b04026dd2f6b9c879cea85a2f052de441e24858b"
+      "bytes": 106273,
+      "sha256": "7f3a148dc0e5bfcba1bae19eef69782c748655d2e7786048d4cbfb23cffe084a"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0015.sql",
-      "bytes": 275134,
-      "sha256": "55db9961bff2c2fccaf4adaa356e6ade1ba872a853908400b3b2c85e0427a748"
+      "bytes": 106006,
+      "sha256": "53bbd6a35f2b538abbdf71b138735cc333b0c4bf2dcd9df3f02224e644951691"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0016.sql",
-      "bytes": 349903,
-      "sha256": "faf3d6564ad0c0ae0debb4e4d6bf4e386b2b7fe3f7c9c655072587f1a5d1f2f1"
+      "bytes": 128888,
+      "sha256": "266c3ea3ba7a10f52da776e51a040e629e0cfa2952ef939bc0adad0868c1635d"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0017.sql",
-      "bytes": 285658,
-      "sha256": "999b1fb49b45924196ef3e619d18fd08cd4e3ff5bc68642986a644e2beffeabc"
+      "bytes": 109872,
+      "sha256": "ac331c1208d2ecd45311234b48f13ae7bd084c90f3c79fe8cfad11ed80a74c50"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0018.sql",
-      "bytes": 260091,
-      "sha256": "ae4635f5f341e4e7bc5eccab2966e72da343698be20a2058869a2de6c3160787"
+      "bytes": 123212,
+      "sha256": "cef428ed7bd68eed617d0c107fe3e6812b9fcb5d752a9fcc68634c8f68cd1de8"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0019.sql",
-      "bytes": 345589,
-      "sha256": "9948ecb13f0af97e8e75d767ace84e42d7bfa16442d46f51ae6f56b47d9d59d3"
+      "bytes": 175074,
+      "sha256": "5da430700e4788af4b3fc37e2debb6fac31bff66086741f4a190b3b1fccfb207"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0020.sql",
-      "bytes": 279880,
-      "sha256": "05a0f9288c261ef41acaeded0cd701423053f8ecc212e1b21e726660cc59ab88"
+      "bytes": 303766,
+      "sha256": "ad0867f85d7f0f1803e58764a1afb9013e8e52c7e091b7ff5d70b0ef3d1b0751"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0021.sql",
-      "bytes": 339695,
-      "sha256": "c99be698a5a6661674428a07e28df4d9cadb24df377e0d5378c3c7780a667def"
+      "bytes": 224335,
+      "sha256": "517671e948c17f8e1a13ab4c5eddd4be859c0c0b3e8df435a1c4c07af0e7c964"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0022.sql",
-      "bytes": 1205945,
-      "sha256": "140bd51737394668d7b7ff4385e714b1cb96608a0cee381cc6b3e53d4df048b7"
+      "bytes": 362439,
+      "sha256": "d64c5a28252852d1837466fad4c3ad961d3ee8467b65c30a616bf63fef3c068d"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0023.sql",
-      "bytes": 350625,
-      "sha256": "980a4642a2eddd116a10e5f18cee33dca756f8c216aabeb30ea5a50ac20a97ed"
+      "bytes": 376627,
+      "sha256": "d7295bb4181e30e834283685b27d1ae8360a5e05759b92317a094584e724e679"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0024.sql",
-      "bytes": 319489,
-      "sha256": "1f6ac29fba237d431bdb26570c4242b6eecf3887038988fb10dce500c391598b"
+      "bytes": 120216,
+      "sha256": "64ecf29f4bcb58dc02871f539b776a504ff59c23919c317f51888a2975c92c1b"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0025.sql",
-      "bytes": 478477,
-      "sha256": "0f2bcdc609b4b5210d47dc4f2237f81843bc8502a792f74b980ad27ea773204f"
+      "bytes": 149023,
+      "sha256": "aa35821207181e33b1d6e4ae646cb35b631d775f3cbca0e13d3c93eae6fe7e2d"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0026.sql",
-      "bytes": 391717,
-      "sha256": "7e3998df4fd288088fefb27b6770fc69a601ce819f4530b3f9f427c2bd73db74"
+      "bytes": 110881,
+      "sha256": "1751ab5e0afcb8bdeeebd2221698391d4a05356278ac1b575ba36641eeaab58b"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0027.sql",
-      "bytes": 490695,
-      "sha256": "158a84fa69afb32f40a61f58550cf1cc1071844faa09efb201915f422a7c9902"
+      "bytes": 155475,
+      "sha256": "5213032e2cdaec15b06710dfb910cbb7e4e9e305ef7480acb4b65119ccede615"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0028.sql",
-      "bytes": 490118,
-      "sha256": "4925dac63110bf37f9b25fcf037a1ede1b2560fbb0383232dfc4cbaa24977a5e"
+      "bytes": 130955,
+      "sha256": "05217197d6941d3497b80d8d1a9808534d78fa5ad4058e2485aab33a43204180"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0029.sql",
-      "bytes": 436662,
-      "sha256": "b888688ce1551867fc36763c3e009f824bde233efda531ed2129024c125b4052"
+      "bytes": 118122,
+      "sha256": "aa714b491802630b9ad2263fd62fe2215e095fe2c3d515b09d14cb80dc469cc2"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0030.sql",
-      "bytes": 389953,
-      "sha256": "1046a2466210b21f7917dacfa551d0db23f31323adfe0262ed340a3174f00c90"
+      "bytes": 87955,
+      "sha256": "deea6774c7eb05a08097aed010ad23abc1dc643d6394c93e8e956f4756cb3744"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0031.sql",
-      "bytes": 557897,
-      "sha256": "6abbf6fb80b6655473c47b4330f3dd975ba4aafb0f09b81f3dd7ebf412e0be64"
+      "bytes": 106410,
+      "sha256": "67f88cdb77c636d76e28a81843780ef1d4934b995d9c5c940677a3e27d1672e4"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0032.sql",
-      "bytes": 525793,
-      "sha256": "d47d819aba4f5ce63cfc19fea5b3c11c885e34bf135729485daaff8847767865"
+      "bytes": 202046,
+      "sha256": "d1c5d5dcd4ccf7d592a83b6e2744e38aec35843e6ea1518f46a5b21336ff4893"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0033.sql",
-      "bytes": 496283,
-      "sha256": "b2eb6f5834b2d83590deb6ad8b4edfb9fc12472f8ec91fc4ac807eba04221014"
+      "bytes": 60756,
+      "sha256": "d670293e4cd93124f5525178cd9d23675bc29676b06c9056fbbf2e3e8330c864"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0034.sql",
-      "bytes": 410316,
-      "sha256": "3135895909c1d4862e03c7e8be02764112e27d2159ed8f1833316648794e68ce"
+      "bytes": 153175,
+      "sha256": "ee7e0db652cec17b0135a225738820aafdb98542d64e17b357c7e0b358ab42c0"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0035.sql",
-      "bytes": 526631,
-      "sha256": "e552aa764a0321c34fb80cfa1b5fe88bf76e36118ef145d438ae85bd359533a1"
+      "bytes": 148492,
+      "sha256": "c4a82b64e6af6318389c700e162541b43a0e7f99c1e357900c3d70543119cbd6"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0036.sql",
-      "bytes": 479373,
-      "sha256": "8112b40b3311fa2f4f4a9bce5a27b9fadce7e3dc8f233acbd0626d1c2bb9c3e3"
+      "bytes": 128413,
+      "sha256": "255bc333201ec3b5c90246fe3fa50a3b20e9edda49bbf851e2fc74502a00cec4"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0037.sql",
-      "bytes": 490610,
-      "sha256": "f2cd56ed0e37d6e55e42cb5e3751c39895877db0f683ee2526522a02d5847bfe"
+      "bytes": 95662,
+      "sha256": "1142c5a6bfedcc16d95207256c02584d6a5284c99f45bf41594b9377df5c0321"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0038.sql",
-      "bytes": 512611,
-      "sha256": "a13c923c974c9b208c2c71b5f80fd5455c5314e42834090467c2a87a6be830f7"
+      "bytes": 94171,
+      "sha256": "e310acf82cce0afb70383e124d2038868cec5821fae770a1200d1364ce5a9ac0"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0039.sql",
-      "bytes": 314940,
-      "sha256": "a18e1525025a80679595d1896f5809e760aa72e894e22e910e992b417e39868f"
+      "bytes": 137334,
+      "sha256": "18b959276bb4d9fb8a29d6bbb8f34a18024287a1dc95771e4e60f1aab8eb7247"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0040.sql",
-      "bytes": 258996,
-      "sha256": "482420a41272ad868b2c763dc5646a0f5bdfc24e62bc8ccac1d18d01dfe805f6"
+      "bytes": 171883,
+      "sha256": "059fc1c821d7c8285eea778bbf90873a4b1861ef1317ce668057dec2ddf91545"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0041.sql",
-      "bytes": 325558,
-      "sha256": "386fd8957ee0611ed700e8ec68b9c0724364433d4dc7b45321b66a7752090ed7"
+      "bytes": 134378,
+      "sha256": "c9d6fc4cbbab30031345923ebe25f8427d39b4ee87687d2357036eb6fcbae378"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0042.sql",
-      "bytes": 282512,
-      "sha256": "b9dce767632f1e5d950b5b45ef13b24d3c863ad2451634d2d9b17c1ee2ba961b"
+      "bytes": 101376,
+      "sha256": "ad41b9afb2ad178b645b9575c4abf65cc6c6e6b00a0774c3cf493aadd784b296"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0043.sql",
-      "bytes": 322017,
-      "sha256": "ece714616622b2bf638a6a7e67e32e121779c7a75d601f52fd4cd573e0b76013"
+      "bytes": 103171,
+      "sha256": "d0a485d234d33698d723a22431f269e8d2f0df4cdfb5c3c068ed6e3e7fbd0eed"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0044.sql",
-      "bytes": 325431,
-      "sha256": "57b93597904654984a54e006ee9b286010d6c64670bd878870c86c50cc19f990"
+      "bytes": 95744,
+      "sha256": "7c5ca1b8b700886a264575c8df314d018f130bb476376bdea2077b8ca5dca4dc"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0045.sql",
-      "bytes": 367762,
-      "sha256": "bbb435b4a3845fbe98656b3f87b9a3b54e721672fecfc41ffb38fcc825042faf"
+      "bytes": 113506,
+      "sha256": "de6ed4b5030022eac5bfd84ef15291df71b195aff6e6ac63af038c886ade6053"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0046.sql",
-      "bytes": 392997,
-      "sha256": "d77aceb55a50915da4f8833deb9684b5ce3024bc11fa5127458d0c2076a85112"
+      "bytes": 164428,
+      "sha256": "cd503da063584460de8ca3d5db4c3bebb7c22687413cd7421fe249cf3dc62a1b"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0047.sql",
-      "bytes": 380681,
-      "sha256": "cfd4998d118252f30d008a2a52cf5a257b6fed2fad00d5f15b13c63f7537e3b0"
+      "bytes": 117747,
+      "sha256": "b8412d82dc5f1bd12846abbb81a4f5ef0b2329bcc55a3ed1f60432d2347eb46d"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0048.sql",
-      "bytes": 282293,
-      "sha256": "e575abab8a0ead04a9136c00bd80acc5930261e18ac5429b87f398766d20dfa9"
+      "bytes": 78364,
+      "sha256": "8814805ab83dec2c65f255a05d7ce2fd9bc6335fd3d2a08a05dcbc8f657cc813"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0049.sql",
-      "bytes": 282064,
-      "sha256": "83764c35bea2b7ae32054c9993db5d87d92530c561dcf250abe460dbcabfc1a5"
+      "bytes": 118061,
+      "sha256": "c9d3d5878514ff2b33a10f776a1a9012f9b9bae8923fb7674c443d1aaaa4d1d7"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0050.sql",
-      "bytes": 183099,
-      "sha256": "e1077c9e644706c0b7edf2c01da03a44c37472187710fae910c52e5d4e2134c1"
+      "bytes": 166183,
+      "sha256": "b294e90e028f1e52c6eb641f0453f23619afe28adaf165a1e6bbbe7205fdf106"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0051.sql",
-      "bytes": 212820,
-      "sha256": "673b79ec0e30ea9af7526c99f2bb02cf376649c2004055471a479d5fe2a272f6"
+      "bytes": 129748,
+      "sha256": "11a9834df6367ed7ee6f507c4bb2c96ced43dff2a9c5971aeb2fc2bf50abfce7"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0052.sql",
-      "bytes": 283095,
-      "sha256": "e84447f37bde592a618cb26246c209c79628e52b1c25f585000af61a555ad013"
+      "bytes": 139846,
+      "sha256": "da51443bd02cdb12dfdf56c2e8e6a09bdd89dcd72697682104b1d154740782e9"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0053.sql",
-      "bytes": 278785,
-      "sha256": "4cf054452aeed78abeaebb0e3c325cdb92a9d45d2a1b7934897c5f4aaa2de23d"
+      "bytes": 139684,
+      "sha256": "d8d28641da473d9ab14f6f53523921e5839f999cb9efcc6910c45d34107c788c"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0054.sql",
-      "bytes": 212246,
-      "sha256": "526b9f7233857910b5e35a277ed7b8e1c6ea78860e353e2e388f9d58253cd026"
+      "bytes": 590613,
+      "sha256": "ea5b47ff02c3a81bb626b59b84b9e3c2d688a4fee437554f14871c7679b95597"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0055.sql",
+      "bytes": 617728,
+      "sha256": "896acfce1cda006fac13bed2b1f177c6744b0d18440645c579b8154617af1e56"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0056.sql",
+      "bytes": 114016,
+      "sha256": "d38f11e6be93580269af830f6e3c52db4b93c75771daccf01a5177510cda723d"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0057.sql",
+      "bytes": 94492,
+      "sha256": "ef9fd016b0b013668754bac1f91a861f46c93b3e8214f75addb0f23f0cd3d2b5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0058.sql",
+      "bytes": 107311,
+      "sha256": "6fce64d5dbb1c82f4aa32a7b7c5a8771aa787c8d5a941e5d48bb965ddfc114bc"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0059.sql",
+      "bytes": 132535,
+      "sha256": "43127d915e36fa7aa62f02674a9c4659bde29ea7e475814f03d7bfee77347f49"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0060.sql",
+      "bytes": 163822,
+      "sha256": "1b549d44642211a318bd04143add09861c1be6f4e5ec553209d53142cc69fa32"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0061.sql",
+      "bytes": 204662,
+      "sha256": "126daef218cfc3aabe64a96680060d811277cbadab2d3f2edafa2338e912055f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0062.sql",
+      "bytes": 183219,
+      "sha256": "5482dde192d6433698070724cb8941df6ee95a90f79e177a28d07c84d350f38f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0063.sql",
+      "bytes": 177390,
+      "sha256": "25a7e0d650fc7d0186d0a102eb492bd02b85fecea95ca47d4c1b2c91a5404efb"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0064.sql",
+      "bytes": 153089,
+      "sha256": "43806b65c8916efacb17031960b0ceaa2732bf33277034d818c221884567cba5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0065.sql",
+      "bytes": 150893,
+      "sha256": "55279da3ab464611bc14b23a7a1f11cd8872324f56b0f528df90ca0c541bcdf6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0066.sql",
+      "bytes": 228713,
+      "sha256": "de8efe930b290de62ead305470fcd8ea1dd7f9e6731e5e9e4025f7cd089cc7ad"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0067.sql",
+      "bytes": 175682,
+      "sha256": "d2ae3a7e78962be67ec007d5b53dcca81cf720bf54ac058371bad2d50332724a"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0068.sql",
+      "bytes": 207512,
+      "sha256": "aa6c80b247bd3b7f770aaff6b42fa2d731c8999569a1ccc0f81f41c7a3dcbf37"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0069.sql",
+      "bytes": 182076,
+      "sha256": "36c185eb841dc32b8aa4e545d22660906c9f6ae24a5c60fd50529d133ea17313"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0070.sql",
+      "bytes": 190649,
+      "sha256": "c2cc2e264ba5d46601d49ba741c09c1436a4dde5efa191389c698ce928ad4cc1"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0071.sql",
+      "bytes": 154481,
+      "sha256": "07a79bf992c8af3b201296342ef43f58b2ac25714b2d94097d3a73a28261b8bb"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0072.sql",
+      "bytes": 179694,
+      "sha256": "14a3cf3dee250bb87dacc2c7e3d6413fbc6865ada2a1b4427903625a27aec3ad"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0073.sql",
+      "bytes": 182904,
+      "sha256": "770276589b3ac6b09f0278bccb2c615d4421af7930248f2802f68f8496a56881"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0074.sql",
+      "bytes": 154752,
+      "sha256": "0c9716e54e60f982a696713f05b6fed01404a3bad7ce9fda31c7636027849d98"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0075.sql",
+      "bytes": 215501,
+      "sha256": "3f4004c037f2fb98e772bcfbd5929c8eb176ff1485f34e140f2417abae3f801c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0076.sql",
+      "bytes": 194036,
+      "sha256": "1d010a1563db198e561085793e64ac11eada5570e8ef00808cb250cac460fa21"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0077.sql",
+      "bytes": 212544,
+      "sha256": "9d0f9b7d09b43d84af197acb86007957df5ce3a8769f2835de30dd561ee1acc0"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0078.sql",
+      "bytes": 198746,
+      "sha256": "a547f7a356753e9435e700a7e9e4e155bd4c40f73a267c37ac26214984db9ef3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0079.sql",
+      "bytes": 244915,
+      "sha256": "b82390fc24a252889c7d258849e7f1c144259b1439b021a12bdaec0c3fcd2aef"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0080.sql",
+      "bytes": 181714,
+      "sha256": "f1e3d4174dc34bea22abd1a85957f1a4407b87198a66fcbfb28dd3ad7ff531ae"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0081.sql",
+      "bytes": 220772,
+      "sha256": "b58c67dfd3068c53feb59a31cc880bb293a1396dff6b0e5d6164a075aa3b7ee0"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0082.sql",
+      "bytes": 187139,
+      "sha256": "5d5318e6d846b466f9b7f7ce75744467f5a76ea8a6f581e8d9736b97d8f448de"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0083.sql",
+      "bytes": 145505,
+      "sha256": "df84a69180c82bd0b6c91fe6d2497b29aea9b9ac12e0c5b073fa452cb035bb4a"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0084.sql",
+      "bytes": 169186,
+      "sha256": "989cc7cb7730a51f02c526daff1e2cdfb54bfca6372ee135c743702d2bc20f9a"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0085.sql",
+      "bytes": 165403,
+      "sha256": "57896806c79a5e71359516d5e53f8507eb405aece316e29f72ae181ab0309dc8"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0086.sql",
+      "bytes": 267369,
+      "sha256": "8882b94ab01b3ee1bde9a1819de3287a67cc72bac9106238ff1c18c425cebc7f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0087.sql",
+      "bytes": 163015,
+      "sha256": "57ea5355078bbe4ac602df540ee8f6f7a1cdb07b8adfee9cc2192f5f69d932ff"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0088.sql",
+      "bytes": 219447,
+      "sha256": "cf960a2b76a12810120b9cfc636107c004bec3aa2930a0306b437f1a17cf976c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0089.sql",
+      "bytes": 168577,
+      "sha256": "4309b6411395cc41ddd3a5ccc0129656cba53428e0077937275791e9b5f835ca"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0090.sql",
+      "bytes": 191742,
+      "sha256": "6ae7b2a81a95f29bf18d2145b4bac569c350373973615b848e78e953ba2a8393"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0091.sql",
+      "bytes": 188559,
+      "sha256": "541ab6bd895846a63bdd44dc371370db041201919065837cd6e4c2e59b831d5c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0092.sql",
+      "bytes": 218788,
+      "sha256": "e266124d3080ea9e8d3417da50e2810d9a0fb245522f044682c38b997ba36741"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0093.sql",
+      "bytes": 165542,
+      "sha256": "c1bf710a6f0c80454c602b5e8a20edddfba801141058986e066d1db0817d781f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0094.sql",
+      "bytes": 188778,
+      "sha256": "29c29e8029ff77b113cd81a22f81f1c88252670f65613fc7323d32fae95a8a5d"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0095.sql",
+      "bytes": 237157,
+      "sha256": "4e4f2234ce3942268f3f46ae342c8a0265ee8423bced4c5d2b20706349c8d189"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0096.sql",
+      "bytes": 174616,
+      "sha256": "a0f401a83a076b82406d077350cee1ed2e3c5aebc49e75a049387181e6cff9f9"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0097.sql",
+      "bytes": 102167,
+      "sha256": "9a39811b5ca46d4b48c31acd4a3bffc5c3fdaee5aac2f8f9658e276405a7e7a3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0098.sql",
+      "bytes": 82633,
+      "sha256": "a26d677aff54b7b017493c569401b44c5713145c43d155597f5d286e4dc6b2dc"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0099.sql",
+      "bytes": 75365,
+      "sha256": "9e4dbd91818aca9793b4d89aa86be4abbb6c907b922628acb3d980ba4ba40a32"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0100.sql",
+      "bytes": 136915,
+      "sha256": "d23c8894f64f2c22041922ced08a40aaad663960f9b8ce4bb1a78d2e118585b7"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0101.sql",
+      "bytes": 122030,
+      "sha256": "137e8a02d0b0df4ead0cdf151a52188deaf3e74b6db38706048d47f5cb8bc524"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0102.sql",
+      "bytes": 139340,
+      "sha256": "4fffe236522923eafafa8cbd0548eebcea4221c79dcbd3f5cee11eb03de1e239"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0103.sql",
+      "bytes": 111876,
+      "sha256": "88c882ef2bf81619380f79328482fd9e3d6f7bf1446bac1836cb7c9c1ee489b2"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0104.sql",
+      "bytes": 124481,
+      "sha256": "2dc293b5c436e9ab3cfe23b9b9f5e684d9a4f1b1c0b3bd56f5f923921d465a87"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0105.sql",
+      "bytes": 112542,
+      "sha256": "6365e772b94d36c4e93d90d7c9cd4c17dfb4e3a4116156485dbab23b9a816d6b"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0106.sql",
+      "bytes": 132773,
+      "sha256": "b2ead07f53622442e3003ce2d1f3ad77eb36da1b5fc01dff3c9f48f980ea773d"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0107.sql",
+      "bytes": 130618,
+      "sha256": "9b081f71e69c7c8bf2b6b0cec296d36bb4c56bb1ac27cb8db1b8b38939b7624c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0108.sql",
+      "bytes": 113249,
+      "sha256": "7c16d482abb0038a14807733064f1bdfb999d37f7d47084b0bdfd0cc0f30accf"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0109.sql",
+      "bytes": 155760,
+      "sha256": "ebb9c93ff3e9ae27ef28f259d4b5909a66e9e0a34b532dd2bd04a179f0504a90"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0110.sql",
+      "bytes": 117474,
+      "sha256": "41a028055ad044eb558e631e72bac7f4edee424ec4e3b956f8fe51bab1daa376"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0111.sql",
+      "bytes": 123821,
+      "sha256": "eab776d2bd1a3599f6667a311dda4a11d96f45ed983b4f020d7ea0fbff1d1e1f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0112.sql",
+      "bytes": 147369,
+      "sha256": "2ec27d35c1c6203e4449af94b1f2b2b6cb60983e924a97864297cd5d431351f8"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0113.sql",
+      "bytes": 210520,
+      "sha256": "21ec8bd1d4901cd89a4b872fbd98c659f923c587372636b0f16336396bb2137a"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0114.sql",
+      "bytes": 177374,
+      "sha256": "60f63df69c7488b91d7151aa618d3f6868ce4cfe04e978a302d848ad5f075b8e"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0115.sql",
+      "bytes": 104101,
+      "sha256": "2ce035c3a8dd928a23503b1b00223b5ee4a51a5e6227413996c1c71d215929ce"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0116.sql",
+      "bytes": 216673,
+      "sha256": "dc2be6c4419b169039f3c0d154836178fe7231763d014821144597eb0a0aafe3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0117.sql",
+      "bytes": 101409,
+      "sha256": "a8fa99a93d7bf44ec9e3ee01916e44f26d317da7a49f991026ff743132809e82"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0118.sql",
+      "bytes": 126399,
+      "sha256": "b5b42463281065a3174a3707b0195effe1ccffbbabc4a1ff3c8e2a05270c84d6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0119.sql",
+      "bytes": 119066,
+      "sha256": "cc85d46ed49b61036b088d3ac019cd9f47953c3251fca6e76c704fd4abbcc50c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0120.sql",
+      "bytes": 101853,
+      "sha256": "24c253cf3c7322999afa4bf886a048b89de2a57025f35b82c7b3c0f7190c2331"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0121.sql",
+      "bytes": 97510,
+      "sha256": "4e64d1d7d2b108c2d65b51405da5424764fda439e80f9750f13747d4c282f3ef"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0122.sql",
+      "bytes": 144593,
+      "sha256": "5e52e523e2731ff46c7b62de837334e59791a9f9e26011435e6f2963515a96d8"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0123.sql",
+      "bytes": 80018,
+      "sha256": "4c55d96aca395a9bcf80c53f4cd35b897d61d39c9deaf819668fcaf4469f9767"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0124.sql",
+      "bytes": 73590,
+      "sha256": "c672fa08b085343274c813ef3452af9a0b27c88c6f963da6fa5bb43ec5c2249e"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0125.sql",
+      "bytes": 71878,
+      "sha256": "626bc67b912102ed1458c5e03603b71b63a9eb8908ae75c3710e61d4d2e2ae83"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0126.sql",
+      "bytes": 77373,
+      "sha256": "36eaae1323a2c9006038621f4050ec14bfee339dd4cbbc69e153468d6ffd9117"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0127.sql",
+      "bytes": 97090,
+      "sha256": "d7ff5bb6c009672b1794e6f839418f8f5e1714a038ab98b0421dea0f3e338614"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0128.sql",
+      "bytes": 81379,
+      "sha256": "eead9aa0655490f77627465e83e415772a1370c22db5a348acb58f80972e9bae"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0129.sql",
+      "bytes": 112611,
+      "sha256": "e5ceca3a1c0357bfd760340d57a2b6afc4376d91994594db116ff8068173440c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0130.sql",
+      "bytes": 129888,
+      "sha256": "04c816708eb7ab7a6c3741eca0ec97844ccf66891a1b50aa2a63c141630086b0"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0131.sql",
+      "bytes": 144353,
+      "sha256": "2ddd518800c8c7ed3d38bd3396e0e7eb28d1081c265de661ebbcf12d9254bdf5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0132.sql",
+      "bytes": 92945,
+      "sha256": "1a5d9a45db967812cc175204b2a3d32c0a6d2c91065056be5aa4897a62879389"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0133.sql",
+      "bytes": 106466,
+      "sha256": "d57480c566c7108dab636493005a48839fd8210105a487020ff2254b81d72b37"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0134.sql",
+      "bytes": 95770,
+      "sha256": "e4abb2e12562b8ca2121959c31829e7acbba16fbec07779c2f46ecd4c2a38adb"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0135.sql",
+      "bytes": 53923,
+      "sha256": "914c0a183e321a4684fc5756ec31dc0285830aa93009976c0bcc23c4642bb9f8"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/90_verify.sql",
@@ -345,8 +760,8 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/91_rollback.sql",
-      "bytes": 163723,
-      "sha256": "03be1fff96fe44aeeb3032cf84f0d1780ecff24e5c1644fcc403d5ee42457c48"
+      "bytes": 3190,
+      "sha256": "64b491ccab8205bd5cb7fa88bd6aee3a7403532779fd4f0fd15ac15bb13f230b"
     },
     {
       "path": "artifacts/stage3_review_queues_20261012/REGULATORY_REVIEW_QUEUE.jsonl",
@@ -370,8 +785,8 @@
     },
     {
       "path": "artifacts/stage3_security_scan_20261012.json",
-      "bytes": 1783,
-      "sha256": "9ce306e60e04db185b12c653428b10417710bb03f447dec0f926e634d56e96b9"
+      "bytes": 1743,
+      "sha256": "62f1e6257e4d644d73c2cb9f3eaf7f7919b7c3c22655b10d45e315b11ecbcebc"
     }
   ]
 }
