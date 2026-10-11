@@ -14,6 +14,7 @@
 #       are gone; leftover concurrent state untouched)
 #   S6  fresh DB: ingest -> verify -> rollback -> EXACT baseline, then
 #       post-rollback re-ingest of sample chunks proves clean restart
+#   S7  rollback after PARTIAL ingestion (40/135 chunks) -> exact baseline
 set -u
 
 PKG="$(cd "$(dirname "$0")/.." && pwd)"
@@ -263,6 +264,29 @@ done' >>"$OUT" 2>&1 && say "POST-ROLLBACK RE-INGEST OK" || say "FAIL post-rollba
 # meaningful invariants: new batch rows landed and seed docs remain untouched
 chk_gt s6_reingest_batch_rows_gt_0 "$(q "select count(*) from public.source_snapshots where metadata->>'ingest_batch'='$BATCH'")"
 chk s6_reingest_seed_intact 5 "$(q "select count(*) from public.source_documents where canonical_url in ($PRE_URLS)")"
+
+# ---------- S7: rollback after PARTIAL ingestion (first 40 chunks only) ----------
+say "--- S7: partial-ingest rollback (only chunks 0001-0040 applied) ---"
+docker exec $C psql -q -U postgres -d $DB -c "drop schema public cascade; create schema public;" >>"$OUT" 2>&1
+docker exec $C psql -q -U postgres -d $DB -v ON_ERROR_STOP=1 -f /pkg/rehearsal/01_schema.sql >>"$OUT" 2>&1
+docker exec $C psql -q -U postgres -d $DB -v ON_ERROR_STOP=1 -f /pkg/rehearsal/02_seed_production.sql >>"$OUT" 2>&1
+docker exec $C sh -c 'set -e
+for f in $(ls /pkg/sql/10_ingest_*.sql | head -40); do
+  psql -q -U postgres -d '"$DB"' -v ON_ERROR_STOP=1 -f "$f" >/dev/null
+done' >>"$OUT" 2>&1 && say "S7 PARTIAL-40 OK" || say "FAIL S7 partial-40"
+PARTIAL_DOCS=$(q 'select count(*) from public.source_documents')
+PARTIAL_BATCH=$(q "select count(*) from public.source_snapshots where metadata->>'ingest_batch'='$BATCH'")
+say "partial state: docs=$PARTIAL_DOCS batch=$PARTIAL_BATCH (both must be > baseline before rollback)"
+chk_gt s7_partial_docs_gt_baseline "$PARTIAL_DOCS"
+chk_gt s7_partial_batch_gt_0 "$PARTIAL_BATCH"
+docker exec $C psql -q -U postgres -d $DB -v ON_ERROR_STOP=1 -f /pkg/sql/91_rollback.sql >>"$OUT" 2>&1
+chk s7_partial_rollback_rc 0 "$?"
+chk s7_docs_baseline 5 "$(q 'select count(*) from public.source_documents')"
+chk s7_snaps_baseline 5 "$(q 'select count(*) from public.source_snapshots')"
+chk s7_batch_left 0 "$(q "select count(*) from public.source_snapshots where metadata->>'ingest_batch'='$BATCH'")"
+chk s7_hashes_restored 5 "$(q "$HASH5")"
+chk s7_feed 0 "$(q 'select count(*) from public.feed_items')"
+say "partial-ingestion rollback restores the exact baseline"
 
 # ---------- pre-existing documents: titles/languages never overwritten ----------
 say "--- pre-existing document identity (title/lang must be the original production values) ---"

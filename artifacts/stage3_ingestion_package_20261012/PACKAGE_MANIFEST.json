@@ -65,13 +65,13 @@
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/REHEARSAL_RESULTS.txt",
-      "bytes": 13493,
-      "sha256": "389e8c717f6a9a1bdf314e92b27e1dd3afad94f282121dce8e683c60a8c4c409"
+      "bytes": 14644,
+      "sha256": "94fc9495f94bfe5b9bac101a0f6229ea7a08af2166913ba8fa87eb3f96f4e6a9"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/run_rehearsal_v3.sh",
-      "bytes": 16465,
-      "sha256": "17f472b449b30071b7b1c7d4ba1e1550dcae2563cacd85bc8b0b5ecf826bb3c8"
+      "bytes": 18205,
+      "sha256": "ad57661674b71a6d7046f6c9aacf886d1db3b6526980fa08f4efcabe12d21e91"
     },
     {
       "path": "artifacts/stage3_ingestion_package_20261012/sql/00_preflight.sql",

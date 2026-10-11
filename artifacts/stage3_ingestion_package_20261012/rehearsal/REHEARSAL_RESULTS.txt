@@ -1,4 +1,4 @@
-=== REHEARSAL v3 (2026-10-11T22:44:37Z) dataset_sha=e443e0d3 ===
+=== REHEARSAL v3 (2026-10-11T23:08:24Z) dataset_sha=e443e0d3 ===
 expected: docs=1612 snaps=1623 batch=1618 created=1607 existing=5 skip_exact_dupes=574
 --- schema + seed ---
 psql:/pkg/rehearsal/01_schema.sql:7: NOTICE:  schema "public" already exists, skipping
@@ -86,7 +86,7 @@ PASS batch_double_run=1618
 --- S3: cited-snapshot rollback refusal ---
 PASS citation_inserted=1
 psql:/pkg/sql/91_rollback.sql:27: ERROR:  update or delete on table "source_snapshots" violates foreign key constraint "knowledge_citations_snapshot_id_fkey" on table "knowledge_citations"
-DETAIL:  Key (id)=(fbb7f998-8c86-40b5-8819-1c1e39e90013) is still referenced from table "knowledge_citations".
+DETAIL:  Key (id)=(c3e68d16-ed5e-450b-9992-5c807be79afe) is still referenced from table "knowledge_citations".
 PASS cited_rollback_exitcode=3
 PASS batch_survived_refusal=1618
 PASS docs_survived_refusal=1612
@@ -94,7 +94,7 @@ PASS snaps_survived_refusal=1623
 REFUSED-WHILE-CITED: whole rollback transaction rolled back atomically, nothing lost
 PASS citation_resolved=0
 --- S4: concurrent (non-batch) writes, then rollback ---
-batch document protected by concurrent snapshot: 0fd78d3c-7877-4cc5-bccf-617fac016502
+batch document protected by concurrent snapshot: 44946ef9-f418-47bb-bb2b-bd61a9aae9b3
                   kept_candidate_with_remaining_snapshots                   | remaining_snapshots 
 ----------------------------------------------------------------------------+---------------------
  https://digivisa.ir/                                                       |                   1
@@ -199,6 +199,34 @@ exact pre-ingest baseline restored: docs=5 snaps=5 batch=0 hashes=original
 POST-ROLLBACK RE-INGEST OK
 PASS s6_reingest_batch_rows_gt_0=36
 PASS s6_reingest_seed_intact=5
+--- S7: partial-ingest rollback (only chunks 0001-0040 applied) ---
+NOTICE:  drop cascades to 9 other objects
+DETAIL:  drop cascades to table content_sources
+drop cascades to table source_documents
+drop cascades to table source_snapshots
+drop cascades to table knowledge_items
+drop cascades to table knowledge_claims
+drop cascades to table knowledge_citations
+drop cascades to table feed_items
+drop cascades to table feed_item_localizations
+drop cascades to function private_rehearsal_guard_feed_mutation()
+psql:/pkg/rehearsal/01_schema.sql:7: NOTICE:  schema "public" already exists, skipping
+S7 PARTIAL-40 OK
+partial state: docs=484 batch=480 (both must be > baseline before rollback)
+PASS s7_partial_docs_gt_baseline=484
+PASS s7_partial_batch_gt_0=480
+ kept_candidate_with_remaining_snapshots | remaining_snapshots 
+-----------------------------------------+---------------------
+ https://digivisa.ir/                    |                   1
+(1 row)
+
+PASS s7_partial_rollback_rc=0
+PASS s7_docs_baseline=5
+PASS s7_snaps_baseline=5
+PASS s7_batch_left=0
+PASS s7_hashes_restored=5
+PASS s7_feed=0
+partial-ingestion rollback restores the exact baseline
 --- pre-existing document identity (title/lang must be the original production values) ---
             canonical_url            |     title     | language_code 
 -------------------------------------+---------------+---------------
