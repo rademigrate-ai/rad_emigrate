@@ -1,0 +1,37 @@
+{
+  "schema_version": "rad-review-queues-v1",
+  "regulatory": {
+    "total_claims": 19017,
+    "priorities": {
+      "P1_research_needed": 15889,
+      "P0_disposition_required": 3128
+    },
+    "top_claim_types": {
+      "fee": 8942,
+      "eligibility": 5231,
+      "timeline": 3111,
+      "work_rights": 1130,
+      "program_existence": 382,
+      "guarantee": 221
+    },
+    "all_review_required": true,
+    "auto_approved": 0
+  },
+  "visa_drafts": {
+    "total": 165,
+    "priorities": {
+      "P1_research_needed": 117,
+      "P0_disposition_required": 14,
+      "P2_routine_editorial": 34
+    },
+    "all_status_draft": true,
+    "auto_approved": 0
+  },
+  "risk_rules": [
+    "P0: material discrepancy vs official source, or high-risk claim type (fees/processing/guarantees/eligibility/visa-existence/deadlines/work-rights) with an official reference to disposition",
+    "P1: high-risk claim type without official reference (research required before any editorial pass)",
+    "P2: routine editorial pass",
+    "Visa P0: destination has contradicted/discrepant official findings, or invest/business drafts with official findings"
+  ],
+  "writes_performed": 0
+}

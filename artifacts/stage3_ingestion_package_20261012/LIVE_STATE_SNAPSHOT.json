@@ -1,0 +1,137 @@
+{
+  "captured_at_utc": "2026-10-11T20:52:47+00:00",
+  "method": "GET-only Supabase REST, publishable key, no writes",
+  "source_documents": [
+    {
+      "id": "49719431-f2eb-486f-8120-cb129474cd31",
+      "canonical_url": "https://digivisa.ir/",
+      "source_authority": "rad_official",
+      "language_code": "fa",
+      "source_id": null,
+      "last_content_hash": "a99199f438e3d2e4134a8d1be35c78473e4f7f6e60edc51d9760ec5f38b00110",
+      "title": "digivisa.ir",
+      "jurisdiction": null
+    },
+    {
+      "id": "ee584003-0e56-4d26-942c-69e1a0451ad5",
+      "canonical_url": "https://radmohajer.ir/fa/",
+      "source_authority": "rad_official",
+      "language_code": "fa",
+      "source_id": null,
+      "last_content_hash": "643a3c62ef94bc0f5303a69808c4c847d3f87ab73689bb56fc0f506f9c8f8ec9",
+      "title": "radmohajer.ir",
+      "jurisdiction": null
+    },
+    {
+      "id": "4cdda0b2-4ceb-4262-bbad-0a700db56cda",
+      "canonical_url": "https://radmohajer.ir/fa/contacts",
+      "source_authority": "rad_official",
+      "language_code": "fa",
+      "source_id": null,
+      "last_content_hash": "1720f460d8addfd0398371ee93210730785222f4a1ce36c5a8e01f4865eefc87",
+      "title": "تماس با ما",
+      "jurisdiction": "IR"
+    },
+    {
+      "id": "46b7753a-d790-4b0e-83cc-73957c5770e8",
+      "canonical_url": "https://radmohajer.ir/en/contact-us",
+      "source_authority": "rad_official",
+      "language_code": "en",
+      "source_id": null,
+      "last_content_hash": "009442bcb63ee35e40eb4d136015083dcc3610f5dc805d5f5be7d4540fa6eeb3",
+      "title": "Contact us",
+      "jurisdiction": "IR"
+    },
+    {
+      "id": "2358a78d-cdef-4ee2-a54e-f5d454a067e4",
+      "canonical_url": "https://radmohajer.ir/en/about-us",
+      "source_authority": "rad_official",
+      "language_code": "en",
+      "source_id": null,
+      "last_content_hash": "549c84fa5e3c3734106847d77c071f7bdf2d9582c05210c728a76cc4ca112d59",
+      "title": "About us",
+      "jurisdiction": "IR"
+    }
+  ],
+  "source_snapshots": [
+    {
+      "id": "86094003-4c62-4786-a4ad-4f8426437534",
+      "document_id": "49719431-f2eb-486f-8120-cb129474cd31",
+      "content_hash": "a99199f438e3d2e4134a8d1be35c78473e4f7f6e60edc51d9760ec5f38b00110",
+      "http_status": 200,
+      "fetched_at": "2026-10-03T21:17:44.778649+00:00"
+    },
+    {
+      "id": "b429ccaf-8055-4144-9b83-21008d562a7e",
+      "document_id": "ee584003-0e56-4d26-942c-69e1a0451ad5",
+      "content_hash": "cace18776242e06d5d787a5a08681967c42cb3b7423a06e44cf8725260888de4",
+      "http_status": 200,
+      "fetched_at": "2026-10-07T07:55:44.687911+00:00"
+    },
+    {
+      "id": "26467c5b-9e0f-4ba0-afe2-d298218da9ed",
+      "document_id": "4cdda0b2-4ceb-4262-bbad-0a700db56cda",
+      "content_hash": "1720f460d8addfd0398371ee93210730785222f4a1ce36c5a8e01f4865eefc87",
+      "http_status": 200,
+      "fetched_at": "2026-10-07T18:03:04.616109+00:00"
+    },
+    {
+      "id": "5d081071-e5cb-47c7-8eae-4aba888975ac",
+      "document_id": "46b7753a-d790-4b0e-83cc-73957c5770e8",
+      "content_hash": "009442bcb63ee35e40eb4d136015083dcc3610f5dc805d5f5be7d4540fa6eeb3",
+      "http_status": 200,
+      "fetched_at": "2026-10-07T18:03:04.616109+00:00"
+    },
+    {
+      "id": "81403639-4483-42d0-ac6c-bd3890969b7b",
+      "document_id": "2358a78d-cdef-4ee2-a54e-f5d454a067e4",
+      "content_hash": "549c84fa5e3c3734106847d77c071f7bdf2d9582c05210c728a76cc4ca112d59",
+      "http_status": 200,
+      "fetched_at": "2026-10-07T18:03:04.616109+00:00"
+    }
+  ],
+  "content_sources": [
+    {
+      "id": "10000000-0000-4000-8000-000000000001",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://radvisa.com/content/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C",
+      "is_active": true
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000004",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://radvisa.com/content/%D9%85%D8%B9%D8%A7%D8%AF%D9%84-%D8%B3%D8%A7%D8%B2%DB%8C-%D9%85%D8%AF%D8%A7%D8%B1%DA%A9-%D9%BE%D8%B2%D8%B4%DA%A9%DB%8C",
+      "is_active": true
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000005",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://digivisa.ir/content/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7",
+      "is_active": true
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000006",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://digivisa.ir/content/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A2%D9%84%D9%85%D8%A7%D9%86",
+      "is_active": true
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000007",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://digivisa.ir/content/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7",
+      "is_active": true
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000008",
+      "publisher": "RAD International Institute",
+      "source_type": "rad_official",
+      "url": "https://radmohajer.ir/fa/",
+      "is_active": true
+    }
+  ]
+}

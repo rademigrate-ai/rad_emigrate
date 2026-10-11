@@ -1,0 +1,58 @@
+=== REHEARSAL v2 (regenerated package, dataset sha e443e0d3) 2026-10-11T21:32:24Z ===
+NOTICE:  schema "public" already exists, skipping
+SCHEMA OK
+SEED OK
+PREFLIGHT OK
+CHUNKS OK: 54
+--- pass1 counts (expect docs=1617 snaps=1623 batch=1618 feed=0):
+docs=1617
+snaps=1623
+batch=1618
+feed=0
+--- pass2 (idempotency) counts:
+docs=1617
+snaps=1623
+batch=1618
+--- verify script:
+--- verify script (90_verify.sql):
+BEGIN
+           k            |  n   
+------------------------+------
+ batch_snapshots        | 1618
+ source_documents_total | 1617
+ source_snapshots_total | 1623
+(3 rows)
+
+ batch_orphans 
+---------------
+             0
+(1 row)
+
+                                     canonical_url                                      |                           title                            | language_code |                        last_content_hash                         
+----------------------------------------------------------------------------------------+------------------------------------------------------------+---------------+------------------------------------------------------------------
+ https://digivisa.ir/                                                                   | digivisa.ir                                                | fa            | c270e3057f6aea525fc4e94cb75ffdb152d81bd17fc9c4e4f5a635487863bbf3
+ https://digivisa.ir/article/ 9-تا-از-بهترین-دانشگاه-های-مهندسی-در-بریتانیا             | 9 تا از بهترین دانشگاه های مهندسی در بریتانیا              | fa            | 513c2c2b7af412e435ed654a955459e655ef9dfa0514447137023313dacc1651
+ https://digivisa.ir/article/ تحصیل در پرتغال و دانشگاه های کشور پرتغال                 | تحصیل در پرتغال و دانشگاه های کشور پرتغال                  | fa            | 30db5d5129dcbf68052df3b814906f969dcecdfc28ad60a833daea531ea7b4c6
+ https://digivisa.ir/article/ تحصیل-در-دانشگاه-های-بین-المللی-به-زبان-انگلیسی           | تحصیل در دانشگاه های بین المللی به زبان انگلیسی            | fa            | 37d285899d4e9eb3ff8ec837917f79fe4aebf5860152600e6d65c2ac5c23d1b2
+ https://digivisa.ir/article/ دانشگاه-های-برتر-اتریش                                    | معرفی برخی از دانشگاه‌های برتر اتریش                        | fa            | 64483b2b69b8bdc15327d2e096b75112f61b6b29dfd95aaeba78e5647cae20fb
+ https://digivisa.ir/article/10-تا-از-بهترین-دانشگاه-های-نروژ-برای-دانشجویان-بین-المللی | 10 تا از بهترین دانشگاه های نروژ برای دانشجویان بین المللی | fa            | ed4f5e40ef559519193ea02b9b742678e3331f6e3e196e04d704d2975b389beb
+ https://digivisa.ir/article/10-تا-از-بهترین-شهرها-برای-بازدید-در-نیوزلند               | 10 تا از بهترین شهر ها برای بازدید در نیوزلند              | fa            | 77dfcf1e3a805cff20257eff65367e9e2b29bcd5269bc5d07ec64bd8dab17413
+ https://digivisa.ir/article/10-دانشگاه-برتر-در-ملبورن                                  | 10 دانشگاه برتر در ملبورن                                  | fa            | b2d184a264c236fc35d95b78bd7f72d77cf869b78ed3eab48f03542d209f029a
+ https://digivisa.ir/article/10-دلیل-برتر-برای-تحصیل-در-مادرید                          | 10 دلیل برتر برای تحصیل در مادرید                          | fa            | a8b7200a358c126746a7a962b6f55a7b4e4c1d8dee40897510887d340e7cf231
+ https://digivisa.ir/article/10-دلیل-برتر-برای-تحصیل-در-هلند                            | 10 دلیل برتر برای تحصیل در هلند                            | fa            | 2b6c1e44472bf7da75b0ad4e9c10a7c091bdadbba2bc0bc181d75c512895a01e
+(10 rows)
+
+ feed_items_after 
+------------------
+                0
+(1 row)
+
+COMMIT
+--- citation safety + rollback:
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+citation_ok
+REFUSED-WHILE-CITED: ERROR:  update or delete on table "source_snapshots" violates foreign key constraint "knowledge_citations_snapshot_id_fkey" on table "knowledge_citations"
+ROLLBACK OK
+post-rollback docs=5 snaps=5 batch_left=0 root_hash_restored=1

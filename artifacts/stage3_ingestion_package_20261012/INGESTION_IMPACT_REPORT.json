@@ -1,0 +1,163 @@
+{
+  "schema_version": "rad-ingestion-impact-v1",
+  "dataset": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+  "live_state_captured_at": "2026-10-11T20:52:47+00:00",
+  "counts": {
+    "DOC_UPDATE": 5,
+    "SNAP_INSERT": 1618,
+    "SKIP_URL_EQUIVALENT_DATASET_ROW": 574,
+    "DOC_INSERT": 1612
+  },
+  "per_site": {
+    "digivisa.ir": {
+      "DOC_UPDATE": 1,
+      "SNAP_INSERT": 570,
+      "SKIP_URL_EQUIVALENT_DATASET_ROW": 369,
+      "DOC_INSERT": 569
+    },
+    "radmohajer.ir": {
+      "DOC_INSERT": 676,
+      "SNAP_INSERT": 680,
+      "DOC_UPDATE": 4
+    },
+    "radvisa.com": {
+      "DOC_INSERT": 367,
+      "SNAP_INSERT": 368,
+      "SKIP_URL_EQUIVALENT_DATASET_ROW": 205
+    }
+  },
+  "url_equivalence_matches": [
+    {
+      "dataset_url": "https://digivisa.ir",
+      "production_url": "https://digivisa.ir/",
+      "production_doc_id": "49719431-f2eb-486f-8120-cb129474cd31"
+    },
+    {
+      "dataset_url": "https://radmohajer.ir/fa",
+      "production_url": "https://radmohajer.ir/fa/",
+      "production_doc_id": "ee584003-0e56-4d26-942c-69e1a0451ad5"
+    }
+  ],
+  "url_equivalence_dataset_collapses": 574,
+  "production_anomalies": [
+    {
+      "url": "https://digivisa.ir/article/آزمون-تافل-و-مزایا-و-معایب-آن ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/دانشگاه-لودویگ-ماکسیمیلیان-مونیخ ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/رد-ویزای-دانشجویی-کانادا-دلایل-و-درخواست-تجدید-نظر   ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/شرایط-تحصیل-در-نیوزلند ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/معرفی شهر نانت فرانسه ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/معرفی-شهر-استراسبورگ-فرانسه ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/مقایسه-تحصیل-در-کانادا-در-مقابل-ایالات-متحده-آمریکا   ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/نحوه-دریافت-ویزای-دانشجویی-فنلاند ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/هزینه-های-زندگی-در-تورنتو ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://digivisa.ir/article/ویزای-استارت-آپ-کانادا ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radmohajer.ir/",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/آیا-به-تحصیل-پزشکی-در-انگلستان-فکر-می-کنید؟ ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/تحصیل-در-فرانسه-و-شرایط-تحصیل-دندانپزشکی-در-فرانسه ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/دانشگاه-بارسلونا ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/دانشگاه-های-استرالیا-که-آیلتس6-را-می-پذیرند ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/دریافت-ویزا-برای-پزشکان-و-دندانپزشکان ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/مهاجرت-پزشکان،-دندان-پزشکان-و-پرستاران-به-دانمارک ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/مهاجرت-پزشکان،-دندان-پزشکان-و-پرستاران-به-کشورهای-عربی ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/پرستار-LPN-در-کانادا -و-آمریکا ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/article/چگونه-در-استرالیا-پزشک-شویم ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "url": "https://radvisa.com/content/تحصیل-دندانپزشکی-در-بلژیک ",
+      "note": "canonical form differs from URL-equivalence key"
+    },
+    {
+      "doc": "https://radmohajer.ir/fa/",
+      "blockers": [
+        "last_content_hash_not_in_snapshots"
+      ],
+      "last_content_hash": "643a3c62ef94bc0f5303a69808c4c847d3f87ab73689bb56fc0f506f9c8f8ec9",
+      "snapshot_hashes": [
+        "cace18776242e06d5d787a5a08681967c42cb3b7423a06e44cf8725260888de4"
+      ]
+    }
+  ],
+  "production_duplicate_url_keys": [],
+  "text_over_100k": [],
+  "totals": {
+    "dataset_rows": 2192,
+    "production_documents": 5,
+    "production_snapshots": 5,
+    "documents_final": 1617,
+    "distinct_url_hash_pairs": 1618
+  },
+  "content_source_linkage": {
+    "production_rows_with_source_id": 0,
+    "policy": "source_id stays NULL for bulk evidence rows, matching existing production rows; content_sources rows are per-article seeds, not per-site."
+  },
+  "id_compatibility": {
+    "dataset_id": "rad-<24 hex> (text, deterministic from canonical_url)",
+    "production_pk": "uuid gen_random_uuid()",
+    "resolution": "The dataset id is carried in snapshot metadata only; the DB primary key is server-generated. Dataset ids remain the stable local identity for review tooling."
+  },
+  "rls_and_permissions": {
+    "write_path": "service_role (bypasses RLS) or admin-authenticated session ('admins manage sources/snapshots' policy)",
+    "anon": "SELECT grant only; INSERT/UPDATE/DELETE denied by grant and by RLS policies",
+    "read_path": "anon reads only documents/snapshots cited by APPROVED knowledge claims (policy-enforced)",
+    "verified_from": "committed migrations 20261003211635 (grants/policies, RLS enabled lines 175-176) + live REST probe (anon GET ok, anon GET on research_findings/content_drafts -> 401/42501)"
+  },
+  "writes_performed": 0
+}
