@@ -1,0 +1,127 @@
+{
+  "scanned_paths": [
+    "artifacts/stage3_acquisition_20261011/manifests",
+    "artifacts/stage3_acquisition_20261011/extracted",
+    "artifacts/stage3_canonical_dataset_20261011",
+    "artifacts/stage3_regulatory_verification_20261011",
+    "artifacts/stage3_visa_coverage_20261011",
+    "artifacts/stage3_database_readiness_20261011",
+    "tools/stage3_content_migration"
+  ],
+  "block_findings": 0,
+  "review_findings": 14,
+  "findings": [
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 1571233,
+      "context": "ری پل های ارتباطی شرکت CKGS آدرس ایمیل: italyvisa.iran@ckgsir.com شماره های تماس: 22180701 22180702 22180",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 1571486,
+      "context": ": تهران، خیابان نوفل لوشاتو آدرس ایمیل: visti.teheran@esteri.it شماره تماس: 69556672 شرکت CKGS در حاضر ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 1577967,
+      "context": " به این مرکز مراجعه نمایید. آدرس ایمیل: info@spainvisa-iran.com شماره تماس: 26253136 26253137 شرکت کارگ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 5656223,
+      "context": "ری پل های ارتباطی شرکت CKGS آدرس ایمیل: italyvisa.iran@ckgsir.com شماره های تماس: 22180701 22180702 22180",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 5656476,
+      "context": ": تهران، خیابان نوفل لوشاتو آدرس ایمیل: visti.teheran@esteri.it شماره تماس: 69556672 شرکت CKGS در حاضر ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\digivisa.ir.jsonl",
+      "offset": 5662957,
+      "context": " به این مرکز مراجعه نمایید. آدرس ایمیل: info@spainvisa-iran.com شماره تماس: 26253136 26253137 شرکت کارگ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_acquisition_20261011\\extracted\\radvisa.com.jsonl",
+      "offset": 1349904,
+      "context": "دهید، مهم است. همچنین می توانید از طریق office@iumcireland.com درخواست فرم درخواست دهید.متقاضیان وضعیت",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2818528,
+      "context": "ری پل های ارتباطی شرکت CKGS آدرس ایمیل: italyvisa.iran@ckgsir.com شماره های تماس: 22180701 22180702 22180",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2818781,
+      "context": ": تهران، خیابان نوفل لوشاتو آدرس ایمیل: visti.teheran@esteri.it شماره تماس: 69556672 شرکت CKGS در حاضر ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2825262,
+      "context": " به این مرکز مراجعه نمایید. آدرس ایمیل: info@spainvisa-iran.com شماره تماس: 26253136 26253137 شرکت کارگ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2848605,
+      "context": "ری پل های ارتباطی شرکت CKGS آدرس ایمیل: italyvisa.iran@ckgsir.com شماره های تماس: 22180701 22180702 22180",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2848858,
+      "context": ": تهران، خیابان نوفل لوشاتو آدرس ایمیل: visti.teheran@esteri.it شماره تماس: 69556672 شرکت CKGS در حاضر ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 2855339,
+      "context": " به این مرکز مراجعه نمایید. آدرس ایمیل: info@spainvisa-iran.com شماره تماس: 26253136 26253137 شرکت کارگ",
+      "note": null
+    },
+    {
+      "rule": "private_email",
+      "severity": "review",
+      "source": "artifacts\\stage3_canonical_dataset_20261011\\CANONICAL_CONTENT_DATASET.jsonl",
+      "offset": 15290594,
+      "context": "دهید، مهم است. همچنین می توانید از طریق office@iumcireland.com درخواست فرم درخواست دهید.متقاضیان وضعیت",
+      "note": null
+    }
+  ]
+}

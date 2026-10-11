@@ -1,0 +1,40 @@
+{
+  "schema_version": "rad-ingestion-dryrun-v1",
+  "target_contract": {
+    "documents_table": "public.source_documents",
+    "document_key": "canonical_url (unique)",
+    "snapshots_table": "public.source_snapshots",
+    "snapshot_key": "(document_id, content_hash) unique",
+    "content_hash_definition": "sha256(extracted normalized body text)",
+    "mapping": {
+      "source_documents.canonical_url": "canonical_url",
+      "source_documents.title": "extracted_title (fallback titles flagged)",
+      "source_documents.language_code": "language (fa|en)",
+      "source_documents.source_authority": "'rad_official' (constant)",
+      "source_documents.jurisdiction": "destination guess or NULL",
+      "source_snapshots.normalized_text": "body",
+      "source_snapshots.content_hash": "body_sha256",
+      "source_snapshots.http_status": "provenance.http_status",
+      "source_snapshots.fetched_at": "provenance.capture_timestamp",
+      "source_snapshots.metadata": "{original_url, raw_snapshot_sha256, quality_classification, extraction_version, regulatory_status}"
+    },
+    "explicitly_not_touched": [
+      "public.knowledge_items / knowledge_claims (promotion is a separate admin step under promote_knowledge_from_evidence)",
+      "public.research_findings / content_drafts (research-sync pipeline only)",
+      "public.feed_items (auto-publication prohibited)",
+      "public.destinations / visa_* (Phase H package, separate authorization)"
+    ]
+  },
+  "rows_total": 2192,
+  "would_insert_documents": 1617,
+  "would_skip_existing_documents": 575,
+  "would_insert_snapshots": 1618,
+  "would_skip_existing_snapshots": 574,
+  "would_fail_language_check": 0,
+  "would_fail_missing_title": 1,
+  "notes": [
+    "Dry-run simulates canonical_url and (document_id, content_hash) uniqueness only; it performs no network or database operations.",
+    "A production ingest must run in a transaction and remains an operator action requiring explicit owner authorization.",
+    "All rows carry regulatory_verification_status=REVIEW_REQUIRED; ingestion into source evidence tables does NOT promote knowledge."
+  ]
+}

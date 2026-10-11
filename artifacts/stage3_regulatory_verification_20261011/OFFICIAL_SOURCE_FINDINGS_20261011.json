@@ -1,0 +1,193 @@
+{
+  "schema_version": "rad-official-source-findings-v1",
+  "generated_at_utc": "2026-10-11T00:00:00Z",
+  "retrieved_date": "2026-10-11",
+  "method": "parallel researcher-web agents restricted to official government immigration sources; 'verified' = fact read from the official page; 'not_found' = not verifiable from allowed sources in this research (NOT proof of absence); blocked pages recorded honestly",
+  "notes": [
+    "These findings are REFERENCE facts for human review. They never auto-approve or auto-reject any RAD claim.",
+    "All linked ledger claims remain REVIEW_REQUIRED pending owner-approved human review.",
+    "Several official sites (UDI, Migri, France-Visas, UGE, AIMA, BMI, Göç İdaresi, Malaysia Immigration, Home Affairs subpages) blocked automated retrieval; those entries carry verification_state 'blocked_or_not_found'."
+  ],
+  "findings": [
+    {
+      "id": "de_opportunity_card",
+      "destination": "DE",
+      "pathway": "job_seeker",
+      "verification_state": "verified",
+      "facts": "Current route is the Opportunity Card (Chancenkarte, section 2a AufenthG), replacing the previous job-seeker visa; up to 12 months, up to 20h/week work; points-based (min 6) or direct route with fully recognized qualification; blocked account ~EUR 1,091/month (2026 figure on official page).",
+      "official_urls": ["https://www.make-it-in-germany.com/en/service/newsletter/opportunitycard", "https://www.make-it-in-germany.com/en/visa-residence/opportunity-card/job-search", "https://www.auswaertiges-amt.de/en/sperrkonto-388600"],
+      "contradicts_claims": ["job_seeker_old_name"]
+    },
+    {
+      "id": "de_no_passive_investment",
+      "destination": "DE",
+      "pathway": "investment",
+      "verification_state": "verified_absence_in_official_sources",
+      "facts": "No passive-investment residence visa and no golden visa/citizenship-by-investment found in official sources; only self-employment route exists; naturalisation after 5 years legal residence (nationality law reform effective 2024-06-27).",
+      "official_urls": ["https://www.make-it-in-germany.com/en/visa-residence/types/other/self-employment", "https://www.auswaertiges-amt.de/en/229970-229970"],
+      "contradicts_claims": ["passive_investment_visa", "golden_visa", "citizenship_by_investment"]
+    },
+    {
+      "id": "de_skilled_work",
+      "destination": "DE",
+      "pathway": "work",
+      "verification_state": "verified",
+      "facts": "Skilled Immigration Act (FEG) phased from Nov 2023; skilled-worker route needs recognized/comparable qualification + job offer; EU Blue Card 2026 thresholds EUR 45,934.20 (shortage/new entrants) and EUR 50,700; settlement permit timelines: 3y general skilled, 27/21mo Blue Card (A1/B1), 2y German graduates; EU long-term residence at 5y.",
+      "official_urls": ["https://www.make-it-in-germany.com/en/visa-residence/skilled-immigration-act", "https://www.make-it-in-germany.com/en/visa-residence/living-permanently/settlement-permit"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "de_tuition_claim_too_broad",
+      "destination": "DE",
+      "pathway": "study",
+      "verification_state": "partially_verified",
+      "facts": "Unqualified 'free tuition at public universities' is too broad; official sources reviewed did not establish a complete current state-by-state fee list (Baden-Württemberg/Bavaria fees not verified here); check per-university fee schedules.",
+      "official_urls": ["https://www.make-it-in-germany.com/en/visa-residence/types/studying"],
+      "contradicts_claims": ["tuition_free_unconditional"]
+    },
+    {
+      "id": "ca_study_permit",
+      "destination": "CA",
+      "pathway": "study",
+      "verification_state": "verified",
+      "facts": "Study permit needs LOA from DLI + PAL/TAL (most cases), funds: CAD 22,895 first-year living expenses (applications 2025-01-01..2026-08-31; rises to 23,448 from 2026-09-01) plus tuition and travel; Quebec separate. SDS DISCONTINUED 2024-11-08 14:00 ET. PGWP: language CLB/NCLC 7 (university programs) or 5 (college) for applications on/after 2024-11-01; field-of-study restrictions for non-degree graduates applying on/after that date.",
+      "official_urls": ["https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html", "https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/end-student-direct-stream-nigeria-student-express.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/eligibility.html"],
+      "contradicts_claims": ["sds_stream_exists"]
+    },
+    {
+      "id": "ca_express_entry",
+      "destination": "CA",
+      "pathway": "skilled_work",
+      "verification_state": "verified",
+      "facts": "Express Entry manages CEC/FSW/FST; CRS out of 1,200; job-offer CRS points removed 2025-03-25; category-based selection categories published; FSW: TEER 0-3, 1yr/1,560h within 10 years, 67/100 selection factors, settlement funds; PNP adds 600 CRS points (QC and Nunavut excluded).",
+      "official_urls": ["https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply/federal-skilled-workers.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "ca_investment_routes_closed",
+      "destination": "CA",
+      "pathway": "investment",
+      "verification_state": "verified",
+      "facts": "Federal Immigrant Investor Program TERMINATED by legislation 2014-06-19 (no passive investor visa since). Start-up Visa PAUSED 2026-06-30 (limited过渡 with 2025 commitment certificates). Self-employedPersons program intake paused since 2024-04-30 (cultural/athletic only anyway).",
+      "official_urls": ["https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/notice-termination-backlog-applications-federal-immigrant-investor-program-federal-entrepreneur-program.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/self-employed.html"],
+      "contradicts_claims": ["passive_investment_visa", "investor_visa_exists"]
+    },
+    {
+      "id": "ca_family_citizenship",
+      "destination": "CA",
+      "pathway": "family_citizenship",
+      "verification_state": "verified",
+      "facts": "Spousal/partner sponsorship: sponsor 18+, citizen/PR; generally no minimum income for spouse/child sponsorship. Citizenship: 1,095 days physical presence in 5 years before applying, incl. 730 days as PR; half-day credit for certain temporary-resident time (max 365).",
+      "official_urls": ["https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/family-sponsorship/spouse-partner-children.html", "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/adult-minor/who.html"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "gb_student_visa",
+      "destination": "GB",
+      "pathway": "study",
+      "verification_state": "verified",
+      "facts": "Tier 4 (General) replaced by Student visa; CAS from licensed sponsor; maintenance GBP 1,529/month London or 1,171/month outside London (max 13,761/10,539 for 9 months) held 28 consecutive days ending within 31 days of application; Iran NOT on differential-evidence list.",
+      "official_urls": ["https://www.gov.uk/student-visa", "https://www.gov.uk/student-visa/money"],
+      "contradicts_claims": ["tier4_current_name"]
+    },
+    {
+      "id": "gb_skilled_worker",
+      "destination": "GB",
+      "pathway": "work",
+      "verification_state": "verified",
+      "facts": "Skilled Worker: sponsored employer, threshold GBP 41,700/year or going rate (whichever higher), exceptions exist; Shortage Occupation List replaced by Immigration Salary List (published 2024-04-04); Graduate visa: 2y (applications <=2026-12-31), 18mo from 2027-01-01, 3y doctoral; cannot be extended.",
+      "official_urls": ["https://www.gov.uk/skilled-worker-visa/your-job", "https://www.gov.uk/government/publications/skilled-worker-visa-immigration-salary-list", "https://www.gov.uk/graduate-visa"],
+      "contradicts_claims": ["shortage_list_current_name"]
+    },
+    {
+      "id": "gb_no_investor_route",
+      "destination": "GB",
+      "pathway": "investment",
+      "verification_state": "verified",
+      "facts": "Tier 1 (Investor) CLOSED to new applicants 2022-02-17; Start-up closed; Innovator Founder visa exists (endorsed active business, NOT passive investment). No current UK route granting residence purely for investment.",
+      "official_urls": ["https://www.gov.uk/government/news/tier-1-investor-visa-route-closes-over-security-concerns", "https://www.gov.uk/innovator-founder-visa", "https://www.gov.uk/browse/visas-immigration/work-visas"],
+      "contradicts_claims": ["passive_investment_visa", "investor_visa_exists", "golden_visa"]
+    },
+    {
+      "id": "gb_family_citizenship",
+      "destination": "GB",
+      "pathway": "family_citizenship",
+      "verification_state": "verified",
+      "facts": "Partner visa minimum income GBP 29,000 (exceptions; GBP 18,600 for extensions of pre-2024-04-11 applications); settlement commonly 5-year route. Naturalisation: 5 years residence + 12 months with ILR/settled (spouse of British citizen: 3 years + ILR, no 12-month wait).",
+      "official_urls": ["https://www.gov.uk/uk-family-visa/proof-income-partner", "https://www.gov.uk/apply-citizenship-indefinite-leave-to-remain", "https://www.gov.uk/apply-citizenship-spouse"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "us_eb5",
+      "destination": "US",
+      "pathway": "investment",
+      "verification_state": "verified",
+      "facts": "EB-5 exists (real residency-by-investment route): minimum USD 1,050,000, or USD 800,000 in TEA/infrastructure (petitions filed on/after 2022-03-15; first inflation adjustment 2027-01-01); conditional LPR then I-829; RIA 2022 set-asides (20% rural, 10% high-unemployment, 2% infrastructure); Regional Center authorized through 2027-09-30; no verified current wait estimate.",
+      "official_urls": ["https://www.uscis.gov/working-in-the-united-states/permanent-workers/employment-based-immigration-fifth-preference-eb-5/about-the-eb-5-visa-classification", "https://www.uscis.gov/working-in-the-united-states/permanent-workers/employment-based-immigration-fifth-preference-eb-5/eb-5-questions-and-answers"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "us_other_routes",
+      "destination": "US",
+      "pathway": "work_study_family",
+      "verification_state": "verified",
+      "facts": "EB-1/EB-2(+NIW)/EB-3 employment green cards as described by USCIS; DV lottery: Iran NOT excluded for DV-2026 (eligibility by country of birth; selection not a visa guarantee); F-1 study with CPT/OPT (OPT generally 12mo + 24mo STEM); H-1B needs US employer petitioner, caps 65,000 + 20,000 advanced-degree; naturalisation general route requires 913 days (30 months) physical presence in statutory 5-year period.",
+      "official_urls": ["https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visators/students-and-employment", "https://travel.state.gov/content/travel/en/us-visas/immigrate/diversity-visa-program-entry/dv-2026-selected-entrants.html", "https://www.uscis.gov/policy-manual/volume-12-part-d-chapter-4"],
+      "contradicts_claims": ["dv_lottery_iran_ineligible"]
+    },
+    {
+      "id": "au_student_skilled",
+      "destination": "AU",
+      "pathway": "study_skilled",
+      "verification_state": "verified",
+      "facts": "Student visa (500): CoE, OSHC, GS requirement replaced GTE for applications from 2024-03-23; financial capacity AUD 29,710/year primary applicant (+tuition+travel). Skilled: 189/190/491 points-tested via SkillSelect EOI (general 65-point threshold), occupation lists per visa/stream. 482 TSS replaced by Skills in Demand 2024-12-07 (Specialist/Core/Labour Agreement streams). 485 graduate: streams with 2-3y / up to 18mo typical, age<=35 general from 2024 changes.",
+      "official_urls": ["https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500", "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-independent-189/points-tested", "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skills-in-demand-visa-subclass-482", "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485"],
+      "contradicts_claims": ["tss_current_name", "gte_current_name"]
+    },
+    {
+      "id": "au_no_golden_visa",
+      "destination": "AU",
+      "pathway": "investment",
+      "verification_state": "verified",
+      "facts": "Business Innovation & Investment Program (incl. subclass 188) CLOSED to new applications 2024-07-31; no currently open passive investor/golden visa. Citizenship: 4 years lawful residence immediately before application incl. 12 months as PR, absence limits apply.",
+      "official_urls": ["https://immi.homeaffairs.gov.au/visas/getting-a-visa/biip-closure-and-refunds", "https://immi.homeaffairs.gov.au/help-support/tools/residence-calculator"],
+      "contradicts_claims": ["passive_investment_visa", "golden_visa", "investor_visa_exists"]
+    },
+    {
+      "id": "se_work_study",
+      "destination": "SE",
+      "pathway": "work_study_investment",
+      "verification_state": "verified",
+      "facts": "Sweden work permit requires employment first (job offer); study permit: tuition paid before application where due, application fee SEK 1,500 adults; NO investor/golden visa category found among official routes; claim that non-EU tuition fees began Sept 2024 NOT FOUND in Migrationsverket material (historical date not shown).",
+      "official_urls": ["https://www.migrationsverket.se/en/you-want-to-apply/work/employee-or-self-employed/employees.html", "https://www.migrationsverket.se/en/you-want-to-apply/study/higher-education.html"],
+      "contradicts_claims": ["golden_visa", "passive_investment_visa"]
+    },
+    {
+      "id": "dk_green_card_abolished",
+      "destination": "DK",
+      "pathway": "program_existence",
+      "verification_state": "verified",
+      "facts": "Denmark Green Card (grønkort) scheme ABOLISHED by Act No. 612 of 2016-06-08, in force 2016-06-10. Pay Limit scheme exists (job offer required, DKK 552,000/year minimum, 2026 level). Study permit: admission, full-time, funds DKK 7,426/month (2026 level).",
+      "official_urls": ["https://nyidanmark.dk/-/media/Files/US/Lovstof/Lovgivning/aliens_consolidation_act_239_100319.pdf", "https://www.nyidanmark.dk/en-GB/You-want-to-apply/Work/Pay-Limit-scheme", "https://www.nyidanmark.dk/en-GB/You-want-to-apply/Study/Higher-Education"],
+      "contradicts_claims": ["dk_green_card_exists"]
+    },
+    {
+      "id": "no_fi_partially_blocked",
+      "destination": "NO_FI",
+      "pathway": "work_study_investment",
+      "verification_state": "blocked_or_not_found",
+      "facts": "Norway UDI and Finland Migri official pages could not be retrieved in this research (access errors). No dedicated passive-investor visa identified in material located, but NOT conclusively verified. Finland start-up permit exists for active entrepreneurs (Business Finland eligibility statement) — not a passive-investor visa; full current criteria UNVERIFIED here.",
+      "official_urls": ["https://www.udi.no/en/want-to-apply/work-immigration/skilled-workers/", "https://migri.fi/en/start-up-entrepreneur"],
+      "contradicts_claims": []
+    },
+    {
+      "id": "fr_es_pt_at_tr_my_blocked",
+      "destination": "MULTI",
+      "pathway": "investment",
+      "verification_state": "blocked_or_not_found",
+      "facts": "Official pages for France (france-visas 403), Spain (UGE 403), Portugal (AIMA cert error), Austria (BMI), Turkey (Göç İdaresi), Malaysia (Immigration) could not be read in this research. Italy: Investor Visa for Italy programme EXISTS (2017 Foreign Ministry framework) — current minimum amounts UNVERIFIED here. No golden-visa status certified for the blocked countries in this run.",
+      "official_urls": ["https://www.esteri.it/en/servizi-opportunita/ingressosoggiornoinitalia/facilitazioni-per-l-attrazione/", "https://france-visas.gouv.fr/en/talents-internationaux-et-attractivite-economique", "https://www.inclusion.gob.es/web/unidadgrandesempresas/inversores", "https://aima.gov.pt/pt/viver/autorizacao-de-residencia-para-investimento-art-90-o-a"],
+      "contradicts_claims": []
+    }
+  ]
+}
