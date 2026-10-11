@@ -6,3 +6,17 @@ artifacts/stage3_three_site_snapshot_pilot_20261011/** -text
 # datasets (extracted/, canonical, ledger) are committed instead — repo-suitability).
 artifacts/stage3_acquisition_20261011/radmohajer_sitemap.xml -text
 artifacts/stage3_acquisition_20261011/radmohajer_fa_home.html -text
+
+# Checksummed Stage 3 derived artifacts: store byte-exactly so SHA-256
+# manifests stay valid across checkouts (core.autocrlf must not rewrite them).
+artifacts/stage3_canonical_dataset_20261011/** -text
+artifacts/stage3_regulatory_verification_20261011/** -text
+artifacts/stage3_visa_coverage_20261011/** -text
+artifacts/stage3_ingestion_package_20261012/** -text
+artifacts/stage3_review_queues_20261012/** -text
+artifacts/stage3_acquisition_20261011/manifests/** -text
+artifacts/stage3_acquisition_20261011/extracted/** -text
+artifacts/stage3_hosted_verification_20261011/** -text
+artifacts/stage3_security_scan_2026101*.json -text
+STAGE3_ARTIFACT_MANIFEST_20261011.json -text
+STAGE3_READINESS_REPORT_20261011.md -text

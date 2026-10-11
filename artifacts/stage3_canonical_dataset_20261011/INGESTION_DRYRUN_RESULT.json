@@ -31,7 +31,7 @@
   "would_insert_snapshots": 1618,
   "would_skip_existing_snapshots": 574,
   "would_fail_language_check": 0,
-  "would_fail_missing_title": 1,
+  "would_fail_missing_title": 0,
   "notes": [
     "Dry-run simulates canonical_url and (document_id, content_hash) uniqueness only; it performs no network or database operations.",
     "A production ingest must run in a transaction and remains an operator action requiring explicit owner authorization.",

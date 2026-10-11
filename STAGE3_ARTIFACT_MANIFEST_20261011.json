@@ -1,8 +1,8 @@
 {
-  "schema_version": "rad-stage3-artifact-manifest-v1",
-  "generated_utc": "2026-10-11",
-  "note": "SHA-256 checksums of all committed Stage 3 derived artifacts and evidence manifests (raw bulk snapshots are pinned separately in RAW_EVIDENCE_SHA256_MANIFEST.json).",
-  "file_count": 22,
+  "schema_version": "rad-stage3-artifact-manifest-v2",
+  "generated_utc": "2026-10-12",
+  "note": "SHA-256 checksums of all committed Stage 3 derived artifacts and evidence manifests (raw bulk snapshots pinned separately in RAW_EVIDENCE_SHA256_MANIFEST.json). v2 adds the pre-production ingestion package and review queues.",
+  "file_count": 96,
   "files": [
     {
       "path": "artifacts/stage3_acquisition_20261011/manifests/acquire_manifest.jsonl",
@@ -46,13 +46,13 @@
     },
     {
       "path": "artifacts/stage3_canonical_dataset_20261011/CANONICAL_CONTENT_DATASET.jsonl",
-      "bytes": 27920465,
-      "sha256": "ac4e8b95512a02b36ede6443125a71c1f5006019dad6e2c4cec93f35e41e0305"
+      "bytes": 27920476,
+      "sha256": "e443e0d35418dbb3e1b158888b9d7730b6befaf1238133a446fe1d545d08cfd4"
     },
     {
       "path": "artifacts/stage3_canonical_dataset_20261011/DATASET_MANIFEST.json",
       "bytes": 835,
-      "sha256": "b11122c5663af9e0f44123fcf944fde7a23a11d900f3c33bc4c5c9645f214d7d"
+      "sha256": "111c26b41150157cacfc339529b2648e16c4dbbd8c35909c74418a55ff949de2"
     },
     {
       "path": "artifacts/stage3_canonical_dataset_20261011/DUPLICATE_CANONICAL_MAP.json",
@@ -62,7 +62,7 @@
     {
       "path": "artifacts/stage3_canonical_dataset_20261011/INGESTION_DRYRUN_RESULT.json",
       "bytes": 2154,
-      "sha256": "8a2b1d85efcb147367c484fed3f7b184038401f5c902b5682192ab8bab2195c5"
+      "sha256": "3fdc8b77e9976a607e527c43b855ecb3d43f2fe1689a2d97cc6c74a8be6b2530"
     },
     {
       "path": "artifacts/stage3_regulatory_verification_20261011/OFFICIAL_SOURCE_FINDINGS_20261011.json",
@@ -105,9 +105,379 @@
       "sha256": "e99a84d4874eb8a6975f9f27610a8c480a8d61082252cc75ca316f1e223e6fd3"
     },
     {
+      "path": "artifacts/stage3_ingestion_package_20261012/FINAL_READINESS_ASSESSMENT.md",
+      "bytes": 5921,
+      "sha256": "127ed0e9f8078869adbf1bddba5492f68081424472e84cc0329ad968e06420a3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/INGEST_MANIFEST.json",
+      "bytes": 11486,
+      "sha256": "cef96d34582d1dc296bef28b6aa2f7cfe7c979c9831060c7f2e63dbaf767edba"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/INGESTION_IMPACT_REPORT.json",
+      "bytes": 6900,
+      "sha256": "76ce09847214f2a3e7680e49897b0295d061545d1a67515386c62d59ec215ab5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/INGESTION_PLAN_PREVIEW.json",
+      "bytes": 499081,
+      "sha256": "5ed5595441004139852f0103e78d20a0961a984c6643b6750c3cb50000dafc74"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/LIVE_STATE_SNAPSHOT.json",
+      "bytes": 5439,
+      "sha256": "e51d13fb6d8f8bfdea65f3c9e48724315cd1d828f63c88b208ff7c361f29fe9d"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/OPERATOR_RUNBOOK.md",
+      "bytes": 6768,
+      "sha256": "722dbdd7a71663c64302238b7452f9fa94b9c5c461f1812d19b0242c6a805188"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/RAW_EVIDENCE_BACKUP_PROCEDURE.md",
+      "bytes": 3101,
+      "sha256": "0567ee4ba7cabf5f3cf3557979e53f6df182e776525dbbec40d226fd103b8431"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/RAW_EVIDENCE_VERIFICATION.json",
+      "bytes": 176,
+      "sha256": "20a46cb8f8dd59aeb41c7b44d5511bf8ee95fd8e9f5121a5cf124cb2c66ffbcc"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/01_schema.sql",
+      "bytes": 3461,
+      "sha256": "cac3dd2771309fc4df2edd31bc0bfbf518af1c51dae8898a68ccae70323cda61"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/02_seed_production.sql",
+      "bytes": 5744,
+      "sha256": "19b7529a69300e795c975dba9fa94f45cdcdddb1b195e995e513f06be468b330"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/generate_seed.py",
+      "bytes": 2274,
+      "sha256": "5f749eed9124ba32025c2b2bfd175babc16fe63aac0d1696571b7914d30e225c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/rehearsal/REHEARSAL_RESULTS.txt",
+      "bytes": 4394,
+      "sha256": "cb355b2f89524b8120d27b60230574ed4051562374690fe490c345722f8cafc9"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/00_preflight.sql",
+      "bytes": 1063,
+      "sha256": "63d7aa5c3f11f34e4684ec748e5a1590d32ad11b4dfb76d5df0aadad973aec88"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0001.sql",
+      "bytes": 345985,
+      "sha256": "e9d143b2262e90d96366b2844f63dfac8e9873cf2dffd73e6cdf4c88d6624abf"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0002.sql",
+      "bytes": 348082,
+      "sha256": "ee3df6437e2a47c989f5ebf667c5ad29658bee46b86e29d39e5afbfbdde077cf"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0003.sql",
+      "bytes": 305549,
+      "sha256": "dacb7a1c32ef71b07523caf21f304d896006bfa49104d45a2f758596805ef4d9"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0004.sql",
+      "bytes": 340301,
+      "sha256": "21aae1c298f996ae8380e7029420af4aae881c9c2cbe37b793e99da86fa69c80"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0005.sql",
+      "bytes": 379650,
+      "sha256": "f2f0fb280a2ec28dfe04451efa903b0389c8d728397f2908d05aa4a2b03c17c9"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0006.sql",
+      "bytes": 285030,
+      "sha256": "ba4e0686bf4c0fedfcd0fc22c8778075daa70c20929845132d73b9ad977b55c6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0007.sql",
+      "bytes": 305408,
+      "sha256": "48f05a17fcb68ea7e0a583ff06c137415cbb6538a05834ea0bf88063b11f84a8"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0008.sql",
+      "bytes": 532978,
+      "sha256": "2ad33a65bfb79125f2e1a11cc5cb5cfc29a81995993af426d85874b5bfbab437"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0009.sql",
+      "bytes": 741695,
+      "sha256": "f64b61a9f9959ee801d75cc13782fd473d349f7b908712af30bc4991a6ea8e1c"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0010.sql",
+      "bytes": 488519,
+      "sha256": "dd1d161e30bfb1abdcfb0f94909854cbeb81bd25743714581eda7963b9cdc4f1"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0011.sql",
+      "bytes": 328872,
+      "sha256": "bbfde7a68285342ab8e73bb732447c85bf148f5c92035333f1c7e547f9dbfad6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0012.sql",
+      "bytes": 272090,
+      "sha256": "0fd0cc5aa660e08feb19c60b4d38b5eb7764e914db3d8a8c897ffc126937ce60"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0013.sql",
+      "bytes": 356016,
+      "sha256": "df75d102fdc48178cbbe7b05a2d6d09e00e1e4ce847ed15b04baec1ae45e55e5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0014.sql",
+      "bytes": 312437,
+      "sha256": "7c8468b5bfd72d53f86b7d84b04026dd2f6b9c879cea85a2f052de441e24858b"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0015.sql",
+      "bytes": 275134,
+      "sha256": "55db9961bff2c2fccaf4adaa356e6ade1ba872a853908400b3b2c85e0427a748"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0016.sql",
+      "bytes": 349903,
+      "sha256": "faf3d6564ad0c0ae0debb4e4d6bf4e386b2b7fe3f7c9c655072587f1a5d1f2f1"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0017.sql",
+      "bytes": 285658,
+      "sha256": "999b1fb49b45924196ef3e619d18fd08cd4e3ff5bc68642986a644e2beffeabc"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0018.sql",
+      "bytes": 260091,
+      "sha256": "ae4635f5f341e4e7bc5eccab2966e72da343698be20a2058869a2de6c3160787"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0019.sql",
+      "bytes": 345589,
+      "sha256": "9948ecb13f0af97e8e75d767ace84e42d7bfa16442d46f51ae6f56b47d9d59d3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0020.sql",
+      "bytes": 279880,
+      "sha256": "05a0f9288c261ef41acaeded0cd701423053f8ecc212e1b21e726660cc59ab88"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0021.sql",
+      "bytes": 339695,
+      "sha256": "c99be698a5a6661674428a07e28df4d9cadb24df377e0d5378c3c7780a667def"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0022.sql",
+      "bytes": 1205945,
+      "sha256": "140bd51737394668d7b7ff4385e714b1cb96608a0cee381cc6b3e53d4df048b7"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0023.sql",
+      "bytes": 350625,
+      "sha256": "980a4642a2eddd116a10e5f18cee33dca756f8c216aabeb30ea5a50ac20a97ed"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0024.sql",
+      "bytes": 319489,
+      "sha256": "1f6ac29fba237d431bdb26570c4242b6eecf3887038988fb10dce500c391598b"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0025.sql",
+      "bytes": 478477,
+      "sha256": "0f2bcdc609b4b5210d47dc4f2237f81843bc8502a792f74b980ad27ea773204f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0026.sql",
+      "bytes": 391717,
+      "sha256": "7e3998df4fd288088fefb27b6770fc69a601ce819f4530b3f9f427c2bd73db74"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0027.sql",
+      "bytes": 490695,
+      "sha256": "158a84fa69afb32f40a61f58550cf1cc1071844faa09efb201915f422a7c9902"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0028.sql",
+      "bytes": 490118,
+      "sha256": "4925dac63110bf37f9b25fcf037a1ede1b2560fbb0383232dfc4cbaa24977a5e"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0029.sql",
+      "bytes": 436662,
+      "sha256": "b888688ce1551867fc36763c3e009f824bde233efda531ed2129024c125b4052"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0030.sql",
+      "bytes": 389953,
+      "sha256": "1046a2466210b21f7917dacfa551d0db23f31323adfe0262ed340a3174f00c90"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0031.sql",
+      "bytes": 557897,
+      "sha256": "6abbf6fb80b6655473c47b4330f3dd975ba4aafb0f09b81f3dd7ebf412e0be64"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0032.sql",
+      "bytes": 525793,
+      "sha256": "d47d819aba4f5ce63cfc19fea5b3c11c885e34bf135729485daaff8847767865"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0033.sql",
+      "bytes": 496283,
+      "sha256": "b2eb6f5834b2d83590deb6ad8b4edfb9fc12472f8ec91fc4ac807eba04221014"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0034.sql",
+      "bytes": 410316,
+      "sha256": "3135895909c1d4862e03c7e8be02764112e27d2159ed8f1833316648794e68ce"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0035.sql",
+      "bytes": 526631,
+      "sha256": "e552aa764a0321c34fb80cfa1b5fe88bf76e36118ef145d438ae85bd359533a1"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0036.sql",
+      "bytes": 479373,
+      "sha256": "8112b40b3311fa2f4f4a9bce5a27b9fadce7e3dc8f233acbd0626d1c2bb9c3e3"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0037.sql",
+      "bytes": 490610,
+      "sha256": "f2cd56ed0e37d6e55e42cb5e3751c39895877db0f683ee2526522a02d5847bfe"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0038.sql",
+      "bytes": 512611,
+      "sha256": "a13c923c974c9b208c2c71b5f80fd5455c5314e42834090467c2a87a6be830f7"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0039.sql",
+      "bytes": 314940,
+      "sha256": "a18e1525025a80679595d1896f5809e760aa72e894e22e910e992b417e39868f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0040.sql",
+      "bytes": 258996,
+      "sha256": "482420a41272ad868b2c763dc5646a0f5bdfc24e62bc8ccac1d18d01dfe805f6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0041.sql",
+      "bytes": 325558,
+      "sha256": "386fd8957ee0611ed700e8ec68b9c0724364433d4dc7b45321b66a7752090ed7"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0042.sql",
+      "bytes": 282512,
+      "sha256": "b9dce767632f1e5d950b5b45ef13b24d3c863ad2451634d2d9b17c1ee2ba961b"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0043.sql",
+      "bytes": 322017,
+      "sha256": "ece714616622b2bf638a6a7e67e32e121779c7a75d601f52fd4cd573e0b76013"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0044.sql",
+      "bytes": 325431,
+      "sha256": "57b93597904654984a54e006ee9b286010d6c64670bd878870c86c50cc19f990"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0045.sql",
+      "bytes": 367762,
+      "sha256": "bbb435b4a3845fbe98656b3f87b9a3b54e721672fecfc41ffb38fcc825042faf"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0046.sql",
+      "bytes": 392997,
+      "sha256": "d77aceb55a50915da4f8833deb9684b5ce3024bc11fa5127458d0c2076a85112"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0047.sql",
+      "bytes": 380681,
+      "sha256": "cfd4998d118252f30d008a2a52cf5a257b6fed2fad00d5f15b13c63f7537e3b0"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0048.sql",
+      "bytes": 282293,
+      "sha256": "e575abab8a0ead04a9136c00bd80acc5930261e18ac5429b87f398766d20dfa9"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0049.sql",
+      "bytes": 282064,
+      "sha256": "83764c35bea2b7ae32054c9993db5d87d92530c561dcf250abe460dbcabfc1a5"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0050.sql",
+      "bytes": 183099,
+      "sha256": "e1077c9e644706c0b7edf2c01da03a44c37472187710fae910c52e5d4e2134c1"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0051.sql",
+      "bytes": 212820,
+      "sha256": "673b79ec0e30ea9af7526c99f2bb02cf376649c2004055471a479d5fe2a272f6"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0052.sql",
+      "bytes": 283095,
+      "sha256": "e84447f37bde592a618cb26246c209c79628e52b1c25f585000af61a555ad013"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0053.sql",
+      "bytes": 278785,
+      "sha256": "4cf054452aeed78abeaebb0e3c325cdb92a9d45d2a1b7934897c5f4aaa2de23d"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/10_ingest_0054.sql",
+      "bytes": 212246,
+      "sha256": "526b9f7233857910b5e35a277ed7b8e1c6ea78860e353e2e388f9d58253cd026"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/90_verify.sql",
+      "bytes": 1143,
+      "sha256": "3eee3110e7cc7183ec156e53f4a1dd6d5fd5340f799b841ad13b7bad3818ec1f"
+    },
+    {
+      "path": "artifacts/stage3_ingestion_package_20261012/sql/91_rollback.sql",
+      "bytes": 163723,
+      "sha256": "03be1fff96fe44aeeb3032cf84f0d1780ecff24e5c1644fcc403d5ee42457c48"
+    },
+    {
+      "path": "artifacts/stage3_review_queues_20261012/REGULATORY_REVIEW_QUEUE.jsonl",
+      "bytes": 17240113,
+      "sha256": "206b7356f7a7633fad748435a977b472df2c83f964f3f4671329243feec24289"
+    },
+    {
+      "path": "artifacts/stage3_review_queues_20261012/REVIEW_QUEUE_SUMMARY.json",
+      "bytes": 1203,
+      "sha256": "0157a62bfafebf127785c3d1a2cd52389e007bcea38134f8e82b2de2b413ba68"
+    },
+    {
+      "path": "artifacts/stage3_review_queues_20261012/REVIEW_QUEUE_SUMMARY.md",
+      "bytes": 930,
+      "sha256": "db2cc97cd15c4f49d951c132833a81e68b42a2111a8fb3f870c88b35639d69ab"
+    },
+    {
+      "path": "artifacts/stage3_review_queues_20261012/VISA_DRAFT_REVIEW_QUEUE.jsonl",
+      "bytes": 235908,
+      "sha256": "8e94ffa9b039af7e81f8d27a6dda7be2639e8051ba95343b6d826d9252178273"
+    },
+    {
       "path": "artifacts/stage3_security_scan_20261011.json",
       "bytes": 5912,
       "sha256": "36484c986ed0731af187f21589e6d1c385dbd9b4e4c057dc2e69377b5fa0312d"
+    },
+    {
+      "path": "artifacts/stage3_security_scan_20261012.json",
+      "bytes": 1783,
+      "sha256": "9ce306e60e04db185b12c653428b10417710bb03f447dec0f926e634d56e96b9"
     },
     {
       "path": "STAGE3_READINESS_REPORT_20261011.md",
