@@ -1,0 +1,113 @@
+{
+  "schema_version": "rad-stage3-artifact-manifest-v1",
+  "generated_utc": "2026-10-11",
+  "note": "SHA-256 checksums of all committed Stage 3 derived artifacts and evidence manifests (raw bulk snapshots are pinned separately in RAW_EVIDENCE_SHA256_MANIFEST.json).",
+  "file_count": 21,
+  "files": [
+    {
+      "path": "artifacts/stage3_acquisition_20261011/manifests/acquire_manifest.jsonl",
+      "bytes": 2668058,
+      "sha256": "873048012d8006a1789700031b65df6dc27e6520ecdecbe0a97fa19e48b3ab3f"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/manifests/acquire_state.json",
+      "bytes": 765,
+      "sha256": "8428855a094bcdfb54257c0e8555a8d4c4de97b1e485e86c7a9f9e6424d11128"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/manifests/RAW_EVIDENCE_SHA256_MANIFEST.json",
+      "bytes": 317049,
+      "sha256": "e4f05e027a9b88172a15d9c63be925914ee2b79cd120bd6bc7201ec23f011c3d"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/extracted/digivisa.ir.jsonl",
+      "bytes": 11208787,
+      "sha256": "e5df9063ba771021e46766fb9d5b02ab723f047979dd4c1cd8a72f81d938e7ad"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/extracted/dup_map.json",
+      "bytes": 257909,
+      "sha256": "d76c7fd94875ea99ccc29fe0b9ff6b5c37116d1bc3c8e147bba5fec3f44a10bb"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/extracted/quality_ledger.jsonl",
+      "bytes": 657383,
+      "sha256": "241539c099b0c94e0f39a7ea323bd4a4b7c4b9da1a7308df20aace765e0fd74b"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/extracted/radmohajer.ir.jsonl",
+      "bytes": 10655199,
+      "sha256": "a00efa6973149c2a84b2e901e10f946a0ab63b78619af5a775f39af37ade110b"
+    },
+    {
+      "path": "artifacts/stage3_acquisition_20261011/extracted/radvisa.com.jsonl",
+      "bytes": 5702337,
+      "sha256": "3a77611cc1bf6f76f06783af1024487bc64e183cefc12c263cac012649b872f7"
+    },
+    {
+      "path": "artifacts/stage3_canonical_dataset_20261011/CANONICAL_CONTENT_DATASET.jsonl",
+      "bytes": 27920465,
+      "sha256": "ac4e8b95512a02b36ede6443125a71c1f5006019dad6e2c4cec93f35e41e0305"
+    },
+    {
+      "path": "artifacts/stage3_canonical_dataset_20261011/DATASET_MANIFEST.json",
+      "bytes": 835,
+      "sha256": "b11122c5663af9e0f44123fcf944fde7a23a11d900f3c33bc4c5c9645f214d7d"
+    },
+    {
+      "path": "artifacts/stage3_canonical_dataset_20261011/DUPLICATE_CANONICAL_MAP.json",
+      "bytes": 662112,
+      "sha256": "3a6225155c7d85b144eb54f8c4d54d026ec67a7e6390a079db8f65bd882a3a1c"
+    },
+    {
+      "path": "artifacts/stage3_canonical_dataset_20261011/INGESTION_DRYRUN_RESULT.json",
+      "bytes": 2154,
+      "sha256": "8a2b1d85efcb147367c484fed3f7b184038401f5c902b5682192ab8bab2195c5"
+    },
+    {
+      "path": "artifacts/stage3_regulatory_verification_20261011/OFFICIAL_SOURCE_FINDINGS_20261011.json",
+      "bytes": 16793,
+      "sha256": "8a0f95080855b2e9d5505875efeceb206f7cfdebc1c168a8a20d6eb647619f40"
+    },
+    {
+      "path": "artifacts/stage3_regulatory_verification_20261011/REGULATORY_LEDGER.jsonl",
+      "bytes": 17360623,
+      "sha256": "0c8edd576bb37474bbfe63b8cf130ffcb27e66a76704436c6ee538c5ce4b290b"
+    },
+    {
+      "path": "artifacts/stage3_regulatory_verification_20261011/REGULATORY_LEDGER_SUMMARY.json",
+      "bytes": 4564,
+      "sha256": "c4c46dd95cada29b66ce8ecbbb38f2be9c77293c922b8525d4dadadc045503cc"
+    },
+    {
+      "path": "artifacts/stage3_visa_coverage_20261011/VISA_COVERAGE_REPORT.json",
+      "bytes": 273547,
+      "sha256": "716014fde9063ec0e6924f7c59808797cff889e5545643caa9f6d3c3db7766f0"
+    },
+    {
+      "path": "artifacts/stage3_visa_coverage_20261011/VISA_INITIALIZATION_PACKAGE.json",
+      "bytes": 774945,
+      "sha256": "3512d0980b879022e37946557db0af83d1ff72824121a9f1782d4df5257e1090"
+    },
+    {
+      "path": "artifacts/stage3_visa_coverage_20261011/VISA_VALIDATION_REPORT.md",
+      "bytes": 1005,
+      "sha256": "fc113cdb4c89827dabe93603b5a5c3eeb2a459f74093e3fef747a2d60614228b"
+    },
+    {
+      "path": "artifacts/stage3_database_readiness_20261011/DATABASE_READINESS_REPORT.md",
+      "bytes": 4073,
+      "sha256": "3efdb80cb9a99b55c753ebaeadb1702fbcfbd8103457261eb3ad3b15b9a3be90"
+    },
+    {
+      "path": "artifacts/stage3_security_scan_20261011.json",
+      "bytes": 5912,
+      "sha256": "36484c986ed0731af187f21589e6d1c385dbd9b4e4c057dc2e69377b5fa0312d"
+    },
+    {
+      "path": "STAGE3_READINESS_REPORT_20261011.md",
+      "bytes": 8488,
+      "sha256": "401cf26b21147ef6fd81ec46a487dbb0bc850d381acbafee996da8b5759e2c78"
+    }
+  ]
+}
