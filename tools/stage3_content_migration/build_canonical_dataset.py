@@ -30,12 +30,20 @@ CONTENT_TYPE_RULES = [
     (re.compile(r"/article/|component/content/article", re.I), "article"),
     (re.compile(r"contact|تماس|ارتباط", re.I), "contact"),
     (re.compile(r"service|خدمات", re.I), "service"),
-    (re.compile(r"/(fa|en)?/?(index)?$|/$|(radmohajer\.ir|radvisa\.com|digivisa\.ir)$", re.I), "home"),
     (re.compile(r"category|blog|اخبار|مقالات", re.I), "category"),
 ]
 
+# Home pages are identified from the URL ONLY: running this rule against
+# url+title falsely matched titles ending in '/' (e.g. "...آمریکا/").
+# Trailing slashes are ignored so canonicals like https://x.ir/fa and
+# https://x.ir/fa/ (or legacy /Index.aspx) classify identically.
+HOME_URL_RE = re.compile(
+    r"^https?://[^/]+(/(fa|en))?(/index\.(aspx|html?))?$", re.I)
+
 
 def content_type_for(url: str, title: str) -> str:
+    if HOME_URL_RE.match(url.rstrip("/")):
+        return "home"
     probe = url + " " + (title or "")
     for pat, ctype in CONTENT_TYPE_RULES:
         if pat.search(probe):
@@ -43,11 +51,12 @@ def content_type_for(url: str, title: str) -> str:
     return "other"
 
 
-def normalize_language(raw, url: str, site: str):
+def normalize_language(raw, url: str, site: str, body: str = ""):
     """Map BCP-47 tags to the DB contract enum ('fa' | 'en'); None if unknown.
 
-    The DB check constraint allows exactly 'fa'/'en' and source_documents.
-    language_code is nullable, so unknown stays None rather than guessing.
+    source_documents.language_code is NOT NULL check('fa','en'), so the
+    fallback order is: explicit tag -> URL/site convention -> deterministic
+    script-based content detection -> None (counted as a contract violation).
     """
     if isinstance(raw, str) and raw.strip():
         primary = raw.strip().lower().split("-")[0]
@@ -55,6 +64,15 @@ def normalize_language(raw, url: str, site: str):
             return primary
     if "/fa" in url or site == "digivisa.ir":
         return "fa"
+    if body:
+        letters = [c for c in body if c.isalpha()]
+        if letters:
+            fa_ratio = sum(1 for c in letters if "\u0600" <= c <= "\u06ff") / len(letters)
+            if fa_ratio >= 0.15:
+                return "fa"
+            latin_ratio = sum(1 for c in letters if c.isascii() and c.isalpha()) / len(letters)
+            if latin_ratio >= 0.60:
+                return "en"
     return None
 
 
@@ -162,6 +180,13 @@ def main() -> int:
             canonical_url = r.get("canonical_url") or r["u"]
             rec_id = "rad-" + hashlib.sha256(
                 ("canonical:v1|" + canonical_url).encode("utf-8")).hexdigest()[:24]
+            title = r.get("title") or None
+            title_fallback = bool(r.get("shell_title")) or not title
+            if not title:
+                # source_documents.title is NOT NULL; fall back to the host
+                # (matching existing production seed practice) and flag it —
+                # never presented as a source-provided title.
+                title = re.sub(r"^https?://", "", canonical_url).split("/")[0]
             canonical_records.append({
                 "id": rec_id,
                 "site": r["domain"],
@@ -170,11 +195,12 @@ def main() -> int:
                 "raw_snapshot_ref": r.get("snapshot_path"),
                 "raw_snapshot_sha256": r.get("snapshot_sha256"),
                 "body_sha256": r["_body_hash"],
-                "extracted_title": r.get("title"),
-                "title_source": r.get("title_source"),
-                "title_is_fallback": bool(r.get("shell_title")),
+                "extracted_title": title,
+                "title_source": r.get("title_source") or ("url_fallback" if not r.get("title") else None),
+                "title_is_fallback": title_fallback,
                 "body": r.get("main_text") or "",
-                "language": normalize_language(r.get("lang"), r["u"], r["domain"]),
+                "language": normalize_language(r.get("lang"), r["u"], r["domain"],
+                                                r.get("main_text") or ""),
                 "content_type": content_type_for(r["u"], r.get("title")),
                 "provenance": {
                     "capture_timestamp": r.get("extracted_at"),
@@ -253,9 +279,8 @@ def main() -> int:
         ],
     }
     for rec in sorted(canonical_records, key=lambda r: (r["site"], r["canonical_url"])):
-        # language_code is nullable in source_documents; only invalid
-        # (non-null, non-fa/en) values would violate the check constraint
-        if rec["language"] is not None and rec["language"] not in ("fa", "en"):
+        if rec["language"] is None or rec["language"] not in ("fa", "en"):
+            # language_code is NOT NULL with check ('fa','en')
             dry["would_fail_language_check"] += 1
         if not rec["extracted_title"]:
             dry["would_fail_missing_title"] += 1
