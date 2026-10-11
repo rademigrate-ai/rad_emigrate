@@ -50,3 +50,8 @@ android/key.properties
 *.keystore
 # Widget Preview related
 .widget_preview/
+
+# Stage 3 bulk raw snapshots: 247MB of captured HTTP bodies kept LOCAL-ONLY.
+# Integrity is pinned by manifests/RAW_EVIDENCE_SHA256_MANIFEST.json; derived
+datasets (extracted/, canonical, ledger) are committed instead (repo-suitability).
+artifacts/stage3_acquisition_20261011/raw/

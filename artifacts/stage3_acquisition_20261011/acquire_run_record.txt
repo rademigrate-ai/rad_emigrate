@@ -1,0 +1,68 @@
+robots radmohajer.ir: {'status': 'cached', 'sha256': '8618ffef612175425f766250f67357ed9d9efe2a9b3c95150e842b8578e77331'} disallow=[('*', '/administrator/'), ('*', '/bin/'), ('*', '/cache/'), ('*', '/cli/'), ('*', '/includes/'), ('*', '/installation/'), ('*', '/language/'), ('*', '/layouts/'), ('*', '/libraries/'), ('*', '/logs/'), ('*', '/tmp/')]
+robots radvisa.com: {'status': 'cached', 'sha256': '4b30d1f4cc26ba7aff4f22061da99faa50f354f2ad3722191bd395f0d831c281'} disallow=[]
+robots digivisa.ir: {'status': 'cached', 'sha256': '4b30d1f4cc26ba7aff4f22061da99faa50f354f2ad3722191bd395f0d831c281'} disallow=[]
+progress 100: {"radmohajer.ir": {"attempted": 100, "live_200": 98, "redirect_live": 0, "soft_404": 0, "hard_404": 2, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 200: {"radmohajer.ir": {"attempted": 200, "live_200": 191, "redirect_live": 0, "soft_404": 0, "hard_404": 8, "restricted": 1, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 300: {"radmohajer.ir": {"attempted": 300, "live_200": 277, "redirect_live": 0, "soft_404": 0, "hard_404": 9, "restricted": 14, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 400: {"radmohajer.ir": {"attempted": 400, "live_200": 369, "redirect_live": 0, "soft_404": 0, "hard_404": 10, "restricted": 21, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 500: {"radmohajer.ir": {"attempted": 500, "live_200": 463, "redirect_live": 0, "soft_404": 0, "hard_404": 10, "restricted": 27, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 600: {"radmohajer.ir": {"attempted": 600, "live_200": 558, "redirect_live": 0, "soft_404": 0, "hard_404": 10, "restricted": 32, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 700: {"radmohajer.ir": {"attempted": 700, "live_200": 652, "redirect_live": 0, "soft_404": 1, "hard_404": 12, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}}
+progress 800: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 85, "live_200": 84, "redirect_live": 1, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}}
+progress 900: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 185, "live_200": 183, "redirect_live": 2, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}}
+progress 1000: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 285, "live_200": 283, "redirect_live": 2, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}}
+progress 1100: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 385, "live_200": 382, "redirect_live": 3, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}}
+progress 1200: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 485, "live_200": 464, "redirect_live": 8, "soft_404": 13, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}}
+progress 1300: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 2, "live_200": 2, "redirect_live": 0, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1400: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 102, "live_200": 102, "redirect_live": 0, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1500: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 202, "live_200": 202, "redirect_live": 0, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1600: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 302, "live_200": 302, "redirect_live": 0, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1700: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 402, "live_200": 402, "redirect_live": 0, "soft_404": 0, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1800: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 502, "live_200": 500, "redirect_live": 1, "soft_404": 1, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 1900: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 602, "live_200": 595, "redirect_live": 2, "soft_404": 5, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 2000: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 702, "live_200": 681, "redirect_live": 4, "soft_404": 17, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 2100: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 802, "live_200": 767, "redirect_live": 15, "soft_404": 20, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 2200: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 902, "live_200": 855, "redirect_live": 17, "soft_404": 30, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0}}
+progress 2300: {"radmohajer.ir": {"attempted": 705, "live_200": 655, "redirect_live": 1, "soft_404": 1, "hard_404": 13, "restricted": 35, "server_error": 0, "non_html": 0, "skipped_pilot": 0, "skipped_robots": 0, "error": 0}, "radvisa.com": {"attempted": 579, "live_200": 555, "redirect_live": 8, "soft_404": 16, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 10, "skipped_robots": 0, "error": 0}, "digivisa.ir": {"attempted": 1002, "live_200": 912, "redirect_live": 17, "soft_404": 69, "hard_404": 0, "restricted": 0, "server_error": 0, "non_html": 0, "skipped_pilot": 4, "skipped_robots": 0, "error": 0, "http_400": 4}}
+FINAL {
+ "radmohajer.ir": {
+  "attempted": 705,
+  "live_200": 655,
+  "redirect_live": 1,
+  "soft_404": 1,
+  "hard_404": 13,
+  "restricted": 35,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 0,
+  "skipped_robots": 0,
+  "error": 0
+ },
+ "radvisa.com": {
+  "attempted": 579,
+  "live_200": 555,
+  "redirect_live": 8,
+  "soft_404": 16,
+  "hard_404": 0,
+  "restricted": 0,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 10,
+  "skipped_robots": 0,
+  "error": 0
+ },
+ "digivisa.ir": {
+  "attempted": 1002,
+  "live_200": 912,
+  "redirect_live": 17,
+  "soft_404": 69,
+  "hard_404": 0,
+  "restricted": 0,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 4,
+  "skipped_robots": 0,
+  "error": 0,
+  "http_400": 4
+ }
+}

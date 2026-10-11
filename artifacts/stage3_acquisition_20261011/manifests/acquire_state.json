@@ -1,0 +1,42 @@
+{
+ "radmohajer.ir": {
+  "attempted": 705,
+  "live_200": 655,
+  "redirect_live": 1,
+  "soft_404": 1,
+  "hard_404": 13,
+  "restricted": 35,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 0,
+  "skipped_robots": 0,
+  "error": 0
+ },
+ "radvisa.com": {
+  "attempted": 579,
+  "live_200": 555,
+  "redirect_live": 8,
+  "soft_404": 16,
+  "hard_404": 0,
+  "restricted": 0,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 10,
+  "skipped_robots": 0,
+  "error": 0
+ },
+ "digivisa.ir": {
+  "attempted": 1002,
+  "live_200": 912,
+  "redirect_live": 17,
+  "soft_404": 69,
+  "hard_404": 0,
+  "restricted": 0,
+  "server_error": 0,
+  "non_html": 0,
+  "skipped_pilot": 4,
+  "skipped_robots": 0,
+  "error": 0,
+  "http_400": 4
+ }
+}

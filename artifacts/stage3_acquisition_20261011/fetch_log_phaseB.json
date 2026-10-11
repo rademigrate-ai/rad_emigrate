@@ -1,0 +1,18 @@
+{
+ "radmohajer_sitemap": {
+  "url": "https://radmohajer.ir/sitemap.xml",
+  "status": 200,
+  "final": "https://radmohajer.ir/sitemap.xml",
+  "ctype": "application/xml",
+  "at": "2026-10-10T22:32:34Z",
+  "bytes": 173681
+ },
+ "radmohajer_fa_home": {
+  "url": "https://radmohajer.ir/fa/",
+  "status": 200,
+  "final": "https://radmohajer.ir/fa/",
+  "ctype": "text/html; charset=utf-8",
+  "at": "2026-10-10T22:32:37Z",
+  "bytes": 185117
+ }
+}

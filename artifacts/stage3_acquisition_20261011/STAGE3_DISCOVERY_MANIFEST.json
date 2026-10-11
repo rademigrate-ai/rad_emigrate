@@ -1,0 +1,38 @@
+{
+ "schema_version": "stage3-discovery-v1",
+ "generated_at_utc": "2026-10-10T22:33:20Z",
+ "dataset_sha256": "cc8f73fe26b8f61d380ae65d4b4f8cca27b552e97ac05a200855e49ae9d66bfa",
+ "dataset_rows": 2332,
+ "exclusion_rules": "(?:\\.css|\\.js|\\.png|\\.jpe?g|\\.gif|\\.ico|\\.svg|\\.woff2?|\\.pdf|\\.mp4|/Administrator/|/login|/captcha|/search\\?|/lang/|/tag/|\\?q=|fbclid|utm_|instagram\\.com|^https?://[^/]+/-\\d+$)",
+ "per_domain": {
+  "radmohajer.ir": {
+   "historical_inventory": 740,
+   "live_sitemap_locs": 717,
+   "nav_links": 302,
+   "union_urls": 731,
+   "hist_in_live_sitemap": 739,
+   "hist_only": 1,
+   "live_sitemap_only": 1,
+   "rows": 731
+  },
+  "radvisa.com": {
+   "live_sitemap_urls": 365,
+   "nav_links": 36,
+   "archive_evidence": 223,
+   "union_urls": 589,
+   "rows": 589
+  },
+  "digivisa.ir": {
+   "live_sitemap_urls": 565,
+   "nav_links": 44,
+   "archive_evidence": 412,
+   "union_urls": 1012,
+   "rows": 1012
+  }
+ },
+ "notes": [
+  "historical datasets preserved; live observations added as separate provenance, never replacing history",
+  "radmohajer historical-vs-live reconciliation computed exactly (hist_in_live_sitemap / hist_only / live_sitemap_only)",
+  "final HTTP classes assigned by acquisition pipeline, not assumed from sitemap listing"
+ ]
+}
