@@ -35,22 +35,8 @@ import json
 import pathlib
 from collections import Counter, defaultdict
 
-
-def url_key(u: str) -> str:
-    """URL-equivalence key: lowercase scheme+host only (paths are
-    case-preserving — ASP.NET paths may be served case-insensitively but
-    distinct dataset rows must not be collapsed on path case alone),
-    trailing '/' ignored."""
-    u = (u or "").strip()
-    if "://" in u:
-        scheme, rest = u.split("://", 1)
-    else:
-        scheme, rest = "https", u
-    host, sep, path = rest.partition("/")
-    key = scheme.lower() + "://" + host.lower()
-    if sep and path.rstrip("/"):
-        key += "/" + path.rstrip("/")
-    return key
+from url_equivalence import url_key  # noqa: F401  (single source of truth,
+                                     # shared with generate_ingest_sql)
 
 
 def main() -> int:
@@ -234,6 +220,35 @@ def main() -> int:
                              "lines 175-176) + live REST probe (anon GET ok, "
                              "anon GET on research_findings/content_drafts "
                              "-> 401/42501)",
+        },
+        "triggers_and_publication_gates": {
+            "inspected_at": "2026-10-12",
+            "inspected_from": "committed migrations (supabase/migrations/*.sql)",
+            "source_documents": "NO triggers (no updated_at, no audit, no gate) "
+                                "and NO realtime/publication membership",
+            "source_snapshots": "NO triggers and NO realtime/publication membership",
+            "content_sources": "has updated_at trigger + AFTER audit trigger "
+                               "(private.audit_content_change -> "
+                               "admin_audit_logs); this package performs ZERO "
+                               "content_sources writes, so neither fires",
+            "feed_items": "Stage 1 migration 20261010010000 adds "
+                          "BEFORE-row guard trigger (trg_guard_human_feed_item_"
+                          "mutation) blocking ALL feed mutations unless an "
+                          "authorized human publish RPC sets the actor marker "
+                          "-- even service_role direct writes fail; this "
+                          "package writes zero feed rows (rehearsal enforced "
+                          "the same invariant with a local hard guard)",
+            "realtime_publication": "no alter publication statements exist in "
+                                    "any migration; nothing in public schema "
+                                    "is publication-gated, so the bulk "
+                                    "ingestion cannot interact with Realtime "
+                                    "replication gates",
+            "impact_on_ingest": "chunk inserts/updates touch only "
+                                "source_documents + source_snapshots; with no "
+                                "triggers on either table the only runtime "
+                                "gates are the unique indexes (idempotency) "
+                                "and the knowledge_citations FK RESTRICT "
+                                "(rollback safety)",
         },
         "writes_performed": 0,
     }

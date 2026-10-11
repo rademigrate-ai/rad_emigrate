@@ -32,8 +32,11 @@ import json
 import pathlib
 from collections import defaultdict
 
+from url_equivalence import url_key  # noqa: F401  (single source of truth,
+                                     # shared with simulate_ingestion)
+
 BATCH_MARKER = "stage3-bulk-20261012"
-PAIRS_PER_CHUNK = 30
+PAIRS_PER_CHUNK = 12
 
 
 def q(s: str) -> str:
@@ -41,20 +44,6 @@ def q(s: str) -> str:
     if s is None:
         return "null"
     return "'" + str(s).replace("'", "''") + "'"
-
-
-def url_key(u: str) -> str:
-    """URL-equivalence key (must match simulate_ingestion.url_key)."""
-    u = (u or "").strip()
-    if "://" in u:
-        scheme, rest = u.split("://", 1)
-    else:
-        scheme, rest = "https", u
-    host, sep, path = rest.partition("/")
-    key = scheme.lower() + "://" + host.lower()
-    if sep and path.rstrip("/"):
-        key += "/" + path.rstrip("/")
-    return key
 
 
 def load_jsonl(p: pathlib.Path):
@@ -87,20 +76,37 @@ def main() -> int:
     def exists(url: str) -> bool:
         return url_key(url) in live_by_key
 
-    # group rows -> distinct (canonical_url, hash) snapshot pairs
-    by_url = defaultdict(list)
+    # group rows by URL-EQUIVALENCE KEY (F-03): percent-encoded, NFC and
+    # trailing-slash variants of one document must produce ONE document row.
+    by_key = defaultdict(list)
     for r in rows:
-        by_url[r["canonical_url"]].append(r)
-    pairs = []           # (url, primary_row, [rows with distinct hashes])
-    for url, rs in sorted(by_url.items()):
+        by_key[url_key(r["canonical_url"])].append(r)
+    pairs = []           # (doc_url, primary_row, snapshot_row)
+    # canonical string per key: production's form if it exists, else prefer
+    # the decoded (no '%') variant, then lexicographic — fully deterministic
+    for key in sorted(by_key):
+        rs = by_key[key]
+        if key in live_by_key:
+            doc_url = live_by_key[key]
+        else:
+            variants = sorted({r["canonical_url"] for r in rs})
+            decoded = [u for u in variants if "%" not in u]
+            doc_url = (decoded or variants)[0]
         by_hash = {}
         for r in sorted(rs, key=lambda x: x["id"]):
             by_hash.setdefault(r["body_sha256"], r)
-        # primary row = first (deterministic); all distinct-hash rows snapshot
-        primary = sorted(rs, key=lambda x: (x["quality_classification"] != "PASS",
-                                            x["id"]))[0]
-        for h, r in sorted(by_hash.items()):
-            pairs.append((url, primary, r))
+        # primary row = PASS-preferred (deterministic); it alone drives the
+        # document's last_content_hash and always sorts FIRST so its update
+        # lands in the same or an earlier chunk than its siblings' snapshots
+        primary = sorted(by_hash.values(),
+                         key=lambda x: (x["quality_classification"] != "PASS",
+                                        x["id"]))[0]
+        for h, r in sorted(by_hash.items(),
+                           key=lambda kv: (kv[1] is not primary, kv[0])):
+            pairs.append((doc_url, primary, r))
+
+    # deterministic global order: document, primary snapshot first
+    pairs.sort(key=lambda p: (p[0], p[2] is not p[1], p[2]["body_sha256"]))
 
     # ---------- 00_preflight.sql ----------
     preflight = f"""-- Stage 3 bulk ingestion — PREFLIGHT (run first, read-only)
@@ -134,9 +140,11 @@ commit;
     chunk_files = []
     for idx, ch in enumerate(chunks, start=1):
         doc_values = []
+        doc_seen = set()
         for url, primary, _ in ch:
-            if exists(url):
+            if exists(url) or url in doc_seen:
                 continue   # exists (exact or equivalent) — never overwrite
+            doc_seen.add(url)
             doc_values.append(
                 "(%s, 'rad_official', %s, %s, null, now(), now())"
                 % (q(url), q(primary["extracted_title"]),
@@ -154,15 +162,19 @@ commit;
                 "regulatory_status": "REVIEW_REQUIRED",
                 "site": r["site"],
             }
-            if rurl != url:
-                meta_obj["dataset_canonical_url"] = url
+            if r["canonical_url"] != url:
+                meta_obj["dataset_canonical_url"] = r["canonical_url"]
             meta = json.dumps(meta_obj, ensure_ascii=False)
             ts = ((r.get("provenance") or {}).get("capture_timestamp")
                   or "2026-10-11T00:00:00Z")
             snap_rows.append("(%s, %s, %s, 200, %s, %s::jsonb)"
                              % (q(rurl), q(r["body_sha256"]),
                                 q(r.get("body") or ""), q(ts), q(meta)))
-            upd_rows.append("(%s, %s)" % (q(rurl), q(r["body_sha256"])))
+            # only the primary (PASS-preferred) row drives last_content_hash;
+            # it always sorts first, so this update lands in the same or an
+            # earlier chunk than sibling versions of the same document
+            if r is primary:
+                upd_rows.append("(%s, %s)" % (q(rurl), q(r["body_sha256"])))
         body = [
             f"-- chunk {idx:04d} / {len(chunks)} | batch {BATCH_MARKER}",
             "begin;",
@@ -225,7 +237,7 @@ commit;
 """
     (sql_dir / "90_verify.sql").write_text(verify, encoding="utf-8")
 
-    # ---------- 91_rollback.sql ----------
+    # ---------- 91_rollback.sql (F-01: strictly batch-scoped, set-based) ----------
     restores = []
     for d in live["source_documents"]:
         if d.get("last_content_hash"):
@@ -233,63 +245,67 @@ commit;
                             % (q(d["canonical_url"]), q(d["last_content_hash"])))
         else:
             restores.append("  (%s, null)" % q(d["canonical_url"]))
+    batch_doc_urls = sorted({u for u, _, _ in pairs if not exists(u)})
+    pre_existing_urls = sorted(live_docs)   # the pre-ingest production docs
+    pre_list = ",\n".join("      " + q(u) for u in pre_existing_urls)
+    restores_sql = ",\n".join(restores)
     rollback = f"""-- Stage 3 bulk ingestion — ROLLBACK (owner-authorized recovery only)
--- Scope: ONLY rows written by batch {BATCH_MARKER}.
--- Safety: knowledge_citations.snapshot_id is ON DELETE RESTRICT — if any
--- ingested snapshot has been cited by reviewed knowledge, this transaction
--- FAILS by design instead of destroying review work. Resolve citations first.
+-- F-01 strategy: strictly batch-scoped and set-based.
+--   * candidate documents are derived from batch snapshot MARKERS captured
+--     BEFORE any deletion — never from a URL list, never from timestamps;
+--   * the {len(pre_existing_urls)} pre-ingest production documents are
+--     hard-excluded by explicit URL guard (generated from the live-state
+--     capture), so they can never be deleted;
+--   * a document survives whenever ANY snapshot remains after batch
+--     deletion (concurrent writers, seed rows, post-ingest work) — the
+--     existence check carries NO metadata predicate, so rows without an
+--     ingest_batch key (NULL) protect their document rather than being
+--     silently skipped;
+--   * knowledge_citations.snapshot_id is ON DELETE RESTRICT: if any batch
+--     snapshot is cited by reviewed knowledge, step 2 FAILS the whole
+--     transaction by design. Resolve citations first.
 begin;
+
+-- 1) batch-created document candidates (set-based, marker-derived)
+create temp table _rb_batch_docs on commit drop as
+select distinct d.id
+  from public.source_documents d
+  join public.source_snapshots s on s.document_id = d.id
+ where s.metadata->>'ingest_batch' = '{BATCH_MARKER}';
+
+-- 2) FK RESTRICT safety net: refuses this transaction while cited
 delete from public.source_snapshots
  where metadata->>'ingest_batch' = '{BATCH_MARKER}';
--- restore pre-existing documents' prior last_content_hash (recorded from the
--- pre-ingest live-state capture; last_seen_at is intentionally left bumped —
--- it is an audit timestamp, not content).
+
+-- 3) delete ONLY batch-created documents that now have zero snapshots
+delete from public.source_documents d
+ where d.id in (select id from _rb_batch_docs)
+   and d.canonical_url not in (
+{pre_list}
+   )
+   and not exists (
+     select 1 from public.source_snapshots s where s.document_id = d.id);
+
+-- 4) restore pre-existing documents' prior last_content_hash (recorded in
+--    the pre-ingest live-state capture; last_seen_at is intentionally left
+--    bumped — it is an audit timestamp, not content).
 update public.source_documents sd
 set last_content_hash = v.h
 from (values
-{",\n".join(restores)}
+{restores_sql}
 ) as v(url, h)
 where sd.canonical_url = v.url;
--- documents created by this batch: delete only those that now have zero
--- snapshots (any doc that acquired citations/snapshots later is kept and
--- reported below).
-delete from public.source_documents d
- where d.first_seen_at >= date_trunc('day', now())
-   and not exists (select 1 from public.source_snapshots s
-                    where s.document_id = d.id)
-   and d.canonical_url in (
-     select jsonb_array_elements_text('[]'::jsonb));  -- replaced below
--- report anything that could NOT be removed (operator inspects):
-select d.canonical_url as kept_doc_with_snapshots
+
+-- 5) audit report: batch-candidate documents kept because snapshots remain
+select d.canonical_url as kept_candidate_with_remaining_snapshots,
+       (select count(*) from public.source_snapshots s
+         where s.document_id = d.id) as remaining_snapshots
   from public.source_documents d
- where d.last_content_hash is null
-   and exists (select 1 from public.source_snapshots s
-                where s.document_id = d.id);
+ where d.id in (select id from _rb_batch_docs)
+ order by 1;
+
 commit;
 """
-    # NOTE: the generic first_seen_at delete above is intentionally NOT used
-    # for batch docs (timestamp heuristics are unsafe). Batch-created docs are
-    # removed by exact canonical_url list instead — generated below.
-    batch_doc_urls = sorted({u for u, _, _ in pairs
-                             if not exists(u)})
-    del_list = ",\n".join("  " + q(u) for u in batch_doc_urls)
-    rollback = rollback.replace(
-        """delete from public.source_documents d
- where d.first_seen_at >= date_trunc('day', now())
-   and not exists (select 1 from public.source_snapshots s
-                    where s.document_id = d.id)
-   and d.canonical_url in (
-     select jsonb_array_elements_text('[]'::jsonb));  -- replaced below""",
-        """-- exact scope: documents created by this batch (canonical_url list)
-delete from public.source_documents
- where canonical_url in (
-{del_list}
- )
- and not exists (
-   select 1 from public.source_snapshots s
-    where s.document_id = source_documents.id
-      and s.metadata->>'ingest_batch' <> '{BATCH_MARKER}');""".format(
-            del_list=del_list, BATCH_MARKER=BATCH_MARKER))
     (sql_dir / "91_rollback.sql").write_text(rollback, encoding="utf-8")
 
     # ---------- INGEST_MANIFEST.json ----------

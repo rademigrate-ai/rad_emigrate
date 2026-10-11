@@ -11,8 +11,9 @@ import json
 import pathlib
 import re
 import sys
-import tempfile
+import unicodedata
 import unittest
+import urllib.parse
 
 TOOLS = pathlib.Path(__file__).resolve().parent
 REPO = TOOLS.parent.parent
@@ -96,6 +97,64 @@ class TestUrlKeyEquivalence(unittest.TestCase):
         self.assertEqual(url_key("https://RadVisa.com/page"),
                          url_key("https://radvisa.com/page"))
 
+    # --- F-03 additions ---
+
+    def test_surrounding_whitespace_ignored(self):
+        self.assertEqual(url_key("  https://digivisa.ir/fa/  "),
+                         url_key("https://digivisa.ir/fa"))
+        self.assertEqual(url_key("https://digivisa.ir/fa/ news "),
+                         url_key("https://digivisa.ir/fa/news"))
+
+    def test_percent_encoded_persian_unifies_with_raw(self):
+        raw = "https://radmohajer.ir/fa/مقالات/181-انگلستان"
+        enc = "https://radmohajer.ir/fa/" + \
+            urllib.parse.quote("مقالات/181-انگلستان", safe="/")
+        self.assertEqual(url_key(raw), url_key(enc))
+
+    def test_unicode_nfc_vs_nfd_unify(self):
+        # Arabic yeh with hamza: precomposed (U+0626) vs base yeh +
+        # combining hamza above (U+064A U+0654).  Explicit escapes so the
+        # literal cannot be silently re-normalized by an editor.
+        nfc = unicodedata.normalize("NFC", "\u0626")
+        nfd = unicodedata.normalize("NFD", "\u0626")
+        self.assertEqual(nfc, "\u0626")
+        self.assertEqual(nfd, "\u064a\u0654")
+        self.assertNotEqual(nfc, nfd)
+        self.assertEqual(url_key("https://x.ir/" + nfc),
+                         url_key("https://x.ir/" + nfd))
+
+    def test_query_trim_and_case(self):
+        self.assertEqual(url_key("https://x.ir/p?id= 5"),
+                         url_key("https://x.ir/p?id=5"))
+        # parameter names/values case-significant (RFC 3986), order kept
+        self.assertNotEqual(url_key("https://x.ir/p?a=1&b=2"),
+                            url_key("https://x.ir/p?a=2&b=1"))
+
+    def test_fragments_dropped(self):
+        self.assertEqual(url_key("https://x.ir/fa#section"),
+                         url_key("https://x.ir/fa"))
+
+    def test_zwnj_vs_space_not_unified(self):
+        # distinct bytes on the sites -> distinct documents (no collapse)
+        self.assertNotEqual(url_key("https://x.ir/دانشگاه‌های"),
+                            url_key("https://x.ir/دانشگاه های"))
+
+    def test_collision_safety_real_pairs(self):
+        # real dataset URLs that must NOT collapse
+        self.assertNotEqual(
+            url_key("https://radmohajer.ir/fa/contacts"),
+            url_key("https://radmohajer.ir/en/contact-us"))
+        self.assertNotEqual(url_key("https://digivisa.ir/Index.aspx"),
+                            url_key("https://digivisa.ir/index.aspx"))
+
+    def test_simulator_and_generator_share_one_key(self):
+        import generate_ingest_sql as gen
+        import simulate_ingestion as sim
+        for u in ("https://digivisa.ir", "https://digivisa.ir/fa/",
+                  "https://radmohajer.ir/fa/مقالات/1-انگلستان",
+                  " https://radvisa.com/x/ "):
+            self.assertEqual(sim.url_key(u), gen.url_key(u), u)
+
 
 @unittest.skipUnless(CANON.exists(), "canonical dataset missing")
 class TestDatasetContract(unittest.TestCase):
@@ -151,12 +210,20 @@ class TestIngestSqlPackage(unittest.TestCase):
 
     def test_chunks_are_balanced_transactions(self):
         chunks = sorted((PKG / "sql").glob("10_ingest_*.sql"))
-        self.assertEqual(len(chunks), 54)
+        expected = len([f for f in self.manifest["execution_order"]
+                        if f.startswith("10_ingest_")])
+        self.assertEqual(len(chunks), expected)
+        self.assertGreater(expected, 0)
         for c in chunks:
             t = c.read_text(encoding="utf-8")
             self.assertEqual(len(re.findall(r"^\s*begin;", t, re.M)), 1, c.name)
             self.assertEqual(len(re.findall(r"^\s*commit;", t, re.M)), 1, c.name)
             self.assertIn("on conflict", t)
+
+    def test_chunk_sizes_are_bounded(self):
+        # F-04: no chunk may exceed ~1.5MB (keeps SQL-editor executions safe)
+        for c in (PKG / "sql").glob("10_ingest_*.sql"):
+            self.assertLess(c.stat().st_size, 1_500_000, c.name)
 
     def test_no_feed_or_research_writes_anywhere(self):
         for f in (PKG / "sql").glob("*.sql"):
@@ -210,6 +277,30 @@ class TestIngestSqlPackage(unittest.TestCase):
         for h in ("a99199f438e3d2e4134a8d1be35c78473e4f7f6e60edc51d9760ec5f38b00110",
                   "643a3c62ef94bc0f5303a69808c4c847d3f87ab73689bb56fc0f506f9c8f8ec9"):
             self.assertIn(h, t)
+
+    def test_rollback_is_set_based_not_url_list(self):
+        """F-01: rollback must derive candidates from batch markers, must
+        exclude pre-existing docs explicitly, and must contain NO
+        metadata-comparison guard vulnerable to NULL evaluation."""
+        t = (PKG / "sql" / "91_rollback.sql").read_text(encoding="utf-8")
+        # candidate set from markers, captured before deletion
+        self.assertIn("create temp table _rb_batch_docs", t)
+        self.assertLess(t.index("create temp table _rb_batch_docs"),
+                        t.index("delete from public.source_snapshots"))
+        # no fragile mass URL list: only the pre-ingest production URLs may
+        # appear as literals (5 live docs; tolerate <= 10 total)
+        self.assertLessEqual(t.count("'https://"), 10,
+                             "rollback must not embed a batch URL list")
+        # pre-existing exclusion guard present
+        self.assertIn("canonical_url not in", t)
+        # NULL trap removed: no `metadata->>'ingest_batch' <> ...` predicate
+        # anywhere (a snapshot without the key must protect its document)
+        self.assertNotIn("'ingest_batch' <>", t)
+        self.assertNotIn("'ingest_batch' !=", t)
+        # surviving-snapshot protection carries no metadata predicate
+        m = re.search(r"and not exists \(\s*select 1 from public\.source_snapshots "
+                      r"s where s\.document_id = d\.id\)", t)
+        self.assertIsNotNone(m, "set-based snapshot-survival guard missing")
 
 
 @unittest.skipUnless(QUEUES.exists(), "review queues missing")
