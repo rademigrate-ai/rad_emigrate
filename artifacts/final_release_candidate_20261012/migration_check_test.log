@@ -1,0 +1,125 @@
+=== TEST 1: production-like clean (valid rows only) ===
+CREATE TABLE
+INSERT 0 4
+        chk         | n 
+--------------------+---
+ preflight_bad_rows | 0
+(1 row)
+
+           conname            
+------------------------------
+ ai_models_pkey
+ ai_models_quality_tier_check
+(2 rows)
+
+--- Apply migration first time ---
+BEGIN
+DO
+DO
+DO
+COMMIT
+APPLY1_EXIT=0
+--- Post-apply constraints ---
+               conname                |                                              pg_get_constraintdef                                              
+--------------------------------------+----------------------------------------------------------------------------------------------------------------
+ ai_models_consecutive_failures_check | CHECK (consecutive_failures >= 0)
+ ai_models_measured_latency_ms_check  | CHECK (measured_latency_ms IS NULL OR measured_latency_ms >= 0)
+ ai_models_pkey                       | PRIMARY KEY (id)
+ ai_models_quality_tier_check         | CHECK (quality_tier >= 0 AND quality_tier <= 10000)
+ ai_models_recent_success_rate_check  | CHECK (recent_success_rate IS NULL OR recent_success_rate >= 0::numeric AND recent_success_rate <= 1::numeric)
+(5 rows)
+
+--- Valid insert ---
+ consecutive_failures 
+----------------------
+                    2
+(1 row)
+
+INSERT 0 1
+--- Invalid consecutive_failures (expect fail) ---
+ERROR:  new row for relation "ai_models" violates check constraint "ai_models_consecutive_failures_check"
+DETAIL:  Failing row contains (96b110fa-d0ae-4442-96d7-ffeaca057f02, -1, null, null, 100).
+EXPECTED_FAIL_OK
+--- Invalid measured_latency_ms (expect fail) ---
+ERROR:  new row for relation "ai_models" violates check constraint "ai_models_measured_latency_ms_check"
+DETAIL:  Failing row contains (aa6eb91c-8f3d-49c0-b4da-424a50bf7113, 0, -5, null, 100).
+EXPECTED_FAIL_OK
+--- Invalid recent_success_rate (expect fail) ---
+ERROR:  new row for relation "ai_models" violates check constraint "ai_models_recent_success_rate_check"
+DETAIL:  Failing row contains (a10634e9-8b5a-4fb5-b589-fb8d53025659, 0, null, 1.5000, 100).
+EXPECTED_FAIL_OK
+--- Repeat execution (idempotent) ---
+BEGIN
+DO
+DO
+DO
+COMMIT
+APPLY2_EXIT=0
+ three_target_checks 
+---------------------
+                   3
+(1 row)
+
+ preserved_rows 
+----------------
+              5
+(1 row)
+
+           conname            
+------------------------------
+ ai_models_quality_tier_check
+(1 row)
+
+=== TEST 2: repo-like (constraints already present) ===
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+INSERT 0 1
+               conname                
+--------------------------------------
+ ai_models_consecutive_failures_check
+ ai_models_measured_latency_ms_check
+ ai_models_pkey
+ ai_models_quality_tier_check
+ ai_models_recent_success_rate_check
+(5 rows)
+
+ seed_rows 
+-----------
+         1
+(1 row)
+
+--- Apply migration on repo-like (must skip ADD, preserve data) ---
+BEGIN
+DO
+DO
+DO
+COMMIT
+APPLY_REPO_EXIT=0
+               conname                |                                              pg_get_constraintdef                                              
+--------------------------------------+----------------------------------------------------------------------------------------------------------------
+ ai_models_consecutive_failures_check | CHECK (consecutive_failures >= 0)
+ ai_models_measured_latency_ms_check  | CHECK (measured_latency_ms IS NULL OR measured_latency_ms >= 0)
+ ai_models_pkey                       | PRIMARY KEY (id)
+ ai_models_quality_tier_check         | CHECK (quality_tier >= 0 AND quality_tier <= 10000)
+ ai_models_recent_success_rate_check  | CHECK (recent_success_rate IS NULL OR recent_success_rate >= 0::numeric AND recent_success_rate <= 1::numeric)
+(5 rows)
+
+ row_count 
+-----------
+         1
+(1 row)
+
+=== TEST 3: VALIDATE rejects bad existing data ===
+CREATE TABLE
+INSERT 0 1
+ERROR:  check constraint "demo_bad_cf_check" of relation "demo_bad" is violated by some row
+CONTEXT:  SQL statement "ALTER TABLE public.demo_bad VALIDATE CONSTRAINT demo_bad_cf_check"
+PL/pgSQL function inline_code_block line 4 at SQL statement
+(expected VALIDATE failure above)
+=== SUMMARY ===
+TEST1_PROD_LIKE_APPLY_AND_ENFORCE
+TEST2_REPO_LIKE_IDEMPOTENT_NO_DROP
+TEST3_BAD_DATA_BLOCKS_VALIDATE

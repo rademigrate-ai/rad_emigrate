@@ -1,0 +1,22 @@
+=== SECURITY REHEARSAL v2 ===
+P0_EXIT=0
+ABUSE_EXIT=0
+CHECK_EXIT=0
+
+PROBES (isolated PostgreSQL 16 skeleton):
+- own_quota: allowed (count 0 / limit 50)
+- cross_user quota: ERROR forbidden
+- cross_user access decision: ERROR forbidden
+- consultation c1/c2/c3: OK
+- consultation c4: ERROR consultation_rate_limited
+- user publish draft: ERROR forbidden
+- admin publish review: ERROR draft requires explicit approval before publication
+- admin publish approved: OK (feed item created, published_feed=1)
+- direct_insert consultation: false
+- admin_note SELECT authenticated: false
+- ai_models_*_check: 3 present
+- trg_guard_human_feed_item_mutation: present
+- RPCs present: get_ai_access_decision, get_ai_daily_quota_status, publish_content_draft, submit_consultation_request
+
+Full verbose log retained in engineering workspace; this summary is the committed evidence pointer.
+=== DONE ===
