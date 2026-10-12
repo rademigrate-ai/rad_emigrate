@@ -239,6 +239,9 @@ chk s10_same_feed_id "$FEED_ID" "$(q 'select id from public.feed_items limit 1')
 say "--- S11: interrupted ingest transaction ---"
 docker exec -i $C psql -U postgres -d $DB -q >>"$OUT" 2>&1 <<EOF
 begin;
+set local role service_role;
+select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+select set_config('request.jwt.claims','$SVC',true);
 select public.ingest_research_snapshot('$JOB','$DOC','hash-eee','interrupted text',200,'{}'::jsonb);
 rollback;
 EOF

@@ -264,7 +264,7 @@ Future<void> showAdminReviewDetail(
                         child: Text(l10n.approve),
                       ),
                       FilledButton(
-                        onPressed: busy
+                        onPressed: busy || item.status != 'approved'
                             ? null
                             : () => run(() async {
                                 await actions.updateDraft(

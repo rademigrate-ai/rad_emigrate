@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/directional_icons.dart';
@@ -30,15 +31,47 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     final locale = Localizations.localeOf(context).languageCode;
     final catalog = ref.watch(visaCatalogProvider(locale));
     if (_selected != null) {
-      return catalog.maybeWhen(
-        data: (value) => _ProgramDetail(
-          program: _selected!,
-          country: value.countries.firstWhere(
-            (item) => item.id == _selected!.countryId,
-          ),
+      return catalog.when(
+        loading: () => _DetailLoadState(
+          title: _selected!.title,
           onBack: () => setState(() => _selected = null),
+          child: LoadingState.section(message: l10n.loadingCatalogue),
         ),
-        orElse: () => const SizedBox.shrink(),
+        error: (_, _) => _DetailLoadState(
+          title: _selected!.title,
+          onBack: () => setState(() => _selected = null),
+          child: ErrorState(
+            message: l10n.catalogueUnavailable,
+            onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
+          ),
+        ),
+        data: (value) {
+          VisaProgram? currentProgram;
+          Country? country;
+          for (final program in value.programs) {
+            if (program.id == _selected!.id) currentProgram = program;
+          }
+          if (currentProgram != null) {
+            for (final item in value.countries) {
+              if (item.id == currentProgram.countryId) country = item;
+            }
+          }
+          if (currentProgram == null || country == null) {
+            return _DetailLoadState(
+              title: _selected!.title,
+              onBack: () => setState(() => _selected = null),
+              child: ErrorState(
+                message: l10n.catalogueUnavailable,
+                onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
+              ),
+            );
+          }
+          return _ProgramDetail(
+            program: currentProgram,
+            country: country,
+            onBack: () => setState(() => _selected = null),
+          );
+        },
       );
     }
     return Scaffold(
@@ -183,6 +216,31 @@ class _VisaPageState extends ConsumerState<VisaPage> {
       ),
     );
   }
+}
+
+class _DetailLoadState extends StatelessWidget {
+  const _DetailLoadState({
+    required this.title,
+    required this.onBack,
+    required this.child,
+  });
+
+  final String title;
+  final VoidCallback onBack;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: Text(title),
+      leading: IconButton(
+        tooltip: AppLocalizations.of(context).back,
+        icon: Icon(directionalBack(context)),
+        onPressed: onBack,
+      ),
+    ),
+    body: child,
+  );
 }
 
 class _ExplorerProgramCard extends StatelessWidget {
@@ -433,6 +491,26 @@ class _ProgramDetail extends StatelessWidget {
                               '${program.source.publisher} · ${program.source.title}',
                             ),
                             const SizedBox(height: 4),
+                            Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  final opened = await launchUrl(
+                                    Uri.parse(program.source.url),
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                  if (!opened && context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(l10n.errorGeneric),
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.open_in_new, size: 18),
+                                label: Text(program.source.url),
+                              ),
+                            ),
                             Text(
                               l10n.structuredSourceNote,
                               style: Theme.of(context).textTheme.bodySmall,
