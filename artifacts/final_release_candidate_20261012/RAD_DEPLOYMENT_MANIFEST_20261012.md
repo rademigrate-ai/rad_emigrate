@@ -18,7 +18,7 @@
 2026-10-13 rehearsal clarification: the value above is the repository's
 LF-normalized SHA-256. Windows checkout supplied CRLF bytes for this one file,
 so the **executed local file bytes** hashed to
-`303b6ba4382453ab682297f57336922050344ef5e800268cdb4cb221711d149`.
+`303b6ba4382453ab682297f57336922050344ef5e800268cd8b4cb221711d149`.
 The other four files had identical worktree and LF-normalized hashes. A
 production operator must hash the exact bytes being applied and compare the
 reviewed SQL content, rather than assume the prior manifest hash describes a

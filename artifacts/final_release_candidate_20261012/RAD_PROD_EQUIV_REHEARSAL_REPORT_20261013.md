@@ -51,7 +51,7 @@ ending at **52**. Hashes below are the **executed Windows file bytes**.
 | 2 | `20261010055013` atomic AI quota | `51ab2b39fb63655fea7e67e1a7aef69bb1ba15297877bc39168b90b2b1c8b646` | PASS |
 | 3 | `20261010070000` SSRF IPv4-mapped IPv6 | `b94878391d4fddb9887e74d9a2a1dc809360de46f989a3d599a5471cc7c42fc5` | PASS |
 | 4 | `20261012110945` consultation/Storage | `9de2fdb764aae7068c9355b07cd3593823bd66b5da73448687693fe5cc535119` | PASS |
-| 5 | `20261012230000` AI CHECK alignment | `303b6ba4382453ab682297f57336922050344ef5e800268cdb4cb221711d149` | PASS |
+| 5 | `20261012230000` AI CHECK alignment | `303b6ba4382453ab682297f57336922050344ef5e800268cd8b4cb221711d149` | PASS |
 
 For file 5, the Git/LF-normalized hash is
 `d4563930461176e6481df29cf587c9dca0eb7b4987395c05af2f613758452fbc`;

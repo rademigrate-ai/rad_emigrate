@@ -1,0 +1,80 @@
+{
+  "project_ref": "inshddthftkhcdosoqcn",
+  "source_branch": "handoff/codex-stage1-stage2-20261010",
+  "source_head_before_report": "f191dba809126d6a155f22acd1301dcd8cd507ee",
+  "scope": "read-only production preflight; no production writes",
+  "observed_utc": "2026-10-12T22:16:31Z",
+  "project": {
+    "source": "Supabase MCP get_project",
+    "status": "ACTIVE_HEALTHY",
+    "postgres_version": "17.11.0.002"
+  },
+  "migration_ledger": {
+    "source": "Supabase MCP list_migrations and SELECT",
+    "count": 47,
+    "latest_version": "20261007212140",
+    "pending_five_present": false
+  },
+  "selected_catalog": {
+    "source": "read-only pg_catalog SELECT",
+    "public_private_tables": 57,
+    "public_private_functions": 47,
+    "policies": 117,
+    "pending_check_constraints_present": 0,
+    "pending_consultation_rpcs_present": 0,
+    "human_feed_guard_triggers_present": 0,
+    "storage_objects_update_policies": 0
+  },
+  "security": {
+    "source": "read-only privilege/function/policy SELECT and Supabase security advisor",
+    "authenticated_consultation_insert": true,
+    "authenticated_admin_note_select": true,
+    "authenticated_feed_insert": true,
+    "authenticated_content_draft_update": true,
+    "ai_access_rpc_authenticated_execute": true,
+    "ai_quota_rpc_authenticated_execute": true,
+    "ai_read_rpcs_have_auth_uid_check": false,
+    "publish_rpc_mentions_approved": false,
+    "advisor_authenticated_callable_definer_findings": 14,
+    "advisor_leaked_password_protection_disabled": true
+  },
+  "data_aggregates": {
+    "ai_models": 682,
+    "ai_models_violating_pending_numeric_checks": 0,
+    "ai_providers": 3,
+    "mapped_ipv6_provider_urls": 0,
+    "document_processor_configs": 1,
+    "document_processor_nonnull_endpoints": 0,
+    "consultation_requests": 0,
+    "feed_items": 0,
+    "content_drafts": 15
+  },
+  "wal_archiving": {
+    "source": "read-only pg_settings and pg_stat_archiver SELECT",
+    "archive_mode": "on",
+    "archive_timeout_seconds": 120,
+    "archived_count": 602,
+    "failed_count": 0,
+    "last_archived_utc": "2026-10-12T22:11:45.418469Z",
+    "proves_backup_retention_or_restore": false
+  },
+  "backup_listing": {
+    "command": "supabase@2.119.0 backups list --project-ref inshddthftkhcdosoqcn --output-format json",
+    "exit_code": 1,
+    "error_code": "AccessTokenRequiredError",
+    "error_message": "Access token not provided. Supply an access token by running `supabase login` or setting the SUPABASE_ACCESS_TOKEN environment variable.",
+    "authenticated_dashboard_available": false,
+    "backup_inventory": "BLOCKED",
+    "pitr_window": "BLOCKED",
+    "production_point_isolated_restore": "NOT_RUN"
+  },
+  "local_rehearsal_reference": {
+    "report": "RAD_PROD_EQUIV_REHEARSAL_REPORT_20261013.md",
+    "naive_restore_excess_application_acls": 86,
+    "naive_restore_excess_function_acls": 34,
+    "naive_restore_excess_table_acls": 52,
+    "hardened_isolated_restore_effective_privilege_checks_passed": 672,
+    "production_recovery_attested": false
+  },
+  "decision": "NO_GO"
+}
