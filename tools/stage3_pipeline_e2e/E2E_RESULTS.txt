@@ -1,0 +1,319 @@
+=== PIPELINE E2E (2026-10-12T00:03:31Z) ===
+--- prelude (platform stubs) ---
+PRELUDE OK
+--- migration 20261001191421_initial_rad_core_schema.sql ---
+WARNING:  there is no transaction in progress
+OK 20261001191421_initial_rad_core_schema.sql
+--- migration 20261003210302_project09_visa_catalog.sql ---
+OK 20261003210302_project09_visa_catalog.sql
+--- migration 20261003211635_project10_knowledge_research.sql ---
+ schedule 
+----------
+        1
+(1 row)
+
+ schedule 
+----------
+        2
+(1 row)
+
+WARNING:  there is no transaction in progress
+OK 20261003211635_project10_knowledge_research.sql
+--- migration 20261003212339_project10_security_hardening.sql ---
+WARNING:  there is no transaction in progress
+OK 20261003212339_project10_security_hardening.sql
+--- migration 20261003213219_project11_ai_orchestration.sql ---
+WARNING:  there is no transaction in progress
+OK 20261003213219_project11_ai_orchestration.sql
+--- migration 20261003214031_project12_document_intelligence.sql ---
+WARNING:  there is no transaction in progress
+OK 20261003214031_project12_document_intelligence.sql
+--- migration 20261003222909_project14_feed_notifications.sql ---
+WARNING:  there is no transaction in progress
+OK 20261003222909_project14_feed_notifications.sql
+--- migration 20261003223717_project15_observability.sql ---
+ schedule 
+----------
+        3
+(1 row)
+
+NOTICE:  policy "profiles update own" for relation "public.profiles" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261003223717_project15_observability.sql
+--- migration 20261003235000_ai_base_url_ssrf_hardening.sql ---
+WARNING:  there is no transaction in progress
+OK 20261003235000_ai_base_url_ssrf_hardening.sql
+--- migration 20261004190000_fix_profile_update_rls_recursion.sql ---
+NOTICE:  policy "documents storage upload own" for relation "storage.objects" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261004190000_fix_profile_update_rls_recursion.sql
+--- migration 20261004203000_client_delivery_ai_scopes.sql ---
+WARNING:  there is no transaction in progress
+OK 20261004203000_client_delivery_ai_scopes.sql
+--- migration 20261005102000_stage1_ai_research_completion.sql ---
+NOTICE:  policy "admins read research sources" for relation "public.research_sources" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261005102000_stage1_ai_research_completion.sql
+--- migration 20261005120000_stage2_review_feed_publish.sql ---
+WARNING:  there is no transaction in progress
+OK 20261005120000_stage2_review_feed_publish.sql
+--- migration 20261006132931_stage5_research_review_candidate_backfill.sql ---
+WARNING:  there is no transaction in progress
+OK 20261006132931_stage5_research_review_candidate_backfill.sql
+--- migration 20261006180000_fix_profile_update_with_check_role_escalation.sql ---
+NOTICE:  trigger "trg_prevent_profile_role_escalation" for relation "public.profiles" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261006180000_fix_profile_update_with_check_role_escalation.sql
+--- migration 20261007080000_ai_dynamic_routing_architecture.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007080000_ai_dynamic_routing_architecture.sql
+--- migration 20261007080001_ai_credential_failure_routing.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007080001_ai_credential_failure_routing.sql
+--- migration 20261007080002_research_atomic_review_candidate.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007080002_research_atomic_review_candidate.sql
+--- migration 20261007180000_stage2_knowledge_completion.sql ---
+NOTICE:  trigger "knowledge_items_search_vector_trg" for relation "public.knowledge_items" does not exist, skipping
+NOTICE:  trigger "knowledge_claims_citation_integrity" for relation "public.knowledge_claims" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261007180000_stage2_knowledge_completion.sql
+--- migration 20261007180001_stage2_knowledge_promote.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007180001_stage2_knowledge_promote.sql
+--- migration 20261007180002_stage2_knowledge_retrieve_conflict.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007180002_stage2_knowledge_retrieve_conflict.sql
+--- migration 20261007210000_stage4_user_ai_quota_grounding.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007210000_stage4_user_ai_quota_grounding.sql
+--- migration 20261007212000_stage4_limit_ai_runtime_chain.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007212000_stage4_limit_ai_runtime_chain.sql
+--- migration 20261007220000_stage5_visa_editorial_summaries.sql ---
+WARNING:  there is no transaction in progress
+OK 20261007220000_stage5_visa_editorial_summaries.sql
+--- migration 20261007230000_stage6_entitlement_access_decision.sql ---
+NOTICE:  policy "users read own entitlements" for relation "public.ai_entitlements" does not exist, skipping
+NOTICE:  policy "service manages entitlements" for relation "public.ai_entitlements" does not exist, skipping
+NOTICE:  policy "admins manage entitlements" for relation "public.ai_entitlements" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261007230000_stage6_entitlement_access_decision.sql
+--- migration 20261008010000_stage7_ops_consultation_app_status.sql ---
+NOTICE:  trigger "trg_guard_application_status" for relation "public.applications" does not exist, skipping
+NOTICE:  policy "users insert own consultations" for relation "public.consultation_requests" does not exist, skipping
+NOTICE:  policy "users read own consultations" for relation "public.consultation_requests" does not exist, skipping
+NOTICE:  policy "admins manage consultations" for relation "public.consultation_requests" does not exist, skipping
+NOTICE:  trigger "trg_guard_consultation_fields" for relation "public.consultation_requests" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261008010000_stage7_ops_consultation_app_status.sql
+--- migration 20261008020000_stage9_security_grant_hardening.sql ---
+NOTICE:  policy "service manages guest quota" for relation "public.ai_guest_quota" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261008020000_stage9_security_grant_hardening.sql
+--- migration 20261010010000_stage1_p0_security_completion.sql ---
+NOTICE:  constraint "document_processor_config_public_endpoint_check" of relation "document_processor_config" does not exist, skipping
+NOTICE:  trigger "trg_guard_human_feed_item_mutation" for relation "public.feed_items" does not exist, skipping
+NOTICE:  trigger "trg_guard_human_feed_localization_mutation" for relation "public.feed_item_localizations" does not exist, skipping
+WARNING:  there is no transaction in progress
+OK 20261010010000_stage1_p0_security_completion.sql
+--- actors ---
+actors OK
+doc=c2e0f376-abc6-4e6d-ae16-166094fa9fbd job=18895c84-c39c-4cb7-8ccd-cc56b29c98f5
+--- S1: ingest snapshot (service_role) ---
+              set_config              
+--------------------------------------
+ 11111111-1111-4111-8111-111111111111
+(1 row)
+
+                              set_config                              
+----------------------------------------------------------------------
+ {"role":"service_role","sub":"11111111-1111-4111-8111-111111111111"}
+(1 row)
+
+       ingest_research_snapshot       
+--------------------------------------
+ bcca3ad4-769d-44ca-b671-ba99cbb784bc
+(1 row)
+
+S1 ingest OK
+PASS s1_snapshots=1
+PASS s1_findings=1
+PASS s1_finding_type_new=new
+PASS s1_drafts_review=1
+PASS s1_doc_hash_updated=hash-aaa
+--- S2: duplicate ingest (same hash) ---
+              set_config              
+--------------------------------------
+ 11111111-1111-4111-8111-111111111111
+(1 row)
+
+                              set_config                              
+----------------------------------------------------------------------
+ {"role":"service_role","sub":"11111111-1111-4111-8111-111111111111"}
+(1 row)
+
+ ingest_research_snapshot 
+--------------------------
+ 
+(1 row)
+
+S2 duplicate OK (returned without insert)
+PASS s2_snapshots=1
+PASS s2_findings=1
+PASS s2_drafts=1
+--- S3: retry idempotency ---
+              set_config              
+--------------------------------------
+ 11111111-1111-4111-8111-111111111111
+(1 row)
+
+                              set_config                              
+----------------------------------------------------------------------
+ {"role":"service_role","sub":"11111111-1111-4111-8111-111111111111"}
+(1 row)
+
+ ingest_research_snapshot 
+--------------------------
+ 
+(1 row)
+
+S3 retry OK
+PASS s3_snapshots=1
+PASS s3_findings=1
+--- S4: changed content ---
+              set_config              
+--------------------------------------
+ 11111111-1111-4111-8111-111111111111
+(1 row)
+
+                              set_config                              
+----------------------------------------------------------------------
+ {"role":"service_role","sub":"11111111-1111-4111-8111-111111111111"}
+(1 row)
+
+       ingest_research_snapshot       
+--------------------------------------
+ b96abd60-4e23-43dc-b560-5cf5bfbdb7f5
+(1 row)
+
+S4 changed OK
+PASS s4_snapshots=2
+PASS s4_finding_changed=changed
+PASS s4_drafts=2
+--- S5: invalid evidence ---
+PASS s5_empty_text=22023
+PASS s5_bad_status=22023
+PASS s5_snapshots_still=2
+--- S6: anon ingest forbidden ---
+PASS s6_anon_ingest=42501
+PASS s6_snapshots_still=2
+--- S7: direct Feed writes blocked ---
+PASS s7_anon_feed=42501
+PASS s7_auth_feed=42501
+PASS s7_svc_feed=42501
+PASS s7_svc_localization=42501
+PASS s7_feed_count=0
+--- S8: non-admin publish forbidden ---
+PASS s8_editor_publish=42501
+--- S9: unapproved publish refused ---
+PASS s9_unapproved=22023
+--- S10: approve + publish + idempotent re-publish ---
+              set_config              
+--------------------------------------
+ 33333333-3333-4333-8333-333333333333
+(1 row)
+
+                              set_config                               
+-----------------------------------------------------------------------
+ {"role":"authenticated","sub":"33333333-3333-4333-8333-333333333333"}
+(1 row)
+
+ set_content_draft_status 
+--------------------------
+ 
+(1 row)
+
+S10 approve OK
+              set_config              
+--------------------------------------
+ 33333333-3333-4333-8333-333333333333
+(1 row)
+
+                              set_config                               
+-----------------------------------------------------------------------
+ {"role":"authenticated","sub":"33333333-3333-4333-8333-333333333333"}
+(1 row)
+
+        publish_content_draft         
+--------------------------------------
+ 92f1c04a-93c6-4e57-a6b8-00a72fb9d9dc
+(1 row)
+
+S10 publish OK
+PASS s10_feed_items=1
+PASS s10_localizations=1
+PASS s10_draft_published=published
+PASS s10_audit_row=1
+              set_config              
+--------------------------------------
+ 33333333-3333-4333-8333-333333333333
+(1 row)
+
+                              set_config                               
+-----------------------------------------------------------------------
+ {"role":"authenticated","sub":"33333333-3333-4333-8333-333333333333"}
+(1 row)
+
+        publish_content_draft         
+--------------------------------------
+ 92f1c04a-93c6-4e57-a6b8-00a72fb9d9dc
+(1 row)
+
+S10 re-publish OK
+PASS s10_feed_still_1=1
+PASS s10_same_feed_id=92f1c04a-93c6-4e57-a6b8-00a72fb9d9dc
+--- S11: interrupted ingest transaction ---
+ERROR:  forbidden
+CONTEXT:  PL/pgSQL function public.ingest_research_snapshot(uuid,uuid,text,text,integer,jsonb) line 4 at RAISE
+PASS s11_snapshots_still=2
+PASS s11_drafts_still=2
+              set_config              
+--------------------------------------
+ 11111111-1111-4111-8111-111111111111
+(1 row)
+
+                              set_config                              
+----------------------------------------------------------------------
+ {"role":"service_role","sub":"11111111-1111-4111-8111-111111111111"}
+(1 row)
+
+       ingest_research_snapshot       
+--------------------------------------
+ 0224ee01-b409-4dec-aaac-090fb710609f
+(1 row)
+
+S11 retry-after-interrupt OK
+PASS s11_after_retry_snapshots=3
+PASS s11_after_retry_drafts=3
+--- S12: rejected draft cannot publish ---
+              set_config              
+--------------------------------------
+ 33333333-3333-4333-8333-333333333333
+(1 row)
+
+                              set_config                               
+-----------------------------------------------------------------------
+ {"role":"authenticated","sub":"33333333-3333-4333-8333-333333333333"}
+(1 row)
+
+ set_content_draft_status 
+--------------------------
+ 
+(1 row)
+
+S12 reject OK
+PASS s12_rejected_publish=22023
+PASS s12_feed_still_1=1
+
+=== PIPELINE E2E SUMMARY: 0 failures ===
