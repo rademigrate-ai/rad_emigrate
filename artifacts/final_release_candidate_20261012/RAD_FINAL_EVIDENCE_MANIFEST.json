@@ -78,6 +78,39 @@
       "prepilot_targeted_flutter_test.log"
     ]
   },
+  "staging_release_blockers": {
+    "source_head": "bc60f377990737fec182525545778694fe2a7e09",
+    "application_android_migration_source_diff": "NONE",
+    "production_project_ref": "inshddthftkhcdosoqcn",
+    "production_migrations": 47,
+    "production_last_migration": "20261007212140_stage9_security_grant_hardening",
+    "isolated_local_migrations": 50,
+    "isolated_local_last_migration": "20261012110945_stage1_security_abuse_storage_alignment",
+    "hosted_staging": "BLOCKED_NO_EXISTING_NON_PRODUCTION_PROJECT",
+    "local_staging_storage_browser": "PASS",
+    "local_definer_guard_regression": "PASS_13",
+    "android_emulator": "BLOCKED_OFFICIAL_SYSTEM_IMAGE_DOWNLOAD_GOOGLE_APIS_1_6_GB_AND_AOSP_ATD_658_MB",
+    "android_device_journeys": "NOT_RUN",
+    "local_storage_denial_paths": "PASS_OWNER_ISOLATION_AND_MIME",
+    "catalog_expanded_read_only": "PASS_760_LIVE_781_LOCAL_23_KEYED_DELTAS",
+    "actual_screen_reader": "NOT_RUN",
+    "production": "NO_GO",
+    "reports": [
+      "RAD_LIVE_DEFINER_REVIEW_20261012.md",
+      "RAD_PRODUCTION_MIGRATION_RECONCILIATION_PLAN_20261012.md",
+      "RAD_STAGING_RELEASE_BLOCKERS_20261012.md"
+    ],
+    "evidence": [
+      "staging_storage_browser/result.json",
+      "staging_storage_browser/documents-after-upload-delete.png",
+      "staging_storage_browser.log",
+      "staging_definer_guard_regression.log",
+      "staging_android_system_image_install.log",
+      "staging_android_atd_install.log",
+      "staging_storage_denials.log",
+      "staging_local_restart.log"
+    ]
+  },
   "local_evidence": [
     "flutter_test.log",
     "flutter_analyze.log",
@@ -93,6 +126,9 @@
     "No Android device or AVD was available for installation and device acceptance",
     "Actual screen-reader testing was not run",
     "Browser screenshots are from a loopback stack, not production",
-    "Production unchanged"
+    "Production unchanged",
+    "Live migration history diverges from repository history; no production migration, grant or setting was changed",
+    "No hosted staging project exists and no paid project or branch was created",
+    "Android emulator system-image transfer did not complete; device acceptance remains blocked"
   ]
 }

@@ -28,3 +28,37 @@ The repository has a secured consultation submission RPC, aligned private-docume
 | G14 deployment/rollback readiness | OPEN | Release owner: approved runbook, rollback and window |
 
 See `RAD_FINAL_SECURITY_MATRIX.md`, `RAD_FINAL_TEST_MATRIX.json`, `RAD_FINAL_RELEASE_BLOCKERS.json`, and `docs/LAUNCH_ENGINEERING_OPERATIONS_HANDOFF_20261012.md`. No production writes, public-site edits, form submissions, deployment, or Feed publication occurred.
+
+## Final staging / live-read audit addendum
+
+At source HEAD `bc60f377990737fec182525545778694fe2a7e09`, a local
+volume-preserving staging restart enabled Storage with all 50 repository
+migrations still applied. Targeted Chrome guest/login/document upload,
+signed-view and delete passed, as did 13 read-only local SECURITY DEFINER
+denial regressions. The live project has 47 migration records ending at
+`20261007212140`; its catalog and advisor were inspected read-only. The two
+AI access/quota functions lack owner checks and the live Feed publication RPC
+does not require an approved draft. The repository's local security migration
+addresses these gaps, but production has not received it. No hosted staging
+branch exists. Android emulator provisioning was attempted but the official
+1.6 GB system-image transfer was too slow to complete; no device journey was
+run. See `RAD_STAGING_RELEASE_BLOCKERS_20261012.md`,
+`RAD_LIVE_DEFINER_REVIEW_20261012.md`, and
+`RAD_PRODUCTION_MIGRATION_RECONCILIATION_PLAN_20261012.md`. Production remains
+**NO-GO**.
+
+## 2026-10-13 checkpoint
+
+The expanded read-only catalog check found four local-only application CHECK
+constraints and the consultation rate-limit index beyond the earlier
+function/policy/trigger inventory. Three AI model constraints belong to a
+historically aliased migration and require DBA reconciliation; the pending P0
+and abuse-control files supply the other constraint and index. Storage
+service internals and a live-only `LOGO` bucket remain separate. Exact
+signatures/grants and dependency order are in the linked reconciliation and
+SECURITY DEFINER reports. A targeted local Storage denial regression passed
+cross-owner signed URL/upsert/path and unsupported MIME cases, then cleaned
+all fixtures. The smaller official AOSP ATD Android image also downloaded too
+slowly (2.6 MB of 658.4 MB; ETA about 4.7 hours), so no AVD or device
+journeys exist. No application or migration source changed. Production stays
+**NO-GO**.

@@ -1,0 +1,25 @@
+{
+  "result": "PASS_LOCAL_STAGING",
+  "guest_gate": "PASS",
+  "auth_login": "PASS",
+  "document_upload_delete": "PASS",
+  "storage_responses": [
+    {
+      "method": "POST",
+      "status": 200,
+      "path": "/object/documents/82ec2f16-579a-4f90-81c0-475b8c818653/f5fc463b-75f2-4d34-a1d6-0b64f3b9f431/stage2-browser-passport.pdf"
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "path": "/object/sign/documents/82ec2f16-579a-4f90-81c0-475b8c818653/f5fc463b-75f2-4d34-a1d6-0b64f3b9f431/stage2-browser-passport.pdf"
+    },
+    {
+      "method": "DELETE",
+      "status": 200,
+      "path": "/object/documents"
+    }
+  ],
+  "console_errors": [],
+  "screenshot": "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\staging_storage_browser\\documents-after-upload-delete.png"
+}

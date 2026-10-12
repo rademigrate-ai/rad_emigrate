@@ -89,6 +89,51 @@
       "command": "python -m py_compile scripts/verify_prepilot_consultation.py scripts/verify_prepilot_accessibility.py",
       "status": "PASS",
       "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9"
+    },
+    {
+      "command": "python scripts/verify_staging_definer_guards.py against isolated local PostgreSQL in read-only transactions",
+      "status": "PASS",
+      "count_pass": 13,
+      "source_head": "bc60f377990737fec182525545778694fe2a7e09",
+      "raw_log": "staging_definer_guard_regression.log"
+    },
+    {
+      "command": "python scripts/verify_staging_storage_browser.py against isolated local Auth/PostgREST/Storage",
+      "status": "PASS_LOCAL_STAGING",
+      "source_head": "bc60f377990737fec182525545778694fe2a7e09",
+      "storage_http_statuses": [200, 200, 200],
+      "raw_log": "staging_storage_browser.log",
+      "result": "staging_storage_browser/result.json"
+    },
+    {
+      "command": "Android SDK install system-images/android-35/google_apis/x86_64",
+      "status": "BLOCKED_DOWNLOAD_RATE",
+      "artifact_total_bytes_approx": 1600000000,
+      "downloaded_bytes_approx": 6100000,
+      "raw_log": "staging_android_system_image_install.log"
+    },
+    {
+      "command": "python scripts/verify_staging_storage_denials.py against isolated local Storage",
+      "status": "PASS_LOCAL_STAGING",
+      "source_head": "bc60f377990737fec182525545778694fe2a7e09",
+      "negative_checks": ["cross_owner_signed_url", "cross_owner_upsert", "cross_owner_insert_path", "unsupported_mime"],
+      "fixture_counts_after": "auth.users=0 consultation_requests=0 storage.objects=0",
+      "raw_log": "staging_storage_denials.log"
+    },
+    {
+      "command": "Android SDK install system-images/android-35/aosp_atd/x86_64",
+      "status": "BLOCKED_DOWNLOAD_RATE",
+      "artifact_total_bytes_approx": 658400000,
+      "downloaded_bytes_approx": 2600000,
+      "raw_log": "staging_android_atd_install.log",
+      "device_journeys": "NOT_RUN"
+    },
+    {
+      "command": "Live read-only pg_catalog and Supabase security advisor queries",
+      "status": "PASS_READ_ONLY_REVIEW",
+      "production_migration_count": 47,
+      "production_last_migration": "20261007212140",
+      "report": "RAD_LIVE_DEFINER_REVIEW_20261012.md"
     }
   ]
 }
