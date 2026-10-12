@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radvisa.com/schemas/review-decision-v1.json",
+  "title": "RAD Editorial Review Decision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "item_type",
+    "item_id",
+    "source_record_sha256",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rad-editorial-review-exchange-v1"
+    },
+    "item_type": {
+      "enum": ["regulatory_claim", "visa_draft"]
+    },
+    "item_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_record_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "status",
+        "reviewer",
+        "reviewed_at",
+        "rationale",
+        "evidence_checked",
+        "official_evidence_checked",
+        "proposed_correction"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rad-editorial-review-decision-v1"
+        },
+        "status": {
+          "enum": [
+            "unreviewed",
+            "in_review",
+            "needs_research",
+            "approved",
+            "rejected",
+            "unresolved"
+          ]
+        },
+        "reviewer": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "display_name"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "display_name": {"type": "string", "minLength": 1}
+              }
+            }
+          ]
+        },
+        "reviewed_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "rationale": {
+          "type": ["string", "null"]
+        },
+        "evidence_checked": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^https://"}
+        },
+        "official_evidence_checked": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^https://"}
+        },
+        "proposed_correction": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

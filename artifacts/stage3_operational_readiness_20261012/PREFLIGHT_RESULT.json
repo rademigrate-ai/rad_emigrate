@@ -1,0 +1,132 @@
+{
+  "batch_marker": "stage3-bulk-20261012",
+  "checks": [
+    {
+      "detail": "actual=handoff/codex-stage1-stage2-20261010, expected=handoff/codex-stage1-stage2-20261010",
+      "evidence": null,
+      "id": "git.branch",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "actual=62c5c91416eeac9e74b629cd47be20ed5cf52f6d, expected=not pinned",
+      "evidence": null,
+      "id": "git.head",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "head=62c5c91416eeac9e74b629cd47be20ed5cf52f6d, remote=62c5c91416eeac9e74b629cd47be20ed5cf52f6d",
+      "evidence": null,
+      "id": "git.remote_sync",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "worktree has tracked/untracked changes",
+      "evidence": [
+        "M lib/features/admin/presentation/pages/admin_review_detail_sheet.dart",
+        " M lib/features/visa/presentation/pages/visa_page.dart",
+        "?? .manus/",
+        "?? .work/",
+        "?? STAGE3_CODEX_CONTINUATION_HANDOFF.md",
+        "?? STAGE3_GROK_CDX_RECOVERY_20261010.md",
+        "?? STAGE3_GROK_CDX_URL_EVIDENCE_20261010.json",
+        "?? STAGE3_INVENTORY_RECOVERY_EVIDENCE_20261010.md",
+        "?? STAGE3_INVENTORY_RECOVERY_PACKAGE_20261010.md",
+        "?? STAGE3_INVENTORY_RECOVERY_VALIDATION_SPEC_20261010.md",
+        "?? artifacts/STAGE3_FINAL_BLOCKER_CLOSURE_PLAN.md",
+        "?? artifacts/STAGE3_LIVE_CONNECTIVITY_DIAGNOSIS.md",
+        "?? artifacts/stage3_live_discovery_20261011/STAGE3_LIVE_DISCOVERY_DELTA_REPORT.md",
+        "?? artifacts/stage3_live_discovery_20261011/STAGE3_LIVE_DISCOVERY_MANIFEST.json",
+        "?? artifacts/stage3_live_snapshot_20261011/",
+        "?? artifacts/stage3_manus_reconciliation_20261010/",
+        "?? artifacts/stage3_operational_readiness_20261012/",
+        "?? docs/STAGE3_OPERATIONAL_TOOLING.md",
+        "?? outputs/",
+        "?? scripts/diag_password_recovery_e2e.py",
+        "?? scripts/diag_timezone_asset_e2e.py",
+        "?? supabase/.branches/",
+        "?? tools/stage3_content_migration/operator_preflight.py",
+        "?? tools/stage3_content_migration/review_workflow.py",
+        "?? tools/stage3_content_migration/schemas/",
+        "?? tools/stage3_content_migration/test_operational_readiness.py",
+        "?? tools/stage3_content_migration/validate_visa_drafts.py",
+        "?? \"\\357\\200\\272 include Stage 1 report and browser E2E dependencies\\357\\200\\242\""
+      ],
+      "id": "git.clean",
+      "status": "FAIL",
+      "stop_reason": "worktree is not clean: worktree has tracked/untracked changes"
+    },
+    {
+      "detail": "verified 157 package entries; failures=0",
+      "evidence": [],
+      "id": "manifest.package",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "verified 138 SQL files; failures=0",
+      "evidence": [],
+      "id": "manifest.sql",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "rows=2192, unique_ids=1617, unique_urls=1617, unsafe=0",
+      "evidence": [],
+      "id": "canonical.dataset",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "project=inshddthftkhcdosoqcn, collision_count=0, age_hours=0.06, failures=[\"production baseline mismatch\"]",
+      "evidence": [
+        "production baseline mismatch"
+      ],
+      "id": "production.live_baseline",
+      "status": "FAIL",
+      "stop_reason": "read-only production baseline/collision verification failed: project=inshddthftkhcdosoqcn, collision_count=0, age_hours=0.06, failures=[\"production baseline mismatch\"]"
+    },
+    {
+      "detail": "live RLS tables=5/5, functions=5/5, failures=[{\"missing_approved_only_publish_gate\": true}]",
+      "evidence": [
+        {
+          "missing_approved_only_publish_gate": true
+        }
+      ],
+      "id": "production.security",
+      "status": "FAIL",
+      "stop_reason": "RLS/grant/trigger verification failed: live RLS tables=5/5, functions=5/5, failures=[{\"missing_approved_only_publish_gate\": true}]"
+    },
+    {
+      "detail": "archive bytes=30142258, checksum_match=True",
+      "evidence": {
+        "actual": "421c7b1feeee558c29586873e6de322f1775f248984fbe7052b8d7a036b30e1a",
+        "expected": "421c7b1feeee558c29586873e6de322f1775f248984fbe7052b8d7a036b30e1a"
+      },
+      "id": "backup.local",
+      "status": "PASS",
+      "stop_reason": null
+    },
+    {
+      "detail": "independent backup attestation is absent",
+      "evidence": null,
+      "id": "backup.independent",
+      "status": "FAIL",
+      "stop_reason": "independent backup verification failed: independent backup attestation is absent"
+    }
+  ],
+  "decision": "NO-GO",
+  "generated_at_utc": "2026-10-12T10:37:09.321592+00:00",
+  "ingestion_sql_executed": false,
+  "project_ref": "inshddthftkhcdosoqcn",
+  "schema_version": "rad-production-preflight-v1",
+  "stop_reasons": [
+    "worktree is not clean: worktree has tracked/untracked changes",
+    "read-only production baseline/collision verification failed: project=inshddthftkhcdosoqcn, collision_count=0, age_hours=0.06, failures=[\"production baseline mismatch\"]",
+    "RLS/grant/trigger verification failed: live RLS tables=5/5, functions=5/5, failures=[{\"missing_approved_only_publish_gate\": true}]",
+    "independent backup verification failed: independent backup attestation is absent"
+  ],
+  "writes_performed": 0
+}

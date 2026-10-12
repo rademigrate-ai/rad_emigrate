@@ -1,0 +1,88 @@
+{
+  "schema_version": "rad-production-live-check-v1",
+  "captured_at_utc": "2026-10-12T10:33:20.368551+00:00",
+  "project_ref": "inshddthftkhcdosoqcn",
+  "project_status": "ACTIVE_HEALTHY",
+  "postgres_version": "17.11.0.002",
+  "method": "read_only_sql",
+  "writes_performed": 0,
+  "batch_marker": "stage3-bulk-20261012",
+  "batch_marker_count": 0,
+  "counts": {
+    "source_documents": 6,
+    "source_snapshots": 14,
+    "research_findings": 15,
+    "content_drafts": 15,
+    "feed_items": 0
+  },
+  "package_baseline_counts": {
+    "source_documents": 5,
+    "source_snapshots": 5
+  },
+  "baseline_matches": false,
+  "latest_recorded_migration": {
+    "version": "20261007212140",
+    "name": "stage9_security_grant_hardening"
+  },
+  "rls": {
+    "source_documents": true,
+    "source_snapshots": true,
+    "research_findings": true,
+    "content_drafts": true,
+    "feed_items": true
+  },
+  "functions": {
+    "ingest_research_snapshot": {
+      "present": true,
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": true,
+      "security_definer": true,
+      "empty_search_path": true,
+      "approved_only_publish_gate": null
+    },
+    "set_research_finding_status": {
+      "present": true,
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": true,
+      "security_definer": true,
+      "empty_search_path": true,
+      "approved_only_publish_gate": null
+    },
+    "set_content_draft_status": {
+      "present": true,
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": true,
+      "security_definer": true,
+      "empty_search_path": true,
+      "approved_only_publish_gate": null
+    },
+    "update_content_draft": {
+      "present": true,
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": true,
+      "security_definer": true,
+      "empty_search_path": true,
+      "approved_only_publish_gate": null
+    },
+    "publish_content_draft": {
+      "present": true,
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": true,
+      "security_definer": true,
+      "empty_search_path": true,
+      "approved_only_publish_gate": false
+    }
+  },
+  "research_review_trigger_present": true,
+  "notes": [
+    "The query contained SELECT statements only.",
+    "The batch marker is not present in Production.",
+    "Production counts have changed since the ingestion package baseline.",
+    "The live publish_content_draft definition lacks the committed approved-only gate; no migration was executed."
+  ]
+}

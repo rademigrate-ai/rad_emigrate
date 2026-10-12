@@ -1,0 +1,34 @@
+{
+  "automatic_approval": false,
+  "inputs": {
+    "coverage_sha256": "716014fde9063ec0e6924f7c59808797cff889e5545643caa9f6d3c3db7766f0",
+    "package_sha256": "3512d0980b879022e37946557db0af83d1ff72824121a9f1782d4df5257e1090",
+    "review_queue_sha256": "8e94ffa9b039af7e81f8d27a6dda7be2639e8051ba95343b6d826d9252178273"
+  },
+  "outputs": {
+    "VISA_CORRECTION_QUEUE.jsonl": "0ab8fe6a5e183cde43d915dd89c6e2ff39bb182237970a957c97f881dde9dfaa",
+    "VISA_EVIDENCE_VALIDATION.json": "5b95dfe7c78cf7d076149db5bcef1c39d205fe600ac9ffe1c72a9214497c178a"
+  },
+  "production_writes": 0,
+  "publication_allowed": false,
+  "schema_version": "rad-visa-evidence-validation-v1",
+  "summary": {
+    "automatic_approvals": 0,
+    "correction_required": 165,
+    "drafts": 165,
+    "human_review_required": 0,
+    "issue_counts": {
+      "NO_OFFICIAL_EVIDENCE": 117,
+      "PLACEHOLDER_REQUIREMENT": 165,
+      "PLACEHOLDER_STEP": 165,
+      "REQUIREMENT_MANDATORY_UNRESOLVED": 165,
+      "REQUIREMENT_NOT_OFFICIALLY_SOURCED": 165,
+      "STEP_NOT_OFFICIALLY_SOURCED": 165,
+      "UNSUPPORTED_GUARANTEE": 5,
+      "UNVERIFIED_COST_IN_COPY": 58,
+      "UNVERIFIED_TIMELINE_IN_COPY": 53
+    },
+    "production_writes": 0,
+    "with_official_evidence": 48
+  }
+}

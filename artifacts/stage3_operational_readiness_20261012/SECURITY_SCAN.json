@@ -1,0 +1,17 @@
+{
+  "scanned_paths": [
+    "tools/stage3_content_migration/review_workflow.py",
+    "tools/stage3_content_migration/validate_visa_drafts.py",
+    "tools/stage3_content_migration/operator_preflight.py",
+    "tools/stage3_content_migration/test_operational_readiness.py",
+    "tools/stage3_content_migration/schemas/review_decision.schema.json",
+    "docs/STAGE3_OPERATIONAL_TOOLING.md",
+    "lib/features/admin/presentation/pages/admin_review_detail_sheet.dart",
+    "lib/features/visa/presentation/pages/visa_page.dart",
+    "test/visa/visa_page_test.dart",
+    "artifacts/stage3_operational_readiness_20261012"
+  ],
+  "block_findings": 0,
+  "review_findings": 0,
+  "findings": []
+}

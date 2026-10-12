@@ -1,0 +1,31 @@
+{
+  "counts": {
+    "duplicate_grouped": 2233,
+    "regulatory_claims": 3126,
+    "total": 3140,
+    "visa_drafts": 14
+  },
+  "export": {
+    "file": "P0_REVIEW_EXPORT.jsonl",
+    "sha256": "3ccd3e74c30edd6f8455191b40d016518f21e34f3597df46458221f000e290a3"
+  },
+  "generated_at": "2026-10-12T10:35:30.241768+00:00",
+  "inputs": {
+    "duplicate_map": "3a6225155c7d85b144eb54f8c4d54d026ec67a7e6390a079db8f65bd882a3a1c",
+    "official_findings": "8a0f95080855b2e9d5505875efeceb206f7cfdebc1c168a8a20d6eb647619f40",
+    "regulatory_queue": "206b7356f7a7633fad748435a977b472df2c83f964f3f4671329243feec24289",
+    "visa_queue": "8e94ffa9b039af7e81f8d27a6dda7be2639e8051ba95343b6d826d9252178273"
+  },
+  "safety": {
+    "automatic_approval": false,
+    "automatic_publication": false,
+    "production_writes": 0
+  },
+  "schema_version": "rad-editorial-review-exchange-v1",
+  "scope": {
+    "priorities": [
+      "P0_disposition_required"
+    ],
+    "production_writes": 0
+  }
+}
