@@ -15,6 +15,15 @@
 |------|---------|
 | `supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql` | `d4563930461176e6481df29cf587c9dca0eb7b4987395c05af2f613758452fbc` |
 
+2026-10-13 rehearsal clarification: the value above is the repository's
+LF-normalized SHA-256. Windows checkout supplied CRLF bytes for this one file,
+so the **executed local file bytes** hashed to
+`303b6ba4382453ab682297f57336922050344ef5e800268cdb4cb221711d149`.
+The other four files had identical worktree and LF-normalized hashes. A
+production operator must hash the exact bytes being applied and compare the
+reviewed SQL content, rather than assume the prior manifest hash describes a
+Windows checkout byte-for-byte.
+
 **Fix applied:** removed unconditional `DROP CONSTRAINT IF EXISTS` + re-ADD.  
 Now uses `DO` blocks that **ADD only when the named constraint is absent**.  
 No catalog churn on environments that already have the constraints.  

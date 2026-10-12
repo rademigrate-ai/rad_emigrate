@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-13",
+  "branch": "handoff/codex-stage1-stage2-20261010",
+  "tested_source_commit": "dc0a86892c18c1cc2afbeb29a4caf026d4f45e6b",
+  "harness_sha256_at_test": {
+    "verify_prod_equiv_rpc_acceptance.py": "c264937a0d724e575abe1bdae4024abfea88d54b26f92cc7091059fa9f9924fb",
+    "verify_prod_equiv_restore.py": "c5b6d4975afbe1c81cbad8b5bd142facd5b28b601389bdea2da87b09f18a97e8",
+    "verify_staging_storage_denials.py": "b762089bbbc814cb45e551607676ecfdd7ac7ef33d253f8aacf082728d76b79a",
+    "verify_staging_definer_guards.py": "b8c9575de95ea28f99af7dd36021c132663cc1032605a2003750205e43f2e7bc"
+  },
+  "environment": {
+    "baseline": "Disposable local Supabase PostgreSQL 17.11 on 127.0.0.1:56321; 47 live-ledger migration statements replayed, no production data copied",
+    "restore": "Separate network-none PostgreSQL 17.11 Docker container",
+    "production_writes": false
+  },
+  "engineering_attestation": {
+    "signed_by": "Codex engineering verification",
+    "attested_at_utc": "2026-10-12T22:06:18Z",
+    "signature_type": "Evidence-based agent attestation; not a cryptographic or owner signature",
+    "scope": "Executed local evidence only; not release-owner or DBA authorization",
+    "decision": "PASS_LOCAL_REHEARSAL_PRODUCTION_NO_GO"
+  },
+  "gates": [
+    {
+      "id": "HISTORY",
+      "status": "PASS",
+      "evidence": "47 live version/name pairs replayed; 16 aliases preserved; final ledger 52 with the original 47-row prefix intact",
+      "raw_log": "prod_equiv_ledger.log"
+    },
+    {
+      "id": "BASELINE_CATALOG",
+      "status": "PASS_SCOPED",
+      "evidence": "771/771 app semantic entries and 109/109 app ACL entries matched live; 18 managed-Storage/bucket exceptions",
+      "artifact": "RAD_PROD_EQUIV_SCHEMA_DIFF_20261013.json"
+    },
+    {
+      "id": "FIVE_MIGRATIONS",
+      "status": "PASS",
+      "evidence": "Five distinct SQL files applied by local Supabase CLI in ascending version order; final app diff 5 catalog + 13 semantic + 18 ACL keys",
+      "raw_log": "prod_equiv_security_migration_apply.log"
+    },
+    {
+      "id": "DEFINER_GUARDS",
+      "status": "PASS",
+      "evidence": "13 ordinary-user protected RPC denials",
+      "raw_log": "prod_equiv_definer_guards.log"
+    },
+    {
+      "id": "AI_OWNER_AND_QUOTA",
+      "status": "PASS",
+      "evidence": "Two cross-user AI RPC denials; spoofed super_admin role resolved to user limit 50; 8 concurrent reservations at 48/50 admitted 2 and denied 6",
+      "raw_log": "prod_equiv_rpc_acceptance.log"
+    },
+    {
+      "id": "FEED",
+      "status": "PASS_LOCAL",
+      "evidence": "Draft/review refused; approved publication created one Feed row inside rolled-back transaction; zero persisted",
+      "raw_log": "prod_equiv_rpc_acceptance.log"
+    },
+    {
+      "id": "CONSULTATION",
+      "status": "PASS",
+      "evidence": "Anonymous/invalid/direct-insert/cross-owner denied; 3 accepted then 4th rate-limited; admin_note denied; no Feed row",
+      "raw_log": "prod_equiv_rpc_acceptance.log"
+    },
+    {
+      "id": "STORAGE_HTTP",
+      "status": "PASS",
+      "evidence": "Owner upload and signed URL 200; cross-owner signed URL/upsert/path and bad MIME denied; fixtures cleaned",
+      "raw_log": "prod_equiv_storage_http.log"
+    },
+    {
+      "id": "RESTORE_NAIVE",
+      "status": "FAIL",
+      "evidence": "Unprepared full restore yielded 86 application ACL overgrant differences; same-cluster attempt could not install pg_cron",
+      "acl_diff": "RAD_PROD_EQUIV_NAIVE_RESTORE_ACL_DIFF_20261013.json",
+      "raw_logs": [
+        "prod_equiv_restore_raw.log",
+        "prod_equiv_full_restore_raw.log"
+      ]
+    },
+    {
+      "id": "RESTORE_HARDENED",
+      "status": "PASS_LOCAL",
+      "evidence": "Network-isolated separate cluster; dump SHA verified; 52 ledger rows, 781 catalog entries, 778 semantic entries, 427 validated constraints, 672 effective privileges and 95 table row-count/data hashes match",
+      "raw_log": "prod_equiv_restore_verification.log"
+    },
+    {
+      "id": "DISCOVERY_BEHAVIOR",
+      "status": "BLOCKED_OWNER_DECISION",
+      "evidence": "Replayed live history auto-enables new chat model; repository 50-chain leaves it disabled",
+      "raw_log": "prod_equiv_rpc_acceptance.log"
+    },
+    {
+      "id": "PRODUCTION_DATA_AND_PITR",
+      "status": "BLOCKED",
+      "evidence": "Read-only live preflight found zero invalid AI/document endpoint rows, but no sanitized production snapshot or independently attested production recovery point was supplied"
+    },
+    {
+      "id": "PRODUCTION_RELEASE",
+      "status": "FAIL_NO_GO",
+      "evidence": "Live security migrations are still unapplied; no production authorization given"
+    }
+  ],
+  "raw_logs": {
+    "prod_equiv_definer_guards.log": {
+      "bytes": 5064,
+      "sha256": "c44b774eddf9cebcb9d8d778595cd0a7c8efce22acae12860321bdc0af52bd4f"
+    },
+    "prod_equiv_full_restore_raw.log": {
+      "bytes": 1030,
+      "sha256": "fa0af9b912e32c6bc102951a5f78bd34ed557813b58965eba186b14fa9ee5f2d"
+    },
+    "prod_equiv_full_restore_restricted_raw.log": {
+      "bytes": 1244,
+      "sha256": "0e9b48c5b43f34ce06f94d65e4f6b222a4032571b5893a5ea94140e9d1e53510"
+    },
+    "prod_equiv_ledger.log": {
+      "bytes": 5412,
+      "sha256": "d3a1ad4ec05e3fc43f8eb57f8e22f460aaff0b52eff4d43d1badcf7008a942a3"
+    },
+    "prod_equiv_restore_raw.log": {
+      "bytes": 1738,
+      "sha256": "84baf969140aac2e411034080af7d6d1bbe09b8dab91263248ca5dc6a2b157b7"
+    },
+    "prod_equiv_restore_verification.log": {
+      "bytes": 884,
+      "sha256": "6b3bc1d7da77c5e32ad1d4be5e6c266b4309cfd77ce5b96b38168f284bf16a9b"
+    },
+    "prod_equiv_rpc_acceptance.log": {
+      "bytes": 3032,
+      "sha256": "694dbc30d50df9029c3cf04c2b33760ad2ca0d6b294469cef95b8283e8adfb4c"
+    },
+    "prod_equiv_security_migration_apply.log": {
+      "bytes": 3584,
+      "sha256": "ad53ceb10d0c1555086fa6ae463724f197b10a1229dc8aed0dd30a1625dafecd"
+    },
+    "prod_equiv_storage_http.log": {
+      "bytes": 1894,
+      "sha256": "cd01f82bd8ba8ebde98226163e42a89d3fd082660f64d6b3111d4a2f541d0681"
+    }
+  }
+}

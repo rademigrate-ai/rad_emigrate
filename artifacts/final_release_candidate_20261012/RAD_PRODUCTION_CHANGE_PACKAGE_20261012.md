@@ -77,11 +77,11 @@ Ordered for the **security-only** production path (editorial Stage 5 excluded):
 
 | Order | File | Purpose |
 |------:|------|---------|
-| 0 | `20261012230000_ai_models_check_constraints_alignment.sql` | Add 3 missing AI model CHECKs |
 | 1 | `20261010010000_stage1_p0_security_completion.sql` | AI owner guards, Feed approved-only + human triggers, admin_note column revoke, document endpoint CHECK, admin consultation RPCs |
 | 2 | `20261010055013_stage1_atomic_ai_quota_reservation.sql` | Atomic quota reservation |
 | 3 | `20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql` | URL validator hardening |
 | 4 | `20261012110945_stage1_security_abuse_storage_alignment.sql` | Consultation RPC + rate limits, direct INSERT revoke, Storage UPDATE own policy, index |
+| 5 | `20261012230000_ai_models_check_constraints_alignment.sql` | Add 3 missing AI model CHECKs |
 
 **Excluded from this path until separate approval:**  
 `20261007220000_stage5_visa_editorial_summaries.sql` (data UPDATE).
@@ -97,11 +97,11 @@ Ordered for the **security-only** production path (editorial Stage 5 excluded):
 1. DBA attests restorable off-machine backup or PITR recovery point.  
 2. Rehearse entire chain on isolated clone that has been seeded with the live 47-statement history (or a production-like snapshot).  
 3. Preflight SQL.  
-4. Apply `20261012230000` (AI CHECKs).  
-5. Apply `20261010010000` (P0 security).  
-6. Apply `20261010055013` (atomic quota).  
-7. Apply `20261010070000` (SSRF).  
-8. Apply `20261012110945` (consultation + Storage).  
+4. Apply `20261010010000` (P0 security).
+5. Apply `20261010055013` (atomic quota).
+6. Apply `20261010070000` (SSRF).
+7. Apply `20261012110945` (consultation + Storage).
+8. Apply `20261012230000` (AI CHECKs).
 9. Post-deployment verification SQL + disposable-identity security probes.  
 10. Re-run security advisor.
 
@@ -161,6 +161,15 @@ select id, public, file_size_limit, allowed_mime_types from storage.buckets orde
 ---
 
 ## 7. Staging rehearsal results (local only)
+
+**2026-10-13 superseding local evidence:** a separate PostgreSQL 17.11 stack
+replayed the 47 actual live-ledger statements before applying the five files
+above in chronological order, then passed targeted security tests and a
+network-isolated backup/restore verification. This is stronger than the
+earlier 50-repository-migration skeleton, but does not replace production
+data preflight, PITR attestation or owner authorization. A naïve restore
+produced excess grants; use the hardened procedure and verify effective
+privileges. See `RAD_PROD_EQUIV_REHEARSAL_REPORT_20261013.md`.
 
 - Isolated local stack applied all 50 repository migrations.
 - SECURITY DEFINER denial regression: 13 protected RPCs returned `forbidden` for ordinary authenticated principal (PASS).

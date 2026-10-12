@@ -111,6 +111,24 @@
       "staging_local_restart.log"
     ]
   },
+  "production_equivalent_rehearsal_20261013": {
+    "tested_source_commit": "dc0a86892c18c1cc2afbeb29a4caf026d4f45e6b",
+    "branch": "handoff/codex-stage1-stage2-20261010",
+    "database": "disposable local PostgreSQL 17.11",
+    "historical_live_ledger_rows_replayed": 47,
+    "security_migrations_applied_in_order": 5,
+    "final_local_ledger_rows": 52,
+    "backup_sha256": "6bb29bf7a638189f99b8ae741e6dfc1c73bcfb395f50d8e10125c6628e4a85b1",
+    "security_behavior": "PASS_LOCAL",
+    "full_isolated_restore_after_privilege_parity": "PASS_LOCAL",
+    "production_pitr": "BLOCKED_NOT_ATTESTED",
+    "production": "NO_GO",
+    "report": "RAD_PROD_EQUIV_REHEARSAL_REPORT_20261013.md",
+    "matrix": "RAD_PROD_EQUIV_EVIDENCE_MATRIX_20261013.json",
+    "historical_ledger_manifest": "RAD_PROD_EQUIV_HISTORICAL_LEDGER_20261013.json",
+    "schema_diff": "RAD_PROD_EQUIV_SCHEMA_DIFF_20261013.json",
+    "naive_restore_acl_diff": "RAD_PROD_EQUIV_NAIVE_RESTORE_ACL_DIFF_20261013.json"
+  },
   "local_evidence": [
     "flutter_test.log",
     "flutter_analyze.log",

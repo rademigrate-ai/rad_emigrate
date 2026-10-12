@@ -1,0 +1,67 @@
+{
+  "source_live_read_only_project": "inshddthftkhcdosoqcn",
+  "baseline": {
+    "live_catalog_entries": 760,
+    "local_catalog_entries": 776,
+    "app_catalog_delta_count": 0,
+    "semantic_entries_each": 771,
+    "semantic_delta_count": 0,
+    "app_acl_entries_each": 109,
+    "app_acl_delta_count": 0,
+    "service_environment_exceptions": [
+      "live-only storage.LOGO bucket",
+      "local-only Storage Iceberg internal constraints/defaults/indexes"
+    ]
+  },
+  "after_five_local_migrations": {
+    "ledger_rows": 52,
+    "live_catalog_entries": 760,
+    "local_catalog_entries": 781,
+    "application_catalog_deltas": [
+      "constraint/public/ai_models:ai_models_consecutive_failures_check",
+      "constraint/public/ai_models:ai_models_measured_latency_ms_check",
+      "constraint/public/ai_models:ai_models_recent_success_rate_check",
+      "constraint/public/document_processor_config:document_processor_config_public_endpoint_check",
+      "index/public/consultation_requests:consultation_requests_user_created_idx"
+    ],
+    "semantic_delta_count": 13,
+    "semantic_delta_keys": [
+      "function/private/is_safe_public_https_url(p_url text)",
+      "function/private/prevent_profile_role_escalation()",
+      "function/public/consume_ai_daily_quota(p_user_id uuid, p_role text)",
+      "function/public/get_ai_access_decision(p_user_id uuid, p_guest_key_hash text)",
+      "function/public/get_ai_daily_quota_status(p_user_id uuid, p_role text)",
+      "function/public/publish_content_draft(p_draft_id uuid, p_category text, p_slug text)",
+      "function/private/guard_human_feed_mutation()",
+      "function/public/list_admin_consultations()",
+      "function/public/submit_consultation_request(p_topic text, p_message text, p_related_application_id uuid)",
+      "function/public/update_admin_consultation(p_consultation_id uuid, p_status text, p_admin_note text)",
+      "policy/storage/objects:documents storage update own",
+      "trigger/public/feed_item_localizations:trg_guard_human_feed_localization_mutation",
+      "trigger/public/feed_items:trg_guard_human_feed_item_mutation"
+    ],
+    "acl_delta_count": 18,
+    "acl_delta_keys": [
+      "function_acl/private/prevent_profile_role_escalation()",
+      "function_acl/public/publish_content_draft(p_draft_id uuid, p_category text, p_slug text)",
+      "table_acl/public/consultation_requests",
+      "table_acl/public/content_drafts",
+      "table_acl/public/feed_item_localizations",
+      "table_acl/public/feed_items",
+      "column_acl/public/consultation_requests:created_at",
+      "column_acl/public/consultation_requests:id",
+      "column_acl/public/consultation_requests:message",
+      "column_acl/public/consultation_requests:related_application_id",
+      "column_acl/public/consultation_requests:status",
+      "column_acl/public/consultation_requests:topic",
+      "column_acl/public/consultation_requests:updated_at",
+      "column_acl/public/consultation_requests:user_id",
+      "function_acl/private/guard_human_feed_mutation()",
+      "function_acl/public/list_admin_consultations()",
+      "function_acl/public/submit_consultation_request(p_topic text, p_message text, p_related_application_id uuid)",
+      "function_acl/public/update_admin_consultation(p_consultation_id uuid, p_status text, p_admin_note text)"
+    ],
+    "storage_service_exceptions_count": 18
+  },
+  "interpretation": "All app-owned deltas are attributable to the five ordered security migrations. This is a catalog/ACL comparison, not proof that all production data or platform configuration is identical."
+}

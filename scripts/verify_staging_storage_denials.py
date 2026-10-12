@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Negative Storage API checks against the disposable loopback stack only."""
 
+import argparse
 import json
 import urllib.error
 import urllib.request
@@ -27,8 +28,12 @@ def storage_request(fixtures, method, path, token, body=None, mime="application/
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--expected-api-url", default="http://127.0.0.1:55321",
+                        choices=("http://127.0.0.1:55321", "http://127.0.0.1:56321"))
+    args = parser.parse_args()
     env = load_local_environment()
-    require(env["API_URL"] == "http://127.0.0.1:55321", "unexpected stack")
+    require(env["API_URL"] == args.expected_api_url, "unexpected stack")
     fixtures = LocalSupabaseFixtures(env)
     uploaded = False
     owner = other = None
@@ -44,6 +49,12 @@ def main():
         require(status == 200, f"owner upload HTTP {status}")
         uploaded = True
         checks["owner_upload"] = status
+        own_signed_status, own_signed_body = storage_request(
+            fixtures, "POST", f"/object/sign/documents/{path}", own_token,
+            json.dumps({"expiresIn": 60}).encode(), "application/json")
+        require(own_signed_status == 200 and "signedURL" in json.loads(own_signed_body),
+                f"owner signed URL HTTP {own_signed_status}")
+        checks["owner_signed_url"] = own_signed_status
 
         cases = {
             "cross_owner_signed_url": storage_request(

@@ -47,6 +47,23 @@ run. See `RAD_STAGING_RELEASE_BLOCKERS_20261012.md`,
 `RAD_PRODUCTION_MIGRATION_RECONCILIATION_PLAN_20261012.md`. Production remains
 **NO-GO**.
 
+## Production-equivalent local rehearsal — 2026-10-13
+
+A new PostgreSQL 17.11 stack replayed the **47 actual live-ledger SQL bodies**
+in order. Before pending migrations, inspected application schema and ACL
+catalogs matched live; no production client data was copied. All five
+security files then applied in chronological order, preserving the 47 ledger
+rows and appending five. Concurrent AI quota, cross-user authorization,
+approved-only Feed, Consultation limits, and Storage HTTP isolation passed
+on that reconstructed stack. A custom-format backup restored into a separate
+network-isolated PostgreSQL 17.11 cluster with matching application schema,
+row/data hashes, constraints and effective grants **after** a hardened
+restore procedure. A plain restore produced unsafe excess grants and must
+not be used as the recovery runbook. See
+`RAD_PROD_EQUIV_REHEARSAL_REPORT_20261013.md` and its signed-off local
+evidence matrix. Production backup/PITR and release authorization are still
+unverified; **production remains NO-GO**.
+
 ## 2026-10-13 checkpoint
 
 The expanded read-only catalog check found four local-only application CHECK

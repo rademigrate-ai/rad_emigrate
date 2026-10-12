@@ -35,8 +35,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--container", default="supabase_db_rad_prepilot_codex_20261012")
     args = parser.parse_args()
-    if not args.container.startswith("supabase_db_rad_prepilot_"):
-        raise SystemExit("refusing a database outside the disposable prepilot stack")
+    if args.container not in (
+        "supabase_db_rad_prepilot_codex_20261012",
+        "supabase_db_rad-prod-equivalent-20261013",
+    ):
+        raise SystemExit("refusing a database outside the disposable local stacks")
     claims = json.dumps({"sub": USER, "role": "authenticated"})
     failures = []
     for name, call in CALLS.items():

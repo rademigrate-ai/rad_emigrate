@@ -1,0 +1,386 @@
+{
+  "date": "2026-10-13",
+  "source": "Live supabase_migrations.schema_migrations read-only; SQL bodies replayed only in disposable local Supabase PostgreSQL 17.11",
+  "project_ref": "inshddthftkhcdosoqcn",
+  "history_rows": 47,
+  "statement_array_join_rule": "One-element arrays replayed as stored; multi-element arrays joined with SQL semicolon terminators (20261003235000, 20261004190000). Files end with newline.",
+  "production_data_copied": false,
+  "rows": [
+    {
+      "version": "20261001191421",
+      "name": "initial_rad_core_schema",
+      "live_statement_count": 1,
+      "live_statement_bytes": 2219,
+      "replay_file_bytes": 2219,
+      "replay_file_sha256": "a9b9791cbbe0b5f45b3fffd48bb6806eebd840c990a89fa2dc585bde37ed5930"
+    },
+    {
+      "version": "20261001191653",
+      "name": "create_profile_trigger_and_storage_setup_v2",
+      "live_statement_count": 1,
+      "live_statement_bytes": 1303,
+      "replay_file_bytes": 1304,
+      "replay_file_sha256": "50fee0a0680267a32a154d0db63d581935ee5ee7dbc6e933936a2ee0ab607db4"
+    },
+    {
+      "version": "20261001194638",
+      "name": "security_hardening_handle_new_user",
+      "live_statement_count": 1,
+      "live_statement_bytes": 336,
+      "replay_file_bytes": 336,
+      "replay_file_sha256": "32747c34efc42eeb052eaec50109535685639ff49e0ef16c031dcd0a6a973618"
+    },
+    {
+      "version": "20261001194715",
+      "name": "add_rad_backend_indexes",
+      "live_statement_count": 1,
+      "live_statement_bytes": 422,
+      "replay_file_bytes": 423,
+      "replay_file_sha256": "4f3cb9194b57aa3ae0e1508f83af5041dc82cec09edb04f1f15718f48148f57b"
+    },
+    {
+      "version": "20261001195750",
+      "name": "security_hardening",
+      "live_statement_count": 1,
+      "live_statement_bytes": 264,
+      "replay_file_bytes": 265,
+      "replay_file_sha256": "52382b2e913dbb9728a2070497027373be483206c691bc7bf24e483a37abc78c"
+    },
+    {
+      "version": "20261001195754",
+      "name": "rls_policies",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3311,
+      "replay_file_bytes": 3312,
+      "replay_file_sha256": "afb4e2d7a829d74fd04cddb6f3c2667843ba53477a0b819b1810cce2a0cb9efc"
+    },
+    {
+      "version": "20261001195756",
+      "name": "storage_policies",
+      "live_statement_count": 1,
+      "live_statement_bytes": 915,
+      "replay_file_bytes": 916,
+      "replay_file_sha256": "65e4a21656ed0de9ee4d899d1729589eee3642611693751bbbd7b0e8a3be2077"
+    },
+    {
+      "version": "20261001200202",
+      "name": "ai_sessions_and_document_bootstrap",
+      "live_statement_count": 1,
+      "live_statement_bytes": 896,
+      "replay_file_bytes": 897,
+      "replay_file_sha256": "b7052f5f96435dcff3b09d3e724c1546ba94f0ad62c726f3e272529c06720260"
+    },
+    {
+      "version": "20261001214952",
+      "name": "project05_launch_hardening",
+      "live_statement_count": 1,
+      "live_statement_bytes": 5864,
+      "replay_file_bytes": 5862,
+      "replay_file_sha256": "0c3e37da7d9d9b1e2a450a8dbe72ccaed30a0663446ff3b699f00cc2b318fe84"
+    },
+    {
+      "version": "20261001215315",
+      "name": "project05_storage_upload_limits",
+      "live_statement_count": 1,
+      "live_statement_bytes": 691,
+      "replay_file_bytes": 689,
+      "replay_file_sha256": "f30fa6173d5a762a4f4c39486266cf66d39db9fc41668b4ff5e356abc6659ce4"
+    },
+    {
+      "version": "20261001215758",
+      "name": "project05_minimize_table_privileges",
+      "live_statement_count": 1,
+      "live_statement_bytes": 189,
+      "replay_file_bytes": 187,
+      "replay_file_sha256": "4519a81c7c18fdd14138e9b643d5ad5d1c5c6ca0af0c50bba9f3568c821e225f"
+    },
+    {
+      "version": "20261001225237",
+      "name": "profile_bootstrap_policy",
+      "live_statement_count": 1,
+      "live_statement_bytes": 185,
+      "replay_file_bytes": 186,
+      "replay_file_sha256": "b74d01c179a26239b4b6cf1e648a54c91b8940b4836560c2fbc113ae9f36a9ca"
+    },
+    {
+      "version": "20261001225632",
+      "name": "storage_validation_policies",
+      "live_statement_count": 1,
+      "live_statement_bytes": 445,
+      "replay_file_bytes": 446,
+      "replay_file_sha256": "5a7beaedba9b29d438b918fdfdb43117330e7a0fed8c99aba65443c107232483"
+    },
+    {
+      "version": "20261001225634",
+      "name": "ai_message_ownership_policies",
+      "live_statement_count": 1,
+      "live_statement_bytes": 1687,
+      "replay_file_bytes": 1688,
+      "replay_file_sha256": "73b9ef0d903b15291156470aa558a4c97fc1715d263cac0155d143518e66254f"
+    },
+    {
+      "version": "20261001233027",
+      "name": "signup_trigger_search_path",
+      "live_statement_count": 1,
+      "live_statement_bytes": 61,
+      "replay_file_bytes": 62,
+      "replay_file_sha256": "99e8f8e56f040396916851c7b1315d100cea513324e9770f4071763e3b3a6d38"
+    },
+    {
+      "version": "20261001233048",
+      "name": "relationship_policies_and_indexes",
+      "live_statement_count": 1,
+      "live_statement_bytes": 2090,
+      "replay_file_bytes": 2091,
+      "replay_file_sha256": "22e6640554dc4f889c7f7ed2e8176df8d3412b576090580ae79272946ddc1cf6"
+    },
+    {
+      "version": "20261003102347",
+      "name": "restrict_documents_bucket_uploads",
+      "live_statement_count": 1,
+      "live_statement_bytes": 151,
+      "replay_file_bytes": 152,
+      "replay_file_sha256": "9ccfea18c23b7a0f2c9499dd2e33202aba2624f98e1321defa704e2b43479581"
+    },
+    {
+      "version": "20261003210302",
+      "name": "project09_visa_catalog",
+      "live_statement_count": 1,
+      "live_statement_bytes": 26513,
+      "replay_file_bytes": 28222,
+      "replay_file_sha256": "8d1b29455b96593e55bbffb0a08c59d23b819414f668dc36e5c6e069a6e1ac15"
+    },
+    {
+      "version": "20261003211635",
+      "name": "project10_knowledge_research",
+      "live_statement_count": 1,
+      "live_statement_bytes": 15606,
+      "replay_file_bytes": 15605,
+      "replay_file_sha256": "9e85ef96c8876e3958421abc1b3181eb226ab5a3793264632b0fa48a30cbc8bc"
+    },
+    {
+      "version": "20261003212339",
+      "name": "project10_security_hardening",
+      "live_statement_count": 1,
+      "live_statement_bytes": 140,
+      "replay_file_bytes": 141,
+      "replay_file_sha256": "2c00cf4a5d6796a0198b24f9f3eb09bf83994eda4a6616da1d4d244d9cd1dfff"
+    },
+    {
+      "version": "20261003213219",
+      "name": "project11_ai_orchestration",
+      "live_statement_count": 1,
+      "live_statement_bytes": 10304,
+      "replay_file_bytes": 10303,
+      "replay_file_sha256": "03f33d365423d35b632c2be1fd5d63dc1ccdf4d2a1cb4c1d0be48f009a8958a2"
+    },
+    {
+      "version": "20261003214031",
+      "name": "project12_document_intelligence",
+      "live_statement_count": 1,
+      "live_statement_bytes": 8459,
+      "replay_file_bytes": 8458,
+      "replay_file_sha256": "0f4f1d1a639f24091e37d43fb2f6129c34010cdc55b10b6d8add85929fdc2599"
+    },
+    {
+      "version": "20261003221324",
+      "name": "project13_admin_operations",
+      "live_statement_count": 1,
+      "live_statement_bytes": 6949,
+      "replay_file_bytes": 6948,
+      "replay_file_sha256": "76fef9294fd2c099821f2761a09f2b284f16233160bff4d31edd43913b519251"
+    },
+    {
+      "version": "20261003222909",
+      "name": "project14_feed_notifications",
+      "live_statement_count": 1,
+      "live_statement_bytes": 8294,
+      "replay_file_bytes": 8293,
+      "replay_file_sha256": "68d4ff676600b794f901e2b11eef872f194fe5fa978c398ae3f9c31c3f288ff1"
+    },
+    {
+      "version": "20261003223717",
+      "name": "project15_observability",
+      "live_statement_count": 1,
+      "live_statement_bytes": 9549,
+      "replay_file_bytes": 9552,
+      "replay_file_sha256": "a53b529dcdcba1eadb09ae0d762675290cdb21b055432198a7d0f51a5df28268"
+    },
+    {
+      "version": "20261003235000",
+      "name": "ai_base_url_ssrf_hardening",
+      "live_statement_count": 9,
+      "live_statement_bytes": 4237,
+      "replay_file_bytes": 4247,
+      "replay_file_sha256": "f3fb79be6a45cd514bcca8ad2e837a4c781efdb508c59f7ae924e96ed57721d9"
+    },
+    {
+      "version": "20261004190000",
+      "name": "fix_profile_update_rls_recursion",
+      "live_statement_count": 6,
+      "live_statement_bytes": 859,
+      "replay_file_bytes": 866,
+      "replay_file_sha256": "0c76e259be132d0a0f84135ea797b6d38b81ee42705cb8d44d676777bc898f02"
+    },
+    {
+      "version": "20261005123027",
+      "name": "client_delivery_ai_scopes",
+      "live_statement_count": 1,
+      "live_statement_bytes": 1729,
+      "replay_file_bytes": 1730,
+      "replay_file_sha256": "6ce8075140cb823aaf81e3e193532c921d9abc204b90364b7e5a5384a029397e"
+    },
+    {
+      "version": "20261005123202",
+      "name": "stage1_ai_research_completion",
+      "live_statement_count": 1,
+      "live_statement_bytes": 14169,
+      "replay_file_bytes": 14170,
+      "replay_file_sha256": "2746b1b2a2701389cac74d175d1f7839ee7f0b3fffd0f465ba0963f885e37b57"
+    },
+    {
+      "version": "20261005123255",
+      "name": "stage2_review_feed_publish",
+      "live_statement_count": 1,
+      "live_statement_bytes": 7769,
+      "replay_file_bytes": 7770,
+      "replay_file_sha256": "46e17165f4798c6b140e7df2302b40a4500254c89808344a30a6171b24435e67"
+    },
+    {
+      "version": "20261005180215",
+      "name": "stage3_fk_covering_indexes",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3365,
+      "replay_file_bytes": 3366,
+      "replay_file_sha256": "f1c4143fb8d07e004ab03f397deaa5e86e042aa347372e92c68ecb52d8875cbc"
+    },
+    {
+      "version": "20261006144235",
+      "name": "stage2_visa_structured_steps",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3563,
+      "replay_file_bytes": 4126,
+      "replay_file_sha256": "d3f6fd01b0e1976693449d4d6e9b0eeec1cb36892ef4d7df8477d1ad49c72012"
+    },
+    {
+      "version": "20261006144246",
+      "name": "stage5_research_review_candidate_backfill",
+      "live_statement_count": 1,
+      "live_statement_bytes": 2602,
+      "replay_file_bytes": 2602,
+      "replay_file_sha256": "1354b526683e46c7a177c61d1ec88bfdf20ef3971a38d152b03f86279b18fcf4"
+    },
+    {
+      "version": "20261006161823",
+      "name": "fix_profile_update_with_check_role_escalation",
+      "live_statement_count": 1,
+      "live_statement_bytes": 995,
+      "replay_file_bytes": 995,
+      "replay_file_sha256": "8971c63a70bc0cdd410cf7a4eee51952acec8a6cb5fec69f6aeed227f7ba71c9"
+    },
+    {
+      "version": "20261006221616",
+      "name": "ai_dynamic_routing_architecture",
+      "live_statement_count": 1,
+      "live_statement_bytes": 9279,
+      "replay_file_bytes": 9280,
+      "replay_file_sha256": "0d650d230418a321897d2cc16168cb0a00aea3d58bf3942153c1120b0812800c"
+    },
+    {
+      "version": "20261007075108",
+      "name": "ai_credential_failure_routing",
+      "live_statement_count": 1,
+      "live_statement_bytes": 17314,
+      "replay_file_bytes": 17314,
+      "replay_file_sha256": "a12a0dffd60aeef2e3b024ed230434b40084e0fb40e426d38c8d800b3a8c8a78"
+    },
+    {
+      "version": "20261007075110",
+      "name": "research_atomic_review_candidate",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3177,
+      "replay_file_bytes": 3177,
+      "replay_file_sha256": "287cb21e959353b833e44f04daf90918fd817bdef34d880cbdd6e9f57a94541d"
+    },
+    {
+      "version": "20261007142614",
+      "name": "ai_discovery_auto_enable_chat",
+      "live_statement_count": 1,
+      "live_statement_bytes": 4048,
+      "replay_file_bytes": 4049,
+      "replay_file_sha256": "fa5c64a2ea54cb5e46eac732ea725f2c238d26c90051be433ce269325e1a2227"
+    },
+    {
+      "version": "20261007171212",
+      "name": "stage2_knowledge_completion",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3903,
+      "replay_file_bytes": 3906,
+      "replay_file_sha256": "05303f0ff2990178c0c63bb6a5738f4291a1150b612f61c1718064ab830a0026"
+    },
+    {
+      "version": "20261007171310",
+      "name": "stage2_promote_knowledge_fn",
+      "live_statement_count": 1,
+      "live_statement_bytes": 6305,
+      "replay_file_bytes": 6306,
+      "replay_file_sha256": "2b83df3bc035fc46d6166ce95d246636876c2c137bca83543eb1a67e7921e32b"
+    },
+    {
+      "version": "20261007171341",
+      "name": "stage2_retrieve_and_conflict_fn",
+      "live_statement_count": 1,
+      "live_statement_bytes": 7169,
+      "replay_file_bytes": 7170,
+      "replay_file_sha256": "ef2a25f78af1574ecfe2e527877797e639611dba52939cce705d08f58b556938"
+    },
+    {
+      "version": "20261007183840",
+      "name": "stage4_user_ai_quota_grounding",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3395,
+      "replay_file_bytes": 3396,
+      "replay_file_sha256": "a81ee1b46558cf3e38a78b6643b08c67c8a634372aa7f5f224e1280352ec83aa"
+    },
+    {
+      "version": "20261007185216",
+      "name": "stage4_guest_quota_advisory_lock",
+      "live_statement_count": 1,
+      "live_statement_bytes": 1560,
+      "replay_file_bytes": 1561,
+      "replay_file_sha256": "32dd06e6ebd1de84ce1bdaa580d57332be3954dd1047dfe12ac262e68645ff84"
+    },
+    {
+      "version": "20261007192522",
+      "name": "stage4_limit_ai_runtime_chain",
+      "live_statement_count": 1,
+      "live_statement_bytes": 3233,
+      "replay_file_bytes": 3234,
+      "replay_file_sha256": "4bcd7f5e3f83e1925bd323a44ffd5a36d95cc6972d3914eee5f823dd02758fac"
+    },
+    {
+      "version": "20261007202907",
+      "name": "stage6_entitlement_access_decision",
+      "live_statement_count": 1,
+      "live_statement_bytes": 8452,
+      "replay_file_bytes": 8452,
+      "replay_file_sha256": "a2b152046f6b270a2728914cabbc9e7b979621215c1baf7a316b340c04adba8f"
+    },
+    {
+      "version": "20261007205734",
+      "name": "stage7_ops_consultation_app_status",
+      "live_statement_count": 1,
+      "live_statement_bytes": 5317,
+      "replay_file_bytes": 5317,
+      "replay_file_sha256": "1f51195547c475776c15948aa7f3fab46c6fa7ef9cdc30511641f0f31ecead47"
+    },
+    {
+      "version": "20261007212140",
+      "name": "stage9_security_grant_hardening",
+      "live_statement_count": 1,
+      "live_statement_bytes": 1424,
+      "replay_file_bytes": 1424,
+      "replay_file_sha256": "a780297e1628b7898ac8a3978ecb895006dc01c41908e6af41c205d757bb4d5b"
+    }
+  ]
+}

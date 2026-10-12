@@ -134,6 +134,46 @@
       "production_migration_count": 47,
       "production_last_migration": "20261007212140",
       "report": "RAD_LIVE_DEFINER_REVIEW_20261012.md"
+    },
+    {
+      "command": "Fresh local PostgreSQL 17.11 replay of 47 live-ledger statements, then supabase migration up --local for five chronological security files",
+      "status": "PASS_LOCAL_REHEARSAL",
+      "source_head": "dc0a86892c18c1cc2afbeb29a4caf026d4f45e6b",
+      "final_ledger_rows": 52,
+      "raw_log": "prod_equiv_security_migration_apply.log",
+      "schema_diff": "RAD_PROD_EQUIV_SCHEMA_DIFF_20261013.json"
+    },
+    {
+      "command": "python scripts/verify_prod_equiv_rpc_acceptance.py against isolated 47+5 stack",
+      "status": "PASS_LOCAL_REHEARSAL",
+      "source_head": "dc0a86892c18c1cc2afbeb29a4caf026d4f45e6b",
+      "quota_parallel_calls": 8,
+      "quota_allowed": 2,
+      "quota_denied": 6,
+      "consultation_hourly_limit": 3,
+      "raw_log": "prod_equiv_rpc_acceptance.log"
+    },
+    {
+      "command": "python scripts/verify_staging_storage_denials.py --expected-api-url http://127.0.0.1:56321",
+      "status": "PASS_LOCAL_REHEARSAL",
+      "raw_log": "prod_equiv_storage_http.log"
+    },
+    {
+      "command": "python scripts/verify_staging_definer_guards.py --container supabase_db_rad-prod-equivalent-20261013",
+      "status": "PASS",
+      "count_pass": 13,
+      "raw_log": "prod_equiv_definer_guards.log"
+    },
+    {
+      "command": "pg_dump custom archive; hardened pg_restore into a separate network-none PostgreSQL 17.11 container; python scripts/verify_prod_equiv_restore.py",
+      "status": "PASS_LOCAL_RESTORE_NOT_PRODUCTION_PITR",
+      "dump_sha256": "6bb29bf7a638189f99b8ae741e6dfc1c73bcfb395f50d8e10125c6628e4a85b1",
+      "catalog_entries": 781,
+      "validated_constraints": 427,
+      "effective_privilege_checks": 672,
+      "table_data_hashes": 95,
+      "raw_log": "prod_equiv_restore_verification.log",
+      "naive_restore_status": "FAIL_86_APPLICATION_ACL_OVERGRANTS"
     }
   ]
 }

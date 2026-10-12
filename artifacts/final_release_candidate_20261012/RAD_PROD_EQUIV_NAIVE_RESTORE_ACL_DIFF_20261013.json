@@ -1,0 +1,441 @@
+{
+  "scenario": "Naive full pg_restore in fresh local PostgreSQL 17.11 cluster before default-ACL preflight",
+  "status": "FAIL_SECURITY_PARITY",
+  "application_acl_differences": 86,
+  "by_kind": {
+    "function_acl": 34,
+    "table_acl": 52
+  },
+  "comparison": [
+    {
+      "key": "function_acl/public/configure_ai_provider(p_slug text, p_display_name text, p_adapter text, p_base_url text, p_api_key text, p_enabled boolean, p_priority integer)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/consume_ai_daily_quota(p_user_id uuid, p_role text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/consume_ai_guest_quota(p_guest_key_hash text, p_limit integer)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/create_research_review_candidate(p_job_id uuid, p_finding_id uuid, p_title text, p_summary text, p_language_code text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/create_user_notification(p_user_id uuid, p_type text, p_title text, p_body text, p_action_path text, p_source_id uuid)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_access_decision(p_user_id uuid, p_guest_key_hash text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_daily_quota_status(p_user_id uuid, p_role text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_provider_runtime(p_provider_id uuid)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_provider_runtime_versioned(p_provider_id uuid)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_runtime_chain(p_capability text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_runtime_chain(p_capability text, p_scope text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_runtime_chain(p_capability text, p_scope text, p_require_tools boolean, p_require_structured boolean, p_min_context integer)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_ai_runtime_chain_versioned(p_capability text, p_scope text, p_require_tools boolean, p_require_structured boolean, p_min_context integer)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/get_document_processor_runtime()",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/handle_new_user()",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/ingest_ai_model_catalogue(p_provider_id uuid, p_credential_version bigint, p_models jsonb)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/ingest_research_snapshot(p_job_id uuid, p_document_id uuid, p_content_hash text, p_normalized_text text, p_http_status integer, p_metadata jsonb)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/list_admin_consultations()",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/promote_knowledge_from_evidence(p_slug text, p_language_code text, p_title text, p_summary text, p_claim_text text, p_snapshot_id uuid, p_excerpt text, p_topic text, p_jurisdiction text, p_destination_code text, p_program_slug text, p_confidence text, p_approve boolean)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/publish_content_draft(p_draft_id uuid, p_category text, p_slug text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/record_ai_model_outcome(p_model_id uuid, p_success boolean, p_latency_ms integer, p_error_code text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/record_ai_provider_outcome(p_provider_id uuid, p_credential_version bigint, p_error_code text, p_revalidated boolean)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/record_component_health(p_component_slug text, p_status text, p_latency_ms integer, p_safe_code text)",
+      "src": "postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/register_knowledge_conflict(p_jurisdiction text, p_statement_a text, p_statement_b text, p_citation_a_id uuid, p_citation_b_id uuid, p_proposed_interpretation text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/retrieve_knowledge(p_query text, p_locale text, p_destination_code text, p_program_slug text, p_limit integer)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/set_ai_model_configuration(p_model_id uuid, p_enabled boolean, p_runtime_scope text, p_priority integer, p_max_output_tokens integer)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/set_content_draft_status(p_draft_id uuid, p_status text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/set_research_finding_status(p_finding_id uuid, p_status text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/set_research_source_configuration(p_source_id uuid, p_display_name text, p_enabled boolean, p_runtime_scope text, p_trust_class text, p_country_code text, p_topic text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/set_user_role(p_user_id uuid, p_role text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/submit_consultation_request(p_topic text, p_message text, p_related_application_id uuid)",
+      "src": "authenticated=X/postgres,postgres=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/update_admin_consultation(p_consultation_id uuid, p_status text, p_admin_note text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/update_content_draft(p_draft_id uuid, p_title text, p_body text, p_language_code text, p_category text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "function_acl/public/upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)",
+      "src": "authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres",
+      "dst": "anon=X/postgres,authenticated=X/postgres,postgres=X/postgres,service_role=X/postgres"
+    },
+    {
+      "key": "table_acl/public/admin_audit_logs",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_guest_quota",
+      "src": "postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_models",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_provider_health",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_providers",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_requests",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_session_messages",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_sessions",
+      "src": "authenticated=arw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/ai_usage_limits",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/applications",
+      "src": "authenticated=arw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/component_health_checks",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/consultation_requests",
+      "src": "anon=arwdDxtm/postgres,authenticated=wdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/content_drafts",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/content_sources",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/dead_letter_jobs",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/destination_localizations",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/destinations",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/document_extractions",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/document_fields",
+      "src": "authenticated=rw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/document_processing_jobs",
+      "src": "authenticated=ar/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/document_processor_config",
+      "src": "postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/document_reviews",
+      "src": "authenticated=ar/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/documents",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/feed_item_localizations",
+      "src": "anon=r/postgres,authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/feed_item_reads",
+      "src": "authenticated=ard/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/feed_items",
+      "src": "anon=r/postgres,authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/incidents",
+      "src": "authenticated=arw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/knowledge_citations",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/knowledge_claims",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/knowledge_conflicts",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/knowledge_items",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/knowledge_versions",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/notification_preferences",
+      "src": "authenticated=arw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/notifications",
+      "src": "authenticated=rw/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/operational_events",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/profiles",
+      "src": "authenticated=ar/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/program_categories",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/program_category_localizations",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/push_subscriptions",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/research_findings",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/research_jobs",
+      "src": "authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/research_sources",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/research_worker_config",
+      "src": "postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/saved_feed_items",
+      "src": "authenticated=ard/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/search_providers",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/source_documents",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/source_snapshots",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/system_components",
+      "src": "authenticated=r/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/visa_program_localizations",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/visa_program_requirements",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/visa_program_steps",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    },
+    {
+      "key": "table_acl/public/visa_programs",
+      "src": "anon=r/postgres,authenticated=arwd/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres",
+      "dst": "anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres"
+    }
+  ]
+}
