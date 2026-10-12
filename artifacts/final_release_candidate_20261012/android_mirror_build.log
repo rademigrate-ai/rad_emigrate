@@ -1,0 +1,69 @@
+flutter : Flutter assets will be downloaded from https://storage.flutter-io.cn. Make sure you trust this source!
+At line:2 char:64
++ ... ttps://storage.flutter-io.cn'; flutter build apk --debug 2>&1 | Tee-O ...
++                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Flutter assets ...st this source!:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Running Gradle task 'assembleDebug'...
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "Windows_NT" == "Windows_NT" setlocal
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set DEFAULT_JVM_OPTS=
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set DIRNAME=C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android\
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android\" == "" set DIRNAME=.
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set APP_BASE_NAME=gradlew
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set APP_HOME=C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android\
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if defined JAVA_HOME goto findJavaFromJavaHome
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set JAVA_HOME=C:\Program Files\Android\Android Studio\jbr
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set JAVA_EXE=C:\Program Files\Android\Android Studio\jbr/bin/java.exe
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if exist "C:\Program Files\Android\Android Studio\jbr/bin/java.exe" goto init
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if not "Windows_NT" == "Windows_NT" goto win9xME_args
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "@eval[2+2]" == "4" goto 4NT_args
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set CMD_LINE_ARGS=
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set _SKIP=2
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "x-q" == "x" goto execute
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set CMD_LINE_ARGS=-q -Ptarget-platform=android-arm,android-arm64,android-x64 -Ptarget=lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuNg==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NWZjMzQ2ODM5Yg==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NjkyMTM2Y2I2NQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy41 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pflutter.androidSdkRoot=C:\Users\Mehrshad\AppData\Local\Android\sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=C:\Users\Mehrshad\AppData\Local\Android\sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>goto execute
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>set CLASSPATH=C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android\\gradle\wrapper\gradle-wrapper.jar
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>"C:\Program Files\Android\Android Studio\jbr/bin/java.exe"    "-Dorg.gradle.appname=gradlew" -classpath "C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android\\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain -q -Ptarget-platform=android-arm,android-arm64,android-x64 -Ptarget=lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuNg==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049NWZjMzQ2ODM5Yg==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NjkyMTM2Y2I2NQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy41 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pflutter.androidSdkRoot=C:\Users\Mehrshad\AppData\Local\Android\sdk -Pflutter.installedNdkVersions=28.2.13676358 -Pflutter.sdkManagerPath=C:\Users\Mehrshad\AppData\Local\Android\sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleDebug
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an
+unnamed module (file:/C:/Users/Mehrshad/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/l
+ib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): file_picker
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-develop
+ers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide:
+https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "0" == "0" goto mainEnd
+
+C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\android>if "Windows_NT" == "Windows_NT" endlocal
+Running Gradle task 'assembleDebug'...                            198.4s
+√ Built build\app\outputs\flutter-apk\app-debug.apk

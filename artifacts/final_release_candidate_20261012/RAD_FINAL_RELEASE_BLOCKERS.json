@@ -14,12 +14,12 @@
     {
       "id": "BROWSER_E2E",
       "owner": "QA",
-      "action": "Run real safe-environment journeys"
+      "action": "Run consultation submission against an authorized disposable backend with the RPC; complete assistive-technology and device checks"
     },
     {
-      "id": "ANDROID_HTTP403",
-      "owner": "Build infrastructure",
-      "action": "Restore Flutter engine artifact access and rerun APK build"
+      "id": "ANDROID_RELEASE_CONFIG",
+      "owner": "Release owner",
+      "action": "Approve application ID and signing, then build release variant and install-test; debug APK passed via documented mirror"
     },
     {
       "id": "STAGE3_BASELINE",

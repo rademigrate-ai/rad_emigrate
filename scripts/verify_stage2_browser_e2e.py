@@ -367,6 +367,7 @@ class BrowserAcceptance:
         recovery: Identity,
         admin: Identity,
         super_admin: Identity,
+        consultation_submit: bool = True,
     ) -> None:
         self.browser = browser
         self.base_url = base_url
@@ -376,6 +377,7 @@ class BrowserAcceptance:
         self.recovery = recovery
         self.admin = admin
         self.super_admin = super_admin
+        self.consultation_submit = consultation_submit
         self.results: list[dict[str, object]] = []
 
     async def enable_semantics(self, page: Page) -> None:
@@ -694,6 +696,8 @@ class BrowserAcceptance:
                 await self.expect_text(page, "restricted to verified RAD administrators")
                 await self.goto(page, "/profile")
                 await self.click(page.get_by_role("button", name="Log out", exact=True))
+                await self.expect_text(page, "Log out of your account?")
+                await self.click(page.get_by_role("button", name="Log out", exact=True).last)
                 await page.wait_for_url(re.compile(r".*/login(?:[?#].*)?$"))
                 await self.goto(page, "/dashboard")
                 await page.wait_for_url(re.compile(r".*/login\?from=.*dashboard"))
@@ -759,6 +763,19 @@ class BrowserAcceptance:
             await message_field.input_value() == message,
             "consultation message was not set",
         )
+        if not self.consultation_submit:
+            target = self.artifacts / "user-desktop" / "consultation-form-only.png"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            await page.screenshot(path=target, full_page=True)
+            self.results.append({
+                "identity": "user",
+                "viewport": "user-desktop",
+                "route": "/consultation",
+                "screenshot": target.as_posix(),
+                "bytes": target.stat().st_size,
+                "result": "FORM_ONLY_BACKEND_RPC_ABSENT",
+            })
+            return
         await self.click(
             page.get_by_role("button", name="Submit request", exact=True)
         )
@@ -823,7 +840,7 @@ class BrowserAcceptance:
                     "/admin/ai-config",
                     f"{identity.role}-{label}",
                 )
-            if identity.role == "admin":
+            if identity.role == "admin" and self.consultation_submit:
                 await self.goto(page, "/admin/consultations")
                 await self.expect_text(page, "Stage 2 browser consultation")
             require(not problems, "staff browser errors: " + " | ".join(problems))
@@ -849,6 +866,7 @@ async def run_browser(
     recovery: Identity,
     admin: Identity,
     super_admin: Identity,
+    consultation_submit: bool = True,
 ) -> list[dict[str, object]]:
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch(channel="chrome", headless=True)
@@ -862,6 +880,7 @@ async def run_browser(
                 recovery,
                 admin,
                 super_admin,
+                consultation_submit,
             )
             return await acceptance.run()
         finally:
@@ -877,6 +896,11 @@ def parse_args() -> argparse.Namespace:
         default=Path("build/stage2-browser-e2e"),
     )
     parser.add_argument("--port", type=int, default=3000)
+    parser.add_argument(
+        "--skip-consultation-submit",
+        action="store_true",
+        help="Capture and validate the form without submission when a disposable local stack lacks the RPC.",
+    )
     return parser.parse_args()
 
 
@@ -904,24 +928,32 @@ def main() -> None:
                     recovery,
                     admin,
                     super_admin,
+                    not args.skip_consultation_submit,
                 )
             )
         manifest = {
-            "result": "PASS",
+            "result": "PARTIAL" if args.skip_consultation_submit else "PASS",
             "base_url": "loopback",
             "supabase_url": "loopback",
             "route_captures": results,
             "route_capture_count": len(results),
+            "consultation_submission": "NOT_RUN_LOCAL_RPC_ABSENT" if args.skip_consultation_submit else "PASS",
         }
         (args.artifacts / "manifest.json").write_text(
             json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
         )
+        result_label = "partial" if args.skip_consultation_submit else "passed"
+        consultation_label = (
+            "consultation form only (local RPC absent)"
+            if args.skip_consultation_submit
+            else "consultation submission"
+        )
         print(
-            "Stage 2 browser E2E passed: public and invalid-session routes, "
+            f"Stage 2 browser E2E {result_label}: public and invalid-session routes, "
             "Persian RTL, password login/error/logout/refresh, "
             "desktop/mobile protected routes, "
             "local password recovery, document error/retry, "
-            "consultation submission, user Admin denial, "
+            f"{consultation_label}, user Admin denial, "
             "Admin routes, and Super Admin-only AI configuration. "
             f"Captured {len(results)} route artifacts."
         )

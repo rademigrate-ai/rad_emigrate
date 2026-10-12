@@ -1,0 +1,339 @@
+{
+  "result": "PARTIAL",
+  "base_url": "loopback",
+  "supabase_url": "loopback",
+  "route_captures": [
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/login?locale=fa",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/login-fa-rtl.png",
+      "bytes": 513537,
+      "elapsed_ms": null,
+      "direction": "rtl",
+      "mirrored_delta_px": 670
+    },
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/login",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/login.png",
+      "bytes": 510039,
+      "elapsed_ms": 2628
+    },
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/register",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/register.png",
+      "bytes": 479412,
+      "elapsed_ms": 2382
+    },
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/forgot-password",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/forgot-password.png",
+      "bytes": 26078,
+      "elapsed_ms": 2305
+    },
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/reset-password",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/reset-password.png",
+      "bytes": 24051,
+      "elapsed_ms": 2324
+    },
+    {
+      "identity": "public",
+      "viewport": "public-desktop",
+      "route": "/otp?identifier=browser-e2e%40example.test",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/otp.png",
+      "bytes": 27054,
+      "elapsed_ms": 2630
+    },
+    {
+      "identity": "recovery",
+      "viewport": "public-desktop",
+      "route": "/reset-password",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/public-desktop/password-recovery.png",
+      "bytes": 21751,
+      "elapsed_ms": null
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/dashboard",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/dashboard.png",
+      "bytes": 520322,
+      "elapsed_ms": 4351
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/visa",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/visa.png",
+      "bytes": 468838,
+      "elapsed_ms": 4931
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/applications",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/applications.png",
+      "bytes": 448058,
+      "elapsed_ms": 3381
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/documents",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/documents.png",
+      "bytes": 36846,
+      "elapsed_ms": 3130
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/consultation",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/consultation.png",
+      "bytes": 41818,
+      "elapsed_ms": 3276
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/notifications",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/notifications.png",
+      "bytes": 25435,
+      "elapsed_ms": 3088
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/profile",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/profile.png",
+      "bytes": 63952,
+      "elapsed_ms": 2704
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/ai-assistant",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/ai-assistant.png",
+      "bytes": 381536,
+      "elapsed_ms": 2497
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/world-clock",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/world-clock.png",
+      "bytes": 297579,
+      "elapsed_ms": 2796
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/feed",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/feed.png",
+      "bytes": 384559,
+      "elapsed_ms": 2577
+    },
+    {
+      "identity": "user",
+      "viewport": "user-desktop",
+      "route": "/consultation",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-desktop/consultation-form-only.png",
+      "bytes": 50365,
+      "result": "FORM_ONLY_BACKEND_RPC_ABSENT"
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/dashboard",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/dashboard.png",
+      "bytes": 174678,
+      "elapsed_ms": 2535
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/visa",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/visa.png",
+      "bytes": 167208,
+      "elapsed_ms": 2496
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/applications",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/applications.png",
+      "bytes": 137790,
+      "elapsed_ms": 2175
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/documents",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/documents.png",
+      "bytes": 25476,
+      "elapsed_ms": 2414
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/consultation",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/consultation.png",
+      "bytes": 33005,
+      "elapsed_ms": 2058
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/notifications",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/notifications.png",
+      "bytes": 14715,
+      "elapsed_ms": 1895
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/profile",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/profile.png",
+      "bytes": 48027,
+      "elapsed_ms": 1932
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/ai-assistant",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/ai-assistant.png",
+      "bytes": 160459,
+      "elapsed_ms": 2380
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/world-clock",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/world-clock.png",
+      "bytes": 105699,
+      "elapsed_ms": 2450
+    },
+    {
+      "identity": "user",
+      "viewport": "user-mobile",
+      "route": "/feed",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/user-mobile/feed.png",
+      "bytes": 130493,
+      "elapsed_ms": 2133
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-desktop",
+      "route": "/admin",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-desktop/admin.png",
+      "bytes": 340698,
+      "elapsed_ms": 2184
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-desktop",
+      "route": "/admin/operations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-desktop/admin-operations.png",
+      "bytes": 74728,
+      "elapsed_ms": 2153
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-desktop",
+      "route": "/admin/consultations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-desktop/admin-consultations.png",
+      "bytes": 38383,
+      "elapsed_ms": 2092
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-desktop",
+      "route": "/admin/ai-research",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-desktop/admin-ai-research.png",
+      "bytes": 373957,
+      "elapsed_ms": 2315
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-mobile",
+      "route": "/admin",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-mobile/admin.png",
+      "bytes": 131563,
+      "elapsed_ms": 2123
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-mobile",
+      "route": "/admin/operations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-mobile/admin-operations.png",
+      "bytes": 38650,
+      "elapsed_ms": 2115
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-mobile",
+      "route": "/admin/consultations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-mobile/admin-consultations.png",
+      "bytes": 26027,
+      "elapsed_ms": 2343
+    },
+    {
+      "identity": "admin",
+      "viewport": "admin-mobile",
+      "route": "/admin/ai-research",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/admin-mobile/admin-ai-research.png",
+      "bytes": 158462,
+      "elapsed_ms": 2183
+    },
+    {
+      "identity": "super_admin",
+      "viewport": "super_admin-desktop",
+      "route": "/admin",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/super_admin-desktop/admin.png",
+      "bytes": 340698,
+      "elapsed_ms": 2574
+    },
+    {
+      "identity": "super_admin",
+      "viewport": "super_admin-desktop",
+      "route": "/admin/operations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/super_admin-desktop/admin-operations.png",
+      "bytes": 77940,
+      "elapsed_ms": 2983
+    },
+    {
+      "identity": "super_admin",
+      "viewport": "super_admin-desktop",
+      "route": "/admin/consultations",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/super_admin-desktop/admin-consultations.png",
+      "bytes": 38383,
+      "elapsed_ms": 2560
+    },
+    {
+      "identity": "super_admin",
+      "viewport": "super_admin-desktop",
+      "route": "/admin/ai-research",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/super_admin-desktop/admin-ai-research.png",
+      "bytes": 373957,
+      "elapsed_ms": 2838
+    },
+    {
+      "identity": "super_admin",
+      "viewport": "super_admin-desktop",
+      "route": "/admin/ai-config",
+      "screenshot": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/artifacts/final_release_candidate_20261012/browser_e2e_final/super_admin-desktop/admin-ai-config.png",
+      "bytes": 66427,
+      "elapsed_ms": 2727
+    }
+  ],
+  "route_capture_count": 41,
+  "consultation_submission": "NOT_RUN_LOCAL_RPC_ABSENT"
+}

@@ -1,6 +1,7 @@
 {
   "date": "2026-10-12",
   "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
+  "rc_validation_head": "1d84d3f71eb6d1db90360076af839b169a757042",
   "sha256": {
     "p0_migration": "76A28A9AA6294F6A8CA8F108394B801A2EE85F85827104246324F69787610BD5",
     "web_main_dart_js": "53BC2EE5A1BAC38543A3554CBFDE753705B041F6E2838EC83683D50C7C361EA7",
@@ -8,6 +9,44 @@
     "flutter_test_log": "C94775274A4A462689CB4B44AAE60E81636BB53EFDFCA48D5F446118EF2C33AE",
     "flutter_analyze_log": "0219FF54F2498A2C5D10B01AD63129A4102AD573181F13707D8D1A8F5E9D001F",
     "stage3_python_test_log": "E6710DBD20B9EA72FBB1907BF0502EBE2BB21AD6DD7DAF6C26858352B565CFD5"
+  },
+  "rc_validation": {
+    "test_state": {
+      "base_head": "1d84d3f71eb6d1db90360076af839b169a757042",
+      "flutter_source_diff_from_base": "NONE",
+      "browser_harness_sha256": "83E62913E91AF638C7A68C978E9519980EE64B630C978A7E13F32BE3443896A1",
+      "mobile_probe_sha256": "0CEC92656FD2078090FB00B9794499DB1B5933387D42B4130200D89B58EB62AA",
+      "browser_harness_dirty_patch_git_blob": "4937ddfba3e8d014ff0911a2e6d38ffc485afdfe",
+      "note": "Application files were unchanged; report and evidence edits after tests do not alter tested code."
+    },
+    "browser_result": "PARTIAL_41_CAPTURES_CONSULTATION_SUBMISSION_NOT_RUN",
+    "android_result": "PASS_DEBUG_APK_ONLY",
+    "sha256": {
+      "browser_manifest": "E00E702D82F17734430182C16FDD2E69EDE3856688058C6903D8B3CBDF188DD8",
+      "browser_screenshot_manifest": "B5CB3CA6966976C53411456C919D4869053DA5EE66F25ABAC1AA51376FFE8732",
+      "browser_log": "C7B747056AAB65A3BE0E7A2A95BFEAAAB2B18487A7607D81D1EB63E8B3F380BD",
+      "mobile_width_probe_log": "5EA64677C80BF372E12008DB7F3901FD6D38818B4A8DE45DA94D51688E6CDD9F",
+      "android_build_log": "1C781FD2528C2D453105DC77382A54CCAC72A0287C52F1B0037FF8973BD23134",
+      "flutter_doctor_log": "AE8F1E510BC6E810E45753CC5799340CD871DF961E8F4EEF78AFA2C4F452006C",
+      "final_flutter_test_log": "76A10134D7BFD2CB60ED2F9D9513D5C4C2A7E6DDC042A8C92F7FFC1D0E120A1B",
+      "final_flutter_analyze_log": "45E52846D100A40EBE360E7D0698BD0BE4D3C55539AFD2CE078AAC0F23D0716C",
+      "final_web_build_log": "0F70682B50ACE51F14B15B8747A2D9848D10AA91706071E1DECDCA0332FFC6BE",
+      "final_web_main_dart_js": "7DE5AC28D7D2E4FF6B3604A197766BC4C848B28E720D399034AC326379914DAF",
+      "android_debug_apk": "DC515F2D4B1878C6263A14AE28DEF573B79EF091C9C6C4071C696232B049CA5C"
+    },
+    "local_artifacts": [
+      "browser_e2e_final/manifest.json",
+      "RAD_FINAL_BROWSER_SCREENSHOT_MANIFEST.json",
+      "browser_e2e_final.log",
+      "mobile_width_probe_final.log",
+      "android_mirror_build.log",
+      "flutter_doctor.log",
+      "final_flutter_test.log",
+      "final_flutter_analyze.log",
+      "final_browser_web_build.log",
+      "../../build/web/main.dart.js",
+      "../../build/app/outputs/flutter-apk/app-debug.apk"
+    ]
   },
   "local_evidence": [
     "flutter_test.log",
@@ -19,8 +58,9 @@
     "../../docs/LAUNCH_ENGINEERING_OPERATIONS_HANDOFF_20261012.md"
   ],
   "limitations": [
-    "Android full log not persisted",
-    "Real browser E2E not run",
+    "Consultation submission not run because the disposable local stack lacks the RPC; no migration was applied",
+    "Android artifact is debug-only and not signed for release",
+    "Browser screenshots are from a loopback stack, not production",
     "Production unchanged"
   ]
 }

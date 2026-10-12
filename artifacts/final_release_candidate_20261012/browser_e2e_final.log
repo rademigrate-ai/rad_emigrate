@@ -1,0 +1,1 @@
+Stage 2 browser E2E partial: public and invalid-session routes, Persian RTL, password login/error/logout/refresh, desktop/mobile protected routes, local password recovery, document error/retry, consultation form only (local RPC absent), user Admin denial, Admin routes, and Super Admin-only AI configuration. Captured 41 route artifacts.

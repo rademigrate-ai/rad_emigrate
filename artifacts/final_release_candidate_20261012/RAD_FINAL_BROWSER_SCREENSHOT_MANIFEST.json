@@ -1,0 +1,212 @@
+{
+  "source_base": "1d84d3f71eb6d1db90360076af839b169a757042",
+  "browser": "Chrome 154.0.8037.98",
+  "capture_count": 41,
+  "captures": [
+    {
+      "path": "admin-desktop/admin.png",
+      "bytes": 340698,
+      "sha256": "2A3C23ED7E3D469608165B60BED8EEC933EB83880676F7DFD7EF9E5BF00D9C28"
+    },
+    {
+      "path": "admin-desktop/admin-ai-research.png",
+      "bytes": 373957,
+      "sha256": "1ECB438547860EF2611D381E24B7EBE267C1A992EB613288C93DE608643C1625"
+    },
+    {
+      "path": "admin-desktop/admin-consultations.png",
+      "bytes": 38383,
+      "sha256": "2349DB0BFFFE099973DF63479D5677362408B6F4BC840D007C6CDD563C2CCA1A"
+    },
+    {
+      "path": "admin-desktop/admin-operations.png",
+      "bytes": 74728,
+      "sha256": "079DFAF25E2A52820EC4E48809131C24A1DCE0AF63F2F5B0E47B7E2B2731F443"
+    },
+    {
+      "path": "admin-mobile/admin.png",
+      "bytes": 131563,
+      "sha256": "3CC97510969ACFD381C145B5E34D2DD629326077012282B1AA95ACCA7D14CBC2"
+    },
+    {
+      "path": "admin-mobile/admin-ai-research.png",
+      "bytes": 158462,
+      "sha256": "9F96F01D48D9E9374620071B31A265D499E8301A3939349D7D612814A96427D4"
+    },
+    {
+      "path": "admin-mobile/admin-consultations.png",
+      "bytes": 26027,
+      "sha256": "9342C85E31A8C6ABA887FF2982370E5AE95CFD8625EA210596ACB5FA0AF8DA84"
+    },
+    {
+      "path": "admin-mobile/admin-operations.png",
+      "bytes": 38650,
+      "sha256": "8BB25C5967B5F021BC424E546A7BB661905281E909EB8615EB2A23B590834D60"
+    },
+    {
+      "path": "public-desktop/forgot-password.png",
+      "bytes": 26078,
+      "sha256": "57977B76C7FEE1603EBFAB07E4049DE0466CE9A51C565803149F1E876BD860B7"
+    },
+    {
+      "path": "public-desktop/login.png",
+      "bytes": 510039,
+      "sha256": "76C485F92C5973725197AC427163A3EBD965B101261AE9CCEF4501D9BE6AA53C"
+    },
+    {
+      "path": "public-desktop/login-fa-rtl.png",
+      "bytes": 513537,
+      "sha256": "127340707CDCFA1A9F9685994BC836E77C0F9268DB833D48D349B687E6246992"
+    },
+    {
+      "path": "public-desktop/otp.png",
+      "bytes": 27054,
+      "sha256": "41F4BCE834DEEED81944ACCE3D81C549ED607537B6FE189E174509D29A9C56A7"
+    },
+    {
+      "path": "public-desktop/password-recovery.png",
+      "bytes": 21751,
+      "sha256": "9C1B556B34181A5C6C80D1AE07107F6E200747F0BFEF82BC38026810742F1D3D"
+    },
+    {
+      "path": "public-desktop/register.png",
+      "bytes": 479412,
+      "sha256": "F18FD9166CBC72B44A4E46A4F1190BAA8B14BB3256EDE7AF623611425DABB70E"
+    },
+    {
+      "path": "public-desktop/reset-password.png",
+      "bytes": 24051,
+      "sha256": "1734611297525D60A7E3A439517E2167C651BAF2971467E4C49B0DAACE36C4FF"
+    },
+    {
+      "path": "super_admin-desktop/admin.png",
+      "bytes": 340698,
+      "sha256": "2A3C23ED7E3D469608165B60BED8EEC933EB83880676F7DFD7EF9E5BF00D9C28"
+    },
+    {
+      "path": "super_admin-desktop/admin-ai-config.png",
+      "bytes": 66427,
+      "sha256": "AB269FF7E6B569C72C77979261A6AD43450C5D9B7018C2E5C19863293581E311"
+    },
+    {
+      "path": "super_admin-desktop/admin-ai-research.png",
+      "bytes": 373957,
+      "sha256": "1ECB438547860EF2611D381E24B7EBE267C1A992EB613288C93DE608643C1625"
+    },
+    {
+      "path": "super_admin-desktop/admin-consultations.png",
+      "bytes": 38383,
+      "sha256": "2349DB0BFFFE099973DF63479D5677362408B6F4BC840D007C6CDD563C2CCA1A"
+    },
+    {
+      "path": "super_admin-desktop/admin-operations.png",
+      "bytes": 77940,
+      "sha256": "853CC7A2BA91EE7ECB9715E4DD26EE2CDC9317B3E806FF6D072C0EFCA9FCB552"
+    },
+    {
+      "path": "user-desktop/ai-assistant.png",
+      "bytes": 381536,
+      "sha256": "0649703A8831163EAA3C40338BB21B1728BFF2C7AEB7129F72945DD582BFA1F0"
+    },
+    {
+      "path": "user-desktop/applications.png",
+      "bytes": 448058,
+      "sha256": "35DC2CBA099DD1AE906B4C55844278EFF4DA070B6F2C57A7761BAE52E3C68C83"
+    },
+    {
+      "path": "user-desktop/consultation.png",
+      "bytes": 41818,
+      "sha256": "B7C6C1828DE87C12A355B21425D5818281545D324DE4983D3399B2DD468ED058"
+    },
+    {
+      "path": "user-desktop/consultation-form-only.png",
+      "bytes": 50365,
+      "sha256": "B3B7C29201E8AD64C97D2AE79A83A8B5F7859C60F8AB7DFF308A25AD87D676E6"
+    },
+    {
+      "path": "user-desktop/dashboard.png",
+      "bytes": 520322,
+      "sha256": "80300FF7D64E9DE245AA2A561015BB7C8AC44B5FB5D0C82FB0C4960FB66721C7"
+    },
+    {
+      "path": "user-desktop/documents.png",
+      "bytes": 36846,
+      "sha256": "4463A546E8D0EA36CA0B8732EE2DF7FE9DB9E8AD719A48BB39C19CFAA18702FD"
+    },
+    {
+      "path": "user-desktop/feed.png",
+      "bytes": 384559,
+      "sha256": "5A8DDA578F9F98C8CEEAC53C847E4BCA85E8FF412AE94DD7213F103EBD4E1E86"
+    },
+    {
+      "path": "user-desktop/notifications.png",
+      "bytes": 25435,
+      "sha256": "0A3B5B5504F0C132DE35680B0FBB1C1024FD07774368AF570910763C353096EF"
+    },
+    {
+      "path": "user-desktop/profile.png",
+      "bytes": 63952,
+      "sha256": "7BE8A33C6776F0DE5D718774BBA107F2B7DA2348F0EDDE276AF377B5AA07888E"
+    },
+    {
+      "path": "user-desktop/visa.png",
+      "bytes": 468838,
+      "sha256": "DE4586CF25D22E73F5E5A8B8087398730BA9927CCDD2BF87AC6D33A331CD6918"
+    },
+    {
+      "path": "user-desktop/world-clock.png",
+      "bytes": 297579,
+      "sha256": "2643028662233E9D64FBBE2BC6FAF177BF78A1E2BFC17EF17F0AC8DD587EB37E"
+    },
+    {
+      "path": "user-mobile/ai-assistant.png",
+      "bytes": 160459,
+      "sha256": "33B9357FEC0BEDA8C166A7D820508605A9E8E3986A1468CCC21592415F9C71F4"
+    },
+    {
+      "path": "user-mobile/applications.png",
+      "bytes": 137790,
+      "sha256": "06AD6F7BD8E915A61B4281807A47E57443C79B1BF372BBBE43258157A3483C01"
+    },
+    {
+      "path": "user-mobile/consultation.png",
+      "bytes": 33005,
+      "sha256": "7ED60684EF5EE2739C6D33F9E0F08C28800A537481947CAE19B65CBA19C2ED4A"
+    },
+    {
+      "path": "user-mobile/dashboard.png",
+      "bytes": 174678,
+      "sha256": "A7A362E6C02BED98EEF46533D18AD16CDF175B396FB119C4086A2B747075F667"
+    },
+    {
+      "path": "user-mobile/documents.png",
+      "bytes": 25476,
+      "sha256": "038FAF865EEED9B061F24DEECD18C6D65F740CDE92F4EE1020B06D5409FCDDF3"
+    },
+    {
+      "path": "user-mobile/feed.png",
+      "bytes": 130493,
+      "sha256": "97B8EFA0F2E1C075DEBF9DB49E6B9567C33A8D43B70FEFA1A37BED3B67729EFB"
+    },
+    {
+      "path": "user-mobile/notifications.png",
+      "bytes": 14715,
+      "sha256": "CAC555DD871643F09D4E4D672CA033EB4743C8AF81D8E856FBEA3DA9BDA6CFE1"
+    },
+    {
+      "path": "user-mobile/profile.png",
+      "bytes": 48027,
+      "sha256": "2EAE051BAEC39A13C5B0E96C31680905AA70864683B95768EB9291902249FB85"
+    },
+    {
+      "path": "user-mobile/visa.png",
+      "bytes": 167208,
+      "sha256": "242CB587B894D784398FE10AB9A0389C1A6C7CE721E79A49D282B7F96305E2C4"
+    },
+    {
+      "path": "user-mobile/world-clock.png",
+      "bytes": 105699,
+      "sha256": "DBA0484919F63C55C3FB550811491351F73EE1DB28F725E01C83585D1DD31FA3"
+    }
+  ]
+}

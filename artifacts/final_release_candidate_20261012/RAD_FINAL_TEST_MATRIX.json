@@ -1,18 +1,19 @@
 {
   "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
-  "source_note": "Integrated working tree; final commit supplied in handoff",
+  "rc_validation_head": "1d84d3f71eb6d1db90360076af839b169a757042",
+  "source_note": "Earlier backend tests remain historical evidence; current Flutter application files are unchanged from the RC validation HEAD. Browser harness and evidence files are the only tracked changes in this validation turn.",
   "tests": [
     {
       "command": "flutter test --reporter expanded",
       "status": "PASS",
       "count_pass": 325,
       "count_skipped": 4,
-      "raw_log": "flutter_test.log"
+      "raw_log": "final_flutter_test.log"
     },
     {
       "command": "flutter analyze",
       "status": "PASS",
-      "raw_log": "flutter_analyze.log"
+      "raw_log": "final_flutter_analyze.log"
     },
     {
       "command": "python -m unittest discover -s tools/stage3_content_migration -p test_*.py -q",
@@ -27,20 +28,25 @@
       "raw_log": "../../tools/stage3_pipeline_e2e/E2E_RESULTS.txt"
     },
     {
-      "command": "flutter build web --release",
+      "command": "flutter build web --release with loopback Supabase URL and local public-key dart-defines",
       "status": "PASS",
-      "raw_log": "web_build.log",
+      "raw_log": "final_browser_web_build.log",
       "artifact": "build/web/main.dart.js"
     },
     {
-      "command": "flutter build apk --debug",
-      "status": "BLOCKED",
-      "reason": "Flutter engine artifacts HTTP 403 from storage.googleapis.com; no APK"
+      "command": "FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn flutter build apk --debug",
+      "status": "PASS_DEBUG_ONLY",
+      "raw_log": "android_mirror_build.log",
+      "artifact": "build/app/outputs/flutter-apk/app-debug.apk",
+      "sha256": "DC515F2D4B1878C6263A14AE28DEF573B79EF091C9C6C4071C696232B049CA5C"
     },
     {
-      "command": "real browser E2E",
-      "status": "NOT RUN",
-      "reason": "No disposable end-to-end backend/browser run completed"
+      "command": "python scripts/verify_stage2_browser_e2e.py --skip-consultation-submit against loopback Chrome",
+      "status": "PARTIAL",
+      "route_captures": 41,
+      "raw_log": "browser_e2e_final.log",
+      "manifest": "browser_e2e_final/manifest.json",
+      "reason": "Disposable local stack lacks consultation RPC; form tested, submission not run"
     }
   ]
 }

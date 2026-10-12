@@ -1,0 +1,344 @@
+00:00 +0: loading C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/admin_ai_quota_test.dart
+00:00 +0: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization USER role cannot access admin operations
+00:00 +1: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/admin_ai_quota_test.dart: AiAssistantPage does not hard-block admin with _freeLimit
+00:00 +2: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +3: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +5: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +6: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +7: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +8: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+00:00 +9: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) immigration question declines with explicit uncertainty
+00:00 +10: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) document analysis request does not fabricate OCR or advice
+00:00 +11: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) legacy ask() preserves uncertainty messaging
+00:00 +12: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) AiResponse preserves sources when provided by a real provider
+00:00 +13: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) uncertain response may carry empty sources without implying certainty
+00:00 +14: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance every status has a non-empty human label
+00:00 +15: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance fromString maps known names and defaults unknown to draft
+00:00 +16: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance owner update via copyWith retains identity fields
+00:00 +17: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance serialization preserves owner and status
+00:01 +18: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance unauthenticated access to each protected route redirects to login
+00:01 +19: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance authenticated incomplete profile is forced to profile-completion
+00:01 +20: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance authenticated complete profile may stay on admin route
+00:01 +21: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance session restoration preserves deep-link for known protected routes
+00:01 +22: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance external or unknown restored destinations fall back to dashboard
+00:01 +23: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance admin deep-link restorable; unauthenticated still login
+00:02 +24: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance storagePath and ownership fields persist through serialization
+00:02 +25: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance signed URL is optional and not used as deletion identity
+00:02 +26: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: ai-orchestrator never writes feed_items or publish_content_draft
+00:02 +27: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: ai-orchestrator never writes feed_items or publish_content_draft
+00:02 +28: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance document type kinds are stable for UI filters
+00:02 +29: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: research-sync never publishes feed
+00:02 +30: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: create_research_review_candidate creates drafts not feed
+00:02 +31: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: Feed repository only loads published items
+00:02 +32: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: database requires approved human RPC and blocks direct Feed writes
+00:02 +33: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Super Admin bootstrap requires verified Auth accounts
+  Skip: External owner action: verify Auth identities before elevation.
+00:02 +33 ~1: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Full Flutter ARB locale service beyond bilingual content model
+  Skip: Deferred optional localization architecture; not a pass claim.
+00:02 +33 ~2: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Data export / account deletion product UI
+  Skip: Deferred pending owner legal and retention policy.
+00:02 +33 ~3: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Production domain, DNS, Auth redirect URLs, app signing
+  Skip: External infrastructure and owner signing action.
+00:03 +33 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pwa_manifest_smoke_test.dart: web/manifest.json exists with required icon references
+00:03 +34 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/pwa_manifest_smoke_test.dart: manifest name is present (production branding may still lag)
+00:04 +35 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/rtl_directionality_test.dart: AppLocale marks FA as RTL and EN as LTR
+00:04 +36 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/rtl_directionality_test.dart: app root applies Directionality from locale controller
+00:04 +37 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/rtl_directionality_test.dart: directional helpers flip chevron back and forward for RTL
+00:04 +38 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/rtl_directionality_test.dart: primary product pages use directional helpers not fixed arrows
+00:04 +39 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/rtl_directionality_test.dart: EN and FA core keys are non-empty and distinct
+00:05 +40 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: (setUpAll)
+00:05 +40 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates knowledge_items review_status includes draft through archived
+00:05 +41 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates public knowledge read requires approved status
+00:05 +42 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates research findings default to review not published
+00:05 +43 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates content_drafts include published only as explicit status
+00:05 +44 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates source authority distinguishes rad_official from government
+00:05 +45 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates knowledge conflicts retain dual statements
+00:05 +46 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates research jobs bound retries with max_attempts
+00:05 +47 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed public read requires published status
+00:05 +48 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed status machine includes draft through archived
+00:05 +49 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility saved feed and reads are owner-scoped
+00:05 +50 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility notifications are owner-scoped
+00:05 +51 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed localizations support fa and en
+00:05 +52 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation API keys use vault secret_id not table column
+00:05 +53 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation configure_ai_provider requires super_admin
+00:05 +54 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation runtime chain is service_role only
+00:05 +55 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation enabled providers and models gate metadata reads
+00:05 +56 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation request attempt_count is bounded
+00:05 +57 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening is_safe_public_https_url helper exists
+00:05 +58 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening configure_ai_provider uses safe URL helper not only https prefix
+00:05 +59 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening blocks private and loopback IPv4 ranges
+00:05 +60 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: (tearDownAll)
+00:05 +60 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: (setUpAll)
+00:05 +60 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: quota and entitlement decisions reject a non-owner user id
+00:06 +61 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: applicants cannot select consultation admin_note
+00:06 +62 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: Storage update matches upsert and stays owner-folder scoped
+00:06 +63 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: consultation submission is RPC-only and rate limited
+00:06 +64 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: existing upload and guest AI abuse bounds remain present
+00:06 +65 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: role escalation and human Feed publication guards remain intact
+00:06 +66 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/security_acceptance_test.dart: (tearDownAll)
+00:06 +66 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: (setUpAll)
+00:06 +66 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane provider credentials remain write-only and service-only
+00:06 +67 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane runtime scope is enforced in service-role RPC
+00:06 +68 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane discovery preserves configuration and disables new models
+00:06 +69 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane provider errors are classified and sanitized
+00:06 +70 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research retrieved content is structurally untrusted
+00:06 +71 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research research fetch is bounded and redirect-safe
+00:06 +72 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research scheduled and browser research have explicit authentication
+00:06 +73 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research meaningful change creates review candidate but never Feed
+00:06 +74 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research first-party sources retain explicit trust distinction
+00:06 +75 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: (tearDownAll)
+00:07 +75 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: publish_content_draft RPC exists and is admin-gated
+00:07 +76 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: research candidate creation never writes feed_items
+00:07 +77 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: research-sync worker does not publish feed
+00:07 +78 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: set_content_draft_status supports reject/keep/approve without publish
+00:07 +79 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: update_content_draft preserves separate provenance path
+00:07 +80 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: feed public read remains published-only via RLS policy source
+00:07 +81 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security publish RPC is admin-gated and idempotent
+00:08 +82 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security research worker never publishes feed
+00:08 +83 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security Stage 1 candidate path does not write feed
+00:08 +84 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security feed public RLS remains published-only
+00:08 +85 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 admin review UI wiring review detail sheet and actions exist
+00:08 +86 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 visa structured content visa steps migration seeds ordered steps without fabricating fees
+00:08 +87 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 visa structured content visa page uses localization facade not language ternaries
+00:08 +88 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 localization Stage 2 keys non-empty and distinct in EN and FA
+00:08 +89 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: research findings remain review-only worker ingests evidence atomically into one review candidate
+00:08 +90 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: research findings remain review-only Stage 5 backfill is idempotent and never publishes
+00:08 +91 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: production initialization is evidence-conscious Visa seed is limited to programmes with specific source evidence
+00:08 +92 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: production initialization is evidence-conscious thin Visa content has bilingual, explicit review state
+00:08 +93 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Android release rejects the unapproved placeholder identity
+00:08 +94 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Edge Functions share Supabase browser CORS headers
+00:08 +95 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Web and Render metadata are production-branded
+00:08 +96 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: Admin overview queries are bounded and counted server-side
+00:08 +97 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: shared loading, empty, and error states expose semantics
+00:10 +98 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:10 +99 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:10 +100 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +101 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +102 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +103 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +104 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +105 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +106 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +107 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +108 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +109 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +110 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +111 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +112 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +113 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +114 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +115 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:12 +116 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +117 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +118 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +119 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +120 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +121 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:13 +122 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:14 +123 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:15 +124 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+00:15 +125 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ai_assistant/ai_assistant_page_test.dart: provider failure retries without duplicating persisted user question
+00:17 +126 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:18 +127 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:18 +128 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:18 +129 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:18 +130 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:19 +131 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:19 +132 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+00:19 +133 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/admin/admin_form_recovery_test.dart: Admin labels localize known categories and suppress arbitrary diagnostics
+00:20 +134 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/auth_resend_test.dart: resend sends the pending email and preserves signup state
+00:20 +135 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/auth_resend_test.dart: signup resend mode reaches the repository explicitly
+00:20 +136 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/auth_resend_test.dart: resend failure preserves pending signup state
+00:21 +137 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_recovery_session_test.dart: recovery marker survives refresh only for the matching session user
+00:21 +138 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_recovery_session_test.dart: clearing recovery state removes the persisted UI gate
+00:21 +139 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_recovery_state_test.dart: recovery state requires a matching non-null active user
+00:22 +140 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:22 +141 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:22 +142 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:22 +143 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +144 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +145 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +146 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +147 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +148 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:23 +149 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +150 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +151 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +152 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +153 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +154 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +155 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +156 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +157 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +158 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+00:25 +159 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:26 +160 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:26 +161 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:26 +162 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:27 +163 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:27 +164 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:27 +165 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:27 +166 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:28 +167 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:28 +168 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:28 +169 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:28 +170 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:29 +171 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:29 +172 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:29 +173 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+00:30 +174 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/motion_primitives_test.dart: MotionReveal renders immediately with reduced motion
+00:31 +175 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/motion_primitives_test.dart: MotionCount never substitutes a value while data is missing
+00:31 +176 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/motion_primitives_test.dart: motion tokens collapse duration for reduced motion
+00:32 +177 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers builds a path-based recovery redirect for path URL strategy
+00:32 +178 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers rejects origins unavailable to a browser build
+00:32 +179 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers classifies Supabase recovery throttling without exposing details
+00:32 +180 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers classifies expired or missing recovery sessions
+00:32 +181 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.dark, 390px)
+00:33 +182 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.dark, 390px)
+00:33 +183 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.dark, 390px)
+00:35 +184 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_brand_test.dart: canonical en RadBrandSize.small emblem fits narrow space
+00:35 +185 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +186 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +187 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +188 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +189 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +190 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +191 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+00:35 +192 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +193 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +194 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +195 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +196 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +197 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +198 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+00:36 +199 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.loginHero animates without layout exceptions at narrow width
+00:36 +200 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: loading adapter maps every tier to the approved Earth scene
+00:37 +201 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.splash animates without layout exceptions at narrow width
+00:37 +202 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: section and compact loaders preserve their declared tier
+00:37 +203 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.fullScreenLoading animates without layout exceptions at narrow width
+00:37 +204 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: reduced motion stops the loader ticker and keeps copy readable
+00:37 +205 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.sectionLoading animates without layout exceptions at narrow width
+00:37 +206 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: inactive loader stops after an active to inactive update
+00:37 +207 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: inactive loader stops after an active to inactive update
+00:37 +208 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: disabled ticker mode stops an already active loader
+00:37 +209 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: removing a running loader disposes its animation cleanly
+00:37 +210 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: shared loading separates display copy from its live announcement
+00:38 +211 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: shared loading states select their declared RAD tier
+00:38 +212 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/rad_loading_test.dart: Splash loading selects the premium splash scene without a skeleton
+00:38 +213 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/session_manager_test.dart: SessionManager restore sets authenticated when session present
+00:38 +214 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/session_manager_test.dart: SessionManager restore sets unauthenticated when no session
+00:38 +215 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/session_manager_test.dart: SessionManager logout clears session
+00:39 +216 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:39 +217 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:39 +218 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:39 +219 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:39 +220 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:40 +221 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:40 +222 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:40 +223 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+00:40 +224 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/core/stage3_ui_quality_test.dart: ConstrainedContent applies max width constraint
+00:42 +225 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 320.0
+00:43 +226 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +227 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +228 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +229 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +230 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +231 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:44 +232 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:45 +233 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:45 +234 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:46 +235 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:47 +236 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+00:47 +237 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA loading shows LoadingState
+00:47 +238 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA error shows ErrorState with retry
+00:47 +239 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/geo_timezone_resolver_test.dart: (setUpAll)
+00:48 +239 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+00:48 +240 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+00:48 +241 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+00:48 +242 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+00:48 +243 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+00:49 +244 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/local_date_format_test.dart: FA uses Jalali weekday and month names
+00:49 +245 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/local_date_format_test.dart: EN uses Gregorian format
+00:50 +246 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: (setUpAll)
+00:50 +246 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine Tehran offset is +3:30 or +4:30 depending on DST rules
+00:50 +247 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine Toronto, London, Berlin, Dubai, Sydney resolve
+00:50 +248 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine convert preserves instant across zones
+00:50 +249 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine isDaytime around noon is true
+00:50 +250 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner suggests windows for Tehran–Toronto
+00:50 +251 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner no crash when zones are far apart
+00:50 +252 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner DST spring-forward date still returns list
+00:50 +253 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: CityCatalog search finds Tehran in English and Persian
+00:50 +254 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: CityCatalog nearest returns a city for a known coordinate
+00:50 +255 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/features/global_time/timezone_engine_test.dart: (tearDownAll)
+00:50 +255 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:50 +256 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:52 +257 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:52 +258 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:52 +259 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:52 +260 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:52 +261 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:54 +262 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:54 +263 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:55 +264 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:55 +265 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:55 +266 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+00:56 +267 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:56 +268 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:56 +269 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:56 +270 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:56 +271 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:57 +272 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+00:58 +273 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 360.0
+00:58 +274 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 390.0
+00:59 +275 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+00:59 +276 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+00:59 +277 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+00:59 +278 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+00:59 +279 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+00:59 +280 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+01:00 +281 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+01:01 +282 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +283 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +284 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +285 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +286 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +287 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +288 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:01 +289 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +290 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +291 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +292 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +293 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +294 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +295 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +296 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:03 +297 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:04 +298 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:04 +299 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+01:04 +300 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02b login rejects malformed email with invalid-email message
+01:06 +301 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visa/visa_page_test.dart: Visa detail exposes its evidence URL as an accessible action
+01:06 +302 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visa/visa_page_test.dart: Visa detail exposes its evidence URL as an accessible action
+01:07 +303 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visa/visa_page_test.dart: Visa detail exposes its evidence URL as an accessible action
+01:10 +304 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA login composition builds
+01:11 +305 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/widget_test.dart: App boots without crashing
+01:13 +306 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/widget_test.dart: App boots without crashing
+01:13 +307 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA visa composition builds
+01:13 +308 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA ai composition builds
+01:13 +309 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA feed composition builds
+01:13 +310 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA admin composition builds
+01:13 +311 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA login uses the premium Earth and bird scene
+01:14 +312 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA Login retains its default editorial rule
+01:14 +313 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading composition presents every RAD loading tier
+01:14 +314 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA Splash route holds the real Splash page pending
+01:14 +315 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-full route presents its approved scene
+01:14 +316 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-section route presents its approved scene
+01:14 +317 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-section-dark route presents its approved scene
+01:14 +318 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen visual QA is clean and uses the enlarged Earth scene
+01:15 +319 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA splash loader suppresses the editorial red rule
+01:15 +320 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-full loader suppresses the editorial red rule
+01:15 +321 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen loader scales down only when narrow width requires it
+01:15 +322 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen loader preserves the 280 px scene at 390 px mobile
+01:15 +323 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: dark section QA title uses explicit readable foreground color
+01:15 +324 ~4: C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA compact route presents light and dark loading states
+01:15 +325 ~4: All tests passed!

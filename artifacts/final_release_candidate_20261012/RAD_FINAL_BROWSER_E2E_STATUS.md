@@ -1,3 +1,11 @@
-# Browser E2E
+# Real-browser RC validation — 2026-10-12
 
-NOT RUN. The web release build passed and `build/web/main.dart.js` was produced, but no complete real-browser journey against a disposable authenticated backend was executed. Widget tests are not represented as browser E2E. Guest/auth, consultation, Visa, Feed, RTL/responsive and console-error browser assertions remain for QA.
+Source: branch `handoff/codex-stage1-stage2-20261010`, base HEAD `1d84d3f71eb6d1db90360076af839b169a757042`. Chrome 154.0.8037.98, headless Playwright, Flutter Web release build with only a loopback Supabase URL and public key. The browser harness refuses non-loopback API URLs. No hosted-project request was made.
+
+**PARTIAL PASS:** 41 Chrome route captures: 7 public desktop, 11 authenticated desktop, 10 authenticated mobile (390×844), 4 Admin desktop, 4 Admin mobile, and 5 Super Admin desktop. The run exercised English LTR and Persian RTL login, registration/OTP routes, invalid and successful sign-in, recovery, session refresh, logout confirmation, Visa, Feed, Consultation, Profile, document error/retry, Admin denial, and role-specific Admin routes. No unexpected page errors or console errors survived the harness's expected-auth-error filtering. The final [browser manifest](browser_e2e_final/manifest.json), [raw run log](browser_e2e_final.log), and 41 PNG captures under `browser_e2e_final/` are the evidence.
+
+**NOT RUN:** Consultation submission. The disposable local stack's latest migration is `20261010070000`; read-only inspection shows `public.submit_consultation_request(text,text,uuid)` absent. The harness validated and captured the topic/message form without submitting. Applying migrations was outside this task's authorization. This is a local backend-version blocker, not evidence that the repository client is defective. Production and public-site forms were not used.
+
+**Responsive observation:** Playwright full-page PNGs for mobile Consultation and AI Assistant are 656px and 809px wide, respectively, despite a 390px viewport. A separate [geometry probe](mobile_width_probe_final.log) found `document.documentElement.scrollWidth == innerWidth == 390` and zero horizontal-scroll range on both routes; Flutter semantics/input elements enlarge `body.scrollWidth`. Visible controls are within the 390px viewport. No application layout fix is justified by this evidence; assistive-technology impact remains unverified.
+
+The earlier run's concluding sentence wrongly claimed submission in the form-only mode. The harness output was corrected and the final run repeated; its manifest and final line both state **PARTIAL / form only**. Disposable test identities were cleaned up (zero `stage2-browser-%` users remained).
