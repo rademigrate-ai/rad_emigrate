@@ -1,0 +1,68 @@
+{
+  "project_ref": "inshddthftkhcdosoqcn",
+  "source_commit": "d8c4c8e0f401c13ad4e47f4664238f91b6c74e5c",
+  "production_operations": "read-only",
+  "observed_utc": "2026-10-12T22:25:25Z",
+  "authenticated_mcp_project": {
+    "status": "ACTIVE_HEALTHY",
+    "postgres_version": "17.11.0.002",
+    "organization_id": "qghduudkmzjyubrwsfzl",
+    "organization_plan": "free",
+    "organization_tier": "tier_free"
+  },
+  "backup_management_access": {
+    "mcp_backup_list_method_exposed": false,
+    "cli_backup_list_exit": "AccessTokenRequiredError",
+    "direct_get_endpoint": "GET /v1/projects/inshddthftkhcdosoqcn/database/backups",
+    "direct_get_http_status": 401,
+    "direct_get_message": "No access token provided",
+    "backup_schedule_get_http_status": 401,
+    "restore_versions_get_http_status": 401,
+    "valid_token_403_observed": false,
+    "scoped_token_permission_for_backup_list": "Backups: Read",
+    "scoped_token_permission_for_restore_versions": "Project Settings: Read",
+    "authenticated_browser_available": false,
+    "backup_inventory_status": "UNVERIFIED",
+    "backup_status": "UNVERIFIED",
+    "retention_window": "UNVERIFIED",
+    "pitr_recovery_window": "UNVERIFIED"
+  },
+  "published_entitlement_applied_to_actual_plan": {
+    "automatic_daily_backups_on_free": false,
+    "pitr_addon_on_free": false,
+    "managed_restore_to_new_project_on_free": false,
+    "basis": [
+      "https://supabase.com/docs/guides/platform/backups",
+      "https://supabase.com/docs/guides/platform/clone-project"
+    ]
+  },
+  "read_only_cost_quotes": {
+    "connector_new_free_project_monthly_usd": 0,
+    "connector_branch_hourly_usd": 0.01344,
+    "either_is_restore_to_new_project_quote": false,
+    "published_pro_base_monthly_usd_approx": 25,
+    "published_seven_day_pitr_monthly_usd_approx": 100,
+    "published_minimum_small_compute_monthly_usd_approx": 15,
+    "paid_clone_exact_quote": "UNVERIFIED"
+  },
+  "database_read_only": {
+    "ledger_count": 47,
+    "ledger_latest": "20261007212140",
+    "archive_mode": "on",
+    "archive_timeout": "2min",
+    "archived_count": 602,
+    "failed_count": 0,
+    "last_archived_utc": "2026-10-12T22:11:45.418469Z",
+    "wal_archiving_proves_recovery_point": false,
+    "storage_objects": [
+      { "bucket": "LOGO", "count": 1, "metadata_bytes": 95420 },
+      { "bucket": "documents", "count": 0, "metadata_bytes": 0 }
+    ]
+  },
+  "owner_decisions_recorded_not_applied": {
+    "new_ai_models": "remain disabled until administrator approval",
+    "leaked_password_protection": "enable after compatibility assessment"
+  },
+  "production_point_isolated_restore": "NOT_RUN",
+  "production_decision": "NO_GO"
+}

@@ -1,5 +1,13 @@
 # RAD production preflight and recovery readiness — 2026-10-13
 
+**Later same-day update:** The organization plan and backup access boundary
+were clarified after this snapshot. See
+`RAD_BACKUP_PITR_ACCESS_ASSESSMENT_20261013.md`; its confirmed Free-plan
+finding supersedes the statement below that plan tier was unattested. The
+owner has also decided that new AI models stay disabled until administrator
+approval and leaked-password protection should be enabled after compatibility
+assessment. Neither decision has been applied to production.
+
 **Decision: NO-GO.** Engineering sign-off here covers read-only inspection of
 Supabase project `inshddthftkhcdosoqcn` and the already completed isolated
 PostgreSQL 17.11 rehearsal. It is not owner/DBA approval, a production restore
