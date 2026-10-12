@@ -1,0 +1,45 @@
+{
+  "result": "PASS_AUTOMATED_CHROME_ONLY",
+  "screen_reader": "NOT_RUN_NO_ASSISTIVE_TECH",
+  "observations": [
+    {
+      "viewport": "1280x800",
+      "login_email_label": true,
+      "login_password_label": true,
+      "focus_after_email_tab": "Password",
+      "english_heading_x": 1670,
+      "persian_heading_x": 1000,
+      "rtl_mirror_delta_px": 670,
+      "english_restored": true,
+      "screenshots": [
+        "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_accessibility\\login-en-1280.png",
+        "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_accessibility\\login-fa-1280.png"
+      ],
+      "console_errors": []
+    },
+    {
+      "viewport": "390x844",
+      "login_email_label": true,
+      "login_password_label": true,
+      "focus_after_email_tab": "Password",
+      "english_heading_x": 147,
+      "persian_heading_x": 147,
+      "rtl_mirror_delta_px": 0,
+      "english_restored": true,
+      "screenshots": [
+        "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_accessibility\\login-en-390.png",
+        "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_accessibility\\login-fa-390.png",
+        "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_accessibility\\consultation-mobile-390.png"
+      ],
+      "console_errors": [],
+      "consultation_topic_tab_focus": "Message",
+      "consultation_geometry": {
+        "innerWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 656,
+        "horizontalScrollMax": 0
+      },
+      "consultation_submit_executed": false
+    }
+  ]
+}

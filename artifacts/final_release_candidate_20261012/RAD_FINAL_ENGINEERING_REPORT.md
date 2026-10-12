@@ -6,7 +6,7 @@ The browser/Android validation turn began at `1d84d3f71eb6d1db90360076af839b169a
 
 ## Outcome
 
-The repository has a secured consultation submission RPC, aligned private-document Storage UPDATE policy, Flutter consultation/profile and overflow repairs, and regression coverage. Full Flutter tests pass (325, 4 skipped), static analysis passes, the web release build passes, 90 Stage 3 Python tests pass, and disposable PostgreSQL pipeline/security scenarios S1–S17 pass. A real debug APK now builds through a documented Flutter artifact mirror. Real Chrome E2E captured 41 routes; consultation submission remains unrun because the disposable local stack lacks the RPC. Production migrations and submissions were not performed. This is an engineering candidate, **not production-ready**.
+The repository has a secured consultation submission RPC, aligned private-document Storage UPDATE policy, Flutter consultation/profile and overflow repairs, and regression coverage. Full Flutter tests pass (325, 4 skipped), static analysis passes, the web release build passes, 90 Stage 3 Python tests pass, and disposable PostgreSQL pipeline/security scenarios S1–S17 pass. A real debug APK now builds through a documented Flutter artifact mirror. The earlier real Chrome E2E captured 41 routes but skipped consultation submission. A later isolated stack applied all 50 repository migrations and a targeted real Chrome consultation submission passed; see `RAD_PREPILOT_ACCEPTANCE_20261012.md`. No Android device was available. Production migrations and submissions were not performed. This is an engineering candidate, **not production-ready**.
 
 ## Gate decision
 
@@ -17,8 +17,8 @@ The repository has a secured consultation submission RPC, aligned private-docume
 | G3 migration reconciliation | OPEN | DBA: reconcile repository history with live objects without altering history blindly |
 | G4 Stage 3 baseline drift | OPEN | Content/data owner: decide 5/5 baseline versus live 6/14 and approve regeneration |
 | G5 Flutter current source | PASS local | Engineering: preserve this commit and rerun after any source change |
-| G6 browser E2E | PARTIAL | QA/DBA: run consultation submission against a separately authorized up-to-date disposable backend; complete assistive-technology review |
-| G7 Android build | PASS debug only | Release owner: approve app ID/signing and run release build plus device smoke test |
+| G6 browser E2E | PASS local consultation; assistive technology UNVERIFIED | QA: complete controlled screen-reader review before pilot |
+| G7 Android build/device | PASS debug APK; device BLOCKED | Release owner: approve app ID/signing, provide device/AVD, then run release build and device smoke test |
 | G8 off-machine backup | UNVERIFIED | DBA: attest restorable backup |
 | G9 Visa editorial approval | OPEN | Editorial/legal: review draft package, sources and structured gaps |
 | G10 consultation/client operations | OPEN | Operations: close launch L01–L04 and pilot safeguards |

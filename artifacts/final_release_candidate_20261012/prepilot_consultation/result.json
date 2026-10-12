@@ -1,0 +1,97 @@
+{
+  "api_url": "http://127.0.0.1:55321",
+  "checks": {
+    "anonymous_denied": {
+      "status": 401,
+      "body": "{\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"permission denied for function submit_consultation_request\"}"
+    },
+    "invalid_topic": {
+      "status": 400,
+      "body": "{\"code\":\"22023\",\"details\":null,\"hint\":null,\"message\":\"invalid_consultation_topic\"}"
+    },
+    "invalid_message": {
+      "status": 400,
+      "body": "{\"code\":\"22023\",\"details\":null,\"hint\":null,\"message\":\"invalid_consultation_message\"}"
+    },
+    "cross_owner_application_denied": {
+      "status": 403,
+      "body": "{\"code\":\"42501\",\"details\":null,\"hint\":null,\"message\":\"related_application_forbidden\"}"
+    },
+    "direct_insert_denied": {
+      "status": 403,
+      "body": "{\"code\":\"42501\",\"details\":null,\"hint\":\"Grant the required privileges to the current role with: GRANT INSERT ON public.consultation_requests TO authenticated;\",\"message\":\"permission denied for table consultation_requests\"}"
+    },
+    "owner_isolation": {
+      "owner_rows": 1,
+      "other_rows": 0
+    },
+    "admin_note_denied": {
+      "status": 403,
+      "body": "{\"code\":\"42501\",\"details\":null,\"hint\":\"Grant the required privileges to the current role with: GRANT SELECT ON public.consultation_requests TO authenticated;\",\"message\":\"permission denied for table consultation_requests\"}"
+    },
+    "rate_limit_3_per_hour": {
+      "status": 400,
+      "body": "{\"code\":\"P0001\",\"details\":null,\"hint\":null,\"message\":\"consultation_rate_limited\"}"
+    },
+    "feed_not_published": {
+      "before": 0,
+      "after": 0
+    }
+  },
+  "browser": {
+    "http_status": 200,
+    "request_id": "aa5539fa-12dc-43d9-88c7-a7125a746784",
+    "request_method": "POST",
+    "request_path": "/rest/v1/rpc/submit_consultation_request",
+    "request_body": {
+      "p_topic": "Stage 2 browser consultation 7f1b5412",
+      "p_message": "Disposable local browser acceptance request."
+    },
+    "response_body": "aa5539fa-12dc-43d9-88c7-a7125a746784",
+    "screenshots": [
+      "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_consultation\\consultation-before-submit.png",
+      "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate\\artifacts\\final_release_candidate_20261012\\prepilot_consultation\\consultation-after-submit.png"
+    ],
+    "semantic_labels": [
+      "BackRequest consultationSubmit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "BackRequest consultationSubmit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "BackRequest consultationSubmit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "BackRequest consultationSubmit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "BackRequest consultationSubmit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "BackRequest consultation",
+      "Back",
+      "Submit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "Submit a request and a RAD advisor will follow up. This does not create a visa application automatically.Submit requestYour requestsNo consultation requests yet.",
+      "Submit a request and a RAD advisor will follow up. This does not create a visa application automatically.",
+      "Submit request",
+      "Submit request",
+      "Your requests",
+      "No consultation requests yet."
+    ],
+    "keyboard_focus_observation": [
+      {
+        "tag": "INPUT",
+        "label": "Topic",
+        "role": null
+      },
+      {
+        "tag": "TEXTAREA",
+        "label": "Message",
+        "role": null
+      },
+      {
+        "tag": "FLT-SEMANTICS",
+        "label": null,
+        "role": "button"
+      },
+      {
+        "tag": "FLT-SEMANTICS",
+        "label": null,
+        "role": "button"
+      }
+    ],
+    "console_errors": []
+  },
+  "result": "PASS",
+  "fixtures_cleaned": true
+}

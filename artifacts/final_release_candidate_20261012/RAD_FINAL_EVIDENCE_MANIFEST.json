@@ -48,6 +48,36 @@
       "../../build/app/outputs/flutter-apk/app-debug.apk"
     ]
   },
+  "prepilot_acceptance": {
+    "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+    "branch": "handoff/codex-stage1-stage2-20261010",
+    "application_source_diff_from_head": "NONE",
+    "source_tree_ids": {
+      "lib": "2cee12716059190af8c38ddc3a4a4ad153b6933d",
+      "android": "4763695cab80515b0430dd6b91458f8ab0d50281",
+      "supabase": "8b9ad1c8a5d5fa0899a63a700404aea953702123"
+    },
+    "migration_count_chronological": 50,
+    "last_migration": "20261012110945_stage1_security_abuse_storage_alignment.sql",
+    "local_api": "http://127.0.0.1:55321",
+    "consultation_e2e": "PASS_REAL_CHROME_LOCAL_ONLY",
+    "accessibility": "PASS_AUTOMATED_CHROME_SCREEN_READER_NOT_RUN",
+    "android_device": "BLOCKED_NO_DEVICE_OR_AVD",
+    "production": "NO_GO",
+    "web_main_dart_js_sha256": "4931B2B29F493177BED529004C1ED2194F70434DC439D7EC018FA2E1AC4070D4",
+    "android_debug_apk_sha256": "DC515F2D4B1878C6263A14AE28DEF573B79EF091C9C6C4071C696232B049CA5C",
+    "report": "RAD_PREPILOT_ACCEPTANCE_20261012.md",
+    "evidence": [
+      "prepilot_consultation/result.json",
+      "prepilot_db_checks.txt",
+      "prepilot_consultation.log",
+      "prepilot_accessibility/result.json",
+      "prepilot_accessibility.log",
+      "prepilot_android_device_probe.log",
+      "prepilot_web_build.log",
+      "prepilot_targeted_flutter_test.log"
+    ]
+  },
   "local_evidence": [
     "flutter_test.log",
     "flutter_analyze.log",
@@ -58,8 +88,10 @@
     "../../docs/LAUNCH_ENGINEERING_OPERATIONS_HANDOFF_20261012.md"
   ],
   "limitations": [
-    "Consultation submission not run because the disposable local stack lacks the RPC; no migration was applied",
+    "The historical RC browser run skipped consultation submission; the later isolated prepilot stack applied all 50 repository migrations and passed a real local Chrome submission",
     "Android artifact is debug-only and not signed for release",
+    "No Android device or AVD was available for installation and device acceptance",
+    "Actual screen-reader testing was not run",
     "Browser screenshots are from a loopback stack, not production",
     "Production unchanged"
   ]

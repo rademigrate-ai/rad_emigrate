@@ -47,6 +47,48 @@
       "raw_log": "browser_e2e_final.log",
       "manifest": "browser_e2e_final/manifest.json",
       "reason": "Disposable local stack lacks consultation RPC; form tested, submission not run"
+    },
+    {
+      "command": "python scripts/verify_prepilot_consultation.py against isolated loopback stack with all 50 chronological migrations",
+      "status": "PASS",
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+      "browser_rpc_http": 200,
+      "negative_checks": ["anonymous", "invalid_topic", "invalid_message", "cross_owner_application", "direct_insert", "cross_owner_read", "admin_note_read", "hourly_rate_limit", "feed_auto_publication"],
+      "raw_log": "prepilot_consultation.log",
+      "result": "prepilot_consultation/result.json"
+    },
+    {
+      "command": "python scripts/verify_prepilot_accessibility.py at 1280x800 and 390x844",
+      "status": "PASS_AUTOMATED_CHROME_ONLY",
+      "screen_reader": "NOT_RUN",
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+      "raw_log": "prepilot_accessibility.log",
+      "result": "prepilot_accessibility/result.json"
+    },
+    {
+      "command": "adb devices -l; emulator -list-avds; flutter emulators",
+      "status": "BLOCKED_NO_DEVICE_OR_AVD",
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+      "raw_log": "prepilot_android_device_probe.log"
+    },
+    {
+      "command": "flutter build web --release with isolated loopback Supabase dart-defines",
+      "status": "PASS",
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+      "raw_log": "prepilot_web_build.log",
+      "artifact_sha256": "4931B2B29F493177BED529004C1ED2194F70434DC439D7EC018FA2E1AC4070D4"
+    },
+    {
+      "command": "flutter test test/user_journeys/consultation_form_journey_test.dart test/core/app_shell_navigation_test.dart test/core/auth_redirect_test.dart --reporter expanded",
+      "status": "PASS",
+      "count_pass": 15,
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9",
+      "raw_log": "prepilot_targeted_flutter_test.log"
+    },
+    {
+      "command": "python -m py_compile scripts/verify_prepilot_consultation.py scripts/verify_prepilot_accessibility.py",
+      "status": "PASS",
+      "source_head": "d5797591e812fd920df2a7708534e95f0633e5a9"
     }
   ]
 }
