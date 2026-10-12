@@ -85,9 +85,16 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get consultationFieldsRequired => 'موضوع و پیام الزامی است.';
   @override
+  String get consultationTopicLength => 'موضوع باید بین ۳ تا ۲۰۰ نویسه باشد.';
+  @override
+  String get consultationMessageLength =>
+      'پیام باید بین ۱۰ تا ۵٬۰۰۰ نویسه باشد.';
+  @override
   String get consultationSubmitted => 'درخواست مشاوره ثبت شد.';
   @override
   String get consultationSubmitFailed => 'ثبت درخواست مشاوره ممکن نشد.';
+  @override
+  String get logoutConfirmation => 'از حساب خود خارج می‌شوید؟';
   @override
   String get submitConsultation => 'ثبت درخواست';
   @override

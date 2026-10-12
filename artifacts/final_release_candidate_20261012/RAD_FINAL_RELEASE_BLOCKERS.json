@@ -1,0 +1,35 @@
+{
+  "production_ready": false,
+  "blockers": [
+    {
+      "id": "P0_SECURITY",
+      "owner": "DBA/security",
+      "action": "Review/apply pending migrations only after authorized backup/rollback, then verify live invariants"
+    },
+    {
+      "id": "LAUNCH_L01_L04",
+      "owner": "Operations, content/legal, external Joomla web owner",
+      "action": "Close 14-item handoff P0 gates; staging test untouched form; do not submit production form"
+    },
+    {
+      "id": "BROWSER_E2E",
+      "owner": "QA",
+      "action": "Run real safe-environment journeys"
+    },
+    {
+      "id": "ANDROID_HTTP403",
+      "owner": "Build infrastructure",
+      "action": "Restore Flutter engine artifact access and rerun APK build"
+    },
+    {
+      "id": "STAGE3_BASELINE",
+      "owner": "Content/data/DBA",
+      "action": "Reconcile package 5/5 versus live 6/14 before ingestion"
+    },
+    {
+      "id": "VISA_EDITORIAL",
+      "owner": "Editorial/legal",
+      "action": "Review draft content and official sources before import"
+    }
+  ]
+}

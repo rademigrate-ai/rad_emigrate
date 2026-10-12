@@ -100,6 +100,8 @@ apply 20261007230000_stage6_entitlement_access_decision.sql
 apply 20261008010000_stage7_ops_consultation_app_status.sql
 apply 20261008020000_stage9_security_grant_hardening.sql
 apply 20261010010000_stage1_p0_security_completion.sql
+apply 20261010055013_stage1_atomic_ai_quota_reservation.sql
+apply 20261012110945_stage1_security_abuse_storage_alignment.sql
 
 # ---------- actors ----------
 say "--- actors ---"
@@ -261,6 +263,64 @@ as authenticated "33333333-3333-4333-8333-333333333333" "$ADM" \
 expect_err s12_rejected_publish 22023 \
   "set role authenticated; select set_config('request.jwt.claim.sub','33333333-3333-4333-8333-333333333333',false); select set_config('request.jwt.claims','$ADM',false); select public.publish_content_draft('$DRAFT2');"
 chk s12_feed_still_1 1 "$(q 'select count(*) from public.feed_items')"
+
+# ---------- S13: AI decision/status RPCs are owner-bound ----------
+say "--- S13: AI quota and entitlement ownership ---"
+expect_err s13_quota_non_owner 42501 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); select public.get_ai_daily_quota_status('33333333-3333-4333-8333-333333333333','super_admin');"
+expect_err s13_access_non_owner 42501 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); select public.get_ai_access_decision('33333333-3333-4333-8333-333333333333',null);"
+as authenticated "22222222-2222-4222-8222-222222222222" "$EDI" \
+  "select public.get_ai_access_decision('22222222-2222-4222-8222-222222222222',null);" \
+  && say "S13 owner access OK" || say "FAIL S13 owner access"
+
+# ---------- S14: applicant-visible consultation columns exclude admin_note ----------
+say "--- S14: consultation confidentiality ---"
+docker exec -i $C psql -q -U postgres -d $DB -v ON_ERROR_STOP=1 >>"$OUT" 2>&1 <<'EOF'
+insert into public.consultation_requests(user_id,topic,message,status,admin_note)
+values (
+  '22222222-2222-4222-8222-222222222222',
+  'Existing request',
+  'Existing request message',
+  'submitted',
+  'internal-only'
+);
+EOF
+as authenticated "22222222-2222-4222-8222-222222222222" "$EDI" \
+  "select id,topic,message,status,created_at from public.consultation_requests where user_id='22222222-2222-4222-8222-222222222222';" \
+  && say "S14 applicant-visible columns OK" || say "FAIL S14 applicant-visible columns"
+expect_err s14_admin_note_denied 42501 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); select admin_note from public.consultation_requests where user_id='22222222-2222-4222-8222-222222222222';"
+
+# ---------- S15: consultation intake is RPC-only and rate limited ----------
+say "--- S15: consultation abuse controls ---"
+expect_err s15_direct_insert_denied 42501 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); insert into public.consultation_requests(user_id,topic,message,status) values ('22222222-2222-4222-8222-222222222222','Direct request','Direct insert must be denied','submitted');"
+for n in 1 2; do
+  as authenticated "22222222-2222-4222-8222-222222222222" "$EDI" \
+    "select public.submit_consultation_request('RPC request $n','RPC request message number $n');" \
+    && say "S15 RPC request $n OK" || say "FAIL S15 RPC request $n"
+done
+# The fixture plus two RPC submissions reaches the three-per-hour limit.
+expect_err s15_fourth_hourly_denied P0001 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); select public.submit_consultation_request('RPC request 3','RPC request message number 3');"
+chk s15_consultation_count 3 "$(q "select count(*) from public.consultation_requests where user_id='22222222-2222-4222-8222-222222222222'")"
+
+# ---------- S16: self-service role escalation remains forbidden ----------
+say "--- S16: role escalation guard ---"
+expect_err s16_role_escalation_denied 42501 \
+  "set role authenticated; select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',false); select set_config('request.jwt.claims','$EDI',false); update public.profiles set role='admin' where id='22222222-2222-4222-8222-222222222222';"
+chk s16_editor_role_user user "$(q "select role from public.profiles where id='22222222-2222-4222-8222-222222222222'")"
+
+# ---------- S17: guest quota remains service-only and capped ----------
+say "--- S17: guest AI abuse controls ---"
+chk s17_anon_guest_execute f "$(q "select has_function_privilege('anon','public.consume_ai_guest_quota(text,integer)','execute')")"
+chk s17_service_guest_execute t "$(q "select has_function_privilege('service_role','public.consume_ai_guest_quota(text,integer)','execute')")"
+for n in 1 2 3 4 5; do
+  q "select public.consume_ai_guest_quota('e2e-guest-security-key-00000001',5)" >/dev/null
+done
+chk s17_guest_sixth_allowed false "$(q "select public.consume_ai_guest_quota('e2e-guest-security-key-00000001',5)->>'allowed'")"
+chk s17_guest_count 5 "$(q "select question_count from public.ai_guest_quota where guest_key_hash='e2e-guest-security-key-00000001'")"
 
 say ""
 say "=== PIPELINE E2E SUMMARY: $FAILURES failures ==="

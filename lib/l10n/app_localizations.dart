@@ -381,8 +381,11 @@ abstract class AppLocalizations {
   String get consultationTopic;
   String get consultationMessage;
   String get consultationFieldsRequired;
+  String get consultationTopicLength;
+  String get consultationMessageLength;
   String get consultationSubmitted;
   String get consultationSubmitFailed;
+  String get logoutConfirmation;
   String get submitConsultation;
   String get myConsultations;
   String get noConsultations;

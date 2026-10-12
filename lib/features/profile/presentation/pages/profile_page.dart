@@ -173,6 +173,26 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             onPressed: _saving
                 ? null
                 : () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: Text(l10n.logout),
+                        content: Text(l10n.logoutConfirmation),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(dialogContext).pop(false),
+                            child: Text(l10n.cancel),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(dialogContext).pop(true),
+                            child: Text(l10n.logout),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirmed != true || !context.mounted) return;
                     await ref.read(authControllerProvider.notifier).logout();
                     if (context.mounted) context.go('/login');
                   },

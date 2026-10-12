@@ -30,12 +30,22 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get consultationFieldsRequired => 'Topic and message are required.';
 
   @override
+  String get consultationTopicLength => 'Enter a topic of 3 to 200 characters.';
+
+  @override
+  String get consultationMessageLength =>
+      'Enter a message of 10 to 5,000 characters.';
+
+  @override
   String get consultationSubmitted =>
       'Your consultation request was submitted.';
 
   @override
   String get consultationSubmitFailed =>
       'Could not submit the consultation request.';
+
+  @override
+  String get logoutConfirmation => 'Log out of your account?';
 
   @override
   String get submitConsultation => 'Submit request';

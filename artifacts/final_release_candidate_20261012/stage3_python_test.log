@@ -1,0 +1,13 @@
+python : ----------------------------------------------------------------------
+At line:2 char:1
++ python -m unittest discover -s tools/stage3_content_migration -p 'tes ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (---------------...---------------:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Ran 90 tests in 25.594s
+
+OK
+{"accepted": true, "audit_events": 1, "changed": 1, "current_decisions": 1, "production_writes": 0, "publication_actions": 0, "received": 1, "schema_version": "rad-editorial-review-decision-v1", "status_counts": {"approved": 0, "in_review": 0, "needs_research": 0, "rejected": 1, "unresolved": 0, "unreviewed": 0}}
+{"accepted": true, "audit_events": 1, "changed": 0, "current_decisions": 1, "production_writes": 0, "publication_actions": 0, "received": 1, "schema_version": "rad-editorial-review-decision-v1", "status_counts": {"approved": 0, "in_review": 0, "needs_research": 0, "rejected": 1, "unresolved": 0, "unreviewed": 0}}
+{"duplicate_grouped": 2233, "regulatory_claims": 3126, "total": 3140, "visa_drafts": 14}

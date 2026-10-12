@@ -1,0 +1,3 @@
+# Migration reconciliation
+
+The read-only production snapshot has latest history `20261007212140_stage9_security_grant_hardening`. Repository migrations `20261010010000_stage1_p0_security_completion.sql` and `20261012110945_stage1_security_abuse_storage_alignment.sql` are pending. Disposable PostgreSQL applied the dependency-ordered relevant migration set and passed S1–S17. History alone is insufficient: inspect live functions, grants, triggers, policies and dependent cron objects, then review backup and rollback before any authorized application. No production history repair or migration was performed.

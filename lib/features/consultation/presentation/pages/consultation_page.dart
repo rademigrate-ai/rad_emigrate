@@ -6,6 +6,7 @@ import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -21,6 +22,7 @@ class ConsultationPage extends ConsumerStatefulWidget {
 }
 
 class _ConsultationPageState extends ConsumerState<ConsultationPage> {
+  final _formKey = GlobalKey<FormState>();
   late final TextEditingController _topic;
   late final TextEditingController _message;
   bool _submitting = false;
@@ -46,19 +48,21 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   }
 
   Future<void> _loadMine() async {
-    final client = ref.read(supabaseClientServiceProvider).client;
-    final uid = client.auth.currentUser?.id;
-    if (uid == null) {
-      if (mounted) setState(() => _historyLoading = false);
-      return;
-    }
-    if (mounted) {
-      setState(() {
-        _historyLoading = true;
-        _historyFailed = false;
-      });
-    }
     try {
+      final session = ref.read(authControllerProvider).valueOrNull;
+      if (session?.authenticated != true) {
+        if (mounted) setState(() => _historyLoading = false);
+        return;
+      }
+      final client = ref.read(supabaseClientServiceProvider).client;
+      final uid = client.auth.currentUser?.id;
+      if (uid == null) throw StateError('Missing consultation session');
+      if (mounted) {
+        setState(() {
+          _historyLoading = true;
+          _historyFailed = false;
+        });
+      }
       final rows = await client
           .from('consultation_requests')
           .select('id, topic, status, created_at')
@@ -82,14 +86,14 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   }
 
   Future<void> _submit() async {
+    if (_submitting) return;
     final l10n = AppLocalizations.of(context);
-    final topic = _topic.text.trim();
-    final message = _message.text.trim();
-    if (topic.isEmpty || message.isEmpty) {
+    if (!_formKey.currentState!.validate()) {
       setState(() => _error = l10n.consultationFieldsRequired);
       return;
     }
-    if (_submitting) return;
+    final topic = _topic.text.trim();
+    final message = _message.text.trim();
     setState(() {
       _submitting = true;
       _error = null;
@@ -99,12 +103,10 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       final client = ref.read(supabaseClientServiceProvider).client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
-      await client.from('consultation_requests').insert({
-        'user_id': uid,
-        'topic': topic,
-        'message': message,
-        'status': 'submitted',
-      });
+      await client.rpc(
+        'submit_consultation_request',
+        params: {'p_topic': topic, 'p_message': message},
+      );
       if (mounted) {
         setState(() {
           _success = l10n.consultationSubmitted;
@@ -128,16 +130,25 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     if (session?.authenticated != true) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.consultationTitle)),
-        body: Center(
-          child: TextButton(
-            onPressed: () => context.go('/login'),
-            child: Text(l10n.signIn),
-          ),
+        body: EmptyState(
+          title: l10n.consultationTitle,
+          subtitle: l10n.signInSubtitle,
+          icon: Icons.support_agent_outlined,
+          actionLabel: l10n.signIn,
+          onAction: () => context.go('/login?from=%2Fconsultation'),
         ),
       );
     }
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consultationTitle)),
+      appBar: AppBar(
+        title: Text(l10n.consultationTitle),
+        leading: IconButton(
+          tooltip: l10n.back,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/dashboard'),
+        ),
+      ),
       body: MotionReveal(
         child: ListView(
           padding: const EdgeInsets.all(20),
@@ -148,38 +159,65 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
             ),
             const SizedBox(height: 16),
             AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AppTextField(
-                    controller: _topic,
-                    label: l10n.consultationTopic,
-                    prefixIcon: Icons.topic_outlined,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    controller: _message,
-                    label: l10n.consultationMessage,
-                    prefixIcon: Icons.message_outlined,
-                    minLines: 4,
-                    maxLines: 8,
-                  ),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppTextField(
+                      controller: _topic,
+                      label: l10n.consultationTopic,
+                      prefixIcon: Icons.topic_outlined,
+                      textInputAction: TextInputAction.next,
+                      enabled: !_submitting,
+                      validator: (value) {
+                        final length = value?.trim().length ?? 0;
+                        if (length == 0) return l10n.consultationFieldsRequired;
+                        return length >= 3 && length <= 200
+                            ? null
+                            : l10n.consultationTopicLength;
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    AppTextField(
+                      controller: _message,
+                      label: l10n.consultationMessage,
+                      prefixIcon: Icons.message_outlined,
+                      minLines: 4,
+                      maxLines: 8,
+                      enabled: !_submitting,
+                      validator: (value) {
+                        final length = value?.trim().length ?? 0;
+                        if (length == 0) return l10n.consultationFieldsRequired;
+                        return length >= 10 && length <= 5000
+                            ? null
+                            : l10n.consultationMessageLength;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             if (_error != null) ...[
               const SizedBox(height: 8),
-              Text(
-                _error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              Semantics(
+                liveRegion: true,
+                child: Text(
+                  _error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ),
             ],
             if (_success != null) ...[
               const SizedBox(height: 8),
-              Text(
-                _success!,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              Semantics(
+                liveRegion: true,
+                child: Text(
+                  _success!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ),
             ],
             const SizedBox(height: 16),

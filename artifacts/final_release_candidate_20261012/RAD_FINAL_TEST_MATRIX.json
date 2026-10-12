@@ -1,0 +1,46 @@
+{
+  "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
+  "source_note": "Integrated working tree; final commit supplied in handoff",
+  "tests": [
+    {
+      "command": "flutter test --reporter expanded",
+      "status": "PASS",
+      "count_pass": 325,
+      "count_skipped": 4,
+      "raw_log": "flutter_test.log"
+    },
+    {
+      "command": "flutter analyze",
+      "status": "PASS",
+      "raw_log": "flutter_analyze.log"
+    },
+    {
+      "command": "python -m unittest discover -s tools/stage3_content_migration -p test_*.py -q",
+      "status": "PASS",
+      "count_pass": 90,
+      "raw_log": "stage3_python_test.log"
+    },
+    {
+      "command": "Git Bash tools/stage3_pipeline_e2e/run_pipeline_e2e.sh",
+      "status": "PASS",
+      "scenarios": "S1-S17; 0 failures",
+      "raw_log": "../../tools/stage3_pipeline_e2e/E2E_RESULTS.txt"
+    },
+    {
+      "command": "flutter build web --release",
+      "status": "PASS",
+      "raw_log": "web_build.log",
+      "artifact": "build/web/main.dart.js"
+    },
+    {
+      "command": "flutter build apk --debug",
+      "status": "BLOCKED",
+      "reason": "Flutter engine artifacts HTTP 403 from storage.googleapis.com; no APK"
+    },
+    {
+      "command": "real browser E2E",
+      "status": "NOT RUN",
+      "reason": "No disposable end-to-end backend/browser run completed"
+    }
+  ]
+}

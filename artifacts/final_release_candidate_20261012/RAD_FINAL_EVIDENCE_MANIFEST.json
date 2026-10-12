@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-12",
+  "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
+  "sha256": {
+    "p0_migration": "76A28A9AA6294F6A8CA8F108394B801A2EE85F85827104246324F69787610BD5",
+    "web_main_dart_js": "53BC2EE5A1BAC38543A3554CBFDE753705B041F6E2838EC83683D50C7C361EA7",
+    "web_build_log": "21CC49C339AB58F74814502399033071B1120232C65188544291A99DB6ED462D",
+    "flutter_test_log": "C94775274A4A462689CB4B44AAE60E81636BB53EFDFCA48D5F446118EF2C33AE",
+    "flutter_analyze_log": "0219FF54F2498A2C5D10B01AD63129A4102AD573181F13707D8D1A8F5E9D001F",
+    "stage3_python_test_log": "E6710DBD20B9EA72FBB1907BF0502EBE2BB21AD6DD7DAF6C26858352B565CFD5"
+  },
+  "local_evidence": [
+    "flutter_test.log",
+    "flutter_analyze.log",
+    "stage3_python_test.log",
+    "web_build.log",
+    "../../tools/stage3_pipeline_e2e/E2E_RESULTS.txt",
+    "../../docs/SECURITY_ACCEPTANCE_20261012.md",
+    "../../docs/LAUNCH_ENGINEERING_OPERATIONS_HANDOFF_20261012.md"
+  ],
+  "limitations": [
+    "Android full log not persisted",
+    "Real browser E2E not run",
+    "Production unchanged"
+  ]
+}

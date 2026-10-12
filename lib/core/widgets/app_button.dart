@@ -60,7 +60,15 @@ class _AppButtonState extends State<AppButton> {
                   Icon(widget.icon, size: 18),
                   const SizedBox(width: 8),
                 ],
-                Text(widget.label),
+                Flexible(
+                  child: Text(
+                    widget.label,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
     );
