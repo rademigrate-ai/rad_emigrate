@@ -1,0 +1,146 @@
+{
+  "format": "rad-independent-recovery-evidence-v1",
+  "generated_utc": "2026-10-13 09:50:22 UTC",
+  "branch": "handoff/codex-stage1-stage2-20261010",
+  "source_base_commit": "4f9993c363c50ab70a187c79d7b52de8402b2f9c",
+  "integrated_remote_documentation_parent": "471c434d7e1bd74cc24a2f6636fbe26254384224",
+  "test_source_fingerprint": [
+    {
+      "path": "scripts/recovery/approval.example.json",
+      "worktree_sha256": "33de161604c445a52f39bc6c3f71e7eb0bfb126b103703f04ae0b71660679c2d",
+      "lf_sha256": "33de161604c445a52f39bc6c3f71e7eb0bfb126b103703f04ae0b71660679c2d"
+    },
+    {
+      "path": "scripts/recovery/encrypted_backup.py",
+      "worktree_sha256": "0cd6da6607915c0aeac46df6a6a3e357e2b5310cb909d6dbe570d8ce0bd85711",
+      "lf_sha256": "0cd6da6607915c0aeac46df6a6a3e357e2b5310cb909d6dbe570d8ce0bd85711"
+    },
+    {
+      "path": "scripts/recovery/neutralize_target_defaults.sql",
+      "worktree_sha256": "fa164fc816336f8289119c5f45f7fc8b8cf766a617ad5be7576bf94f3d2e0d14",
+      "lf_sha256": "fa164fc816336f8289119c5f45f7fc8b8cf766a617ad5be7576bf94f3d2e0d14"
+    },
+    {
+      "path": "scripts/recovery/README.md",
+      "worktree_sha256": "93469a86dad5f7e9ac570a109bd2b35de213f830567b94221d732ddafa32f9d6",
+      "lf_sha256": "93469a86dad5f7e9ac570a109bd2b35de213f830567b94221d732ddafa32f9d6"
+    },
+    {
+      "path": "scripts/recovery/rehearse_synthetic.py",
+      "worktree_sha256": "45a7326771edea77a7ee9f3c3f8006998afb68f66b0e22df6d96cadb13a11bbb",
+      "lf_sha256": "45a7326771edea77a7ee9f3c3f8006998afb68f66b0e22df6d96cadb13a11bbb"
+    },
+    {
+      "path": "scripts/recovery/service_configuration.example.json",
+      "worktree_sha256": "2448086def9dd13c20a08f2245fb6d5b512622d53611968ca6319a94537b28ba",
+      "lf_sha256": "2448086def9dd13c20a08f2245fb6d5b512622d53611968ca6319a94537b28ba"
+    },
+    {
+      "path": "scripts/recovery/snapshot.py",
+      "worktree_sha256": "ff18993d11a903f279527bde630cda3cf0883f9a89d924d22707300c8cc2eb1b",
+      "lf_sha256": "ff18993d11a903f279527bde630cda3cf0883f9a89d924d22707300c8cc2eb1b"
+    },
+    {
+      "path": "scripts/recovery/storage_manifest.py",
+      "worktree_sha256": "8e06e51fc45effc6a183623579baa7472221a4ebdd56ede998743f52164fd59c",
+      "lf_sha256": "8e06e51fc45effc6a183623579baa7472221a4ebdd56ede998743f52164fd59c"
+    },
+    {
+      "path": "scripts/recovery/synthetic_fixture.sql",
+      "worktree_sha256": "ac3f90c46bdb33f5d7fec5d64ff1510c4fb38e19b17a6e54f71037de45edd816",
+      "lf_sha256": "ac3f90c46bdb33f5d7fec5d64ff1510c4fb38e19b17a6e54f71037de45edd816"
+    },
+    {
+      "path": "scripts/recovery/test_recovery_tools.py",
+      "worktree_sha256": "08d0067dd8bacfe8a6f6c0f1322c06af79c750d4bc55381ecc3f6c54b4cbd0d4",
+      "lf_sha256": "08d0067dd8bacfe8a6f6c0f1322c06af79c750d4bc55381ecc3f6c54b4cbd0d4"
+    },
+    {
+      "path": "scripts/recovery/verify_bundle.py",
+      "worktree_sha256": "b1a7a77b3dbc924bfca303e7145daf64967263b0cc38294bd0742289f9af0d9b",
+      "lf_sha256": "b1a7a77b3dbc924bfca303e7145daf64967263b0cc38294bd0742289f9af0d9b"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "artifacts/independent_recovery_20261013/full_local_catalog_raw.txt",
+      "worktree_sha256": "b47bb075475e6e912e775a63ccc2198dd0fa3a950e1897bf1c9ca5a1b5956446",
+      "lf_sha256": "b47bb075475e6e912e775a63ccc2198dd0fa3a950e1897bf1c9ca5a1b5956446"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/initial_roles_connection_failure_raw.txt",
+      "worktree_sha256": "442a3a44459646a9f8220ad53e3626341e92280eba20050eea09555a354a4a9d",
+      "lf_sha256": "d76955804bebe4ef63fe0b8c1e2918fa7f6968e34bf153f3ffe6a9d5418bb04b"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/initial_version_probe_failure_raw.txt",
+      "worktree_sha256": "95b3587e5b4d8d3a416db828c3ab8481df04f5a67554e23c0ea7ba4d5b847a5a",
+      "lf_sha256": "bbdbc94e10d54d50d5ef4681df3f7f22622ea72ec6fbf7aef67bba70f423f7be"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/RECOVERY_ACCEPTANCE.md",
+      "worktree_sha256": "ea7785e91a3ed7ad638a02d1e768c0893427b5d5b73d4cd42650a5cf6b685e96",
+      "lf_sha256": "234f896f9145c87ec910d9da01c163ae3a408fe4c28af0058ebf343c73ad9b6b"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/synthetic_rehearsal_raw.txt",
+      "worktree_sha256": "1a428e692ff9acdb72e7423d7445db2b5dae0f2d6fa27e9a82694ccd016855b9",
+      "lf_sha256": "722a2fb91e53a7838f2513cc7d0278bf5fabd91766c153ec46201b5c8067d5b7"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/synthetic_restore_snapshot.json",
+      "worktree_sha256": "483afacbe4f87e40cb20f7c43689546699e1b4a455b3ea6638dc388f507574d5",
+      "lf_sha256": "fce9931c19094d07428d7353551303e09fec0699c5daa42b187f992424803968"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/synthetic_source_snapshot.json",
+      "worktree_sha256": "093c1a14e66fc08a6adf50e94cfdb93f587f1da509becf731c449f5263d12c52",
+      "lf_sha256": "7e5218dbdd829bc7404369c4705dfa8dd12af6e3e1944879083a181684040be5"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/synthetic_summary.json",
+      "worktree_sha256": "c9dcb02adc6b720f66f98ceda5a7f5132cb2bf065d885263324d4a5c65369d6d",
+      "lf_sha256": "b7a5271cc86bcc039d496afa179f61b67157d7ae53a9537e3666118df2e66202"
+    },
+    {
+      "path": "artifacts/independent_recovery_20261013/unit_tests_raw.txt",
+      "worktree_sha256": "e4744eaa368f03c374e7cee7117310147c3818eede34aaccd5b133a53fbc2f5a",
+      "lf_sha256": "e4744eaa368f03c374e7cee7117310147c3818eede34aaccd5b133a53fbc2f5a"
+    }
+  ],
+  "tests": {
+    "unit_tests": {
+      "status": "PASS",
+      "passed": 11
+    },
+    "synthetic_end_to_end": {
+      "status": "PASS",
+      "tables": 7,
+      "rows": 6,
+      "effective_privilege_entries": 546,
+      "storage_objects": 2,
+      "storage_bytes": 17,
+      "naive_extra_individual_acl_rights": 26
+    },
+    "full_local_catalog_smoke": {
+      "status": "PASS_CATALOG_ONLY",
+      "ledger_rows": 52,
+      "schemas": 14,
+      "functions": 172,
+      "acl_records": 3462,
+      "non_system_roles": 15
+    },
+    "production_backup": "NOT_RUN",
+    "private_storage_api": "NOT_RUN",
+    "production_point_restore": "NOT_RUN",
+    "off_machine_signature_and_key_recovery": "BLOCKED_OWNER_SELECTION",
+    "nonempty_large_objects": "NOT_RUN",
+    "dba_signoff": "BLOCKED_ACTUAL_REVIEW_REQUIRED"
+  },
+  "production_operations": "No production data export, backup, private object read/copy, restore, Auth change, migration, paid resource or deployment",
+  "owner_decisions": {
+    "new_ai_models": "disabled until administrator approval",
+    "leaked_password_protection": "enable after compatibility assessment"
+  },
+  "production_decision": "NO_GO"
+}

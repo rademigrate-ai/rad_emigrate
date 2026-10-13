@@ -1,0 +1,31 @@
+{
+  "format": "rad-service-recovery-inventory-v1",
+  "project_ref": "inshddthftkhcdosoqcn",
+  "captured_utc": "",
+  "postgres_image_and_extension_versions": "",
+  "database_connection_tls_network_and_role_inventory": "",
+  "auth": {
+    "service_version": "",
+    "site_url_redirects_deep_links": [],
+    "oauth_smtp_mfa_captcha_and_rate_limit_configuration": "",
+    "jwt_signing_key_and_api_key_custody_references": [],
+    "custom_role_password_reset_plan": "",
+    "cloned_sessions_and_target_reauthentication_plan": ""
+  },
+  "storage": {
+    "service_version_and_backend": "",
+    "s3_endpoint_region_and_credential_custody_reference": "",
+    "bucket_inventory_and_object_manifest_references": [],
+    "owner_id_metadata_reconciliation_plan": ""
+  },
+  "edge_functions": {"source_commit_and_function_versions": "", "secret_custody_references": []},
+  "vault_pgsodium_and_other_encryption_key_custody": [],
+  "realtime_publications_replication_slots_and_service_settings": "",
+  "cron_workers_webhooks_and_outbound_containment": "",
+  "dns_domains_cors_and_network_configuration": "",
+  "owner_decisions": {
+    "new_ai_models": "disabled until administrator approval; production alignment requires separate authorization",
+    "leaked_password_protection": "enable after compatibility assessment; production setting change requires separate authorization"
+  },
+  "dba_review_reference": ""
+}

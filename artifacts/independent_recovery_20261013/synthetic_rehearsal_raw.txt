@@ -1,0 +1,299 @@
+Synthetic-only independent recovery rehearsal; no production connections
+verify_network_none: exit=0, expected=0
+none
+verify_network_none: exit=0, expected=0
+none
+synthetic_sql_rad_recovery_fixture: exit=0, expected=0
+synthetic_age_identity: exit=0, expected=0
+synthetic_public_recipient: exit=0, expected=0
+age1ywppn5y2evzfz76xkksx47cx2xp7acryccr2z3vazgc54g5evp6qw7hc2z
+encrypted_database_backup: exit=0, expected=0
+{"status": "PASS", "encrypted_files": 3}
+verify_database_ciphertext_bundle: exit=0, expected=0
+{"status": "PASS", "encrypted_files": 3}
+decrypt_synthetic_database.dump: exit=0, expected=0
+decrypt_synthetic_source.json: exit=0, expected=0
+copy_synthetic_archive: exit=0, expected=0
+inspect_synthetic_archive: exit=0, expected=0
+;
+; Archive created at 2026-10-13 09:45:10 UTC
+;     dbname: rad_recovery_fixture
+;     TOC Entries: 44
+;     Compression: gzip
+;     Dump Version: 1.16-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 17.11
+;     Dumped by pg_dump version: 17.11
+;
+;
+; Selected TOC Entries:
+;
+6; 2615 16666 SCHEMA - auth supabase_admin
+5; 2615 16665 SCHEMA - private supabase_admin
+3466; 0 0 ACL - SCHEMA public pg_database_owner
+7; 2615 16667 SCHEMA - storage supabase_admin
+8; 2615 16668 SCHEMA - supabase_migrations supabase_admin
+229; 1255 16735 FUNCTION public synthetic_admin_action() supabase_admin
+3467; 0 0 ACL public FUNCTION synthetic_admin_action() supabase_admin
+222; 1259 16674 TABLE auth identities supabase_admin
+223; 1259 16684 TABLE auth sessions supabase_admin
+221; 1259 16669 TABLE auth users supabase_admin
+228; 1259 16721 TABLE public consultation_requests supabase_admin
+3468; 0 0 ACL public COLUMN consultation_requests.id supabase_admin
+3469; 0 0 ACL public COLUMN consultation_requests.user_id supabase_admin
+3470; 0 0 ACL public COLUMN consultation_requests.message supabase_admin
+227; 1259 16720 SEQUENCE public consultation_requests_id_seq supabase_admin
+224; 1259 16694 TABLE storage buckets supabase_admin
+225; 1259 16701 TABLE storage objects supabase_admin
+226; 1259 16713 TABLE supabase_migrations schema_migrations supabase_admin
+3453; 0 16674 TABLE DATA auth identities supabase_admin
+3454; 0 16684 TABLE DATA auth sessions supabase_admin
+3452; 0 16669 TABLE DATA auth users supabase_admin
+3459; 0 16721 TABLE DATA public consultation_requests supabase_admin
+3455; 0 16694 TABLE DATA storage buckets supabase_admin
+3456; 0 16701 TABLE DATA storage objects supabase_admin
+3457; 0 16713 TABLE DATA supabase_migrations schema_migrations supabase_admin
+3471; 0 0 SEQUENCE SET public consultation_requests_id_seq supabase_admin
+3290; 2606 16678 CONSTRAINT auth identities identities_pkey supabase_admin
+3292; 2606 16688 CONSTRAINT auth sessions sessions_pkey supabase_admin
+3288; 2606 16673 CONSTRAINT auth users users_pkey supabase_admin
+3300; 2606 16728 CONSTRAINT public consultation_requests consultation_requests_pkey supabase_admin
+3294; 2606 16700 CONSTRAINT storage buckets buckets_pkey supabase_admin
+3296; 2606 16707 CONSTRAINT storage objects objects_pkey supabase_admin
+3298; 2606 16719 CONSTRAINT supabase_migrations schema_migrations schema_migrations_pkey supabase_admin
+3301; 2606 16679 FK CONSTRAINT auth identities identities_user_id_fkey supabase_admin
+3302; 2606 16689 FK CONSTRAINT auth sessions sessions_user_id_fkey supabase_admin
+3304; 2606 16729 FK CONSTRAINT public consultation_requests consultation_requests_user_id_fkey supabase_admin
+3303; 2606 16708 FK CONSTRAINT storage objects objects_bucket_id_fkey supabase_admin
+3450; 0 16721 ROW SECURITY public consultation_requests supabase_admin
+3451; 3256 16734 POLICY public consultation_requests synthetic_owner supabase_admin
+2073; 826 16664 DEFAULT ACL - DEFAULT PRIVILEGES FOR FUNCTIONS supabase_admin
+copy_reviewed_synthetic_toc: exit=0, expected=0
+synthetic_sql_postgres: exit=0, expected=0
+synthetic_sql_rad_recovery_naive_accepted20261013: exit=0, expected=0
+target_confirmation_denial: exit=3, expected=3
+psql:<stdin>:10: ERROR:  restore-target confirmation is required
+CONTEXT:  PL/pgSQL function inline_code_block line 4 at RAISE
+synthetic_sql_rad_recovery_safe_accepted20261013: exit=0, expected=0
+restore_rad_recovery_naive_accepted20261013: exit=0, expected=0
+capture_rad_recovery_naive_accepted20261013: exit=0, expected=0
+compare_rad_recovery_naive_accepted20261013: exit=1, expected=1
+{
+  "differences": {
+    "acls": {
+      "source_only": 0,
+      "source_only_examples": [],
+      "target_only": 26,
+      "target_only_examples": [
+        "{\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"key\": \"public.consultation_requests\", \"kind\": \"relation\", \"privilege\": \"DELETE\"}",
+        "{\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"key\": \"public.consultation_requests\", \"kind\": \"relation\", \"privilege\": \"INSERT\"}",
+        "{\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"key\": \"public.consultation_requests\", \"kind\": \"relation\", \"privilege\": \"MAINTAIN\"}"
+      ]
+    },
+    "default_acls": {
+      "source_only": 0,
+      "source_only_examples": [],
+      "target_only": 2,
+      "target_only_examples": [
+        "{\"acl\": [{\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"DELETE\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"INSERT\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"MAINTAIN\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"REFERENCES\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"SELECT\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRIGGER\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRUNCATE\"}, {\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"UPDATE\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"DELETE\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"INSERT\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"MAINTAIN\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"REFERENCES\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"SELECT\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRIGGER\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRUNCATE\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"UPDATE\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"DELETE\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"INSERT\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"MAINTAIN\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"REFERENCES\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"SELECT\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRIGGER\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"TRUNCATE\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"UPDATE\"}], \"owner\": \"supabase_admin\", \"schema\": \"public\", \"type\": \"r\"}",
+        "{\"acl\": [{\"grantable\": false, \"grantee\": \"anon\", \"grantor\": \"supabase_admin\", \"privilege\": \"EXECUTE\"}, {\"grantable\": false, \"grantee\": \"authenticated\", \"grantor\": \"supabase_admin\", \"privilege\": \"EXECUTE\"}, {\"grantable\": false, \"grantee\": \"service_role\", \"grantor\": \"supabase_admin\", \"privilege\": \"EXECUTE\"}], \"owner\": \"supabase_admin\", \"schema\": \"public\", \"type\": \"f\"}"
+      ]
+    },
+    "effective_columns": {
+      "source_only": 16,
+      "source_only_examples": [
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"anon\", \"select\": false, \"update\": false}",
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"authenticated\", \"select\": false, \"update\": false}",
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"postgres\", \"select\": true, \"update\": false}"
+      ],
+      "target_only": 16,
+      "target_only_examples": [
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"anon\", \"select\": true, \"update\": true}",
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"authenticated\", \"select\": true, \"update\": true}",
+        "{\"key\": \"public.consultation_requests.admin_note\", \"role\": \"postgres\", \"select\": true, \"update\": true}"
+      ]
+    },
+    "effective_functions": {
+      "source_only": 2,
+      "source_only_examples": [
+        "{\"execute\": false, \"key\": \"public.synthetic_admin_action()\", \"role\": \"anon\"}",
+        "{\"execute\": false, \"key\": \"public.synthetic_admin_action()\", \"role\": \"service_role\"}"
+      ],
+      "target_only": 2,
+      "target_only_examples": [
+        "{\"execute\": true, \"key\": \"public.synthetic_admin_action()\", \"role\": \"anon\"}",
+        "{\"execute\": true, \"key\": \"public.synthetic_admin_action()\", \"role\": \"service_role\"}"
+      ]
+    },
+    "effective_tables": {
+      "source_only": 4,
+      "source_only_examples": [
+        "{\"delete\": false, \"insert\": false, \"key\": \"public.consultation_requests\", \"role\": \"anon\", \"select\": false, \"update\": false}",
+        "{\"delete\": false, \"insert\": false, \"key\": \"public.consultation_requests\", \"role\": \"authenticated\", \"select\": false, \"update\": false}",
+        "{\"delete\": false, \"insert\": false, \"key\": \"public.consultation_requests\", \"role\": \"postgres\", \"select\": true, \"update\": false}"
+      ],
+      "target_only": 4,
+      "target_only_examples": [
+        "{\"delete\": true, \"insert\": true, \"key\": \"public.consultation_requests\", \"role\": \"anon\", \"select\": true, \"update\": true}",
+        "{\"delete\": true, \"insert\": true, \"key\": \"public.consultation_requests\", \"role\": \"authenticated\", \"select\": true, \"update\": true}",
+        "{\"delete\": true, \"insert\": true, \"key\": \"public.consultation_requests\", \"role\": \"postgres\", \"select\": true, \"update\": true}"
+      ]
+    }
+  },
+  "status": "FAIL",
+  "verification_scope": "catalog_and_data"
+}
+restore_rad_recovery_safe_accepted20261013: exit=0, expected=0
+capture_rad_recovery_safe_accepted20261013: exit=0, expected=0
+compare_rad_recovery_safe_accepted20261013: exit=0, expected=0
+{
+  "differences": {},
+  "status": "PASS",
+  "verification_scope": "catalog_and_data"
+}
+synthetic_sql_rad_recovery_safe_accepted20261013: exit=0, expected=0
+setval 
+--------
+     99
+(1 row)
+capture_mutated_data_and_sequence: exit=0, expected=0
+detect_mutated_data_and_sequence: exit=1, expected=1
+{
+  "differences": {
+    "data_hashes": {
+      "source": {
+        "auth.identities": {
+          "rows": 0,
+          "sha256_of_row_sha256s": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "auth.sessions": {
+          "rows": 0,
+          "sha256_of_row_sha256s": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "auth.users": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "1023c257220d6c3e77fbd404117b92af073c3e036bde541a295289b48c82c86e"
+        },
+        "public.consultation_requests": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "de8997e5508d9e13e4f53f4a8d958a52ca6d080c7e22ef075d3b644ee140da60"
+        },
+        "storage.buckets": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "d480fe8251d4da004834159f1c9f57f4a796bcdcd6ab528f06d65c5fa30fd7a3"
+        },
+        "storage.objects": {
+          "rows": 2,
+          "sha256_of_row_sha256s": "75b498c052f575b235fa6ac0b028e9c74acbeaa6027ee0b32e1540adc3805841"
+        },
+        "supabase_migrations.schema_migrations": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "f5e6d8dccebe9cdd9a825c7ac19251dcebe7aa3b1baf9c12a32969a85f06f419"
+        }
+      },
+      "target": {
+        "auth.identities": {
+          "rows": 0,
+          "sha256_of_row_sha256s": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "auth.sessions": {
+          "rows": 0,
+          "sha256_of_row_sha256s": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "auth.users": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "1023c257220d6c3e77fbd404117b92af073c3e036bde541a295289b48c82c86e"
+        },
+        "public.consultation_requests": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "a661e59c82680ca256351ba4858d1e6fb0d18beeba0d526f7be2fb8cdeb1419a"
+        },
+        "storage.buckets": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "d480fe8251d4da004834159f1c9f57f4a796bcdcd6ab528f06d65c5fa30fd7a3"
+        },
+        "storage.objects": {
+          "rows": 2,
+          "sha256_of_row_sha256s": "75b498c052f575b235fa6ac0b028e9c74acbeaa6027ee0b32e1540adc3805841"
+        },
+        "supabase_migrations.schema_migrations": {
+          "rows": 1,
+          "sha256_of_row_sha256s": "f5e6d8dccebe9cdd9a825c7ac19251dcebe7aa3b1baf9c12a32969a85f06f419"
+        }
+      }
+    },
+    "sequence_states": {
+      "source": {
+        "public.consultation_requests_id_seq": {
+          "is_called": true,
+          "last_value": 1
+        }
+      },
+      "target": {
+        "public.consultation_requests_id_seq": {
+          "is_called": true,
+          "last_value": 99
+        }
+      }
+    }
+  },
+  "status": "FAIL",
+  "verification_scope": "catalog_and_data"
+}
+synthetic_sql_rad_recovery_safe_accepted20261013: exit=0, expected=0
+setval 
+--------
+      1
+(1 row)
+capture_repaired_synthetic_fixture: exit=0, expected=0
+compare_final_restored_fixture: exit=0, expected=0
+{
+  "differences": {},
+  "status": "PASS",
+  "verification_scope": "catalog_and_data"
+}
+encrypted_storage_backup: exit=0, expected=0
+{"status": "PASS", "encrypted_files": 2}
+verify_storage_ciphertext_bundle: exit=0, expected=0
+{"status": "PASS", "encrypted_files": 2}
+decrypt_storage_tar: exit=0, expected=0
+decrypt_storage_manifest: exit=0, expected=0
+extract_synthetic_storage: exit=0, expected=0
+hash_restored_storage: exit=0, expected=0
+compare_storage_bytes: exit=0, expected=0
+{
+  "status": "PASS",
+  "source_count": 2,
+  "target_count": 2,
+  "missing": [],
+  "extra": [],
+  "changed": []
+}
+reconcile_storage_database_inventory: exit=0, expected=0
+{
+  "status": "PASS",
+  "source_object_count": 2,
+  "backed_up_object_count": 2,
+  "missing": [],
+  "extra": [],
+  "size_mismatch": []
+}
+age_tamper_rejection: exit=1, expected=1
+age: error: failed to decrypt and authenticate payload chunk, file may be corrupted or tampered with
+age: report unexpected or unhelpful errors at https://filippo.io/age/report
+{
+  "source_tables_hashed": 7,
+  "source_rows_hashed": 6,
+  "effective_privilege_entries": 546,
+  "status": "PASS",
+  "naive_restore_overgrant_detected": true,
+  "hardened_restore_parity": true,
+  "encrypted_storage_bytes_match": true,
+  "ciphertext_tamper_rejected": true,
+  "data_and_sequence_mutation_detected": true,
+  "storage_database_inventory_matches_bytes": true,
+  "source_container": "rad-recovery-src-20261013a",
+  "target_container": "rad-recovery-target-20261013a"
+}

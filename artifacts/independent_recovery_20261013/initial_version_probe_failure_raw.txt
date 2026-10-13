@@ -1,0 +1,18 @@
+Synthetic-only independent recovery rehearsal; no production connections
+create_network_none_rad-recovery-src-20261013a: exit=0, expected=0
+ce20701dcdf1c8f3b4aa982cca44488bbe8ba17ebdb59000eba5a93c84556d81
+verify_network_none: exit=0, expected=0
+none
+create_network_none_rad-recovery-target-20261013a: exit=0, expected=0
+739d76f4873c94f8d21283bbd23cd4e312adbb3ec161ffa13e142192e6e53cec
+verify_network_none: exit=0, expected=0
+none
+synthetic_sql_postgres: exit=0, expected=0
+synthetic_sql_rad_recovery_fixture: exit=0, expected=0
+synthetic_sql_rad_recovery_fixture: exit=0, expected=0
+synthetic_age_identity: exit=0, expected=0
+synthetic_public_recipient: exit=0, expected=0
+age1su9a3z4nq9l7yhawdqng50h0ns97nm8fxaccxkv39wvcqp7k8spstpysm4
+encrypted_database_backup: exit=2, expected=0
+ERROR: Command '['docker', 'exec', '-e', 'PGTZ=UTC', '-e', 'PGOPTIONS=-c default_transaction_read_only=on', 'rad-recovery-src-20261013a', 'pg_dump', '-U', 'supabase_admin', '--version']' returned non-zero exit status 1.
+FAIL: encrypted_database_backup failed; preserve C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\.work\independent-recovery-rehearsal-20261013a

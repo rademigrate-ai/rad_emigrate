@@ -1,0 +1,5 @@
+Command: python scripts/recovery/snapshot.py capture --docker-container supabase_db_rad-prod-equivalent-20261013 --all-user-schemas --output .work/recovery-full-local-catalog-accepted-20261013.json
+Scope: catalog only on a disposable local Supabase stack; no production connection.
+Exit code: 0
+{"Postgres":"17.11","LedgerRows":52,"Schemas":"_realtime,auth,cron,extensions,graphql,graphql_public,net,private,public,realtime,storage,supabase_functions,supabase_migrations,vault","Functions":172,"ACLRecords":3462,"NonSystemRoles":15,"StorageInventoryObjects":0}
+

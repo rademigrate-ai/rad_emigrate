@@ -1,0 +1,14 @@
+{
+  "source_tables_hashed": 7,
+  "source_rows_hashed": 6,
+  "effective_privilege_entries": 546,
+  "status": "PASS",
+  "naive_restore_overgrant_detected": true,
+  "hardened_restore_parity": true,
+  "encrypted_storage_bytes_match": true,
+  "ciphertext_tamper_rejected": true,
+  "data_and_sequence_mutation_detected": true,
+  "storage_database_inventory_matches_bytes": true,
+  "source_container": "rad-recovery-src-20261013a",
+  "target_container": "rad-recovery-target-20261013a"
+}

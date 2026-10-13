@@ -1,0 +1,18 @@
+Command: python -m unittest discover -s scripts/recovery -p test_recovery_tools.py -v
+test_approval_scope_and_tls_are_enforced (test_recovery_tools.RecoveryToolsTest.test_approval_scope_and_tls_are_enforced) ... ok
+test_ciphertext_hash_and_partial_detection (test_recovery_tools.RecoveryToolsTest.test_ciphertext_hash_and_partial_detection) ... ok
+test_data_hashes_require_frozen_writes (test_recovery_tools.RecoveryToolsTest.test_data_hashes_require_frozen_writes) ... ok
+test_duplicate_storage_keys_are_rejected (test_recovery_tools.RecoveryToolsTest.test_duplicate_storage_keys_are_rejected) ... ok
+test_effective_overgrant_and_data_mismatch_fail (test_recovery_tools.RecoveryToolsTest.test_effective_overgrant_and_data_mismatch_fail) ... ok
+test_incomplete_database_snapshot_cannot_pass (test_recovery_tools.RecoveryToolsTest.test_incomplete_database_snapshot_cannot_pass) ... ok
+test_invalid_storage_manifest_is_rejected (test_recovery_tools.RecoveryToolsTest.test_invalid_storage_manifest_is_rejected) ... ok
+test_local_capture_forces_read_only_and_utc (test_recovery_tools.RecoveryToolsTest.test_local_capture_forces_read_only_and_utc) ... ok
+test_service_without_approval_never_starts_psql (test_recovery_tools.RecoveryToolsTest.test_service_without_approval_never_starts_psql) ... ok
+test_storage_byte_change_missing_extra_and_empty_file (test_recovery_tools.RecoveryToolsTest.test_storage_byte_change_missing_extra_and_empty_file) ... ok
+test_storage_inventory_missing_and_size_mismatch_fail (test_recovery_tools.RecoveryToolsTest.test_storage_inventory_missing_and_size_mismatch_fail) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.472s
+
+OK
+

@@ -1,0 +1,11 @@
+Synthetic-only independent recovery rehearsal; no production connections
+verify_network_none: exit=0, expected=0
+none
+verify_network_none: exit=0, expected=0
+none
+synthetic_age_identity: exit=0, expected=0
+synthetic_public_recipient: exit=0, expected=0
+age1up3vvfe9nrdy9j2dzc0wwngk4d3e9sunu904gzj07qkfvu4vrslsj0fyxa
+encrypted_database_backup: exit=2, expected=0
+ERROR: roles-reference.sql.age: producer exit=1, age exit=0; partial retained
+FAIL: encrypted_database_backup failed; preserve C:\Users\Mehrshad\Desktop\Projects\rad_emigrate\.work\independent-recovery-rehearsal-20261013b
