@@ -1,0 +1,190 @@
+﻿2026-10-13T11:20:19.4879546Z Current runner version: '2.337.0'
+2026-10-13T11:20:19.4904507Z ##[group]Runner Image Provisioner
+2026-10-13T11:20:19.4905390Z Hosted Compute Agent
+2026-10-13T11:20:19.4905970Z Version: 20261002.596
+2026-10-13T11:20:19.4906586Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-13T11:20:19.4907281Z Build Date: 2026-10-02T22:28:27Z
+2026-10-13T11:20:19.4907919Z Worker ID: {b268cbc2-7f90-4a7b-a546-51495e7f0e22}
+2026-10-13T11:20:19.4908620Z Region: southcentralus
+2026-10-13T11:20:19.4909156Z Cloud: Azure
+2026-10-13T11:20:19.4909678Z ##[endgroup]
+2026-10-13T11:20:19.4911207Z ##[group]Operating System
+2026-10-13T11:20:19.4911957Z Ubuntu
+2026-10-13T11:20:19.4912492Z 24.04.5
+2026-10-13T11:20:19.4913084Z LTS
+2026-10-13T11:20:19.4913576Z ##[endgroup]
+2026-10-13T11:20:19.4914132Z ##[group]Runner Image
+2026-10-13T11:20:19.4914698Z Image: ubuntu-24.04
+2026-10-13T11:20:19.4915234Z Version: 20261004.327.1
+2026-10-13T11:20:19.4916468Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-13T11:20:19.4917898Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-13T11:20:19.4918778Z ##[endgroup]
+2026-10-13T11:20:19.4919844Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T11:20:19.4922351Z Contents: read
+2026-10-13T11:20:19.4922937Z Metadata: read
+2026-10-13T11:20:19.4923466Z ##[endgroup]
+2026-10-13T11:20:19.4925502Z Secret source: Actions
+2026-10-13T11:20:19.4926398Z Cache mode: write
+2026-10-13T11:20:19.4927059Z Prepare workflow directory
+2026-10-13T11:20:19.6302538Z Prepare all required actions
+2026-10-13T11:20:19.6374094Z Getting action download info
+2026-10-13T11:20:19.8909906Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-13T11:20:20.3398632Z Download action repository 'denoland/setup-deno@v2' (SHA:22d081ff2d3a40755e97629de92e3bcbfa7cf2ed)
+2026-10-13T11:20:20.9979627Z Complete job name: routing
+2026-10-13T11:20:21.0888613Z ##[group]Run actions/checkout@v4
+2026-10-13T11:20:21.0889481Z with:
+2026-10-13T11:20:21.0890075Z   repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.0894321Z   token: ***
+2026-10-13T11:20:21.0894818Z   ssh-strict: true
+2026-10-13T11:20:21.0895380Z   ssh-user: git
+2026-10-13T11:20:21.0895882Z   persist-credentials: true
+2026-10-13T11:20:21.0896435Z   clean: true
+2026-10-13T11:20:21.0896982Z   sparse-checkout-cone-mode: true
+2026-10-13T11:20:21.0897559Z   fetch-depth: 1
+2026-10-13T11:20:21.0898104Z   fetch-tags: false
+2026-10-13T11:20:21.0898605Z   show-progress: true
+2026-10-13T11:20:21.0899135Z   lfs: false
+2026-10-13T11:20:21.0899664Z   submodules: false
+2026-10-13T11:20:21.0900180Z   set-safe-directory: true
+2026-10-13T11:20:21.0900761Z   allow-unsafe-pr-checkout: false
+2026-10-13T11:20:21.0901550Z ##[endgroup]
+2026-10-13T11:20:21.1886483Z Syncing repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.1889113Z ##[group]Getting Git version info
+2026-10-13T11:20:21.1890183Z Working directory is '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:21.1891604Z [command]/usr/bin/git version
+2026-10-13T11:20:21.1971243Z git version 2.55.0
+2026-10-13T11:20:21.2005577Z ##[endgroup]
+2026-10-13T11:20:21.2020300Z Temporarily overriding HOME='/home/runner/work/_temp/05357435-079b-4b4c-a309-508bd77555bc' before making global git config changes
+2026-10-13T11:20:21.2023108Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:20:21.2028078Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:21.3396220Z Deleting the contents of '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:21.3412342Z ##[group]Initializing the repository
+2026-10-13T11:20:21.3414099Z [command]/usr/bin/git init /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:21.3678016Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T11:20:21.3680167Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T11:20:21.3681992Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T11:20:21.3683109Z hint: call:
+2026-10-13T11:20:21.3683882Z hint:
+2026-10-13T11:20:21.3684745Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T11:20:21.3685563Z hint:
+2026-10-13T11:20:21.3686568Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T11:20:21.3687694Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T11:20:21.3688523Z hint:
+2026-10-13T11:20:21.3689029Z hint: 	git branch -m <name>
+2026-10-13T11:20:21.3689565Z hint:
+2026-10-13T11:20:21.3690234Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T11:20:21.3696718Z Initialized empty Git repository in /home/runner/work/rad_emigrate/rad_emigrate/.git/
+2026-10-13T11:20:21.3704136Z [command]/usr/bin/git remote add origin https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.3872304Z ##[endgroup]
+2026-10-13T11:20:21.3873831Z ##[group]Disabling automatic garbage collection
+2026-10-13T11:20:21.3876602Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-13T11:20:21.3970760Z ##[endgroup]
+2026-10-13T11:20:21.3972811Z ##[group]Setting up auth
+2026-10-13T11:20:21.3977571Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:20:21.4009558Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:20:21.4479678Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:20:21.4510805Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:20:21.4720807Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:20:21.4756579Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:20:21.4948919Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T11:20:21.5157686Z ##[endgroup]
+2026-10-13T11:20:21.5171122Z ##[group]Fetching the repository
+2026-10-13T11:20:21.5175261Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5013341fc021043f3721d50912c76f9c92a9387e:refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:28.8062582Z From https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:28.8064646Z  * [new ref]         5013341fc021043f3721d50912c76f9c92a9387e -> origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:28.8068931Z ##[endgroup]
+2026-10-13T11:20:28.8070792Z ##[group]Determining the checkout info
+2026-10-13T11:20:28.8072661Z ##[endgroup]
+2026-10-13T11:20:28.8076228Z [command]/usr/bin/git sparse-checkout disable
+2026-10-13T11:20:28.8130923Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T11:20:28.8160371Z ##[group]Checking out the ref
+2026-10-13T11:20:28.8164025Z [command]/usr/bin/git checkout --progress --force -B handoff/codex-stage1-stage2-20261010 refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:29.4800724Z Switched to a new branch 'handoff/codex-stage1-stage2-20261010'
+2026-10-13T11:20:29.4803344Z branch 'handoff/codex-stage1-stage2-20261010' set up to track 'origin/handoff/codex-stage1-stage2-20261010'.
+2026-10-13T11:20:29.4827557Z ##[endgroup]
+2026-10-13T11:20:29.4872056Z [command]/usr/bin/git log -1 --format=%H
+2026-10-13T11:20:29.4895370Z 5013341fc021043f3721d50912c76f9c92a9387e
+2026-10-13T11:20:29.5128521Z ##[group]Run denoland/setup-deno@v2
+2026-10-13T11:20:29.5128935Z with:
+2026-10-13T11:20:29.5129289Z   deno-version: v2.5.4
+2026-10-13T11:20:29.5129817Z   deno-binary-name: deno
+2026-10-13T11:20:29.5130149Z   cache: false
+2026-10-13T11:20:29.5130515Z ##[endgroup]
+2026-10-13T11:20:29.8049907Z Going to install stable version 2.5.4.
+2026-10-13T11:20:29.8058673Z Downloading Deno from https://github.com/denoland/deno/releases/download/v2.5.4/deno-x86_64-unknown-linux-gnu.zip.
+2026-10-13T11:20:30.3269957Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/34c23624-dd91-4d26-b3e5-9d918d8a0bb7
+2026-10-13T11:20:31.7871557Z Cached Deno to /opt/hostedtoolcache/deno/2.5.4/x64.
+2026-10-13T11:20:31.7905091Z Installation complete.
+2026-10-13T11:20:31.8586435Z ##[group]Run deno fmt --check supabase/functions
+2026-10-13T11:20:31.8587048Z [36;1mdeno fmt --check supabase/functions[0m
+2026-10-13T11:20:31.9015056Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:31.9015585Z ##[endgroup]
+2026-10-13T11:20:32.0142265Z Checked 13 files
+2026-10-13T11:20:32.0206347Z ##[group]Run deno lint supabase/functions
+2026-10-13T11:20:32.0206840Z [36;1mdeno lint supabase/functions[0m
+2026-10-13T11:20:32.0249658Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:32.0250233Z ##[endgroup]
+2026-10-13T11:20:32.0660474Z Checked 12 files
+2026-10-13T11:20:32.0717890Z ##[group]Run deno test --allow-env supabase/functions/tests
+2026-10-13T11:20:32.0718453Z [36;1mdeno test --allow-env supabase/functions/tests[0m
+2026-10-13T11:20:32.0761334Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:32.0761841Z ##[endgroup]
+2026-10-13T11:20:32.0957009Z [0m[32mCheck[0m file:///home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/tests/ai_orchestrator_test.ts
+2026-10-13T11:20:32.0958619Z [0m[32mCheck[0m file:///home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/tests/document_intelligence_test.ts
+2026-10-13T11:20:32.0959885Z [0m[32mCheck[0m file:///home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/tests/research_sync_test.ts
+2026-10-13T11:20:32.8599901Z [0m[38;5;245mrunning 22 tests from ./supabase/functions/tests/ai_orchestrator_test.ts[0m
+2026-10-13T11:20:32.8718727Z 01 discovery normalizes multiple models and preserves a dynamic catalogue ... [0m[32mok[0m [0m[38;5;245m(11ms)[0m
+2026-10-13T11:20:32.8856894Z 02 disappeared models become stale and unavailable without deletion ... [0m[32mok[0m [0m[38;5;245m(13ms)[0m
+2026-10-13T11:20:32.8873395Z 03 preferred eligible healthy model is selected ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8886303Z 04 preferred 429 fails over to next eligible model ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8899442Z 05 timeout safely fails over ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8909509Z 06 model-specific upstream failure safely fails over ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.8920790Z 07 provider A fails and provider B succeeds ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8936147Z 08 invalid A skips every remaining A model and healthy B stays available ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8947753Z 09 all providers fail with useful sanitized final error ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8955899Z 10 capability requirements reach the strict RPC and failure cannot downgrade ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.8961052Z 11 exhausted eligible pool makes no provider request during cooldown ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.8968318Z 12 recovered eligible model is tried and records success ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.8981177Z 13 attempts are bounded even with a large catalogue ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.8990408Z 14 persistence failure after successful inference never invokes another model ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9000065Z 15 telemetry contains only sanitized metadata and no secrets or upstream text ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9022057Z 16 secrets never reach client responses, including failure responses ... [0m[32mok[0m [0m[38;5;245m(2ms)[0m
+2026-10-13T11:20:32.9027840Z public discovery cannot clear rejected credentials ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9034295Z explicit credential revalidation requires an authenticated model response ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9038375Z ordinary users cannot discover providers or use Admin AI ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9041325Z authenticated quota denial makes no provider request ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9045207Z authenticated quota reservation failure is fail closed ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9052821Z provider redirects are rejected and never followed ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9491661Z [0m[38;5;245mrunning 5 tests from ./supabase/functions/tests/document_intelligence_test.ts[0m
+2026-10-13T11:20:32.9516433Z OCR lookup binds document id to the authenticated owner ... [0m[32mok[0m [0m[38;5;245m(2ms)[0m
+2026-10-13T11:20:32.9522289Z OCR rejects a database path outside the authenticated namespace ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9538870Z OCR rejects private provider endpoints before network access ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:32.9547545Z public URL validation rejects loopback, private, and metadata hosts ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:32.9676636Z OCR blocks mapped IPv6 endpoints before provider fetch ... [0m[32mok[0m [0m[38;5;245m(12ms)[0m
+2026-10-13T11:20:33.0120637Z [0m[38;5;245mrunning 4 tests from ./supabase/functions/tests/research_sync_test.ts[0m
+2026-10-13T11:20:33.0180782Z Research fetch invokes one atomic ingest with exact Unicode evidence and attribution ... [0m[32mok[0m [0m[38;5;245m(5ms)[0m
+2026-10-13T11:20:33.0191513Z Unchanged evidence reports no new candidate ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+2026-10-13T11:20:33.0326601Z Source failure is visible and sanitized without a fake finding ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:33.0329433Z Ordinary users cannot start Research or read worker credentials ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+2026-10-13T11:20:33.0347769Z 
+2026-10-13T11:20:33.0349247Z [0m[32mok[0m | 31 passed | 0 failed [0m[38;5;245m(175ms)[0m
+2026-10-13T11:20:33.0349778Z 
+2026-10-13T11:20:33.0489435Z Post job cleanup.
+2026-10-13T11:20:33.1572073Z Caching is not enabled. Caching is skipped.
+2026-10-13T11:20:33.1736118Z Post job cleanup.
+2026-10-13T11:20:33.2573623Z [command]/usr/bin/git version
+2026-10-13T11:20:33.2611476Z git version 2.55.0
+2026-10-13T11:20:33.2647334Z Temporarily overriding HOME='/home/runner/work/_temp/a1e45c48-ca3c-43dd-8d33-49ffa44c51d3' before making global git config changes
+2026-10-13T11:20:33.2648761Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:20:33.2652412Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:33.2692946Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:20:33.2724558Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:20:33.2950938Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:20:33.2976716Z http.https://github.com/.extraheader
+2026-10-13T11:20:33.2987071Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T11:20:33.3021570Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:20:33.3222240Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:20:33.3260784Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:20:33.3600102Z Cleaning up orphan processes
+2026-10-13T11:20:33.3850814Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

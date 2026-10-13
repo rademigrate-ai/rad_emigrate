@@ -1,0 +1,673 @@
+﻿2026-10-13T11:20:19.1071003Z Current runner version: '2.337.0'
+2026-10-13T11:20:19.1089434Z ##[group]Runner Image Provisioner
+2026-10-13T11:20:19.1089963Z Hosted Compute Agent
+2026-10-13T11:20:19.1090365Z Version: 20261002.596
+2026-10-13T11:20:19.1090724Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-13T11:20:19.1091127Z Build Date: 2026-10-02T22:28:27Z
+2026-10-13T11:20:19.1091611Z Worker ID: {62607011-8eb5-48b4-bc12-817615dd0f3a}
+2026-10-13T11:20:19.1092008Z Region: centralus
+2026-10-13T11:20:19.1092360Z Cloud: Azure
+2026-10-13T11:20:19.1092674Z ##[endgroup]
+2026-10-13T11:20:19.1093789Z ##[group]Operating System
+2026-10-13T11:20:19.1094288Z Ubuntu
+2026-10-13T11:20:19.1094593Z 24.04.5
+2026-10-13T11:20:19.1094913Z LTS
+2026-10-13T11:20:19.1095227Z ##[endgroup]
+2026-10-13T11:20:19.1095541Z ##[group]Runner Image
+2026-10-13T11:20:19.1095974Z Image: ubuntu-24.04
+2026-10-13T11:20:19.1096297Z Version: 20261004.327.1
+2026-10-13T11:20:19.1097073Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-13T11:20:19.1097892Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-13T11:20:19.1098500Z ##[endgroup]
+2026-10-13T11:20:19.1099120Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T11:20:19.1100527Z Contents: read
+2026-10-13T11:20:19.1100862Z Metadata: read
+2026-10-13T11:20:19.1101251Z ##[endgroup]
+2026-10-13T11:20:19.1102599Z Secret source: Actions
+2026-10-13T11:20:19.1103461Z Cache mode: write
+2026-10-13T11:20:19.1104065Z Prepare workflow directory
+2026-10-13T11:20:19.1305727Z Prepare all required actions
+2026-10-13T11:20:19.1342076Z Getting action download info
+2026-10-13T11:20:19.3628188Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-13T11:20:19.4531930Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+2026-10-13T11:20:19.8008895Z Getting action download info
+2026-10-13T11:20:19.8875457Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+2026-10-13T11:20:20.1107411Z Complete job name: flutter
+2026-10-13T11:20:20.1601720Z ##[group]Run actions/checkout@v4
+2026-10-13T11:20:20.1602309Z with:
+2026-10-13T11:20:20.1602704Z   repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:20.1605261Z   token: ***
+2026-10-13T11:20:20.1605638Z   ssh-strict: true
+2026-10-13T11:20:20.1606017Z   ssh-user: git
+2026-10-13T11:20:20.1606403Z   persist-credentials: true
+2026-10-13T11:20:20.1606818Z   clean: true
+2026-10-13T11:20:20.1607206Z   sparse-checkout-cone-mode: true
+2026-10-13T11:20:20.1607633Z   fetch-depth: 1
+2026-10-13T11:20:20.1608010Z   fetch-tags: false
+2026-10-13T11:20:20.1608394Z   show-progress: true
+2026-10-13T11:20:20.1608773Z   lfs: false
+2026-10-13T11:20:20.1609141Z   submodules: false
+2026-10-13T11:20:20.1609534Z   set-safe-directory: true
+2026-10-13T11:20:20.1609959Z   allow-unsafe-pr-checkout: false
+2026-10-13T11:20:20.1610610Z ##[endgroup]
+2026-10-13T11:20:20.2269341Z Syncing repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:20.2270922Z ##[group]Getting Git version info
+2026-10-13T11:20:20.2271557Z Working directory is '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:20.2272346Z [command]/usr/bin/git version
+2026-10-13T11:20:20.2341104Z git version 2.55.0
+2026-10-13T11:20:20.2359395Z ##[endgroup]
+2026-10-13T11:20:20.2370116Z Temporarily overriding HOME='/home/runner/work/_temp/e7ead58b-4fbe-49fe-898e-e8ffb0bea432' before making global git config changes
+2026-10-13T11:20:20.2374403Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:20:20.2375288Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:20.2421924Z Deleting the contents of '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:20.2425654Z ##[group]Initializing the repository
+2026-10-13T11:20:20.2428638Z [command]/usr/bin/git init /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:20.2535967Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T11:20:20.2537619Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T11:20:20.2538885Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T11:20:20.2540345Z hint: call:
+2026-10-13T11:20:20.2541047Z hint:
+2026-10-13T11:20:20.2542187Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T11:20:20.2542988Z hint:
+2026-10-13T11:20:20.2543860Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T11:20:20.2544882Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T11:20:20.2545758Z hint:
+2026-10-13T11:20:20.2546357Z hint: 	git branch -m <name>
+2026-10-13T11:20:20.2546975Z hint:
+2026-10-13T11:20:20.2547726Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T11:20:20.2548904Z Initialized empty Git repository in /home/runner/work/rad_emigrate/rad_emigrate/.git/
+2026-10-13T11:20:20.2551168Z [command]/usr/bin/git remote add origin https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:20.2593345Z ##[endgroup]
+2026-10-13T11:20:20.2594521Z ##[group]Disabling automatic garbage collection
+2026-10-13T11:20:20.2596621Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-13T11:20:20.2628656Z ##[endgroup]
+2026-10-13T11:20:20.2629715Z ##[group]Setting up auth
+2026-10-13T11:20:20.2634403Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:20:20.2664276Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:20:20.2952456Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:20:20.2982666Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:20:20.3156097Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:20:20.3185373Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:20:20.3359567Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T11:20:20.3392997Z ##[endgroup]
+2026-10-13T11:20:20.3393878Z ##[group]Fetching the repository
+2026-10-13T11:20:20.3400327Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5013341fc021043f3721d50912c76f9c92a9387e:refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:26.7963918Z From https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:26.7964511Z  * [new ref]         5013341fc021043f3721d50912c76f9c92a9387e -> origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:26.7994870Z ##[endgroup]
+2026-10-13T11:20:26.8004370Z ##[group]Determining the checkout info
+2026-10-13T11:20:26.8012559Z ##[endgroup]
+2026-10-13T11:20:26.8012998Z [command]/usr/bin/git sparse-checkout disable
+2026-10-13T11:20:26.8034201Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T11:20:26.8080243Z ##[group]Checking out the ref
+2026-10-13T11:20:26.8083030Z [command]/usr/bin/git checkout --progress --force -B handoff/codex-stage1-stage2-20261010 refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:27.2583478Z Switched to a new branch 'handoff/codex-stage1-stage2-20261010'
+2026-10-13T11:20:27.2588049Z branch 'handoff/codex-stage1-stage2-20261010' set up to track 'origin/handoff/codex-stage1-stage2-20261010'.
+2026-10-13T11:20:27.2612698Z ##[endgroup]
+2026-10-13T11:20:27.2654654Z [command]/usr/bin/git log -1 --format=%H
+2026-10-13T11:20:27.2677263Z 5013341fc021043f3721d50912c76f9c92a9387e
+2026-10-13T11:20:27.2960374Z ##[group]Run subosito/flutter-action@v2
+2026-10-13T11:20:27.2960556Z with:
+2026-10-13T11:20:27.2960670Z   flutter-version: 3.47.6
+2026-10-13T11:20:27.2960794Z   channel: stable
+2026-10-13T11:20:27.2960900Z   cache: true
+2026-10-13T11:20:27.2961011Z   architecture: X64
+2026-10-13T11:20:27.2961134Z   pub-cache-path: default
+2026-10-13T11:20:27.2961265Z   dry-run: false
+2026-10-13T11:20:27.2961419Z   git-source: https://github.com/flutter/flutter.git
+2026-10-13T11:20:27.2961589Z ##[endgroup]
+2026-10-13T11:20:27.2997339Z ##[start-action display=Make yq tool available on Windows runners;id=__subosito_flutter-action.__run]
+2026-10-13T11:20:27.3009146Z ##[end-action id=__subosito_flutter-action.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-13T11:20:27.3010356Z ##[start-action display=Make setup script executable;id=__subosito_flutter-action.__run_2]
+2026-10-13T11:20:27.3033959Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+2026-10-13T11:20:27.3034214Z [36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"[0m
+2026-10-13T11:20:27.3329884Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:27.3330117Z ##[endgroup]
+2026-10-13T11:20:27.3420997Z ##[end-action id=__subosito_flutter-action.__run_2;outcome=success;conclusion=success;duration_ms=41]
+2026-10-13T11:20:27.3422295Z ##[start-action display=Set action inputs;id=__subosito_flutter-action.flutter-action]
+2026-10-13T11:20:27.3446639Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+2026-10-13T11:20:27.3446842Z [36;1m$GITHUB_ACTION_PATH/setup.sh -p \[0m
+2026-10-13T11:20:27.3446998Z [36;1m  -n '3.47.6' \[0m
+2026-10-13T11:20:27.3447131Z [36;1m  -f '' \[0m
+2026-10-13T11:20:27.3447244Z [36;1m  -a 'X64' \[0m
+2026-10-13T11:20:27.3447358Z [36;1m  -k '' \[0m
+2026-10-13T11:20:27.3447469Z [36;1m  -c '' \[0m
+2026-10-13T11:20:27.3447579Z [36;1m  -l '' \[0m
+2026-10-13T11:20:27.3447694Z [36;1m  -d 'default' \[0m
+2026-10-13T11:20:27.3447869Z [36;1m  -g 'https://github.com/flutter/flutter.git' \[0m
+2026-10-13T11:20:27.3448052Z [36;1m  stable[0m
+2026-10-13T11:20:27.3492758Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:27.3492941Z ##[endgroup]
+2026-10-13T11:20:27.6645782Z ##[end-action id=__subosito_flutter-action.flutter-action;outcome=success;conclusion=success;duration_ms=322]
+2026-10-13T11:20:27.6649256Z ##[start-action display=Cache Flutter;id=__subosito_flutter-action.cache-flutter]
+2026-10-13T11:20:27.8990702Z ##[group]Run actions/cache@v5
+2026-10-13T11:20:27.8990864Z with:
+2026-10-13T11:20:27.8991007Z   path: /opt/hostedtoolcache/flutter/stable-3.47.6-x64
+2026-10-13T11:20:27.8991255Z   key: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:27.8991507Z   enableCrossOsArchive: false
+2026-10-13T11:20:27.8991645Z   fail-on-cache-miss: false
+2026-10-13T11:20:27.8991773Z   lookup-only: false
+2026-10-13T11:20:27.8991891Z   save-always: false
+2026-10-13T11:20:27.8992007Z ##[endgroup]
+2026-10-13T11:20:28.1527817Z Cache hit for: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:29.2995566Z Received 121634816 of 1721736160 (7.1%), 115.9 MBs/sec
+2026-10-13T11:20:30.3045372Z Received 289406976 of 1721736160 (16.8%), 137.7 MBs/sec
+2026-10-13T11:20:31.3011727Z Received 486539264 of 1721736160 (28.3%), 154.5 MBs/sec
+2026-10-13T11:20:32.3009159Z Received 654311424 of 1721736160 (38.0%), 155.8 MBs/sec
+2026-10-13T11:20:33.3017300Z Received 813694976 of 1721736160 (47.3%), 155.0 MBs/sec
+2026-10-13T11:20:34.3019449Z Received 994050048 of 1721736160 (57.7%), 157.9 MBs/sec
+2026-10-13T11:20:35.3062707Z Received 1124073472 of 1721736160 (65.3%), 153.0 MBs/sec
+2026-10-13T11:20:36.3031795Z Received 1262485504 of 1721736160 (73.3%), 150.4 MBs/sec
+2026-10-13T11:20:37.3031852Z Received 1384120320 of 1721736160 (80.4%), 146.6 MBs/sec
+2026-10-13T11:20:38.3039124Z Received 1509949440 of 1721736160 (87.7%), 143.9 MBs/sec
+2026-10-13T11:20:39.3040835Z Received 1610612736 of 1721736160 (93.5%), 139.5 MBs/sec
+2026-10-13T11:20:40.0166160Z Received 1721736160 of 1721736160 (100.0%), 140.1 MBs/sec
+2026-10-13T11:20:40.0166667Z Cache Size: ~1642 MB (1721736160 B)
+2026-10-13T11:20:40.0191425Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5b7bfd3f-a440-40e7-8e65-7f4c9f42b26a/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:20:50.0912537Z Cache restored successfully
+2026-10-13T11:20:50.4995989Z Cache restored from key: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:50.5112709Z ##[end-action id=__subosito_flutter-action.cache-flutter;outcome=success;conclusion=success;duration_ms=22846]
+2026-10-13T11:20:50.5114954Z ##[start-action display=Cache pub dependencies;id=__subosito_flutter-action.cache-pub]
+2026-10-13T11:20:50.7310106Z ##[group]Run actions/cache@v5
+2026-10-13T11:20:50.7310266Z with:
+2026-10-13T11:20:50.7310391Z   path: /home/runner/.pub-cache
+2026-10-13T11:20:50.7310818Z   key: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:50.7311247Z   enableCrossOsArchive: false
+2026-10-13T11:20:50.7311394Z   fail-on-cache-miss: false
+2026-10-13T11:20:50.7311531Z   lookup-only: false
+2026-10-13T11:20:50.7311652Z   save-always: false
+2026-10-13T11:20:50.7311776Z ##[endgroup]
+2026-10-13T11:20:50.9664990Z Cache hit for: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:52.1257570Z Received 92322548 of 92322548 (100.0%), 91.0 MBs/sec
+2026-10-13T11:20:52.1259160Z Cache Size: ~88 MB (92322548 B)
+2026-10-13T11:20:52.1285033Z [command]/usr/bin/tar -xf /home/runner/work/_temp/762b12fb-adf7-4f8b-b4e3-d7f87126276f/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:20:52.9561495Z Cache restored successfully
+2026-10-13T11:20:52.9648344Z Cache restored from key: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:52.9728326Z ##[end-action id=__subosito_flutter-action.cache-pub;outcome=success;conclusion=success;duration_ms=2461]
+2026-10-13T11:20:52.9730334Z ##[start-action display=Run setup script;id=__subosito_flutter-action.__run_3]
+2026-10-13T11:20:52.9766798Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+2026-10-13T11:20:52.9767013Z [36;1m$GITHUB_ACTION_PATH/setup.sh \[0m
+2026-10-13T11:20:52.9767170Z [36;1m  -n '3.47.6' \[0m
+2026-10-13T11:20:52.9782841Z [36;1m  -a 'x64' \[0m
+2026-10-13T11:20:52.9783053Z [36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.47.6-x64' \[0m
+2026-10-13T11:20:52.9783258Z [36;1m  -d '/home/runner/.pub-cache' \[0m
+2026-10-13T11:20:52.9783413Z [36;1m  stable[0m
+2026-10-13T11:20:52.9834584Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:52.9834779Z ##[endgroup]
+2026-10-13T11:20:53.2848068Z ##[end-action id=__subosito_flutter-action.__run_3;outcome=success;conclusion=success;duration_ms=311]
+2026-10-13T11:20:53.2889208Z ##[group]Run flutter --version
+2026-10-13T11:20:53.2889383Z [36;1mflutter --version[0m
+2026-10-13T11:20:53.2940783Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:53.2940927Z env:
+2026-10-13T11:20:53.2941097Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:53.2941308Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:53.2941454Z ##[endgroup]
+2026-10-13T11:20:53.5001858Z Flutter 3.47.6 • channel stable • https://github.com/flutter/flutter.git
+2026-10-13T11:20:53.5002276Z Framework • revision 5fc346839b (13 days ago) • 2026-09-30 15:02:49 -0700
+2026-10-13T11:20:53.5002781Z Engine • hash b8c8d3d8d5d0095127057f8a29ca8cc53da2167c (revision 692136cb65) (13 days ago) • 2026-09-30 00:56:59.000Z
+2026-10-13T11:20:53.5003135Z Tools • Dart 3.13.5 • DevTools 2.60.0
+2026-10-13T11:20:53.5055600Z ##[group]Run flutter pub get
+2026-10-13T11:20:53.5055782Z [36;1mflutter pub get[0m
+2026-10-13T11:20:53.5107438Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:53.5107582Z env:
+2026-10-13T11:20:53.5107759Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:53.5107978Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:53.5108130Z ##[endgroup]
+2026-10-13T11:20:53.6099811Z Resolving dependencies...
+2026-10-13T11:20:53.7096789Z Downloading packages...
+2026-10-13T11:20:53.9406623Z   _fe_analyzer_shared 96.0.0 (109.0.0 available)
+2026-10-13T11:20:53.9406958Z   analyzer 10.2.0 (14.5.0 available)
+2026-10-13T11:20:53.9407188Z   app_links 7.2.1 (7.2.2 available)
+2026-10-13T11:20:53.9407426Z   app_links_linux 1.0.3 (1.0.4 available)
+2026-10-13T11:20:53.9407624Z   app_links_web 1.0.4 (1.0.5 available)
+2026-10-13T11:20:53.9407776Z   archive 4.3.0 (4.5.2 available)
+2026-10-13T11:20:53.9407961Z   build 4.0.7 (4.0.11 available)
+2026-10-13T11:20:53.9408253Z   build_runner 2.15.1 (2.16.2 available)
+2026-10-13T11:20:53.9408480Z   code_assets 1.2.1 (2.1.0 available)
+2026-10-13T11:20:53.9408757Z   cross_file 0.3.5+5 (0.4.0 available)
+2026-10-13T11:20:53.9408976Z   cupertino_icons 1.0.9 (2.0.0 available)
+2026-10-13T11:20:53.9409202Z   dart_style 3.1.7 (3.1.13 available)
+2026-10-13T11:20:53.9409417Z   dbus 0.7.15 (0.8.0 available)
+2026-10-13T11:20:53.9409631Z   file_picker 11.0.3 (13.1.0 available)
+2026-10-13T11:20:53.9409862Z   flutter_riverpod 2.6.1 (3.4.3 available)
+2026-10-13T11:20:53.9410118Z   flutter_secure_storage 9.2.4 (11.2.0 available)
+2026-10-13T11:20:53.9410399Z   flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+2026-10-13T11:20:53.9410684Z   flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+2026-10-13T11:20:53.9411041Z   flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+2026-10-13T11:20:53.9411364Z   flutter_secure_storage_web 1.2.1 (2.1.1 available)
+2026-10-13T11:20:53.9411652Z   flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+2026-10-13T11:20:53.9411851Z   freezed 3.2.5 (4.0.2 available)
+2026-10-13T11:20:53.9411994Z   go_router 15.1.3 (18.0.2 available)
+2026-10-13T11:20:53.9412137Z   gotrue 2.27.2 (2.27.3 available)
+2026-10-13T11:20:53.9412274Z   hooks 2.0.2 (2.2.0 available)
+2026-10-13T11:20:53.9412420Z   jni_flutter 1.0.3 (1.0.4+1 available)
+2026-10-13T11:20:53.9412566Z   js 0.6.7 (0.7.2 available)
+2026-10-13T11:20:53.9412698Z   latlong2 0.9.1 (0.10.1 available)
+2026-10-13T11:20:53.9412856Z   material_color_utilities 0.13.0 (0.13.1 available)
+2026-10-13T11:20:53.9413016Z   meta 1.18.3 (1.19.0 available)
+2026-10-13T11:20:53.9413152Z   objective_c 9.5.0 (9.6.2 available)
+2026-10-13T11:20:53.9413301Z   package_config 2.2.0 (3.0.0 available)
+2026-10-13T11:20:53.9413535Z   petitparser 7.0.2 (7.1.0 available)
+2026-10-13T11:20:53.9413833Z   realtime_client 2.13.0 (2.13.2 available)
+2026-10-13T11:20:53.9413986Z   record_use 0.6.0 (1.1.1 available)
+2026-10-13T11:20:53.9414125Z   riverpod 2.6.1 (3.4.3 available)
+2026-10-13T11:20:53.9414278Z   shared_preferences 2.5.5 (2.5.6 available)
+2026-10-13T11:20:53.9414428Z   source_gen 4.2.4 (4.3.0 available)
+2026-10-13T11:20:53.9414570Z   supabase 2.16.2 (2.16.5 available)
+2026-10-13T11:20:53.9414716Z   supabase_flutter 2.18.0 (2.18.3 available)
+2026-10-13T11:20:53.9414861Z   test_api 0.7.12 (0.7.15 available)
+2026-10-13T11:20:53.9414998Z   timezone 0.11.1 (0.11.2 available)
+2026-10-13T11:20:53.9415136Z   url_launcher 6.3.2 (6.3.3 available)
+2026-10-13T11:20:53.9415279Z   vector_math 2.4.0 (2.4.3 available)
+2026-10-13T11:20:53.9415418Z   win32 5.15.0 (6.4.0 available)
+2026-10-13T11:20:53.9415550Z   xml 7.0.1 (7.1.0 available)
+2026-10-13T11:20:53.9415710Z Got dependencies!
+2026-10-13T11:20:53.9415899Z 46 packages have newer versions incompatible with dependency constraints.
+2026-10-13T11:20:53.9416130Z Try `flutter pub outdated` for more information.
+2026-10-13T11:20:54.2291764Z ##[group]Run set -euo pipefail
+2026-10-13T11:20:54.2291972Z [36;1mset -euo pipefail[0m
+2026-10-13T11:20:54.2292162Z [36;1mif ! dart format --set-exit-if-changed lib test; then[0m
+2026-10-13T11:20:54.2292413Z [36;1m  echo '::error::dart format would change files. Listing offenders:'[0m
+2026-10-13T11:20:54.2292757Z [36;1m  dart format lib test[0m
+2026-10-13T11:20:54.2292927Z [36;1m  git --no-pager diff --name-only[0m
+2026-10-13T11:20:54.2293095Z [36;1m  git --no-pager diff --stat[0m
+2026-10-13T11:20:54.2293376Z [36;1m  git --no-pager diff -- lib/l10n/app_localizations_en_a.dart lib/l10n/app_localizations_fa_a.dart[0m
+2026-10-13T11:20:54.2293784Z [36;1m  exit 1[0m
+2026-10-13T11:20:54.2293902Z [36;1mfi[0m
+2026-10-13T11:20:54.2345098Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:54.2345247Z env:
+2026-10-13T11:20:54.2345422Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:54.2345637Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:54.2345826Z ##[endgroup]
+2026-10-13T11:20:54.7585203Z Formatted 231 files (0 changed) in 0.51 seconds.
+2026-10-13T11:20:54.7663576Z ##[group]Run flutter analyze --no-pub
+2026-10-13T11:20:54.7663988Z [36;1mflutter analyze --no-pub[0m
+2026-10-13T11:20:54.7715746Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:54.7715894Z env:
+2026-10-13T11:20:54.7716069Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:54.7716282Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:54.7716436Z ##[endgroup]
+2026-10-13T11:21:06.2501196Z Analyzing rad_emigrate...                                       
+2026-10-13T11:21:06.2511141Z No issues found! (ran in 11.2s)
+2026-10-13T11:21:06.2608638Z ##[group]Run flutter test --no-pub
+2026-10-13T11:21:06.2608956Z [36;1mflutter test --no-pub[0m
+2026-10-13T11:21:06.2661707Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:21:06.2661862Z env:
+2026-10-13T11:21:06.2662042Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:21:06.2662255Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:21:06.2662403Z ##[endgroup]
+2026-10-13T11:21:07.3278881Z 
+2026-10-13T11:21:17.9353087Z ##[group]✅ Passing tests
+2026-10-13T11:21:17.9354233Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/auth_button_overflow_regression_test.dart: AppButton expanded with long label does not overflow at 320px
+2026-10-13T11:21:17.9602456Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/auth_button_overflow_regression_test.dart: AppButton expanded FA-length label + textScale 1.3 does not overflow
+2026-10-13T11:21:17.9783120Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/auth_button_overflow_regression_test.dart: EditorialKicker long label does not overflow at 280px
+2026-10-13T11:21:18.2251907Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/widget_test.dart: App boots without crashing
+2026-10-13T11:21:19.5569316Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine Tehran offset is +3:30 or +4:30 depending on DST rules
+2026-10-13T11:21:19.5587747Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine Toronto, London, Berlin, Dubai, Sydney resolve
+2026-10-13T11:21:19.5612434Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine convert preserves instant across zones
+2026-10-13T11:21:19.5625514Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: TimezoneEngine isDaytime around noon is true
+2026-10-13T11:21:19.5654547Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner suggests windows for Tehran–Toronto
+2026-10-13T11:21:19.5681540Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner no crash when zones are far apart
+2026-10-13T11:21:19.5695839Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: MeetingPlanner DST spring-forward date still returns list
+2026-10-13T11:21:19.5717518Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: CityCatalog search finds Tehran in English and Persian
+2026-10-13T11:21:19.5734248Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/timezone_engine_test.dart: CityCatalog nearest returns a city for a known coordinate
+2026-10-13T11:21:19.7379543Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 320.0
+2026-10-13T11:21:19.8222940Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 360.0
+2026-10-13T11:21:19.8971932Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage has no RenderFlex overflow at width 390.0
+2026-10-13T11:21:19.9722344Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: LoginPage FA + textScale 1.3 has no RenderFlex overflow at 360
+2026-10-13T11:21:20.0484334Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ui_repair/login_register_layout_regression_test.dart: RegisterPage has no RenderFlex overflow at 360
+2026-10-13T11:21:20.2775156Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/local_date_format_test.dart: FA uses Jalali weekday and month names
+2026-10-13T11:21:20.2845653Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/local_date_format_test.dart: EN uses Gregorian format
+2026-10-13T11:21:20.7988620Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/geo_timezone_resolver_test.dart: GeoTimezoneResolver boundary lookup Tehran center resolves to Asia/Tehran
+2026-10-13T11:21:20.8009597Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/geo_timezone_resolver_test.dart: GeoTimezoneResolver boundary lookup mid-Atlantic ocean is unresolved or unavailable
+2026-10-13T11:21:20.8021462Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/geo_timezone_resolver_test.dart: GeoTimezoneResolver boundary lookup manual override never invents silently
+2026-10-13T11:21:20.8043546Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/features/global_time/geo_timezone_resolver_test.dart: GeoTimezoneResolver boundary lookup Dubai non-hour offset zone still has clocks
+2026-10-13T11:21:21.9372499Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/user_profile_test.dart: UserProfile fromJson / toJson round-trip
+2026-10-13T11:21:21.9397836Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/user_profile_test.dart: UserProfile copyWith overrides fields
+2026-10-13T11:21:21.9404796Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/user_profile_test.dart: UserProfile equality
+2026-10-13T11:21:22.5561442Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/profile_failed_save_widget_test.dart: ordinary phone-save failure retains form and permits retry while authenticated
+2026-10-13T11:21:23.0016998Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/profile_repository_test.dart: profile save fields survive json round-trip for repository boundary
+2026-10-13T11:21:23.6379502Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/profile_session_regression_test.dart: profile metadata remains authenticated while saving and after ordinary failure
+2026-10-13T11:21:23.6408592Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/profile/profile_session_regression_test.dart: phone persistence and ordinary failure preserve global auth
+2026-10-13T11:21:24.3705483Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth_controller_test.dart: UserSession isAuthenticated is false by default
+2026-10-13T11:21:24.3724580Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth_controller_test.dart: UserSession isAuthenticated is true when token present and authenticated flag set
+2026-10-13T11:21:24.3745202Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth_controller_test.dart: UserSession copyWith overrides specified fields only
+2026-10-13T11:21:24.3760808Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth_controller_test.dart: ApplicationStatus labels all statuses have labels
+2026-10-13T11:21:24.7653420Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/auth_repository_impl_test.dart: AuthRemoteDataSource preserves the legacy transport contract
+2026-10-13T11:21:26.0075695Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_recovery_state_test.dart: recovery state requires a matching non-null active user
+2026-10-13T11:21:26.6594090Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_recovery_session_test.dart: recovery marker survives refresh only for the matching session user
+2026-10-13T11:21:26.6608400Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_recovery_session_test.dart: clearing recovery state removes the persisted UI gate
+2026-10-13T11:21:27.3088267Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/auth_resend_test.dart: resend sends the pending email and preserves signup state
+2026-10-13T11:21:27.3099657Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/auth_resend_test.dart: signup resend mode reaches the repository explicitly
+2026-10-13T11:21:27.3131905Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/auth_resend_test.dart: resend failure preserves pending signup state
+2026-10-13T11:21:27.9187249Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/phone_normalize_test.dart: normalizeE164 accepts international numbers
+2026-10-13T11:21:27.9196355Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/phone_normalize_test.dart: normalizeE164 maps Iranian local formats
+2026-10-13T11:21:27.9206627Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/phone_normalize_test.dart: normalizeE164 rejects invalid
+2026-10-13T11:21:29.6352966Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_reset_recovery_test.dart: en: failed recovery retains email and permits retry without false success
+2026-10-13T11:21:29.7291742Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_reset_recovery_test.dart: fa: failed recovery retains email and permits retry without false success
+2026-10-13T11:21:29.8001431Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_reset_recovery_test.dart: pending recovery blocks duplicate sends and shows no success
+2026-10-13T11:21:29.8489485Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/password_reset_recovery_test.dart: rate-limited recovery shows retry guidance and blocks resends
+2026-10-13T11:21:31.6617689Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA login composition builds
+2026-10-13T11:21:31.9715504Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA dashboard composition builds
+2026-10-13T11:21:32.0420323Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA visa composition builds
+2026-10-13T11:21:32.0850122Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA ai composition builds
+2026-10-13T11:21:32.1223124Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA feed composition builds
+2026-10-13T11:21:32.1519684Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA admin composition builds
+2026-10-13T11:21:32.2046549Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA login uses the premium Earth and bird scene
+2026-10-13T11:21:32.2517127Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA Login retains its default editorial rule
+2026-10-13T11:21:32.2852787Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading composition presents every RAD loading tier
+2026-10-13T11:21:32.3124551Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA Splash route holds the real Splash page pending
+2026-10-13T11:21:32.3331279Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-full route presents its approved scene
+2026-10-13T11:21:32.3528633Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-section route presents its approved scene
+2026-10-13T11:21:32.3723063Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-section-dark route presents its approved scene
+2026-10-13T11:21:32.3880373Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen visual QA is clean and uses the enlarged Earth scene
+2026-10-13T11:21:32.4039334Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA splash loader suppresses the editorial red rule
+2026-10-13T11:21:32.4178671Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA loading-full loader suppresses the editorial red rule
+2026-10-13T11:21:32.4367655Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen loader scales down only when narrow width requires it
+2026-10-13T11:21:32.4564705Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: full-screen loader preserves the 280 px scene at 390 px mobile
+2026-10-13T11:21:32.4725598Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: dark section QA title uses explicit readable foreground color
+2026-10-13T11:21:32.4919844Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visual_qa_smoke_test.dart: visual QA compact route presents light and dark loading states
+2026-10-13T11:21:32.7735741Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/auth/profile_name_session_test.dart: supplementary profile network failure retains valid signed-in session
+2026-10-13T11:21:33.2744829Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_service_test.dart: unavailable AI service clearly declines unsourced immigration guidance
+2026-10-13T11:21:33.4149149Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: USER ADMIN and BOTH scopes never widen across boundaries
+2026-10-13T11:21:33.4161985Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: fallback is priority ordered finite and returns controlled failure
+2026-10-13T11:21:33.4172344Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: fallback stops on first success without recursion
+2026-10-13T11:21:33.4189966Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: disabled provider model unhealthy and cooldown candidates are skipped
+2026-10-13T11:21:33.4203134Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: 429 and timeout have explicit retry and fallback policies
+2026-10-13T11:21:33.4223779Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: model discovery normalizes duplicates and preserves removed models
+2026-10-13T11:21:33.4237821Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: newly discovered models are never auto-enabled
+2026-10-13T11:21:33.4248475Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: empty and malformed discovery input fails closed to no additions
+2026-10-13T11:21:33.4263271Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: evidence deduplicates by URL and keeps freshest provenance
+2026-10-13T11:21:33.4274338Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: conflicting evidence is preserved rather than silently resolved
+2026-10-13T11:21:33.4293317Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: change detection handles whitespace content unavailable and error
+2026-10-13T11:21:33.4308393Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: prompt structurally isolates malicious retrieved content
+2026-10-13T11:21:33.4319107Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: User capability excludes privileged admin operations
+2026-10-13T11:21:33.4328844Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: Admin research can review and approve but cannot publish roles or secrets
+2026-10-13T11:21:33.4341011Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: Admin research result exposes only pre-publication stages
+2026-10-13T11:21:33.4352141Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_finalization_prebuild_test.dart: domain-facing provider errors are sanitized constants
+2026-10-13T11:21:33.9970840Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/admin/research_source_url_test.dart: only public HTTPS DNS sources can be saved
+2026-10-13T11:21:33.9997516Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/admin/research_source_url_test.dart: canonical duplicates retain distinct page paths
+2026-10-13T11:21:34.8987731Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect unauthenticated cold launch reaches login after restoration
+2026-10-13T11:21:34.9012104Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect authenticated deep link waits for restoration and keeps destination
+2026-10-13T11:21:34.9035153Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect login preserves query-bearing destination and rejects external from
+2026-10-13T11:21:34.9054683Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect expired session redirects to login after restoration
+2026-10-13T11:21:34.9068628Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect incomplete profile routes to profile completion
+2026-10-13T11:21:34.9086994Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect restored public route resolves to dashboard or profile completion
+2026-10-13T11:21:34.9120818Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect forgot and reset password stay public
+2026-10-13T11:21:34.9135216Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect invalid restored destinations fall back to dashboard
+2026-10-13T11:21:34.9148403Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/auth_redirect_test.dart: authRedirect world-clock is a protected route for deep-link restoration
+2026-10-13T11:21:35.4680476Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/admin/admin_form_recovery_test.dart: Source rejects unusable URL and retains form on failure for safe retry
+2026-10-13T11:21:35.6423064Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/localized_error_message_test.dart: unknown backend details are never returned to users
+2026-10-13T11:21:35.6443289Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/localized_error_message_test.dart: known auth failures map to localized safe messages
+2026-10-13T11:21:35.9351507Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/admin/admin_form_recovery_test.dart: failed model save keeps changed settings in dialog and permits retry
+2026-10-13T11:21:35.9386152Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/admin/admin_form_recovery_test.dart: Admin labels localize known categories and suppress arbitrary diagnostics
+2026-10-13T11:21:36.6330396Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/motion_primitives_test.dart: MotionReveal renders immediately with reduced motion
+2026-10-13T11:21:36.6598138Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/motion_primitives_test.dart: MotionCount never substitutes a value while data is missing
+2026-10-13T11:21:36.6716824Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/motion_primitives_test.dart: motion tokens collapse duration for reduced motion
+2026-10-13T11:21:36.8367892Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/session_manager_test.dart: SessionManager restore sets authenticated when session present
+2026-10-13T11:21:36.8381435Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/session_manager_test.dart: SessionManager restore sets unauthenticated when no session
+2026-10-13T11:21:36.8394285Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/session_manager_test.dart: SessionManager logout clears session
+2026-10-13T11:21:37.4284944Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/app_config_test.dart: AppConfig.isProduction is true only for production
+2026-10-13T11:21:37.4311504Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/app_config_test.dart: fromName resolves environments
+2026-10-13T11:21:38.3044479Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/localization_completeness_test.dart: document labels and assistant suggestions exist in EN and FA
+2026-10-13T11:21:38.3156299Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/localization_completeness_test.dart: document localization keys remain mirrored in both ARB files
+2026-10-13T11:21:38.3180268Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/localization_completeness_test.dart: Stage 1 AI and research strings are complete in EN and FA
+2026-10-13T11:21:38.7564321Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/app_shell_navigation_test.dart: mobile More menu exposes every secondary destination
+2026-10-13T11:21:38.8762823Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/app_shell_navigation_test.dart: non-admin mobile menu does not claim admin access
+2026-10-13T11:21:39.1052067Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/locale_theme_controller_test.dart: AppLocale FA is RTL and EN is LTR
+2026-10-13T11:21:39.1071279Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/locale_theme_controller_test.dart: AppLocale fromLanguageCode defaults to English
+2026-10-13T11:21:39.1120225Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/locale_theme_controller_test.dart: LocaleController restores and persists locale
+2026-10-13T11:21:39.1141707Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/locale_theme_controller_test.dart: ThemeController restores and persists theme preference
+2026-10-13T11:21:40.0042988Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: Login Hero scene exposes one semantic label and runs when active
+2026-10-13T11:21:40.0464503Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: scene keeps a stable composition when motion is reduced
+2026-10-13T11:21:40.0853766Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: scene stops its ticker when deactivated
+2026-10-13T11:21:40.1168056Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: scene stops when its ticker subtree is disabled
+2026-10-13T11:21:40.1458624Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: removing the scene disposes the running controller
+2026-10-13T11:21:40.1726688Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.loginHero animates without layout exceptions at narrow width
+2026-10-13T11:21:40.1969185Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.splash animates without layout exceptions at narrow width
+2026-10-13T11:21:40.2374625Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.fullScreenLoading animates without layout exceptions at narrow width
+2026-10-13T11:21:40.2604129Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.sectionLoading animates without layout exceptions at narrow width
+2026-10-13T11:21:40.2802567Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_earth_bird_scene_test.dart: RadEarthBirdVariant.compactLoading animates without layout exceptions at narrow width
+2026-10-13T11:21:40.4310800Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: full-screen RAD loader exposes one live loading label
+2026-10-13T11:21:40.4709044Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: loading adapter maps every tier to the approved Earth scene
+2026-10-13T11:21:40.4976540Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: section and compact loaders preserve their declared tier
+2026-10-13T11:21:40.5177216Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: reduced motion stops the loader ticker and keeps copy readable
+2026-10-13T11:21:40.5542451Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: inactive loader stops after an active to inactive update
+2026-10-13T11:21:40.5810061Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: disabled ticker mode stops an already active loader
+2026-10-13T11:21:40.6025548Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: removing a running loader disposes its animation cleanly
+2026-10-13T11:21:40.6404610Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: shared loading separates display copy from its live announcement
+2026-10-13T11:21:40.6758268Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: shared loading states select their declared RAD tier
+2026-10-13T11:21:40.6977127Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_loading_test.dart: Splash loading selects the premium splash scene without a skeleton
+2026-10-13T11:21:41.0488456Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical application logo is square and transparent
+2026-10-13T11:21:41.0550818Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: PWA installs use canonical PNGs with separate maskable artwork
+2026-10-13T11:21:41.4338629Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers builds a path-based recovery redirect for path URL strategy
+2026-10-13T11:21:41.4352576Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers rejects origins unavailable to a browser build
+2026-10-13T11:21:41.4368331Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers classifies Supabase recovery throttling without exposing details
+2026-10-13T11:21:41.4379983Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/password_recovery_test.dart: password recovery helpers classifies expired or missing recovery sessions
+2026-10-13T11:21:41.4944636Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical en RadBrandSize.small emblem fits narrow space
+2026-10-13T11:21:41.5256482Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical en RadBrandSize.medium emblem fits narrow space
+2026-10-13T11:21:41.5570481Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical en RadBrandSize.large emblem fits narrow space
+2026-10-13T11:21:41.5759060Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical fa RadBrandSize.small emblem fits narrow space
+2026-10-13T11:21:41.5917007Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical fa RadBrandSize.medium emblem fits narrow space
+2026-10-13T11:21:41.6087188Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/rad_brand_test.dart: canonical fa RadBrandSize.large emblem fits narrow space
+2026-10-13T11:21:42.7218357Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.dark, 390px)
+2026-10-13T11:21:42.7784899Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.dark, 1440px)
+2026-10-13T11:21:42.8319557Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.light, 390px)
+2026-10-13T11:21:42.8730265Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/persian_typography_test.dart: Persian component typography (Brightness.light, 1440px)
+2026-10-13T11:21:43.0177783Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/stage3_ui_quality_test.dart: EmptyState exposes combined semantics label
+2026-10-13T11:21:43.0457587Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/core/stage3_ui_quality_test.dart: ConstrainedContent applies max width constraint
+2026-10-13T11:21:44.1808404Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: AI payload includes history and current prompt once, retaining admin scope
+2026-10-13T11:21:44.1890034Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: provider credential rejection remains a localized failure
+2026-10-13T11:21:44.1996790Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: history retrieves latest bounded page and returns chronological turns
+2026-10-13T11:21:44.2059437Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: committed question remains saved when counter GET fails
+2026-10-13T11:21:44.2100250Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: committed question remains saved when counter PATCH fails
+2026-10-13T11:21:44.2148163Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_transport_persistence_test.dart: primary message-insert errors still reach caller without updating count
+2026-10-13T11:21:44.6249792Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_assistant_page_test.dart: provider failure retries without duplicating persisted user question
+2026-10-13T11:21:44.7463473Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_assistant_page_test.dart: restored conversation turns reach subsequent requests
+2026-10-13T11:21:44.8809581Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_assistant_page_test.dart: send waits for history and retains restored session
+2026-10-13T11:21:45.0025388Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/ai_assistant/ai_assistant_page_test.dart: transport failure is actionable and admin retry retains scope
+2026-10-13T11:21:45.8463565Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visa/visa_entities_test.dart: catalog keeps provenance with every programme
+2026-10-13T11:21:45.9980938Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/visa/visa_page_test.dart: Visa detail exposes its evidence URL as an accessible action
+2026-10-13T11:21:46.5479764Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_storage_test.dart: storage path survives local cache serialization
+2026-10-13T11:21:46.9524386Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_cache_isolation_test.dart: two accounts cannot read each other document cache
+2026-10-13T11:21:46.9542124Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_cache_isolation_test.dart: legacy shared cache is deleted and never migrated
+2026-10-13T11:21:46.9567793Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_cache_isolation_test.dart: foreign rows and signed bearer URLs are not persisted
+2026-10-13T11:21:46.9580658Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_cache_isolation_test.dart: logout lifecycle clear removes only the departing user
+2026-10-13T11:21:47.3276078Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_test.dart: Document serialization round-trip
+2026-10-13T11:21:47.3291103Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/documents/document_test.dart: Document type labels
+2026-10-13T11:21:47.4645409Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane provider credentials remain write-only and service-only
+2026-10-13T11:21:47.4675636Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane runtime scope is enforced in service-role RPC
+2026-10-13T11:21:47.4685155Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane discovery preserves configuration and disables new models
+2026-10-13T11:21:47.4707236Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: AI control plane provider errors are classified and sanitized
+2026-10-13T11:21:47.4722773Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research retrieved content is structurally untrusted
+2026-10-13T11:21:47.4756456Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research research fetch is bounded and redirect-safe
+2026-10-13T11:21:47.4769957Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research scheduled and browser research have explicit authentication
+2026-10-13T11:21:47.4782626Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research meaningful change creates review candidate but never Feed
+2026-10-13T11:21:47.4791902Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage1_ai_research_completion_test.dart: grounding and research first-party sources retain explicit trust distinction
+2026-10-13T11:21:47.8283051Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates knowledge_items review_status includes draft through archived
+2026-10-13T11:21:47.8300868Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates public knowledge read requires approved status
+2026-10-13T11:21:47.8313013Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates research findings default to review not published
+2026-10-13T11:21:47.8324506Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates content_drafts include published only as explicit status
+2026-10-13T11:21:47.8335641Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates source authority distinguishes rad_official from government
+2026-10-13T11:21:47.8344233Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates knowledge conflicts retain dual statements
+2026-10-13T11:21:47.8355694Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Knowledge / research review gates research jobs bound retries with max_attempts
+2026-10-13T11:21:47.8365937Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed public read requires published status
+2026-10-13T11:21:47.8374674Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed status machine includes draft through archived
+2026-10-13T11:21:47.8382638Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility saved feed and reads are owner-scoped
+2026-10-13T11:21:47.8390949Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility notifications are owner-scoped
+2026-10-13T11:21:47.8398958Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: Feed publish visibility feed localizations support fa and en
+2026-10-13T11:21:47.8413493Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation API keys use vault secret_id not table column
+2026-10-13T11:21:47.8424283Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation configure_ai_provider requires super_admin
+2026-10-13T11:21:47.8442628Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation runtime chain is service_role only
+2026-10-13T11:21:47.8452104Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation enabled providers and models gate metadata reads
+2026-10-13T11:21:47.8460073Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI provider secret isolation request attempt_count is bounded
+2026-10-13T11:21:47.8469602Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening is_safe_public_https_url helper exists
+2026-10-13T11:21:47.8480295Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening configure_ai_provider uses safe URL helper not only https prefix
+2026-10-13T11:21:47.8491378Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/schema_policy_acceptance_test.dart: AI base_url SSRF hardening blocks private and loopback IPv4 ranges
+2026-10-13T11:21:48.2670267Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: research findings remain review-only worker ingests evidence atomically into one review candidate
+2026-10-13T11:21:48.2683348Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: research findings remain review-only Stage 5 backfill is idempotent and never publishes
+2026-10-13T11:21:48.2712016Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: production initialization is evidence-conscious Visa seed is limited to programmes with specific source evidence
+2026-10-13T11:21:48.2764435Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: production initialization is evidence-conscious thin Visa content has bilingual, explicit review state
+2026-10-13T11:21:48.2775307Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Android release rejects the unapproved placeholder identity
+2026-10-13T11:21:48.2792743Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Edge Functions share Supabase browser CORS headers
+2026-10-13T11:21:48.2809097Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: release configuration and browser compatibility Web and Render metadata are production-branded
+2026-10-13T11:21:48.2819350Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: Admin overview queries are bounded and counted server-side
+2026-10-13T11:21:48.2830499Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage5_release_readiness_test.dart: shared loading, empty, and error states expose semantics
+2026-10-13T11:21:48.7053008Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security publish RPC is admin-gated and idempotent
+2026-10-13T11:21:48.7100422Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security research worker never publishes feed
+2026-10-13T11:21:48.7124931Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security Stage 1 candidate path does not write feed
+2026-10-13T11:21:48.7154909Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 review publish security feed public RLS remains published-only
+2026-10-13T11:21:48.7187646Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 admin review UI wiring review detail sheet and actions exist
+2026-10-13T11:21:48.7220719Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 visa structured content visa steps migration seeds ordered steps without fabricating fees
+2026-10-13T11:21:48.7244639Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 visa structured content visa page uses localization facade not language ternaries
+2026-10-13T11:21:48.7308547Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_visa_test.dart: Stage 2 localization Stage 2 keys non-empty and distinct in EN and FA
+2026-10-13T11:21:48.8651555Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: publish_content_draft RPC exists and is admin-gated
+2026-10-13T11:21:48.8675561Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: research candidate creation never writes feed_items
+2026-10-13T11:21:48.8694907Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: research-sync worker does not publish feed
+2026-10-13T11:21:48.8745881Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: set_content_draft_status supports reject/keep/approve without publish
+2026-10-13T11:21:48.8795374Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: update_content_draft preserves separate provenance path
+2026-10-13T11:21:48.8820562Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/stage2_review_feed_publish_test.dart: feed public read remains published-only via RLS policy source
+2026-10-13T11:21:49.4853190Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization USER role cannot access admin operations
+2026-10-13T11:21:49.4869339Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization ADMIN role can access operations but is not Super Admin
+2026-10-13T11:21:49.4883418Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization SUPER_ADMIN role can access operations and audit events
+2026-10-13T11:21:49.4903362Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization arbitrary client role strings do not grant access
+2026-10-13T11:21:49.4918486Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_role_authorization_test.dart: AdminSnapshot role authorization USER cannot become ADMIN through client-side role mutation model
+2026-10-13T11:21:49.6163526Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pwa_manifest_smoke_test.dart: web/manifest.json exists with required icon references
+2026-10-13T11:21:49.6177377Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pwa_manifest_smoke_test.dart: manifest name is present (production branding may still lag)
+2026-10-13T11:21:50.2260691Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) empty prompt does not invent immigration requirements
+2026-10-13T11:21:50.2294806Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) immigration question declines with explicit uncertainty
+2026-10-13T11:21:50.2315171Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) document analysis request does not fabricate OCR or advice
+2026-10-13T11:21:50.2316788Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) legacy ask() preserves uncertainty messaging
+2026-10-13T11:21:50.2328584Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) AiResponse preserves sources when provided by a real provider
+2026-10-13T11:21:50.2345169Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/ai_safety_grounding_test.dart: AI safety and grounding (UnavailableAiService) uncertain response may carry empty sources without implying certainty
+2026-10-13T11:21:50.6632623Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance every status has a non-empty human label
+2026-10-13T11:21:50.6654434Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance fromString maps known names and defaults unknown to draft
+2026-10-13T11:21:50.6672644Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance owner update via copyWith retains identity fields
+2026-10-13T11:21:50.6704725Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/application_status_acceptance_test.dart: ApplicationStatus acceptance serialization preserves owner and status
+2026-10-13T11:21:50.8859958Z ##[endgroup]
+2026-10-13T11:21:50.8860530Z ##[group]⏭️ Skipped tests
+2026-10-13T11:21:50.8861065Z ⏭️ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Super Admin bootstrap requires verified Auth accounts (skipped)
+2026-10-13T11:21:50.8861815Z Skip: External owner action: verify Auth identities before elevation.
+2026-10-13T11:21:50.8862648Z ⏭️ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Full Flutter ARB locale service beyond bilingual content model (skipped)
+2026-10-13T11:21:50.8863239Z Skip: Deferred optional localization architecture; not a pass claim.
+2026-10-13T11:21:50.8864095Z ⏭️ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Data export / account deletion product UI (skipped)
+2026-10-13T11:21:50.8864617Z Skip: Deferred pending owner legal and retention policy.
+2026-10-13T11:21:50.8865365Z ⏭️ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/pending_implementation_gates_test.dart: External / deferred engineering gates Production domain, DNS, Auth redirect URLs, app signing (skipped)
+2026-10-13T11:21:50.8865968Z Skip: External infrastructure and owner signing action.
+2026-10-13T11:21:51.0938161Z ##[endgroup]
+2026-10-13T11:21:51.0939182Z ##[group]✅ Passing tests
+2026-10-13T11:21:51.0940241Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: quota and entitlement decisions reject a non-owner user id
+2026-10-13T11:21:51.0959482Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: applicants cannot select consultation admin_note
+2026-10-13T11:21:51.0978790Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: Storage update matches upsert and stays owner-folder scoped
+2026-10-13T11:21:51.0997304Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: consultation submission is RPC-only and rate limited
+2026-10-13T11:21:51.1010984Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: existing upload and guest AI abuse bounds remain present
+2026-10-13T11:21:51.1022260Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/security_acceptance_test.dart: role escalation and human Feed publication guards remain intact
+2026-10-13T11:21:51.6415211Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance unauthenticated access to each protected route redirects to login
+2026-10-13T11:21:51.6427676Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance authenticated incomplete profile is forced to profile-completion
+2026-10-13T11:21:51.6438288Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance authenticated complete profile may stay on admin route
+2026-10-13T11:21:51.6455125Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance session restoration preserves deep-link for known protected routes
+2026-10-13T11:21:51.6469451Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance external or unknown restored destinations fall back to dashboard
+2026-10-13T11:21:51.6480198Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/auth_redirect_acceptance_test.dart: authRedirect acceptance admin deep-link restorable; unauthenticated still login
+2026-10-13T11:21:51.7445390Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_ai_quota_test.dart: AiAssistantPage does not hard-block admin with _freeLimit
+2026-10-13T11:21:51.7464344Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_ai_quota_test.dart: Admin AI workspace is a dedicated page, not only adminMode flag
+2026-10-13T11:21:51.7480858Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/admin_ai_quota_test.dart: ai-orchestrator enforces server-side daily limits by role
+2026-10-13T11:21:52.2865234Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance storagePath and ownership fields persist through serialization
+2026-10-13T11:21:52.2881684Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance signed URL is optional and not used as deletion identity
+2026-10-13T11:21:52.2897944Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance verification status labels cover lifecycle
+2026-10-13T11:21:52.2909421Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/document_acceptance_test.dart: Document acceptance document type kinds are stable for UI filters
+2026-10-13T11:21:52.4275854Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: ai-orchestrator never writes feed_items or publish_content_draft
+2026-10-13T11:21:52.4302286Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: research-sync never publishes feed
+2026-10-13T11:21:52.4329703Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: create_research_review_candidate creates drafts not feed
+2026-10-13T11:21:52.4348887Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: Feed repository only loads published items
+2026-10-13T11:21:52.4383287Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/no_ai_research_auto_publish_test.dart: database requires approved human RPC and blocks direct Feed writes
+2026-10-13T11:21:53.0520192Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/rtl_directionality_test.dart: AppLocale marks FA as RTL and EN as LTR
+2026-10-13T11:21:53.0562221Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/rtl_directionality_test.dart: app root applies Directionality from locale controller
+2026-10-13T11:21:53.0576077Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/rtl_directionality_test.dart: directional helpers flip chevron back and forward for RTL
+2026-10-13T11:21:53.0640711Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/rtl_directionality_test.dart: primary product pages use directional helpers not fixed arrows
+2026-10-13T11:21:53.0681195Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/acceptance/rtl_directionality_test.dart: EN and FA core keys are non-empty and distinct
+2026-10-13T11:21:54.3746630Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/auth_password_visibility_test.dart: EQS-AUTH password visibility toggles tooltip and icon
+2026-10-13T11:21:54.4615332Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/feed_page_states_test.dart: EQS-FEED loading shows LoadingState
+2026-10-13T11:21:54.5381104Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/feed_page_states_test.dart: EQS-FEED error shows ErrorState and retry
+2026-10-13T11:21:54.6065140Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/feed_page_states_test.dart: EQS-FEED empty shows EmptyState
+2026-10-13T11:21:54.7871937Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/feed_page_states_test.dart: EQS-FEED data renders published title
+2026-10-13T11:21:55.6112315Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 320.0
+2026-10-13T11:21:55.6304652Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 360.0
+2026-10-13T11:21:55.6549902Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 390.0
+2026-10-13T11:21:55.6781765Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 768.0
+2026-10-13T11:21:55.7074464Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y EmptyState no overflow at 1280.0
+2026-10-13T11:21:55.7890182Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y ErrorState semantics live region at scale 1.6
+2026-10-13T11:21:55.8079661Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/a11y_responsive_states_test.dart: EQS-A11Y StatusBadge semantics include status label
+2026-10-13T11:21:56.3464270Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA loading shows LoadingState
+2026-10-13T11:21:56.4092504Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA error shows ErrorState with retry
+2026-10-13T11:21:56.5105958Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/eqs/visa_page_states_test.dart: EQS-VISA data lists programme titles
+2026-10-13T11:21:57.0744898Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09 EmptyState shows title subtitle and optional action
+2026-10-13T11:21:57.1133235Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09b ErrorState exposes live region and retry
+2026-10-13T11:21:57.1829967Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/empty_error_loading_journey_test.dart: UJ09c LoadingState section renders without exception
+2026-10-13T11:21:57.4320257Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/consultation_form_journey_test.dart: UJ05 unauthenticated deep link to /consultation redirects to login
+2026-10-13T11:21:57.4339712Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/consultation_form_journey_test.dart: UJ05b consultation is a known protected destination
+2026-10-13T11:21:57.4405532Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/consultation_form_journey_test.dart: UJ05c consultation page source enforces auth gate and required fields
+2026-10-13T11:21:57.4423015Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/consultation_form_journey_test.dart: UJ05d UserSession defaults to unauthenticated
+2026-10-13T11:21:58.0116176Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ03 fixture catalog exposes destinations and programmes
+2026-10-13T11:21:58.0133832Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ03b filter by Canada keeps only Canada Study Permit
+2026-10-13T11:21:58.0145301Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ03c filter by work category keeps Germany Work Visa
+2026-10-13T11:21:58.0156294Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ03d search query narrows by title substring
+2026-10-13T11:21:58.0167050Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ03e empty filter combination yields empty list (empty state path)
+2026-10-13T11:21:58.0182580Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ04 structured program exposes requirements and steps for detail
+2026-10-13T11:21:58.0194331Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/visa_catalog_journey_test.dart: UJ04b pending program has empty structure for pending UI
+2026-10-13T11:21:58.4804602Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/feed_profile_route_journey_test.dart: UJ06 /profile is a known protected destination
+2026-10-13T11:21:58.4821273Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/feed_profile_route_journey_test.dart: UJ08 /feed is a known protected destination
+2026-10-13T11:21:58.4879037Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/feed_profile_route_journey_test.dart: UJ06b router source registers profile and feed shell routes
+2026-10-13T11:21:58.4909345Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/feed_profile_route_journey_test.dart: UJ08b feed page source is read-oriented (no publish mutation UI)
+2026-10-13T11:21:58.9835972Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/startup_navigation_journey_test.dart: UJ01 unauthenticated deep link to /visa redirects to login with from
+2026-10-13T11:21:58.9847494Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/startup_navigation_journey_test.dart: UJ01b authenticated incomplete profile is sent to profile-completion
+2026-10-13T11:21:58.9857029Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/startup_navigation_journey_test.dart: UJ01c external from query is rejected by restoredProtectedDestination
+2026-10-13T11:21:58.9866734Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/startup_navigation_journey_test.dart: UJ01d splash path does not redirect during restoration wait
+2026-10-13T11:21:59.3981725Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/application_status_journey_test.dart: UJ07 application draft can transition to submitted via copyWith
+2026-10-13T11:21:59.3998255Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/application_status_journey_test.dart: UJ07b status labels cover full lifecycle
+2026-10-13T11:21:59.7796958Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/rtl_navigation_journey_test.dart: UJ10 AppLocale persian is RTL and english is LTR
+2026-10-13T11:21:59.7821523Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/application_status_journey_test.dart: UJ07c StatusBadge announces status to semantics
+2026-10-13T11:22:00.1479234Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/rtl_navigation_journey_test.dart: UJ10b directionalBack flips under RTL Directionality
+2026-10-13T11:22:00.1563500Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/rtl_navigation_journey_test.dart: UJ10c FA and EN product strings differ for core nav labels
+2026-10-13T11:22:00.9996417Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/applications/application_status_flow_test.dart: status transition via copyWith
+2026-10-13T11:22:01.4684095Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02 login validates empty email and password without network call
+2026-10-13T11:22:01.6896846Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/applications/visa_application_test.dart: VisaApplication serialization round-trip
+2026-10-13T11:22:01.6922377Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/applications/visa_application_test.dart: VisaApplication status labels
+2026-10-13T11:22:01.7761489Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02b login rejects malformed email with invalid-email message
+2026-10-13T11:22:01.7836756Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02c register page source includes form validators and create CTA
+2026-10-13T11:22:01.8756734Z ✅ /home/runner/work/rad_emigrate/rad_emigrate/test/user_journeys/login_register_form_journey_test.dart: UJ02d Persian login still mounts form without exception
+2026-10-13T11:22:01.8994158Z ##[endgroup]
+2026-10-13T11:22:01.8994305Z 
+2026-10-13T11:22:01.8998686Z 🎉 325 tests passed, 4 skipped.
+2026-10-13T11:22:01.9881499Z ##[group]Run git diff --check
+2026-10-13T11:22:01.9881687Z [36;1mgit diff --check[0m
+2026-10-13T11:22:01.9932362Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:22:01.9932503Z env:
+2026-10-13T11:22:01.9932674Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:22:01.9932885Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:22:01.9933032Z ##[endgroup]
+2026-10-13T11:22:02.1881863Z Post job cleanup.
+2026-10-13T11:22:02.1884708Z ##[start-action display=Cache pub dependencies;id=__499722da-f9e5-40e1-93be-d30befbe4ea0.cache-pub]
+2026-10-13T11:22:02.3464052Z Post job cleanup.
+2026-10-13T11:22:02.4333070Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66, not saving cache.
+2026-10-13T11:22:02.4389817Z ##[end-action id=__499722da-f9e5-40e1-93be-d30befbe4ea0.cache-pub;outcome=success;conclusion=success;duration_ms=250]
+2026-10-13T11:22:02.4391982Z ##[start-action display=Cache Flutter;id=__499722da-f9e5-40e1-93be-d30befbe4ea0.cache-flutter]
+2026-10-13T11:22:02.4417980Z Post job cleanup.
+2026-10-13T11:22:02.5259750Z Cache hit occurred on the primary key flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d, not saving cache.
+2026-10-13T11:22:02.5318328Z ##[end-action id=__499722da-f9e5-40e1-93be-d30befbe4ea0.cache-flutter;outcome=success;conclusion=success;duration_ms=92]
+2026-10-13T11:22:02.5362230Z Post job cleanup.
+2026-10-13T11:22:02.5889829Z [command]/usr/bin/git version
+2026-10-13T11:22:02.5921133Z git version 2.55.0
+2026-10-13T11:22:02.5942425Z Temporarily overriding HOME='/home/runner/work/_temp/028c71cb-8653-4da9-a5cb-7d1b78c41ed7' before making global git config changes
+2026-10-13T11:22:02.5943135Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:22:02.5945426Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:22:02.5975982Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:22:02.6009994Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:22:02.6205349Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:22:02.6235236Z http.https://github.com/.extraheader
+2026-10-13T11:22:02.6252872Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T11:22:02.6288081Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:22:02.6479145Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:22:02.6508429Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:22:02.6790765Z Cleaning up orphan processes
+2026-10-13T11:22:02.6978292Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

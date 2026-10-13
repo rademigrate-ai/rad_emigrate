@@ -1,0 +1,35 @@
+{
+  "result": "FAIL",
+  "synthetic_only": true,
+  "checks": {
+    "anon_ingest": 401,
+    "user_ingest": 403,
+    "user_approval": 403,
+    "user_publish": 403,
+    "service_publish": 403,
+    "unapproved_publish": 400
+  },
+  "research_atomic_review_no_publication": "PASS",
+  "browser": {
+    "rpc_responses": [],
+    "cold_start": [
+      {
+        "viewport": [
+          1280,
+          800
+        ],
+        "interactive_ms": 12070,
+        "terminal_route": "/login?from=/dashboard"
+      },
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "interactive_ms": 13607,
+        "terminal_route": "/login?from=/dashboard"
+      }
+    ]
+  },
+  "fixtures_cleaned": true
+}

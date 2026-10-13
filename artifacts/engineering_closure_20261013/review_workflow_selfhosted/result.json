@@ -1,0 +1,81 @@
+{
+  "result": "PASS",
+  "synthetic_only": true,
+  "checks": {
+    "anon_ingest": 401,
+    "user_ingest": 403,
+    "user_approval": 403,
+    "user_publish": 403,
+    "service_publish": 403,
+    "unapproved_publish": 400
+  },
+  "research_atomic_review_no_publication": "PASS",
+  "browser": {
+    "rpc_responses": [
+      {
+        "rpc": "update_content_draft",
+        "status": 204
+      },
+      {
+        "rpc": "set_content_draft_status",
+        "status": 204
+      },
+      {
+        "rpc": "update_content_draft",
+        "status": 204
+      },
+      {
+        "rpc": "publish_content_draft",
+        "status": 200
+      }
+    ],
+    "cold_start": [
+      {
+        "viewport": [
+          1280,
+          800
+        ],
+        "interactive_ms": 7798,
+        "terminal_route": "/login?from=/dashboard"
+      },
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "interactive_ms": 5799,
+        "terminal_route": "/login?from=/dashboard"
+      }
+    ],
+    "review_semantics": [
+      "Admin operationsRefreshAdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced accessHuman review queue",
+      "Admin operationsRefreshAdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced accessHuman review queue",
+      "Admin operationsRefreshAdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced accessHuman review queue",
+      "Admin operationsRefreshAdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced accessHuman review queue",
+      "Admin operationsRefreshAdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced accessHuman review queue",
+      "Admin operationsRefresh",
+      "Refresh",
+      "AdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced access",
+      "AdminOperational overviewAI requestsSourceResearch jobsUnder reviewFeedServer-enforced access",
+      "Admin",
+      "Operational overview",
+      "AI requests",
+      "Source",
+      "Research jobs",
+      "Under review",
+      "Feed",
+      "Server-enforced access",
+      "Human review queue",
+      "Human review queue",
+      "Human review queue",
+      "Unreviewed source excerpt from https://example.test/synthetic/64f234ec-e6b4-4a77-8904-455abb177053\n\nSYNTHETIC ENGINEERING TEST ONLY. Contains no immigration advice or factual claims.\nFinding review",
+      "review",
+      "Synthetic engineering fixture ecf97338: new\nDraft review",
+      "approved"
+    ],
+    "published_feed_id": "4de3d0ec-4c96-4498-8c72-59a44fb80c05",
+    "console_errors": [],
+    "chrome_approve_publish_feed": "PASS"
+  },
+  "fixtures_cleaned": true
+}

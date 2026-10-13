@@ -1,5 +1,6 @@
 """Prevent CI replay from silently omitting newly committed migrations."""
 import re
+import ast
 import unittest
 from pathlib import Path
 
@@ -26,6 +27,18 @@ class MigrationInventoryTest(unittest.TestCase):
         script = (ROOT / "scripts/verify_local_auth_isolation.py").read_text()
         self.assertIn('"/rest/v1/rpc/submit_consultation_request"', script)
         self.assertIn('label="consultation direct INSERT must stay forbidden"', script)
+
+    def test_browser_navigation_waits_for_session_restoration(self):
+        script = (ROOT / "scripts/verify_stage2_browser_e2e.py").read_text()
+        self.assertIn("window.location.pathname !== '/splash'", script)
+        self.assertIn('wait_until="domcontentloaded", timeout=30_000', script)
+        self.assertIn('environment["API_URL"] in compiled', script)
+
+    def test_consultation_limit_harness_preserves_concurrency_module(self):
+        tree = ast.parse((ROOT / 'scripts/verify_local_consultation_limits.py').read_text())
+        assignments = {node.id for node in ast.walk(tree)
+                       if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store)}
+        self.assertNotIn('concurrent', assignments)
 
 
 if __name__ == "__main__":

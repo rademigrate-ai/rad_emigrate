@@ -1,5 +1,11 @@
 # Stage 5 production handover
 
+> 2026-10-13 closure update: production remains NO-GO. Current evidence is in
+> `artifacts/engineering_closure_20261013/ACCEPTANCE.md`. Historical inventory
+> paragraphs below are not a current production attestation. The exact-five
+> security deployment/recovery instructions below supersede the former generic
+> whole-directory CLI push procedure.
+
 This document is the owner-run activation package for the Stage 5 release
 candidate. Engineering prepares and verifies the release; it does not merge the
 pull request, mutate production, or deploy Render from this task.
@@ -35,38 +41,52 @@ pull request, mutate production, or deploy Render from this task.
 
 ## Release order
 
-Use the final green commit from PR #23. Do not deploy a mixture of files from
-different commits.
+Use one owner-approved SHA on `handoff/codex-stage1-stage2-20261010` with all
+seven CI jobs green. This engineering task does not authorize a merge or deploy.
 
-1. Review and merge PR #23 only when the owner authorizes it.
-2. Back up production and record the currently deployed Render commit and Edge
-   Function versions.
-3. Apply repository migrations in order with the Supabase CLI. Do not repair,
-   rename, or edit production migration history. The pending Visa migration is
-   `20261005130000_stage2_visa_structured_steps.sql`; the Stage 5 review-candidate
-   repair is `20261006132931_stage5_research_review_candidate_backfill.sql`.
+1. Obtain owner/DBA approval, verify a real restorable recovery point in an
+   isolated target, and record the current Web/Edge versions. The Free-plan
+   entitlement gap is established; synthetic logical restore tests are not PITR
+   evidence. Use `scripts/recovery/README.md` only after actual DBA sign-off and
+   the explicit production export, Storage-copy and retention authorizations.
+2. Recheck the live 47-entry ledger (last `20261007212140`), catalog, grants,
+   constraints and invalid-row preflights against the approved rehearsal.
+   Stop on drift, failed backup integrity, missing sign-off or mismatched hashes.
+3. Apply ONLY the five reviewed security files, each transactionally with its
+   correct ledger entry, preserving all historical versions/aliases. Follow
+   `RAD_PROD_EQUIV_REHEARSAL_REPORT_20261013.md`,
+   `RAD_PRODUCTION_READONLY_PREFLIGHT_20261013.md` and
+   `RAD_DEPLOYMENT_MANIFEST_20261012.md` in the final RC artifacts. Order:
+   `20261010010000`, `20261010055013`, `20261010070000`,
+   `20261012110945`, `20261012230000`. Do not use whole-directory `db push`.
+   Knowledge aliases and Visa editorial SQL are outside this security scope.
 4. Deploy the exact release-candidate sources for `research-sync`,
    `ai-orchestrator`, and `document-intelligence`. Production currently has older
    function bundles; database migration alone does not fix future research runs.
 5. Run the read-only verification queries below.
-6. Configure Auth URLs, leaked-password protection, AI provider/model scopes,
-   and any owner-approved branding/signing values.
+6. Under separate authorization, configure Auth URLs and enable leaked-password
+   protection after compatibility assessment. Newly discovered models MUST remain
+   disabled pending administrator approval. The live catalogue function still
+   auto-enables new chat models in the 47+5 rehearsal: the five security files do
+   not resolve that divergence. Require a DBA-reviewed forward alignment and
+   a disabled-by-default discovery test before activating discovery/inference.
+   Do not invent provider credentials, application identity or signing values.
 7. Create/update the Render Static Site from `render.yaml`, then execute the
    smoke test.
 
-Example owner commands from a clean checkout at the final SHA:
+Edge commands below require separate deployment authorization, from a clean
+checkout at the approved SHA, only after successful DB postflight:
 
 ```bash
 supabase link --project-ref inshddthftkhcdosoqcn
-supabase db push --dry-run
-supabase db push
 supabase functions deploy research-sync
 supabase functions deploy ai-orchestrator
 supabase functions deploy document-intelligence
 ```
 
-Confirm the linked project before every command. Do not use `db reset` against
-production.
+Confirm the linked project before every command. Do not use `db reset`,
+`migration repair`, or generic `db push` against production. Nothing above is
+an instruction for an agent to execute without the separate approvals.
 
 ## Research repair verification
 
@@ -167,7 +187,9 @@ upload. No keystore or signing password belongs in this repository.
 
 ## AI activation
 
-Production had zero providers and zero models at audit time. In a Super Admin
+The older zero-provider inventory is superseded by the read-only preflight
+(three providers and 682 models); counts do not establish usable credentials or
+an approved inference canary. In an authorized Super Admin
 session: Admin → AI configuration → configure provider → enter write-only key →
 Save → Test provider → Discover models → enable the approved model → select
 USER, ADMIN, or BOTH scope → set priority. Confirm both a grounded User AI answer
@@ -178,8 +200,9 @@ localized safe-unavailable response and infers no immigration requirements.
 
 - Set the final HTTPS Site URL and exact login/recovery redirects in Supabase
   Auth. Test direct callback refreshes.
-- Enable leaked-password protection in Supabase Dashboard → Authentication →
-  password/security settings. It was disabled at audit time.
+- Owner decision: enable leaked-password protection after compatibility
+  assessment, under separate Auth authorization. It remains disabled in the
+  recorded production evidence; no setting was changed by this task.
 - Verify the canonical transparent RAD logo binaries visually/against the
   owner-provided originals before release; repository references and PWA/Android
   icon wiring are present, but byte identity is not asserted here.
@@ -196,9 +219,14 @@ localized safe-unavailable response and infers no immigration requirements.
 1. Render: redeploy the recorded previous known-good commit.
 2. Edge Functions: redeploy the recorded previous function bundle if a function
    regression is isolated.
-3. Database: do not reset or delete production data. These migrations are
-   additive; prefer a forward corrective migration. Backfilled review drafts are
-   safe to leave pending and must not be mass-published.
+3. Database: stop writes and escalation on any failed postflight. Prefer an
+   approved forward correction; never restore vulnerable grants/approval paths
+   just to roll back application code. A point restore loses later writes and
+   does not restore Storage bytes. Use a separately authorized, fenced target,
+   neutralize target default privileges before object creation, retain explicit
+   archive ACLs, and require exact effective-privilege parity before exposure.
+   The earlier naive restore had 86 excess ACL grants. Never waive that diff or
+   use `--no-acl` as an unverified shortcut. Reconcile Storage bytes separately.
 4. Auth: restore the previous Site URL/redirect set only if callbacks fail, then
    retest recovery and login.
 5. Secrets: rotate the affected provider/worker credential, update Vault or the
@@ -206,10 +234,12 @@ localized safe-unavailable response and infers no immigration requirements.
 
 ## Exact remaining owner actions
 
-1. Approve/merge the final green PR, back up production, then apply migrations
-   and deploy all three Edge Functions from that one SHA.
-2. Set final Auth Site/redirect/recovery URLs and enable leaked-password
-   protection.
+1. Authorize/review independent recovery, encrypted off-machine custody and
+   isolated real-point restore with DBA sign-off. Then separately approve the
+   exact-five-file apply and three Edge deployments from one green SHA. No merge
+   is authorized by this document.
+2. Set final Auth Site/redirect/recovery URLs and approve enabling leaked-password
+   protection after compatibility testing; approve the discovery function alignment.
 3. Add the provider key through Admin/Vault; Test, Discover, enable models,
    scopes, and priorities.
 4. Choose `RAD_ANDROID_APPLICATION_ID`, configure release signing, and verify

@@ -407,6 +407,12 @@ class BrowserAcceptance:
         )
         require(response is not None and response.ok, f"navigation failed for {path}")
         await self.enable_semantics(page)
+        # Semantics can become ready on the splash while the authenticated
+        # profile is still restoring. Do not mistake that intermediate route
+        # for an application redirect failure on slower mobile/CI hosts.
+        await page.wait_for_function(
+            "() => window.location.pathname !== '/splash'", timeout=30_000
+        )
         await page.wait_for_timeout(450)
 
     async def expect_text(self, page: Page, text: str, timeout: int = 15_000) -> None:
@@ -437,12 +443,12 @@ class BrowserAcceptance:
         await self.goto(page, start)
         email_field = page.get_by_label("Email", exact=True)
         await email_field.focus()
-        await email_field.press_sequentially(identity.email, delay=1)
+        await email_field.press_sequentially(identity.email, delay=25)
         await page.keyboard.press("Tab")
         await page.wait_for_timeout(200)
         password_field = page.get_by_label("Password", exact=True)
         await password_field.focus()
-        await password_field.press_sequentially(identity.password, delay=1)
+        await password_field.press_sequentially(identity.password, delay=25)
         await page.keyboard.press("Tab")
         await page.wait_for_timeout(350)
         require(
@@ -450,8 +456,24 @@ class BrowserAcceptance:
             and await password_field.input_value() == identity.password,
             "Flutter login fields did not retain browser input",
         )
-        await self.click(page.get_by_role("button", name="Sign in", exact=True))
-        await page.wait_for_url(re.compile(r".*/dashboard(?:[?#].*)?$"), timeout=30_000)
+        async with page.expect_response(
+            re.compile(r".*/auth/v1/token\?grant_type=password.*"), timeout=30_000
+        ) as login_response:
+            await self.click(page.get_by_role("button", name="Sign in", exact=True))
+        response = await login_response.value
+        sent = json.loads(response.request.post_data or "{}")
+        matches = sent.get("email") == identity.email and sent.get("password") == identity.password
+        print(json.dumps({"valid_local_login_http": response.status,
+                          "submitted_credentials_match_fixture": matches,
+                          "viewport": page.viewport_size}), flush=True)
+        require(matches and response.status == 200,
+                f"local login response {response.status}; fixture match={matches}")
+        # SPA authentication is complete at the destination route, independent
+        # of unrelated font/renderer downloads keeping the window load pending.
+        await page.wait_for_url(
+            re.compile(r".*/dashboard(?:[?#].*)?$"),
+            wait_until="domcontentloaded", timeout=30_000,
+        )
         await self.enable_semantics(page)
         # The profile fixture name is not rendered on every responsive
         # dashboard layout. Assert the localized dashboard app-bar title
@@ -750,12 +772,12 @@ class BrowserAcceptance:
         topic_field = page.get_by_label("Topic", exact=True)
         message = "Disposable local browser acceptance request."
         await topic_field.focus()
-        await topic_field.press_sequentially(topic, delay=1)
+        await topic_field.press_sequentially(topic, delay=25)
         await page.keyboard.press("Tab")
         await page.wait_for_timeout(200)
         message_field = page.get_by_label("Message", exact=True)
         await message_field.focus()
-        await message_field.press_sequentially(message, delay=1)
+        await message_field.press_sequentially(message, delay=25)
         await page.keyboard.press("Tab")
         await page.wait_for_timeout(350)
         require(await topic_field.input_value() == topic, "consultation topic was not set")
@@ -907,6 +929,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     environment = load_local_environment()
+    compiled = (args.web_root / "main.dart.js").read_text(encoding="utf-8")
+    require(
+        environment["API_URL"] in compiled and "inshddthftkhcdosoqcn" not in compiled,
+        "refusing a web artifact not compiled for the disposable local API",
+    )
     fixtures = LocalSupabaseFixtures(environment)
     args.artifacts.mkdir(parents=True, exist_ok=True)
     cleanup_failure: Exception | None = None

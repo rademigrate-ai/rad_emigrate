@@ -1,0 +1,566 @@
+﻿2026-10-13T11:20:19.0619738Z Current runner version: '2.337.0'
+2026-10-13T11:20:19.0638426Z ##[group]Runner Image Provisioner
+2026-10-13T11:20:19.0638993Z Hosted Compute Agent
+2026-10-13T11:20:19.0639401Z Version: 20261002.596
+2026-10-13T11:20:19.0639790Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-13T11:20:19.0640216Z Build Date: 2026-10-02T22:28:27Z
+2026-10-13T11:20:19.0640659Z Worker ID: {0097eb6c-0b31-4f5d-a5fb-685ef353a534}
+2026-10-13T11:20:19.0641107Z Region: centralus
+2026-10-13T11:20:19.0641429Z Cloud: Azure
+2026-10-13T11:20:19.0641802Z ##[endgroup]
+2026-10-13T11:20:19.0642800Z ##[group]Operating System
+2026-10-13T11:20:19.0643240Z Ubuntu
+2026-10-13T11:20:19.0643590Z 24.04.5
+2026-10-13T11:20:19.0643891Z LTS
+2026-10-13T11:20:19.0644273Z ##[endgroup]
+2026-10-13T11:20:19.0644604Z ##[group]Runner Image
+2026-10-13T11:20:19.0645033Z Image: ubuntu-24.04
+2026-10-13T11:20:19.0645417Z Version: 20261004.327.1
+2026-10-13T11:20:19.0646204Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-13T11:20:19.0647085Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-13T11:20:19.0647725Z ##[endgroup]
+2026-10-13T11:20:19.0648427Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T11:20:19.0649744Z Contents: read
+2026-10-13T11:20:19.0650092Z Metadata: read
+2026-10-13T11:20:19.0650417Z ##[endgroup]
+2026-10-13T11:20:19.0652018Z Secret source: Actions
+2026-10-13T11:20:19.0652900Z Cache mode: write
+2026-10-13T11:20:19.0653364Z Prepare workflow directory
+2026-10-13T11:20:19.0862626Z Prepare all required actions
+2026-10-13T11:20:19.0894074Z Getting action download info
+2026-10-13T11:20:19.3344666Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-13T11:20:19.4165953Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+2026-10-13T11:20:19.7267843Z Download action repository 'gradle/actions@v4' (SHA:ed408507eac070d1f99cc633dbcf757c94c7933a)
+2026-10-13T11:20:21.1375699Z Getting action download info
+2026-10-13T11:20:21.2527396Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+2026-10-13T11:20:21.4494198Z Complete job name: android-build
+2026-10-13T11:20:21.4935666Z ##[group]Run actions/checkout@v4
+2026-10-13T11:20:21.4935986Z with:
+2026-10-13T11:20:21.4936149Z   repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.4937464Z   token: ***
+2026-10-13T11:20:21.4937610Z   ssh-strict: true
+2026-10-13T11:20:21.4937760Z   ssh-user: git
+2026-10-13T11:20:21.4937911Z   persist-credentials: true
+2026-10-13T11:20:21.4938079Z   clean: true
+2026-10-13T11:20:21.4938232Z   sparse-checkout-cone-mode: true
+2026-10-13T11:20:21.4938412Z   fetch-depth: 1
+2026-10-13T11:20:21.4938556Z   fetch-tags: false
+2026-10-13T11:20:21.4938717Z   show-progress: true
+2026-10-13T11:20:21.4938878Z   lfs: false
+2026-10-13T11:20:21.4939017Z   submodules: false
+2026-10-13T11:20:21.4939167Z   set-safe-directory: true
+2026-10-13T11:20:21.4939353Z   allow-unsafe-pr-checkout: false
+2026-10-13T11:20:21.4939601Z ##[endgroup]
+2026-10-13T11:20:21.5663624Z Syncing repository: rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.5664846Z ##[group]Getting Git version info
+2026-10-13T11:20:21.5665203Z Working directory is '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:21.5665788Z [command]/usr/bin/git version
+2026-10-13T11:20:21.5666062Z git version 2.55.0
+2026-10-13T11:20:21.5674323Z ##[endgroup]
+2026-10-13T11:20:21.5697367Z Temporarily overriding HOME='/home/runner/work/_temp/7f713643-6ab8-4c9c-9883-69633724302e' before making global git config changes
+2026-10-13T11:20:21.5698243Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:20:21.5701256Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:21.5757473Z Deleting the contents of '/home/runner/work/rad_emigrate/rad_emigrate'
+2026-10-13T11:20:21.5758820Z ##[group]Initializing the repository
+2026-10-13T11:20:21.5764533Z [command]/usr/bin/git init /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:20:21.5861399Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T11:20:21.5861955Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T11:20:21.5862528Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T11:20:21.5862942Z hint: call:
+2026-10-13T11:20:21.5863157Z hint:
+2026-10-13T11:20:21.5863499Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T11:20:21.5863837Z hint:
+2026-10-13T11:20:21.5864153Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T11:20:21.5864644Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T11:20:21.5865031Z hint:
+2026-10-13T11:20:21.5865256Z hint: 	git branch -m <name>
+2026-10-13T11:20:21.5865510Z hint:
+2026-10-13T11:20:21.5865874Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T11:20:21.5869042Z Initialized empty Git repository in /home/runner/work/rad_emigrate/rad_emigrate/.git/
+2026-10-13T11:20:21.5876551Z [command]/usr/bin/git remote add origin https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:21.5936427Z ##[endgroup]
+2026-10-13T11:20:21.5936935Z ##[group]Disabling automatic garbage collection
+2026-10-13T11:20:21.5937312Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-13T11:20:21.5957096Z ##[endgroup]
+2026-10-13T11:20:21.5957534Z ##[group]Setting up auth
+2026-10-13T11:20:21.5962477Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:20:21.5989112Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:20:21.6320232Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:20:21.6349905Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:20:21.6521442Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:20:21.6548622Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:20:21.6722030Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T11:20:21.6755306Z ##[endgroup]
+2026-10-13T11:20:21.6755724Z ##[group]Fetching the repository
+2026-10-13T11:20:21.6761094Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5013341fc021043f3721d50912c76f9c92a9387e:refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:27.4762842Z From https://github.com/rademigrate-ai/rad_emigrate
+2026-10-13T11:20:27.4763827Z  * [new ref]         5013341fc021043f3721d50912c76f9c92a9387e -> origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:27.4765374Z ##[endgroup]
+2026-10-13T11:20:27.4765909Z ##[group]Determining the checkout info
+2026-10-13T11:20:27.4766351Z ##[endgroup]
+2026-10-13T11:20:27.4766789Z [command]/usr/bin/git sparse-checkout disable
+2026-10-13T11:20:27.4861625Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T11:20:27.4960178Z ##[group]Checking out the ref
+2026-10-13T11:20:27.4973630Z [command]/usr/bin/git checkout --progress --force -B handoff/codex-stage1-stage2-20261010 refs/remotes/origin/handoff/codex-stage1-stage2-20261010
+2026-10-13T11:20:27.9667550Z Switched to a new branch 'handoff/codex-stage1-stage2-20261010'
+2026-10-13T11:20:27.9669335Z branch 'handoff/codex-stage1-stage2-20261010' set up to track 'origin/handoff/codex-stage1-stage2-20261010'.
+2026-10-13T11:20:27.9692878Z ##[endgroup]
+2026-10-13T11:20:27.9732174Z [command]/usr/bin/git log -1 --format=%H
+2026-10-13T11:20:27.9755128Z 5013341fc021043f3721d50912c76f9c92a9387e
+2026-10-13T11:20:28.0224260Z ##[group]Run subosito/flutter-action@v2
+2026-10-13T11:20:28.0224463Z with:
+2026-10-13T11:20:28.0224583Z   flutter-version: 3.47.6
+2026-10-13T11:20:28.0224717Z   channel: stable
+2026-10-13T11:20:28.0224832Z   cache: true
+2026-10-13T11:20:28.0224953Z   architecture: X64
+2026-10-13T11:20:28.0225078Z   pub-cache-path: default
+2026-10-13T11:20:28.0225210Z   dry-run: false
+2026-10-13T11:20:28.0225385Z   git-source: https://github.com/flutter/flutter.git
+2026-10-13T11:20:28.0225565Z ##[endgroup]
+2026-10-13T11:20:28.0264398Z ##[start-action display=Make yq tool available on Windows runners;id=__subosito_flutter-action.__run]
+2026-10-13T11:20:28.0277250Z ##[end-action id=__subosito_flutter-action.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-13T11:20:28.0278597Z ##[start-action display=Make setup script executable;id=__subosito_flutter-action.__run_2]
+2026-10-13T11:20:28.0807140Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+2026-10-13T11:20:28.0807438Z [36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"[0m
+2026-10-13T11:20:28.1234443Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:28.1234678Z ##[endgroup]
+2026-10-13T11:20:28.1938736Z ##[end-action id=__subosito_flutter-action.__run_2;outcome=success;conclusion=success;duration_ms=165]
+2026-10-13T11:20:28.1940701Z ##[start-action display=Set action inputs;id=__subosito_flutter-action.flutter-action]
+2026-10-13T11:20:28.2576755Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+2026-10-13T11:20:28.2577012Z [36;1m$GITHUB_ACTION_PATH/setup.sh -p \[0m
+2026-10-13T11:20:28.2577177Z [36;1m  -n '3.47.6' \[0m
+2026-10-13T11:20:28.2577306Z [36;1m  -f '' \[0m
+2026-10-13T11:20:28.2577426Z [36;1m  -a 'X64' \[0m
+2026-10-13T11:20:28.2577546Z [36;1m  -k '' \[0m
+2026-10-13T11:20:28.2577660Z [36;1m  -c '' \[0m
+2026-10-13T11:20:28.2577775Z [36;1m  -l '' \[0m
+2026-10-13T11:20:28.2577908Z [36;1m  -d 'default' \[0m
+2026-10-13T11:20:28.2578092Z [36;1m  -g 'https://github.com/flutter/flutter.git' \[0m
+2026-10-13T11:20:28.2578278Z [36;1m  stable[0m
+2026-10-13T11:20:28.2629627Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:28.2629816Z ##[endgroup]
+2026-10-13T11:20:28.5685903Z ##[end-action id=__subosito_flutter-action.flutter-action;outcome=success;conclusion=success;duration_ms=374]
+2026-10-13T11:20:28.5689539Z ##[start-action display=Cache Flutter;id=__subosito_flutter-action.cache-flutter]
+2026-10-13T11:20:28.6174277Z ##[group]Run actions/cache@v5
+2026-10-13T11:20:28.6174434Z with:
+2026-10-13T11:20:28.6174584Z   path: /opt/hostedtoolcache/flutter/stable-3.47.6-x64
+2026-10-13T11:20:28.6174849Z   key: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:28.6175087Z   enableCrossOsArchive: false
+2026-10-13T11:20:28.6175231Z   fail-on-cache-miss: false
+2026-10-13T11:20:28.6175368Z   lookup-only: false
+2026-10-13T11:20:28.6175507Z   save-always: false
+2026-10-13T11:20:28.6175632Z ##[endgroup]
+2026-10-13T11:20:28.9518002Z Cache hit for: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:30.1107636Z Received 134217728 of 1721736160 (7.8%), 128.0 MBs/sec
+2026-10-13T11:20:31.1149993Z Received 381681664 of 1721736160 (22.2%), 182.0 MBs/sec
+2026-10-13T11:20:32.1115370Z Received 595591168 of 1721736160 (34.6%), 189.3 MBs/sec
+2026-10-13T11:20:33.1124833Z Received 805306368 of 1721736160 (46.8%), 191.9 MBs/sec
+2026-10-13T11:20:34.1128090Z Received 989855744 of 1721736160 (57.5%), 188.7 MBs/sec
+2026-10-13T11:20:35.1161066Z Received 1186988032 of 1721736160 (68.9%), 188.6 MBs/sec
+2026-10-13T11:20:36.1138006Z Received 1342177280 of 1721736160 (78.0%), 182.8 MBs/sec
+2026-10-13T11:20:37.1143027Z Received 1518338048 of 1721736160 (88.2%), 180.9 MBs/sec
+2026-10-13T11:20:38.1139385Z Received 1690304512 of 1721736160 (98.2%), 179.1 MBs/sec
+2026-10-13T11:20:38.3129823Z Received 1721736160 of 1721736160 (100.0%), 178.4 MBs/sec
+2026-10-13T11:20:38.3131577Z Cache Size: ~1642 MB (1721736160 B)
+2026-10-13T11:20:38.3235626Z [command]/usr/bin/tar -xf /home/runner/work/_temp/81b39d0a-9043-40d1-9d6d-98c3bca07e22/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:20:48.8029714Z Cache restored successfully
+2026-10-13T11:20:48.8786180Z Cache restored from key: flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d
+2026-10-13T11:20:48.8896099Z ##[end-action id=__subosito_flutter-action.cache-flutter;outcome=success;conclusion=success;duration_ms=20320]
+2026-10-13T11:20:48.8898234Z ##[start-action display=Cache pub dependencies;id=__subosito_flutter-action.cache-pub]
+2026-10-13T11:20:49.1537288Z ##[group]Run actions/cache@v5
+2026-10-13T11:20:49.1537444Z with:
+2026-10-13T11:20:49.1537570Z   path: /home/runner/.pub-cache
+2026-10-13T11:20:49.1537977Z   key: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:49.1538395Z   enableCrossOsArchive: false
+2026-10-13T11:20:49.1538546Z   fail-on-cache-miss: false
+2026-10-13T11:20:49.1538681Z   lookup-only: false
+2026-10-13T11:20:49.1538802Z   save-always: false
+2026-10-13T11:20:49.1538928Z ##[endgroup]
+2026-10-13T11:20:49.3764577Z Cache hit for: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:50.3954878Z Received 92322548 of 92322548 (100.0%), 103.9 MBs/sec
+2026-10-13T11:20:50.3955235Z Cache Size: ~88 MB (92322548 B)
+2026-10-13T11:20:50.3971892Z [command]/usr/bin/tar -xf /home/runner/work/_temp/9ae38add-c422-42e7-b0e4-5fa4b4a29a06/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:20:51.4939201Z Cache restored successfully
+2026-10-13T11:20:51.5029229Z Cache restored from key: flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66
+2026-10-13T11:20:51.5119327Z ##[end-action id=__subosito_flutter-action.cache-pub;outcome=success;conclusion=success;duration_ms=2622]
+2026-10-13T11:20:51.5122124Z ##[start-action display=Run setup script;id=__subosito_flutter-action.__run_3]
+2026-10-13T11:20:51.5151067Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+2026-10-13T11:20:51.5151285Z [36;1m$GITHUB_ACTION_PATH/setup.sh \[0m
+2026-10-13T11:20:51.5151454Z [36;1m  -n '3.47.6' \[0m
+2026-10-13T11:20:51.5151591Z [36;1m  -a 'x64' \[0m
+2026-10-13T11:20:51.5151771Z [36;1m  -c '/opt/hostedtoolcache/flutter/stable-3.47.6-x64' \[0m
+2026-10-13T11:20:51.5151981Z [36;1m  -d '/home/runner/.pub-cache' \[0m
+2026-10-13T11:20:51.5152138Z [36;1m  stable[0m
+2026-10-13T11:20:51.5205643Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:20:51.5205842Z ##[endgroup]
+2026-10-13T11:20:51.7183840Z ##[end-action id=__subosito_flutter-action.__run_3;outcome=success;conclusion=success;duration_ms=206]
+2026-10-13T11:20:51.7225533Z ##[group]Run flutter pub get
+2026-10-13T11:20:51.7225716Z [36;1mflutter pub get[0m
+2026-10-13T11:20:51.7280134Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:20:51.7280288Z env:
+2026-10-13T11:20:51.7280466Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:51.7280688Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:51.7280841Z ##[endgroup]
+2026-10-13T11:20:52.0909707Z Resolving dependencies...
+2026-10-13T11:20:52.1946217Z Downloading packages...
+2026-10-13T11:20:52.4228554Z   _fe_analyzer_shared 96.0.0 (109.0.0 available)
+2026-10-13T11:20:52.4228906Z   analyzer 10.2.0 (14.5.0 available)
+2026-10-13T11:20:52.4229150Z   app_links 7.2.1 (7.2.2 available)
+2026-10-13T11:20:52.4229426Z   app_links_linux 1.0.3 (1.0.4 available)
+2026-10-13T11:20:52.4229684Z   app_links_web 1.0.4 (1.0.5 available)
+2026-10-13T11:20:52.4229929Z   archive 4.3.0 (4.5.2 available)
+2026-10-13T11:20:52.4230156Z   build 4.0.7 (4.0.11 available)
+2026-10-13T11:20:52.4230773Z   build_runner 2.15.1 (2.16.2 available)
+2026-10-13T11:20:52.4231023Z   code_assets 1.2.1 (2.1.0 available)
+2026-10-13T11:20:52.4231262Z   cross_file 0.3.5+5 (0.4.0 available)
+2026-10-13T11:20:52.4231505Z   cupertino_icons 1.0.9 (2.0.0 available)
+2026-10-13T11:20:52.4231747Z   dart_style 3.1.7 (3.1.13 available)
+2026-10-13T11:20:52.4231987Z   dbus 0.7.15 (0.8.0 available)
+2026-10-13T11:20:52.4232332Z   file_picker 11.0.3 (13.1.0 available)
+2026-10-13T11:20:52.4232573Z   flutter_riverpod 2.6.1 (3.4.3 available)
+2026-10-13T11:20:52.4232852Z   flutter_secure_storage 9.2.4 (11.2.0 available)
+2026-10-13T11:20:52.4233147Z   flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+2026-10-13T11:20:52.4233458Z   flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+2026-10-13T11:20:52.4233810Z   flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+2026-10-13T11:20:52.4234163Z   flutter_secure_storage_web 1.2.1 (2.1.1 available)
+2026-10-13T11:20:52.4234501Z   flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+2026-10-13T11:20:52.4234779Z   freezed 3.2.5 (4.0.2 available)
+2026-10-13T11:20:52.4235007Z   go_router 15.1.3 (18.0.2 available)
+2026-10-13T11:20:52.4235233Z   gotrue 2.27.2 (2.27.3 available)
+2026-10-13T11:20:52.4235446Z   hooks 2.0.2 (2.2.0 available)
+2026-10-13T11:20:52.4235746Z   jni_flutter 1.0.3 (1.0.4+1 available)
+2026-10-13T11:20:52.4235970Z   js 0.6.7 (0.7.2 available)
+2026-10-13T11:20:52.4236175Z   latlong2 0.9.1 (0.10.1 available)
+2026-10-13T11:20:52.4236430Z   material_color_utilities 0.13.0 (0.13.1 available)
+2026-10-13T11:20:52.4236685Z   meta 1.18.3 (1.19.0 available)
+2026-10-13T11:20:52.4236913Z   objective_c 9.5.0 (9.6.2 available)
+2026-10-13T11:20:52.4237159Z   package_config 2.2.0 (3.0.0 available)
+2026-10-13T11:20:52.4237405Z   petitparser 7.0.2 (7.1.0 available)
+2026-10-13T11:20:52.4237646Z   realtime_client 2.13.0 (2.13.2 available)
+2026-10-13T11:20:52.4237886Z   record_use 0.6.0 (1.1.1 available)
+2026-10-13T11:20:52.4238111Z   riverpod 2.6.1 (3.4.3 available)
+2026-10-13T11:20:52.4238373Z   shared_preferences 2.5.5 (2.5.6 available)
+2026-10-13T11:20:52.4238616Z   source_gen 4.2.4 (4.3.0 available)
+2026-10-13T11:20:52.4238848Z   supabase 2.16.2 (2.16.5 available)
+2026-10-13T11:20:52.4239089Z   supabase_flutter 2.18.0 (2.18.3 available)
+2026-10-13T11:20:52.4239337Z   test_api 0.7.12 (0.7.15 available)
+2026-10-13T11:20:52.4239566Z   timezone 0.11.1 (0.11.2 available)
+2026-10-13T11:20:52.4239796Z   url_launcher 6.3.2 (6.3.3 available)
+2026-10-13T11:20:52.4240032Z   vector_math 2.4.0 (2.4.3 available)
+2026-10-13T11:20:52.4240247Z   win32 5.15.0 (6.4.0 available)
+2026-10-13T11:20:52.4240445Z   xml 7.0.1 (7.1.0 available)
+2026-10-13T11:20:52.4240693Z Got dependencies!
+2026-10-13T11:20:52.4240988Z 46 packages have newer versions incompatible with dependency constraints.
+2026-10-13T11:20:52.4241368Z Try `flutter pub outdated` for more information.
+2026-10-13T11:20:52.7152144Z ##[group]Run gradle/actions/setup-gradle@v4
+2026-10-13T11:20:52.7152532Z with:
+2026-10-13T11:20:52.7152662Z   cache-read-only: false
+2026-10-13T11:20:52.7152811Z   cache-cleanup: on-success
+2026-10-13T11:20:52.7152954Z   cache-disabled: false
+2026-10-13T11:20:52.7153089Z   cache-write-only: false
+2026-10-13T11:20:52.7153235Z   cache-overwrite-existing: false
+2026-10-13T11:20:52.7153432Z   gradle-home-cache-includes: caches
+notifications
+
+2026-10-13T11:20:52.7153614Z   add-job-summary: always
+2026-10-13T11:20:52.7153762Z   add-job-summary-as-pr-comment: never
+2026-10-13T11:20:52.7153924Z   dependency-graph: disabled
+2026-10-13T11:20:52.7154105Z   dependency-graph-report-dir: dependency-graph-reports
+2026-10-13T11:20:52.7154318Z   dependency-graph-continue-on-failure: true
+2026-10-13T11:20:52.7154491Z   build-scan-publish: false
+2026-10-13T11:20:52.7154640Z   validate-wrappers: true
+2026-10-13T11:20:52.7154787Z   allow-snapshot-wrappers: false
+2026-10-13T11:20:52.7154973Z   gradle-home-cache-strict-match: false
+2026-10-13T11:20:52.7155139Z   workflow-job-context: null
+2026-10-13T11:20:52.7156566Z   github-token: ***
+2026-10-13T11:20:52.7156689Z env:
+2026-10-13T11:20:52.7156864Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:20:52.7157082Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:20:52.7157233Z ##[endgroup]
+2026-10-13T11:20:54.1126761Z Wrote default JDK locations to /home/runner/.m2/toolchains.xml
+2026-10-13T11:20:54.1127740Z Preparing cache for cleanup.
+2026-10-13T11:20:54.1130388Z ##[group]Restore Gradle state from cache
+2026-10-13T11:20:54.2599626Z Cache hit for restore-key: gradle-home-v1|Linux-X64|android-build[b8a35c2f917259958c9abe8f2ff1b5ff]-1794f18fa52b73f8749e0d46d0b1e8d70cbebaa5
+2026-10-13T11:20:55.4213406Z Received 117440512 of 759316660 (15.5%), 112.0 MBs/sec
+2026-10-13T11:20:56.4217992Z Received 327155712 of 759316660 (43.1%), 156.0 MBs/sec
+2026-10-13T11:20:57.4219649Z Received 528482304 of 759316660 (69.6%), 168.0 MBs/sec
+2026-10-13T11:20:58.4231522Z Received 708837376 of 759316660 (93.4%), 169.0 MBs/sec
+2026-10-13T11:20:58.6540216Z Received 759316660 of 759316660 (100.0%), 171.1 MBs/sec
+2026-10-13T11:20:58.6542875Z Cache Size: ~724 MB (759316660 B)
+2026-10-13T11:20:58.6650773Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e6879da9-7877-4833-9134-8c49607933ad/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:20:59.8736098Z Cache restored successfully
+2026-10-13T11:20:59.9037827Z Restored cache entry with key gradle-home-v1|Linux-X64|android-build[b8a35c2f917259958c9abe8f2ff1b5ff]-5013341fc021043f3721d50912c76f9c92a9387e to /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 5790ms
+2026-10-13T11:21:00.0521727Z Cache hit for: gradle-transforms-v1-070ae8f659f7bb29b0c6fdd946b08fc8
+2026-10-13T11:21:00.0569009Z Cache hit for: gradle-kotlin-dsl-v1-5a79cd0fca0a5defd58536f85fa10c08
+2026-10-13T11:21:00.0580181Z Cache hit for: gradle-instrumented-jars-v1-c4d60c260439eb541dd5fd957c6f6ef6
+2026-10-13T11:21:00.0591527Z Cache hit for: gradle-generated-gradle-jars-v1-cb4b032a7d08b9bf1e84e9eacaebcc29
+2026-10-13T11:21:00.0703869Z Cache hit for: gradle-dependencies-v1-8e6ba18753c31adf47aaf06aff225541
+2026-10-13T11:21:00.0767688Z Cache hit for: gradle-groovy-dsl-v1-abcfa2bec6609f6082d4953f7f84a8f0
+2026-10-13T11:21:00.1397775Z Cache hit for: gradle-wrapper-zips-v1-b0b62de0d10eafd88bc23ee6bea77a84
+2026-10-13T11:21:00.4829279Z Received 79233 of 79233 (100.0%), 0.3 MBs/sec
+2026-10-13T11:21:00.4830795Z Cache Size: ~0 MB (79233 B)
+2026-10-13T11:21:00.4847321Z [command]/usr/bin/tar -xf /home/runner/work/_temp/deb8f8f1-2357-4150-a8f9-8a4b7c8c4e38/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:00.4905876Z Received 136817 of 136817 (100.0%), 0.5 MBs/sec
+2026-10-13T11:21:00.4906242Z Cache Size: ~0 MB (136817 B)
+2026-10-13T11:21:00.4953340Z [command]/usr/bin/tar -xf /home/runner/work/_temp/247e8665-1a6d-44d9-966a-2f4b732ad15c/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:00.4988842Z Cache restored successfully
+2026-10-13T11:21:00.4990517Z Restored cache entry with key gradle-instrumented-jars-v1-c4d60c260439eb541dd5fd957c6f6ef6 to /home/runner/.gradle/caches/jars-*/*/ in 593ms
+2026-10-13T11:21:00.5188669Z Cache restored successfully
+2026-10-13T11:21:00.5189727Z Restored cache entry with key gradle-groovy-dsl-v1-abcfa2bec6609f6082d4953f7f84a8f0 to /home/runner/.gradle/caches/*/groovy-dsl/*/ in 613ms
+2026-10-13T11:21:00.5784806Z Received 41993404 of 41993404 (100.0%), 82.9 MBs/sec
+2026-10-13T11:21:00.5785194Z Cache Size: ~40 MB (41993404 B)
+2026-10-13T11:21:00.5790063Z Received 314364 of 314364 (100.0%), 0.9 MBs/sec
+2026-10-13T11:21:00.5790364Z Cache Size: ~0 MB (314364 B)
+2026-10-13T11:21:00.5983434Z [command]/usr/bin/tar -xf /home/runner/work/_temp/448bdd04-f634-4858-9830-ecd6d93e7f5f/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:00.6026215Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c3b9dd09-98d8-4d22-a5ef-247d90f920ac/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:00.6929926Z Cache restored successfully
+2026-10-13T11:21:00.6946779Z Restored cache entry with key gradle-kotlin-dsl-v1-5a79cd0fca0a5defd58536f85fa10c08 to /home/runner/.gradle/caches/*/kotlin-dsl/accessors/*/,/home/runner/.gradle/caches/*/kotlin-dsl/scripts/*/ in 789ms
+2026-10-13T11:21:00.8609721Z Cache restored successfully
+2026-10-13T11:21:00.8691252Z Restored cache entry with key gradle-generated-gradle-jars-v1-cb4b032a7d08b9bf1e84e9eacaebcc29 to /home/runner/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar in 964ms
+2026-10-13T11:21:01.1842737Z Received 67108864 of 464939160 (14.4%), 63.9 MBs/sec
+2026-10-13T11:21:01.2355476Z Received 67108864 of 888586131 (7.6%), 64.0 MBs/sec
+2026-10-13T11:21:01.2953001Z Received 92274688 of 183164796 (50.4%), 87.9 MBs/sec
+2026-10-13T11:21:01.8994888Z Received 183164796 of 183164796 (100.0%), 108.8 MBs/sec
+2026-10-13T11:21:01.8996518Z Cache Size: ~175 MB (183164796 B)
+2026-10-13T11:21:01.9056462Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2d8a0063-4bc8-4b0a-881b-5a44c1b9c8f4/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:02.1913509Z Received 247463936 of 464939160 (53.2%), 117.9 MBs/sec
+2026-10-13T11:21:02.2354977Z Received 247463936 of 888586131 (27.8%), 118.0 MBs/sec
+2026-10-13T11:21:03.1853435Z Received 322961408 of 464939160 (69.5%), 102.6 MBs/sec
+2026-10-13T11:21:03.2365612Z Received 348127232 of 888586131 (39.2%), 110.6 MBs/sec
+2026-10-13T11:21:04.6824926Z Received 402653184 of 464939160 (86.6%), 85.4 MBs/sec
+2026-10-13T11:21:04.6825525Z Received 490733568 of 888586131 (55.2%), 105.2 MBs/sec
+2026-10-13T11:21:04.7000104Z Cache restored successfully
+2026-10-13T11:21:04.7156790Z Restored cache entry with key gradle-wrapper-zips-v1-b0b62de0d10eafd88bc23ee6bea77a84 to /home/runner/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0 in 4810ms
+2026-10-13T11:21:05.7930305Z Received 464939160 of 464939160 (100.0%), 79.1 MBs/sec
+2026-10-13T11:21:05.7931984Z Cache Size: ~443 MB (464939160 B)
+2026-10-13T11:21:05.7935545Z Received 557842432 of 888586131 (62.8%), 95.7 MBs/sec
+2026-10-13T11:21:05.8157952Z [command]/usr/bin/tar -xf /home/runner/work/_temp/714b3eb2-7bfe-4e57-a7e2-5428603999f4/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:06.7942293Z Received 704643072 of 888586131 (79.3%), 102.5 MBs/sec
+2026-10-13T11:21:07.7947221Z Received 851443712 of 888586131 (95.8%), 107.4 MBs/sec
+2026-10-13T11:21:08.1279607Z Received 888586131 of 888586131 (100.0%), 107.4 MBs/sec
+2026-10-13T11:21:08.1282014Z Cache Size: ~847 MB (888586131 B)
+2026-10-13T11:21:08.2398568Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d4a80a54-9194-4a44-9cbf-0b9363ede274/cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --use-compress-program unzstd
+2026-10-13T11:21:19.0523674Z Cache restored successfully
+2026-10-13T11:21:19.0900204Z Restored cache entry with key gradle-dependencies-v1-8e6ba18753c31adf47aaf06aff225541 to /home/runner/.gradle/caches/modules-*/files-*/*/*/*/* in 19184ms
+2026-10-13T11:21:21.9375215Z Cache restored successfully
+2026-10-13T11:21:21.9556528Z Restored cache entry with key gradle-transforms-v1-070ae8f659f7bb29b0c6fdd946b08fc8 to /home/runner/.gradle/caches/transforms-4/*/,/home/runner/.gradle/caches/*/transforms/*/ in 22050ms
+2026-10-13T11:21:21.9694040Z ##[endgroup]
+2026-10-13T11:21:21.9898415Z ##[group]All Gradle Wrapper jars are valid
+2026-10-13T11:21:21.9898730Z 
+2026-10-13T11:21:21.9898924Z ##[endgroup]
+2026-10-13T11:21:22.0363084Z ##[group]Run flutter build apk --debug --no-pub --target-platform android-arm64
+2026-10-13T11:21:22.0363552Z [36;1mflutter build apk --debug --no-pub --target-platform android-arm64[0m
+2026-10-13T11:21:22.0416746Z shell: /usr/bin/bash -e {0}
+2026-10-13T11:21:22.0416929Z env:
+2026-10-13T11:21:22.0417143Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:21:22.0417568Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:21:22.0417784Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-13T11:21:22.0417996Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-13T11:21:22.0418191Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-13T11:21:22.0418394Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-13T11:21:22.0418675Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-13T11:21:22.0418975Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-13T11:21:22.0419215Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-13T11:21:22.0419403Z ##[endgroup]
+2026-10-13T11:21:34.7873169Z Running Gradle task 'assembleDebug'...                          
+2026-10-13T11:21:34.7874126Z Loading package information...                                                  
+2026-10-13T11:21:34.7876139Z Loading local repository...                                                     
+2026-10-13T11:21:34.7876629Z [                                       ] 3% Loading local repository...        
+2026-10-13T11:21:35.5943150Z [                                       ] 3% Fetch remote repository...         
+2026-10-13T11:21:35.8853384Z [=                                      ] 3% Fetch remote repository...         
+2026-10-13T11:21:35.9884420Z [=                                      ] 4% Fetch remote repository...         
+2026-10-13T11:21:35.9893523Z [=                                      ] 5% Fetch remote repository...         
+2026-10-13T11:21:36.0853739Z [==                                     ] 5% Fetch remote repository...         
+2026-10-13T11:21:36.0858796Z [==                                     ] 6% Fetch remote repository...         
+2026-10-13T11:21:36.1842027Z [==                                     ] 7% Fetch remote repository...         
+2026-10-13T11:21:36.1842964Z [==                                     ] 7% Computing updates...               
+2026-10-13T11:21:36.1843488Z [===                                    ] 8% Computing updates...               
+2026-10-13T11:21:36.2843426Z [===                                    ] 10% Computing updates...              
+2026-10-13T11:21:36.2844273Z [===                                    ] 10% Installing NDK (Side by side) 28.2
+2026-10-13T11:21:36.5844341Z [===                                    ] 10% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.6868790Z [====                                   ] 10% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.6869672Z [====                                   ] 11% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.7840169Z [====                                   ] 12% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.8839890Z [=====                                  ] 13% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.9840086Z [=====                                  ] 14% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:36.9840704Z [=====                                  ] 15% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.0867235Z [======                                 ] 15% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.0867698Z [======                                 ] 16% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.1840367Z [======                                 ] 17% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.2840548Z [=======                                ] 18% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.3839389Z [=======                                ] 19% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.3840279Z [=======                                ] 20% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.4846240Z [========                               ] 20% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.5842977Z [========                               ] 21% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.5843370Z [========                               ] 22% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.6840891Z [=========                              ] 23% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.7841908Z [=========                              ] 24% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.8847138Z [=========                              ] 25% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.8847594Z [==========                             ] 25% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.9843649Z [==========                             ] 26% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:37.9844415Z [==========                             ] 27% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.0841238Z [===========                            ] 28% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.1841348Z [===========                            ] 29% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.1841977Z [===========                            ] 30% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.2840738Z [============                           ] 30% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.3839415Z [============                           ] 31% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.3840043Z [============                           ] 32% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.3840463Z [============                           ] 33% Downloading android-ndk-r28c-linux
+2026-10-13T11:21:38.6852367Z [============                           ] 33% Unzipping...                      
+2026-10-13T11:21:38.6853304Z [============                           ] 33% Unzipping... android-ndk-r28c/    
+2026-10-13T11:21:38.6854061Z [============                           ] 33% Unzipping... android-ndk-r28c/READ
+2026-10-13T11:21:38.6854642Z [=============                          ] 33% Unzipping... android-ndk-r28c/READ
+2026-10-13T11:21:38.6856533Z [=============                          ] 33% Unzipping... android-ndk-r28c/meta
+2026-10-13T11:21:38.7842565Z [=============                          ] 33% Unzipping... android-ndk-r28c/shad
+2026-10-13T11:21:38.7848423Z [=============                          ] 33% Unzipping... android-ndk-r28c/ndk-
+2026-10-13T11:21:38.7849168Z [=============                          ] 33% Unzipping... android-ndk-r28c/wrap
+2026-10-13T11:21:38.7849717Z [=============                          ] 33% Unzipping... android-ndk-r28c/ndk-
+2026-10-13T11:21:39.1840299Z [=============                          ] 33% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:39.9840332Z [=============                          ] 34% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:40.6839758Z [=============                          ] 35% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:40.8839431Z [==============                         ] 35% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:41.1840731Z [==============                         ] 36% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:42.4840116Z [==============                         ] 37% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:43.6839952Z [===============                        ] 38% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:44.4841277Z [===============                        ] 39% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:44.6840413Z [===============                        ] 40% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:45.0840309Z [================                       ] 40% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:45.7840900Z [================                       ] 41% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:46.4840975Z [================                       ] 42% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:47.3843797Z [=================                      ] 43% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:48.2840654Z [=================                      ] 44% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:48.5839889Z [=================                      ] 45% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:48.9840861Z [==================                     ] 45% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:49.6846115Z [==================                     ] 46% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:50.3840490Z [==================                     ] 47% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:51.0840616Z [===================                    ] 48% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:51.7840207Z [===================                    ] 49% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:51.9839981Z [===================                    ] 50% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:52.2841609Z [====================                   ] 50% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:53.0840827Z [====================                   ] 51% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:53.4840529Z [====================                   ] 52% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:54.4840818Z [=====================                  ] 53% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:54.7839885Z [=====================                  ] 54% Unzipping... android-ndk-r28c/tool
+2026-10-13T11:21:54.8840898Z [=====================                  ] 54% Unzipping... android-ndk-r28c/buil
+2026-10-13T11:21:55.0841156Z [=====================                  ] 54% Unzipping... android-ndk-r28c/sour
+2026-10-13T11:21:55.0841947Z [=====================                  ] 54% Unzipping... android-ndk-r28c/NOTI
+2026-10-13T11:21:55.0842884Z [=====================                  ] 54% Unzipping... android-ndk-r28c/ndk-
+2026-10-13T11:21:55.0843314Z [=====================                  ] 54% Unzipping... android-ndk-r28c/NOTI
+2026-10-13T11:21:55.0843721Z [=====================                  ] 54% Unzipping... android-ndk-r28c/pyth
+2026-10-13T11:21:55.1841704Z [=====================                  ] 54% Unzipping... android-ndk-r28c/preb
+2026-10-13T11:21:55.1842368Z [=====================                  ] 54% Unzipping... android-ndk-r28c/ndk-
+2026-10-13T11:21:55.1842823Z [=====================                  ] 54% Unzipping... android-ndk-r28c/sour
+2026-10-13T11:21:55.1843230Z [=====================                  ] 54% Unzipping... android-ndk-r28c/simp
+2026-10-13T11:21:55.2840195Z [=====================                  ] 55% Unzipping... android-ndk-r28c/simp
+2026-10-13T11:21:55.3839522Z [=====================                  ] 55% Unzipping... android-ndk-r28c/CHAN
+2026-10-13T11:21:55.3839890Z [=======================================] 100% Unzipping... android-ndk-r28c/CHA
+2026-10-13T11:21:55.7839705Z 
+2026-10-13T11:21:59.6906531Z WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): file_picker
+2026-10-13T11:21:59.6909848Z Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+2026-10-13T11:21:59.6910407Z 
+2026-10-13T11:21:59.6910916Z Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+2026-10-13T11:21:59.6911712Z If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+2026-10-13T11:21:59.6913038Z an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+2026-10-13T11:21:59.6913919Z 
+2026-10-13T11:21:59.6914631Z If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+2026-10-13T11:22:06.4854257Z Checking the license for package CMake 3.22.1 in /usr/local/lib/android/sdk/licenses
+2026-10-13T11:22:06.4854925Z License for package CMake 3.22.1 accepted.
+2026-10-13T11:22:06.4855251Z Preparing "Install CMake 3.22.1 v.3.22.1".
+2026-10-13T11:22:09.0894105Z "Install CMake 3.22.1 v.3.22.1" ready.
+2026-10-13T11:22:09.0923423Z Installing CMake 3.22.1 in /usr/local/lib/android/sdk/cmake/3.22.1
+2026-10-13T11:22:09.0952831Z "Install CMake 3.22.1 v.3.22.1" complete.
+2026-10-13T11:22:09.1863553Z "Install CMake 3.22.1 v.3.22.1" finished.
+2026-10-13T11:22:20.7490367Z Running Gradle task 'assembleDebug'...                             58.3s
+2026-10-13T11:22:21.2784072Z ✓ Built build/app/outputs/flutter-apk/app-debug.apk
+2026-10-13T11:22:21.2903678Z ##[group]Run set -euo pipefail
+2026-10-13T11:22:21.2903963Z [36;1mset -euo pipefail[0m
+2026-10-13T11:22:21.2904145Z [36;1msigning_vars=([0m
+2026-10-13T11:22:21.2904322Z [36;1m  RAD_RELEASE_STORE_FILE[0m
+2026-10-13T11:22:21.2904522Z [36;1m  RAD_RELEASE_STORE_PASSWORD[0m
+2026-10-13T11:22:21.2904722Z [36;1m  RAD_RELEASE_KEY_ALIAS[0m
+2026-10-13T11:22:21.2904912Z [36;1m  RAD_RELEASE_KEY_PASSWORD[0m
+2026-10-13T11:22:21.2905092Z [36;1m)[0m
+2026-10-13T11:22:21.2905259Z [36;1mfor name in "${signing_vars[@]}"; do[0m
+2026-10-13T11:22:21.2905463Z [36;1m  if [[ -n "${!name:-}" ]]; then[0m
+2026-10-13T11:22:21.2905703Z [36;1m    echo "Unexpected release signing value in CI: $name" >&2[0m
+2026-10-13T11:22:21.2905950Z [36;1m    exit 1[0m
+2026-10-13T11:22:21.2906106Z [36;1m  fi[0m
+2026-10-13T11:22:21.2906249Z [36;1mdone[0m
+2026-10-13T11:22:21.2906517Z [36;1mecho "Release packaging remains blocked until owner-provided signing values are configured."[0m
+2026-10-13T11:22:21.3009839Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:22:21.3010091Z env:
+2026-10-13T11:22:21.3010332Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:22:21.3010603Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:22:21.3010829Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-13T11:22:21.3011054Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-13T11:22:21.3011272Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-13T11:22:21.3011491Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-13T11:22:21.3011793Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-13T11:22:21.3012099Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-13T11:22:21.3012506Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-13T11:22:21.3012703Z ##[endgroup]
+2026-10-13T11:22:21.3092840Z Release packaging remains blocked until owner-provided signing values are configured.
+2026-10-13T11:22:21.3168182Z ##[group]Run set -euo pipefail
+2026-10-13T11:22:21.3168419Z [36;1mset -euo pipefail[0m
+2026-10-13T11:22:21.3168710Z [36;1mif ./android/gradlew -p android :app:verifyReleaseSigning >release-check.log 2>&1; then[0m
+2026-10-13T11:22:21.3169100Z [36;1m  echo "Release verification unexpectedly accepted placeholder identity/signing." >&2[0m
+2026-10-13T11:22:21.3169376Z [36;1m  exit 1[0m
+2026-10-13T11:22:21.3169657Z [36;1mfi[0m
+2026-10-13T11:22:21.3169951Z [36;1mgrep -F "RAD_ANDROID_APPLICATION_ID" release-check.log[0m
+2026-10-13T11:22:21.3225594Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-13T11:22:21.3225817Z env:
+2026-10-13T11:22:21.3226021Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.6-x64/flutter
+2026-10-13T11:22:21.3226410Z   PUB_CACHE: /home/runner/.pub-cache
+2026-10-13T11:22:21.3226700Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-13T11:22:21.3227006Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-13T11:22:21.3227323Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-13T11:22:21.3227611Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-13T11:22:21.3228027Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-13T11:22:21.3228331Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-13T11:22:21.3228548Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-13T11:22:21.3228733Z ##[endgroup]
+2026-10-13T11:22:22.2142347Z > Android release build requires a permanent, owner-approved RAD_ANDROID_APPLICATION_ID. The placeholder package ID is not allowed.
+2026-10-13T11:22:22.2315647Z Post job cleanup.
+2026-10-13T11:22:22.4442432Z In post-action step
+2026-10-13T11:22:22.4449866Z ##[group]Stopping Gradle daemons
+2026-10-13T11:22:22.4450363Z Stopping Gradle daemons for /home/runner/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1
+2026-10-13T11:22:22.4460979Z [command]/home/runner/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/bin/gradle --stop
+2026-10-13T11:22:22.8977780Z Stopping Daemon(s)
+2026-10-13T11:22:22.9750552Z 1 Daemon stopped
+2026-10-13T11:22:22.9899298Z ##[endgroup]
+2026-10-13T11:22:22.9899807Z Not performing cache-cleanup due to build failure
+2026-10-13T11:22:22.9900469Z ##[group]Caching Gradle state
+2026-10-13T11:22:30.3782415Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/rad_emigrate/rad_emigrate --files-from manifest.txt --use-compress-program zstdmt
+2026-10-13T11:22:32.2433944Z Sent 0 of 759313125 (0.0%), 0.0 MBs/sec
+2026-10-13T11:22:33.2423091Z Sent 490877669 of 759313125 (64.6%), 233.6 MBs/sec
+2026-10-13T11:22:34.1152778Z Sent 759313125 of 759313125 (100.0%), 251.7 MBs/sec
+2026-10-13T11:22:34.3774441Z Saved cache entry with key gradle-home-v1|Linux-X64|android-build[b8a35c2f917259958c9abe8f2ff1b5ff]-5013341fc021043f3721d50912c76f9c92a9387e from /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 4009ms
+2026-10-13T11:22:34.3775866Z ##[endgroup]
+2026-10-13T11:22:34.3776143Z Generating Job Summary
+2026-10-13T11:22:34.3788175Z Completed post-action step
+2026-10-13T11:22:34.5211796Z Post job cleanup.
+2026-10-13T11:22:34.5214929Z ##[start-action display=Cache pub dependencies;id=__b488302f-05ad-41ed-a50f-48a98e406de6.cache-pub]
+2026-10-13T11:22:35.0281967Z Post job cleanup.
+2026-10-13T11:22:35.1194894Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d-ccec310be8ac6973fd3120af0b77a74fc809d06386f523007bf1758529305f66, not saving cache.
+2026-10-13T11:22:35.1250586Z ##[end-action id=__b488302f-05ad-41ed-a50f-48a98e406de6.cache-pub;outcome=success;conclusion=success;duration_ms=603]
+2026-10-13T11:22:35.1253215Z ##[start-action display=Cache Flutter;id=__b488302f-05ad-41ed-a50f-48a98e406de6.cache-flutter]
+2026-10-13T11:22:35.1281734Z Post job cleanup.
+2026-10-13T11:22:35.2121514Z Cache hit occurred on the primary key flutter-linux-stable-3.47.6-x64-5fc346839b5d0eef006ed8404392afb4dfae428d, not saving cache.
+2026-10-13T11:22:35.2180296Z ##[end-action id=__b488302f-05ad-41ed-a50f-48a98e406de6.cache-flutter;outcome=success;conclusion=success;duration_ms=92]
+2026-10-13T11:22:35.2277924Z Post job cleanup.
+2026-10-13T11:22:35.2887313Z [command]/usr/bin/git version
+2026-10-13T11:22:35.2925325Z git version 2.55.0
+2026-10-13T11:22:35.2954197Z Temporarily overriding HOME='/home/runner/work/_temp/20add25d-047f-4a2c-b1e3-e4bed5ad8d50' before making global git config changes
+2026-10-13T11:22:35.2954789Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T11:22:35.2958483Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/rad_emigrate/rad_emigrate
+2026-10-13T11:22:35.3003179Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T11:22:35.3034260Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T11:22:35.3281406Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T11:22:35.3313728Z http.https://github.com/.extraheader
+2026-10-13T11:22:35.3325224Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T11:22:35.3360523Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T11:22:35.3578510Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T11:22:35.3619070Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T11:22:35.3936602Z Cleaning up orphan processes
+2026-10-13T11:22:35.4154104Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, gradle/actions/setup-gradle@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

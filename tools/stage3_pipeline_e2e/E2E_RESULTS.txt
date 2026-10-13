@@ -1,4 +1,4 @@
-=== PIPELINE E2E (2026-10-12T11:17:56Z) ===
+﻿=== PIPELINE E2E (2026-10-13T11:18:24Z) ===
 --- prelude (platform stubs) ---
 PRELUDE OK
 --- migration 20261001191421_initial_rad_core_schema.sql ---
@@ -126,7 +126,7 @@ WARNING:  there is no transaction in progress
 OK 20261012110945_stage1_security_abuse_storage_alignment.sql
 --- actors ---
 actors OK
-doc=8b6355c0-9d47-4c8f-94ed-c1b5e1b4da74 job=f191fc67-8ec2-4760-93c6-6ddbbaa3be07
+doc=aac42a78-e1e5-4ec1-bb0a-7573a5025857 job=9dedb3a0-ea85-4dc2-9d40-20717a0b8cb0
 --- S1: ingest snapshot (service_role) ---
               set_config
 --------------------------------------
@@ -140,7 +140,7 @@ doc=8b6355c0-9d47-4c8f-94ed-c1b5e1b4da74 job=f191fc67-8ec2-4760-93c6-6ddbbaa3be0
 
        ingest_research_snapshot
 --------------------------------------
- 3f7b6582-fe21-4d86-820a-03dd2ce4a781
+ 5f75b0cd-4b95-4af3-955d-88ba951cb3a0
 (1 row)
 
 S1 ingest OK
@@ -201,7 +201,7 @@ PASS s3_findings=1
 
        ingest_research_snapshot
 --------------------------------------
- adc15b61-ebee-4463-a2e8-50175053f631
+ cc2b544c-767d-4296-b598-a9f285186de8
 (1 row)
 
 S4 changed OK
@@ -254,7 +254,7 @@ S10 approve OK
 
         publish_content_draft
 --------------------------------------
- 47ad3f1f-5ace-4de5-942e-4538a900ebda
+ 6ff76776-2f5a-41c9-936b-e46631261b94
 (1 row)
 
 S10 publish OK
@@ -274,12 +274,12 @@ PASS s10_audit_row=1
 
         publish_content_draft
 --------------------------------------
- 47ad3f1f-5ace-4de5-942e-4538a900ebda
+ 6ff76776-2f5a-41c9-936b-e46631261b94
 (1 row)
 
 S10 re-publish OK
 PASS s10_feed_still_1=1
-PASS s10_same_feed_id=47ad3f1f-5ace-4de5-942e-4538a900ebda
+PASS s10_same_feed_id=6ff76776-2f5a-41c9-936b-e46631261b94
 --- S11: interrupted ingest transaction ---
               set_config
 --------------------------------------
@@ -293,7 +293,7 @@ PASS s10_same_feed_id=47ad3f1f-5ace-4de5-942e-4538a900ebda
 
        ingest_research_snapshot
 --------------------------------------
- 2dd78946-3ea5-467b-9ec1-a5c4ceaf707c
+ 8b1c0364-b839-46b6-9e4e-81cdb30ff37c
 (1 row)
 
 PASS s11_snapshots_still=2
@@ -310,7 +310,7 @@ PASS s11_drafts_still=2
 
        ingest_research_snapshot
 --------------------------------------
- 66701ec8-00a5-47ad-a2f7-e9dfc6d3a282
+ 7e771a96-168b-48f7-8c9e-208407e15a00
 (1 row)
 
 S11 retry-after-interrupt OK
@@ -367,7 +367,7 @@ S13 owner access OK
 
                   id                  |      topic       |         message          |  status   |          created_at
 --------------------------------------+------------------+--------------------------+-----------+-------------------------------
- dc507b96-b649-4633-a50a-7563792c0fbe | Existing request | Existing request message | submitted | 2026-10-12 11:21:37.738896+00
+ 5afbba35-d82e-422f-a365-fc339208b0c4 | Existing request | Existing request message | submitted | 2026-10-13 11:37:06.067932+00
 (1 row)
 
 S14 applicant-visible columns OK
@@ -386,7 +386,7 @@ PASS s15_direct_insert_denied=42501
 
      submit_consultation_request
 --------------------------------------
- 4711e9f1-80c6-412b-b846-f0a0ea432147
+ 6dd4b5a5-7a44-4789-be8c-955fea3c7b2f
 (1 row)
 
 S15 RPC request 1 OK
@@ -402,7 +402,7 @@ S15 RPC request 1 OK
 
      submit_consultation_request
 --------------------------------------
- c12c6e77-2178-48bf-8c99-c5be23960de4
+ 50eb6622-3691-4f3e-9bc3-e7f85534b52f
 (1 row)
 
 S15 RPC request 2 OK

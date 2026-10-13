@@ -1,4 +1,19 @@
 {
+  "engineering_closure_20261013": {
+    "acceptance": "../engineering_closure_20261013/ACCEPTANCE.md",
+    "evidence_manifest": "../engineering_closure_20261013/EVIDENCE_MANIFEST.json",
+    "ci_exact_head": "5013341fc021043f3721d50912c76f9c92a9387e",
+    "ci_run": 38389510371,
+    "ci_jobs_passed": 7,
+    "browser": "../engineering_closure_20261013/browser_selfhosted/manifest.json",
+    "browser_result": "PASS_40_CAPTURES_ACTUAL_CONSULTATION_SUBMISSION",
+    "review_workflow": "../engineering_closure_20261013/review_workflow_selfhosted/result.json",
+    "application_sha256": "295d6a7dacd6520b7532ccb406e8106797db4ebc7c329d3c4abfc214082e3976",
+    "source_note": "App sources unchanged from bbabe044; harness changes separately pinned. Post-commit final CI receipt is separate, never inferred from ancestor SHA.",
+    "android_device": "BLOCKED_NO_DEVICE_OR_SYSTEM_IMAGE",
+    "actual_screen_reader": "NOT_RUN",
+    "production_ready": false
+  },
   "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
   "rc_validation_head": "1d84d3f71eb6d1db90360076af839b169a757042",
   "source_note": "Earlier backend tests remain historical evidence; current Flutter application files are unchanged from the RC validation HEAD. Browser harness and evidence files are the only tracked changes in this validation turn.",

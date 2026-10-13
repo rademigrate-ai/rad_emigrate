@@ -50,11 +50,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--web-root", type=Path, required=True)
     parser.add_argument("--artifacts", type=Path, required=True)
+    parser.add_argument("--expected-api-url", default="http://127.0.0.1:55321",
+                        choices=("http://127.0.0.1:55321", "http://127.0.0.1:56321"))
     args = parser.parse_args()
     artifacts = args.artifacts.resolve()
     artifacts.mkdir(parents=True, exist_ok=True)
     env = load_local_environment()
-    require(env["API_URL"] == "http://127.0.0.1:55321", "unexpected local stack")
+    require(env["API_URL"] == args.expected_api_url, "unexpected local stack")
     fixtures = LocalSupabaseFixtures(env)
     try:
         identity = fixtures.create_identity("user")

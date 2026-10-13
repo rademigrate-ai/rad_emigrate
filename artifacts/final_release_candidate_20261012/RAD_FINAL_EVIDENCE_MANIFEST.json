@@ -1,4 +1,15 @@
 {
+  "engineering_closure_20261013": {
+    "manifest": "../engineering_closure_20261013/EVIDENCE_MANIFEST.json",
+    "acceptance": "../engineering_closure_20261013/ACCEPTANCE.md",
+    "ci_verified_head": "5013341fc021043f3721d50912c76f9c92a9387e",
+    "ci_run": 38389510371,
+    "browser_result": "PASS",
+    "browser_route_captures": 40,
+    "research_review_approval_feed": "PASS_LOCAL_SYNTHETIC_CHROME",
+    "production_ready": false,
+    "note": "Earlier sections retain their original source provenance. Final pushed-HEAD CI receipt is generated after commit; no mixed-HEAD unified acceptance is claimed."
+  },
   "date": "2026-10-12",
   "source_base": "7ae0a467e6e82bf0a83799e9ad67b6ab541435f0",
   "rc_validation_head": "1d84d3f71eb6d1db90360076af839b169a757042",
