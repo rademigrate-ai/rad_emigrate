@@ -22,6 +22,11 @@ class MigrationInventoryTest(unittest.TestCase):
         self.assertIn("storage_policy_count <> 4", script)
         self.assertIn('"policies":"5b8620228bf8c9346092eb66f1afa4cb"', script)
 
+    def test_auth_harness_uses_rpc_and_tests_direct_insert_denial(self):
+        script = (ROOT / "scripts/verify_local_auth_isolation.py").read_text()
+        self.assertIn('"/rest/v1/rpc/submit_consultation_request"', script)
+        self.assertIn('label="consultation direct INSERT must stay forbidden"', script)
+
 
 if __name__ == "__main__":
     unittest.main()

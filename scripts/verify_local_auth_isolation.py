@@ -388,9 +388,9 @@ def main() -> None:
         label="OCR job cannot target another user's document",
     )
 
-    consultation_rows = rows(
+    expect_denied(
         "POST",
-        "/rest/v1/consultation_requests?select=id,user_id,topic,status",
+        "/rest/v1/consultation_requests",
         token_a,
         [{
             "user_id": user_a,
@@ -398,6 +398,24 @@ def main() -> None:
             "message": "Disposable two-user confidentiality fixture",
             "status": "submitted",
         }],
+        label="consultation direct INSERT must stay forbidden",
+    )
+    consultation_id, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/submit_consultation_request",
+        token_a,
+        {
+            "p_topic": "Temporary local consultation",
+            "p_message": "Disposable two-user confidentiality fixture",
+            "p_related_application_id": None,
+        },
+        label="owner-bound consultation submission RPC",
+    )
+    require(isinstance(consultation_id, str), "consultation RPC returns UUID")
+    consultation_rows = rows(
+        "GET",
+        f"/rest/v1/consultation_requests?select=id,user_id,topic,status&id=eq.{consultation_id}",
+        token_a,
     )
     require(
         len(consultation_rows) == 1
