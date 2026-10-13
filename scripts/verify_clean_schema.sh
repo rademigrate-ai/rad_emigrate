@@ -75,7 +75,7 @@ BEGIN
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened',function_count,hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %',rls_count; END IF;
   IF app_policy_count <> 40 THEN RAISE EXCEPTION 'Expected 40 public policies, got %',app_policy_count; END IF;
-  IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %',storage_policy_count; END IF;
+  IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 owner-scoped documents Storage policies, got %',storage_policy_count; END IF;
   IF trigger_count <> 17 THEN RAISE EXCEPTION 'Expected auth, update, and audit trigger events, got %',trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %',bucket_count; END IF;
 END
@@ -85,7 +85,8 @@ SQL
 # Preserve the stable core fingerprint while allowing reviewed additive
 # functions, triggers, and constraints to evolve. Those security-sensitive
 # objects are verified behaviorally below and by the two-user JWT harness.
-expected_core_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"c52042a2489e9129526327c3fa0933b9"}'
+# Reviewed security alignment adds only the owner-scoped Storage UPDATE policy.
+expected_core_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"5b8620228bf8c9346092eb66f1afa4cb"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 python3 - "$expected_core_fingerprint" "$actual_fingerprint" <<'PY'
 import json, sys

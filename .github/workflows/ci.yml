@@ -198,6 +198,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install --yes postgresql-client
           fi
+      - name: Check complete migration replay inventory
+        run: python3 -m unittest discover -s scripts -p 'test_ci_*.py'
       - name: Reconstruct authoritative lineage and compare production metadata
         run: bash scripts/verify_migration_reconstruction.sh
       - name: Upload metadata-only reconciliation proof
