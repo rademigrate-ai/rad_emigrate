@@ -1,35 +1,70 @@
 {
   "production_ready": false,
+  "audited_head": "4f9993c363c50ab70a187c79d7b52de8402b2f9c",
+  "independent_audit": "RAD_GROK_INDEPENDENT_AUDIT_INCORPORATION_20261013.md",
   "blockers": [
     {
-      "id": "P0_SECURITY",
+      "id": "SEC_001_AI_RPC_IDOR",
+      "severity": "CRITICAL",
       "owner": "DBA/security",
-      "action": "Review/apply pending migrations only after authorized backup/rollback, then verify live invariants"
+      "repo_status": "FIXED",
+      "production_status": "VULNERABLE",
+      "action": "Apply 20261010010000 after backup attestation; verify cross-owner forbidden"
     },
     {
-      "id": "LAUNCH_L01_L04",
-      "owner": "Operations, content/legal, external Joomla web owner",
-      "action": "Close 14-item handoff P0 gates; staging test untouched form; do not submit production form"
+      "id": "SEC_002_FEED_APPROVAL",
+      "severity": "CRITICAL",
+      "owner": "DBA/security",
+      "repo_status": "FIXED",
+      "production_status": "VULNERABLE",
+      "action": "Apply 20261010010000; verify approved-only publish and human Feed triggers"
     },
     {
-      "id": "BROWSER_E2E",
-      "owner": "QA",
-      "action": "Run consultation submission against an authorized disposable backend with the RPC; complete assistive-technology and device checks"
+      "id": "SEC_003_CONSULTATION",
+      "severity": "HIGH",
+      "owner": "DBA/security",
+      "repo_status": "FIXED",
+      "production_status": "VULNERABLE",
+      "action": "Apply 20261010010000 then 20261012110945; verify RPC-only, rate limit, admin_note denial"
+    },
+    {
+      "id": "SEC_004_AI_MODEL_CHECKS",
+      "severity": "MEDIUM",
+      "owner": "DBA",
+      "repo_status": "FIXED",
+      "production_status": "MISSING",
+      "action": "Apply 20261012230000 after preflight invalid-row count is zero"
+    },
+    {
+      "id": "SEC_005_BACKUP_RECOVERY",
+      "severity": "CRITICAL",
+      "owner": "Owner/DBA",
+      "repo_status": "N/A",
+      "production_status": "FAIL_FREE_PLAN_UNVERIFIED",
+      "action": "Attest restorable recovery point before any migration apply"
+    },
+    {
+      "id": "SEC_006_LEAKED_PASSWORD",
+      "severity": "MEDIUM",
+      "owner": "Auth owner",
+      "repo_status": "N/A",
+      "production_status": "DISABLED_PRIOR",
+      "action": "Assess compatibility then enable leaked-password protection"
     },
     {
       "id": "ANDROID_RELEASE_CONFIG",
       "owner": "Release owner",
-      "action": "Approve application ID and signing, then build release variant and install-test; debug APK passed via documented mirror"
-    },
-    {
-      "id": "STAGE3_BASELINE",
-      "owner": "Content/data/DBA",
-      "action": "Reconcile package 5/5 versus live 6/14 before ingestion"
+      "action": "Approve application ID and signing; device/AVD smoke"
     },
     {
       "id": "VISA_EDITORIAL",
       "owner": "Editorial/legal",
-      "action": "Review draft content and official sources before import"
+      "action": "Official regulatory verification of user-visible immigration claims"
+    },
+    {
+      "id": "STAGE3_BASELINE",
+      "owner": "Content/data/DBA",
+      "action": "Reconcile package baseline versus live research counts before ingestion"
     }
   ]
 }
