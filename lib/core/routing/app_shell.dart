@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 import '../widgets/rad_brand.dart';
 import '../widgets/app_entrance.dart';
+import '../widgets/rad_ai_bird_nav_icon.dart';
+import '../widgets/rad_phoenix_navigation_surface.dart';
 import '../theme/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
@@ -26,6 +28,7 @@ class AppShell extends ConsumerWidget {
     final location = GoRouterState.of(context).matchedLocation;
     final canAccessAdmin =
         ref.watch(adminSnapshotProvider).valueOrNull?.canAccess == true;
+
     final items = [
       _NavItem(
         label: l10n.home,
@@ -83,15 +86,26 @@ class AppShell extends ConsumerWidget {
           selectedIcon: Icons.admin_panel_settings,
         ),
     ];
+
+    // Mobile primary: Home | Visa | AI bird | Cases | Profile
+    final primary = [items[0], items[1], items[2], items[7]];
+    final overflow = items
+        .where(
+          (item) =>
+              item.path != '/dashboard' &&
+              item.path != '/visa' &&
+              item.path != '/applications' &&
+              item.path != '/profile' &&
+              item.path != '/ai-assistant',
+        )
+        .toList();
+
     final selected = _selectedIndex(location, items);
-    final compactItems = items.take(4).toList();
-    final compactSelected = _selectedIndex(location, compactItems);
-    final isCompactRoute = compactItems.any(
-      (item) => location.startsWith(item.path),
-    );
     final wide = MediaQuery.sizeOf(context).width >= 900;
+    final aiSelected = location.startsWith('/ai-assistant');
 
     return Scaffold(
+      extendBody: !wide,
       body: Row(
         children: [
           if (wide)
@@ -141,33 +155,18 @@ class AppShell extends ConsumerWidget {
       ),
       bottomNavigationBar: wide
           ? null
-          : NavigationBar(
-              selectedIndex: isCompactRoute ? compactSelected : 4,
-              onDestinationSelected: (i) async {
-                if (i < compactItems.length) {
-                  context.go(compactItems[i].path);
-                  return;
-                }
-                final path = await _showMore(
-                  context,
-                  items.skip(compactItems.length).toList(),
-                  location,
-                );
+          : _RadBottomBar(
+              primary: primary,
+              location: location,
+              aiSelected: aiSelected,
+              aiLabel: l10n.aiAssistant,
+              moreLabel: l10n.more,
+              onPrimarySelected: (path) => context.go(path),
+              onAiTap: () => context.go('/ai-assistant'),
+              onMore: () async {
+                final path = await _showMore(context, overflow, location);
                 if (path != null && context.mounted) context.go(path);
               },
-              destinations: [
-                for (final item in compactItems)
-                  NavigationDestination(
-                    icon: Icon(item.icon),
-                    selectedIcon: Icon(item.selectedIcon),
-                    label: item.label,
-                  ),
-                NavigationDestination(
-                  icon: const Icon(Icons.more_horiz),
-                  selectedIcon: const Icon(Icons.more),
-                  label: l10n.more,
-                ),
-              ],
             ),
     );
   }
@@ -200,6 +199,120 @@ class AppShell extends ConsumerWidget {
                 title: Text(item.label),
                 onTap: () => Navigator.pop(sheetContext, item.path),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RadBottomBar extends StatelessWidget {
+  const _RadBottomBar({
+    required this.primary,
+    required this.location,
+    required this.aiSelected,
+    required this.aiLabel,
+    required this.moreLabel,
+    required this.onPrimarySelected,
+    required this.onAiTap,
+    required this.onMore,
+  });
+
+  final List<_NavItem> primary;
+  final String location;
+  final bool aiSelected;
+  final String aiLabel;
+  final String moreLabel;
+  final ValueChanged<String> onPrimarySelected;
+  final VoidCallback onAiTap;
+  final VoidCallback onMore;
+
+  bool _isSelected(_NavItem item) => location.startsWith(item.path);
+
+  @override
+  Widget build(BuildContext context) {
+    final left = primary.take(2).toList();
+    final right = primary.skip(2).toList();
+    return RadPhoenixNavigationSurface(
+      leading: [
+        for (final item in left)
+          _NavSlot(
+            item: item,
+            selected: _isSelected(item) && !aiSelected,
+            onTap: () => onPrimarySelected(item.path),
+          ),
+      ],
+      trailing: [
+        for (final item in right)
+          _NavSlot(
+            item: item,
+            selected: _isSelected(item) && !aiSelected,
+            onTap: () => onPrimarySelected(item.path),
+          ),
+      ],
+      phoenix: RadAiBirdNavIcon(
+        selected: aiSelected,
+        size: (MediaQuery.sizeOf(context).width * 0.285).clamp(86.0, 118.0),
+        label: aiLabel,
+        moreLabel: moreLabel,
+        onTap: onAiTap,
+        onLongPress: onMore,
+      ),
+    );
+  }
+}
+
+class _NavSlot extends StatelessWidget {
+  const _NavSlot({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _NavItem item;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = selected
+        ? (theme.brightness == Brightness.dark
+              ? const Color(0xFFFF6475)
+              : AppColors.primaryRed)
+        : (theme.brightness == Brightness.dark
+              ? const Color(0xFFADB3C0)
+              : const Color(0xFF596575));
+
+    return Semantics(
+      label: item.label,
+      button: true,
+      selected: selected,
+      excludeSemantics: true,
+      onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedScale(
+              duration: AppMotion.duration(context, AppMotion.buttonFeedback),
+              scale: selected ? 1.05 : 1,
+              child: Icon(item.icon, size: 27, color: color),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              item.label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
       ),

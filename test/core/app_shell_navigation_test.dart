@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rad_emigrate/core/routing/app_shell.dart';
+import 'package:rad_emigrate/core/widgets/rad_ai_bird_nav_icon.dart';
 import 'package:rad_emigrate/features/admin/data/admin_operations_repository.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
@@ -17,7 +19,7 @@ AdminSnapshot _snapshot(String role) => AdminSnapshot(
   auditEvents: 0,
 );
 
-Future<void> _pumpShell(
+Future<GoRouter> _pumpShell(
   WidgetTester tester, {
   required String role,
   double width = 390,
@@ -32,11 +34,22 @@ Future<void> _pumpShell(
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
         routes: [
-          GoRoute(
-            path: '/dashboard',
-            builder: (_, _) =>
-                const Scaffold(body: Center(child: Text('Dashboard body'))),
-          ),
+          for (final path in [
+            '/dashboard',
+            '/visa',
+            '/ai-assistant',
+            '/applications',
+            '/world-clock',
+            '/feed',
+            '/documents',
+            '/profile',
+            '/admin',
+          ])
+            GoRoute(
+              path: path,
+              builder: (_, _) =>
+                  Scaffold(body: Center(child: Text('$path body'))),
+            ),
         ],
       ),
     ],
@@ -54,34 +67,84 @@ Future<void> _pumpShell(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 400));
+  return router;
 }
 
 void main() {
-  testWidgets('mobile More menu exposes every secondary destination', (
+  testWidgets('mobile primary destinations and bird route are available', (
+    tester,
+  ) async {
+    final router = await _pumpShell(tester, role: 'user', width: 360);
+
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Visa'), findsOneWidget);
+    expect(find.text('Cases'), findsOneWidget);
+    expect(find.text('Profile'), findsOneWidget);
+
+    await tester.tap(find.byType(RadAiBirdNavIcon));
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(router.routeInformationProvider.value.uri.path, '/ai-assistant');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('bird long-press opens secondary destinations and admin', (
     tester,
   ) async {
     await _pumpShell(tester, role: 'admin', width: 360);
 
-    await tester.tap(find.text('More'));
-    await tester.pumpAndSettle();
+    await tester.longPress(find.byType(RadAiBirdNavIcon));
+    await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.text('Docs'), findsOneWidget);
-    expect(find.text('AI Assistant'), findsOneWidget);
-    expect(find.text('Profile'), findsOneWidget);
+    expect(find.text('AI Assistant'), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.text('Profile'),
+      ),
+      findsNothing,
+    );
     expect(find.text('Admin'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('non-admin mobile menu does not claim admin access', (
-    tester,
-  ) async {
+  testWidgets('non-admin overflow does not claim admin access', (tester) async {
     await _pumpShell(tester, role: 'user');
 
-    await tester.tap(find.text('More'));
-    await tester.pumpAndSettle();
+    await tester.longPress(find.byType(RadAiBirdNavIcon));
+    await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.text('Admin'), findsNothing);
-    expect(find.text('AI Assistant'), findsOneWidget);
+    expect(find.text('Docs'), findsOneWidget);
+  });
+
+  testWidgets('bird exposes localized tap and More semantics', (tester) async {
+    final semanticsHandle = tester.ensureSemantics();
+    await _pumpShell(tester, role: 'user');
+
+    final birdFinder = find.byType(RadAiBirdNavIcon);
+    final data = tester.getSemantics(birdFinder).getSemanticsData();
+    final customActions = tester
+        .widgetList<Semantics>(
+          find.descendant(of: birdFinder, matching: find.byType(Semantics)),
+        )
+        .map((semantics) => semantics.properties.customSemanticsActions)
+        .firstWhere((actions) => actions != null);
+    expect(data.label, 'AI Assistant');
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+    expect(customActions, isNotNull);
+    expect(customActions!.keys.map((action) => action.label), contains('More'));
+    semanticsHandle.dispose();
+  });
+
+  testWidgets('wide layout retains the navigation rail', (tester) async {
+    await _pumpShell(tester, role: 'user', width: 1000);
+
+    expect(find.byType(NavigationRail), findsOneWidget);
+    expect(find.byType(RadAiBirdNavIcon), findsNothing);
+    expect(find.byType(BottomNavigationBar), findsNothing);
   });
 }
