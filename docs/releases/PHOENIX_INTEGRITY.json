@@ -1,0 +1,218 @@
+{
+  "owner_approval_scope": "Six final Phoenix screenshots; visual freeze; not production release approval",
+  "base_main": "6d79f810de7454a700b4cc6bacadccff008259ec",
+  "historical_owner_snapshot": "3b4bb9aee63b6507dc9011dbfbf53bba8d4b208448849543cf89fe6e2a451ef7",
+  "integration_application_source_fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+  "fingerprint_convention": "Sorted tracked application/test/web/assets/android/pubspec/.github plus explicit UI inputs; UTF-8 non-NUL CRLF->LF, binary unchanged. Documentation excluded.",
+  "owner_freeze_receipt_sha256": "2a58ac6b8fb1113dca47b72ee6e8a46653f0539ba7deda0fdbca566906fddf50",
+  "files": [
+    {
+      "path": "lib/core/routing/app_shell.dart",
+      "working_sha256": "17162fd8def744be5669d4cdab78daaf44685a6361845a0baf91b2554c5762e5",
+      "git_lf_normalized_sha256": "17162fd8def744be5669d4cdab78daaf44685a6361845a0baf91b2554c5762e5",
+      "owner_freeze_sha256": "17162fd8def744be5669d4cdab78daaf44685a6361845a0baf91b2554c5762e5",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "lib/core/widgets/rad_ai_bird_nav_icon.dart",
+      "working_sha256": "af6165fd84c48d6f7c823fa1fecd604bfbf984544fec6b5ab4350d9027b4144d",
+      "git_lf_normalized_sha256": "af6165fd84c48d6f7c823fa1fecd604bfbf984544fec6b5ab4350d9027b4144d",
+      "owner_freeze_sha256": "af6165fd84c48d6f7c823fa1fecd604bfbf984544fec6b5ab4350d9027b4144d",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "lib/core/widgets/rad_phoenix_navigation_surface.dart",
+      "working_sha256": "9244139d754e532216e4d767e61447eca7fe4d9d9b1c264f5d1908d86d883d3b",
+      "git_lf_normalized_sha256": "9244139d754e532216e4d767e61447eca7fe4d9d9b1c264f5d1908d86d883d3b",
+      "owner_freeze_sha256": "9244139d754e532216e4d767e61447eca7fe4d9d9b1c264f5d1908d86d883d3b",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "assets/branding/rad_phoenix_final_master.png",
+      "working_sha256": "099791d3becc34888e9221e5782a8fa3bd1f05cb66435f8d91913cec74dad07b",
+      "git_lf_normalized_sha256": "099791d3becc34888e9221e5782a8fa3bd1f05cb66435f8d91913cec74dad07b",
+      "owner_freeze_sha256": "099791d3becc34888e9221e5782a8fa3bd1f05cb66435f8d91913cec74dad07b",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "assets/branding/rad_phoenix_final_256.png",
+      "working_sha256": "0ff9f09f28cf6b8700b9eb2e42b335026d68fee13c2f2298fd2f9ee601b3c3ca",
+      "git_lf_normalized_sha256": "0ff9f09f28cf6b8700b9eb2e42b335026d68fee13c2f2298fd2f9ee601b3c3ca",
+      "owner_freeze_sha256": "0ff9f09f28cf6b8700b9eb2e42b335026d68fee13c2f2298fd2f9ee601b3c3ca",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "assets/branding/rad_phoenix_final_512.png",
+      "working_sha256": "4c85e5f842f66604b7e914c072d5af395b31de63841d790300f2ff0d64d56009",
+      "git_lf_normalized_sha256": "4c85e5f842f66604b7e914c072d5af395b31de63841d790300f2ff0d64d56009",
+      "owner_freeze_sha256": "4c85e5f842f66604b7e914c072d5af395b31de63841d790300f2ff0d64d56009",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "assets/branding/rad_phoenix_final_768.png",
+      "working_sha256": "9e7f18616ab7de160236523913dce696ce1efd635fff269838921a858e2f6b8f",
+      "git_lf_normalized_sha256": "9e7f18616ab7de160236523913dce696ce1efd635fff269838921a858e2f6b8f",
+      "owner_freeze_sha256": "9e7f18616ab7de160236523913dce696ce1efd635fff269838921a858e2f6b8f",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "test/core/phoenix_final_asset_test.dart",
+      "working_sha256": "1112cd513256e0c9d1ccd1ab324873ec5bff4389c4c651e783deb75d6a712f31",
+      "git_lf_normalized_sha256": "1112cd513256e0c9d1ccd1ab324873ec5bff4389c4c651e783deb75d6a712f31",
+      "owner_freeze_sha256": "1112cd513256e0c9d1ccd1ab324873ec5bff4389c4c651e783deb75d6a712f31",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "test/core/phoenix_navigation_layout_test.dart",
+      "working_sha256": "f98c596c8715eb818ead2040aad01585276c50b49314742774ab46b45f590034",
+      "git_lf_normalized_sha256": "f98c596c8715eb818ead2040aad01585276c50b49314742774ab46b45f590034",
+      "owner_freeze_sha256": "e99c6725ec42a7312d0eb0c9944f97a3f17dfcd86810352bcc4ae82a3032db5a",
+      "integration_review": "integration-only test adjustment"
+    },
+    {
+      "path": "test/core/rad_ai_bird_nav_icon_test.dart",
+      "working_sha256": "5e179f4551e23f48d46e9fa7377bd789830c5beee256669c183617e96512e4ba",
+      "git_lf_normalized_sha256": "7b18e3f661d7b49812bccbdd15e07fd7ca51b9e63301dd850d915f568927a5ac",
+      "owner_freeze_sha256": "be4d9dc6c9075de3ee20706ba92fa3fe1c22dce2382a4cdfa48e65ffe5dd6562",
+      "integration_review": "integration-only test adjustment"
+    },
+    {
+      "path": "test/core/app_shell_navigation_test.dart",
+      "working_sha256": "bbefce1af0033fd576be5bc032a2ca11ec0f92b1cfa8456ffc91d6225584560d",
+      "git_lf_normalized_sha256": "80622de6259db2ca115be3edc74f2891cffd7a0c16f9e01da6c878da7d343615",
+      "owner_freeze_sha256": "bbefce1af0033fd576be5bc032a2ca11ec0f92b1cfa8456ffc91d6225584560d",
+      "integration_review": "freeze-byte-exact"
+    },
+    {
+      "path": "web/index.html",
+      "working_sha256": "7064ac4fd06c853c1dbe1210a0d8f879c85847384239d4451bc1c8c3a3bd3d5d",
+      "git_lf_normalized_sha256": "69267a49dda3a33992f7a2689d276abdddb22476f6835dd0c8e930793abb8364",
+      "owner_freeze_sha256": "7064ac4fd06c853c1dbe1210a0d8f879c85847384239d4451bc1c8c3a3bd3d5d",
+      "integration_review": "freeze-byte-exact"
+    }
+  ],
+  "approved_screenshots": [
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_dark_fa_390x844.png",
+      "sha256": "4f7456796afd8e4fabf8657dea281ae733ad7c5732298750af5f0fbea5825b26",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "locale": "fa"
+    },
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_light_fa_390x844.png",
+      "sha256": "fdcd88787a1e51037a3dce30c0262bdf6c88c2a558489998ffa268b33e4b15c8",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "locale": "fa"
+    },
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_dark_en_390x844.png",
+      "sha256": "2022b0670910d29326f04c1f2f0b190d1220b6e12f955833109d5dac4c075e7d",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "dark",
+      "locale": "en"
+    },
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_light_en_390x844.png",
+      "sha256": "2b15b364178b0053e6b732c6288e81d364fbfdcc7e880270af75b59669e34576",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "locale": "en"
+    },
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_dark_fa_320x844.png",
+      "sha256": "94fd0d2898781a1459c1382f16840451466241bd2f3aa1c4437a57126f4f7ffe",
+      "viewport": [
+        320,
+        844
+      ],
+      "theme": "dark",
+      "locale": "fa"
+    },
+    {
+      "path": "artifacts/phoenix_polish_20261015/browser_final/phoenix_light_fa_320x844.png",
+      "sha256": "7be0f45e301f09fca674b245ea2901c7f9dbfa0fdeb41cd01f2a9901787d60c5",
+      "viewport": [
+        320,
+        844
+      ],
+      "theme": "light",
+      "locale": "fa"
+    }
+  ],
+  "integration_only_changes": [
+    "Layout test uses its real AppShell fixture instead of excluded preview tool",
+    "Dart formatting of bird test",
+    "pubspec.lock SDK dependency transitive->direct main classification; no version change",
+    "Git text LF normalization, binary artwork unchanged"
+  ],
+  "validation_events": [
+    {
+      "label": "format",
+      "exit": 0,
+      "fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+      "elapsed_seconds": 3.74,
+      "recorded_utc": "2026-10-14T23:14:05.765672+00:00"
+    },
+    {
+      "label": "analyze",
+      "exit": 0,
+      "fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+      "elapsed_seconds": 141.09,
+      "recorded_utc": "2026-10-14T23:16:27.317148+00:00"
+    },
+    {
+      "label": "flutter_full",
+      "exit": 0,
+      "fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+      "elapsed_seconds": 101.87,
+      "recorded_utc": "2026-10-14T23:18:09.772894+00:00"
+    },
+    {
+      "label": "web_release",
+      "exit": 0,
+      "fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+      "elapsed_seconds": 139.48,
+      "recorded_utc": "2026-10-14T23:20:30.008062+00:00"
+    },
+    {
+      "label": "diff_check",
+      "exit": 0,
+      "fingerprint": "507b39bc621d084b862dc9f6c8563ed4cfe54e46928ad6c4230119ea4cc06547",
+      "elapsed_seconds": 0.29,
+      "recorded_utc": "2026-10-14T23:20:31.041449+00:00"
+    }
+  ],
+  "web_packaged_asset_hashes": {
+    "assets/branding/rad_phoenix_final_master.png": "099791d3becc34888e9221e5782a8fa3bd1f05cb66435f8d91913cec74dad07b",
+    "assets/branding/rad_phoenix_final_256.png": "0ff9f09f28cf6b8700b9eb2e42b335026d68fee13c2f2298fd2f9ee601b3c3ca",
+    "assets/branding/rad_phoenix_final_512.png": "4c85e5f842f66604b7e914c072d5af395b31de63841d790300f2ff0d64d56009",
+    "assets/branding/rad_phoenix_final_768.png": "9e7f18616ab7de160236523913dce696ce1efd635fff269838921a858e2f6b8f"
+  },
+  "local_harness_incidents": [
+    "Offline pub get native exit 0; wrapper source-stability assertion rejected expected SDK dependency classification update before validation epoch",
+    "Web build native exit 0 and raw evidence persisted; then cp1252 console printing failed on success glyph; local helper corrected to UTF-8; build/assets independently verified"
+  ],
+  "main_dart_js_sha256": "73210d57017d19648b2243ee0c5c5c080258f9916bb5ea15c57b2871df86bffc",
+  "remote_publication_gate": "Owner verified Deploy to production ON and Automatic branching OFF. Owner authorizes isolated branch push/PR only. Main push/merge prohibited until owner disables production auto-deployment and grants fresh approval. No settings changed.",
+  "limitations": [
+    "Real device NOT RUN",
+    "Actual screen reader NOT RUN",
+    "Browser proof uses prior UI-only fixture; not fresh authenticated E2E",
+    "No production credentials used in compilation",
+    "Separate client/security/recovery changes not merged wholesale"
+  ]
+}
