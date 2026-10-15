@@ -60,6 +60,7 @@ class VisaRepository {
       slug: row['slug'] as String,
       flagEmoji: row['flag_emoji'] as String? ?? '🌐',
       name: localized['name'] as String,
+      summary: localized['summary'] as String? ?? '',
     );
   }
 

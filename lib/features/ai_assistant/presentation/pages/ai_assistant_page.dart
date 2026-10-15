@@ -35,6 +35,7 @@ class AiAssistantPage extends ConsumerStatefulWidget {
     this.adminMode = false,
     this.embedded = false,
     this.visualQaDemo = false,
+    this.contextLabel,
   });
 
   final bool adminMode;
@@ -45,6 +46,9 @@ class AiAssistantPage extends ConsumerStatefulWidget {
   /// Explicit synthetic state used only by the separate visual-QA entrypoint.
   /// It is never enabled from the production router.
   final bool visualQaDemo;
+
+  /// Optional country/program context shown as a pill (from Visa deep link).
+  final String? contextLabel;
 
   @override
   ConsumerState<AiAssistantPage> createState() => _AiAssistantPageState();
@@ -123,7 +127,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     if (text.isEmpty || _loading) return;
 
     setState(() => _loading = true);
-    // A send during initial history loading must use the restored session.
     await _historyRestore;
     if (!mounted) return;
     final userId = ref.read(authControllerProvider).valueOrNull?.userId;
@@ -176,7 +179,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   }) async {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    // The latest user turn is sent as prompt; failures are UI notices only.
     final turns = _messages.where((m) => m.retryPrompt == null).toList();
     final history = turns
         .take(math.max(0, turns.length - 1))
@@ -296,6 +298,21 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   ),
                 ),
               ),
+            if (widget.contextLabel != null &&
+                widget.contextLabel!.trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Chip(
+                    avatar: const Icon(Icons.place_outlined, size: 16),
+                    label: Text(widget.contextLabel!),
+                    backgroundColor: const Color(0xFF143743),
+                    labelStyle: const TextStyle(color: Color(0xFFE2F1F3)),
+                    side: BorderSide.none,
+                  ),
+                ),
+              ),
             Expanded(
               child: _messages.isEmpty
                   ? ListView(
@@ -358,7 +375,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       itemBuilder: (context, index) {
                         if (_loading && index == _messages.length) {
                           return Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
                               child: RadInlineLoading(

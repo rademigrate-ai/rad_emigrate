@@ -36,6 +36,13 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   void initState() {
     super.initState();
     _identifierCtrl = TextEditingController(text: widget.identifier ?? '');
+    // Bare /otp without an identifier is not a valid entry point.
+    if (widget.identifier == null || widget.identifier!.trim().isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        context.go(widget.signup ? '/register' : '/login');
+      });
+    }
   }
 
   @override

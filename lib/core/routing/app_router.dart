@@ -66,6 +66,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             LoginPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
+      // BUG-002: /signup is a compatibility alias for /register.
+      GoRoute(path: '/signup', builder: (_, _) => const RegisterPage()),
       GoRoute(
         path: '/forgot-password',
         builder: (_, _) => const ForgotPasswordPage(),
@@ -110,7 +112,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
           GoRoute(
             path: '/ai-assistant',
-            builder: (_, _) => const AiAssistantPage(),
+            builder: (_, state) => AiAssistantPage(
+              contextLabel: state.uri.queryParameters['context'],
+            ),
           ),
           GoRoute(
             path: '/world-clock',

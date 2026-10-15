@@ -67,7 +67,10 @@ void main() {
     );
 
     test('thin Visa content has bilingual, explicit review state', () {
-      final page = read('lib/features/visa/presentation/pages/visa_page.dart');
+      final page = [
+        read('lib/features/visa/presentation/pages/visa_page.dart'),
+        read('lib/features/visa/presentation/pages/visa_page_program.dart'),
+      ].join('\n');
       final en = lookupAppLocalizations(const Locale('en'));
       final fa = lookupAppLocalizations(const Locale('fa'));
 

@@ -465,6 +465,7 @@ final _visualCatalog = VisaCatalog(
       code: 'SMP',
       flagEmoji: '◉',
       slug: 'sample-destination',
+      summary: 'Visual QA sample summary',
     ),
   ],
   categories: const [
