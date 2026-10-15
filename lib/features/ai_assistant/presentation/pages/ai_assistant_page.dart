@@ -35,6 +35,7 @@ class AiAssistantPage extends ConsumerStatefulWidget {
     this.adminMode = false,
     this.embedded = false,
     this.visualQaDemo = false,
+    this.contextLabel,
   });
 
   final bool adminMode;
@@ -45,6 +46,9 @@ class AiAssistantPage extends ConsumerStatefulWidget {
   /// Explicit synthetic state used only by the separate visual-QA entrypoint.
   /// It is never enabled from the production router.
   final bool visualQaDemo;
+
+  /// Optional country/program context shown as a pill (from Visa deep link).
+  final String? contextLabel;
 
   @override
   ConsumerState<AiAssistantPage> createState() => _AiAssistantPageState();
@@ -70,7 +74,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
         _ChatMessage(
           isUser: false,
-          text: 'I can help you organize the published requirements. I will keep uncertain information clearly marked and point you to official sources when available.',
+          text:
+              'I can help you organize the published requirements. I will keep uncertain information clearly marked and point you to official sources when available.',
         ),
       ]);
       _loading = true;
@@ -123,7 +128,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     if (text.isEmpty || _loading) return;
 
     setState(() => _loading = true);
-    // A send during initial history loading must use the restored session.
     await _historyRestore;
     if (!mounted) return;
     final userId = ref.read(authControllerProvider).valueOrNull?.userId;
@@ -176,7 +180,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   }) async {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    // The latest user turn is sent as prompt; failures are UI notices only.
     final turns = _messages.where((m) => m.retryPrompt == null).toList();
     final history = turns
         .take(math.max(0, turns.length - 1))
@@ -206,9 +209,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
           userId.isNotEmpty &&
           _sessionId != null) {
         try {
-          await ref
-              .read(aiSessionRepositoryProvider)
-              .saveMessage(
+          await ref.read(aiSessionRepositoryProvider).saveMessage(
                 sessionId: _sessionId!,
                 userId: userId,
                 role: 'assistant',
@@ -216,8 +217,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               );
         } catch (_) {
           if (mounted) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(l10n.aiResponseNotSaved)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.aiResponseNotSaved)),
+            );
           }
         }
       }
@@ -291,8 +293,24 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                     widget.adminMode
                         ? l10n.untrustedResearchDisclaimer
                         : l10n.aiDisclaimer,
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xFFC2D7DB)),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFFC2D7DB),
+                        ),
+                  ),
+                ),
+              ),
+            if (widget.contextLabel != null &&
+                widget.contextLabel!.trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Chip(
+                    avatar: const Icon(Icons.place_outlined, size: 16),
+                    label: Text(widget.contextLabel!),
+                    backgroundColor: const Color(0xFF143743),
+                    labelStyle: const TextStyle(color: Color(0xFFE2F1F3)),
+                    side: BorderSide.none,
                   ),
                 ),
               ),
@@ -358,7 +376,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       itemBuilder: (context, index) {
                         if (_loading && index == _messages.length) {
                           return Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
                               child: RadInlineLoading(
@@ -402,15 +420,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                 children: [
                                   Text(
                                     m.text,
-                                    style: Theme.of(context).textTheme.bodyLarge
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
                                         ?.copyWith(color: Colors.white),
                                   ),
                                   if (m.retryPrompt != null &&
                                       index == _messages.length - 1)
                                     TextButton.icon(
-                                      onPressed: _loading
-                                          ? null
-                                          : () => _retry(m),
+                                      onPressed:
+                                          _loading ? null : () => _retry(m),
                                       icon: const Icon(Icons.refresh),
                                       label: Text(l10n.retry),
                                     ),
