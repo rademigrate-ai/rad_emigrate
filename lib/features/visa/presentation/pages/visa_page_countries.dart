@@ -22,7 +22,7 @@ class _CountriesStage extends StatelessWidget {
     if (catalog.countries.isEmpty) {
       return EmptyState(
         title: l10n.catalogueUnavailable,
-        message: l10n.catalogueDisclaimer,
+        subtitle: l10n.catalogueDisclaimer,
       );
     }
 
@@ -294,7 +294,7 @@ class _CountryDetailStage extends StatelessWidget {
                 hasScrollBody: false,
                 child: EmptyState(
                   title: l10n.catalogueUnavailable,
-                  message: l10n.catalogueDisclaimer,
+                  subtitle: l10n.catalogueDisclaimer,
                 ),
               )
             else
