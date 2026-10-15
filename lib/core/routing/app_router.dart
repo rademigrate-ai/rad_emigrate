@@ -112,7 +112,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
           GoRoute(
             path: '/ai-assistant',
-            builder: (_, _) => const AiAssistantPage(),
+            builder: (_, state) => AiAssistantPage(
+              contextLabel: state.uri.queryParameters['context'],
+            ),
           ),
           GoRoute(
             path: '/world-clock',
