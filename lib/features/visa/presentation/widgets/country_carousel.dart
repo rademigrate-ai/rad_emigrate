@@ -110,8 +110,8 @@ class _CountryCarouselState extends State<CountryCarousel> {
                   : 'Swipe for more destinations',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ],
@@ -149,7 +149,10 @@ class _CountryCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CountryPhotography.image(code: country.code, fit: BoxFit.cover),
+                  CountryPhotography.image(
+                    code: country.code,
+                    fit: BoxFit.cover,
+                  ),
                   const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -245,15 +248,16 @@ class CountrySearchPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final q = query.trim().toLowerCase();
-    final filtered = countries
-        .where(
-          (c) =>
-              q.isEmpty ||
-              c.name.toLowerCase().contains(q) ||
-              c.code.toLowerCase().contains(q),
-        )
-        .toList()
-      ..sort((a, b) => a.name.compareTo(b.name));
+    final filtered =
+        countries
+            .where(
+              (c) =>
+                  q.isEmpty ||
+                  c.name.toLowerCase().contains(q) ||
+                  c.code.toLowerCase().contains(q),
+            )
+            .toList()
+          ..sort((a, b) => a.name.compareTo(b.name));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
