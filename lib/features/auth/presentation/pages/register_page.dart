@@ -88,6 +88,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         onPressed: () => ref.read(localeControllerProvider.notifier).toggle(),
       ),
       form: MotionReveal(
+        key: ValueKey(ref.watch(localeControllerProvider).isRtl),
         offset: const Offset(0, 0.04),
         child: Form(
           key: _formKey,
