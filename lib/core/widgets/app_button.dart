@@ -60,7 +60,18 @@ class _AppButtonState extends State<AppButton> {
                   Icon(widget.icon, size: 18),
                   const SizedBox(width: 8),
                 ],
-                Text(widget.label),
+                // Localized labels (e.g. FA) can be much longer than EN ones.
+                // Flexible keeps the label inside the button bounds instead of
+                // overflowing the Row when the locale changes.
+                Flexible(
+                  child: Text(
+                    widget.label,
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
     );

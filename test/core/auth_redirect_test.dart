@@ -206,4 +206,135 @@ void main() {
       );
     });
   });
+
+  group('public compatibility, unknown routes, and OTP context', () {
+    test('/signup behaves like /register', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/signup'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/signup'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: true,
+        ),
+        '/dashboard',
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/signup'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: false,
+        ),
+        '/profile-completion?from=%2Fdashboard',
+      );
+    });
+
+    test('unknown routes fall through to NotFound for every auth state', () {
+      for (final path in [
+        '/does-not-exist',
+        '/loginn',
+        '/dashboard/extra',
+        '/register/x',
+      ]) {
+        expect(
+          authRedirect(
+            uri: Uri.parse(path),
+            isRestoring: false,
+            isAuthenticated: false,
+            profileComplete: false,
+          ),
+          isNull,
+          reason: '$path must reach NotFound, not login',
+        );
+      }
+      expect(
+        authRedirect(
+          uri: Uri.parse('/does-not-exist'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/does-not-exist'),
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
+
+    test('known protected routes still enforce authentication', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/dashboard'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        '/login?from=%2Fdashboard',
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/admin/operations'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        '/login?from=%2Fadmin%2Foperations',
+      );
+    });
+
+    test('/otp without a verification flow context redirects to login', () {
+      for (final path in [
+        '/otp',
+        '/otp?mode=signup',
+        '/otp?identifier=not-an-email',
+      ]) {
+        expect(
+          authRedirect(
+            uri: Uri.parse(path),
+            isRestoring: false,
+            isAuthenticated: false,
+            profileComplete: false,
+          ),
+          '/login',
+          reason: '$path has no flow context',
+        );
+      }
+    });
+
+    test('/otp with a pending verification flow stays available', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/otp?identifier=qa%40example.test'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/otp?identifier=qa%40example.test&mode=signup'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
+  });
 }

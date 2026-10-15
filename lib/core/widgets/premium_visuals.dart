@@ -82,13 +82,20 @@ class EditorialKicker extends StatelessWidget {
       children: [
         Container(width: 28, height: 2, color: AppColors.primaryRed),
         const SizedBox(width: 10),
-        Text(
-          '$index / $label',
-          style: TextStyle(
-            color: color,
-            fontSize: 11,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.15,
+        // The kicker must never overflow narrow mobile headers; ellipsize
+        // instead of breaking layout when the label is long.
+        Flexible(
+          child: Text(
+            '$index / $label',
+            maxLines: 1,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.15,
+            ),
           ),
         ),
       ],
