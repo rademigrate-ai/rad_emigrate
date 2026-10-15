@@ -104,6 +104,7 @@ if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
 fi
 
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
 python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py
 

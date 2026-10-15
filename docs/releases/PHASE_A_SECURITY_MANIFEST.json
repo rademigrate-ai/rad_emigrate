@@ -53,7 +53,8 @@
     "auth_jwt_vendor_definition_sha256": "a03aab653b8f1edad4bba3c471af00f94674ef60df43a69765e652e719f23d9b",
     "scaffold": "Raw Supabase PG17.11 + installed vendor Storage SQL and Auth jwt/uid helper definitions; NOT production-equivalent, HTTP or recovery acceptance",
     "prior_adapter_attempts": "Retained outside Git: vendor role/search_path/bootstrap, missing Auth scaffolding, split-session and test fixture corrections. No five-migration SQL edits.",
-    "production_access": "NONE"
+    "production_access": "NONE",
+    "missing_model_check_path": "PASS missing_check_backfill.log; exact fifth migration restores definitions/validation, rows and ledger unchanged"
   },
   "local_core_fingerprint_delta": {
     "baseline": {
@@ -79,7 +80,7 @@
     "only_changed_dimension": "policies",
     "note": "Windows CRLF function-body hash differs from Linux Git/LF golden; unchanged between local baseline/final. CI retains and verifies all eight Linux golden dimensions."
   },
-  "static_regressions": "6 PASS",
+  "static_regressions": "7 PASS",
   "shell_syntax": "PASS",
   "diff_check": "PASS",
   "evidence_log_hashes": [
@@ -137,6 +138,11 @@
       "local_file": "verified_reapply_behavior.log",
       "sha256": "cdb23a5e2edf7143e6c1f27b65469b7f62aa53dee4426c4a3c80cc80a00969db",
       "native_exit": 0
+    },
+    {
+      "local_file": "missing_check_backfill.log",
+      "sha256": "9218a7f628972825c3e5d8b4a95aba609842cf6d790512ae87c36f9882fdf085",
+      "native_exit": 0
     }
   ],
   "ci": "PENDING on committed PR head; do not infer historical acceptance",
@@ -153,7 +159,8 @@
     "supabase/reconciliation/security_regression.sql",
     "supabase/tests/phase_a_security.sql",
     "docs/releases/PHASE_A_SECURITY_MIGRATIONS.md",
-    "docs/releases/PHASE_A_SECURITY_MANIFEST.json"
+    "docs/releases/PHASE_A_SECURITY_MANIFEST.json",
+    "supabase/tests/phase_a_constraint_backfill.sql"
   ],
   "production_impact": "See PHASE_A_SECURITY_MIGRATIONS.md: consultation/Admin/AI Edge integration dependencies block applying SQL to current product",
   "safety": "No production mutation, deployment, secret/Auth/Vault/Edge configuration changes or merge. Shared worktree and Phoenix unchanged."

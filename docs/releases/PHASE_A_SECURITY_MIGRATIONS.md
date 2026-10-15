@@ -142,8 +142,13 @@ role/owner denials, three validated CHECKs and invalid values, both Feed guards,
 Storage old/new path restrictions, consultation invalid input/direct INSERT and
 3/hour + 10/day limits. The existing HTTP harness adds unique atomic reservations
 under concurrency, real two-user ownership and explicit approval-to-Feed tests.
-All test identities/content are synthetic in disposable databases; SQL fixtures
-ROLL BACK. CI runs clean reconstruction, security/HTTP regressions, Flutter format/
+All test identities/content are synthetic in disposable databases; data fixtures
+ROLL BACK. A separate disposable-only DDL regression removes the three model
+CHECKs to simulate the historical missing case, runs the exact fifth migration,
+then requires identical restored definitions, validated constraints and unchanged
+model/ledger row counts. It deliberately restores the expected schema rather
+than using a transaction that the migration's own COMMIT would end.
+CI runs clean reconstruction, security/HTTP regressions, Flutter format/
 analyze/full tests, Web/Android builds, routing and credential checks on the PR head.
 
 Local raw logs live outside Git under `%LOCALAPPDATA%\RADPhaseASecurity-20261015`.

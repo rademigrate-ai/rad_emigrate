@@ -27,7 +27,8 @@ class PhaseASecurity(unittest.TestCase):
 
     def test_reconstruction_does_not_omit_security_files(self):
         script=(ROOT/'scripts/verify_migration_reconstruction.sh').read_text()
-        for name in FILES:self.assertEqual(script.count(name),2,name)
+        for name in FILES:
+            self.assertEqual(script.count(name),3 if name.startswith('20261012230000') else 2,name)
         self.assertIn('phase_a_security.sql',script)
 
     def test_full_core_fingerprint_guard_preserved(self):
@@ -50,5 +51,14 @@ class PhaseASecurity(unittest.TestCase):
         self.assertTrue(sql.rstrip().endswith('rollback;'))
         for required in ['cross-owner quota','direct consultation insert','fourth hourly','eleventh daily','negative latency','both active human feed guards']:
             self.assertIn(required,sql)
+
+    def test_missing_check_backfill_uses_exact_migration(self):
+        sql=(ROOT/'supabase/tests/phase_a_constraint_backfill.sql').read_text()
+        self.assertIn('\\set phase_a_migration ../migrations/20261012230000_ai_models_check_constraints_alignment.sql',sql)
+        self.assertIn('\\ir :phase_a_migration',sql)
+        self.assertIn('Backfilled CHECK definition differs',sql)
+        self.assertIn('Backfill changed rows or migration history',sql)
+        for name in ('verify_clean_schema.sh','verify_migration_reconstruction.sh'):
+            self.assertIn('phase_a_constraint_backfill.sql',(ROOT/'scripts'/name).read_text())
 
 if __name__=='__main__':unittest.main()
