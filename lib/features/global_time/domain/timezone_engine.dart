@@ -41,7 +41,8 @@ abstract final class TimezoneEngine {
         return tz.getLocation('UTC');
       } catch (_) {
         // Database not loaded yet — never rethrow into the widget tree.
-        return tz.Location('UTC', [0], [0], [const tz.TimeZone.noDST(0)]);
+        // [tz.UTC] is a compile-time Location and does not require the DB.
+        return tz.UTC;
       }
     }
   }
