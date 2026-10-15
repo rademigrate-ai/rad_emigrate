@@ -66,6 +66,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             LoginPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
+      GoRoute(path: '/signup', redirect: (_, __) => '/register'),
       GoRoute(
         path: '/forgot-password',
         builder: (_, _) => const ForgotPasswordPage(),
