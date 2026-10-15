@@ -2,6 +2,8 @@ const Set<String> _publicRoutes = {
   '/splash',
   '/login',
   '/register',
+  // BUG-002: /signup is a compatibility alias for /register.
+  '/signup',
   '/otp',
   '/forgot-password',
   '/reset-password',
@@ -32,6 +34,24 @@ bool _isProtectedPath(String location) {
   return false;
 }
 
+/// True when the location is a route the router actually declares.
+///
+/// Unknown locations must fall through to the router's NotFound page instead
+/// of being treated as protected destinations (they previously redirected
+/// unauthenticated visitors to /login).
+bool _isKnownLocation(String location) =>
+    _publicRoutes.contains(location) || _isProtectedPath(location);
+
+/// True when an OTP page visit carries a pending verification flow.
+///
+/// The verification form may only be presented when a real flow handed over
+/// an email identifier (register or login-with-OTP). Bare /otp visits have no
+/// context and must not show a code-entry form.
+bool hasOtpFlowContext(Uri uri) {
+  final identifier = uri.queryParameters['identifier'] ?? '';
+  return identifier.contains('@');
+}
+
 /// Resolves auth routing while distinguishing session restoration from logout.
 ///
 /// Unknown paths are left unhandled so GoRouter [errorBuilder] can show
@@ -51,6 +71,10 @@ String? authRedirect({
 }) {
   final location = uri.path;
 
+  // Unknown routes are never redirected for auth; the router renders its
+  // NotFound page for them (BUG-003).
+  if (!_isKnownLocation(location)) return null;
+
   if (isRestoring &&
       location != '/splash' &&
       !_publicRoutes.contains(location) &&
@@ -66,8 +90,13 @@ String? authRedirect({
   // Recovery deep-link: keep user on set-password even if a session exists.
   if (location == '/reset-password') return null;
 
+  // BUG-004: /otp without a pending verification flow goes back to login
+  // instead of presenting a code-entry form with no context.
+  if (location == '/otp' && !hasOtpFlowContext(uri)) {
+    return '/login';
+  }
+
   // Unauthenticated users: only force login for known protected routes.
-  // Unknown routes fall through to GoRouter errorBuilder (NotFound).
   if (!isAuthenticated && _isProtectedPath(location)) {
     return Uri(
       path: '/login',
@@ -89,9 +118,9 @@ String? authRedirect({
 
   if (isAuthenticated &&
       !profileComplete &&
+      _isProtectedPath(location) &&
       location != '/profile-completion' &&
-      location != '/profile' &&
-      _isProtectedPath(location)) {
+      location != '/profile') {
     return Uri(
       path: '/profile-completion',
       queryParameters: {'from': restoredProtectedDestination(uri.toString())},
