@@ -123,16 +123,16 @@ class VisaRepository {
         title: source['title'] as String,
         url: source['url'] as String,
         publisher: source['publisher'] as String,
-        retrievedAt: DateTime.parse(source['retrieved_at'] as String),
+        retrievedAt: DateTime.parse(source['retrieved_at'].toString()),
       ),
     );
   }
 
   Map<String, dynamic> _first(dynamic value) {
-    if (value is List && value.isNotEmpty) {
-      return value.first as Map<String, dynamic>;
+    final rows = value as List<dynamic>?;
+    if (rows == null || rows.isEmpty) {
+      throw const FormatException('Missing localized catalogue content.');
     }
-    if (value is Map<String, dynamic>) return value;
-    throw StateError('Expected localized row');
+    return rows.first as Map<String, dynamic>;
   }
 }
