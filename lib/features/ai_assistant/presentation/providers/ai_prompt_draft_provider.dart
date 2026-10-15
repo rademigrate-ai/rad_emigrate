@@ -12,12 +12,13 @@ class AiPromptDraft {
 
 class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
   AiPromptDraftNotifier() : super(const AiPromptDraft()) {
-    _load();
+    ready = _load();
   }
 
   static const _prefPrompt = 'rad_ai_pending_prompt';
   static const _prefContext = 'rad_ai_pending_context';
   bool _loaded = false;
+  late final Future<void> ready;
 
   Future<void> _load() async {
     try {
@@ -47,6 +48,7 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
   }
 
   Future<String?> consumePrompt() async {
+    await ready;
     _loaded = true;
     final p = state.prompt;
     state = const AiPromptDraft();
