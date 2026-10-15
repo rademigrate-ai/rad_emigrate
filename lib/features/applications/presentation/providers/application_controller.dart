@@ -15,10 +15,12 @@ final _prefsProvider = FutureProvider<SharedPreferences>((ref) {
   return SharedPreferences.getInstance();
 });
 
-/// Resolves once [SharedPreferences] is ready so production never binds an
-/// empty no-op repository that permanently hides remote applications.
+/// Real repository once SharedPreferences is ready; otherwise null so the
+/// controller stays in loading instead of permanently binding an empty repo.
 final applicationRepositoryProvider = Provider<ApplicationRepository?>((ref) {
-  final prefs = ref.watch(_prefsProvider).valueOrNull;
+  // Re-subscribe so the provider rebuilds when prefs complete.
+  final prefsAsync = ref.watch(_prefsProvider);
+  final prefs = prefsAsync.valueOrNull;
   if (prefs == null) return null;
   final config = ref.watch(appConfigProvider);
   return ApplicationRepositoryImpl(
@@ -37,10 +39,6 @@ final applicationControllerProvider =
     >((ref) {
       final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
       final repository = ref.watch(applicationRepositoryProvider);
-      // Stay loading until prefs (and thus the real repository) are available.
-      if (repository == null) {
-        return ApplicationController.pending();
-      }
       return ApplicationController(repository, userId);
     });
 
@@ -50,12 +48,6 @@ class ApplicationController
     : super(const AsyncValue.loading()) {
     load();
   }
-
-  /// Placeholder until SharedPreferences unlocks the real repository.
-  ApplicationController.pending()
-    : _repository = null,
-      _userId = null,
-      super(const AsyncValue.loading());
 
   final ApplicationRepository? _repository;
   final String? _userId;
@@ -76,6 +68,8 @@ class ApplicationController
   }
 
   Future<void> updateStatus(String id, ApplicationStatus status) async {
+    final repository = _repository;
+    if (repository == null) return;
     final current = state.valueOrNull ?? [];
     VisaApplication? app;
     for (final a in current) {
@@ -85,7 +79,7 @@ class ApplicationController
       }
     }
     if (app == null) return;
-    final updated = await _repository!.updateApplication(
+    final updated = await repository.updateApplication(
       app.copyWith(status: status),
     );
     final next = current.map((a) => a.id == id ? updated : a).toList();
@@ -97,7 +91,11 @@ class ApplicationController
     required String programName,
     required String country,
   }) async {
-    final created = await _repository!.createApplication(
+    final repository = _repository;
+    if (repository == null) {
+      throw StateError('Application repository is not ready yet.');
+    }
+    final created = await repository.createApplication(
       VisaApplication(
         id: 'temp',
         title: title,
