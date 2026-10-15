@@ -39,7 +39,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     // Bare /otp without an identifier is not a valid entry point.
     if (widget.identifier == null || widget.identifier!.trim().isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
+        if (!context.mounted) return;
         context.go(widget.signup ? '/register' : '/login');
       });
     }
