@@ -442,7 +442,8 @@ const _visualFeed = [
     slug: 'visual-checklist',
     category: 'Visual QA',
     title: 'Sample pathway checklist',
-    summary: 'Synthetic review content used solely to verify the visual hierarchy of published-update cards.',
+    summary:
+        'Synthetic review content used solely to verify the visual hierarchy of published-update cards.',
     saved: false,
     publishedAt: null,
   ),
@@ -451,7 +452,8 @@ const _visualFeed = [
     slug: 'visual-source',
     category: 'Visual QA',
     title: 'Sample source review',
-    summary: 'A controlled non-customer record for testing information grouping and scanability.',
+    summary:
+        'A controlled non-customer record for testing information grouping and scanability.',
     saved: true,
     publishedAt: null,
   ),
@@ -465,6 +467,7 @@ final _visualCatalog = VisaCatalog(
       code: 'SMP',
       flagEmoji: '◉',
       slug: 'sample-destination',
+      summary: 'Visual QA sample summary',
     ),
   ],
   categories: const [
