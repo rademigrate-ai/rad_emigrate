@@ -263,10 +263,7 @@ void main() {
     });
 
     test('unknown routes fall through to NotFound for every auth state', () {
-      for (final path in [
-        '/does-not-exist',
-        '/totally/missing',
-      ]) {
+      for (final path in ['/does-not-exist', '/totally/missing']) {
         expect(
           authRedirect(
             uri: Uri.parse(path),
