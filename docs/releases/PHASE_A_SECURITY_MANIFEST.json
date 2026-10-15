@@ -1,0 +1,160 @@
+{
+  "base_main": "28154f1667ab4298cfa93c396e32b9fcb9662f2d",
+  "source_branch": "handoff/codex-stage1-stage2-20261010",
+  "source_sha": "1809fb733f3924bf5295a4c7e2055ff3ae80030c",
+  "migrations": [
+    {
+      "path": "supabase/migrations/20261010010000_stage1_p0_security_completion.sql",
+      "version": "20261010010000",
+      "sha256_git_lf": "76a28a9aa6294f6a8ca8f108394b801a2ee85f85827104246324f69787610bd5",
+      "bytes": 14786
+    },
+    {
+      "path": "supabase/migrations/20261010055013_stage1_atomic_ai_quota_reservation.sql",
+      "version": "20261010055013",
+      "sha256_git_lf": "51ab2b39fb63655fea7e67e1a7aef69bb1ba15297877bc39168b90b2b1c8b646",
+      "bytes": 2774
+    },
+    {
+      "path": "supabase/migrations/20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql",
+      "version": "20261010070000",
+      "sha256_git_lf": "b94878391d4fddb9887e74d9a2a1dc809360de46f989a3d599a5471cc7c42fc5",
+      "bytes": 2844
+    },
+    {
+      "path": "supabase/migrations/20261012110945_stage1_security_abuse_storage_alignment.sql",
+      "version": "20261012110945",
+      "sha256_git_lf": "9de2fdb764aae7068c9355b07cd3593823bd66b5da73448687693fe5cc535119",
+      "bytes": 3978
+    },
+    {
+      "path": "supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql",
+      "version": "20261012230000",
+      "sha256_git_lf": "d4563930461176e6481df29cf587c9dca0eb7b4987395c05af2f613758452fbc",
+      "bytes": 2429
+    }
+  ],
+  "migration_source_integrity": "BYTE EXACT Git/LF",
+  "total_active_migrations": 51,
+  "new_migrations": 5,
+  "historical_main_migrations": 46,
+  "historical_production_reported_ledger": 47,
+  "production_history_repair": "NOT PERFORMED / NOT AUTHORIZED",
+  "local_rehearsal": {
+    "target": "rad_phase_a_clean_20261015",
+    "postgres": "17.11",
+    "network": "none, no ports",
+    "repository_51_replay": "PASS one-session; see clean_51_migration_replay.log",
+    "security_catalog_regression": "PASS clean_security_regression.log",
+    "behavioral_sql": "PASS final_phase_a_behavior.log",
+    "five_reapply_and_behavior": "PASS",
+    "existing_routing_discovery_research_regression": "PASS final_existing_routing.log",
+    "ledger": "51, final 20261012230000",
+    "auth_jwt_vendor_definition_sha256": "a03aab653b8f1edad4bba3c471af00f94674ef60df43a69765e652e719f23d9b",
+    "scaffold": "Raw Supabase PG17.11 + installed vendor Storage SQL and Auth jwt/uid helper definitions; NOT production-equivalent, HTTP or recovery acceptance",
+    "prior_adapter_attempts": "Retained outside Git: vendor role/search_path/bootstrap, missing Auth scaffolding, split-session and test fixture corrections. No five-migration SQL edits.",
+    "production_access": "NONE"
+  },
+  "local_core_fingerprint_delta": {
+    "baseline": {
+      "rls": "f774d2521876438405d177897df727d3",
+      "bucket": "4082dda1bd1da983bda51a025c66ac93",
+      "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+      "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+      "policies": "c52042a2489e9129526327c3fa0933b9",
+      "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+      "functions": "85e036ad34a619ad440006f3ac54ab14",
+      "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+    },
+    "final": {
+      "rls": "f774d2521876438405d177897df727d3",
+      "bucket": "4082dda1bd1da983bda51a025c66ac93",
+      "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+      "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+      "policies": "5b8620228bf8c9346092eb66f1afa4cb",
+      "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+      "functions": "85e036ad34a619ad440006f3ac54ab14",
+      "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+    },
+    "only_changed_dimension": "policies",
+    "note": "Windows CRLF function-body hash differs from Linux Git/LF golden; unchanged between local baseline/final. CI retains and verifies all eight Linux golden dimensions."
+  },
+  "static_regressions": "6 PASS",
+  "shell_syntax": "PASS",
+  "diff_check": "PASS",
+  "evidence_log_hashes": [
+    {
+      "local_file": "clean_51_migration_replay.log",
+      "sha256": "a1deb849ab266bd6971dee0bcf1c723320511f2c3e768fc3302778adc5d8601c",
+      "native_exit": 0
+    },
+    {
+      "local_file": "clean_security_regression.log",
+      "sha256": "386cf66ee01d73243c97fecfe482c8c888f0159cf77e13adae6b6bf630a33a64",
+      "native_exit": 0
+    },
+    {
+      "local_file": "final_existing_routing.log",
+      "sha256": "9fa299aaaa72745e073277a8741d417bc63d9e2b38aee1811e8d25493b056782",
+      "native_exit": 0
+    },
+    {
+      "local_file": "final_phase_a_behavior.log",
+      "sha256": "cdb23a5e2edf7143e6c1f27b65469b7f62aa53dee4426c4a3c80cc80a00969db",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_ledger.log",
+      "sha256": "dc044fc5e66a9cbadaa45fc8b1c71be6014cb712fb826bc820ae458ebf9824e4",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_20261010010000_stage1_p0_security_completion.log",
+      "sha256": "c40711aac2a191aaeea8f58ba4da329cc2fa2a2a1a40553636680eae452019ed",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_20261010055013_stage1_atomic_ai_quota_reservation.log",
+      "sha256": "fdcf778ac807a3f41eacf1365877a33865a06ffd4d10eabc4fd5065802aed2cc",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_20261010070000_stage1_ssrf_ipv4_mapped_ipv6.log",
+      "sha256": "f9a15de5cbd24ea1832572725ff755f39cd9f14787d0c86f815372229d6f80f3",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_20261012110945_stage1_security_abuse_storage_alignment.log",
+      "sha256": "2a2e49ccb65ac1199dd2a5d8cc7dff59d2fbd9c2c23019f19e103c1ab90fdba5",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_20261012230000_ai_models_check_constraints_alignment.log",
+      "sha256": "17151a06db1832f0dec7dc8862a569c0d569d06579df968942f8601d6099357f",
+      "native_exit": 0
+    },
+    {
+      "local_file": "verified_reapply_behavior.log",
+      "sha256": "cdb23a5e2edf7143e6c1f27b65469b7f62aa53dee4426c4a3c80cc80a00969db",
+      "native_exit": 0
+    }
+  ],
+  "ci": "PENDING on committed PR head; do not infer historical acceptance",
+  "included_paths": [
+    "supabase/migrations/20261010010000_stage1_p0_security_completion.sql",
+    "supabase/migrations/20261010055013_stage1_atomic_ai_quota_reservation.sql",
+    "supabase/migrations/20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql",
+    "supabase/migrations/20261012110945_stage1_security_abuse_storage_alignment.sql",
+    "supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql",
+    "scripts/verify_clean_schema.sh",
+    "scripts/verify_migration_reconstruction.sh",
+    "scripts/verify_local_auth_isolation.py",
+    "scripts/tests/test_phase_a_security.py",
+    "supabase/reconciliation/security_regression.sql",
+    "supabase/tests/phase_a_security.sql",
+    "docs/releases/PHASE_A_SECURITY_MIGRATIONS.md",
+    "docs/releases/PHASE_A_SECURITY_MANIFEST.json"
+  ],
+  "production_impact": "See PHASE_A_SECURITY_MIGRATIONS.md: consultation/Admin/AI Edge integration dependencies block applying SQL to current product",
+  "safety": "No production mutation, deployment, secret/Auth/Vault/Edge configuration changes or merge. Shared worktree and Phoenix unchanged."
+}
