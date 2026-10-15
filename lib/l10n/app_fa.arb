@@ -235,5 +235,21 @@
   "healthUnknown": "بررسی نشده",
   "modelSaveFailed": "تنظیمات مدل ذخیره نشد. تغییرات شما حفظ شده است؛ دوباره تلاش کنید.",
   "sourceQueryRejected": "از نشانی عمومی HTTPS بدون پارامتر پرس‌وجو استفاده کنید. نشانی‌های منبع دارای پارامتر پرس‌وجو هنوز پشتیبانی نمی‌شوند.",
-  "lastProviderCheck": "آخرین بررسی ارائه‌دهنده"
+  "lastProviderCheck": "آخرین بررسی ارائه‌دهنده",
+  "guestVisitor": "کاربر مهمان",
+  "guestProfileSubtitle": "برای دسترسی به نقشه راه اختصاصی، پیگیری پرونده، مدیریت مدارک و گفت‌وگو با هوش مصنوعی وارد شوید.",
+  "guestWhySignIn": "امکانات ویژه حساب کاربری",
+  "guestTrackCasesTitle": "پیگیری پرونده‌ها",
+  "guestTrackCasesBody": "مشاهده وضعیت لحظه‌ای پرونده و مراحل صدور ویزا.",
+  "guestManageDocsTitle": "صندوق امن مدارک",
+  "guestManageDocsBody": "بارگذاری، اعتبارسنجی و نگهداری اسناد هویتی و تحصیلی.",
+  "guestAiTitle": "دستیار هوشمند مهاجرت",
+  "guestAiBody": "راهنمایی اختصاصی به همراه تاریخچه گفت‌وگوها.",
+  "guestConsultationTitle": "مشاوره با متخصصین",
+  "guestConsultationBody": "درخواست و رزرو وقت مشاوره با مشاوران رسمی راد.",
+  "signInToViewConsultations": "برای مشاهده تاریخچه مشاوره‌ها وارد شوید",
+  "signInToChatAi": "برای گفت‌وگو با دستیار هوشمند وارد شوید",
+  "signInToSave": "برای ذخیره خبرها وارد شوید",
+  "consultationDraftRestored": "پیش‌نویس مشاوره شما بازیابی شد.",
+  "aiPromptRestored": "پرسش شما بازیابی شد."
 }

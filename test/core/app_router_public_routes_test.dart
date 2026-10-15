@@ -106,9 +106,20 @@ void main() {
     tester,
   ) async {
     await _pumpApp(tester);
-    await _go(tester, '/dashboard');
+    await _go(tester, '/applications');
 
     expect(find.byType(LoginPage), findsOneWidget);
+    expect(find.byType(NotFoundPage), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('public in-app routes allow guest access without forcing login', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await _go(tester, '/dashboard');
+
+    expect(find.byType(LoginPage), findsNothing);
     expect(find.byType(NotFoundPage), findsNothing);
     expect(tester.takeException(), isNull);
   });

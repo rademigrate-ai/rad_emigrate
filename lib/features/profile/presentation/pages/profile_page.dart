@@ -151,63 +151,211 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
+    final isGuest = session == null || !session.isAuthenticated;
     final profileState = ref.watch(profileControllerProvider);
     final themePref = ref.watch(themeControllerProvider);
     final localePref = ref.watch(localeControllerProvider);
-    profileState.whenData(_hydrate);
+
+    if (!isGuest) {
+      profileState.whenData(_hydrate);
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.profile),
         actions: [
-          if (!_editing)
+          if (!isGuest) ...[
+            if (!_editing)
+              IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                tooltip: l10n.settings,
+                onPressed: () => setState(() => _editing = true),
+              ),
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
-              tooltip: l10n.settings,
-              onPressed: () => setState(() => _editing = true),
+              icon: const Icon(Icons.logout),
+              tooltip: l10n.logout,
+              onPressed: _saving
+                  ? null
+                  : () async {
+                      await ref.read(authControllerProvider.notifier).logout();
+                      if (context.mounted) context.go('/login');
+                    },
             ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: l10n.logout,
-            onPressed: _saving
-                ? null
-                : () async {
-                    await ref.read(authControllerProvider.notifier).logout();
-                    if (context.mounted) context.go('/login');
-                  },
-          ),
-          const SizedBox(width: 8),
+            const SizedBox(width: 8),
+          ],
         ],
       ),
-      body: profileState.when(
-        skipError: true,
-        loading: () => _saving
-            ? _ProfileContent(
+      body: isGuest
+          ? _buildGuestProfileContent(context, themePref, localePref, l10n)
+          : profileState.when(
+              skipError: true,
+              loading: () => _saving
+                  ? _ProfileContent(
+                      child: _buildProfileContent(
+                        context,
+                        null,
+                        session,
+                        themePref,
+                        localePref,
+                        l10n,
+                      ),
+                    )
+                  : LoadingState.section(message: l10n.loading),
+              error: (e, _) => ErrorState(
+                message: l10n.errorGeneric,
+                onRetry: () =>
+                    ref.read(profileControllerProvider.notifier).load(),
+              ),
+              data: (profile) => _ProfileContent(
                 child: _buildProfileContent(
                   context,
-                  null,
+                  profile,
                   session,
                   themePref,
                   localePref,
                   l10n,
                 ),
-              )
-            : LoadingState.section(message: l10n.loading),
-        error: (e, _) => ErrorState(
-          message: l10n.errorGeneric,
-          onRetry: () => ref.read(profileControllerProvider.notifier).load(),
-        ),
-        data: (profile) => _ProfileContent(
-          child: _buildProfileContent(
-            context,
-            profile,
-            session,
-            themePref,
-            localePref,
-            l10n,
+              ),
+            ),
+    );
+  }
+
+  Widget _buildGuestProfileContent(
+    BuildContext context,
+    AppThemePreference themePref,
+    AppLocale localePref,
+    AppLocalizations l10n,
+  ) {
+    final theme = Theme.of(context);
+    return _ProfileContent(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        children: [
+          AppCard(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: AppColors.primaryRed.withValues(alpha: 0.15),
+                  child: const Icon(
+                    Icons.person_outline,
+                    size: 38,
+                    color: AppColors.primaryRed,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.guestVisitor,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.guestProfileSubtitle,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton(
+                        label: l10n.signIn,
+                        icon: Icons.login_rounded,
+                        onPressed: () => context.go('/login?from=%2Fprofile'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppButton(
+                        label: l10n.createAccount,
+                        variant: AppButtonVariant.secondary,
+                        icon: Icons.person_add_outlined,
+                        onPressed: () =>
+                            context.go('/register?from=%2Fprofile'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 24),
+          Text(
+            l10n.guestWhySignIn,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _GuestFeatureTile(
+            icon: Icons.assignment_outlined,
+            title: l10n.guestTrackCasesTitle,
+            subtitle: l10n.guestTrackCasesBody,
+          ),
+          const SizedBox(height: 8),
+          _GuestFeatureTile(
+            icon: Icons.folder_outlined,
+            title: l10n.guestManageDocsTitle,
+            subtitle: l10n.guestManageDocsBody,
+          ),
+          const SizedBox(height: 8),
+          _GuestFeatureTile(
+            icon: Icons.smart_toy_outlined,
+            title: l10n.guestAiTitle,
+            subtitle: l10n.guestAiBody,
+          ),
+          const SizedBox(height: 8),
+          _GuestFeatureTile(
+            icon: Icons.support_agent_outlined,
+            title: l10n.guestConsultationTitle,
+            subtitle: l10n.guestConsultationBody,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            l10n.settings,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              children: [
+                _PreferenceSelector<String>(
+                  icon: Icons.language,
+                  title: l10n.language,
+                  selected: localePref.languageCode,
+                  options: {'en': l10n.english, 'fa': l10n.persian},
+                  onSelected: (code) => ref
+                      .read(localeControllerProvider.notifier)
+                      .setLocale(AppLocale.fromLanguageCode(code)),
+                ),
+                const Divider(height: 24),
+                _PreferenceSelector<AppThemePreference>(
+                  icon: Icons.brightness_6_outlined,
+                  title: l10n.theme,
+                  selected: themePref,
+                  options: {
+                    AppThemePreference.light: l10n.themeLight,
+                    AppThemePreference.dark: l10n.themeDark,
+                    AppThemePreference.system: l10n.themeSystem,
+                  },
+                  onSelected: (preference) => ref
+                      .read(themeControllerProvider.notifier)
+                      .setPreference(preference),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -538,6 +686,59 @@ class _PreferenceSelector<T> extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _GuestFeatureTile extends StatelessWidget {
+  const _GuestFeatureTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AppCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.teal.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: AppColors.teal, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

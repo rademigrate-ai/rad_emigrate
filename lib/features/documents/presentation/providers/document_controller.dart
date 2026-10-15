@@ -49,6 +49,10 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
   final String? _userId;
 
   Future<void> load() async {
+    if (_userId == null || _userId.isEmpty) {
+      state = const AsyncValue.data([]);
+      return;
+    }
     state = const AsyncValue.loading();
     try {
       final items = await _repository.listDocuments(userId: _userId);

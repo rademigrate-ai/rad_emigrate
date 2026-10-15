@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -13,10 +14,16 @@ import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
-  const OtpPage({super.key, this.identifier, this.signup = false});
+  const OtpPage({
+    super.key,
+    this.identifier,
+    this.signup = false,
+    this.destination,
+  });
 
   final String? identifier;
   final bool signup;
+  final String? destination;
 
   @override
   ConsumerState<OtpPage> createState() => _OtpPageState();
@@ -94,9 +101,16 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       final session = ref.read(authControllerProvider).valueOrNull;
       if (mounted) {
         if (session != null && !session.profileComplete) {
-          context.go('/profile-completion');
+          context.go(
+            widget.destination != null
+                ? Uri(
+                    path: '/profile-completion',
+                    queryParameters: {'from': widget.destination!},
+                  ).toString()
+                : '/profile-completion',
+          );
         } else {
-          context.go('/dashboard');
+          context.go(restoredProtectedDestination(widget.destination));
         }
       }
     } catch (e) {

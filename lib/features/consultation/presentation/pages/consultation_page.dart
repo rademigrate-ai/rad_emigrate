@@ -9,6 +9,7 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../providers/consultation_draft_provider.dart';
 
 /// Explicit user-initiated consultation / human-handoff request.
 class ConsultationPage extends ConsumerStatefulWidget {
@@ -33,20 +34,58 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   @override
   void initState() {
     super.initState();
-    _topic = TextEditingController(text: widget.initialTopic ?? '');
-    _message = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadMine());
+    final draft = ref.read(consultationDraftProvider);
+    final initialTopic = widget.initialTopic?.trim();
+    final effectiveTopic = (initialTopic != null && initialTopic.isNotEmpty)
+        ? initialTopic
+        : draft.topic;
+    _topic = TextEditingController(text: effectiveTopic);
+    _message = TextEditingController(text: draft.message);
+
+    _topic.addListener(_onFieldChanged);
+    _message.addListener(_onFieldChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(consultationDraftProvider.notifier).ready;
+      if (!mounted) return;
+      final restored = ref.read(consultationDraftProvider);
+      if (_topic.text.isEmpty && restored.topic.isNotEmpty) {
+        _topic.text = restored.topic;
+      }
+      if (_message.text.isEmpty && restored.message.isNotEmpty) {
+        _message.text = restored.message;
+      }
+      await _loadMine();
+    });
+  }
+
+  void _onFieldChanged() {
+    ref
+        .read(consultationDraftProvider.notifier)
+        .updateDraft(topic: _topic.text, message: _message.text);
   }
 
   @override
   void dispose() {
+    _topic.removeListener(_onFieldChanged);
+    _message.removeListener(_onFieldChanged);
     _topic.dispose();
     _message.dispose();
     super.dispose();
   }
 
   Future<void> _loadMine() async {
-    final client = ref.read(supabaseClientServiceProvider).client;
+    final session = ref.read(authControllerProvider).valueOrNull;
+    if (session?.authenticated != true || session?.userId == null) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    final supabase = ref.read(supabaseClientServiceProvider);
+    if (!supabase.isInitialized) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    final client = supabase.client;
     final uid = client.auth.currentUser?.id;
     if (uid == null) {
       if (mounted) setState(() => _historyLoading = false);
@@ -89,14 +128,26 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       setState(() => _error = l10n.consultationFieldsRequired);
       return;
     }
+
+    final session = ref.read(authControllerProvider).valueOrNull;
+    if (session?.authenticated != true) {
+      if (mounted) {
+        context.go('/login?from=%2Fconsultation');
+      }
+      return;
+    }
+
     if (_submitting) return;
     setState(() {
       _submitting = true;
       _error = null;
       _success = null;
     });
+
     try {
-      final client = ref.read(supabaseClientServiceProvider).client;
+      final supabase = ref.read(supabaseClientServiceProvider);
+      if (!supabase.isInitialized) throw Exception('supabase_not_initialized');
+      final client = supabase.client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
       await client.from('consultation_requests').insert({
@@ -105,6 +156,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
         'message': message,
         'status': 'submitted',
       });
+      await ref.read(consultationDraftProvider.notifier).clearDraft();
       if (mounted) {
         setState(() {
           _success = l10n.consultationSubmitted;
@@ -125,17 +177,8 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
-    if (session?.authenticated != true) {
-      return Scaffold(
-        appBar: AppBar(title: Text(l10n.consultationTitle)),
-        body: Center(
-          child: TextButton(
-            onPressed: () => context.go('/login'),
-            child: Text(l10n.signIn),
-          ),
-        ),
-      );
-    }
+    final isAuthed = session?.authenticated == true;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.consultationTitle)),
       body: MotionReveal(
@@ -195,7 +238,22 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            if (_historyLoading)
+            if (!isAuthed)
+              AppCard(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  leading: const Icon(Icons.lock_outline),
+                  title: Text(l10n.signInToViewConsultations),
+                  trailing: TextButton(
+                    onPressed: () => context.go('/login?from=%2Fconsultation'),
+                    child: Text(l10n.signIn),
+                  ),
+                ),
+              )
+            else if (_historyLoading)
               const Center(child: CircularProgressIndicator())
             else if (_historyFailed)
               TextButton.icon(
