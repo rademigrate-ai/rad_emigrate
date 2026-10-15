@@ -58,6 +58,10 @@ class ApplicationController
       state = const AsyncValue.loading();
       return;
     }
+    if (_userId == null || _userId.isEmpty) {
+      state = const AsyncValue.data([]);
+      return;
+    }
     state = const AsyncValue.loading();
     try {
       final items = await repository.listApplications(userId: _userId);

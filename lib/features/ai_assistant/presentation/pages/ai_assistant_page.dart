@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -14,6 +15,7 @@ import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../providers/ai_prompt_draft_provider.dart';
 
 class _ChatMessage {
   _ChatMessage({
@@ -80,6 +82,20 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       _loading = true;
     }
     _historyRestore = _restoreHistory();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final session = ref.read(authControllerProvider).valueOrNull;
+      if (session != null && session.authenticated) {
+        final draft = ref.read(aiPromptDraftProvider);
+        if (!draft.hasContent) return;
+        final pending = await ref
+            .read(aiPromptDraftProvider.notifier)
+            .consumePrompt();
+        if (pending != null && pending.isNotEmpty && mounted) {
+          _controller.text = pending;
+          await _send(pending);
+        }
+      }
+    });
   }
 
   Future<void> _restoreHistory() async {
@@ -126,24 +142,44 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
+    final session = ref.read(authControllerProvider).valueOrNull;
+    final userId = session?.userId;
+    if (session == null ||
+        !session.authenticated ||
+        userId == null ||
+        userId.isEmpty) {
+      await ref
+          .read(aiPromptDraftProvider.notifier)
+          .savePrompt(text, widget.contextLabel);
+      if (mounted) {
+        final destination = widget.contextLabel != null
+            ? '/ai-assistant?context=${Uri.encodeComponent(widget.contextLabel!)}'
+            : '/ai-assistant';
+        context.go(
+          Uri(
+            path: '/login',
+            queryParameters: {'from': destination},
+          ).toString(),
+        );
+      }
+      return;
+    }
+
     setState(() => _loading = true);
     await _historyRestore;
     if (!mounted) return;
-    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
     try {
-      if (userId != null && userId.isNotEmpty) {
-        final repository = ref.read(aiSessionRepositoryProvider);
-        _sessionId ??= (await repository.createSession(
-          userId,
-          scope: widget.adminMode ? 'admin' : 'user',
-        )).id;
-        await repository.saveMessage(
-          sessionId: _sessionId!,
-          userId: userId,
-          role: 'user',
-          content: text,
-        );
-      }
+      final repository = ref.read(aiSessionRepositoryProvider);
+      _sessionId ??= (await repository.createSession(
+        userId,
+        scope: widget.adminMode ? 'admin' : 'user',
+      )).id;
+      await repository.saveMessage(
+        sessionId: _sessionId!,
+        userId: userId,
+        role: 'user',
+        content: text,
+      );
     } catch (_) {
       if (mounted) {
         setState(() => _loading = false);

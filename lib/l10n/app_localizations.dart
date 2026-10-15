@@ -422,6 +422,22 @@ abstract class AppLocalizations {
   String get meetingPlannerTitle;
   String get meetingPlannerHint;
   String get consultationLoadFailed;
+  String get guestVisitor;
+  String get guestProfileSubtitle;
+  String get guestWhySignIn;
+  String get guestTrackCasesTitle;
+  String get guestTrackCasesBody;
+  String get guestManageDocsTitle;
+  String get guestManageDocsBody;
+  String get guestAiTitle;
+  String get guestAiBody;
+  String get guestConsultationTitle;
+  String get guestConsultationBody;
+  String get signInToViewConsultations;
+  String get signInToChatAi;
+  String get signInToSave;
+  String get consultationDraftRestored;
+  String get aiPromptRestored;
 }
 
 class _AppLocalizationsDelegate

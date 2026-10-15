@@ -8,22 +8,15 @@ void main() {
       'unauthenticated access to each protected route redirects to login',
       () {
         const protected = [
-          '/dashboard',
-          '/visa',
           '/applications',
           '/documents',
-          '/profile',
-          '/ai-assistant',
+          '/notifications',
           '/profile-completion',
           '/admin',
           '/admin/ai-config',
           '/admin/operations',
           '/admin/ai-research',
           '/admin/consultations',
-          '/consultation',
-          '/notifications',
-          '/feed',
-          '/world-clock',
         ];
         for (final path in protected) {
           expect(
@@ -41,28 +34,52 @@ void main() {
     );
 
     test(
-      'authenticated incomplete profile is forced to profile-completion',
+      'unauthenticated access to public in-app routes is allowed in guest mode',
       () {
-        expect(
-          authRedirect(
-            uri: Uri.parse('/admin'),
-            isRestoring: false,
-            isAuthenticated: true,
-            profileComplete: false,
-          ),
-          '/profile-completion?from=%2Fadmin',
-        );
-        expect(
-          authRedirect(
-            uri: Uri.parse('/ai-assistant'),
-            isRestoring: false,
-            isAuthenticated: true,
-            profileComplete: false,
-          ),
-          '/profile-completion?from=%2Fai-assistant',
-        );
+        const publicInApp = [
+          '/dashboard',
+          '/visa',
+          '/profile',
+          '/ai-assistant',
+          '/consultation',
+          '/feed',
+          '/world-clock',
+        ];
+        for (final path in publicInApp) {
+          expect(
+            authRedirect(
+              uri: Uri.parse(path),
+              isRestoring: false,
+              isAuthenticated: false,
+              profileComplete: false,
+            ),
+            isNull,
+            reason: path,
+          );
+        }
       },
     );
+
+    test('authenticated incomplete profile is forced to profile-completion on protected routes', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/admin'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: false,
+        ),
+        '/profile-completion?from=%2Fadmin',
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/applications'),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: false,
+        ),
+        '/profile-completion?from=%2Fapplications',
+      );
+    });
 
     test('authenticated complete profile may stay on admin route', () {
       expect(

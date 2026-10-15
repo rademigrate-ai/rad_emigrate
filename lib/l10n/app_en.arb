@@ -252,5 +252,21 @@
   "healthUnknown": "Not checked",
   "modelSaveFailed": "Could not save model settings. Your changes are retained; try again.",
   "sourceQueryRejected": "Use a public HTTPS page without a query string. Query-based source addresses are not supported yet.",
-  "lastProviderCheck": "Last provider check"
+  "lastProviderCheck": "Last provider check",
+  "guestVisitor": "Guest Visitor",
+  "guestProfileSubtitle": "Sign in to access your personal roadmap, track cases, manage documents, and chat with AI.",
+  "guestWhySignIn": "Explore with an account",
+  "guestTrackCasesTitle": "Track Applications",
+  "guestTrackCasesBody": "Follow your visa status and deadlines in real-time.",
+  "guestManageDocsTitle": "Document Vault",
+  "guestManageDocsBody": "Store, organize, and submit your personal documents.",
+  "guestAiTitle": "AI Immigration Assistant",
+  "guestAiBody": "Get tailored guidance with saved conversation history.",
+  "guestConsultationTitle": "Specialist Consultation",
+  "guestConsultationBody": "Book dedicated sessions with certified immigration advisors.",
+  "signInToViewConsultations": "Sign in to view your consultation history",
+  "signInToChatAi": "Sign in to chat with the AI assistant",
+  "signInToSave": "Sign in to bookmark updates",
+  "consultationDraftRestored": "Your consultation draft has been restored.",
+  "aiPromptRestored": "Your question has been restored."
 }

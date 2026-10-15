@@ -30,7 +30,10 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
-    final name = session?.fullName ?? l10n.travelerFallback;
+    final isAuthed = session != null && session.isAuthenticated;
+    final name = isAuthed
+        ? (session.fullName ?? l10n.travelerFallback)
+        : l10n.travelerFallback;
     final appsState = ref.watch(applicationControllerProvider);
     final docsState = ref.watch(documentControllerProvider);
     final apps = appsState.valueOrNull ?? [];
@@ -43,8 +46,8 @@ class DashboardPage extends ConsumerWidget {
     final missingDocs = docs
         .where((d) => d.status == DocumentVerificationStatus.missing)
         .length;
-    final profileDone = session?.profileComplete == true;
-    final needsAction = !profileDone || missingDocs > 0;
+    final profileDone = isAuthed && session.profileComplete;
+    final needsAction = isAuthed && (!profileDone || missingDocs > 0);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -75,9 +78,12 @@ class DashboardPage extends ConsumerWidget {
                 AppEntrance(
                   child: _JourneyHero(
                     name: name,
+                    isAuthed: isAuthed,
                     needsAction: needsAction,
                     onPrimaryAction: () => context.go(
-                      !profileDone
+                      !isAuthed
+                          ? '/login?from=%2Fdashboard'
+                          : !profileDone
                           ? '/profile-completion'
                           : needsAction
                           ? '/documents'
@@ -282,11 +288,13 @@ class DashboardPage extends ConsumerWidget {
 class _JourneyHero extends StatelessWidget {
   const _JourneyHero({
     required this.name,
+    required this.isAuthed,
     required this.needsAction,
     required this.onPrimaryAction,
   });
 
   final String name;
+  final bool isAuthed;
   final bool needsAction;
   final VoidCallback onPrimaryAction;
 
@@ -319,13 +327,19 @@ class _JourneyHero extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             ),
             icon: Icon(
-              needsAction
+              !isAuthed
+                  ? Icons.login_rounded
+                  : needsAction
                   ? directionalForward(context)
                   : Icons.assignment_outlined,
               size: 18,
             ),
             label: Text(
-              needsAction ? l10n.reviewNextStep : l10n.viewApplications,
+              !isAuthed
+                  ? l10n.signIn
+                  : needsAction
+                  ? l10n.reviewNextStep
+                  : l10n.viewApplications,
             ),
             onPressed: onPrimaryAction,
           ),

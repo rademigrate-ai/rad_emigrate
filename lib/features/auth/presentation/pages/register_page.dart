@@ -13,7 +13,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({super.key, this.destination});
+
+  final String? destination;
 
   @override
   ConsumerState<RegisterPage> createState() => _RegisterPageState();
@@ -52,9 +54,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             password: _passwordCtrl.text,
           );
       if (mounted) {
-        context.go(
-          '/otp?identifier=${Uri.encodeComponent(_emailCtrl.text.trim())}&mode=signup',
+        final uri = Uri(
+          path: '/otp',
+          queryParameters: {
+            'identifier': _emailCtrl.text.trim(),
+            'mode': 'signup',
+            if (widget.destination != null) 'from': widget.destination!,
+          },
         );
+        context.go(uri.toString());
       }
     } catch (e) {
       if (mounted) {

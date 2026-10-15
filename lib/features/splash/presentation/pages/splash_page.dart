@@ -34,17 +34,20 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     }
     if (!mounted) return;
     final session = ref.read(authControllerProvider).valueOrNull;
+    final destination = restoredProtectedDestination(widget.destination);
     if (session != null && session.isAuthenticated) {
-      context.go(restoredProtectedDestination(widget.destination));
+      context.go(destination);
     } else {
-      context.go(
-        Uri(
-          path: '/login',
-          queryParameters: {
-            'from': restoredProtectedDestination(widget.destination),
-          },
-        ).toString(),
-      );
+      if (widget.destination != null && isProtectedPath(widget.destination!)) {
+        context.go(
+          Uri(
+            path: '/login',
+            queryParameters: {'from': destination},
+          ).toString(),
+        );
+      } else {
+        context.go(destination);
+      }
     }
   }
 

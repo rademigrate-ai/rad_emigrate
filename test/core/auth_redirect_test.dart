@@ -180,10 +180,10 @@ void main() {
       expect(restoredProtectedDestination('/world-clock'), '/world-clock');
     });
 
-    test('world-clock is a protected route for deep-link restoration', () {
-      final uri = Uri.parse('/world-clock');
+    test('protected route preserves deep-link restoration; public route does not block', () {
+      final protectedUri = Uri.parse('/applications');
       final redirected = authRedirect(
-        uri: uri,
+        uri: protectedUri,
         isRestoring: true,
         isAuthenticated: false,
         profileComplete: false,
@@ -193,14 +193,25 @@ void main() {
       expect(splashUri.path, '/splash');
       expect(
         restoredProtectedDestination(splashUri.queryParameters['from']),
-        uri.toString(),
+        protectedUri.toString(),
       );
       expect(
         authRedirect(
-          uri: uri,
+          uri: protectedUri,
           isRestoring: false,
           isAuthenticated: true,
           profileComplete: true,
+        ),
+        isNull,
+      );
+
+      final publicUri = Uri.parse('/world-clock');
+      expect(
+        authRedirect(
+          uri: publicUri,
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
         ),
         isNull,
       );
@@ -307,12 +318,12 @@ void main() {
     test('known protected routes still enforce authentication', () {
       expect(
         authRedirect(
-          uri: Uri.parse('/dashboard'),
+          uri: Uri.parse('/applications'),
           isRestoring: false,
           isAuthenticated: false,
           profileComplete: false,
         ),
-        '/login?from=%2Fdashboard',
+        '/login?from=%2Fapplications',
       );
       expect(
         authRedirect(
@@ -322,6 +333,15 @@ void main() {
           profileComplete: false,
         ),
         '/login?from=%2Fadmin%2Foperations',
+      );
+      expect(
+        authRedirect(
+          uri: Uri.parse('/dashboard'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
       );
     });
 

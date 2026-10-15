@@ -75,7 +75,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await ref
           .read(authControllerProvider.notifier)
           .resendOtp(identifier: email);
-      if (mounted) context.go('/otp?identifier=${Uri.encodeComponent(email)}');
+      if (mounted) {
+        final uri = Uri(
+          path: '/otp',
+          queryParameters: {
+            'identifier': email,
+            if (widget.destination != null) 'from': widget.destination!,
+          },
+        );
+        context.go(uri.toString());
+      }
     } catch (error) {
       if (mounted) {
         final message = error.toString().toLowerCase();
@@ -223,7 +232,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               AppButton(
                 label: l10n.createAccount,
                 variant: AppButtonVariant.secondary,
-                onPressed: () => context.go('/register'),
+                onPressed: () => context.go(
+                  widget.destination != null
+                      ? Uri(
+                          path: '/register',
+                          queryParameters: {'from': widget.destination!},
+                        ).toString()
+                      : '/register',
+                ),
               ),
               TextButton(
                 onPressed: loading ? null : _continueWithOtp,
