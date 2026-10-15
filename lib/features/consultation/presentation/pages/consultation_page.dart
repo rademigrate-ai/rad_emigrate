@@ -24,7 +24,6 @@ class ConsultationPage extends ConsumerStatefulWidget {
 class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   late final TextEditingController _topic;
   late final TextEditingController _message;
-  final Set<String> _processedTokens = {};
   bool _submitting = false;
   String? _error;
   String? _success;
@@ -47,7 +46,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     _message.addListener(_onFieldChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkPendingSubmissionOrLoadMine();
+      _loadMine();
     });
   }
 
@@ -55,32 +54,6 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     ref
         .read(consultationDraftProvider.notifier)
         .updateDraft(topic: _topic.text, message: _message.text);
-  }
-
-  Future<void> _checkPendingSubmissionOrLoadMine() async {
-    if (!mounted) return;
-    final session = ref.read(authControllerProvider).valueOrNull;
-    if (session?.authenticated == true) {
-      final draft = ref.read(consultationDraftProvider);
-      if (draft.pendingSubmit &&
-          draft.submissionToken != null &&
-          !_processedTokens.contains(draft.submissionToken) &&
-          !_submitting) {
-        _processedTokens.add(draft.submissionToken!);
-        await ref
-            .read(consultationDraftProvider.notifier)
-            .clearPendingSubmission();
-        if (mounted) {
-          await _submit();
-        }
-      } else {
-        await _loadMine();
-      }
-    } else {
-      if (mounted) {
-        setState(() => _historyLoading = false);
-      }
-    }
   }
 
   @override
@@ -139,10 +112,6 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
 
     final session = ref.read(authControllerProvider).valueOrNull;
     if (session?.authenticated != true) {
-      final token = DateTime.now().microsecondsSinceEpoch.toString();
-      await ref
-          .read(consultationDraftProvider.notifier)
-          .markPendingSubmission(token);
       if (mounted) {
         context.go('/login?from=%2Fconsultation');
       }
