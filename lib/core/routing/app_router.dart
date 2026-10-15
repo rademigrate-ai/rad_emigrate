@@ -66,7 +66,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             LoginPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
-      GoRoute(path: '/signup', redirect: (context, state) => '/register'),
+      // BUG-002: /signup is a compatibility alias for /register.
+      GoRoute(path: '/signup', builder: (_, _) => const RegisterPage()),
       GoRoute(
         path: '/forgot-password',
         builder: (_, _) => const ForgotPasswordPage(),
