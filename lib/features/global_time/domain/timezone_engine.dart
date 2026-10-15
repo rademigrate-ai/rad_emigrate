@@ -6,15 +6,26 @@ import 'geo_bootstrap.dart';
 /// Accurate IANA timezone conversions for RAD Global Time.
 abstract final class TimezoneEngine {
   static bool _initialized = false;
+  static Future<void>? _initialization;
 
-  static Future<void> ensureInitialized() async {
-    if (_initialized) return;
+  static bool get isReady => _initialized;
+
+  /// Share a single bootstrap across concurrent callers. The timezone database
+  /// must be ready before clock widgets attempt to resolve IANA locations.
+  static Future<void> ensureInitialized() {
+    if (_initialized) return Future<void>.value();
+    return _initialization ??= _bootstrap();
+  }
+
+  static Future<void> _bootstrap() async {
     try {
       await bootstrapGeoTimezone();
       _initialized = true;
     } catch (_) {
-      // Do not rethrow: page must still render catalog clocks.
-      // markInitialized may already have run for the tz db portion.
+      // Boundary polygons are optional. Clear the shared future so a later
+      // caller can retry if the first attempt failed before markInitialized.
+    } finally {
+      _initialization = null;
     }
   }
 
@@ -29,8 +40,8 @@ abstract final class TimezoneEngine {
       try {
         return tz.getLocation('UTC');
       } catch (_) {
-        // Extremely defensive: database not loaded yet.
-        rethrow;
+        // Database not loaded yet — never rethrow into the widget tree.
+        return tz.Location('UTC', [0], [0], [const tz.TimeZone.noDST(0)]);
       }
     }
   }

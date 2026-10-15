@@ -25,7 +25,17 @@ const Set<String> _protectedRoutes = {
   '/world-clock',
 };
 
+bool _isProtectedPath(String location) {
+  if (_protectedRoutes.contains(location)) return true;
+  // Nested admin paths under /admin/
+  if (location.startsWith('/admin/')) return true;
+  return false;
+}
+
 /// Resolves auth routing while distinguishing session restoration from logout.
+///
+/// Unknown paths are left unhandled so GoRouter [errorBuilder] can show
+/// NotFound instead of incorrectly sending users to login.
 ///
 /// Authorization for `/admin` remains server-side (RLS + role). Including
 /// `/admin` here only preserves deep-link restoration after session restore;
@@ -43,7 +53,8 @@ String? authRedirect({
 
   if (isRestoring &&
       location != '/splash' &&
-      !_publicRoutes.contains(location)) {
+      !_publicRoutes.contains(location) &&
+      _isProtectedPath(location)) {
     return Uri(
       path: '/splash',
       queryParameters: {'from': uri.toString()},
@@ -55,7 +66,9 @@ String? authRedirect({
   // Recovery deep-link: keep user on set-password even if a session exists.
   if (location == '/reset-password') return null;
 
-  if (!isAuthenticated && !_publicRoutes.contains(location)) {
+  // Unauthenticated users: only force login for known protected routes.
+  // Unknown routes fall through to GoRouter errorBuilder (NotFound).
+  if (!isAuthenticated && _isProtectedPath(location)) {
     return Uri(
       path: '/login',
       queryParameters: {'from': restoredProtectedDestination(uri.toString())},
@@ -77,7 +90,8 @@ String? authRedirect({
   if (isAuthenticated &&
       !profileComplete &&
       location != '/profile-completion' &&
-      location != '/profile') {
+      location != '/profile' &&
+      _isProtectedPath(location)) {
     return Uri(
       path: '/profile-completion',
       queryParameters: {'from': restoredProtectedDestination(uri.toString())},
@@ -93,7 +107,7 @@ String restoredProtectedDestination(String? value) {
   if (uri == null ||
       uri.hasScheme ||
       uri.hasAuthority ||
-      !_protectedRoutes.contains(uri.path)) {
+      !_isProtectedPath(uri.path)) {
     return '/dashboard';
   }
   return uri.toString();

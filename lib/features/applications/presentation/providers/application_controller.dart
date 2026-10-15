@@ -15,9 +15,11 @@ final _prefsProvider = FutureProvider<SharedPreferences>((ref) {
   return SharedPreferences.getInstance();
 });
 
-final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
+/// Resolves once [SharedPreferences] is ready so production never binds an
+/// empty no-op repository that permanently hides remote applications.
+final applicationRepositoryProvider = Provider<ApplicationRepository?>((ref) {
   final prefs = ref.watch(_prefsProvider).valueOrNull;
-  if (prefs == null) return _EmptyApplicationRepository();
+  if (prefs == null) return null;
   final config = ref.watch(appConfigProvider);
   return ApplicationRepositoryImpl(
     remote: ApplicationRemoteDataSource(
@@ -34,10 +36,12 @@ final applicationControllerProvider =
       AsyncValue<List<VisaApplication>>
     >((ref) {
       final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
-      return ApplicationController(
-        ref.watch(applicationRepositoryProvider),
-        userId,
-      );
+      final repository = ref.watch(applicationRepositoryProvider);
+      // Stay loading until prefs (and thus the real repository) are available.
+      if (repository == null) {
+        return ApplicationController.pending();
+      }
+      return ApplicationController(repository, userId);
     });
 
 class ApplicationController
@@ -47,13 +51,24 @@ class ApplicationController
     load();
   }
 
-  final ApplicationRepository _repository;
+  /// Placeholder until SharedPreferences unlocks the real repository.
+  ApplicationController.pending()
+    : _repository = null,
+      _userId = null,
+      super(const AsyncValue.loading());
+
+  final ApplicationRepository? _repository;
   final String? _userId;
 
   Future<void> load() async {
+    final repository = _repository;
+    if (repository == null) {
+      state = const AsyncValue.loading();
+      return;
+    }
     state = const AsyncValue.loading();
     try {
-      final items = await _repository.listApplications(userId: _userId);
+      final items = await repository.listApplications(userId: _userId);
       state = AsyncValue.data(items);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -70,7 +85,7 @@ class ApplicationController
       }
     }
     if (app == null) return;
-    final updated = await _repository.updateApplication(
+    final updated = await _repository!.updateApplication(
       app.copyWith(status: status),
     );
     final next = current.map((a) => a.id == id ? updated : a).toList();
@@ -82,7 +97,7 @@ class ApplicationController
     required String programName,
     required String country,
   }) async {
-    final created = await _repository.createApplication(
+    final created = await _repository!.createApplication(
       VisaApplication(
         id: 'temp',
         title: title,
@@ -98,22 +113,4 @@ class ApplicationController
     state = AsyncValue.data([created, ...current]);
     return created;
   }
-}
-
-class _EmptyApplicationRepository implements ApplicationRepository {
-  @override
-  Future<List<VisaApplication>> listApplications({String? userId}) async => [];
-
-  @override
-  Future<VisaApplication?> getApplication(String id) async => null;
-
-  @override
-  Future<VisaApplication> createApplication(
-    VisaApplication application,
-  ) async => application;
-
-  @override
-  Future<VisaApplication> updateApplication(
-    VisaApplication application,
-  ) async => application;
 }
