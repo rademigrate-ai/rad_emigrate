@@ -15,6 +15,9 @@ import '../providers/visa_catalog_provider.dart';
 import '../widgets/country_carousel.dart';
 import '../widgets/country_photography.dart';
 
+part 'visa_page_countries.dart';
+part 'visa_page_program.dart';
+
 String _t(BuildContext context, String en, String fa) {
   return Localizations.localeOf(context).languageCode == 'fa' ? fa : en;
 }
@@ -127,6 +130,3 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     );
   }
 }
-
-part 'visa_page_countries.dart';
-part 'visa_page_program.dart';
