@@ -84,7 +84,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
             ? null
             : IconButton(
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                icon: Icon(DirectionalIcons.back(context)),
+                icon: Icon(directionalBack(context)),
                 onPressed: _back,
               ),
         actions: [

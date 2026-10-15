@@ -64,6 +64,14 @@ class _ProgramDetailStage extends StatelessWidget {
         const SizedBox(height: 16),
         if (program.summary.trim().isNotEmpty)
           Text(program.summary, style: Theme.of(context).textTheme.bodyLarge),
+        if (program.requirements.isEmpty && program.steps.isEmpty) ...[
+          const SizedBox(height: 22),
+          EmptyState(
+            title: l10n.structuredDetailsPending,
+            subtitle: l10n.structuredDetailsPendingBody,
+            icon: Icons.fact_check_outlined,
+          ),
+        ],
         const SizedBox(height: 12),
         _ProgramAccordions(
           description: hasDescription ? program.description!.trim() : null,
@@ -218,7 +226,7 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
       panels.add(
         _accordion(
           keyName: 'requirements',
-          title: _t(context, 'Requirements', 'الزامات'),
+          title: widget.l10n.publishedRequirements,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -249,7 +257,7 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
       panels.add(
         _accordion(
           keyName: 'steps',
-          title: _t(context, 'Steps', 'مراحل'),
+          title: widget.l10n.applicationSteps,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -319,8 +327,18 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
       _accordion(
         keyName: 'source',
         title: widget.l10n.source,
-        child: Text(
-          '${widget.source.title} — ${widget.source.publisher}\n${widget.source.url}',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${widget.source.title} — ${widget.source.publisher}\n${widget.source.url}',
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.l10n.structuredSourceNote,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
       ),
     );
