@@ -38,12 +38,27 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
     state = AiPromptDraft(prompt: prompt, contextLabel: contextLabel);
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_prefPrompt, prompt);
-      if (contextLabel != null) {
-        await prefs.setString(_prefContext, contextLabel);
-      } else {
+      if (prompt.trim().isEmpty) {
+        await prefs.remove(_prefPrompt);
         await prefs.remove(_prefContext);
+      } else {
+        await prefs.setString(_prefPrompt, prompt);
+        if (contextLabel != null && contextLabel.trim().isNotEmpty) {
+          await prefs.setString(_prefContext, contextLabel);
+        } else {
+          await prefs.remove(_prefContext);
+        }
       }
+    } catch (_) {}
+  }
+
+  Future<void> clearDraft() async {
+    _loaded = true;
+    state = const AiPromptDraft();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_prefPrompt);
+      await prefs.remove(_prefContext);
     } catch (_) {}
   }
 

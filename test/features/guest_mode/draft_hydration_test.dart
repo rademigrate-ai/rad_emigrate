@@ -38,4 +38,78 @@ void main() {
     expect(draft.state.isEmpty, true);
     draft.dispose();
   });
+
+  test(
+    'AI draft handles Persian and English Unicode and empty string clearing',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final draft = AiPromptDraftNotifier();
+      await draft.ready;
+
+      // Save Persian + English prompt
+      await draft.savePrompt(
+        'سلام! شرایط ویزای استارتاپ کانادا چیست؟\nWhat are the language criteria? 🇨🇦',
+        'Canada Startup Visa',
+      );
+      expect(draft.state.hasContent, true);
+      expect(
+        draft.state.prompt,
+        contains('سلام! شرایط ویزای استارتاپ کانادا چیست؟'),
+      );
+      expect(draft.state.contextLabel, 'Canada Startup Visa');
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('rad_ai_pending_prompt'), contains('🇨🇦'));
+      expect(prefs.getString('rad_ai_pending_context'), 'Canada Startup Visa');
+
+      // Saving empty prompt removes keys from storage
+      await draft.savePrompt('', null);
+      expect(draft.state.hasContent, false);
+      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
+      expect(prefs.getString('rad_ai_pending_context'), isNull);
+
+      // clearDraft atomically wipes state
+      await draft.savePrompt('Temp prompt', 'Context');
+      expect(draft.state.hasContent, true);
+      await draft.clearDraft();
+      expect(draft.state.hasContent, false);
+      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
+      expect(prefs.getString('rad_ai_pending_context'), isNull);
+
+      draft.dispose();
+    },
+  );
+
+  test(
+    'Consultation draft handles Persian and English Unicode and clearing',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final draft = ConsultationDraftNotifier();
+      await draft.ready;
+
+      await draft.updateDraft(
+        topic: 'مشاوره تحصیلی آلمان ۲۰۲۶',
+        message: 'سلام، مدارک تحصیلی من آماده است.\nWhen is the winter semester intake? 🇩🇪\nممنون!',
+      );
+      expect(draft.state.topic, 'مشاوره تحصیلی آلمان ۲۰۲۶');
+      expect(draft.state.message, contains('winter semester intake? 🇩🇪'));
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(
+        prefs.getString('rad_consultation_draft_topic'),
+        'مشاوره تحصیلی آلمان ۲۰۲۶',
+      );
+      expect(
+        prefs.getString('rad_consultation_draft_message'),
+        contains('🇩🇪'),
+      );
+
+      await draft.clearDraft();
+      expect(draft.state.isEmpty, true);
+      expect(prefs.getString('rad_consultation_draft_topic'), isNull);
+      expect(prefs.getString('rad_consultation_draft_message'), isNull);
+
+      draft.dispose();
+    },
+  );
 }

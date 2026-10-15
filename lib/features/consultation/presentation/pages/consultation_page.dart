@@ -80,7 +80,12 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       if (mounted) setState(() => _historyLoading = false);
       return;
     }
-    final client = ref.read(supabaseClientServiceProvider).client;
+    final supabase = ref.read(supabaseClientServiceProvider);
+    if (!supabase.isInitialized) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    final client = supabase.client;
     final uid = client.auth.currentUser?.id;
     if (uid == null) {
       if (mounted) setState(() => _historyLoading = false);
@@ -140,7 +145,9 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     });
 
     try {
-      final client = ref.read(supabaseClientServiceProvider).client;
+      final supabase = ref.read(supabaseClientServiceProvider);
+      if (!supabase.isInitialized) throw Exception('supabase_not_initialized');
+      final client = supabase.client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
       await client.from('consultation_requests').insert({

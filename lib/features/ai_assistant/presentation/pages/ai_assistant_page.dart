@@ -81,19 +81,24 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       ]);
       _loading = true;
     }
+    _controller.addListener(_onPromptChanged);
     _historyRestore = _restoreHistory();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final session = ref.read(authControllerProvider).valueOrNull;
-      if (session != null && session.authenticated) {
-        final pending = await ref
-            .read(aiPromptDraftProvider.notifier)
-            .consumePrompt();
-        if (pending != null && pending.isNotEmpty && mounted) {
-          _controller.text = pending;
-          // Restore the prompt for explicit user confirmation; never auto-send.
-        }
+      await ref.read(aiPromptDraftProvider.notifier).ready;
+      if (!mounted) return;
+      final draft = ref.read(aiPromptDraftProvider);
+      if (_controller.text.isEmpty && draft.hasContent) {
+        setState(() {
+          _controller.text = draft.prompt;
+        });
       }
     });
+  }
+
+  void _onPromptChanged() {
+    ref
+        .read(aiPromptDraftProvider.notifier)
+        .savePrompt(_controller.text, widget.contextLabel);
   }
 
   Future<void> _restoreHistory() async {
@@ -130,6 +135,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   @override
   void dispose() {
+    _controller.removeListener(_onPromptChanged);
     _controller.dispose();
     _scroll.dispose();
     super.dispose();
@@ -193,6 +199,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       _loading = true;
       _controller.clear();
     });
+    await ref.read(aiPromptDraftProvider.notifier).clearDraft();
     _scrollToEnd();
 
     await _complete(text, userId);
@@ -307,6 +314,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       l10n.suggestionVisaProcessingTime,
       l10n.suggestionGteStatement,
     ];
+    final draftContext = ref.watch(aiPromptDraftProvider).contextLabel;
+    final effectiveContext =
+        (widget.contextLabel != null && widget.contextLabel!.trim().isNotEmpty)
+        ? widget.contextLabel
+        : draftContext;
 
     final body = PremiumCanvas(
       dark: true,
@@ -332,15 +344,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   ),
                 ),
               ),
-            if (widget.contextLabel != null &&
-                widget.contextLabel!.trim().isNotEmpty)
+            if (effectiveContext != null && effectiveContext.trim().isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Chip(
                     avatar: const Icon(Icons.place_outlined, size: 16),
-                    label: Text(widget.contextLabel!),
+                    label: Text(effectiveContext),
                     backgroundColor: const Color(0xFF143743),
                     labelStyle: const TextStyle(color: Color(0xFFE2F1F3)),
                     side: BorderSide.none,
