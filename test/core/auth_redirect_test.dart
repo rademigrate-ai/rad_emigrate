@@ -205,5 +205,29 @@ void main() {
         isNull,
       );
     });
+
+    test('unknown path is not forced to login so NotFound can render', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/does-not-exist-xyz'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
+
+    test('unknown path during restore is not forced through splash', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/random-unknown'),
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
   });
 }
