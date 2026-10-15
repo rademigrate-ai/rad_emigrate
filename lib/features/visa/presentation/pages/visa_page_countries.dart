@@ -212,7 +212,93 @@ class _CountryDetailStage extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 960),
         child: CustomScrollView(
           slivers: [
-            two_placeholder_removed
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: isDesktop ? 240 : 180,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Hero(
+                          tag: 'country-hero-${country.id}',
+                          child: CountryPhotography.image(
+                            code: country.code,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0x33000000), Color(0xCC000000)],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: const Offset(0, -28),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Material(
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        color: Theme.of(context).colorScheme.surface,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    country.flagEmoji,
+                                    style: const TextStyle(fontSize: 28),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      country.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (country.summary.trim().isNotEmpty) ...[
+                                const SizedBox(height: 10),
+                                Text(
+                                  country.summary,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (programs.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: EmptyState(
+                  title: l10n.catalogueUnavailable,
+                  subtitle: l10n.catalogueDisclaimer,
+                ),
+              )
+            else
+              Spadded_placeholder_REMOVE
           ],
         ),
       ),
