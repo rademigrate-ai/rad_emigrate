@@ -144,7 +144,7 @@ void main() {
     );
 
     testWidgets(
-      'Guest consultation form preserves draft across typing and provides pending submit',
+      'Guest consultation form preserves draft and requires manual submit after login',
       (tester) async {
         tester.view.physicalSize = const Size(1200, 1600);
         tester.view.devicePixelRatio = 1;
@@ -218,7 +218,7 @@ void main() {
         );
         expect(draft.pendingSubmit, false);
 
-        // Submit as guest -> triggers pending draft and redirect to login
+        // Submit as guest -> preserves draft and redirects to login without scheduling submission
         final submitButton = find.text('Submit request');
         await tester.ensureVisible(submitButton);
         await tester.tap(submitButton);
@@ -229,9 +229,10 @@ void main() {
 
         // Verify draft state has pendingSubmit = true and valid token
         final updatedDraft = refCapture.read(consultationDraftProvider);
-        expect(updatedDraft.pendingSubmit, true);
-        expect(updatedDraft.submissionToken, isNotNull);
-        expect(updatedDraft.submissionToken!.isNotEmpty, true);
+        expect(updatedDraft.pendingSubmit, false);
+        expect(updatedDraft.submissionToken, isNull);
+        expect(updatedDraft.topic, 'Express Entry Canada');
+        expect(updatedDraft.message, 'I have questions about CRS points and language tests.');
       },
     );
 
