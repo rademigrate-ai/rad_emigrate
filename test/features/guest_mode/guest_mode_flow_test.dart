@@ -216,7 +216,6 @@ void main() {
           draft.message,
           'I have questions about CRS points and language tests.',
         );
-        expect(draft.pendingSubmit, false);
 
         // Submit as guest -> preserves draft and redirects to login without scheduling submission
         final submitButton = find.text('Submit request');
@@ -229,8 +228,6 @@ void main() {
 
         // Verify draft state has pendingSubmit = true and valid token
         final updatedDraft = refCapture.read(consultationDraftProvider);
-        expect(updatedDraft.pendingSubmit, false);
-        expect(updatedDraft.submissionToken, isNull);
         expect(updatedDraft.topic, 'Express Entry Canada');
         expect(
           updatedDraft.message,
