@@ -85,8 +85,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final session = ref.read(authControllerProvider).valueOrNull;
       if (session != null && session.authenticated) {
-        final draft = ref.read(aiPromptDraftProvider);
-        if (!draft.hasContent) return;
         final pending = await ref
             .read(aiPromptDraftProvider.notifier)
             .consumePrompt();
