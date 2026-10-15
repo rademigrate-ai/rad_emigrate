@@ -66,6 +66,11 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   }
 
   Future<void> _loadMine() async {
+    final session = ref.read(authControllerProvider).valueOrNull;
+    if (session?.authenticated != true || session?.userId == null) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
     final client = ref.read(supabaseClientServiceProvider).client;
     final uid = client.auth.currentUser?.id;
     if (uid == null) {
