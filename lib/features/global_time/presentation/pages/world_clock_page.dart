@@ -5,7 +5,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/rad_brand.dart';
 import '../../domain/city.dart';
 import '../../domain/geo_timezone_resolver.dart';
-import '../../domain/timezone_engine.dart';
 import '../providers/global_time_controller.dart';
 import '../widgets/city_clock_card.dart';
 import '../widgets/meeting_planner_panel.dart';
@@ -22,13 +21,6 @@ class WorldClockPage extends ConsumerStatefulWidget {
 class _WorldClockPageState extends ConsumerState<WorldClockPage> {
   final _searchCtrl = TextEditingController();
   double _scrubHour = DateTime.now().hour + DateTime.now().minute / 60.0;
-
-  @override
-  void initState() {
-    super.initState();
-    TimezoneEngine.ensureInitialized();
-    GeoTimezoneResolver.ensureReady();
-  }
 
   @override
   void dispose() {
