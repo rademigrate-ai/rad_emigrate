@@ -16,6 +16,7 @@ import '../widgets/country_carousel.dart';
 import '../widgets/country_photography.dart';
 
 part 'visa_page_countries.dart';
+part 'visa_page_country_detail.dart';
 part 'visa_page_program.dart';
 
 String _t(BuildContext context, String en, String fa) {
