@@ -92,7 +92,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             .consumePrompt();
         if (pending != null && pending.isNotEmpty && mounted) {
           _controller.text = pending;
-          await _send(pending);
+          // Restore the prompt for explicit user confirmation; never auto-send.
         }
       }
     });
