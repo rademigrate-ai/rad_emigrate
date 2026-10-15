@@ -45,8 +45,17 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     _topic.addListener(_onFieldChanged);
     _message.addListener(_onFieldChanged);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadMine();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(consultationDraftProvider.notifier).ready;
+      if (!mounted) return;
+      final restored = ref.read(consultationDraftProvider);
+      if (_topic.text.isEmpty && restored.topic.isNotEmpty) {
+        _topic.text = restored.topic;
+      }
+      if (_message.text.isEmpty && restored.message.isNotEmpty) {
+        _message.text = restored.message;
+      }
+      await _loadMine();
     });
   }
 
