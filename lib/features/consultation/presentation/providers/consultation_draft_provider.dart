@@ -2,10 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsultationDraft {
-  const ConsultationDraft({
-    this.topic = '',
-    this.message = '',
-  });
+  const ConsultationDraft({this.topic = '', this.message = ''});
 
   final String topic;
   final String message;
@@ -13,10 +10,7 @@ class ConsultationDraft {
   bool get isEmpty => topic.trim().isEmpty && message.trim().isEmpty;
   bool get hasContent => topic.trim().isNotEmpty || message.trim().isNotEmpty;
 
-  ConsultationDraft copyWith({
-    String? topic,
-    String? message,
-  }) {
+  ConsultationDraft copyWith({String? topic, String? message}) {
     return ConsultationDraft(
       topic: topic ?? this.topic,
       message: message ?? this.message,
@@ -41,10 +35,7 @@ class ConsultationDraftNotifier extends StateNotifier<ConsultationDraft> {
       final topic = prefs.getString(_prefTopic) ?? '';
       final message = prefs.getString(_prefMessage) ?? '';
       if (!_loaded) {
-        state = ConsultationDraft(
-          topic: topic,
-          message: message,
-        );
+        state = ConsultationDraft(topic: topic, message: message);
         _loaded = true;
       }
     } catch (_) {}
