@@ -6,21 +6,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('AI draft hydrates from storage and is consumed only explicitly', () async {
-    SharedPreferences.setMockInitialValues({
-      'rad_ai_pending_prompt': 'Saved visa question',
-      'rad_ai_pending_context': 'Canada',
-    });
-    final draft = AiPromptDraftNotifier();
-    await draft.ready;
-    expect(draft.state.prompt, 'Saved visa question');
-    expect(draft.state.contextLabel, 'Canada');
-    expect(await draft.consumePrompt(), 'Saved visa question');
-    expect(draft.state.hasContent, false);
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('rad_ai_pending_prompt'), isNull);
-    draft.dispose();
-  });
+  test(
+      'AI draft hydrates from storage and is consumed only explicitly',
+      () async {
+      SharedPreferences.setMockInitialValues({
+        'rad_ai_pending_prompt': 'Saved visa question',
+        'rad_ai_pending_context': 'Canada',
+      });
+      final draft = AiPromptDraftNotifier();
+      await draft.ready;
+      expect(draft.state.prompt, 'Saved visa question');
+      expect(draft.state.contextLabel, 'Canada');
+      expect(await draft.consumePrompt(), 'Saved visa question');
+      expect(draft.state.hasContent, false);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
+        draft.dispose();
+    },
+  );
 
   test('Consultation draft hydrates without pending submission', () async {
     SharedPreferences.setMockInitialValues({
