@@ -232,7 +232,10 @@ void main() {
         expect(updatedDraft.pendingSubmit, false);
         expect(updatedDraft.submissionToken, isNull);
         expect(updatedDraft.topic, 'Express Entry Canada');
-        expect(updatedDraft.message, 'I have questions about CRS points and language tests.');
+        expect(
+          updatedDraft.message,
+          'I have questions about CRS points and language tests.',
+        );
       },
     );
 
