@@ -50,7 +50,7 @@ async def main():
                                     placeholder = page.locator('flt-semantics-placeholder')
                                     if await placeholder.count():
                                         await placeholder.evaluate('(element) => element.click()')
-                                    await page.get_by_label('visual-qa-assets-ready', exact=True).wait_for(state='attached', timeout=60000)
+                                    await page.wait_for_function('window.radQaAssetsReady === true', timeout=60000)
                                     await page.wait_for_timeout(1400)
                                     filename = f'{size}-{locale}-{theme}-{screen}.png'
                                     await page.screenshot(path=str(OUT / filename))

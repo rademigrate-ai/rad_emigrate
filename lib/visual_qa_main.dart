@@ -50,6 +50,8 @@ import 'features/visa/domain/entities/visa_entities.dart';
 import 'features/visa/presentation/pages/visa_page.dart';
 import 'features/visa/presentation/providers/visa_catalog_provider.dart';
 import 'l10n/app_localizations.dart';
+import 'visual_qa_capture_signal_stub.dart'
+    if (dart.library.js_interop) 'visual_qa_capture_signal_web.dart';
 
 /// A separate, non-production entrypoint for repeatable visual QA.
 ///
@@ -162,7 +164,6 @@ class _QaAssetReadiness extends StatefulWidget {
 
 class _QaAssetReadinessState extends State<_QaAssetReadiness> {
   bool _started = false;
-  bool _ready = false;
 
   @override
   void didChangeDependencies() {
@@ -173,46 +174,39 @@ class _QaAssetReadinessState extends State<_QaAssetReadiness> {
   }
 
   Future<void> _warmAssets() async {
-    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    if (!mounted) return;
-    final assets = manifest.listAssets().where(
-      (path) =>
-          path.startsWith('assets/') &&
-          (path.endsWith('.png') ||
-              path.endsWith('.jpg') ||
-              path.endsWith('.webp')),
-    );
+    // Required by the actual fixture pages; unrelated source/master artwork
+    // must not evict visible assets from Flutter's bounded image cache.
+    const assets = [
+      'assets/branding/rad_flying_bird_128.png',
+      'assets/branding/rad_flying_bird_512.png',
+      'assets/branding/rad_official_logo_transparent.webp',
+      'assets/images/destinations/ch.jpg',
+      'assets/images/destinations/ca.jpg',
+      'assets/images/destinations/de.jpg',
+      'assets/images/destinations/jp.jpg',
+      'assets/images/destinations/au.jpg',
+      'assets/images/destinations/gb.jpg',
+    ];
     var failed = false;
     await Future.wait(
       assets.map(
         (path) => precacheImage(
           AssetImage(path),
           context,
-          onError: (_, _) => failed = true,
+          onError: (error, _) {
+            failed = true;
+            debugPrint('Visual QA asset failed: $path: $error');
+          },
         ),
       ),
     );
     if (!mounted || failed) return;
     await WidgetsBinding.instance.endOfFrame;
-    if (mounted) setState(() => _ready = true);
+    if (mounted) markVisualQaAssetsReady();
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      widget.child,
-      if (_ready)
-        Positioned(
-          left: 0,
-          top: 0,
-          child: Semantics(
-            label: 'visual-qa-assets-ready',
-            container: true,
-            child: const SizedBox(width: 1, height: 1),
-          ),
-        ),
-    ],
-  );
+  Widget build(BuildContext context) => widget.child;
 }
 
 class _QaFrame extends StatelessWidget {
