@@ -1,6 +1,6 @@
 // Generated-style localization facade for RAD Emigrate.
 // Keep in sync with lib/l10n/app_en.arb and app_fa.arb.
-// generate: false — this custom facade is intentional.
+// generate: false â€” this custom facade is intentional.
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -35,6 +35,11 @@ abstract class AppLocalizations {
 
   static const List<Locale> supportedLocales = [Locale('en'), Locale('fa')];
 
+  String get migrationHeroTitle;
+  String get recentActivity;
+  String get allItems;
+  String get consultationShortLabel;
+  String get suggestionComparePathways;
   String get collapseNavigation;
   String get expandNavigation;
   String get editProfile;

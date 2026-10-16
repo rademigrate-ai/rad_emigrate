@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/reference_widgets.dart';
 import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/premium_visuals.dart';
@@ -58,42 +58,49 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: PremiumCanvas(
-        accent: AppColors.teal,
         showEditorialRule: false,
         child: SafeArea(
-          child: Stack(
-            children: [
-              PositionedDirectional(
-                top: 28,
-                start: 24,
-                child: EditorialKicker(
-                  index: '01',
-                  label: AppLocalizations.of(context).immigrationJourney,
-                ),
-              ),
-              LoadingState.splash(
-                message: l10n.splashLoadingStatus,
-                dark: context.premium.isDark,
-              ),
-              PositionedDirectional(
-                bottom: 28,
-                start: 24,
-                end: 24,
-                child: Text(
-                  l10n.brandIntroTitle,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: context.premium.text,
-                    fontWeight: FontWeight.w700,
+          child: ReferenceScenery(
+            child: SizedBox.expand(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      LoadingState.splash(
+                        message: l10n.splashLoadingStatus,
+                        dark: context.premium.isDark,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'RAD Emigrate',
+                        textDirection: TextDirection.ltr,
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.brandIntroTitle,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.brandIntroBody,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      Semantics(
+                        label: l10n.appTitle,
+                        image: true,
+                        child: const SizedBox.shrink(),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Semantics(
-                label: l10n.appTitle,
-                image: true,
-                child: const SizedBox.shrink(),
-              ),
-            ],
+            ),
           ),
         ),
       ),

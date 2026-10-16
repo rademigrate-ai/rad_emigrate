@@ -239,7 +239,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
-          _ProfileHero(
+          AppCard(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -347,7 +347,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       .read(localeControllerProvider.notifier)
                       .setLocale(AppLocale.fromLanguageCode(code)),
                 ),
-                const Divider(height: 24),
+                const Divider(height: 1),
                 _PreferenceSelector<AppThemePreference>(
                   icon: Icons.brightness_6_outlined,
                   title: l10n.theme,
@@ -387,48 +387,34 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
-        _ProfileHero(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
             children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundColor: AppColors.primaryRed,
-                child: Text(
-                  initials,
-                  style: const TextStyle(fontSize: 28, color: Colors.white),
-                ),
+              _ProfileAvatar(initials: initials, avatar: profile?.avatar),
+              const SizedBox(height: 10),
+              Text(
+                displayName,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayName,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    if (profile?.email != null || session?.email != null)
-                      _ContactLine(
-                        icon: Icons.mail_outline,
-                        text: profile?.email ?? session?.email ?? '',
-                        textDirection: TextDirection.ltr,
-                      ),
-                    if (profile?.phone != null || session?.phone != null)
-                      _ContactLine(
-                        icon: Icons.phone_outlined,
-                        text: profile?.phone ?? session?.phone ?? '',
-                        textDirection: TextDirection.ltr,
-                      ),
-                    if (profile?.nationality != null)
-                      _ContactLine(
-                        icon: Icons.public_outlined,
-                        text: profile!.nationality!,
-                      ),
-                  ],
+              if (profile?.email != null || session?.email != null) ...[
+                const SizedBox(height: 3),
+                Text(
+                  profile?.email ?? session?.email ?? '',
+                  textDirection: TextDirection.ltr,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-              ),
+              ],
+              if (profile?.phone != null || session?.phone != null) ...[
+                const SizedBox(height: 3),
+                Text(
+                  profile?.phone ?? session?.phone ?? '',
+                  textDirection: TextDirection.ltr,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ],
           ),
         ),
@@ -476,8 +462,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
         ),
         const SizedBox(height: 16),
-        const SecondaryDestinations(),
-        const SizedBox(height: 20),
         Text(l10n.settings, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         AppCard(
@@ -493,7 +477,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     .read(localeControllerProvider.notifier)
                     .setLocale(AppLocale.fromLanguageCode(code)),
               ),
-              const Divider(height: 24),
+              const Divider(height: 1),
               _PreferenceSelector<AppThemePreference>(
                 icon: Icons.brightness_6_outlined,
                 title: l10n.theme,
@@ -511,6 +495,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         ),
         const SizedBox(height: 20),
+        const SecondaryDestinations(),
+        const SizedBox(height: 16),
         Text(
           AppLocalizations.of(context).supportInformationLabel,
           style: Theme.of(context).textTheme.titleMedium,
@@ -633,6 +619,42 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 }
 
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar({required this.initials, this.avatar});
+  final String initials;
+  final String? avatar;
+  @override
+  Widget build(BuildContext context) {
+    final fallback = CircleAvatar(
+      radius: 36,
+      backgroundColor: context.premium.surfaceElevated,
+      child: Text(
+        initials,
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          color: context.premium.text,
+        ),
+      ),
+    );
+    final uri = Uri.tryParse(avatar ?? '');
+    if (uri == null ||
+        !{'http', 'https'}.contains(uri.scheme) ||
+        uri.host.isEmpty) {
+      return fallback;
+    }
+    return ClipOval(
+      child: Image.network(
+        uri.toString(),
+        width: 72,
+        height: 72,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => fallback,
+      ),
+    );
+  }
+}
+
 class _ProfileContent extends StatelessWidget {
   const _ProfileContent({required this.child});
 
@@ -698,14 +720,14 @@ class _ProfileActionRow extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadii.lg),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 78),
+          constraints: const BoxConstraints(minHeight: 62),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: Row(
               children: [
                 Container(
-                  width: 42,
-                  height: 42,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
                     color:
                         (destructive
@@ -762,72 +784,6 @@ class _ProfileActionRow extends StatelessWidget {
   }
 }
 
-class _ProfileHero extends StatelessWidget {
-  const _ProfileHero({required this.child, required this.padding});
-
-  final Widget child;
-  final EdgeInsetsGeometry padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final dark = theme.brightness == Brightness.dark;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-        border: Border.all(
-          color: AppColors.primaryRed.withValues(alpha: dark ? .34 : .2),
-        ),
-        gradient: LinearGradient(
-          begin: AlignmentDirectional.topStart,
-          end: AlignmentDirectional.bottomEnd,
-          colors: context.premium.heroGradient.colors,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryRed.withValues(alpha: dark ? .1 : .07),
-            blurRadius: 28,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Padding(padding: padding, child: child),
-    );
-  }
-}
-
-class _ContactLine extends StatelessWidget {
-  const _ContactLine({
-    required this.icon,
-    required this.text,
-    this.textDirection,
-  });
-
-  final IconData icon;
-  final String text;
-  final TextDirection? textDirection;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: Row(
-        children: [
-          Icon(icon, size: 15, color: Theme.of(context).hintColor),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              textDirection: textDirection,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PreferenceSelector<T> extends StatelessWidget {
   const _PreferenceSelector({
     required this.icon,
@@ -844,35 +800,32 @@ class _PreferenceSelector<T> extends StatelessWidget {
   final ValueChanged<T> onSelected;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            Icon(icon),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+  Widget build(BuildContext context) => ExpansionTile(
+    tilePadding: const EdgeInsets.symmetric(horizontal: 4),
+    shape: const Border(),
+    collapsedShape: const Border(),
+    leading: Icon(icon, size: 21, color: context.premium.information),
+    title: Text(title, style: Theme.of(context).textTheme.titleSmall),
+    subtitle: Text(
+      options[selected] ?? '',
+      style: Theme.of(context).textTheme.bodySmall,
+    ),
+    childrenPadding: const EdgeInsets.only(bottom: 10),
+    children: [
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final option in options.entries)
+            ChoiceChip(
+              label: Text(option.value),
+              selected: selected == option.key,
+              onSelected: (_) => onSelected(option.key),
             ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final option in options.entries)
-              ChoiceChip(
-                label: Text(option.value),
-                selected: selected == option.key,
-                onSelected: (_) => onSelected(option.key),
-              ),
-          ],
-        ),
-      ],
-    );
-  }
+        ],
+      ),
+    ],
+  );
 }
 
 class _GuestFeatureTile extends StatelessWidget {

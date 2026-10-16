@@ -83,9 +83,12 @@ class VisualQaApp extends StatelessWidget {
         initialScreen ?? Uri.base.queryParameters['screen'] ?? 'login';
     final requestedTheme = Uri.base.queryParameters['theme'];
     final requestedLocale = Uri.base.queryParameters['locale'];
+    final fixtureFa = (locale?.languageCode ?? requestedLocale) == 'fa';
     return ProviderScope(
       overrides: [
-        authControllerProvider.overrideWith((ref) => _visualAuthController()),
+        authControllerProvider.overrideWith(
+          (ref) => _visualAuthController(fa: fixtureFa),
+        ),
         appBootstrapProvider.overrideWith((ref) {
           if (screen != 'splash') return Future<void>.value();
           final bootstrap = Completer<void>();
@@ -94,14 +97,19 @@ class VisualQaApp extends StatelessWidget {
         }),
         sharedPreferencesProvider.overrideWithValue(preferences),
         applicationControllerProvider.overrideWith(
-          (ref) => ApplicationController(_VisualApplications(), 'visual-qa'),
+          (ref) => ApplicationController(
+            _VisualApplications(fa: fixtureFa),
+            'visual-qa',
+          ),
         ),
         documentControllerProvider.overrideWith(
-          (ref) => DocumentController(_VisualDocuments(), 'visual-qa'),
+          (ref) =>
+              DocumentController(_VisualDocuments(fa: fixtureFa), 'visual-qa'),
         ),
         feedProvider('en').overrideWith((ref) async => _visualFeed),
         visaCatalogProvider('en').overrideWith((ref) async => _visualCatalog),
-        visaCatalogProvider('fa').overrideWith((ref) async => _visualCatalog),
+        visaCatalogProvider('fa')
+            .overrideWith((ref) async => _localizedVisualCatalog()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -160,6 +168,7 @@ class _QaFrame extends StatelessWidget {
       'dashboard' => const DashboardPage(),
       'visa' => const VisaPage(),
       'ai' => const AiAssistantPage(visualQaDemo: true),
+      'ai-empty' => const AiAssistantPage(),
       'feed' => const FeedPage(),
       'admin' => const AdminHubPage(),
       'profile' => const ProfilePage(),
@@ -175,12 +184,16 @@ class _QaFrame extends StatelessWidget {
       'loading-compact' => const _CompactLoadingQaPage(),
       _ => const LoginPage(),
     };
+    if (Uri.base.queryParameters['dock'] == '1') {
+      return _ShellQaApp(screen: screen);
+    }
     return page;
   }
 }
 
 class _ShellQaApp extends StatefulWidget {
-  const _ShellQaApp();
+  const _ShellQaApp({this.screen = 'dashboard'});
+  final String screen;
 
   @override
   State<_ShellQaApp> createState() => _ShellQaAppState();
@@ -188,7 +201,16 @@ class _ShellQaApp extends StatefulWidget {
 
 class _ShellQaAppState extends State<_ShellQaApp> {
   late final GoRouter _router = GoRouter(
-    initialLocation: '/dashboard',
+    initialLocation: switch (widget.screen) {
+      'visa' => '/visa',
+      'ai' || 'ai-empty' => '/ai-assistant',
+      'cases' => '/applications',
+      'documents' => '/documents',
+      'profile' => '/profile',
+      'world-time' => '/world-clock',
+      'feed' => '/feed',
+      _ => '/dashboard',
+    },
     routes: [
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
@@ -203,7 +225,21 @@ class _ShellQaAppState extends State<_ShellQaApp> {
             '/documents',
             '/profile',
           ])
-            GoRoute(path: path, builder: (_, _) => const DashboardPage()),
+            GoRoute(
+              path: path,
+              builder: (_, _) => switch (path) {
+                '/visa' => const VisaPage(),
+                '/ai-assistant' => AiAssistantPage(
+                  visualQaDemo: widget.screen == 'ai',
+                ),
+                '/applications' => const ApplicationsPage(),
+                '/documents' => const DocumentsPage(),
+                '/profile' => const ProfilePage(),
+                '/world-clock' => const WorldClockPage(),
+                '/feed' => const FeedPage(),
+                _ => const DashboardPage(),
+              },
+            ),
         ],
       ),
     ],
@@ -466,13 +502,13 @@ class _CompactLoadingQaPage extends StatelessWidget {
   }
 }
 
-AuthController _visualAuthController() {
+AuthController _visualAuthController({bool fa = false}) {
   final controller = AuthController(_VisualAuthRepository());
   controller.applySession(
-    const UserSession(
+    UserSession(
       token: 'visual-qa-token',
       userId: 'visual-qa-user',
-      fullName: 'Visual QA traveler',
+      fullName: fa ? 'مسافر آزمایشی' : 'Visual QA traveler',
       email: 'visual.qa@example.test',
       authenticated: true,
       profileComplete: true,
@@ -534,12 +570,14 @@ class _VisualAuthRepository implements AuthRepository {
 }
 
 class _VisualApplications implements ApplicationRepository {
+  _VisualApplications({this.fa = false});
+  final bool fa;
   static final _records = [
     VisaApplication(
       id: 'visual-app-1',
       title: 'Sample study pathway',
       programName: 'Visual QA example',
-      country: 'Sample destination',
+      country: 'Canada',
       status: ApplicationStatus.reviewing,
       updatedAt: DateTime.utc(2026, 10, 8),
       userId: 'visual-qa',
@@ -548,7 +586,7 @@ class _VisualApplications implements ApplicationRepository {
       id: 'visual-app-2',
       title: 'Sample document review',
       programName: 'Visual QA example',
-      country: 'Sample destination',
+      country: 'Germany',
       status: ApplicationStatus.documentsRequired,
       updatedAt: DateTime.utc(2026, 10, 7),
       userId: 'visual-qa',
@@ -562,8 +600,18 @@ class _VisualApplications implements ApplicationRepository {
   @override
   Future<VisaApplication?> getApplication(String id) async => null;
   @override
-  Future<List<VisaApplication>> listApplications({String? userId}) async =>
-      _records;
+  Future<List<VisaApplication>> listApplications({String? userId}) async => fa
+      ? _records
+            .map(
+              (a) => a.copyWith(
+                title: a.id == 'visual-app-1'
+                    ? 'پرونده آزمایشی تحصیل'
+                    : 'بررسی آزمایشی مدارک',
+                programName: 'نمونه نمایشی',
+              ),
+            )
+            .toList()
+      : _records;
   @override
   Future<VisaApplication> updateApplication(
     VisaApplication application,
@@ -571,6 +619,8 @@ class _VisualApplications implements ApplicationRepository {
 }
 
 class _VisualDocuments implements DocumentRepository {
+  _VisualDocuments({this.fa = false});
+  final bool fa;
   static final _records = [
     Document(
       id: 'visual-doc-1',
@@ -595,7 +645,17 @@ class _VisualDocuments implements DocumentRepository {
   @override
   Future<Document?> getDocument(String id) async => null;
   @override
-  Future<List<Document>> listDocuments({String? userId}) async => _records;
+  Future<List<Document>> listDocuments({String? userId}) async => fa
+      ? _records
+            .map(
+              (d) => d.copyWith(
+                name: d.kind == DocumentTypeKind.passport
+                    ? 'گذرنامه آزمایشی'
+                    : 'مدرک تحصیلی آزمایشی',
+              ),
+            )
+            .toList()
+      : _records;
   @override
   Future<Document> uploadDocument({
     required Document document,
@@ -673,29 +733,74 @@ const _visualCountries = [
 
 final _visualCatalog = VisaCatalog(
   countries: _visualCountries,
-  categories: const [
-    VisaCategory(
-      id: 'visual-category-1',
-      name: 'Sample pathway',
-      description: 'Visual QA only',
-      slug: 'sample-pathway',
-    ),
+  categories: [
+    for (final entry in [
+      'Study',
+      'Work',
+      'Investment',
+      'Visit',
+    ].asMap().entries)
+      VisaCategory(
+        id: 'visual-category-${entry.key + 1}',
+        name: entry.value,
+        description: 'Synthetic visual QA category only',
+        slug: 'qa-${entry.key}',
+      ),
   ],
   programs: [
     for (final country in _visualCountries)
-      VisaProgram(
-        id: 'visual-program-${country.code.toLowerCase()}',
-        slug: 'sample-${country.slug}-pathway',
-        title: 'Sample study pathway',
-        countryId: country.id,
-        categoryId: 'visual-category-1',
-        summary: 'Synthetic non-customer catalogue content for visual QA only.',
-        source: VisaSource(
-          title: 'Visual QA source',
-          url: 'https://example.test',
-          publisher: 'RAD Visual QA',
-          retrievedAt: DateTime.utc(2026, 10, 8),
+      for (var category = 1; category <= 4; category++)
+        VisaProgram(
+          id: 'visual-program-${country.code.toLowerCase()}-$category',
+          slug: 'sample-${country.slug}-pathway',
+          title: 'Sample study pathway',
+          countryId: country.id,
+          categoryId: 'visual-category-$category',
+          summary:
+              'Synthetic non-customer catalogue content for visual QA only.',
+          source: VisaSource(
+            title: 'Visual QA source',
+            url: 'https://example.test',
+            publisher: 'RAD Visual QA',
+            retrievedAt: DateTime.utc(2026, 10, 8),
+          ),
         ),
+  ],
+);
+
+VisaCatalog _localizedVisualCatalog() => VisaCatalog(
+  countries: [
+    for (final c in _visualCountries)
+      Country(
+        id: c.id,
+        code: c.code,
+        flagEmoji: c.flagEmoji,
+        slug: c.slug,
+        summary: 'نمونه نمایشی',
+        name:
+            {
+              'CA': 'کانادا',
+              'DE': 'آلمان',
+              'AE': 'امارات',
+              'JP': 'ژاپن',
+              'AU': 'استرالیا',
+            }[c.code] ??
+            c.name,
       ),
   ],
+  categories: [
+    for (final c in _visualCatalog.categories)
+      VisaCategory(
+        id: c.id,
+        name: {
+          'visual-category-1': 'تحصیلی',
+          'visual-category-2': 'کاری',
+          'visual-category-3': 'سرمایه‌گذاری',
+          'visual-category-4': 'گردشگری',
+        }[c.id]!,
+        description: 'نمونه نمایشی',
+        slug: c.slug,
+      ),
+  ],
+  programs: _visualCatalog.programs,
 );

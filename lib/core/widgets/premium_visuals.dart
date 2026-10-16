@@ -21,7 +21,7 @@ class PremiumCanvas extends StatelessWidget {
     this.dark = false,
     this.accent = AppColors.teal,
     this.compact = false,
-    this.showEditorialRule = true,
+    this.showEditorialRule = false,
   });
 
   final Widget child;
@@ -492,15 +492,6 @@ class _CanvasGridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final grid = Paint()
-      ..color = (dark ? Colors.white : AppColors.navy).withValues(
-        alpha: dark ? 0.008 : 0.004,
-      )
-      ..strokeWidth = 1;
-    final step = compact ? 52.0 : 72.0;
-    for (var x = -size.height; x < size.width + size.height; x += step) {
-      canvas.drawLine(Offset(x, 0), Offset(x + size.height, size.height), grid);
-    }
     final glow = Paint()
       ..shader =
           RadialGradient(

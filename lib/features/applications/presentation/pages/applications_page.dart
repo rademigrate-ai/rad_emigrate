@@ -9,7 +9,9 @@ import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
-import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/reference_widgets.dart';
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../visa/presentation/widgets/country_photography.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/progress_steps.dart';
 import '../../../../core/widgets/rad_loading.dart';
@@ -28,6 +30,7 @@ class ApplicationsPage extends ConsumerStatefulWidget {
 
 class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
   VisaApplication? _selected;
+  int _filter = 0;
   var _creatingDraft = false;
   var _updatingStatus = false;
 
@@ -194,6 +197,21 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
                 children: [
+                  if (referenceCountryCode(app.country)
+                      case final String code) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: SizedBox(
+                        height: 150,
+                        width: double.infinity,
+                        child: CountryPhotography.image(
+                          code: code,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,89 +336,148 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                 onAction: _createDraft,
               );
             }
+            final filtered = apps
+                .where(
+                  (app) =>
+                      _filter == 0 ||
+                      (_filter == 2
+                          ? {
+                              ApplicationStatus.completed,
+                              ApplicationStatus.approved,
+                            }.contains(app.status)
+                          : !{
+                              ApplicationStatus.completed,
+                              ApplicationStatus.approved,
+                              ApplicationStatus.rejected,
+                            }.contains(app.status)),
+                )
+                .toList();
             return Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 880),
-                child: ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-                  itemCount: apps.length + 1,
-                  separatorBuilder: (_, _) => const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return PremiumHeroPanel(
-                        kicker: EditorialKicker(
-                          index: '03',
-                          label: AppLocalizations.of(context).caseRoom,
-                          dark: true,
-                        ),
-                        title: l10n.applications,
-                        body: l10n.caseOverviewSubtitle,
-                        trailing: const RadOrbit(size: 180, showBrand: false),
-                      );
-                    }
-                    final app = apps[index - 1];
-                    return MotionStagger(
-                      index: index - 1,
-                      child: AppCard(
-                        onTap: () => setState(() => _selected = app),
-                        padding: EdgeInsets.zero,
-                        child: IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                width: 8,
-                                color: _toneColor(_tone(app.status)),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${l10n.cases} ${(index).toString().padLeft(2, '0')}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall
-                                            ?.copyWith(
-                                              color: AppColors.teal,
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: 1,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 7),
-                                      Text(
-                                        app.title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        '${app.programName} · ${app.country}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 14),
-                                      StatusBadge(
-                                        label: _statusLabel(app.status, l10n),
-                                        tone: _tone(app.status),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 6,
+                      children: [
+                        for (final entry in [
+                          l10n.allCases,
+                          l10n.statusReviewing,
+                          l10n.statusCompleted,
+                        ].asMap().entries)
+                          ChoiceChip(
+                            label: Text(entry.value),
+                            selected: _filter == entry.key,
+                            selectedColor: context.premium.accent,
+                            showCheckmark: false,
+                            labelStyle: TextStyle(
+                              color: _filter == entry.key
+                                  ? Colors.white
+                                  : context.premium.mutedText,
+                            ),
+                            onSelected: (_) =>
+                                setState(() => _filter = entry.key),
                           ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    if (filtered.isEmpty)
+                      EmptyState(
+                        title: l10n.noApplications,
+                        subtitle: l10n.noApplicationsSubtitle,
+                      ),
+                    for (final app in filtered)
+                      AppCard(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(14),
+                        onTap: () => setState(() => _selected = app),
+                        child: Row(
+                          children: [
+                            ReferenceFlag(country: app.country, size: 44),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    app.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w800),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    app.programName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    _statusLabel(app.status, l10n),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: _toneColor(
+                                            _tone(app.status),
+                                            context,
+                                          ),
+                                        ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Semantics(
+                                    label:
+                                        '${l10n.progress}: ${_statusLabel(app.status, l10n)}',
+                                    child: Row(
+                                      children: [
+                                        for (final step in _timeline(
+                                          app.status,
+                                          l10n,
+                                        ))
+                                          Expanded(
+                                            child: Container(
+                                              height: 4,
+                                              margin:
+                                                  const EdgeInsetsDirectional.only(
+                                                    end: 3,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                color:
+                                                    step.state ==
+                                                        ProgressStepState
+                                                            .upcoming
+                                                    ? context.premium.border
+                                                    : _toneColor(
+                                                        _tone(app.status),
+                                                        context,
+                                                      ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Icon(
+                              directionalChevron(context),
+                              size: 18,
+                              color: context.premium.mutedText,
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
+                  ],
                 ),
               ),
             );
@@ -411,10 +488,10 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
   }
 }
 
-Color _toneColor(StatusTone tone) => switch (tone) {
-  StatusTone.success => AppColors.success,
-  StatusTone.warning => AppColors.warning,
-  StatusTone.danger => AppColors.error,
-  StatusTone.info => AppColors.teal,
-  StatusTone.neutral => AppColors.navyMuted,
+Color _toneColor(StatusTone tone, BuildContext context) => switch (tone) {
+  StatusTone.success => context.premium.success,
+  StatusTone.warning => context.premium.accentForeground,
+  StatusTone.danger => context.premium.error,
+  StatusTone.info => context.premium.information,
+  StatusTone.neutral => context.premium.mutedText,
 };

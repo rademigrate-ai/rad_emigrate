@@ -135,6 +135,8 @@ void main() {
         'dashboard',
         'visa',
         'ai',
+        'ai-empty',
+        'splash',
         'cases',
         'documents',
         'profile',

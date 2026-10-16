@@ -1,4 +1,11 @@
 {
+  "consultationShortLabel": "Consultation",
+  "suggestionComparePathways": "How can I compare immigration pathways?",
+
+  "migrationHeroTitle": "Your immigration journey starts here",
+  "recentActivity": "Recent activity",
+  "allItems": "All",
+
   "@@locale": "en",
   "appTitle": "RAD International Institute",
   "@appTitle": {

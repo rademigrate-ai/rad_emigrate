@@ -2,6 +2,22 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsEnA on AppLocalizations {
   @override
+  String get consultationShortLabel => 'Consultation';
+
+  @override
+  String get suggestionComparePathways =>
+      'How can I compare immigration pathways?';
+
+  @override
+  String get migrationHeroTitle => 'Your immigration journey starts here';
+
+  @override
+  String get recentActivity => 'Recent activity';
+
+  @override
+  String get allItems => 'All';
+
+  @override
   String get appTitle => 'RAD International Institute';
 
   @override

@@ -1,11 +1,12 @@
 """Guest interactions in the real app, using CI placeholder configuration."""
 import asyncio
 import json
+import os
 from pathlib import Path
 from playwright.async_api import async_playwright
 
-BASE = 'http://127.0.0.1:8825'
-OUT = Path('docs/qa/pr54/redesign/real-app')
+BASE = os.environ.get('RAD_QA_BASE_URL', 'http://127.0.0.1:8825')
+OUT = Path(os.environ.get('RAD_QA_OUTPUT', 'docs/qa/pr54/redesign/real-app'))
 
 
 async def semantics(page):
@@ -47,7 +48,9 @@ async def main():
         await page.mouse.wheel(0, 1600)
         await page.wait_for_timeout(800)
         await semantics(page)
+        await page.get_by_role('button', name='Theme', exact=False).dispatch_event('click')
         await page.get_by_role('checkbox', name='Dark', exact=True).dispatch_event('click')
+        await page.get_by_role('button', name='Language', exact=False).dispatch_event('click')
         await page.get_by_role('checkbox', name='Persian', exact=True).dispatch_event('click')
         await page.wait_for_timeout(800)
         await page.screenshot(path=str(OUT / 'persian-dark-profile.png'))

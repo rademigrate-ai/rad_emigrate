@@ -5,13 +5,19 @@ import os
 from pathlib import Path
 from playwright.async_api import async_playwright
 
-OUT = Path('docs/qa/pr54/redesign')
+OUT = Path(os.environ.get('RAD_QA_OUTPUT', 'docs/qa/pr54/redesign'))
 BASE = os.environ.get('RAD_QA_BASE_URL', 'http://127.0.0.1:8824/')
 SCREENS = ['shell', 'dashboard', 'visa', 'ai', 'cases', 'documents', 'profile',
-           'world-time', 'login', 'register', 'otp', 'forgot-password',
+           'world-time', 'ai-empty', 'splash', 'loading', 'login', 'register', 'otp', 'forgot-password',
            'reset-password', 'profile-completion', 'consultation', 'feed',
            'notifications', 'admin', 'not-found']
+if os.environ.get('RAD_QA_SCREENS'):
+    SCREENS = os.environ['RAD_QA_SCREENS'].split(',')
 SIZES = {'mobile': (390, 844), 'tablet': (834, 1112), 'desktop': (1440, 900)}
+
+
+if os.environ.get('RAD_QA_SIZES'):
+    SIZES = {key: SIZES[key] for key in os.environ['RAD_QA_SIZES'].split(',')}
 
 
 async def main():
@@ -28,6 +34,8 @@ async def main():
                 page.on('pageerror', lambda error: errors.append(str(error)))
                 page.on('console', lambda message: errors.append(message.text) if message.type == 'error' else None)
                 url = f'{BASE}?screen={screen}&locale={locale}&theme={theme}&capture=1'
+                if os.environ.get('RAD_QA_DOCK') == '1' and screen in ['shell', 'dashboard', 'visa', 'ai', 'ai-empty', 'cases', 'documents', 'profile', 'world-time', 'feed']:
+                    url += '&dock=1'
                 response = await page.goto(url, wait_until='networkidle', timeout=90000)
                 await page.wait_for_selector('flt-glass-pane', state='attached')
                 await page.wait_for_timeout(1000)

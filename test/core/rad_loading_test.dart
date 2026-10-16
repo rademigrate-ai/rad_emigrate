@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/loading_state.dart';
 import 'package:rad_emigrate/core/widgets/motion_primitives.dart';
-import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 
 void main() {
   testWidgets('full-screen RAD loader exposes one live loading label', (
@@ -33,67 +33,62 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('loading adapter maps every tier to the approved Earth scene', (
-    tester,
-  ) async {
-    final semantics = tester.ensureSemantics();
+  testWidgets(
+    'loading adapter maps every tier to the approved natural wingbeat',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
 
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: Column(
-            children: [
-              RadLoadingIndicator(
-                size: RadLoadingSize.fullScreen,
-                label: 'Loading RAD workspace',
-              ),
-              RadLoadingIndicator(
-                size: RadLoadingSize.section,
-                label: 'Loading applications',
-              ),
-              RadInlineLoading(label: 'Updating application'),
-            ],
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                RadLoadingIndicator(
+                  size: RadLoadingSize.fullScreen,
+                  label: 'Loading RAD workspace',
+                ),
+                RadLoadingIndicator(
+                  size: RadLoadingSize.section,
+                  label: 'Loading applications',
+                ),
+                RadInlineLoading(label: 'Updating application'),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.fullScreenLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.sectionLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.compactLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      tester.getSemantics(
+      expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadLoadingIndicator &&
-              widget.size == RadLoadingSize.fullScreen,
+          (widget) => widget is RadFlappingBird && widget.size == 280,
         ),
-      ),
-      matchesSemantics(label: 'Loading RAD workspace', isLiveRegion: true),
-    );
-    semantics.dispose();
-  });
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadFlappingBird && widget.size == 120,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadFlappingBird && widget.size == 40,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        tester.getSemantics(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is RadLoadingIndicator &&
+                widget.size == RadLoadingSize.fullScreen,
+          ),
+        ),
+        matchesSemantics(label: 'Loading RAD workspace', isLiveRegion: true),
+      );
+      semantics.dispose();
+    },
+  );
 
   testWidgets('section and compact loaders preserve their declared tier', (
     tester,
@@ -347,9 +342,7 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadEarthBirdScene &&
-              widget.variant == RadEarthBirdVariant.splash,
+          (widget) => widget is RadFlappingBird && widget.size == 280,
         ),
         findsOneWidget,
       );

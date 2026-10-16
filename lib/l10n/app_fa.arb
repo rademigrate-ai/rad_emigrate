@@ -1,4 +1,11 @@
 {
+  "consultationShortLabel": "مشاوره",
+  "suggestionComparePathways": "چطور مسیرهای مهاجرت را مقایسه کنم؟",
+
+  "migrationHeroTitle": "مسیر مهاجرت شما از اینجا شروع می‌شود",
+  "recentActivity": "آخرین فعالیت‌ها",
+  "allItems": "همه",
+
   "@@locale": "fa",
   "appTitle": "موسسه بین‌المللی راد",
   "signIn": "ورود",

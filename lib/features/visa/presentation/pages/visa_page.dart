@@ -15,7 +15,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
 import '../../data/visa_repository.dart';
 import '../providers/visa_catalog_provider.dart';
-import '../widgets/country_carousel.dart';
+import '../../../../core/widgets/reference_widgets.dart';
 import '../widgets/country_photography.dart';
 
 part 'visa_page_countries.dart';
@@ -36,14 +36,12 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   Country? _country;
   VisaProgram? _program;
   String _query = '';
-  var _showSearch = false;
 
   void _openCountry(Country country) {
     setState(() {
       _country = country;
       _program = null;
       _stage = _VisaStage.countryDetail;
-      _showSearch = false;
     });
   }
 
@@ -86,14 +84,6 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                 icon: Icon(directionalBack(context)),
                 onPressed: _back,
               ),
-        actions: [
-          if (_stage == _VisaStage.countries)
-            IconButton(
-              tooltip: l10n.searchProgrammes,
-              icon: Icon(_showSearch ? Icons.close : Icons.search),
-              onPressed: () => setState(() => _showSearch = !_showSearch),
-            ),
-        ],
       ),
       body: PremiumCanvas(
         accent: AppColors.teal,
@@ -114,7 +104,6 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                   _VisaStage.countries => _CountriesStage(
                     catalog: value,
                     l10n: l10n,
-                    showSearch: _showSearch,
                     query: _query,
                     onQuery: (q) => setState(() => _query = q),
                     onSelect: _openCountry,

@@ -375,6 +375,24 @@ class _NavSlot extends StatelessWidget {
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
+              if (selected)
+                Positioned(
+                  bottom: 5,
+                  child: Container(
+                    width: 26,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: context.premium.accentForeground,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.premium.accent.withValues(alpha: .3),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               Positioned(
                 bottom: 34,
                 child: AnimatedScale(

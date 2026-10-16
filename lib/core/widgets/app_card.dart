@@ -37,15 +37,16 @@ class _AppCardState extends State<AppCard> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     final active = _interactive && (_hovered || _focused || _pressed);
     final elevated = _hovered || _focused;
     final borderColor = active
         ? scheme.secondary.withValues(alpha: 0.58)
         : widget.emphasized
         ? scheme.primary.withValues(alpha: 0.28)
-        : theme.dividerColor;
+        : context.premium.border.withValues(
+            alpha: context.premium.isDark ? .8 : .35,
+          );
     final surface = widget.emphasized
         ? Color.alphaBlend(
             scheme.primary.withValues(alpha: 0.06),
@@ -67,7 +68,7 @@ class _AppCardState extends State<AppCard> {
         duration: duration,
         curve: AppMotion.curve(context, preferred: AppMotion.emphasizedCurve),
         decoration: BoxDecoration(
-          color: surface,
+          color: surface.withValues(alpha: context.premium.isDark ? .88 : .80),
           borderRadius: BorderRadius.circular(AppRadii.lg),
           border: Border.all(color: borderColor),
           boxShadow: elevated
@@ -78,7 +79,15 @@ class _AppCardState extends State<AppCard> {
                     offset: const Offset(0, 8),
                   ),
                 ]
-              : const [],
+              : [
+                  BoxShadow(
+                    color: context.premium.isDark
+                        ? const Color(0x14000000)
+                        : const Color(0x086E8EB8),
+                    blurRadius: 18,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
         ),
         child: Material(
           color: Colors.transparent,

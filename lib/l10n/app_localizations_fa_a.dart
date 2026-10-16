@@ -2,6 +2,21 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get consultationShortLabel => 'مشاوره';
+
+  @override
+  String get suggestionComparePathways => 'چطور مسیرهای مهاجرت را مقایسه کنم؟';
+
+  @override
+  String get migrationHeroTitle => 'مسیر مهاجرت شما از اینجا شروع می‌شود';
+
+  @override
+  String get recentActivity => 'آخرین فعالیت‌ها';
+
+  @override
+  String get allItems => 'همه';
+
+  @override
   String get appTitle => 'موسسه بین‌المللی راد';
   @override
   String get signIn => 'ورود';

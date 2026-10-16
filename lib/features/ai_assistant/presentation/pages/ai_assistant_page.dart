@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/rad_ai_bird.dart';
@@ -359,6 +359,19 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       l10n.suggestionStudyPermitDocuments,
       l10n.suggestionVisaProcessingTime,
       l10n.suggestionGteStatement,
+      l10n.suggestionComparePathways,
+    ];
+    const suggestionColors = [
+      Color(0xFFD91F2B),
+      Color(0xFF345CFF),
+      Color(0xFF00A986),
+      Color(0xFF3186DA),
+    ];
+    const suggestionIcons = [
+      Icons.school_outlined,
+      Icons.work_outline,
+      Icons.trending_up,
+      Icons.public_outlined,
     ];
     final draftContext = ref.watch(aiPromptDraftProvider).contextLabel;
     final effectiveContext =
@@ -372,23 +385,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         active: _loading,
         child: Column(
           children: [
-            if (!widget.embedded)
-              Material(
-                color: context.premium.surfaceElevated,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  child: Text(
-                    widget.adminMode
-                        ? l10n.untrustedResearchDisclaimer
-                        : l10n.aiDisclaimer,
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: context.premium.mutedText),
-                  ),
-                ),
-              ),
             if (effectiveContext != null && effectiveContext.trim().isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -405,59 +401,93 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               ),
             Expanded(
               child: _messages.isEmpty
-                  ? ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-                      children: [
-                        PremiumHeroPanel(
-                          kicker: EditorialKicker(
-                            index: '04',
-                            label: AppLocalizations.of(context).radIntelligence,
-                          ),
-                          title: l10n.howCanWeHelp,
-                          body: l10n.askAboutVisas,
-                          trailing: RadAiBird(
-                            state: _birdState,
-                            semanticLabel: _birdSemanticLabel(context),
-                            size: 180,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ...suggestions.asMap().entries.map(
-                          (entry) => MotionStagger(
-                            index: entry.key,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: AppCard(
-                                onTap: () => _send(entry.value),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 32,
-                                      height: 32,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.teal.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          AppRadii.sm,
-                                        ),
-                                      ),
-                                      child: const Icon(
-                                        Icons.auto_awesome,
-                                        size: 17,
-                                        color: AppColors.teal,
-                                      ),
+                  ? Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 640),
+                        child: ListView(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  RadAiBird(
+                                    state: _birdState,
+                                    semanticLabel: _birdSemanticLabel(context),
+                                    size: 140,
+                                    showBackgroundOrb: false,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    l10n.howCanWeHelp,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.w800),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 380,
                                     ),
-                                    const SizedBox(width: 12),
-                                    Expanded(child: Text(entry.value)),
-                                  ],
+                                    child: Text(
+                                      l10n.askAboutVisas,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ...suggestions.asMap().entries.map(
+                              (entry) => MotionStagger(
+                                index: entry.key,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: AppCard(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    onTap: () => _send(entry.value),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 32,
+                                          height: 32,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: suggestionColors[entry.key]
+                                                .withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(
+                                              AppRadii.sm,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            suggestionIcons[entry.key],
+                                            size: 17,
+                                            color: suggestionColors[entry.key],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(child: Text(entry.value)),
+                                        Icon(
+                                          directionalChevron(context),
+                                          size: 18,
+                                          color: context.premium.mutedText,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     )
                   : ListView.builder(
                       controller: _scroll,
@@ -576,6 +606,23 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       },
                     ),
             ),
+            if (!widget.embedded)
+              Material(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
+                  child: Text(
+                    widget.adminMode
+                        ? l10n.untrustedResearchDisclaimer
+                        : l10n.aiDisclaimer,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: context.premium.mutedText),
+                  ),
+                ),
+              ),
             SafeArea(
               child: Container(
                 color: context.premium.surface,

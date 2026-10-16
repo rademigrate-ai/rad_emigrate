@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'rad_earth_bird_scene.dart';
+import 'rad_flapping_bird.dart';
 
 /// The visual density appropriate for a real pending operation.
 enum RadLoadingSize { fullScreen, section, compact }
 
-/// A lifecycle-safe, branded pending-operation adapter for RAD.
-///
-/// The visual renderer is intentionally shared with the approved Login Hero:
-/// [RadEarthBirdScene] owns painting, the official bird asset, orbit geometry,
-/// Reduced Motion, ticker state, repaint isolation, and controller disposal.
-/// This adapter owns the density selection, contextual message, and one live
-/// loading announcement for existing pending-state call sites.
+/// Branded pending feedback using the existing six-stage natural wingbeat.
+/// The original bird artwork, reduced motion and ticker lifecycle are owned by
+/// RadFlappingBird. This adapter supplies size and one live announcement.
 class RadLoadingIndicator extends StatelessWidget {
   const RadLoadingIndicator({
     super.key,
@@ -20,7 +16,7 @@ class RadLoadingIndicator extends StatelessWidget {
     this.message,
     this.active = true,
     this.dark = false,
-  }) : _sceneVariantOverride = null;
+  });
 
   /// Prominent app-bootstrap feedback using the approved Splash visual tier.
   const RadLoadingIndicator.splash({
@@ -29,32 +25,32 @@ class RadLoadingIndicator extends StatelessWidget {
     this.message,
     this.active = true,
     this.dark = true,
-  }) : size = RadLoadingSize.fullScreen,
-       _sceneVariantOverride = RadEarthBirdVariant.splash;
+  }) : size = RadLoadingSize.fullScreen;
 
   final RadLoadingSize size;
   final String label;
   final String? message;
   final bool active;
   final bool dark;
-  final RadEarthBirdVariant? _sceneVariantOverride;
-
-  RadEarthBirdVariant get _sceneVariant =>
-      _sceneVariantOverride ??
-      switch (size) {
-        RadLoadingSize.fullScreen => RadEarthBirdVariant.fullScreenLoading,
-        RadLoadingSize.section => RadEarthBirdVariant.sectionLoading,
-        RadLoadingSize.compact => RadEarthBirdVariant.compactLoading,
-      };
-
   @override
   Widget build(BuildContext context) {
     final scene = ExcludeSemantics(
-      child: RadEarthBirdScene(
-        variant: _sceneVariant,
-        semanticLabel: label,
-        active: active,
-        dark: dark,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final preferred = switch (size) {
+            RadLoadingSize.fullScreen => 280.0,
+            RadLoadingSize.section => 120.0,
+            RadLoadingSize.compact => 40.0,
+          };
+          final dimension = constraints.hasBoundedWidth
+              ? preferred.clamp(0.0, constraints.maxWidth)
+              : preferred;
+          return RadFlappingBird(
+            size: dimension,
+            active: active,
+            showAura: size != RadLoadingSize.compact,
+          );
+        },
       ),
     );
 
@@ -64,7 +60,26 @@ class RadLoadingIndicator extends StatelessWidget {
       container: true,
       child: ExcludeSemantics(
         child: switch (size) {
-          RadLoadingSize.compact => scene,
+          RadLoadingSize.compact => LayoutBuilder(
+            builder: (context, constraints) {
+              if (!constraints.hasBoundedWidth || constraints.maxWidth < 160) {
+                return SizedBox(width: 40, child: scene);
+              }
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: 40, child: scene),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      message ?? label,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
           _ => Column(
             mainAxisSize: MainAxisSize.min,
             children: [

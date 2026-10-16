@@ -28,7 +28,7 @@ class PremiumTokens extends ThemeExtension<PremiumTokens> {
 
   bool get isDark => canvas.computeLuminance() < 0.1;
   Color get text => isDark ? const Color(0xFFF8FAFC) : AppColors.textPrimary;
-  Color get disabledText => mutedText;
+  Color get disabledText => isDark ? mutedText : const Color(0xFF596575);
   Color get accent => AppColors.primaryRed;
   // The lighter foreground is reserved for small red text on dark surfaces.
   Color get accentForeground => isDark ? const Color(0xFFFF7685) : accent;
@@ -62,11 +62,11 @@ class PremiumTokens extends ThemeExtension<PremiumTokens> {
   );
 
   static const dark = PremiumTokens(
-    canvas: Color(0xFF070A0F),
-    surface: Color(0xFF10151D),
-    surfaceElevated: Color(0xFF171D27),
-    border: Color(0xFF29313D),
-    mutedText: Color(0xFFAAB2BF),
+    canvas: Color(0xFF0B1220),
+    surface: Color(0xFF121A26),
+    surfaceElevated: Color(0xFF1A2333),
+    border: Color(0xFF243041),
+    mutedText: Color(0xFF94A3B8),
     heroGradient: LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
