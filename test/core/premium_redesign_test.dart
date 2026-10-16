@@ -119,6 +119,7 @@ void main() {
   for (final locale in ['en', 'fa']) {
     for (final mode in [ThemeMode.light, ThemeMode.dark]) {
       for (final screen in [
+        'admin',
         'dashboard',
         'visa',
         'ai',

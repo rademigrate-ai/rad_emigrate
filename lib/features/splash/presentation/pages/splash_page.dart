@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +58,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: PremiumCanvas(
-        dark: true,
         accent: AppColors.teal,
         showEditorialRule: false,
         child: SafeArea(
@@ -68,12 +69,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 child: EditorialKicker(
                   index: '01',
                   label: AppLocalizations.of(context).immigrationJourney,
-                  dark: true,
                 ),
               ),
               LoadingState.splash(
                 message: l10n.splashLoadingStatus,
-                dark: true,
+                dark: context.premium.isDark,
               ),
               PositionedDirectional(
                 bottom: 28,
@@ -83,7 +83,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                   l10n.brandIntroTitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
+                    color: context.premium.text,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

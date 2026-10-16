@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,7 +48,6 @@ class AdminHubPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.adminOperations)),
       body: PremiumCanvas(
-        dark: true,
         accent: AppColors.teal,
         child: SafeArea(
           child: Center(
@@ -59,7 +60,6 @@ class AdminHubPage extends StatelessWidget {
                     kicker: EditorialKicker(
                       index: '06',
                       label: AppLocalizations.of(context).operationsConsole,
-                      dark: true,
                     ),
                     title: l10n.adminOperations,
                     body: l10n.serverEnforcedAccessBody,
@@ -68,7 +68,8 @@ class AdminHubPage extends StatelessWidget {
                   const SizedBox(height: 24),
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final wide = constraints.maxWidth >= 700;
+                      final wide =
+                          constraints.maxWidth >= AppBreakpoints.tablet;
                       return Wrap(
                         spacing: 14,
                         runSpacing: 14,
@@ -125,9 +126,9 @@ class _AdminDeckCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(26),
+      borderRadius: BorderRadius.circular(AppRadii.xl),
       child: Material(
-        color: const Color(0xFF0D2B37),
+        color: context.premium.surface,
         child: InkWell(
           onTap: onTap,
           child: Padding(
@@ -140,20 +141,24 @@ class _AdminDeckCard extends StatelessWidget {
                     Text(
                       item.index,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: const Color(0xFF74E2DB),
+                        color: context.premium.information,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.4,
                       ),
                     ),
                     const Spacer(),
-                    Icon(item.icon, color: const Color(0xFF74E2DB), size: 25),
+                    Icon(
+                      item.icon,
+                      color: context.premium.information,
+                      size: 25,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 34),
                 Text(
                   item.title,
                   style: Theme.of(context).textTheme.titleLarge
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: context.premium.text),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -161,7 +166,7 @@ class _AdminDeckCard extends StatelessWidget {
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(color: const Color(0xFFBDD2D8)),
+                      ?.copyWith(color: context.premium.mutedText),
                 ),
                 const SizedBox(height: 24),
                 Icon(directionalChevron(context), color: AppColors.primaryRed),
