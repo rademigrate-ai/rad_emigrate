@@ -50,7 +50,7 @@ class VisaRepository {
             .eq('status', 'published')
             .eq('visa_program_localizations.locale', language)
             .order('published_at', ascending: false),
-      ]);
+      ]).timeout(const Duration(seconds: 10));
 
       return VisaCatalog(
         countries: (results[0] as List<dynamic>)
@@ -77,6 +77,7 @@ class VisaRepository {
           text.contains('network') ||
           text.contains('connection') ||
           text.contains('failed host lookup') ||
+          text.contains('timeout') ||
           text.contains('xmlhttprequest')) {
         throw VisaCatalogException(VisaCatalogFailureKind.network, error);
       }

@@ -1,0 +1,45 @@
+[
+  {
+    "test": "Real App Mobile Dashboard",
+    "url": "http://127.0.0.1:8794/dashboard",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-dashboard.png",
+    "console_errors": [
+      "[error] Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ]
+  },
+  {
+    "test": "Real App Mobile World Clock",
+    "url": "http://127.0.0.1:8794/world-clock",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-world-clock.png"
+  },
+  {
+    "test": "Real App Mobile Visa",
+    "url": "http://127.0.0.1:8794/visa",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-visa.png"
+  },
+  {
+    "test": "Real App Mobile Profile (Guest)",
+    "url": "http://127.0.0.1:8794/profile",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-profile.png"
+  },
+  {
+    "test": "Real App Mobile AI Assistant",
+    "url": "http://127.0.0.1:8794/ai-assistant",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-ai-assistant.png"
+  },
+  {
+    "test": "Real App Mobile Consultation",
+    "url": "http://127.0.0.1:8794/consultation",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-mobile-consultation.png"
+  },
+  {
+    "test": "Real App Desktop Dashboard",
+    "url": "http://127.0.0.1:8794/dashboard",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-desktop-dashboard.png"
+  },
+  {
+    "test": "Real App Desktop World Clock",
+    "url": "http://127.0.0.1:8794/world-clock",
+    "screenshot": "docs\\qa\\pr54\\real_app\\real-desktop-world-clock.png"
+  }
+]
