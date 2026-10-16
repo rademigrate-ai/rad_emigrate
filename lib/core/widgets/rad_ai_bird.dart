@@ -17,11 +17,13 @@ class RadAiBird extends StatefulWidget {
     required this.state,
     required this.semanticLabel,
     this.size = 176,
+    this.showStateEffects = true,
   });
 
   final RadAiBirdState state;
   final String semanticLabel;
   final double size;
+  final bool showStateEffects;
 
   @override
   State<RadAiBird> createState() => _RadAiBirdState();
@@ -94,7 +96,8 @@ class _RadAiBirdState extends State<RadAiBird>
                 final reduced = AppMotion.reduceMotion(context);
                 final pose = reduced ? 0.0 : math.sin(t);
                 final dy = switch (widget.state) {
-                  RadAiBirdState.idle => pose * 2.5,
+                  RadAiBirdState.idle =>
+                    pose * math.min(2.5, widget.size * .014),
                   RadAiBirdState.listening => pose.abs() * -1.8,
                   RadAiBirdState.thinking => 3.6 + math.sin(t * .5) * 1.2,
                   RadAiBirdState.responding => pose * 1.4,
@@ -108,10 +111,12 @@ class _RadAiBirdState extends State<RadAiBird>
                   RadAiBirdState.newMessage => pose * .10,
                 };
                 return CustomPaint(
-                  painter: _BirdStatePainter(
-                    state: widget.state,
-                    progress: _controller.value,
-                  ),
+                  painter: widget.showStateEffects
+                      ? _BirdStatePainter(
+                          state: widget.state,
+                          progress: _controller.value,
+                        )
+                      : null,
                   child: Transform.translate(
                     offset: Offset(0, dy),
                     child: reduced
@@ -123,13 +128,10 @@ class _RadAiBirdState extends State<RadAiBird>
                   ),
                 );
               },
-              child: Padding(
-                padding: EdgeInsets.all(widget.size * .12),
-                child: Image.asset(
-                  'assets/branding/rad_phoenix_final_512.png',
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.high,
-                ),
+              child: Image.asset(
+                'assets/branding/rad_flying_bird_512.png',
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
               ),
             ),
           ),
@@ -139,15 +141,14 @@ class _RadAiBirdState extends State<RadAiBird>
   }
 }
 
-/// Splits the approved master into independently hinged wings and a stable
-/// body. Every layer uses the same source pixels, so articulation never
-/// redraws, recolors, or substitutes the RAD mark.
+/// Separates the visible main wing from the body of the approved side-profile
+/// artwork. Both layers use the same source pixels; no substitute mark is used.
 class _ArticulatedBird extends StatelessWidget {
   const _ArticulatedBird({super.key, required this.wingAngle});
 
   final double wingAngle;
 
-  static const _asset = 'assets/branding/rad_phoenix_final_512.png';
+  static const _asset = 'assets/branding/rad_flying_bird_512.png';
 
   Widget _image() => Image.asset(
     _asset,
@@ -164,29 +165,19 @@ class _ArticulatedBird extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Transform.rotate(
-            key: const ValueKey('rad-bird-left-wing'),
-            angle: -wingAngle,
-            alignment: const Alignment(-.18, -.08),
-            child: ClipPath(
-              clipper: const _BirdLayerClipper(_BirdLayer.leftWing),
-              clipBehavior: Clip.hardEdge,
-              child: _image(),
-            ),
-          ),
-          Transform.rotate(
-            key: const ValueKey('rad-bird-right-wing'),
+            key: const ValueKey('rad-bird-wing'),
             angle: wingAngle,
-            alignment: const Alignment(.18, -.08),
+            alignment: const Alignment(.20, .18),
             child: ClipPath(
-              clipper: const _BirdLayerClipper(_BirdLayer.rightWing),
-              clipBehavior: Clip.hardEdge,
+              clipper: const _BirdLayerClipper(_BirdLayer.wing),
+              clipBehavior: Clip.antiAlias,
               child: _image(),
             ),
           ),
           ClipPath(
             key: const ValueKey('rad-bird-body'),
             clipper: const _BirdLayerClipper(_BirdLayer.body),
-            clipBehavior: Clip.hardEdge,
+            clipBehavior: Clip.antiAlias,
             child: _image(),
           ),
         ],
@@ -195,7 +186,7 @@ class _ArticulatedBird extends StatelessWidget {
   }
 }
 
-enum _BirdLayer { leftWing, rightWing, body }
+enum _BirdLayer { wing, body }
 
 class _BirdLayerClipper extends CustomClipper<Path> {
   const _BirdLayerClipper(this.layer);
@@ -207,28 +198,27 @@ class _BirdLayerClipper extends CustomClipper<Path> {
     final w = size.width;
     final h = size.height;
     return switch (layer) {
-      _BirdLayer.leftWing =>
+      _BirdLayer.wing =>
         Path()
           ..moveTo(0, 0)
-          ..lineTo(w * .53, 0)
-          ..lineTo(w * .53, h * .63)
-          ..lineTo(w * .35, h)
-          ..lineTo(0, h)
-          ..close(),
-      _BirdLayer.rightWing =>
-        Path()
-          ..moveTo(w * .47, 0)
-          ..lineTo(w, 0)
-          ..lineTo(w, h)
-          ..lineTo(w * .65, h)
-          ..lineTo(w * .47, h * .63)
+          ..lineTo(w * .72, 0)
+          ..lineTo(w * .72, h * .51)
+          ..lineTo(w * .61, h * .60)
+          ..lineTo(w * .53, h * .64)
+          ..lineTo(w * .38, h * .60)
+          ..lineTo(0, h * .60)
           ..close(),
       _BirdLayer.body =>
         Path()
-          ..moveTo(w * .34, h * .18)
-          ..lineTo(w * .66, h * .18)
-          ..lineTo(w * .66, h)
-          ..lineTo(w * .34, h)
+          ..moveTo(w * .72, 0)
+          ..lineTo(w, 0)
+          ..lineTo(w, h)
+          ..lineTo(0, h)
+          ..lineTo(0, h * .60)
+          ..lineTo(w * .38, h * .60)
+          ..lineTo(w * .53, h * .64)
+          ..lineTo(w * .61, h * .60)
+          ..lineTo(w * .72, h * .51)
           ..close(),
     };
   }

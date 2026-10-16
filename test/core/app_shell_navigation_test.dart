@@ -79,7 +79,7 @@ void main() {
     final router = await _pumpShell(tester, role: 'user', width: 360);
 
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Visa'), findsOneWidget);
+    expect(find.text('Explore'), findsOneWidget);
     expect(find.text('Cases'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
@@ -257,4 +257,79 @@ void main() {
       },
     );
   }
+
+  testWidgets('mobile navigation hides while the keyboard is visible', (
+    tester,
+  ) async {
+    await _pumpShell(tester, role: 'user');
+    expect(find.byType(RadAiBirdNavIcon), findsOneWidget);
+
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.pump();
+
+    expect(find.byType(RadAiBirdNavIcon), findsNothing);
+  });
+
+  testWidgets('stateful shell preserves primary tab state', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.reset);
+
+    final router = GoRouter(
+      initialLocation: '/dashboard',
+      routes: [
+        StatefulShellRoute.indexedStack(
+          builder: (_, _, navigationShell) =>
+              AppShell.withNavigationShell(navigationShell: navigationShell),
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/dashboard',
+                  builder: (_, _) => const Scaffold(
+                    body: TextField(key: ValueKey('preserved-field')),
+                  ),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/visa',
+                  builder: (_, _) => const Scaffold(body: Text('explore body')),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+    addTearDown(router.dispose);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          adminSnapshotProvider.overrideWith((ref) async => _snapshot('user')),
+        ],
+        child: MaterialApp.router(
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    await tester.enterText(
+      find.byKey(const ValueKey('preserved-field')),
+      'kept between tabs',
+    );
+    await tester.tap(find.text('Explore'));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('explore body'), findsOneWidget);
+
+    await tester.tap(find.text('Home'));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('kept between tabs'), findsOneWidget);
+  });
 }

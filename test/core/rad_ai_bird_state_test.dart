@@ -37,7 +37,7 @@ void main() {
     });
   }
 
-  testWidgets('motion mode articulates both wings around the original body', (
+  testWidgets('motion mode articulates the original bird wing and body', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -53,10 +53,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 120));
 
     expect(find.byKey(const ValueKey('articulated-rad-bird')), findsOneWidget);
-    expect(find.byKey(const ValueKey('rad-bird-left-wing')), findsOneWidget);
-    expect(find.byKey(const ValueKey('rad-bird-right-wing')), findsOneWidget);
+    expect(find.byKey(const ValueKey('rad-bird-wing')), findsOneWidget);
     expect(find.byKey(const ValueKey('rad-bird-body')), findsOneWidget);
-    expect(find.byType(Image), findsNWidgets(3));
+    expect(find.byType(Image), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rad_emigrate/core/widgets/rad_ai_bird.dart';
 import 'package:rad_emigrate/core/widgets/rad_ai_bird_nav_icon.dart';
 
 double _scale(WidgetTester tester) => tester
@@ -84,5 +85,63 @@ void main() {
     disableAnimations.value = false;
     await tester.pump();
     expect(_scale(tester), 1);
+  });
+
+  testWidgets('new AI message shows a persistent dot and brief wing response', (
+    tester,
+  ) async {
+    var revision = 0;
+    var unread = false;
+    late StateSetter update;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return SizedBox(
+                width: 88,
+                height: 80,
+                child: RadAiBirdNavIcon(
+                  selected: false,
+                  label: 'AI Assistant',
+                  moreLabel: 'More',
+                  hasNewMessage: unread,
+                  newMessageRevision: revision,
+                  onTap: () {},
+                  onLongPress: () {},
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    update(() {
+      unread = true;
+      revision = 1;
+    });
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('rad-ai-new-message-dot')),
+      findsOneWidget,
+    );
+    expect(
+      tester.widget<RadAiBird>(find.byType(RadAiBird)).state,
+      RadAiBirdState.newMessage,
+    );
+
+    await tester.pump(const Duration(milliseconds: 1000));
+    expect(
+      tester.widget<RadAiBird>(find.byType(RadAiBird)).state,
+      RadAiBirdState.idle,
+    );
+    expect(
+      find.byKey(const ValueKey('rad-ai-new-message-dot')),
+      findsOneWidget,
+    );
   });
 }

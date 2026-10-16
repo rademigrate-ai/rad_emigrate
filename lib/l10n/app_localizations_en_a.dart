@@ -132,6 +132,9 @@ mixin AppLocalizationsEnA on AppLocalizations {
   String get home => 'Home';
 
   @override
+  String get explore => 'Explore';
+
+  @override
   String get visa => 'Visa';
 
   @override

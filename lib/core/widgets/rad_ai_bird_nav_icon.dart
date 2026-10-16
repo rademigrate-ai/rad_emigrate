@@ -5,10 +5,11 @@ import 'package:flutter/services.dart';
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
 import 'rad_ai_bird.dart';
+import 'rad_phoenix_navigation_surface.dart';
 
 /// Centered RAD AI Assistant bird for the bottom navigation bar.
 ///
-/// Uses the owner-approved front-facing red bird asset with subtle idle float,
+/// Uses the owner-approved translucent red bird asset with subtle idle float,
 /// spring tap response, and restrained active illumination. Respects
 /// reduced-motion system preferences.
 class RadAiBirdNavIcon extends StatefulWidget {
@@ -19,7 +20,9 @@ class RadAiBirdNavIcon extends StatefulWidget {
     required this.moreLabel,
     required this.onTap,
     required this.onLongPress,
-    this.size = 111,
+    this.hasNewMessage = false,
+    this.newMessageRevision = 0,
+    this.size = 88,
   });
 
   final bool selected;
@@ -27,6 +30,8 @@ class RadAiBirdNavIcon extends StatefulWidget {
   final String moreLabel;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
+  final bool hasNewMessage;
+  final int newMessageRevision;
   final double size;
 
   @override
@@ -39,6 +44,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
 
   late final AnimationController _floatController;
   late final AnimationController _tapController;
+  late final AnimationController _messageController;
   late final Animation<double> _float;
   late final Animation<double> _tapScale;
 
@@ -49,7 +55,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
       vsync: this,
       duration: const Duration(milliseconds: 2600),
     );
-    _float = Tween<double>(begin: -2.5, end: 2.5).animate(
+    _float = Tween<double>(begin: -0.6, end: 0.6).animate(
       CurvedAnimation(parent: _floatController, curve: Curves.easeInOutSine),
     );
 
@@ -80,6 +86,14 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
         weight: 25,
       ),
     ]).animate(_tapController);
+
+    _messageController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 920),
+        )..addStatusListener((_) {
+          if (mounted) setState(() {});
+        });
   }
 
   @override
@@ -94,9 +108,15 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     if (oldWidget.selected != widget.selected) {
       _syncFloat();
     }
+    if (oldWidget.newMessageRevision != widget.newMessageRevision &&
+        widget.newMessageRevision > 0 &&
+        !AppMotion.reduceMotion(context)) {
+      _messageController.forward(from: 0);
+    }
   }
 
   void _handleTap() {
+    HapticFeedback.selectionClick();
     if (!AppMotion.reduceMotion(context)) {
       _tapController.forward(from: 0);
     }
@@ -108,6 +128,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     if (AppMotion.reduceMotion(context)) {
       _floatController.stop();
       _tapController.stop();
+      _messageController.stop();
       _floatController.value = 0.5;
       _tapController.value = 0;
       return;
@@ -121,6 +142,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
   void dispose() {
     _floatController.dispose();
     _tapController.dispose();
+    _messageController.dispose();
     super.dispose();
   }
 
@@ -130,6 +152,8 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     final selected = widget.selected;
     final theme = Theme.of(context);
     final dark = theme.brightness == Brightness.dark;
+    final labelHeight = radNavigationLabelHeight(context);
+    final wrapLabel = MediaQuery.textScalerOf(context).scale(11) > 13.2;
 
     return Semantics(
       label: widget.label,
@@ -173,15 +197,21 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  bottom: 30,
+                  bottom: labelHeight + 9,
                   child: AnimatedOpacity(
                     duration: AppMotion.duration(context, AppMotion.fast),
-                    opacity: selected ? 0.6 : 0.25,
-                    child: Container(
-                      width: 54,
-                      height: 54,
+                    opacity: selected ? 1 : 0.7,
+                    child: AnimatedContainer(
+                      duration: AppMotion.duration(context, AppMotion.fast),
+                      width: 58,
+                      height: 48,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(20),
+                        color: selected
+                            ? AppColors.primaryRed.withValues(
+                                alpha: dark ? 0.16 : 0.10,
+                              )
+                            : Colors.transparent,
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primaryRed.withValues(
@@ -196,11 +226,12 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                   ),
                 ),
                 Positioned(
-                  bottom: 26,
+                  bottom: labelHeight + 12,
                   child: AnimatedBuilder(
                     animation: Listenable.merge([
                       _floatController,
                       _tapController,
+                      _messageController,
                     ]),
                     builder: (context, child) {
                       final dy = reduce ? 0.0 : _float.value;
@@ -215,31 +246,63 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                       );
                     },
                     child: SizedBox.square(
-                      dimension: 60,
+                      dimension: 48,
                       child: ExcludeSemantics(
                         child: RadAiBird(
-                          state: selected
-                              ? RadAiBirdState.responding
+                          state: _messageController.isAnimating
+                              ? RadAiBirdState.newMessage
                               : RadAiBirdState.idle,
                           semanticLabel: widget.label,
-                          size: 60,
+                          size: 48,
+                          showStateEffects: false,
                         ),
                       ),
                     ),
                   ),
                 ),
+                if (widget.hasNewMessage)
+                  PositionedDirectional(
+                    top: 5,
+                    end: 10,
+                    child: ExcludeSemantics(
+                      child: DecoratedBox(
+                        key: const ValueKey('rad-ai-new-message-dot'),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryRed,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: dark
+                                ? const Color(0xFF17191F)
+                                : Colors.white,
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primaryRed.withValues(
+                                alpha: 0.45,
+                              ),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        child: const SizedBox.square(dimension: 9),
+                      ),
+                    ),
+                  ),
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 12,
+                  bottom: 9,
                   child: SizedBox(
-                    height: 18,
-                    child: Center(
+                    height: labelHeight,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
                       child: ExcludeSemantics(
                         child: Text(
                           widget.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: wrapLabel ? null : 1,
+                          softWrap: wrapLabel,
+                          overflow: TextOverflow.visible,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: selected
@@ -250,8 +313,8 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                                       ? const Color(0xFFCED3DC)
                                       : const Color(0xFF596575)),
                             fontWeight: selected
-                                ? FontWeight.w800
-                                : FontWeight.w600,
+                                ? FontWeight.w600
+                                : FontWeight.w500,
                             fontSize: 11,
                             height: 1.2,
                           ),

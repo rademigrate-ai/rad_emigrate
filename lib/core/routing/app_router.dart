@@ -98,55 +98,98 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           destination: state.uri.queryParameters['from'],
         ),
       ),
-      ShellRoute(
-        builder: (_, _, child) => AppShell(child: child),
-        routes: [
-          GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
-          GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
-          GoRoute(
-            path: '/applications',
-            builder: (_, _) => const ApplicationsPage(),
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, navigationShell) =>
+            AppShell.withNavigationShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/dashboard',
+                builder: (_, _) => const DashboardPage(),
+              ),
+            ],
           ),
-          GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
-          GoRoute(
-            path: '/consultation',
-            builder: (context, state) => ConsultationPage(
-              initialTopic: state.uri.queryParameters['topic'],
-            ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
+            ],
           ),
-          GoRoute(
-            path: '/notifications',
-            builder: (_, _) => const NotificationsPage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/applications',
+                builder: (_, _) => const ApplicationsPage(),
+              ),
+            ],
           ),
-          GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
-          GoRoute(
-            path: '/ai-assistant',
-            builder: (_, state) => AiAssistantPage(
-              contextLabel: state.uri.queryParameters['context'],
-            ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/world-clock',
+                builder: (_, _) => const WorldClockPage(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/world-clock',
-            builder: (_, _) => const WorldClockPage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
+            ],
           ),
-          GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
-          GoRoute(
-            path: '/admin/ai-config',
-            builder: (_, _) => const AdminAiConfigPage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/documents',
+                builder: (_, _) => const DocumentsPage(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/admin/operations',
-            builder: (_, _) => const AdminOperationsPage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/ai-assistant',
+                builder: (_, state) => AiAssistantPage(
+                  contextLabel: state.uri.queryParameters['context'],
+                ),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/admin/consultations',
-            builder: (_, _) => const AdminConsultationsPage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
+              GoRoute(
+                path: '/consultation',
+                builder: (context, state) => ConsultationPage(
+                  initialTopic: state.uri.queryParameters['topic'],
+                ),
+              ),
+              GoRoute(
+                path: '/notifications',
+                builder: (_, _) => const NotificationsPage(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/admin/ai-research',
-            builder: (_, _) => const AdminAiWorkspacePage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/admin', builder: (_, _) => const AdminHubPage()),
+              GoRoute(
+                path: '/admin/ai-config',
+                builder: (_, _) => const AdminAiConfigPage(),
+              ),
+              GoRoute(
+                path: '/admin/operations',
+                builder: (_, _) => const AdminOperationsPage(),
+              ),
+              GoRoute(
+                path: '/admin/consultations',
+                builder: (_, _) => const AdminConsultationsPage(),
+              ),
+              GoRoute(
+                path: '/admin/ai-research',
+                builder: (_, _) => const AdminAiWorkspacePage(),
+              ),
+            ],
           ),
-          GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],
       ),
     ],

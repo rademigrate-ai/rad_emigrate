@@ -16,6 +16,7 @@ import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/rad_ai_bird.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../providers/ai_assistant_activity_provider.dart';
 import '../providers/ai_prompt_draft_provider.dart';
 
 class _ChatMessage {
@@ -122,6 +123,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     _birdTimer = Timer(const Duration(milliseconds: 800), () {
       if (!mounted) return;
       setState(() => _birdState = RadAiBirdState.newMessage);
+      ref.read(aiAssistantActivityProvider.notifier).markNewMessage();
       _birdTimer = Timer(const Duration(milliseconds: 1400), () {
         if (!mounted) return;
         setState(

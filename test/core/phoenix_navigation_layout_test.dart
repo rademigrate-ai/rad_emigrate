@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rad_emigrate/core/routing/app_shell.dart';
 import 'package:rad_emigrate/core/theme/app_theme.dart';
+import 'package:rad_emigrate/core/widgets/rad_ai_bird.dart';
 import 'package:rad_emigrate/core/widgets/rad_ai_bird_nav_icon.dart';
 import 'package:rad_emigrate/features/admin/data/admin_operations_repository.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
@@ -102,8 +103,15 @@ void main() {
           );
           final phoenix = tester.getRect(find.byType(RadAiBirdNavIcon));
           expect(surface.bottom, lessThanOrEqualTo(844 - 34 - 8));
+          expect(surface.height, 80);
           expect(phoenix.center.dx, closeTo(195, 0.1));
-          expect(phoenix.width, greaterThan(100));
+          expect(phoenix.width, greaterThanOrEqualTo(72));
+          final bird = tester.getRect(find.byType(RadAiBird));
+          expect(bird.size, const Size.square(48));
+          expect(
+            tester.getCenter(find.byIcon(Icons.home)).dy - bird.center.dy,
+            closeTo(6, 0.1),
+          );
           final home = tester.getCenter(
             find.text(locale == 'fa' ? 'خانه' : 'Home'),
           );
@@ -124,7 +132,7 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(
       tester.getRect(find.byType(RadAiBirdNavIcon)).width,
-      greaterThanOrEqualTo(80),
+      greaterThanOrEqualTo(70),
     );
     await tester.tap(find.text('پروفایل'));
     await tester.pumpAndSettle();

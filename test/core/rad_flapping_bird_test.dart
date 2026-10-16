@@ -6,7 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
-    'RadFlappingBird articulates left wing, right wing, and body in 6-stage cycle',
+    'RadFlappingBird articulates the approved wing and body in 6-stage cycle',
     (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -24,16 +24,9 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(
-        find.byKey(const ValueKey('flapping-bird-left-wing')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const ValueKey('flapping-bird-right-wing')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const ValueKey('flapping-bird-wing')), findsOneWidget);
       expect(find.byKey(const ValueKey('flapping-bird-body')), findsOneWidget);
-      expect(find.byType(Image), findsNWidgets(3));
+      expect(find.byType(Image), findsNWidgets(2));
       expect(find.bySemanticsLabel('Loading bird'), findsOneWidget);
     },
   );
@@ -82,14 +75,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(
-      find.byKey(const ValueKey('flapping-bird-left-wing')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('flapping-bird-right-wing')),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('flapping-bird-wing')), findsOneWidget);
     expect(find.byKey(const ValueKey('flapping-bird-body')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

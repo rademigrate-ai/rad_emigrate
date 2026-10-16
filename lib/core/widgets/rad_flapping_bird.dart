@@ -124,30 +124,19 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
                 fit: StackFit.expand,
                 alignment: Alignment.center,
                 children: [
-                  // Left wing
+                  // The approved artwork is a side-profile bird with one
+                  // dominant visible wing. Articulate that exact wing instead
+                  // of mirroring or inventing a second one.
                   Transform.rotate(
-                    key: const ValueKey('flapping-bird-left-wing'),
-                    angle: -angles.wingAngle,
-                    alignment: const Alignment(-0.16, -0.06),
+                    key: const ValueKey('flapping-bird-wing'),
+                    angle: angles.wingAngle,
+                    alignment: const Alignment(0.20, 0.18),
                     child: Transform.scale(
                       scaleX: angles.wingFold,
                       alignment: Alignment.centerRight,
                       child: ClipPath(
-                        clipper: const _FlappingWingClipper(isLeft: true),
-                        child: _birdImage(size),
-                      ),
-                    ),
-                  ),
-                  // Right wing
-                  Transform.rotate(
-                    key: const ValueKey('flapping-bird-right-wing'),
-                    angle: angles.wingAngle,
-                    alignment: const Alignment(0.16, -0.06),
-                    child: Transform.scale(
-                      scaleX: angles.wingFold,
-                      alignment: Alignment.centerLeft,
-                      child: ClipPath(
-                        clipper: const _FlappingWingClipper(isLeft: false),
+                        clipper: const _FlappingWingClipper(),
+                        clipBehavior: Clip.antiAlias,
                         child: _birdImage(size),
                       ),
                     ),
@@ -156,6 +145,7 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
                   ClipPath(
                     key: const ValueKey('flapping-bird-body'),
                     clipper: const _FlappingBodyClipper(),
+                    clipBehavior: Clip.antiAlias,
                     child: _birdImage(size),
                   ),
                 ],
@@ -195,16 +185,6 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
       color: widget.color,
       colorBlendMode: widget.color != null ? BlendMode.srcIn : null,
       excludeFromSemantics: true,
-      errorBuilder: (context, error, stackTrace) {
-        // Fallback to silhouette if multi-resolution asset is unavailable
-        return Image.asset(
-          'assets/branding/rad_bird_silhouette.png',
-          fit: BoxFit.contain,
-          color: widget.color,
-          colorBlendMode: widget.color != null ? BlendMode.srcIn : null,
-          excludeFromSemantics: true,
-        );
-      },
     );
   }
 
@@ -272,36 +252,25 @@ class _Kinetics {
 }
 
 class _FlappingWingClipper extends CustomClipper<Path> {
-  const _FlappingWingClipper({required this.isLeft});
-
-  final bool isLeft;
+  const _FlappingWingClipper();
 
   @override
   Path getClip(Size size) {
     final w = size.width;
     final h = size.height;
-    if (isLeft) {
-      return Path()
-        ..moveTo(0, 0)
-        ..lineTo(w * 0.52, 0)
-        ..lineTo(w * 0.52, h * 0.62)
-        ..lineTo(w * 0.36, h)
-        ..lineTo(0, h)
-        ..close();
-    } else {
-      return Path()
-        ..moveTo(w * 0.48, 0)
-        ..lineTo(w, 0)
-        ..lineTo(w, h)
-        ..lineTo(w * 0.64, h)
-        ..lineTo(w * 0.48, h * 0.62)
-        ..close();
-    }
+    return Path()
+      ..moveTo(0, 0)
+      ..lineTo(w * 0.72, 0)
+      ..lineTo(w * 0.72, h * 0.51)
+      ..lineTo(w * 0.61, h * 0.60)
+      ..lineTo(w * 0.53, h * 0.64)
+      ..lineTo(w * 0.38, h * 0.60)
+      ..lineTo(0, h * 0.60)
+      ..close();
   }
 
   @override
-  bool shouldReclip(covariant _FlappingWingClipper oldClipper) =>
-      oldClipper.isLeft != isLeft;
+  bool shouldReclip(covariant _FlappingWingClipper oldClipper) => false;
 }
 
 class _FlappingBodyClipper extends CustomClipper<Path> {
@@ -312,10 +281,15 @@ class _FlappingBodyClipper extends CustomClipper<Path> {
     final w = size.width;
     final h = size.height;
     return Path()
-      ..moveTo(w * 0.35, h * 0.16)
-      ..lineTo(w * 0.65, h * 0.16)
-      ..lineTo(w * 0.65, h)
-      ..lineTo(w * 0.35, h)
+      ..moveTo(w * 0.72, 0)
+      ..lineTo(w, 0)
+      ..lineTo(w, h)
+      ..lineTo(0, h)
+      ..lineTo(0, h * 0.60)
+      ..lineTo(w * 0.38, h * 0.60)
+      ..lineTo(w * 0.53, h * 0.64)
+      ..lineTo(w * 0.61, h * 0.60)
+      ..lineTo(w * 0.72, h * 0.51)
       ..close();
   }
 

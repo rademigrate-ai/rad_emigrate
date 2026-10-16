@@ -69,6 +69,7 @@ abstract class AppLocalizations {
   String get profileCompletionSubtitle;
   String get saveAndContinue;
   String get home;
+  String get explore;
   String get visa;
   String get cases;
   String get docs;

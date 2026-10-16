@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,10 +11,19 @@ import '../widgets/rad_phoenix_navigation_surface.dart';
 import '../theme/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
+import '../../features/ai_assistant/presentation/providers/ai_assistant_activity_provider.dart';
 
 class AppShell extends ConsumerStatefulWidget {
   final Widget child;
-  const AppShell({super.key, required this.child});
+  final StatefulNavigationShell? navigationShell;
+
+  const AppShell({super.key, required this.child}) : navigationShell = null;
+
+  const AppShell.withNavigationShell({
+    super.key,
+    required StatefulNavigationShell navigationShell,
+  }) : child = navigationShell,
+       navigationShell = navigationShell;
 
   @override
   ConsumerState<AppShell> createState() => _AppShellState();
@@ -21,6 +31,23 @@ class AppShell extends ConsumerStatefulWidget {
 
 class _AppShellState extends ConsumerState<AppShell> {
   var _railExtended = true;
+
+  void _goTo(String path, List<_NavItem> items) {
+    final navigationShell = widget.navigationShell;
+    if (navigationShell == null) {
+      context.go(path);
+      return;
+    }
+    final branch = items.indexWhere((item) => item.path == path);
+    if (branch < 0) {
+      context.go(path);
+      return;
+    }
+    navigationShell.goBranch(
+      branch,
+      initialLocation: branch == navigationShell.currentIndex,
+    );
+  }
 
   int _selectedIndex(String location, List<_NavItem> items) {
     for (var i = 0; i < items.length; i++) {
@@ -44,10 +71,10 @@ class _AppShellState extends ConsumerState<AppShell> {
         selectedIcon: Icons.home,
       ),
       _NavItem(
-        label: l10n.visa,
+        label: l10n.explore,
         path: '/visa',
-        icon: Icons.public_outlined,
-        selectedIcon: Icons.public,
+        icon: Icons.explore_outlined,
+        selectedIcon: Icons.explore,
       ),
       _NavItem(
         label: l10n.cases,
@@ -94,7 +121,7 @@ class _AppShellState extends ConsumerState<AppShell> {
         ),
     ];
 
-    // Mobile primary: Home | Visa | AI bird | Cases | Profile
+    // Mobile primary: Home | Explore | AI Assistant | Cases | Profile.
     final primary = [items[0], items[1], items[2], items[7]];
     final overflow = items
         .where(
@@ -109,7 +136,9 @@ class _AppShellState extends ConsumerState<AppShell> {
 
     final selected = _selectedIndex(location, items);
     final wide = MediaQuery.sizeOf(context).width >= 900;
+    final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
     final aiSelected = location.startsWith('/ai-assistant');
+    final aiActivity = ref.watch(aiAssistantActivityProvider);
 
     return Scaffold(
       // Keep route content above the navigation surface. Extending behind the
@@ -133,7 +162,7 @@ class _AppShellState extends ConsumerState<AppShell> {
               child: NavigationRail(
                 extended: _railExtended,
                 selectedIndex: selected,
-                onDestinationSelected: (i) => context.go(items[i].path),
+                onDestinationSelected: (i) => _goTo(items[i].path, items),
                 labelType: _railExtended
                     ? NavigationRailLabelType.none
                     : NavigationRailLabelType.all,
@@ -184,24 +213,31 @@ class _AppShellState extends ConsumerState<AppShell> {
           Expanded(
             child: ColoredBox(
               color: Theme.of(context).scaffoldBackgroundColor,
-              child: AppEntrance(key: ValueKey(location), child: widget.child),
+              child:
+                  widget.navigationShell ??
+                  AppEntrance(key: ValueKey(location), child: widget.child),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: wide
+      bottomNavigationBar: wide || keyboardVisible
           ? null
           : _RadBottomBar(
               primary: primary,
               location: location,
               aiSelected: aiSelected,
               aiLabel: l10n.aiAssistant,
+              hasAiMessage: aiActivity.hasUnreadMessage,
+              aiMessageRevision: aiActivity.revision,
               moreLabel: l10n.more,
-              onPrimarySelected: (path) => context.go(path),
-              onAiTap: () => context.go('/ai-assistant'),
+              onPrimarySelected: (path) => _goTo(path, items),
+              onAiTap: () {
+                ref.read(aiAssistantActivityProvider.notifier).markRead();
+                _goTo('/ai-assistant', items);
+              },
               onMore: () async {
                 final path = await _showMore(context, overflow, location);
-                if (path != null && context.mounted) context.go(path);
+                if (path != null && context.mounted) _goTo(path, items);
               },
             ),
     );
@@ -248,6 +284,8 @@ class _RadBottomBar extends StatelessWidget {
     required this.location,
     required this.aiSelected,
     required this.aiLabel,
+    required this.hasAiMessage,
+    required this.aiMessageRevision,
     required this.moreLabel,
     required this.onPrimarySelected,
     required this.onAiTap,
@@ -258,6 +296,8 @@ class _RadBottomBar extends StatelessWidget {
   final String location;
   final bool aiSelected;
   final String aiLabel;
+  final bool hasAiMessage;
+  final int aiMessageRevision;
   final String moreLabel;
   final ValueChanged<String> onPrimarySelected;
   final VoidCallback onAiTap;
@@ -288,9 +328,11 @@ class _RadBottomBar extends StatelessWidget {
       ],
       phoenix: RadAiBirdNavIcon(
         selected: aiSelected,
-        size: (MediaQuery.sizeOf(context).width * 0.285).clamp(86.0, 118.0),
+        size: (MediaQuery.sizeOf(context).width * 0.22).clamp(72.0, 96.0),
         label: aiLabel,
         moreLabel: moreLabel,
+        hasNewMessage: hasAiMessage,
+        newMessageRevision: aiMessageRevision,
         onTap: onAiTap,
         onLongPress: onMore,
       ),
@@ -298,7 +340,7 @@ class _RadBottomBar extends StatelessWidget {
   }
 }
 
-class _NavSlot extends StatelessWidget {
+class _NavSlot extends StatefulWidget {
   const _NavSlot({
     required this.item,
     required this.selected,
@@ -310,9 +352,23 @@ class _NavSlot extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NavSlot> createState() => _NavSlotState();
+}
+
+class _NavSlotState extends State<_NavSlot> {
+  var _pressed = false;
+
+  void _handleTap() {
+    HapticFeedback.selectionClick();
+    widget.onTap();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = selected
+    final labelHeight = radNavigationLabelHeight(context);
+    final wrapLabel = MediaQuery.textScalerOf(context).scale(11) > 13.2;
+    final color = widget.selected
         ? (theme.brightness == Brightness.dark
               ? const Color(0xFFFF6475)
               : AppColors.primaryRed)
@@ -321,44 +377,68 @@ class _NavSlot extends StatelessWidget {
               : const Color(0xFF596575));
 
     return Semantics(
-      label: item.label,
+      label: widget.item.label,
       button: true,
-      selected: selected,
+      selected: widget.selected,
       excludeSemantics: true,
-      onTap: onTap,
+      onTap: _handleTap,
       child: InkWell(
-        onTap: onTap,
+        onTap: _handleTap,
+        onHighlightChanged: (value) => setState(() => _pressed = value),
         borderRadius: BorderRadius.circular(20),
         child: SizedBox.expand(
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
               Positioned(
-                bottom: 34,
+                bottom: labelHeight + 11,
                 child: AnimatedScale(
                   duration: AppMotion.duration(
                     context,
                     AppMotion.buttonFeedback,
                   ),
-                  scale: selected ? 1.05 : 1,
-                  child: Icon(item.icon, size: 26, color: color),
+                  scale: _pressed ? 0.90 : (widget.selected ? 1.04 : 1),
+                  child: AnimatedContainer(
+                    duration: AppMotion.duration(context, AppMotion.fast),
+                    width: 44,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: widget.selected
+                          ? AppColors.primaryRed.withValues(
+                              alpha: theme.brightness == Brightness.dark
+                                  ? 0.17
+                                  : 0.10,
+                            )
+                          : Colors.transparent,
+                    ),
+                    child: Icon(
+                      widget.selected
+                          ? widget.item.selectedIcon
+                          : widget.item.icon,
+                      size: 25,
+                      color: color,
+                    ),
+                  ),
                 ),
               ),
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 12,
+                bottom: 9,
                 child: SizedBox(
-                  height: 18,
-                  child: Center(
+                  height: labelHeight,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
                     child: Text(
-                      item.label,
+                      widget.item.label,
                       textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: wrapLabel ? null : 1,
+                      softWrap: wrapLabel,
+                      overflow: TextOverflow.visible,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: color,
-                        fontWeight: selected
+                        fontWeight: widget.selected
                             ? FontWeight.w600
                             : FontWeight.w500,
                         fontSize: 11,
