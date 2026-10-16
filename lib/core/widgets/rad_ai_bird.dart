@@ -95,17 +95,17 @@ class _RadAiBirdState extends State<RadAiBird>
                 final pose = reduced ? 0.0 : math.sin(t);
                 final dy = switch (widget.state) {
                   RadAiBirdState.idle => pose * 2.5,
-                  RadAiBirdState.listening => pose.abs() * -1.4,
-                  RadAiBirdState.thinking => math.sin(t * .5) * 2,
-                  RadAiBirdState.responding => pose * 1.2,
+                  RadAiBirdState.listening => pose.abs() * -1.8,
+                  RadAiBirdState.thinking => 3.6 + math.sin(t * .5) * 1.2,
+                  RadAiBirdState.responding => pose * 1.4,
                   RadAiBirdState.newMessage => pose.abs() * -4,
                 };
                 final wingAngle = switch (widget.state) {
                   RadAiBirdState.idle => pose * .025,
                   RadAiBirdState.listening => pose * .045,
-                  RadAiBirdState.thinking => pose * .03,
-                  RadAiBirdState.responding => pose * .085,
-                  RadAiBirdState.newMessage => pose * .12,
+                  RadAiBirdState.thinking => -0.05 + math.sin(t * .5) * 0.015,
+                  RadAiBirdState.responding => pose * .14,
+                  RadAiBirdState.newMessage => pose * .10,
                 };
                 return CustomPaint(
                   painter: _BirdStatePainter(
@@ -247,60 +247,101 @@ class _BirdStatePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final red = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = math.max(1.2, size.width * .009)
-      ..color = AppColors.primaryRed.withValues(alpha: .52);
 
     if (state == RadAiBirdState.listening) {
-      for (var i = 0; i < 2; i++) {
-        final radius = size.width * (.27 + i * .075 + progress * .025);
-        canvas.drawArc(
-          Rect.fromCircle(
-            center: Offset(size.width * .73, size.height * .48),
-            radius: radius,
+      // Sound wave graphic directly above the bird
+      final waveCenterY = size.height * 0.16;
+      final barWidth = math.max(2.0, size.width * 0.018);
+      final barSpacing = size.width * 0.042;
+      const barCount = 5;
+      final startX = center.dx - ((barCount - 1) / 2) * barSpacing;
+      final barPaint = Paint()
+        ..style = PaintingStyle.fill
+        ..color = AppColors.primaryRed.withValues(alpha: 0.92);
+
+      for (var i = 0; i < barCount; i++) {
+        final distFromCenter = (i - (barCount - 1) / 2).abs();
+        final maxH = size.height * (0.13 - distFromCenter * 0.026);
+        final minH = size.height * 0.032;
+        final waveVal =
+            (math.sin(progress * math.pi * 2 * 2.2 + i * 1.15) + 1) / 2;
+        final barH = minH + (maxH - minH) * waveVal;
+        final x = startX + i * barSpacing;
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(
+              center: Offset(x, waveCenterY),
+              width: barWidth,
+              height: barH,
+            ),
+            Radius.circular(barWidth / 2),
           ),
-          -math.pi * .38,
-          math.pi * .76,
-          false,
-          red..color = red.color.withValues(alpha: .48 - i * .16),
+          barPaint,
         );
       }
     } else if (state == RadAiBirdState.thinking) {
-      red.color = AppColors.primaryRed.withValues(alpha: .45);
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: size.width * .42),
-        progress * math.pi * 2,
-        math.pi * 1.35,
-        false,
-        red,
-      );
-      final angle = progress * math.pi * 2;
-      canvas.drawCircle(
-        center + Offset(math.cos(angle), math.sin(angle)) * size.width * .42,
-        size.width * .025,
-        Paint()..color = const Color(0xFFFF6575),
-      );
+      // 3 dots directly above the bird's head
+      final dotCenterY = size.height * 0.16;
+      final dotSpacing = size.width * 0.062;
+      final dotRadius = size.width * 0.024;
+      for (var i = 0; i < 3; i++) {
+        final x = center.dx + (i - 1) * dotSpacing;
+        final pulse =
+            (math.sin(progress * math.pi * 2 * 1.6 - i * 0.95) + 1) / 2;
+        final alpha = 0.35 + pulse * 0.65;
+        final r = dotRadius * (0.8 + pulse * 0.35);
+        canvas.drawCircle(
+          Offset(x, dotCenterY),
+          r,
+          Paint()..color = AppColors.primaryRed.withValues(alpha: alpha),
+        );
+      }
     } else if (state == RadAiBirdState.responding) {
-      final alpha = .12 + ((math.sin(progress * math.pi * 2) + 1) * .1);
+      final alpha = .16 + ((math.sin(progress * math.pi * 2) + 1) * .12);
       canvas.drawCircle(
         center,
-        size.width * .42,
+        size.width * .44,
         Paint()
           ..color = AppColors.primaryRed.withValues(alpha: alpha)
-          ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * .08),
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * .09),
       );
+      // Radiant aura waves
+      for (var i = 1; i <= 2; i++) {
+        final waveProg = (progress + i * 0.5) % 1.0;
+        final waveRadius = size.width * (0.28 + waveProg * 0.18);
+        final waveAlpha = (1.0 - waveProg) * 0.35;
+        canvas.drawCircle(
+          center,
+          waveRadius,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = math.max(1.0, size.width * 0.01)
+            ..color = AppColors.primaryRed.withValues(alpha: waveAlpha),
+        );
+      }
     } else if (state == RadAiBirdState.newMessage) {
-      final badge = Offset(size.width * .78, size.height * .2);
+      final badge = Offset(size.width * .78, size.height * .18);
+      // Outer radar pulse
+      final pulseRadius = size.width * (0.05 + (progress % 1.0) * 0.06);
+      final pulseAlpha = (1.0 - (progress % 1.0)) * 0.45;
       canvas.drawCircle(
         badge,
-        size.width * .075,
+        pulseRadius,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..color = AppColors.primaryRed.withValues(alpha: pulseAlpha),
+      );
+      // Solid badge
+      canvas.drawCircle(
+        badge,
+        size.width * .068,
         Paint()..color = AppColors.primaryRed,
       );
+      // Inner white core
       canvas.drawCircle(
         badge,
-        size.width * .025,
+        size.width * .024,
         Paint()..color = Colors.white,
       );
     }

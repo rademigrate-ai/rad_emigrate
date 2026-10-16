@@ -1,0 +1,26 @@
+[
+  {
+    "test": "Mobile Persian Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dashboard.png"
+  },
+  {
+    "test": "Mobile Persian AI Assistant",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-ai-assistant.png"
+  },
+  {
+    "test": "Mobile Persian Visa",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-visa.png"
+  },
+  {
+    "test": "Mobile Persian World Time",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-world-clock.png"
+  },
+  {
+    "test": "Desktop English Sidebar Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-sidebar-dashboard.png"
+  },
+  {
+    "test": "Desktop English World Clock",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-world-clock.png"
+  }
+]

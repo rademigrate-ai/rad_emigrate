@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import 'rad_flapping_bird.dart';
 
 enum AppButtonVariant { primary, secondary, ghost }
 
@@ -46,10 +47,7 @@ class _AppButtonState extends State<AppButton> {
               key: ValueKey('loading'),
               height: 20,
               width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
+              child: RadFlappingBird.button(size: 20),
             )
           : Row(
               key: const ValueKey('label'),

@@ -148,6 +148,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                       const RadBrand(
                         size: RadBrandSize.small,
                         showInstituteName: false,
+                        darkSurface: true,
                       ),
                       const SizedBox(height: 10),
                       IconButton(

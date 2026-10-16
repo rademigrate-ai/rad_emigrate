@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import 'rad_flapping_bird.dart';
 
 /// The visual context in which the shared RAD Earth-and-bird identity appears.
 ///
@@ -126,7 +127,10 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
                 dimension: sceneSize,
                 child: AnimatedBuilder(
                   animation: _controller,
-                  child: _RadBirdMark(dimension: birdSize),
+                  child: _RadBirdMark(
+                    dimension: birdSize,
+                    active: widget.active,
+                  ),
                   builder: (context, bird) {
                     final orbit = _OrbitGeometry.fromProgress(
                       progress: _controller.value,
@@ -311,26 +315,14 @@ class _PositionedBird extends StatelessWidget {
 }
 
 class _RadBirdMark extends StatelessWidget {
-  const _RadBirdMark({required this.dimension});
+  const _RadBirdMark({required this.dimension, this.active = true});
 
   final double dimension;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: dimension,
-      child: ColorFiltered(
-        colorFilter: const ColorFilter.mode(
-          AppColors.primaryRed,
-          BlendMode.srcIn,
-        ),
-        child: Image.asset(
-          'assets/branding/rad_bird_silhouette.png',
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
-        ),
-      ),
-    );
+    return RadFlappingBird(size: dimension, active: active);
   }
 }
 
