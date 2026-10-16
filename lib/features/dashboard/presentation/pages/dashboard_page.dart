@@ -122,19 +122,26 @@ class DashboardPage extends ConsumerWidget {
                   action: l10n.shortcuts,
                   onAction: () => context.go('/profile'),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final item in quick)
-                      Expanded(
-                        child: ReferenceQuickAction(
-                          icon: item.$1,
-                          color: item.$2,
-                          label: item.$3,
-                          onTap: () => context.go(item.$4),
+                LayoutBuilder(
+                  builder: (context, constraints) => Wrap(
+                    runSpacing: 8,
+                    children: [
+                      for (final item in quick)
+                        SizedBox(
+                          width:
+                              constraints.maxWidth /
+                              (MediaQuery.textScalerOf(context).scale(14) > 20
+                                  ? 2
+                                  : 4),
+                          child: ReferenceQuickAction(
+                            icon: item.$1,
+                            color: item.$2,
+                            label: item.$3,
+                            onTap: () => context.go(item.$4),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 ReferenceSection(
                   title: l10n.recentActivity,

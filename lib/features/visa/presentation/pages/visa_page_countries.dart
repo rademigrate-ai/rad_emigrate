@@ -80,7 +80,9 @@ class _CountriesStageState extends State<_CountriesStage> {
                   children: [
                     for (var i = 0; i < catalog.categories.length; i++)
                       SizedBox(
-                        width: (constraints.maxWidth - 24) / 4,
+                        width: MediaQuery.textScalerOf(context).scale(14) > 20
+                            ? (constraints.maxWidth - 8) / 2
+                            : (constraints.maxWidth - 24) / 4,
                         child: Semantics(
                           selected: _category == catalog.categories[i].id,
                           child: ReferenceQuickAction(
@@ -114,7 +116,11 @@ class _CountriesStageState extends State<_CountriesStage> {
               ),
             LayoutBuilder(
               builder: (context, constraints) {
-                final columns = constraints.maxWidth >= 900
+                final columns =
+                    constraints.maxWidth < 600 &&
+                        MediaQuery.textScalerOf(context).scale(14) > 20
+                    ? 1
+                    : constraints.maxWidth >= 900
                     ? 4
                     : constraints.maxWidth >= 600
                     ? 3

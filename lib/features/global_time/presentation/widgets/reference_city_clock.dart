@@ -38,24 +38,33 @@ class ReferenceCityRow extends StatelessWidget {
       onTap: onTap,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      child: Row(
-        children: [
-          if (city.flagEmoji != null) ...[
-            Text(city.flagEmoji!, style: const TextStyle(fontSize: 29)),
-            const SizedBox(width: 12),
-          ],
-          Expanded(
-            child: Text(
-              city.localizedName(languageCode),
-              style: Theme.of(context).textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 360 &&
+              MediaQuery.textScalerOf(context).scale(14) > 20) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    if (city.flagEmoji != null) ...[
+                      Text(
+                        city.flagEmoji!,
+                        style: const TextStyle(fontSize: 29),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Expanded(
+                      child: Text(
+                        city.localizedName(languageCode),
+                        style: Theme.of(context).textTheme.titleSmall
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    const Icon(Icons.more_vert, size: 18),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 Text(
                   formatLocalTime(now),
                   textDirection: TextDirection.ltr,
@@ -64,18 +73,53 @@ class ReferenceCityRow extends StatelessWidget {
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),
-                const SizedBox(height: 3),
                 Text(
                   formatLocalDate(now, languageCode),
-                  textAlign: TextAlign.end,
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          const Icon(Icons.more_vert, size: 18),
-        ],
+            );
+          }
+          return Row(
+            children: [
+              if (city.flagEmoji != null) ...[
+                Text(city.flagEmoji!, style: const TextStyle(fontSize: 29)),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Text(
+                  city.localizedName(languageCode),
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      formatLocalTime(now),
+                      textDirection: TextDirection.ltr,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      formatLocalDate(now, languageCode),
+                      textAlign: TextAlign.end,
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.more_vert, size: 18),
+            ],
+          );
+        },
       ),
     );
   }
