@@ -34,6 +34,10 @@ class _CountriesStage extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
     final isTablet = width >= 600;
     final isDesktop = width >= 1100;
+    final grouped = <_VisaContinent, List<Country>>{};
+    for (final country in catalog.countries) {
+      grouped.putIfAbsent(_continentFor(country.code), () => []).add(country);
+    }
 
     return Center(
       child: ConstrainedBox(
@@ -63,28 +67,128 @@ class _CountriesStage extends StatelessWidget {
                 onQueryChanged: onQuery,
                 onSelect: onSelect,
               )
-            else if (isDesktop)
-              _CountryGrid(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                columns: 3,
-                onSelect: onSelect,
-              )
-            else if (isTablet)
-              _CountryGrid(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                columns: 2,
-                onSelect: onSelect,
-              )
             else
-              CountryCarousel(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                onSelect: onSelect,
-              ),
+              for (final group in grouped.entries) ...[
+                _ContinentHeading(
+                  continent: group.key,
+                  count: group.value.length,
+                ),
+                const SizedBox(height: 10),
+                if (isDesktop)
+                  _CountryGrid(
+                    countries: group.value,
+                    categoryLabels: categoryLabels,
+                    columns: 3,
+                    onSelect: onSelect,
+                  )
+                else if (isTablet)
+                  _CountryGrid(
+                    countries: group.value,
+                    categoryLabels: categoryLabels,
+                    columns: 2,
+                    onSelect: onSelect,
+                  )
+                else
+                  CountryCarousel(
+                    countries: group.value,
+                    categoryLabels: categoryLabels,
+                    onSelect: onSelect,
+                  ),
+                const SizedBox(height: 24),
+              ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+enum _VisaContinent { northAmerica, europe, asia, oceania, middleEast, other }
+
+_VisaContinent _continentFor(String rawCode) {
+  final code = rawCode.toUpperCase();
+  if (const {'CA', 'US', 'MX'}.contains(code)) {
+    return _VisaContinent.northAmerica;
+  }
+  if (const {
+    'AT',
+    'BE',
+    'CH',
+    'DE',
+    'DK',
+    'ES',
+    'FI',
+    'FR',
+    'GB',
+    'IE',
+    'IT',
+    'NL',
+    'NO',
+    'PT',
+    'SE',
+  }.contains(code)) {
+    return _VisaContinent.europe;
+  }
+  if (const {
+    'AE',
+    'BH',
+    'IL',
+    'JO',
+    'KW',
+    'OM',
+    'QA',
+    'SA',
+    'TR',
+  }.contains(code)) {
+    return _VisaContinent.middleEast;
+  }
+  if (const {'AU', 'NZ'}.contains(code)) return _VisaContinent.oceania;
+  if (const {'CN', 'IN', 'JP', 'KR', 'MY', 'SG', 'TH'}.contains(code)) {
+    return _VisaContinent.asia;
+  }
+  return _VisaContinent.other;
+}
+
+class _ContinentHeading extends StatelessWidget {
+  const _ContinentHeading({required this.continent, required this.count});
+
+  final _VisaContinent continent;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final fa = Localizations.localeOf(context).languageCode == 'fa';
+    final label = switch (continent) {
+      _VisaContinent.northAmerica => fa ? 'آمریکای شمالی' : 'North America',
+      _VisaContinent.europe => fa ? 'اروپا' : 'Europe',
+      _VisaContinent.asia => fa ? 'آسیا' : 'Asia',
+      _VisaContinent.oceania => fa ? 'اقیانوسیه' : 'Oceania',
+      _VisaContinent.middleEast => fa ? 'خاورمیانه' : 'Middle East',
+      _VisaContinent.other => fa ? 'سایر مقصدها' : 'Other destinations',
+    };
+    return Semantics(
+      header: true,
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: AppColors.primaryRed,
+              borderRadius: BorderRadius.circular(99),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+          ),
+          Text(
+            '$count',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
       ),
     );
   }

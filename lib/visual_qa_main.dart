@@ -4,14 +4,17 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 
 import 'app/dependencies.dart';
 import 'core/constants/app_colors.dart';
+import 'core/routing/app_shell.dart';
 import 'core/theme/theme_controller.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/loading_state.dart';
 import 'core/widgets/premium_visuals.dart';
 import 'core/widgets/rad_loading.dart';
+import 'core/widgets/rad_ai_bird.dart';
 import 'features/admin/presentation/pages/admin_hub_page.dart';
 import 'features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import 'features/applications/domain/entities/application_status.dart';
@@ -23,12 +26,15 @@ import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/providers/auth_controller.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
+import 'features/consultation/presentation/pages/consultation_page.dart';
 import 'features/documents/domain/entities/document.dart';
 import 'features/documents/domain/entities/document_type.dart';
 import 'features/documents/domain/repositories/document_repository.dart';
 import 'features/documents/presentation/providers/document_controller.dart';
 import 'features/feed/data/feed_repository.dart';
 import 'features/feed/presentation/pages/feed_page.dart';
+import 'features/global_time/presentation/pages/world_clock_page.dart';
+import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/splash/presentation/pages/splash_page.dart';
 import 'features/visa/domain/entities/visa_entities.dart';
 import 'features/visa/presentation/pages/visa_page.dart';
@@ -55,6 +61,8 @@ class VisualQaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final screen =
         initialScreen ?? Uri.base.queryParameters['screen'] ?? 'login';
+    final requestedTheme = Uri.base.queryParameters['theme'];
+    final requestedLocale = Uri.base.queryParameters['locale'];
     return ProviderScope(
       overrides: [
         authControllerProvider.overrideWith((ref) => _visualAuthController()),
@@ -72,12 +80,23 @@ class VisualQaApp extends StatelessWidget {
         ),
         feedProvider('en').overrideWith((ref) async => _visualFeed),
         visaCatalogProvider('en').overrideWith((ref) async => _visualCatalog),
+        visaCatalogProvider('fa').overrideWith((ref) async => _visualCatalog),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'RAD Visual QA',
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
+        themeMode: requestedTheme == 'dark'
+            ? ThemeMode.dark
+            : requestedTheme == 'light'
+            ? ThemeMode.light
+            : ThemeMode.system,
+        locale: requestedLocale == 'fa'
+            ? const Locale('fa')
+            : requestedLocale == 'en'
+            ? const Locale('en')
+            : null,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: _QaFrame(screen: screen),
@@ -99,6 +118,11 @@ class _QaFrame extends StatelessWidget {
       'ai' => const AiAssistantPage(visualQaDemo: true),
       'feed' => const FeedPage(),
       'admin' => const AdminHubPage(),
+      'profile' => const ProfilePage(),
+      'consultation' => const ConsultationPage(),
+      'world-time' => const WorldClockPage(),
+      'bird-states' => const _BirdStatesQaPage(),
+      'shell' => const _ShellQaApp(),
       'splash' => const SplashPage(),
       'loading' => const _LoadingMotionQaPage(),
       'loading-full' => const _FullLoadingQaPage(),
@@ -108,6 +132,109 @@ class _QaFrame extends StatelessWidget {
       _ => const LoginPage(),
     };
     return page;
+  }
+}
+
+class _ShellQaApp extends StatefulWidget {
+  const _ShellQaApp();
+
+  @override
+  State<_ShellQaApp> createState() => _ShellQaAppState();
+}
+
+class _ShellQaAppState extends State<_ShellQaApp> {
+  late final GoRouter _router = GoRouter(
+    initialLocation: '/dashboard',
+    routes: [
+      ShellRoute(
+        builder: (_, _, child) => AppShell(child: child),
+        routes: [
+          for (final path in [
+            '/dashboard',
+            '/visa',
+            '/ai-assistant',
+            '/applications',
+            '/world-clock',
+            '/feed',
+            '/documents',
+            '/profile',
+          ])
+            GoRoute(path: path, builder: (_, _) => const DashboardPage()),
+        ],
+      ),
+    ],
+  );
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: Theme.of(context),
+      locale: Localizations.localeOf(context),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: _router,
+    );
+  }
+}
+
+class _BirdStatesQaPage extends StatelessWidget {
+  const _BirdStatesQaPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF070A0F),
+      appBar: AppBar(
+        title: const Text('RAD Assistant states'),
+        backgroundColor: const Color(0xFF070A0F),
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            runSpacing: 16,
+            children: [
+              for (final state in RadAiBirdState.values)
+                Container(
+                  width: 210,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF11161D),
+                    border: Border.all(color: const Color(0xFF303743)),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RadAiBird(
+                        state: state,
+                        semanticLabel: 'Assistant ${state.name}',
+                      ),
+                      Text(
+                        state.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -457,17 +584,51 @@ const _visualFeed = [
   ),
 ];
 
+const _visualCountries = [
+  Country(
+    id: 'visual-ca',
+    name: 'Canada',
+    code: 'CA',
+    flagEmoji: '🇨🇦',
+    slug: 'canada',
+    summary: 'Visual QA sample summary',
+  ),
+  Country(
+    id: 'visual-de',
+    name: 'Germany',
+    code: 'DE',
+    flagEmoji: '🇩🇪',
+    slug: 'germany',
+    summary: 'Visual QA sample summary',
+  ),
+  Country(
+    id: 'visual-ae',
+    name: 'United Arab Emirates',
+    code: 'AE',
+    flagEmoji: '🇦🇪',
+    slug: 'united-arab-emirates',
+    summary: 'Visual QA sample summary',
+  ),
+  Country(
+    id: 'visual-jp',
+    name: 'Japan',
+    code: 'JP',
+    flagEmoji: '🇯🇵',
+    slug: 'japan',
+    summary: 'Visual QA sample summary',
+  ),
+  Country(
+    id: 'visual-au',
+    name: 'Australia',
+    code: 'AU',
+    flagEmoji: '🇦🇺',
+    slug: 'australia',
+    summary: 'Visual QA sample summary',
+  ),
+];
+
 final _visualCatalog = VisaCatalog(
-  countries: const [
-    Country(
-      id: 'visual-country-1',
-      name: 'Sample destination',
-      code: 'SMP',
-      flagEmoji: '◉',
-      slug: 'sample-destination',
-      summary: 'Visual QA sample summary',
-    ),
-  ],
+  countries: _visualCountries,
   categories: const [
     VisaCategory(
       id: 'visual-category-1',
@@ -477,33 +638,20 @@ final _visualCatalog = VisaCatalog(
     ),
   ],
   programs: [
-    VisaProgram(
-      id: 'visual-program-1',
-      slug: 'sample-study-pathway',
-      title: 'Sample study pathway',
-      countryId: 'visual-country-1',
-      categoryId: 'visual-category-1',
-      summary: 'Synthetic non-customer catalogue content for visual QA only.',
-      source: VisaSource(
-        title: 'Visual QA source',
-        url: 'https://example.test',
-        publisher: 'RAD Visual QA',
-        retrievedAt: DateTime.utc(2026, 10, 8),
+    for (final country in _visualCountries)
+      VisaProgram(
+        id: 'visual-program-${country.code.toLowerCase()}',
+        slug: 'sample-${country.slug}-pathway',
+        title: 'Sample study pathway',
+        countryId: country.id,
+        categoryId: 'visual-category-1',
+        summary: 'Synthetic non-customer catalogue content for visual QA only.',
+        source: VisaSource(
+          title: 'Visual QA source',
+          url: 'https://example.test',
+          publisher: 'RAD Visual QA',
+          retrievedAt: DateTime.utc(2026, 10, 8),
+        ),
       ),
-    ),
-    VisaProgram(
-      id: 'visual-program-2',
-      slug: 'sample-review-pathway',
-      title: 'Sample review pathway',
-      countryId: 'visual-country-1',
-      categoryId: 'visual-category-1',
-      summary: 'Synthetic non-customer catalogue content for visual QA only.',
-      source: VisaSource(
-        title: 'Visual QA source',
-        url: 'https://example.test',
-        publisher: 'RAD Visual QA',
-        retrievedAt: DateTime.utc(2026, 10, 8),
-      ),
-    ),
   ],
 );

@@ -29,15 +29,19 @@ class PremiumCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = dark ? AppColors.midnight : const Color(0xFFF3F7F8);
+    final effectiveDark =
+        dark || Theme.of(context).brightness == Brightness.dark;
+    final background = effectiveDark
+        ? const Color(0xFF070A0F)
+        : const Color(0xFFF3F7F8);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: background,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: dark
-              ? const [Color(0xFF071620), Color(0xFF0B2632), Color(0xFF071620)]
+          colors: effectiveDark
+              ? const [Color(0xFF070A0F), Color(0xFF171019), Color(0xFF0A1118)]
               : const [Color(0xFFF7FAFA), Color(0xFFEAF4F5), Color(0xFFF9FBFB)],
         ),
       ),
@@ -47,7 +51,7 @@ class PremiumCanvas extends StatelessWidget {
             child: IgnorePointer(
               child: CustomPaint(
                 painter: _CanvasGridPainter(
-                  dark: dark,
+                  dark: effectiveDark,
                   accent: accent,
                   compact: compact,
                   showEditorialRule: showEditorialRule,
@@ -392,6 +396,7 @@ class PremiumHeroPanel extends StatelessWidget {
           dark: dark,
           accent: AppColors.teal,
           child: Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
               border: Border.all(

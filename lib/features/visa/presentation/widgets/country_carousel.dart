@@ -268,7 +268,9 @@ class CountrySearchPanel extends StatelessWidget {
               : 'Search countries…',
           leading: const Icon(Icons.search),
           elevation: const WidgetStatePropertyAll(0),
-          backgroundColor: const WidgetStatePropertyAll(Color(0xFFF5FAFA)),
+          backgroundColor: WidgetStatePropertyAll(
+            Theme.of(context).colorScheme.surface,
+          ),
           onChanged: onQueryChanged,
         ),
         const SizedBox(height: 8),

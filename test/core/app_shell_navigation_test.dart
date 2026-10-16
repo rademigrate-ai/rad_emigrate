@@ -99,7 +99,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.text('Docs'), findsOneWidget);
-    expect(find.text('AI Assistant'), findsNothing);
+    expect(find.text('AI Assistant'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.text('AI Assistant'),
+      ),
+      findsNothing,
+    );
     expect(
       find.descendant(
         of: find.byType(BottomSheet),
@@ -146,5 +153,25 @@ void main() {
     expect(find.byType(NavigationRail), findsOneWidget);
     expect(find.byType(RadAiBirdNavIcon), findsNothing);
     expect(find.byType(BottomNavigationBar), findsNothing);
+  });
+
+  testWidgets('desktop rail can collapse without changing the route', (
+    tester,
+  ) async {
+    final router = await _pumpShell(tester, role: 'user', width: 1200);
+
+    expect(
+      tester.widget<NavigationRail>(find.byType(NavigationRail)).extended,
+      isTrue,
+    );
+    await tester.tap(find.byTooltip('Collapse navigation'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(
+      tester.widget<NavigationRail>(find.byType(NavigationRail)).extended,
+      isFalse,
+    );
+    expect(router.routeInformationProvider.value.uri.path, '/dashboard');
+    expect(tester.takeException(), isNull);
   });
 }

@@ -12,7 +12,7 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
-import '../../../../core/widgets/section_card.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../domain/entities/user_profile.dart';
@@ -186,38 +186,41 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ],
         ],
       ),
-      body: isGuest
-          ? _buildGuestProfileContent(context, themePref, localePref, l10n)
-          : profileState.when(
-              skipError: true,
-              loading: () => _saving
-                  ? _ProfileContent(
-                      child: _buildProfileContent(
-                        context,
-                        null,
-                        session,
-                        themePref,
-                        localePref,
-                        l10n,
-                      ),
-                    )
-                  : LoadingState.section(message: l10n.loading),
-              error: (e, _) => ErrorState(
-                message: l10n.errorGeneric,
-                onRetry: () =>
-                    ref.read(profileControllerProvider.notifier).load(),
-              ),
-              data: (profile) => _ProfileContent(
-                child: _buildProfileContent(
-                  context,
-                  profile,
-                  session,
-                  themePref,
-                  localePref,
-                  l10n,
+      body: PremiumCanvas(
+        accent: AppColors.primaryRed,
+        child: isGuest
+            ? _buildGuestProfileContent(context, themePref, localePref, l10n)
+            : profileState.when(
+                skipError: true,
+                loading: () => _saving
+                    ? _ProfileContent(
+                        child: _buildProfileContent(
+                          context,
+                          null,
+                          session,
+                          themePref,
+                          localePref,
+                          l10n,
+                        ),
+                      )
+                    : LoadingState.section(message: l10n.loading),
+                error: (e, _) => ErrorState(
+                  message: l10n.errorGeneric,
+                  onRetry: () =>
+                      ref.read(profileControllerProvider.notifier).load(),
+                ),
+                data: (profile) => _ProfileContent(
+                  child: _buildProfileContent(
+                    context,
+                    profile,
+                    session,
+                    themePref,
+                    localePref,
+                    l10n,
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -232,7 +235,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
-          AppCard(
+          _ProfileHero(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -378,7 +381,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
-        AppCard(
+        _ProfileHero(
           padding: const EdgeInsets.all(20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,44 +437,37 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 )
               : KeyedSubtree(
                   key: const ValueKey('profile-summary'),
-                  child: SectionCard(
-                    title: l10n.profile,
-                    subtitle: l10n.profileCompletionSubtitle,
-                    icon: Icons.badge_outlined,
-                    onTap: () => setState(() => _editing = true),
-                    trailing: Icon(directionalChevron(context)),
-                    child: Text(
-                      profile == null
-                          ? l10n.profileCompletionSubtitle
-                          : '${l10n.fullName}: $displayName',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                  child: _ProfileActionGroup(
+                    children: [
+                      _ProfileActionRow(
+                        title: l10n.profile,
+                        subtitle: profile == null
+                            ? l10n.profileCompletionSubtitle
+                            : '${l10n.fullName}: $displayName',
+                        icon: Icons.badge_outlined,
+                        onTap: () => setState(() => _editing = true),
+                      ),
+                      _ProfileActionRow(
+                        title: l10n.applications,
+                        subtitle: l10n.viewDetails,
+                        icon: Icons.assignment_outlined,
+                        onTap: () => context.go('/applications'),
+                      ),
+                      _ProfileActionRow(
+                        title: l10n.documents,
+                        subtitle: l10n.uploadDocument,
+                        icon: Icons.folder_outlined,
+                        onTap: () => context.go('/documents'),
+                      ),
+                      _ProfileActionRow(
+                        title: l10n.aiAssistant,
+                        subtitle: l10n.viewDetails,
+                        icon: Icons.smart_toy_outlined,
+                        onTap: () => context.go('/ai-assistant'),
+                      ),
+                    ],
                   ),
                 ),
-        ),
-        const SizedBox(height: 8),
-        SectionCard(
-          title: l10n.applications,
-          subtitle: l10n.viewDetails,
-          icon: Icons.assignment_outlined,
-          onTap: () => context.go('/applications'),
-          trailing: Icon(directionalChevron(context)),
-        ),
-        const SizedBox(height: 8),
-        SectionCard(
-          title: l10n.documents,
-          subtitle: l10n.uploadDocument,
-          icon: Icons.folder_outlined,
-          onTap: () => context.go('/documents'),
-          trailing: Icon(directionalChevron(context)),
-        ),
-        const SizedBox(height: 8),
-        SectionCard(
-          title: l10n.aiAssistant,
-          subtitle: l10n.viewDetails,
-          icon: Icons.smart_toy_outlined,
-          onTap: () => context.go('/ai-assistant'),
-          trailing: Icon(directionalChevron(context)),
         ),
         const SizedBox(height: 16),
         Text(l10n.settings, style: Theme.of(context).textTheme.titleMedium),
@@ -505,6 +501,44 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          Localizations.localeOf(context).languageCode == 'fa'
+              ? 'پشتیبانی و اطلاعات'
+              : 'Support & information',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        _ProfileActionGroup(
+          children: [
+            _ProfileActionRow(
+              title: l10n.consultationTitle,
+              subtitle: l10n.consultationIntro,
+              icon: Icons.support_agent_outlined,
+              onTap: () => context.go('/consultation'),
+            ),
+            _ProfileActionRow(
+              title: l10n.feed,
+              subtitle: l10n.feedPublishedOnly,
+              icon: Icons.info_outline,
+              onTap: () => context.go('/feed'),
+            ),
+            _ProfileActionRow(
+              title: l10n.logout,
+              subtitle: Localizations.localeOf(context).languageCode == 'fa'
+                  ? 'خروج امن از حساب کاربری'
+                  : 'Securely sign out of this account',
+              icon: Icons.logout,
+              destructive: true,
+              onTap: _saving
+                  ? null
+                  : () async {
+                      await ref.read(authControllerProvider.notifier).logout();
+                      if (context.mounted) context.go('/login');
+                    },
+            ),
+          ],
         ),
       ],
     );
@@ -604,9 +638,158 @@ class _ProfileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 760),
+        constraints: const BoxConstraints(maxWidth: 960),
         child: child,
       ),
+    );
+  }
+}
+
+class _ProfileActionGroup extends StatelessWidget {
+  const _ProfileActionGroup({required this.children});
+
+  final List<_ProfileActionRow> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          for (var index = 0; index < children.length; index++) ...[
+            children[index],
+            if (index != children.length - 1)
+              const Divider(height: 1, indent: 72, endIndent: 18),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileActionRow extends StatelessWidget {
+  const _ProfileActionRow({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+    this.destructive = false,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback? onTap;
+  final bool destructive;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = destructive
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.onSurface;
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 78),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color:
+                        (destructive
+                                ? Theme.of(context).colorScheme.error
+                                : AppColors.primaryRed)
+                            .withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: destructive ? color : AppColors.primaryRed,
+                    size: 21,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: color,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  directionalChevron(context),
+                  color: destructive
+                      ? color
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileHero extends StatelessWidget {
+  const _ProfileHero({required this.child, required this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primaryRed.withValues(alpha: dark ? .34 : .2),
+        ),
+        gradient: LinearGradient(
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
+          colors: dark
+              ? const [Color(0xFF211018), Color(0xFF111720), Color(0xFF0C1017)]
+              : const [Color(0xFFFFFFFF), Color(0xFFFFF3F4), Color(0xFFF6F8FA)],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryRed.withValues(alpha: dark ? .1 : .07),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Padding(padding: padding, child: child),
     );
   }
 }

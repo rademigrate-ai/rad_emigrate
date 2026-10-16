@@ -6,7 +6,9 @@ import 'timezone_engine.dart';
 
 /// Flutter Web: load latest_all tzf + install ODbL boundary polygons from assets.
 Future<void> bootstrapGeoTimezone() async {
-  await tz.initializeTimeZone('packages/timezone/data/latest_all.tzf');
+  // timezone/browser performs a direct HTTP fetch rather than using
+  // rootBundle. Flutter Web emits package assets below /assets/packages/.
+  await tz.initializeTimeZone('assets/packages/timezone/data/latest_all.tzf');
   // The timezone database is essential; map polygons are optional. Mark
   // clocks ready before attempting the larger boundary asset download.
   TimezoneEngine.markInitialized();

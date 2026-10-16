@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import '../../../../core/theme/app_motion.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
-import '../../../../core/widgets/rad_loading.dart';
+import '../../../../core/widgets/rad_ai_bird.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../providers/ai_prompt_draft_provider.dart';
@@ -59,8 +60,11 @@ class AiAssistantPage extends ConsumerStatefulWidget {
 class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _controller = TextEditingController();
   final _scroll = ScrollController();
+  final _composerFocus = FocusNode();
   final _messages = <_ChatMessage>[];
   var _loading = false;
+  var _birdState = RadAiBirdState.idle;
+  Timer? _birdTimer;
 
   String? _sessionId;
   late final Future<void> _historyRestore;
@@ -80,8 +84,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
       ]);
       _loading = true;
+      _birdState = RadAiBirdState.thinking;
     }
     _controller.addListener(_onPromptChanged);
+    _composerFocus.addListener(_onComposerFocusChanged);
     _historyRestore = _restoreHistory();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(aiPromptDraftProvider.notifier).ready;
@@ -99,6 +105,32 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     ref
         .read(aiPromptDraftProvider.notifier)
         .savePrompt(_controller.text, widget.contextLabel);
+  }
+
+  void _onComposerFocusChanged() {
+    if (!mounted || _loading) return;
+    setState(() {
+      _birdState = _composerFocus.hasFocus
+          ? RadAiBirdState.listening
+          : RadAiBirdState.idle;
+    });
+  }
+
+  void _showResponseState() {
+    _birdTimer?.cancel();
+    setState(() => _birdState = RadAiBirdState.responding);
+    _birdTimer = Timer(const Duration(milliseconds: 800), () {
+      if (!mounted) return;
+      setState(() => _birdState = RadAiBirdState.newMessage);
+      _birdTimer = Timer(const Duration(milliseconds: 1400), () {
+        if (!mounted) return;
+        setState(
+          () => _birdState = _composerFocus.hasFocus
+              ? RadAiBirdState.listening
+              : RadAiBirdState.idle,
+        );
+      });
+    });
   }
 
   Future<void> _restoreHistory() async {
@@ -136,6 +168,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   @override
   void dispose() {
     _controller.removeListener(_onPromptChanged);
+    _composerFocus.removeListener(_onComposerFocusChanged);
+    _composerFocus.dispose();
+    _birdTimer?.cancel();
     _controller.dispose();
     _scroll.dispose();
     super.dispose();
@@ -169,7 +204,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       return;
     }
 
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _birdState = RadAiBirdState.thinking;
+    });
     await _historyRestore;
     if (!mounted) return;
     try {
@@ -186,7 +224,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       );
     } catch (_) {
       if (mounted) {
-        setState(() => _loading = false);
+        setState(() {
+          _loading = false;
+          _birdState = RadAiBirdState.idle;
+        });
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
@@ -277,6 +318,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         );
         _loading = false;
       });
+      _showResponseState();
       _scrollToEnd();
     } catch (error) {
       if (!mounted) return;
@@ -290,6 +332,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         );
         _loading = false;
       });
+      _showResponseState();
       _scrollToEnd();
     }
   }
@@ -371,10 +414,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                           ),
                           title: l10n.howCanWeHelp,
                           body: l10n.askAboutVisas,
-                          trailing: const RadOrbit(
+                          trailing: RadAiBird(
+                            state: _birdState,
+                            semanticLabel: _birdSemanticLabel(context),
                             size: 180,
-                            showBrand: false,
-                            active: false,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -423,9 +466,38 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                             padding: const EdgeInsets.all(8),
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
-                              child: RadInlineLoading(
-                                label: l10n.loading,
-                                dark: true,
+                              child: Semantics(
+                                liveRegion: true,
+                                label: _birdSemanticLabel(context),
+                                child: ExcludeSemantics(
+                                  child: AppCard(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          8,
+                                          6,
+                                          18,
+                                          6,
+                                        ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        RadAiBird(
+                                          state: RadAiBirdState.thinking,
+                                          semanticLabel: l10n.loading,
+                                          size: 64,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          l10n.loading,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           );
@@ -507,6 +579,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       Expanded(
                         child: TextField(
                           controller: _controller,
+                          focusNode: _composerFocus,
                           minLines: 1,
                           maxLines: 4,
                           textInputAction: TextInputAction.send,
@@ -561,5 +634,23 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
       ),
     );
+  }
+
+  String _birdSemanticLabel(BuildContext context) {
+    final fa = Localizations.localeOf(context).languageCode == 'fa';
+    return switch (_birdState) {
+      RadAiBirdState.idle =>
+        fa ? 'دستیار هوشمند آماده است' : 'AI assistant is ready',
+      RadAiBirdState.listening =>
+        fa ? 'دستیار هوشمند در حال گوش دادن است' : 'AI assistant is listening',
+      RadAiBirdState.thinking =>
+        fa ? 'دستیار هوشمند در حال فکر کردن است' : 'AI assistant is thinking',
+      RadAiBirdState.responding =>
+        fa
+            ? 'دستیار هوشمند در حال پاسخ دادن است'
+            : 'AI assistant is responding',
+      RadAiBirdState.newMessage =>
+        fa ? 'پیام جدید از دستیار هوشمند' : 'New message from AI assistant',
+    };
   }
 }

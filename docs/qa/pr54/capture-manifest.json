@@ -1,0 +1,102 @@
+[
+  {
+    "file": "after-mobile-fa-dark-visa.png",
+    "screen": "visa",
+    "theme": "dark",
+    "locale": "fa",
+    "viewport": "390x844",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-mobile-fa-light-profile.png",
+    "screen": "profile",
+    "theme": "light",
+    "locale": "fa",
+    "viewport": "390x844",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-tablet-en-light-world-time.png",
+    "screen": "world-time",
+    "theme": "light",
+    "locale": "en",
+    "viewport": "834x1112",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-tablet-fa-dark-consultation.png",
+    "screen": "consultation",
+    "theme": "dark",
+    "locale": "fa",
+    "viewport": "834x1112",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-desktop-en-dark-bird-states.png",
+    "screen": "bird-states",
+    "theme": "dark",
+    "locale": "en",
+    "viewport": "1440x900",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-desktop-en-dark-dashboard.png",
+    "screen": "dashboard",
+    "theme": "dark",
+    "locale": "en",
+    "viewport": "1440x900",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-desktop-fa-light-profile.png",
+    "screen": "profile",
+    "theme": "light",
+    "locale": "fa",
+    "viewport": "1440x900",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-mobile-en-dark-ai.png",
+    "screen": "ai",
+    "theme": "dark",
+    "locale": "en",
+    "viewport": "390x844",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-mobile-fa-dark-shell.png",
+    "screen": "shell",
+    "theme": "dark",
+    "locale": "fa",
+    "viewport": "390x844",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  },
+  {
+    "file": "after-desktop-en-dark-shell.png",
+    "screen": "shell",
+    "theme": "dark",
+    "locale": "en",
+    "viewport": "1440x900",
+    "http_status": 200,
+    "console_errors": [],
+    "evidence_type": "widget-fixture browser capture"
+  }
+]

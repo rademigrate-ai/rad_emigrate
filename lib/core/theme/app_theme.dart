@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../constants/app_colors.dart';
+import 'premium_tokens.dart';
 
 abstract final class AppTheme {
   static const _radius = 16.0;
@@ -50,14 +51,14 @@ abstract final class AppTheme {
   }
 
   static ThemeData dark() {
-    const darkBg = Color(0xFF071620);
-    const darkSurface = Color(0xFF0D2130);
-    const darkSurfaceMuted = Color(0xFF132C3D);
+    const darkBg = Color(0xFF070A0F);
+    const darkSurface = Color(0xFF10151D);
+    const darkSurfaceMuted = Color(0xFF181F29);
     const darkTextPrimary = Color(0xFFF0F7FA);
     const darkTextSecondary = Color(0xFFAABDC8);
     const darkTextTertiary = Color(0xFF78909F);
-    const darkBorder = Color(0xFF244558);
-    const darkBorderSubtle = Color(0xFF173344);
+    const darkBorder = Color(0xFF2B333D);
+    const darkBorderSubtle = Color(0xFF202731);
 
     final base = ThemeData(
       useMaterial3: true,
@@ -68,8 +69,8 @@ abstract final class AppTheme {
     final colorScheme = const ColorScheme.dark(
       primary: AppColors.primaryRed,
       onPrimary: AppColors.white,
-      secondary: Color(0xFF3ACBC5),
-      onSecondary: Color(0xFF071620),
+      secondary: Color(0xFFFF6B7A),
+      onSecondary: Color(0xFF170307),
       surface: darkSurface,
       onSurface: darkTextPrimary,
       error: Color(0xFFE85A64),
@@ -86,14 +87,14 @@ abstract final class AppTheme {
       cardColor: darkSurface,
       inputFill: darkSurfaceMuted,
       borderColor: darkBorder,
-      focusedBorder: const Color(0xFF4BD6CF),
+      focusedBorder: const Color(0xFFFF6B7A),
       labelColor: darkTextSecondary,
       hintColor: darkTextTertiary,
       navBarBackground: darkSurface,
-      navIndicator: const Color(0xFF3ACBC5).withValues(alpha: 0.18),
-      navSelected: const Color(0xFF72E3DC),
+      navIndicator: AppColors.primaryRed.withValues(alpha: 0.2),
+      navSelected: const Color(0xFFFF7685),
       navUnselected: darkTextSecondary,
-      railBackground: const Color(0xFF091B29),
+      railBackground: const Color(0xFF090C12),
       dividerColor: darkBorderSubtle,
       textPrimary: darkTextPrimary,
       textSecondary: darkTextSecondary,
@@ -125,6 +126,11 @@ abstract final class AppTheme {
     required Color textTertiary,
   }) {
     return base.copyWith(
+      extensions: [
+        base.brightness == Brightness.dark
+            ? PremiumTokens.dark
+            : PremiumTokens.light,
+      ],
       splashFactory: InkRipple.splashFactory,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: scaffoldBackground,

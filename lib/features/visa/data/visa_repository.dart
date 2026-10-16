@@ -1,55 +1,87 @@
 import '../../../core/supabase/supabase_client.dart';
 import '../domain/entities/visa_entities.dart';
 
+enum VisaCatalogFailureKind { configuration, access, network, data, unknown }
+
+class VisaCatalogException implements Exception {
+  const VisaCatalogException(this.kind, [this.cause]);
+
+  final VisaCatalogFailureKind kind;
+  final Object? cause;
+
+  @override
+  String toString() => 'VisaCatalogException($kind)';
+}
+
 class VisaRepository {
   const VisaRepository(this._service);
   final SupabaseClientService _service;
 
   Future<VisaCatalog> loadCatalog({required String locale}) async {
     if (!_service.isInitialized) {
-      throw StateError('Supabase is not configured for this build.');
+      throw const VisaCatalogException(VisaCatalogFailureKind.configuration);
     }
     final language = locale == 'fa' ? 'fa' : 'en';
-    final results = await Future.wait([
-      _service.client
-          .from('destinations')
-          .select(
-            'id,code,slug,flag_emoji,destination_localizations!inner(name,summary,locale)',
-          )
-          .eq('destination_localizations.locale', language)
-          .order('display_order'),
-      _service.client
-          .from('program_categories')
-          .select(
-            'id,slug,program_category_localizations!inner(name,description,locale)',
-          )
-          .eq('program_category_localizations.locale', language)
-          .order('display_order'),
-      _service.client
-          .from('visa_programs')
-          .select(
-            'id,slug,destination_id,category_id,processing_time_text,fees_text,'
-            'visa_program_localizations!inner(title,summary,description,locale),'
-            'visa_program_requirements(requirement,is_mandatory,display_order,locale),'
-            'visa_program_steps(title,description,display_order,locale),'
-            'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
-          )
-          .eq('status', 'published')
-          .eq('visa_program_localizations.locale', language)
-          .order('published_at', ascending: false),
-    ]);
+    try {
+      final results = await Future.wait([
+        _service.client
+            .from('destinations')
+            .select(
+              'id,code,slug,flag_emoji,destination_localizations!inner(name,summary,locale)',
+            )
+            .eq('destination_localizations.locale', language)
+            .order('display_order'),
+        _service.client
+            .from('program_categories')
+            .select(
+              'id,slug,program_category_localizations!inner(name,description,locale)',
+            )
+            .eq('program_category_localizations.locale', language)
+            .order('display_order'),
+        _service.client
+            .from('visa_programs')
+            .select(
+              'id,slug,destination_id,category_id,processing_time_text,fees_text,'
+              'visa_program_localizations!inner(title,summary,description,locale),'
+              'visa_program_requirements(requirement,is_mandatory,display_order,locale),'
+              'visa_program_steps(title,description,display_order,locale),'
+              'content_sources!visa_programs_primary_source_id_fkey(title,url,publisher,retrieved_at)',
+            )
+            .eq('status', 'published')
+            .eq('visa_program_localizations.locale', language)
+            .order('published_at', ascending: false),
+      ]);
 
-    return VisaCatalog(
-      countries: (results[0] as List<dynamic>)
-          .map((row) => _country(row as Map<String, dynamic>))
-          .toList(growable: false),
-      categories: (results[1] as List<dynamic>)
-          .map((row) => _category(row as Map<String, dynamic>))
-          .toList(growable: false),
-      programs: (results[2] as List<dynamic>)
-          .map((row) => _program(row as Map<String, dynamic>, language))
-          .toList(growable: false),
-    );
+      return VisaCatalog(
+        countries: (results[0] as List<dynamic>)
+            .map((row) => _country(row as Map<String, dynamic>))
+            .toList(growable: false),
+        categories: (results[1] as List<dynamic>)
+            .map((row) => _category(row as Map<String, dynamic>))
+            .toList(growable: false),
+        programs: (results[2] as List<dynamic>)
+            .map((row) => _program(row as Map<String, dynamic>, language))
+            .toList(growable: false),
+      );
+    } on FormatException catch (error) {
+      throw VisaCatalogException(VisaCatalogFailureKind.data, error);
+    } catch (error) {
+      final text = error.toString().toLowerCase();
+      if (text.contains('permission') ||
+          text.contains('42501') ||
+          text.contains('unauthorized') ||
+          text.contains('forbidden')) {
+        throw VisaCatalogException(VisaCatalogFailureKind.access, error);
+      }
+      if (text.contains('socket') ||
+          text.contains('network') ||
+          text.contains('connection') ||
+          text.contains('failed host lookup') ||
+          text.contains('xmlhttprequest')) {
+        throw VisaCatalogException(VisaCatalogFailureKind.network, error);
+      }
+      throw VisaCatalogException(VisaCatalogFailureKind.unknown, error);
+    }
   }
 
   Country _country(Map<String, dynamic> row) {

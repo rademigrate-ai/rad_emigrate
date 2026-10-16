@@ -11,6 +11,7 @@ import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
+import '../../data/visa_repository.dart';
 import '../providers/visa_catalog_provider.dart';
 import '../widgets/country_carousel.dart';
 import '../widgets/country_photography.dart';
@@ -100,34 +101,79 @@ class _VisaPageState extends ConsumerState<VisaPage> {
         accent: AppColors.teal,
         child: catalog.when(
           loading: () => LoadingState.section(message: l10n.loadingCatalogue),
-          error: (_, _) => ErrorState(
-            message: l10n.catalogueUnavailable,
+          error: (error, _) => ErrorState(
+            message: _visaErrorMessage(context, error, l10n),
             onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
           ),
-          data: (value) => switch (_stage) {
-            _VisaStage.countries => _CountriesStage(
-              catalog: value,
-              l10n: l10n,
-              showSearch: _showSearch,
-              query: _query,
-              onQuery: (q) => setState(() => _query = q),
-              onSelect: _openCountry,
-            ),
-            _VisaStage.countryDetail => _CountryDetailStage(
-              catalog: value,
-              country: _country!,
-              l10n: l10n,
-              onSelectProgram: _openProgram,
-            ),
-            _VisaStage.programDetail => _ProgramDetailStage(
-              catalog: value,
-              country: _country!,
-              program: _program!,
-              l10n: l10n,
-            ),
-          },
+          data: (value) => value.countries.isEmpty
+              ? EmptyState(
+                  icon: Icons.public_off_outlined,
+                  title: _t(
+                    context,
+                    'No published destinations',
+                    'هنوز مقصد منتشرشده‌ای وجود ندارد',
+                  ),
+                  subtitle: _t(
+                    context,
+                    'Published visa destinations will appear here.',
+                    'مقصدهای منتشرشده ویزا در این بخش نمایش داده می‌شوند.',
+                  ),
+                )
+              : switch (_stage) {
+                  _VisaStage.countries => _CountriesStage(
+                    catalog: value,
+                    l10n: l10n,
+                    showSearch: _showSearch,
+                    query: _query,
+                    onQuery: (q) => setState(() => _query = q),
+                    onSelect: _openCountry,
+                  ),
+                  _VisaStage.countryDetail => _CountryDetailStage(
+                    catalog: value,
+                    country: _country!,
+                    l10n: l10n,
+                    onSelectProgram: _openProgram,
+                  ),
+                  _VisaStage.programDetail => _ProgramDetailStage(
+                    catalog: value,
+                    country: _country!,
+                    program: _program!,
+                    l10n: l10n,
+                  ),
+                },
         ),
       ),
     );
+  }
+
+  String _visaErrorMessage(
+    BuildContext context,
+    Object error,
+    AppLocalizations l10n,
+  ) {
+    final kind = error is VisaCatalogException ? error.kind : null;
+    return switch (kind) {
+      VisaCatalogFailureKind.configuration => _t(
+        context,
+        'Visa discovery is unavailable in this build configuration.',
+        'بخش ویزا در پیکربندی فعلی برنامه در دسترس نیست.',
+      ),
+      VisaCatalogFailureKind.access => _t(
+        context,
+        'Published visa content could not be accessed. Please retry.',
+        'دسترسی به محتوای منتشرشده ویزا ممکن نشد. دوباره تلاش کنید.',
+      ),
+      VisaCatalogFailureKind.network => _t(
+        context,
+        'Check your connection and retry visa discovery.',
+        'اتصال اینترنت را بررسی و دوباره تلاش کنید.',
+      ),
+      VisaCatalogFailureKind.data => _t(
+        context,
+        'Published visa content is incomplete. Please try again later.',
+        'محتوای منتشرشده ویزا کامل نیست. بعداً دوباره تلاش کنید.',
+      ),
+      _ => l10n.catalogueUnavailable,
+    };
   }
 }

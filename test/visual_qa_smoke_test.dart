@@ -24,7 +24,19 @@ Future<void> _pump(
 }
 
 void main() {
-  for (final screen in ['login', 'dashboard', 'visa', 'ai', 'feed', 'admin']) {
+  for (final screen in [
+    'login',
+    'dashboard',
+    'visa',
+    'ai',
+    'feed',
+    'admin',
+    'profile',
+    'consultation',
+    'world-time',
+    'bird-states',
+    'shell',
+  ]) {
     testWidgets('visual QA $screen composition builds', (tester) async {
       await _pump(tester, screen);
       expect(tester.takeException(), isNull);

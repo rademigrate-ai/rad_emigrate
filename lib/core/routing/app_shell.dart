@@ -11,9 +11,16 @@ import '../theme/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
 
-class AppShell extends ConsumerWidget {
+class AppShell extends ConsumerStatefulWidget {
   final Widget child;
   const AppShell({super.key, required this.child});
+
+  @override
+  ConsumerState<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends ConsumerState<AppShell> {
+  var _railExtended = true;
 
   int _selectedIndex(String location, List<_NavItem> items) {
     for (var i = 0; i < items.length; i++) {
@@ -23,7 +30,7 @@ class AppShell extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final location = GoRouterState.of(context).matchedLocation;
     final canAccessAdmin =
@@ -105,7 +112,9 @@ class AppShell extends ConsumerWidget {
     final aiSelected = location.startsWith('/ai-assistant');
 
     return Scaffold(
-      extendBody: !wide,
+      // Keep route content above the navigation surface. Extending behind the
+      // bar made the last controls unreadable and untappable on compact views.
+      extendBody: false,
       body: Row(
         children: [
           if (wide)
@@ -122,17 +131,43 @@ class AppShell extends ConsumerWidget {
                 ),
               ),
               child: NavigationRail(
+                extended: _railExtended,
                 selectedIndex: selected,
                 onDestinationSelected: (i) => context.go(items[i].path),
-                labelType: NavigationRailLabelType.all,
+                labelType: _railExtended
+                    ? NavigationRailLabelType.none
+                    : NavigationRailLabelType.all,
                 backgroundColor: Colors.transparent,
                 groupAlignment: -0.55,
-                minWidth: 116,
-                leading: const Padding(
-                  padding: EdgeInsets.only(top: 18, bottom: 28),
-                  child: RadBrand(
-                    size: RadBrandSize.small,
-                    showInstituteName: false,
+                minWidth: 80,
+                minExtendedWidth: 236,
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 14, bottom: 20),
+                  child: Column(
+                    children: [
+                      const RadBrand(
+                        size: RadBrandSize.small,
+                        showInstituteName: false,
+                      ),
+                      const SizedBox(height: 10),
+                      IconButton(
+                        tooltip:
+                            Localizations.localeOf(context).languageCode == 'fa'
+                            ? (_railExtended
+                                  ? 'جمع کردن پیمایش'
+                                  : 'باز کردن پیمایش')
+                            : (_railExtended
+                                  ? 'Collapse navigation'
+                                  : 'Expand navigation'),
+                        onPressed: () =>
+                            setState(() => _railExtended = !_railExtended),
+                        icon: Icon(
+                          _railExtended
+                              ? Icons.keyboard_double_arrow_left
+                              : Icons.keyboard_double_arrow_right,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 destinations: [
@@ -148,7 +183,7 @@ class AppShell extends ConsumerWidget {
           Expanded(
             child: ColoredBox(
               color: Theme.of(context).scaffoldBackgroundColor,
-              child: AppEntrance(key: ValueKey(location), child: child),
+              child: AppEntrance(key: ValueKey(location), child: widget.child),
             ),
           ),
         ],

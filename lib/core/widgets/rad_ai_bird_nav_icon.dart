@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import 'rad_ai_bird.dart';
 
 /// Centered RAD AI Assistant bird for the bottom navigation bar.
 ///
@@ -34,8 +35,6 @@ class RadAiBirdNavIcon extends StatefulWidget {
 
 class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     with TickerProviderStateMixin {
-  // Whole-canvas downscale of the byte-exact owner master; no redraw or recolor.
-  static const _asset = 'assets/branding/rad_phoenix_final_512.png';
   bool _showFocus = false;
 
   late final AnimationController _floatController;
@@ -184,7 +183,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
             onLongPress: widget.onLongPress,
             child: SizedBox(
               width: size,
-              height: 82,
+              height: 94,
               child: Stack(
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
@@ -213,13 +212,40 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                     child: OverflowBox(
                       maxWidth: size,
                       maxHeight: size,
-                      child: Image.asset(
-                        _asset,
-                        width: size,
-                        height: size,
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.high,
-                        excludeFromSemantics: true,
+                      child: ExcludeSemantics(
+                        child: RadAiBird(
+                          state: selected
+                              ? RadAiBirdState.responding
+                              : RadAiBirdState.idle,
+                          semanticLabel: widget.label,
+                          size: size,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: ExcludeSemantics(
+                      child: Text(
+                        widget.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: selected
+                              ? (dark
+                                    ? const Color(0xFFFF7685)
+                                    : AppColors.primaryRed)
+                              : (dark
+                                    ? const Color(0xFFCED3DC)
+                                    : const Color(0xFF596575)),
+                          fontWeight: selected
+                              ? FontWeight.w800
+                              : FontWeight.w600,
+                          fontSize: 10.5,
+                        ),
                       ),
                     ),
                   ),

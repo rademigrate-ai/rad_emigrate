@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/rad_brand.dart';
 import '../../domain/city.dart';
 import '../../domain/geo_timezone_resolver.dart';
@@ -134,11 +135,21 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
     final lang = Localizations.localeOf(context).languageCode;
     final wide = MediaQuery.sizeOf(context).width >= 900;
     final medium = MediaQuery.sizeOf(context).width >= 600;
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    final panel = dark ? const Color(0xFF141820) : theme.colorScheme.surface;
+    final foreground = theme.colorScheme.onSurface;
+    final muted = theme.colorScheme.onSurfaceVariant;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B111A),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: state.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? LoadingState.section(
+              message: lang == 'fa'
+                  ? 'در حال آماده‌سازی ساعت‌های جهانی…'
+                  : 'Preparing world clocks…',
+              dark: dark,
+            )
           : CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _HeroHeader(languageCode: lang)),
@@ -153,18 +164,15 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                       children: [
                         TextField(
                           controller: _searchCtrl,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: foreground),
                           decoration: InputDecoration(
                             hintText: lang == 'fa'
                                 ? 'جستجوی شهر، کشور یا منطقه زمانی…'
                                 : 'Search city, country, or timezone…',
-                            hintStyle: const TextStyle(color: Colors.white38),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: Colors.white54,
-                            ),
+                            hintStyle: TextStyle(color: muted),
+                            prefixIcon: Icon(Icons.search, color: muted),
                             filled: true,
-                            fillColor: const Color(0xFF141C28),
+                            fillColor: panel,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
                               borderSide: BorderSide.none,
@@ -180,15 +188,15 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                               .map(
                                 (c) => ListTile(
                                   dense: true,
-                                  tileColor: const Color(0xFF141C28),
+                                  tileColor: panel,
                                   title: Text(
                                     '${c.flagEmoji ?? ''} ${c.localizedName(lang)}',
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(color: foreground),
                                   ),
                                   subtitle: Text(
                                     c.timezone,
-                                    style: const TextStyle(
-                                      color: Colors.white54,
+                                    style: TextStyle(
+                                      color: muted,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -264,7 +272,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF141C28),
+                            color: panel,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
                               color: AppColors.primaryRed.withValues(
@@ -281,7 +289,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                                     : '24-Hour Timeline',
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(
-                                      color: Colors.white,
+                                      color: foreground,
                                       fontWeight: FontWeight.w700,
                                     ),
                               ),

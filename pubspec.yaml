@@ -21,6 +21,7 @@ flutter:
   assets:
     - assets/branding/
     - assets/images/
+    - assets/images/destinations/
     - assets/icons/
     - assets/flags/
     # Timezone Boundary Builder polygons for Flutter Web (ODbL).
