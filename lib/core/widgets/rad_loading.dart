@@ -38,9 +38,9 @@ class RadLoadingIndicator extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final preferred = switch (size) {
-            RadLoadingSize.fullScreen => 280.0,
-            RadLoadingSize.section => 120.0,
-            RadLoadingSize.compact => 40.0,
+            RadLoadingSize.fullScreen => 128.0,
+            RadLoadingSize.section => 72.0,
+            RadLoadingSize.compact => 32.0,
           };
           final dimension = constraints.hasBoundedWidth
               ? preferred.clamp(0.0, constraints.maxWidth)
@@ -48,7 +48,7 @@ class RadLoadingIndicator extends StatelessWidget {
           return RadFlappingBird(
             size: dimension,
             active: active,
-            showAura: size != RadLoadingSize.compact,
+            showAura: true,
           );
         },
       ),
@@ -63,12 +63,12 @@ class RadLoadingIndicator extends StatelessWidget {
           RadLoadingSize.compact => LayoutBuilder(
             builder: (context, constraints) {
               if (!constraints.hasBoundedWidth || constraints.maxWidth < 160) {
-                return SizedBox(width: 40, child: scene);
+                return SizedBox(width: 32, child: scene);
               }
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(width: 40, child: scene),
+                  SizedBox(width: 32, child: scene),
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
@@ -84,21 +84,19 @@ class RadLoadingIndicator extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               scene,
-              if (message != null) ...[
-                const SizedBox(height: 14),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 300),
-                  child: Text(
-                    message!,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: dark
-                          ? const Color(0xFFD2E4E8)
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+              const SizedBox(height: 14),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 300),
+                child: Text(
+                  message ?? label,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: dark
+                        ? const Color(0xFFD2E4E8)
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-              ],
+              ),
             ],
           ),
         },

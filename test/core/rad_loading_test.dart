@@ -4,8 +4,39 @@ import 'package:rad_emigrate/core/widgets/loading_state.dart';
 import 'package:rad_emigrate/core/widgets/motion_primitives.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
 import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
+import 'package:rad_emigrate/core/widgets/app_button.dart';
 
 void main() {
+  testWidgets(
+    'pending buttons retain original colors and reject duplicate submission',
+    (tester) async {
+      var submissions = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppButton(
+              label: 'Submit request',
+              loading: true,
+              onPressed: () => submissions++,
+            ),
+          ),
+        ),
+      );
+      final bird = tester.widget<RadFlappingBird>(find.byType(RadFlappingBird));
+      expect(
+        bird.color,
+        isNull,
+        reason: 'Pending feedback preserves the layered red artwork',
+      );
+      expect(
+        tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+        isNull,
+      );
+      await tester.tap(find.byType(FilledButton));
+      await tester.pump();
+      expect(submissions, 0);
+    },
+  );
   testWidgets('full-screen RAD loader exposes one live loading label', (
     tester,
   ) async {
@@ -60,19 +91,19 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RadFlappingBird && widget.size == 280,
+          (widget) => widget is RadFlappingBird && widget.size == 128,
         ),
         findsOneWidget,
       );
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RadFlappingBird && widget.size == 120,
+          (widget) => widget is RadFlappingBird && widget.size == 72,
         ),
         findsOneWidget,
       );
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RadFlappingBird && widget.size == 40,
+          (widget) => widget is RadFlappingBird && widget.size == 32,
         ),
         findsOneWidget,
       );
@@ -301,6 +332,19 @@ void main() {
     );
 
     expect(
+      find.descendant(
+        of: find.byWidgetPredicate(
+          (widget) =>
+              widget is LoadingState &&
+              widget.size == RadLoadingSize.fullScreen,
+        ),
+        matching: find.byType(AppSkeleton),
+      ),
+      findsNothing,
+      reason:
+          'Full-screen loading centers the bird; skeletons belong to sections',
+    );
+    expect(
       find.byWidgetPredicate(
         (widget) =>
             widget is RadLoadingIndicator &&
@@ -342,7 +386,7 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RadFlappingBird && widget.size == 280,
+          (widget) => widget is RadFlappingBird && widget.size == 128,
         ),
         findsOneWidget,
       );

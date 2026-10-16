@@ -25,6 +25,7 @@ import 'core/widgets/loading_state.dart';
 import 'core/widgets/premium_visuals.dart';
 import 'core/widgets/rad_loading.dart';
 import 'core/widgets/rad_ai_bird.dart';
+import 'core/widgets/app_button.dart';
 import 'features/admin/presentation/pages/admin_hub_page.dart';
 import 'features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import 'features/applications/domain/entities/application_status.dart';
@@ -475,8 +476,8 @@ class _SectionLoadingQaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surface = dark ? const Color(0xFF071D28) : const Color(0xFFF4FBFC);
-    final foreground = dark ? Colors.white : const Color(0xFF102B35);
+    final surface = dark ? const Color(0xFF0B1220) : const Color(0xFFF7FAFE);
+    final foreground = dark ? Colors.white : const Color(0xFF0F172A);
     return Scaffold(
       backgroundColor: surface,
       appBar: AppBar(
@@ -504,10 +505,10 @@ class _CompactLoadingQaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4FBFC),
+      backgroundColor: const Color(0xFFF7FAFE),
       appBar: AppBar(
         title: const Text('Compact loading'),
-        backgroundColor: const Color(0xFFF4FBFC),
+        backgroundColor: const Color(0xFFF7FAFE),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -520,7 +521,7 @@ class _CompactLoadingQaPage extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: const Color(0xFFB9D9DE)),
+                  border: Border.all(color: const Color(0xFFE5EAF1)),
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: const Row(
@@ -536,7 +537,7 @@ class _CompactLoadingQaPage extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0B2430),
+                  color: const Color(0xFF121A26),
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: const Row(
@@ -555,6 +556,8 @@ class _CompactLoadingQaPage extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 18),
+              const AppButton(label: 'Submitting request', loading: true),
             ],
           ),
         ),

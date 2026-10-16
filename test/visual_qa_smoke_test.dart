@@ -113,7 +113,7 @@ void main() {
     expect(find.byType(SplashPage), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (widget) => widget is RadFlappingBird && widget.size == 280,
+        (widget) => widget is RadFlappingBird && widget.size == 128,
       ),
       findsOneWidget,
     );
@@ -121,9 +121,9 @@ void main() {
   });
 
   for (final entry in {
-    'loading-full': 280.0,
-    'loading-section': 120.0,
-    'loading-section-dark': 120.0,
+    'loading-full': 128.0,
+    'loading-section': 72.0,
+    'loading-section-dark': 72.0,
   }.entries) {
     testWidgets('visual QA ${entry.key} route presents its approved scene', (
       tester,
@@ -161,8 +161,8 @@ void main() {
           matching: find.byWidgetPredicate(
             (widget) =>
                 widget is SizedBox &&
-                widget.width == 280 &&
-                widget.height == 280,
+                widget.width == 128 &&
+                widget.height == 128,
           ),
         ),
         findsOneWidget,
@@ -187,32 +187,27 @@ void main() {
     });
   }
 
-  testWidgets(
-    'full-screen loader scales down only when narrow width requires it',
-    (tester) async {
-      await _pump(tester, 'loading-full', viewport: const Size(320, 844));
+  testWidgets('full-screen loader retains reference scale at 320 px', (
+    tester,
+  ) async {
+    await _pump(tester, 'loading-full', viewport: const Size(320, 844));
 
-      final scene = find.byWidgetPredicate(
-        (widget) => widget is RadFlappingBird,
-      );
-      expect(
-        find.descendant(
-          of: scene,
-          matching: find.byWidgetPredicate(
-            (widget) =>
-                widget is SizedBox &&
-                widget.width == 272 &&
-                widget.height == 272,
-          ),
+    final scene = find.byWidgetPredicate((widget) => widget is RadFlappingBird);
+    expect(
+      find.descendant(
+        of: scene,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.width == 128 && widget.height == 128,
         ),
-        findsOneWidget,
-      );
-      expect(tester.takeException(), isNull);
-    },
-  );
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
-    'full-screen loader preserves the 280 px wingbeat at 390 px mobile',
+    'full-screen loader uses the reference-sized 128 px wingbeat at 390 px mobile',
     (tester) async {
       await _pump(tester, 'loading-full', viewport: const Size(390, 844));
 
@@ -225,8 +220,8 @@ void main() {
           matching: find.byWidgetPredicate(
             (widget) =>
                 widget is SizedBox &&
-                widget.width == 280 &&
-                widget.height == 280,
+                widget.width == 128 &&
+                widget.height == 128,
           ),
         ),
         findsOneWidget,
@@ -264,7 +259,7 @@ void main() {
       );
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RadFlappingBird && widget.size == 40,
+          (widget) => widget is RadFlappingBird && widget.size == 32,
         ),
         findsNWidgets(2),
       );

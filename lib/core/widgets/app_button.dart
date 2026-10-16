@@ -46,9 +46,9 @@ class _AppButtonState extends State<AppButton> {
       child: widget.loading
           ? const SizedBox(
               key: ValueKey('loading'),
-              height: 20,
-              width: 20,
-              child: RadFlappingBird.button(size: 20),
+              height: 28,
+              width: 28,
+              child: RadFlappingBird(size: 28, showAura: true),
             )
           : Row(
               key: const ValueKey('label'),

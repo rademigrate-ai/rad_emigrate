@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rad_emigrate/core/routing/app_shell.dart';
 import 'package:rad_emigrate/core/theme/app_theme.dart';
 import 'package:rad_emigrate/core/widgets/rad_ai_bird_nav_icon.dart';
+import 'package:rad_emigrate/core/widgets/rad_ai_bird.dart';
 import 'package:rad_emigrate/features/admin/data/admin_operations_repository.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
@@ -104,6 +105,31 @@ void main() {
           expect(surface.bottom, lessThanOrEqualTo(844 - 34 - 8));
           expect(phoenix.center.dx, closeTo(195, 0.1));
           expect(phoenix.width, greaterThan(100));
+          final shapeFinder = find.descendant(
+            of: find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
+            matching: find.byType(PhysicalShape),
+          );
+          final shape = tester.widget<PhysicalShape>(shapeFinder);
+          final path = shape.clipper.getClip(tester.getSize(shapeFinder));
+          expect(
+            path.contains(Offset(surface.width / 2, 6)),
+            isFalse,
+            reason: 'The continuous capsule must not regain a center hump',
+          );
+          expect(path.contains(const Offset(50, 18)), isTrue);
+          expect(path.contains(Offset(surface.width / 2, 18)), isTrue);
+          final bird = tester.widget<RadAiBird>(
+            find.descendant(
+              of: find.byType(RadAiBirdNavIcon),
+              matching: find.byType(RadAiBird),
+            ),
+          );
+          expect(bird.showBackgroundOrb, isFalse);
+          expect(
+            bird.size,
+            greaterThan(24 * 2),
+            reason: 'The unframed bird remains larger than neighboring icons',
+          );
           final home = tester.getCenter(
             find.text(locale == 'fa' ? 'خانه' : 'Home'),
           );

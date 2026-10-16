@@ -448,7 +448,7 @@ class _BirdStatePainter extends CustomPainter {
           ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * 0.12),
       );
 
-      for (var i = 1; i <= 2; i++) {
+      for (var i = 1; showOrb && i <= 2; i++) {
         final waveProg = (progress + i * 0.5) % 1.0;
         final waveRadius = orbRadius * (0.85 + waveProg * 0.45);
         final waveAlpha = (1.0 - waveProg) * 0.45;

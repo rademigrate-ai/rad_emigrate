@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-/// Floating glass navigation with a raised centre for the original RAD Phoenix.
+/// Continuous glass capsule; the original RAD Phoenix rises above its top edge.
 /// Insets are outside the glass: no destination can sit beneath the home gesture.
 class RadPhoenixNavigationSurface extends StatelessWidget {
   const RadPhoenixNavigationSurface({
@@ -41,6 +41,7 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                 key: const ValueKey('rad-phoenix-navigation-surface'),
                 height: height,
                 child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Positioned.fill(
                       child: PhysicalShape(
@@ -52,7 +53,7 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                         elevation: dark ? 12 : 6,
                         clipBehavior: Clip.antiAlias,
                         child: BackdropFilter(
-                          filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                          filter: ui.ImageFilter.blur(sigmaX: 32, sigmaY: 32),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -60,15 +61,15 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                                 end: Alignment.bottomCenter,
                                 colors: dark
                                     ? [
-                                        const Color(0xFF222328)
-                                            .withValues(alpha: 0.83),
-                                        const Color(0xFF101115)
-                                            .withValues(alpha: 0.92),
+                                        const Color(0xFF253344)
+                                            .withValues(alpha: 0.72),
+                                        const Color(0xFF101925)
+                                            .withValues(alpha: 0.86),
                                       ]
                                     : [
-                                        Colors.white.withValues(alpha: 0.88),
-                                        const Color(0xFFF0F2F6)
-                                            .withValues(alpha: 0.96),
+                                        Colors.white.withValues(alpha: 0.76),
+                                        const Color(0xFFE9F1FC)
+                                            .withValues(alpha: 0.86),
                                       ],
                               ),
                             ),
@@ -99,9 +100,8 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                         child: CustomPaint(
                           painter: _PhoenixBorderPainter(
                             dark
-                                ? Colors.white.withValues(alpha: 0.18)
-                                : const Color(0xFF6A7383)
-                                      .withValues(alpha: 0.18),
+                                ? Colors.white.withValues(alpha: 0.16)
+                                : Colors.white.withValues(alpha: 0.90),
                           ),
                         ),
                       ),
@@ -132,22 +132,9 @@ class _PhoenixSurfaceClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final w = size.width;
-    final h = size.height;
+    final rect = Rect.fromLTRB(1, 12, size.width - 1, size.height - 1);
     return Path()
-      ..moveTo(32, 24)
-      ..lineTo(w * 0.31, 24)
-      ..cubicTo(w * 0.40, 24, w * 0.40, 1, w * 0.50, 1)
-      ..cubicTo(w * 0.60, 1, w * 0.60, 24, w * 0.69, 24)
-      ..lineTo(w - 32, 24)
-      ..quadraticBezierTo(w - 1, 24, w - 1, 55)
-      ..lineTo(w - 1, h - 32)
-      ..quadraticBezierTo(w - 1, h - 1, w - 32, h - 1)
-      ..lineTo(32, h - 1)
-      ..quadraticBezierTo(1, h - 1, 1, h - 32)
-      ..lineTo(1, 55)
-      ..quadraticBezierTo(1, 24, 32, 24)
-      ..close();
+      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(42)));
   }
 
   @override

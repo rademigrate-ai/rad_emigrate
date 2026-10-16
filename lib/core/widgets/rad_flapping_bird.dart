@@ -348,24 +348,19 @@ class _BirdAuraPainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final auraColor = color ?? AppColors.primaryRed;
 
-    // Outer subtle expanding ring
-    final wave = (progress * 1.5) % 1.0;
-    final radius = size.width * (0.45 + wave * 0.25);
-    final alpha = (1.0 - wave) * 0.18;
-
-    final ringPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = math.max(1.0, size.width * 0.015)
-      ..color = auraColor.withValues(alpha: alpha);
-
-    canvas.drawCircle(center, radius, ringPaint);
-
-    // Inner soft glow
+    // Diffuse light follows the layered feathers; no outlined ring or orb.
+    final breath = (math.sin(progress * math.pi * 2) + 1) * .025;
     final glowPaint = Paint()
-      ..color = auraColor.withValues(alpha: 0.08)
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * 0.18);
-
-    canvas.drawCircle(center, size.width * 0.38, glowPaint);
+      ..color = auraColor.withValues(alpha: .16 + breath)
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * .14);
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: center,
+        width: size.width * .70,
+        height: size.height * .45,
+      ),
+      glowPaint,
+    );
   }
 
   @override

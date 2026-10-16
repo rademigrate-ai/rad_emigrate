@@ -177,24 +177,22 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  bottom: 30,
+                  bottom: 24,
                   child: AnimatedOpacity(
                     duration: AppMotion.duration(context, AppMotion.fast),
-                    opacity: selected ? 0.6 : 0.25,
+                    opacity: selected ? 0.65 : 0.35,
                     child: Container(
-                      width: 54,
-                      height: 54,
+                      width: 78,
+                      height: 48,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryRed.withValues(
-                              alpha: dark ? 0.28 : 0.16,
+                        gradient: RadialGradient(
+                          colors: [
+                            AppColors.primaryRed.withValues(
+                              alpha: dark ? .22 : .12,
                             ),
-                            blurRadius: 16,
-                            spreadRadius: 2,
-                          ),
-                        ],
+                            Colors.transparent,
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -219,14 +217,15 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                       );
                     },
                     child: SizedBox.square(
-                      dimension: 60,
+                      dimension: 76,
                       child: ExcludeSemantics(
                         child: RadAiBird(
                           state: selected
                               ? RadAiBirdState.responding
                               : RadAiBirdState.idle,
                           semanticLabel: widget.label,
-                          size: 60,
+                          size: 76,
+                          showBackgroundOrb: false,
                         ),
                       ),
                     ),

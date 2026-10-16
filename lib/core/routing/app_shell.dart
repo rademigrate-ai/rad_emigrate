@@ -48,8 +48,8 @@ class _AppShellState extends ConsumerState<AppShell> {
       _NavItem(
         label: l10n.explore,
         path: '/visa',
-        icon: Icons.public_outlined,
-        selectedIcon: Icons.public,
+        icon: Icons.explore_outlined,
+        selectedIcon: Icons.explore,
       ),
       _NavItem(
         label: l10n.cases,
@@ -377,19 +377,18 @@ class _NavSlot extends StatelessWidget {
             children: [
               if (selected)
                 Positioned(
-                  bottom: 5,
+                  bottom: 27,
                   child: Container(
-                    width: 26,
-                    height: 3,
+                    width: 46,
+                    height: 46,
                     decoration: BoxDecoration(
-                      color: context.premium.accentForeground,
-                      borderRadius: BorderRadius.circular(6),
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.premium.accent.withValues(alpha: .3),
-                          blurRadius: 8,
-                        ),
-                      ],
+                      gradient: RadialGradient(
+                        colors: [
+                          context.premium.accent.withValues(alpha: .18),
+                          context.premium.accent.withValues(alpha: .04),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(23),
                     ),
                   ),
                 ),
@@ -403,7 +402,7 @@ class _NavSlot extends StatelessWidget {
                   scale: selected ? 1.05 : 1,
                   child: Icon(
                     selected ? item.selectedIcon : item.icon,
-                    size: 26,
+                    size: 24,
                     color: color,
                   ),
                 ),
