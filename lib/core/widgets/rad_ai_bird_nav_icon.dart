@@ -5,10 +5,11 @@ import 'package:flutter/services.dart';
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
 import 'rad_ai_bird.dart';
+import 'rad_phoenix_navigation_surface.dart';
 
 /// Centered RAD AI Assistant bird for the bottom navigation bar.
 ///
-/// Uses the owner-approved front-facing red bird asset with subtle idle float,
+/// Uses the original right-facing red bird asset with subtle idle float,
 /// spring tap response, and restrained active illumination. Respects
 /// reduced-motion system preferences.
 class RadAiBirdNavIcon extends StatefulWidget {
@@ -19,7 +20,7 @@ class RadAiBirdNavIcon extends StatefulWidget {
     required this.moreLabel,
     required this.onTap,
     required this.onLongPress,
-    this.size = 111,
+    this.size = 44,
   });
 
   final bool selected;
@@ -86,7 +87,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
   void didChangeDependencies() {
     super.didChangeDependencies();
     precacheImage(
-      const AssetImage('assets/branding/rad_flying_bird_512.png'),
+      const AssetImage('assets/branding/rad_flying_bird_1024.png'),
       context,
     );
     _syncFloat();
@@ -134,6 +135,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     final selected = widget.selected;
     final theme = Theme.of(context);
     final dark = theme.brightness == Brightness.dark;
+    final labelHeight = RadPhoenixNavigationSurface.labelHeight(context);
 
     return Semantics(
       label: widget.label,
@@ -177,13 +179,13 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  bottom: 24,
+                  bottom: labelHeight + 1,
                   child: AnimatedOpacity(
                     duration: AppMotion.duration(context, AppMotion.fast),
-                    opacity: selected ? 0.65 : 0.35,
+                    opacity: selected ? 0.45 : 0.18,
                     child: Container(
-                      width: 78,
-                      height: 48,
+                      width: 50,
+                      height: 32,
                       decoration: BoxDecoration(
                         gradient: RadialGradient(
                           colors: [
@@ -198,7 +200,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                   ),
                 ),
                 Positioned(
-                  bottom: 26,
+                  bottom: labelHeight + 1,
                   child: AnimatedBuilder(
                     animation: Listenable.merge([
                       _floatController,
@@ -217,15 +219,21 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                       );
                     },
                     child: SizedBox.square(
-                      dimension: 76,
-                      child: ExcludeSemantics(
-                        child: RadAiBird(
-                          state: selected
-                              ? RadAiBirdState.responding
-                              : RadAiBirdState.idle,
-                          semanticLabel: widget.label,
-                          size: 76,
-                          showBackgroundOrb: false,
+                      dimension: widget.size,
+                      // Scale the existing animation canvas as a whole so its
+                      // anatomy padding and wing motion retain their proportions.
+                      child: FittedBox(
+                        child: ExcludeSemantics(
+                          child: RadAiBird(
+                            state: selected
+                                ? RadAiBirdState.responding
+                                : RadAiBirdState.idle,
+                            semanticLabel: widget.label,
+                            size: 76,
+                            assetName:
+                                'assets/branding/rad_flying_bird_1024.png',
+                            showBackgroundOrb: false,
+                          ),
                         ),
                       ),
                     ),
@@ -234,14 +242,16 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 12,
+                  bottom: 2,
                   child: SizedBox(
-                    height: 18,
+                    height: labelHeight,
                     child: Center(
                       child: ExcludeSemantics(
                         child: Text(
                           widget.label,
-                          maxLines: 1,
+                          maxLines: RadPhoenixNavigationSurface.labelLines(
+                            context,
+                          ),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.labelSmall?.copyWith(
@@ -253,8 +263,8 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                                       ? const Color(0xFFCED3DC)
                                       : const Color(0xFF596575)),
                             fontWeight: selected
-                                ? FontWeight.w800
-                                : FontWeight.w600,
+                                ? FontWeight.w600
+                                : FontWeight.w500,
                             fontSize: 11,
                             height: 1.2,
                           ),

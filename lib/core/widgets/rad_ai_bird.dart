@@ -19,12 +19,14 @@ class RadAiBird extends StatefulWidget {
     required this.semanticLabel,
     this.size = 176,
     this.showBackgroundOrb = true,
+    this.assetName = 'assets/branding/rad_flying_bird_512.png',
   });
 
   final RadAiBirdState state;
   final String semanticLabel;
   final double size;
   final bool showBackgroundOrb;
+  final String assetName;
 
   @override
   State<RadAiBird> createState() => _RadAiBirdState();
@@ -51,10 +53,7 @@ class _RadAiBirdState extends State<RadAiBird>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(
-      const AssetImage('assets/branding/rad_flying_bird_512.png'),
-      context,
-    );
+    precacheImage(AssetImage(widget.assetName), context);
     _syncMotion();
   }
 
@@ -139,6 +138,7 @@ class _RadAiBirdState extends State<RadAiBird>
                           ? child
                           : _ArticulatedBird(
                               key: const ValueKey('articulated-rad-bird'),
+                              assetName: widget.assetName,
                               wingAngle: wingAngle,
                               isResponding:
                                   widget.state == RadAiBirdState.responding,
@@ -150,7 +150,7 @@ class _RadAiBirdState extends State<RadAiBird>
               child: Padding(
                 padding: EdgeInsets.all(widget.size * 0.08),
                 child: Image.asset(
-                  'assets/branding/rad_flying_bird_512.png',
+                  widget.assetName,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
                 ),
@@ -170,6 +170,7 @@ class _RadAiBirdState extends State<RadAiBird>
 class _ArticulatedBird extends StatelessWidget {
   const _ArticulatedBird({
     super.key,
+    required this.assetName,
     required this.wingAngle,
     this.isResponding = false,
   });
@@ -177,10 +178,10 @@ class _ArticulatedBird extends StatelessWidget {
   final double wingAngle;
   final bool isResponding;
 
-  static const _asset = 'assets/branding/rad_flying_bird_512.png';
+  final String assetName;
 
   Widget _image() => Image.asset(
-    _asset,
+    assetName,
     fit: BoxFit.contain,
     filterQuality: FilterQuality.high,
     excludeFromSemantics: true,

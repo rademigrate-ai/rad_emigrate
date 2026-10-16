@@ -86,7 +86,7 @@ void main() {
       final image = tester.widget<Image>(find.byType(Image));
       expect(
         (image.image as AssetImage).assetName,
-        'assets/branding/rad_flying_bird_512.png',
+        'assets/branding/rad_flying_bird_1024.png',
       );
       expect(image.fit, BoxFit.contain);
       expect(

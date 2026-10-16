@@ -334,7 +334,6 @@ class _RadBottomBar extends StatelessWidget {
       ],
       phoenix: RadAiBirdNavIcon(
         selected: aiSelected,
-        size: (MediaQuery.sizeOf(context).width * 0.285).clamp(86.0, 118.0),
         label: aiLabel,
         moreLabel: moreLabel,
         onTap: onAiTap,
@@ -358,6 +357,7 @@ class _NavSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final labelHeight = RadPhoenixNavigationSurface.labelHeight(context);
     final color = selected
         ? context.premium.accentForeground
         : context.premium.mutedText;
@@ -377,10 +377,10 @@ class _NavSlot extends StatelessWidget {
             children: [
               if (selected)
                 Positioned(
-                  bottom: 27,
+                  bottom: 2,
                   child: Container(
-                    width: 46,
-                    height: 46,
+                    width: 48,
+                    height: labelHeight + 26,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: [
@@ -393,7 +393,7 @@ class _NavSlot extends StatelessWidget {
                   ),
                 ),
               Positioned(
-                bottom: 34,
+                bottom: labelHeight + 3,
                 child: AnimatedScale(
                   duration: AppMotion.duration(
                     context,
@@ -410,14 +410,14 @@ class _NavSlot extends StatelessWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 12,
+                bottom: 2,
                 child: SizedBox(
-                  height: 18,
+                  height: labelHeight,
                   child: Center(
                     child: Text(
                       item.label,
                       textAlign: TextAlign.center,
-                      maxLines: 1,
+                      maxLines: RadPhoenixNavigationSurface.labelLines(context),
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: color,

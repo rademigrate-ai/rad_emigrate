@@ -16,13 +16,28 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
   final List<Widget> trailing;
   final Widget phoenix;
 
+  // Large system text wraps rather than being clipped by the slim line box.
+  static int labelLines(BuildContext context) {
+    final size = MediaQuery.textScalerOf(context).scale(11);
+    // At 200% on a 320 px screen, "AI Assistant" needs three lines while
+    // preserving 48 px neighboring touch targets and the requested text size.
+    return size > 19.8 ? 3 : (size > 14.3 ? 2 : 1);
+  }
+
+  static double labelHeight(BuildContext context) {
+    final scale = (MediaQuery.textScalerOf(context).scale(11) / 11).clamp(
+      1.0,
+      double.infinity,
+    );
+    return 18 * scale * labelLines(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;
-    // Two-line Persian labels have a taller line box than Latin labels. Grow
-    // the surface instead of shrinking text when the user increases text size.
-    final height = 96.0 + ((textScale - 1).clamp(0.0, 3.0) * 44);
+    // A 48 px glass body plus the raised bird's headroom. The entire 60 px
+    // destination is interactive; device-safe insets remain outside it.
+    final height = 42.0 + labelHeight(context);
     const clipper = _PhoenixSurfaceClipper();
 
     return Material(
@@ -30,12 +45,12 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final centreWidth = (constraints.maxWidth * 0.30).clamp(
+              final centreWidth = (constraints.maxWidth * 0.28).clamp(
                 88.0,
-                118.0,
+                104.0,
               );
               return SizedBox(
                 key: const ValueKey('rad-phoenix-navigation-surface'),
@@ -48,9 +63,9 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                         clipper: clipper,
                         color: Colors.transparent,
                         shadowColor: Colors.black.withValues(
-                          alpha: dark ? 0.48 : 0.16,
+                          alpha: dark ? 0.32 : 0.10,
                         ),
-                        elevation: dark ? 12 : 6,
+                        elevation: dark ? 8 : 3,
                         clipBehavior: Clip.antiAlias,
                         child: BackdropFilter(
                           filter: ui.ImageFilter.blur(sigmaX: 32, sigmaY: 32),
@@ -61,7 +76,7 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                                 end: Alignment.bottomCenter,
                                 colors: dark
                                     ? [
-                                        const Color(0xFF253344)
+                                        const Color(0xFF272936)
                                             .withValues(alpha: 0.72),
                                         const Color(0xFF101925)
                                             .withValues(alpha: 0.86),
@@ -83,7 +98,7 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                                     colors: [
                                       const Color(
                                         0xFFFF1835,
-                                      ).withValues(alpha: dark ? 0.13 : 0.05),
+                                      ).withValues(alpha: dark ? 0.06 : 0.02),
                                       const Color(0xFFFF1835)
                                           .withValues(alpha: 0),
                                     ],
@@ -132,9 +147,9 @@ class _PhoenixSurfaceClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final rect = Rect.fromLTRB(1, 12, size.width - 1, size.height - 1);
+    final rect = Rect.fromLTRB(1, 11, size.width - 1, size.height - 1);
     return Path()
-      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(42)));
+      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(24)));
   }
 
   @override

@@ -1,0 +1,18 @@
+{
+  "original_assets_sha256": {
+    "assets/branding/rad_flying_bird_1024.png": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06",
+    "assets/branding/rad_flying_bird_128.png": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e",
+    "assets/branding/rad_flying_bird_256.png": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1",
+    "assets/branding/rad_flying_bird_512.png": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4",
+    "assets/branding/rad_flying_bird_64.png": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5"
+  },
+  "unchanged_motion_and_callbacks_sha256": {
+    "lib/core/widgets/rad_ai_bird.dart": "df43f684111b30d6f04619cca33304dca4253c084769de52f617cc9d1375a4c0",
+    "lib/core/widgets/rad_ai_bird_nav_icon.dart": "1d6814d9ff3c0c54cdd948f34ec39e6eee5fbc87b6d3f7ec060353ffc95db3cf"
+  },
+  "notes": [
+    "Original PNG bytes are identical to baseline.",
+    "Only navigation passes the original 1024px master; other bird consumers retain their 512px asset.",
+    "Animation timing, states, anatomy clippers, lifecycle, Reduced Motion, routes and keyboard bindings are preserved."
+  ]
+}
