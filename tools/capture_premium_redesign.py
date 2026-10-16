@@ -2,6 +2,7 @@
 import asyncio
 import json
 import os
+import subprocess
 from pathlib import Path
 from playwright.async_api import async_playwright
 
@@ -22,22 +23,34 @@ if os.environ.get('RAD_QA_SIZES'):
 
 async def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    source_head = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+    lib_tree = subprocess.check_output(['git', 'rev-parse', 'HEAD:lib']).decode().strip()
     captures = []
-    # Isolate GPU processes: sharing one Chromium instance across many
-    # CanvasKit pages can leave decoded assets waiting indefinitely on Windows.
-    semaphore = asyncio.Semaphore(2)
+    if os.environ.get('RAD_QA_RESUME') == '1' and (OUT / 'capture-progress.json').exists():
+        captures = json.loads((OUT / 'capture-progress.json').read_text(encoding='utf-8'))
+    completed = {item['file'] for item in captures}
+    semaphore = asyncio.Semaphore(3)
     async with async_playwright() as p:
-        # Restart Chromium between locale/theme/viewport batches so hundreds
-        # of CanvasKit pages cannot exhaust a shared GPU process.
+        # Reuse the decoded browser cache within an isolated locale/theme
+        # batch. A failed decode gets a fresh browser/GPU process on retry.
         for size, dimensions in SIZES.items():
             for locale in ['en', 'fa']:
                 for theme in ['light', 'dark']:
+                    batch_browser = await p.chromium.launch(channel='chrome', headless=True)
+                    batch_context = await batch_browser.new_context(viewport=dict(zip(('width', 'height'), dimensions)), reduced_motion='reduce')
                     async def capture(screen):
+                        filename = f'{size}-{locale}-{theme}-{screen}.png'
+                        if filename in completed:
+                            return
                         async with semaphore:
                             attempts = []
                             for attempt in range(4):
-                                browser = await p.chromium.launch(channel='chrome', headless=True)
-                                page = await browser.new_page(viewport=dict(zip(('width', 'height'), dimensions)), reduced_motion='reduce')
+                                attempt_browser = None
+                                if attempt:
+                                    attempt_browser = await p.chromium.launch(channel='chrome', headless=True)
+                                    page = await attempt_browser.new_page(viewport=dict(zip(('width', 'height'), dimensions)), reduced_motion='reduce')
+                                else:
+                                    page = await batch_context.new_page()
                                 await page.add_init_script(f"localStorage.setItem('flutter.rad_locale', JSON.stringify('{locale}')); localStorage.setItem('flutter.rad_theme_mode', JSON.stringify('{theme}'));")
                                 errors = []
                                 page.on('pageerror', lambda error: errors.append(str(error)))
@@ -53,9 +66,12 @@ async def main():
                                         await placeholder.evaluate('(element) => element.click()')
                                     await page.wait_for_function('window.radQaAssetsReady === true', timeout=30000)
                                     await page.wait_for_timeout(1400)
+                                    # CanvasKit discovers emoji fallback fonts
+                                    # after the first painted text paragraphs.
+                                    await page.wait_for_load_state('networkidle')
+                                    await page.wait_for_timeout(600)
                                     if errors:
                                         raise RuntimeError('; '.join(errors))
-                                    filename = f'{size}-{locale}-{theme}-{screen}.png'
                                     await page.screenshot(path=str(OUT / filename))
                                     captures.append(dict(file=filename, screen=screen, locale=locale, theme=theme,
                                                          viewport=list(dimensions), status=response.status, errors=errors, retries=attempts))
@@ -66,9 +82,13 @@ async def main():
                                     if attempt == 3:
                                         raise
                                 finally:
-                                    await browser.close()
+                                    if attempt_browser:
+                                        await attempt_browser.close()
+                                    else:
+                                        await page.close()
 
                     await asyncio.gather(*(capture(screen) for screen in SCREENS))
+                    await batch_browser.close()
                     print(f'{size} {locale} {theme}: {len(SCREENS)} captured', flush=True)
     if os.environ.get('RAD_QA_MERGE') == '1' and (OUT / 'capture-manifest.json').exists():
         previous = json.loads((OUT / 'capture-manifest.json').read_text(encoding='utf-8'))['captures']
@@ -78,6 +98,7 @@ async def main():
     captures.sort(key=lambda item: item['file'])
     (OUT / 'capture-manifest.json').write_text(json.dumps(dict(
         evidence='Actual Flutter Web pages with synthetic fixture repositories; not authenticated production testing.',
+        source_head=source_head, lib_tree=lib_tree,
         limitations=['Notifications captures show the unavailable-service state.',
                      'Reset-password captures show the invalid/missing recovery-session state; valid recovery requires a real session.',
                      'No physical Android or iOS device execution.'], captures=captures), indent=2), encoding='utf-8')

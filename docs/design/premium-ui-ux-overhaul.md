@@ -1,6 +1,6 @@
 # RAD Emigrate — Premium UI/UX Overhaul
 
-Status: **Implemented for owner visual review**. See the [implementation and verification report](../qa/pr54/redesign-review.md). Physical-device and live authenticated production testing remain unverified; this is not a production-readiness claim.
+Status: **Client-reference reconstruction implemented for owner visual review**. The binding boards and current screen classifications are in the [fidelity report](../qa/pr54/fidelity/README.md). This supersedes the earlier composition direction below where noted. Physical-device and live authenticated production testing remain unverified.
 
 ## Approved direction
 
@@ -8,8 +8,8 @@ Status: **Implemented for owner visual review**. See the [implementation and ver
 - Adaptive navigation: mobile safe-area-aware bottom dock with Home, Explore, **دستیار هوشمند**, Cases, Profile. Assistant bird centered and visually raised, label **دستیار هوشمند** always visible; desktop collapsible sidebar. Preserve existing route protection and browser history.
 - Bird animation based on user-supplied red bird artwork; preserve recognizable silhouette, refine wing articulation for natural flapping. States: idle, listening, thinking, responding, new message. Reduce Motion and low-power/static fallback. Do not use a static PNG as evidence of real wing animation.
 - Loading: branded bird for startup and major transitions, skeletons for lists/cards, scoped progress indicators for mutations; handle error, empty, offline and retry.
-- Visa: continent-first grouping, search/filter, larger destination cards with properly licensed destination photography, cache and fallback. Show only real destinations and evidence-backed immigration content; missing information remains explicitly unavailable.
-- World Time: photographic city/timezone cards, accurate IANA timezone clocks, day/night indicator; do not imply a country has only one timezone.
+- Visa: persistent search, actual catalog category shortcuts, portrait destination grid with existing licensed photography, flags and honest missing-photo fallback. Real catalog data and selection contracts remain intact.
+- World Time: compact flag/city/time/date rows and an analog city detail using the existing IANA timezone engine. Map, meeting planner and scrubber remain available through adaptive sections.
 - Profile: structured identity header, grouped settings, support, about, logout; inspired by approved reference screenshots but with RAD branding and existing supported actions only.
 - Guest-first exploration, protected actions gated by login, safe return routes, persisted consultation/AI drafts, **never auto-submit**.
 - Responsive mobile/tablet/desktop Web and Android; keyboard navigation, focus, text scaling, contrast, RTL/LTR, performance, no overflow.

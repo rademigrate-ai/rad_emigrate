@@ -1,5 +1,7 @@
 # RAD Emigrate implementation and audit reconciliation
 
+Historical technical review. The client-approved [visual reconstruction and fidelity assessment](fidelity/README.md) supersedes the visual acceptance statements here. The original evidence remains unchanged.
+
 Review date: 2026-10-16. Repository: `rademigrate-ai/rad_emigrate`.
 Branch: `feature/premium-ui-ux-overhaul-20261016`. [Draft PR #54](https://github.com/rademigrate-ai/rad_emigrate/pull/54).
 
