@@ -50,19 +50,6 @@ class RadBrand extends StatelessWidget {
       },
     );
 
-    return Semantics(
-      label: label,
-      image: true,
-      child: darkSurface
-          ? image
-          : Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: image,
-            ),
-    );
+    return Semantics(label: label, image: true, child: image);
   }
 }

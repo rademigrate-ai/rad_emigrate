@@ -1,26 +1,46 @@
 [
   {
-    "test": "Mobile Persian Dashboard",
-    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dashboard.png"
+    "test": "Mobile Persian Dark Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-dashboard.png"
   },
   {
-    "test": "Mobile Persian AI Assistant",
-    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-ai-assistant.png"
+    "test": "Mobile Persian Nav Dock Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-nav-dock-crop.png"
   },
   {
-    "test": "Mobile Persian Visa",
-    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-visa.png"
+    "test": "Animated Bird Wing Flapping GIF",
+    "file": "docs\\qa\\pr54\\verification\\final-bird-wing-flapping.gif"
   },
   {
-    "test": "Mobile Persian World Time",
-    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-world-clock.png"
+    "test": "Mobile Persian Dark AI Assistant",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-ai-assistant.png"
   },
   {
-    "test": "Desktop English Sidebar Dashboard",
-    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-sidebar-dashboard.png"
+    "test": "Mobile Persian Dark Visa",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-visa.png"
   },
   {
-    "test": "Desktop English World Clock",
-    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-world-clock.png"
+    "test": "Mobile Persian Dark World Time",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-world-clock.png"
+  },
+  {
+    "test": "Mobile Persian Dark Profile",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-profile.png"
+  },
+  {
+    "test": "Mobile English Light Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-en-light-dashboard.png"
+  },
+  {
+    "test": "Desktop English Dark Sidebar Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-dark-dashboard.png"
+  },
+  {
+    "test": "Desktop English Sidebar Logo Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-sidebar-logo-crop.png"
+  },
+  {
+    "test": "Desktop Persian Light Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-fa-light-dashboard.png"
   }
 ]

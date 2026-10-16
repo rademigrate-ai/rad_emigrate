@@ -174,4 +174,87 @@ void main() {
     expect(router.routeInformationProvider.value.uri.path, '/dashboard');
     expect(tester.takeException(), isNull);
   });
+
+  for (final localeCode in ['en', 'fa']) {
+    testWidgets(
+      'mobile bottom navigation labels share identical vertical baselines ($localeCode)',
+      (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = const Size(390, 844);
+        addTearDown(tester.view.reset);
+
+        final router = GoRouter(
+          initialLocation: '/dashboard',
+          routes: [
+            ShellRoute(
+              builder: (_, _, child) => AppShell(child: child),
+              routes: [
+                GoRoute(
+                  path: '/dashboard',
+                  builder: (_, _) => const Scaffold(),
+                ),
+                GoRoute(
+                  path: '/ai-assistant',
+                  builder: (_, _) => const Scaffold(),
+                ),
+              ],
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adminSnapshotProvider.overrideWith(
+                (ref) async => _snapshot('user'),
+              ),
+            ],
+            child: MaterialApp.router(
+              routerConfig: router,
+              locale: Locale(localeCode),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+
+        final navTexts = tester.widgetList<Text>(
+          find.descendant(
+            of: find.byType(AppShell),
+            matching: find.byType(Text),
+          ),
+        );
+        final labelRects = <String, Rect>{};
+        for (final text in navTexts) {
+          final data = text.data ?? '';
+          if (data.isEmpty) continue;
+          final finder = find.text(data);
+          if (finder.evaluate().isNotEmpty) {
+            final rect = tester.getRect(finder.first);
+            if (rect.top > 700) {
+              labelRects[data] = rect;
+            }
+          }
+        }
+
+        expect(labelRects.length, 5);
+        final firstBottom = labelRects.values.first.bottom;
+        final firstTop = labelRects.values.first.top;
+        for (final entry in labelRects.entries) {
+          expect(
+            entry.value.bottom,
+            closeTo(firstBottom, 0.5),
+            reason: 'Label ${entry.key} bottom baseline must match precisely',
+          );
+          expect(
+            entry.value.top,
+            closeTo(firstTop, 0.5),
+            reason: 'Label ${entry.key} top baseline must match precisely',
+          );
+        }
+      },
+    );
+  }
 }

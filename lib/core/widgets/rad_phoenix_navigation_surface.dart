@@ -110,32 +110,10 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         for (final destination in leading)
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                top: 24,
-                                bottom: 6,
-                              ),
-                              child: destination,
-                            ),
-                          ),
-                        SizedBox(
-                          width: centreWidth,
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: phoenix,
-                          ),
-                        ),
+                          Expanded(child: destination),
+                        SizedBox(width: centreWidth, child: phoenix),
                         for (final destination in trailing)
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                top: 24,
-                                bottom: 6,
-                              ),
-                              child: destination,
-                            ),
-                          ),
+                          Expanded(child: destination),
                       ],
                     ),
                   ],

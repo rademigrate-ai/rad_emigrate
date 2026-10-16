@@ -248,7 +248,13 @@ class _BirdStatePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
 
-    if (state == RadAiBirdState.listening) {
+    if (state == RadAiBirdState.idle) {
+      final glowAlpha = 0.10 + ((math.sin(progress * math.pi * 2) + 1) * 0.035);
+      final orbPaint = Paint()
+        ..color = AppColors.primaryRed.withValues(alpha: glowAlpha)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * 0.08);
+      canvas.drawCircle(center, size.width * 0.36, orbPaint);
+    } else if (state == RadAiBirdState.listening) {
       // Sound wave graphic directly above the bird
       final waveCenterY = size.height * 0.16;
       final barWidth = math.max(2.0, size.width * 0.018);

@@ -136,6 +136,8 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
                       progress: _controller.value,
                       side: sceneSize,
                       compact: isCompact,
+                      isLoginHero:
+                          widget.variant == RadEarthBirdVariant.loginHero,
                     );
                     final birdLayer = _PositionedBird(
                       geometry: orbit,
@@ -255,7 +257,16 @@ class _OrbitGeometry {
     required double progress,
     required double side,
     required bool compact,
+    bool isLoginHero = true,
   }) {
+    if (!isLoginHero) {
+      return _OrbitGeometry(
+        position: Offset(side / 2, side / 2),
+        bank: 0.0,
+        scale: 1.0,
+        isForeground: true,
+      );
+    }
     // Deterministic, seamlessly looping flight: multiple low-frequency
     // harmonics produce natural variation without per-frame random jumps.
     // Compact loading deliberately retains its simple, predictable orbit.
@@ -339,6 +350,9 @@ class _BackdropOrbitPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (variant != RadEarthBirdVariant.loginHero) {
+      return;
+    }
     final center = size.center(Offset.zero);
     final side = math.min(size.width, size.height);
     final compact = variant == RadEarthBirdVariant.compactLoading;
@@ -845,10 +859,7 @@ class _ForegroundOrbitPainter extends CustomPainter {
 double _earthRadiusFor(RadEarthBirdVariant variant) {
   return switch (variant) {
     RadEarthBirdVariant.loginHero => 0.315,
-    RadEarthBirdVariant.splash => 0.31,
-    RadEarthBirdVariant.fullScreenLoading => 0.305,
-    RadEarthBirdVariant.sectionLoading => 0.3,
-    RadEarthBirdVariant.compactLoading => 0,
+    _ => 0,
   };
 }
 

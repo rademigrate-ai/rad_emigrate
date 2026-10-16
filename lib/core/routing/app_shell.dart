@@ -329,27 +329,47 @@ class _NavSlot extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedScale(
-              duration: AppMotion.duration(context, AppMotion.buttonFeedback),
-              scale: selected ? 1.05 : 1,
-              child: Icon(item.icon, size: 27, color: color),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              item.label,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: color,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                fontSize: 11,
+        child: SizedBox.expand(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Positioned(
+                bottom: 34,
+                child: AnimatedScale(
+                  duration: AppMotion.duration(
+                    context,
+                    AppMotion.buttonFeedback,
+                  ),
+                  scale: selected ? 1.05 : 1,
+                  child: Icon(item.icon, size: 26, color: color),
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 12,
+                child: SizedBox(
+                  height: 18,
+                  child: Center(
+                    child: Text(
+                      item.label,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: color,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        fontSize: 11,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

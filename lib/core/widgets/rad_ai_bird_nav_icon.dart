@@ -128,8 +128,8 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
   Widget build(BuildContext context) {
     final reduce = AppMotion.reduceMotion(context);
     final selected = widget.selected;
-    final size = widget.size;
-    final dark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
 
     return Semantics(
       label: widget.label,
@@ -140,131 +140,141 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
       customSemanticsActions: {
         CustomSemanticsAction(label: widget.moreLabel): widget.onLongPress,
       },
-      child: AnimatedBuilder(
-        animation: Listenable.merge([_floatController, _tapController]),
-        builder: (context, child) {
-          final dy = reduce ? 0.0 : _float.value;
-          final scale = reduce ? 1.0 : _tapScale.value;
-          return Transform.translate(
-            offset: Offset(0, dy),
-            child: Transform.scale(
-              key: const ValueKey('rad-ai-bird-nav-scale'),
-              scale: scale,
-              child: child,
-            ),
-          );
+      child: FocusableActionDetector(
+        onShowFocusHighlight: (value) => setState(() => _showFocus = value),
+        shortcuts: const {
+          SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
+          SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
+          SingleActivator(LogicalKeyboardKey.f10, shift: true):
+              _OpenMoreIntent(),
         },
-        child: FocusableActionDetector(
-          onShowFocusHighlight: (value) => setState(() => _showFocus = value),
-          shortcuts: const {
-            SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
-            SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
-            SingleActivator(LogicalKeyboardKey.f10, shift: true):
-                _OpenMoreIntent(),
-          },
-          actions: {
-            ActivateIntent: CallbackAction<ActivateIntent>(
-              onInvoke: (_) {
-                _handleTap();
-                return null;
-              },
-            ),
-            _OpenMoreIntent: CallbackAction<_OpenMoreIntent>(
-              onInvoke: (_) {
-                widget.onLongPress();
-                return null;
-              },
-            ),
-          },
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            excludeFromSemantics: true,
-            onTap: _handleTap,
-            onLongPress: widget.onLongPress,
-            child: SizedBox(
-              width: size,
-              height: 94,
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  AnimatedOpacity(
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) {
+              _handleTap();
+              return null;
+            },
+          ),
+          _OpenMoreIntent: CallbackAction<_OpenMoreIntent>(
+            onInvoke: (_) {
+              widget.onLongPress();
+              return null;
+            },
+          ),
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          excludeFromSemantics: true,
+          onTap: _handleTap,
+          onLongPress: widget.onLongPress,
+          child: SizedBox.expand(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  bottom: 30,
+                  child: AnimatedOpacity(
                     duration: AppMotion.duration(context, AppMotion.fast),
-                    opacity: selected ? 0.5 : 0.2,
+                    opacity: selected ? 0.6 : 0.25,
                     child: Container(
-                      width: size * 0.64,
-                      height: size * 0.52,
+                      width: 54,
+                      height: 54,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primaryRed.withValues(
-                              alpha: dark ? 0.22 : 0.14,
+                              alpha: dark ? 0.28 : 0.16,
                             ),
-                            blurRadius: 14,
-                            spreadRadius: 0,
+                            blurRadius: 16,
+                            spreadRadius: 2,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  ClipRect(
-                    child: OverflowBox(
-                      maxWidth: size,
-                      maxHeight: size,
+                ),
+                Positioned(
+                  bottom: 26,
+                  child: AnimatedBuilder(
+                    animation: Listenable.merge([
+                      _floatController,
+                      _tapController,
+                    ]),
+                    builder: (context, child) {
+                      final dy = reduce ? 0.0 : _float.value;
+                      final scale = reduce ? 1.0 : _tapScale.value;
+                      return Transform.translate(
+                        offset: Offset(0, dy),
+                        child: Transform.scale(
+                          key: const ValueKey('rad-ai-bird-nav-scale'),
+                          scale: scale,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: SizedBox.square(
+                      dimension: 60,
                       child: ExcludeSemantics(
                         child: RadAiBird(
                           state: selected
                               ? RadAiBirdState.responding
                               : RadAiBirdState.idle,
                           semanticLabel: widget.label,
-                          size: size,
+                          size: 60,
                         ),
                       ),
                     ),
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: ExcludeSemantics(
-                      child: Text(
-                        widget.label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: selected
-                              ? (dark
-                                    ? const Color(0xFFFF7685)
-                                    : AppColors.primaryRed)
-                              : (dark
-                                    ? const Color(0xFFCED3DC)
-                                    : const Color(0xFF596575)),
-                          fontWeight: selected
-                              ? FontWeight.w800
-                              : FontWeight.w600,
-                          fontSize: 10.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_showFocus)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.primaryRed,
-                              width: 2,
-                            ),
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 12,
+                  child: SizedBox(
+                    height: 18,
+                    child: Center(
+                      child: ExcludeSemantics(
+                        child: Text(
+                          widget.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: selected
+                                ? (dark
+                                      ? const Color(0xFFFF7685)
+                                      : AppColors.primaryRed)
+                                : (dark
+                                      ? const Color(0xFFCED3DC)
+                                      : const Color(0xFF596575)),
+                            fontWeight: selected
+                                ? FontWeight.w800
+                                : FontWeight.w600,
+                            fontSize: 11,
+                            height: 1.2,
                           ),
                         ),
                       ),
                     ),
-                ],
-              ),
+                  ),
+                ),
+                if (_showFocus)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.primaryRed,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
