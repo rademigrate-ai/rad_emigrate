@@ -20,6 +20,13 @@ class SpaHandler(http.server.SimpleHTTPRequestHandler):
         return super().send_head()
 
 
+class SpaServer(http.server.ThreadingHTTPServer):
+    # Flutter opens many asset/font connections during bootstrap. The small
+    # socket backlog can reject those bursts on Windows during matrix capture.
+    request_queue_size = 128
+    daemon_threads = True
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--directory", default="build/web")
@@ -28,7 +35,7 @@ def main() -> None:
     args = parser.parse_args()
     os.chdir(args.directory)
     SpaHandler.quiet = args.quiet
-    with http.server.ThreadingHTTPServer(("127.0.0.1", args.port), SpaHandler) as server:
+    with SpaServer(("127.0.0.1", args.port), SpaHandler) as server:
         server.serve_forever()
 
 

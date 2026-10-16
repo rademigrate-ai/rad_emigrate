@@ -180,40 +180,53 @@ class ReferenceJourneyHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge
-                          ?.copyWith(fontWeight: FontWeight.w800, height: 1.45),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      body,
-                      style: Theme.of(context).textTheme.bodySmall
-                          ?.copyWith(color: context.premium.text, height: 1.65),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Expanded(
-                flex: 2,
-                child: ExcludeSemantics(
-                  child: RadAiBird(
-                    size: 116,
-                    semanticLabel: '',
-                    showBackgroundOrb: false,
-                    state: RadAiBirdState.idle,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final stacked =
+                  constraints.maxWidth < 270 ||
+                  MediaQuery.textScalerOf(context).scale(20) > 28;
+              final copy = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800, height: 1.45),
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    body,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: context.premium.text, height: 1.65),
+                  ),
+                ],
+              );
+              const bird = ExcludeSemantics(
+                child: RadAiBird(
+                  size: 116,
+                  semanticLabel: '',
+                  showBackgroundOrb: false,
+                  state: RadAiBirdState.idle,
                 ),
-              ),
-            ],
+              );
+              if (stacked) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Center(child: bird),
+                    const SizedBox(height: 12),
+                    copy,
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(flex: 3, child: copy),
+                  const SizedBox(width: 4),
+                  const Expanded(flex: 2, child: bird),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 16),
           FilledButton(
