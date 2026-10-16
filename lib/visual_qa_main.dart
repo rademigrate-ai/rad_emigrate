@@ -9,7 +9,6 @@ import 'features/auth/presentation/pages/profile_completion_page.dart';
 import 'core/widgets/not_found_page.dart';
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -175,6 +174,7 @@ class _QaAssetReadinessState extends State<_QaAssetReadiness> {
 
   Future<void> _warmAssets() async {
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    if (!mounted) return;
     final assets = manifest.listAssets().where(
       (path) =>
           path.startsWith('assets/') &&
@@ -202,13 +202,13 @@ class _QaAssetReadinessState extends State<_QaAssetReadiness> {
     children: [
       widget.child,
       if (_ready)
-        const Positioned(
+        Positioned(
           left: 0,
           top: 0,
           child: Semantics(
             label: 'visual-qa-assets-ready',
             container: true,
-            child: SizedBox(width: 1, height: 1),
+            child: const SizedBox(width: 1, height: 1),
           ),
         ),
     ],
