@@ -116,7 +116,12 @@ Future<void> _pump(
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: AiAssistantPage(adminMode: admin),
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(disableAnimations: true),
+            child: AiAssistantPage(adminMode: admin),
+          ),
+        ),
       ),
     ),
   );
