@@ -21,6 +21,7 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8794)
     args = parser.parse_args()
     os.chdir(args.directory)
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("127.0.0.1", args.port), SpaHandler) as server:
         server.serve_forever()
 

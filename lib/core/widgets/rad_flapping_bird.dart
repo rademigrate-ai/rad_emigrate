@@ -70,6 +70,10 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    precacheImage(
+      const AssetImage('assets/branding/rad_flying_bird_128.png'),
+      context,
+    );
     _syncAnimation();
   }
 
@@ -124,25 +128,11 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
                 fit: StackFit.expand,
                 alignment: Alignment.center,
                 children: [
-                  // Left wing
-                  Transform.rotate(
-                    key: const ValueKey('flapping-bird-left-wing'),
-                    angle: -angles.wingAngle,
-                    alignment: const Alignment(-0.16, -0.06),
-                    child: Transform.scale(
-                      scaleX: angles.wingFold,
-                      alignment: Alignment.centerRight,
-                      child: ClipPath(
-                        clipper: const _FlappingWingClipper(isLeft: true),
-                        child: _birdImage(size),
-                      ),
-                    ),
-                  ),
-                  // Right wing
+                  // Secondary wing (background)
                   Transform.rotate(
                     key: const ValueKey('flapping-bird-right-wing'),
-                    angle: angles.wingAngle,
-                    alignment: const Alignment(0.16, -0.06),
+                    angle: angles.wingAngle * 0.5,
+                    alignment: const Alignment(0.18, 0.15),
                     child: Transform.scale(
                       scaleX: angles.wingFold,
                       alignment: Alignment.centerLeft,
@@ -152,11 +142,25 @@ class _RadFlappingBirdState extends State<RadFlappingBird>
                       ),
                     ),
                   ),
-                  // Central body & head
+                  // Central body, head & tail
                   ClipPath(
                     key: const ValueKey('flapping-bird-body'),
                     clipper: const _FlappingBodyClipper(),
                     child: _birdImage(size),
+                  ),
+                  // Primary wing (foreground)
+                  Transform.rotate(
+                    key: const ValueKey('flapping-bird-left-wing'),
+                    angle: -angles.wingAngle,
+                    alignment: const Alignment(0.22, 0.20),
+                    child: Transform.scale(
+                      scaleX: angles.wingFold,
+                      alignment: Alignment.centerRight,
+                      child: ClipPath(
+                        clipper: const _FlappingWingClipper(isLeft: true),
+                        child: _birdImage(size),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -281,20 +285,24 @@ class _FlappingWingClipper extends CustomClipper<Path> {
     final w = size.width;
     final h = size.height;
     if (isLeft) {
+      // Primary sweeping wing feathers
       return Path()
         ..moveTo(0, 0)
-        ..lineTo(w * 0.52, 0)
-        ..lineTo(w * 0.52, h * 0.62)
-        ..lineTo(w * 0.36, h)
-        ..lineTo(0, h)
+        ..lineTo(w * 0.70, 0)
+        ..lineTo(w * 0.68, h * 0.45)
+        ..lineTo(w * 0.60, h * 0.58)
+        ..lineTo(w * 0.50, h * 0.65)
+        ..lineTo(w * 0.35, h * 0.62)
+        ..lineTo(0, h * 0.62)
         ..close();
     } else {
+      // Secondary radiant wing layer
       return Path()
-        ..moveTo(w * 0.48, 0)
-        ..lineTo(w, 0)
-        ..lineTo(w, h)
-        ..lineTo(w * 0.64, h)
-        ..lineTo(w * 0.48, h * 0.62)
+        ..moveTo(w * 0.18, 0)
+        ..lineTo(w * 0.68, 0)
+        ..lineTo(w * 0.68, h * 0.45)
+        ..lineTo(w * 0.52, h * 0.56)
+        ..lineTo(w * 0.18, h * 0.48)
         ..close();
     }
   }
@@ -312,10 +320,16 @@ class _FlappingBodyClipper extends CustomClipper<Path> {
     final w = size.width;
     final h = size.height;
     return Path()
-      ..moveTo(w * 0.35, h * 0.16)
-      ..lineTo(w * 0.65, h * 0.16)
-      ..lineTo(w * 0.65, h)
-      ..lineTo(w * 0.35, h)
+      ..moveTo(w * 0.58, 0)
+      ..lineTo(w, 0)
+      ..lineTo(w, h)
+      ..lineTo(0, h)
+      ..lineTo(0, h * 0.58)
+      ..lineTo(w * 0.35, h * 0.58)
+      ..lineTo(w * 0.50, h * 0.60)
+      ..lineTo(w * 0.58, h * 0.52)
+      ..lineTo(w * 0.62, h * 0.40)
+      ..lineTo(w * 0.65, 0)
       ..close();
   }
 

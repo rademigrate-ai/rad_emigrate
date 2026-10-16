@@ -85,6 +85,10 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    precacheImage(
+      const AssetImage('assets/branding/rad_flying_bird_512.png'),
+      context,
+    );
     _syncFloat();
   }
 
