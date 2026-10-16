@@ -37,6 +37,7 @@ async def main():
                             attempts = []
                             for attempt in range(2):
                                 page = await browser.new_page(viewport=dict(zip(('width', 'height'), dimensions)), reduced_motion='reduce')
+                                await page.add_init_script(f"localStorage.setItem('flutter.rad_locale', JSON.stringify('{locale}')); localStorage.setItem('flutter.rad_theme_mode', JSON.stringify('{theme}'));")
                                 errors = []
                                 page.on('pageerror', lambda error: errors.append(str(error)))
                                 page.on('console', lambda message: errors.append(message.text) if message.type == 'error' else None)
@@ -46,7 +47,11 @@ async def main():
                                 try:
                                     response = await page.goto(url, wait_until='networkidle', timeout=90000)
                                     await page.wait_for_selector('flt-glass-pane', state='attached', timeout=60000)
-                                    await page.wait_for_timeout(1200)
+                                    placeholder = page.locator('flt-semantics-placeholder')
+                                    if await placeholder.count():
+                                        await placeholder.evaluate('(element) => element.click()')
+                                    await page.get_by_label('visual-qa-assets-ready', exact=True).wait_for(state='attached', timeout=60000)
+                                    await page.wait_for_timeout(1400)
                                     filename = f'{size}-{locale}-{theme}-{screen}.png'
                                     await page.screenshot(path=str(OUT / filename))
                                     captures.append(dict(file=filename, screen=screen, locale=locale, theme=theme,
@@ -62,6 +67,11 @@ async def main():
                     await asyncio.gather(*(capture(screen) for screen in SCREENS))
                     await browser.close()
                     print(f'{size} {locale} {theme}: {len(SCREENS)} captured', flush=True)
+    if os.environ.get('RAD_QA_MERGE') == '1' and (OUT / 'capture-manifest.json').exists():
+        previous = json.loads((OUT / 'capture-manifest.json').read_text(encoding='utf-8'))['captures']
+        merged = {capture['file']: capture for capture in previous}
+        merged.update({capture['file']: capture for capture in captures})
+        captures = list(merged.values())
     captures.sort(key=lambda item: item['file'])
     (OUT / 'capture-manifest.json').write_text(json.dumps(dict(
         evidence='Actual Flutter Web pages with synthetic fixture repositories; not authenticated production testing.',

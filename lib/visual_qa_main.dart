@@ -12,6 +12,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -140,12 +141,78 @@ class VisualQaApp extends StatelessWidget {
                   textScale,
             ),
           ),
-          child: child!,
+          child: Uri.base.queryParameters['capture'] == '1'
+              ? _QaAssetReadiness(child: child!)
+              : child!,
         ),
         home: _QaFrame(screen: screen),
       ),
     );
   }
+}
+
+/// QA-only readiness marker: never imported by the production entrypoint.
+/// Decoding fixture photography and original branding before capture prevents
+/// transient blank assets from being mistaken for accepted visual evidence.
+class _QaAssetReadiness extends StatefulWidget {
+  const _QaAssetReadiness({required this.child});
+  final Widget child;
+  @override
+  State<_QaAssetReadiness> createState() => _QaAssetReadinessState();
+}
+
+class _QaAssetReadinessState extends State<_QaAssetReadiness> {
+  bool _started = false;
+  bool _ready = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    _warmAssets();
+  }
+
+  Future<void> _warmAssets() async {
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    final assets = manifest.listAssets().where(
+      (path) =>
+          path.startsWith('assets/') &&
+          (path.endsWith('.png') ||
+              path.endsWith('.jpg') ||
+              path.endsWith('.webp')),
+    );
+    var failed = false;
+    await Future.wait(
+      assets.map(
+        (path) => precacheImage(
+          AssetImage(path),
+          context,
+          onError: (_, _) => failed = true,
+        ),
+      ),
+    );
+    if (!mounted || failed) return;
+    await WidgetsBinding.instance.endOfFrame;
+    if (mounted) setState(() => _ready = true);
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    children: [
+      widget.child,
+      if (_ready)
+        const Positioned(
+          left: 0,
+          top: 0,
+          child: Semantics(
+            label: 'visual-qa-assets-ready',
+            container: true,
+            child: SizedBox(width: 1, height: 1),
+          ),
+        ),
+    ],
+  );
 }
 
 class _QaFrame extends StatelessWidget {

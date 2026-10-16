@@ -14,6 +14,7 @@ async def enable_semantics(page):
     placeholder = page.locator('flt-semantics-placeholder')
     if await placeholder.count():
         await placeholder.evaluate('(element) => element.click()')
+    await page.get_by_label('visual-qa-assets-ready', exact=True).wait_for(state='attached', timeout=60000)
     await page.wait_for_timeout(500)
 
 
@@ -25,6 +26,7 @@ async def main():
         for locale in ['en', 'fa']:
             for theme in ['light', 'dark']:
                 page = await browser.new_page(viewport={'width': 390, 'height': 844}, reduced_motion='reduce')
+                await page.add_init_script(f"localStorage.setItem('flutter.rad_locale', JSON.stringify('{locale}')); localStorage.setItem('flutter.rad_theme_mode', JSON.stringify('{theme}'));")
                 errors = []
                 page.on('pageerror', lambda error: errors.append(str(error)))
                 page.on('console', lambda msg: errors.append(msg.text) if msg.type == 'error' else None)
