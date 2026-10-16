@@ -36,6 +36,8 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get home => 'خانه';
   @override
+  String get explore => 'کاوش';
+  @override
   String get visa => 'ویزا';
   @override
   String get cases => 'پرونده‌ها';
