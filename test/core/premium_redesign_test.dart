@@ -113,6 +113,18 @@ void main() {
       await tester.tap(find.text('World Time'));
       await tester.pumpAndSettle();
       expect(router.routeInformationProvider.value.uri.path, '/world-clock');
+      for (final destination in [
+        ('Feed', '/feed'),
+        ('Documents', '/documents'),
+        ('Request consultation', '/consultation'),
+        ('Notifications', '/notifications'),
+      ]) {
+        router.go('/');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(destination.$1));
+        await tester.pumpAndSettle();
+        expect(router.routeInformationProvider.value.uri.path, destination.$2);
+      }
     },
   );
 

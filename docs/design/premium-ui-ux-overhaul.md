@@ -1,6 +1,6 @@
 # RAD Emigrate — Premium UI/UX Overhaul
 
-Status: **Implementation in progress**. This document is the approved design and acceptance contract, not a claim of completed implementation.
+Status: **Implemented for owner visual review**. See the [implementation and verification report](../qa/pr54/redesign-review.md). Physical-device and live authenticated production testing remain unverified; this is not a production-readiness claim.
 
 ## Approved direction
 
@@ -39,3 +39,9 @@ Status: **Implementation in progress**. This document is the approved design and
 ## Reference assets
 
 User provided a red bird visual reference, wing-motion storyboard, dark/light navigation concepts and profile screenshots in conversation. These references are not yet committed as reusable production assets. Asset licensing, transparency, resolution, wing-rigging and runtime performance must be verified before use.
+
+## Consolidated implementation (2026-10-16)
+
+The shared `PremiumTokens`, `AppRadii`, `AppBreakpoints`, `AppTheme`, `RadGlassSurface` and `InlineAlert` drive the application chrome. All six auth pages share the cinematic shell, with adaptive forms and real operation labels. Unsupported progress percentages were removed. The original bird source and approved capsule renderer remain unchanged, with byte/source-preservation proof in the QA evidence directory.
+
+The implementation report contains semantic color values, typography, geometry, motion/accessibility decisions, every screen, both audit reconciliations and explicit testing limitations. [228 actual screenshots and review indexes](../qa/pr54/redesign/README.md) cover both locales/themes across mobile, tablet and desktop. Original asset provenance now supersedes the earlier ?not yet committed? reference-asset note above.

@@ -1,0 +1,98 @@
+{
+  "source_commit": "44625a24084f128f05ed7484d650fb1019528431",
+  "lib_tree": "247afad34e6a715cdf1db8759fedba8e71acc907",
+  "format": {
+    "status": "PASS",
+    "files": 241,
+    "changes": 0,
+    "command": "dart format --output=none --set-exit-if-changed lib test"
+  },
+  "analysis": {
+    "status": "PASS",
+    "issues": 0,
+    "command": "flutter analyze --no-pub lib test"
+  },
+  "flutter_tests": {
+    "status": "PASS",
+    "count": 417,
+    "command": "flutter test --no-pub"
+  },
+  "additional_navigation_matrix": {
+    "status": "PASS",
+    "count": 71,
+    "coverage": "All visible secondary links and EN/FA x light/dark x 320px/200% text"
+  },
+  "web_fixture_build": {
+    "status": "PASS",
+    "command": "flutter build web --release --no-pub --no-wasm-dry-run --target lib/visual_qa_main.dart --output build/qa-premium"
+  },
+  "web_product_build": {
+    "status": "PASS",
+    "configuration": "CI placeholders; no production credentials",
+    "output": "build/app-premium"
+  },
+  "android_debug_build": {
+    "status": "PASS",
+    "exit_code": 0,
+    "command": "flutter build apk --debug --no-pub --target-platform android-arm64"
+  },
+  "diff_hygiene": {
+    "status": "PASS"
+  },
+  "ci_source_run": {
+    "status": "PASS",
+    "run_id": 38934103223,
+    "url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/38934103223",
+    "jobs": [
+      "flutter",
+      "web-build",
+      "android-build",
+      "routing",
+      "clean-schema",
+      "migration-reconstruction",
+      "repository-keyword-scan"
+    ]
+  },
+  "visual_qa": {
+    "status": "PASS",
+    "captures": 228,
+    "browser_errors": 0,
+    "contact_sheets_reviewed": 12
+  },
+  "real_guest_browser": {
+    "evidence": "Actual production entrypoint with non-production CI placeholder configuration; guest only.",
+    "results": [
+      {
+        "flow": "five localized primary destinations",
+        "status": "PASS"
+      },
+      {
+        "flow": "Profile to World Time without long-press",
+        "status": "PASS"
+      },
+      {
+        "flow": "language/theme persist across refresh",
+        "status": "PASS"
+      },
+      {
+        "flow": "guest AI gate and draft restoration; no auto-submit",
+        "status": "PASS"
+      }
+    ],
+    "page_errors": []
+  },
+  "not_tested": [
+    "Physical Android",
+    "Android emulator",
+    "Native iOS",
+    "Live authenticated customer/admin/provider operations"
+  ],
+  "safety": {
+    "merged": false,
+    "deployed": false,
+    "production_supabase_modified": false,
+    "migrations_created": false,
+    "bird_assets_modified": false,
+    "capsule_geometry_modified": false
+  }
+}
