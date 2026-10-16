@@ -46,7 +46,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
         SnackBar(
           content: Text(
             lang == 'fa'
-                ? 'Ù…Ù†Ø·Ù‚Ù‡ Ø²Ù…Ø§Ù†ÛŒ: ${result.ianaId}'
+                ? 'منطقه زمانی: ${result.ianaId}'
                 : 'Timezone: ${result.ianaId}',
           ),
           action: SnackBarAction(
@@ -116,9 +116,7 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              lang == 'fa'
-                  ? 'Ø§Ù†ØªØ®Ø§Ø¨ Ø¯Ø³ØªÛŒ: $manual'
-                  : 'Manual: $manual',
+              lang == 'fa' ? 'انتخاب دستی: $manual' : 'Manual: $manual',
             ),
             action: SnackBarAction(
               label: AppLocalizations.of(context).addCity,

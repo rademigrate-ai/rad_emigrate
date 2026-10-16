@@ -297,6 +297,17 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
         title: Text(l10n.applications),
         actions: [
           IconButton(
+            tooltip: _creatingDraft ? l10n.creating : l10n.newDraft,
+            onPressed: _creatingDraft ? null : _createDraft,
+            icon: _creatingDraft
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.add),
+          ),
+          IconButton(
             tooltip: l10n.refresh,
             icon: const Icon(Icons.refresh),
             onPressed: _creatingDraft
@@ -305,22 +316,6 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
           ),
           const SizedBox(width: 8),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primaryRed,
-        foregroundColor: Colors.white,
-        icon: _creatingDraft
-            ? const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-            : const Icon(Icons.add),
-        label: Text(_creatingDraft ? l10n.creating : l10n.newDraft),
-        onPressed: _creatingDraft ? null : _createDraft,
       ),
       body: PremiumCanvas(
         accent: AppColors.teal,

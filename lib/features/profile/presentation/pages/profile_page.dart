@@ -713,6 +713,14 @@ class _ProfileActionRow extends StatelessWidget {
     final color = destructive
         ? Theme.of(context).colorScheme.error
         : Theme.of(context).colorScheme.onSurface;
+    final iconColor = destructive
+        ? color
+        : switch (icon) {
+            Icons.badge_outlined => const Color(0xFF8B5CF6),
+            Icons.assignment_outlined => context.premium.success,
+            Icons.folder_outlined => context.premium.information,
+            _ => context.premium.information,
+          };
     return Semantics(
       button: true,
       enabled: onTap != null,
@@ -729,18 +737,10 @@ class _ProfileActionRow extends StatelessWidget {
                   width: 34,
                   height: 34,
                   decoration: BoxDecoration(
-                    color:
-                        (destructive
-                                ? Theme.of(context).colorScheme.error
-                                : AppColors.primaryRed)
-                            .withValues(alpha: .1),
+                    color: iconColor.withValues(alpha: .1),
                     borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
-                  child: Icon(
-                    icon,
-                    color: destructive ? color : AppColors.primaryRed,
-                    size: 21,
-                  ),
+                  child: Icon(icon, color: iconColor, size: 21),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
