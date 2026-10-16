@@ -1,5 +1,7 @@
 # PR 54 focused visual acceptance
 
+Historical review: navigation/loading assessments are superseded by the owner-requested [focused visual patch](../nav-loading-patch/README.md). The earlier navigation MATCHED classification was QA assessment, not final owner acceptance.
+
 The reconstructed presentation is ready for owner review on the same [Draft PR 54](https://github.com/rademigrate-ai/rad_emigrate/pull/54). Further screenshot generation and cosmetic iteration have stopped. Final application source: `c5eda9600018b5bf4ba0907169379ba6571c050d`. Local source checks/builds are recorded in [verification](verification.json); the updated PR records required CI on the final pushed head. The last source correction fixes invisible selected desktop labels and adds a contrast regression check. Existing screenshots predate only that correction and are reused unchanged elsewhere.
 
 - [Focused acceptance set](focused-acceptance.json): 44 existing captures covering seven primary screens, navigation, EN/FA, both themes, critical detail views, large text and composer focus.

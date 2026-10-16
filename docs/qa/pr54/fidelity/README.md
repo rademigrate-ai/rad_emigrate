@@ -1,5 +1,7 @@
 # Client-approved visual reconstruction - PR 54
 
+Historical review: navigation/loading assessments are superseded by the owner-requested [focused visual patch](../nav-loading-patch/README.md). The earlier navigation MATCHED classification was QA assessment, not final owner acceptance.
+
 This review supersedes the visual acceptance claims in the earlier redesign report. The client boards are binding. The previous 228 screenshots remain untouched in [redesign](../redesign/README.md).
 
 Final application source: `c5eda9600018b5bf4ba0907169379ba6571c050d`; `lib` tree `1b61ae036430da3ff6221c3d3854e00c364619e9`. Existing captures use `5ddfecffc80f6c5b1785eef8e8f791dc8136b5c8` / `ef05b26462376bf15523121cb4d7c3e91d45ef31`. The only later presentation change fixes the selected desktop rail label from white to theme text color. It has a light/dark contrast regression check; mobile compositions and all captured page content are unchanged. No screenshot regeneration follows the owner stop directive.
