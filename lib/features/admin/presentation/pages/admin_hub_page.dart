@@ -56,9 +56,9 @@ class AdminHubPage extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 children: [
                   PremiumHeroPanel(
-                    kicker: const EditorialKicker(
+                    kicker: EditorialKicker(
                       index: '06',
-                      label: 'OPERATIONS CONSOLE',
+                      label: AppLocalizations.of(context).operationsConsole,
                       dark: true,
                     ),
                     title: l10n.adminOperations,

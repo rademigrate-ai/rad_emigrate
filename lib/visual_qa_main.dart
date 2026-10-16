@@ -1,3 +1,13 @@
+import 'features/applications/presentation/pages/applications_page.dart';
+import 'features/documents/presentation/pages/documents_page.dart';
+import 'features/notifications/presentation/pages/notifications_page.dart';
+import 'features/auth/presentation/pages/register_page.dart';
+import 'features/auth/presentation/pages/otp_page.dart';
+import 'features/auth/presentation/pages/forgot_password_page.dart';
+import 'features/auth/presentation/pages/reset_password_page.dart';
+import 'features/auth/presentation/pages/profile_completion_page.dart';
+import 'core/widgets/not_found_page.dart';
+
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -52,10 +62,20 @@ Future<void> main() async {
 }
 
 class VisualQaApp extends StatelessWidget {
-  const VisualQaApp({super.key, required this.preferences, this.initialScreen});
+  const VisualQaApp({
+    super.key,
+    required this.preferences,
+    this.initialScreen,
+    this.locale,
+    this.themeMode,
+    this.textScale = 1,
+  });
 
   final SharedPreferences preferences;
   final String? initialScreen;
+  final Locale? locale;
+  final ThemeMode? themeMode;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +87,7 @@ class VisualQaApp extends StatelessWidget {
       overrides: [
         authControllerProvider.overrideWith((ref) => _visualAuthController()),
         appBootstrapProvider.overrideWith((ref) {
+          if (screen != 'splash') return Future<void>.value();
           final bootstrap = Completer<void>();
           ref.onDispose(bootstrap.complete);
           return bootstrap.future;
@@ -87,18 +108,32 @@ class VisualQaApp extends StatelessWidget {
         title: 'RAD Visual QA',
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
-        themeMode: requestedTheme == 'dark'
-            ? ThemeMode.dark
-            : requestedTheme == 'light'
-            ? ThemeMode.light
-            : ThemeMode.system,
-        locale: requestedLocale == 'fa'
-            ? const Locale('fa')
-            : requestedLocale == 'en'
-            ? const Locale('en')
-            : null,
+        themeMode:
+            themeMode ??
+            (requestedTheme == 'dark'
+                ? ThemeMode.dark
+                : requestedTheme == 'light'
+                ? ThemeMode.light
+                : ThemeMode.system),
+        locale:
+            locale ??
+            (requestedLocale == 'fa'
+                ? const Locale('fa')
+                : requestedLocale == 'en'
+                ? const Locale('en')
+                : null),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            disableAnimations: Uri.base.queryParameters['capture'] == '1',
+            textScaler: TextScaler.linear(
+              double.tryParse(Uri.base.queryParameters['scale'] ?? '') ??
+                  textScale,
+            ),
+          ),
+          child: child!,
+        ),
         home: _QaFrame(screen: screen),
       ),
     );
@@ -113,6 +148,15 @@ class _QaFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final page = switch (screen) {
+      'cases' => const ApplicationsPage(),
+      'documents' => const DocumentsPage(),
+      'notifications' => const NotificationsPage(),
+      'register' => const RegisterPage(),
+      'otp' => const OtpPage(identifier: 'visual.qa@example.test'),
+      'forgot-password' => const ForgotPasswordPage(),
+      'reset-password' => const ResetPasswordPage(),
+      'profile-completion' => const ProfileCompletionPage(),
+      'not-found' => const NotFoundPage(),
       'dashboard' => const DashboardPage(),
       'visa' => const VisaPage(),
       'ai' => const AiAssistantPage(visualQaDemo: true),

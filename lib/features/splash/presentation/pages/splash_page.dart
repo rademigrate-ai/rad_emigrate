@@ -62,12 +62,12 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         child: SafeArea(
           child: Stack(
             children: [
-              const PositionedDirectional(
+              PositionedDirectional(
                 top: 28,
                 start: 24,
                 child: EditorialKicker(
                   index: '01',
-                  label: 'IMMIGRATION JOURNEY',
+                  label: AppLocalizations.of(context).immigrationJourney,
                   dark: true,
                 ),
               ),

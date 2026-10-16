@@ -1,3 +1,7 @@
+import '../../../../core/widgets/record_labels.dart';
+import '../../../../core/widgets/inline_alert.dart';
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -207,9 +211,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            Localizations.localeOf(context).languageCode == 'fa'
-                                ? 'جزئیات درخواست'
-                                : 'Request details',
+                            AppLocalizations.of(context).requestDetailsHeading,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w800),
                           ),
@@ -242,12 +244,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: 8),
-                    Text(
-                      _error!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
+                    InlineAlert(message: _error!),
                   ],
                   if (_success != null) ...[
                     const SizedBox(height: 8),
@@ -308,7 +305,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
                             contentPadding: EdgeInsets.zero,
                             title: Text('${r['topic'] ?? ''}'),
                             subtitle: Text(
-                              '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
+                              '${consultationStatusLabel(r['status'], l10n)} · ${recordDateLabel(r['created_at'], context)}',
                             ),
                           ),
                         ),
@@ -340,11 +337,9 @@ class _ConsultationHeader extends StatelessWidget {
           gradient: LinearGradient(
             begin: AlignmentDirectional.topStart,
             end: AlignmentDirectional.bottomEnd,
-            colors: dark
-                ? const [Color(0xFF281019), Color(0xFF101720)]
-                : const [Color(0xFFFFF0F2), Color(0xFFFFFFFF)],
+            colors: context.premium.heroGradient.colors,
           ),
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(AppRadii.hero),
           boxShadow: [
             BoxShadow(
               color: AppColors.primaryRed.withValues(alpha: dark ? .14 : .08),
@@ -362,7 +357,7 @@ class _ConsultationHeader extends StatelessWidget {
                 height: 58,
                 decoration: BoxDecoration(
                   color: AppColors.primaryRed,
-                  borderRadius: BorderRadius.circular(19),
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
                 ),
                 child: const Icon(
                   Icons.support_agent_rounded,

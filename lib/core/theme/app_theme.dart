@@ -5,7 +5,7 @@ import '../constants/app_colors.dart';
 import 'premium_tokens.dart';
 
 abstract final class AppTheme {
-  static const _radius = 16.0;
+  static const _radius = AppRadii.lg;
 
   static ThemeData light() {
     final base = ThemeData(
@@ -37,28 +37,28 @@ abstract final class AppTheme {
       borderColor: AppColors.border,
       focusedBorder: AppColors.navy,
       labelColor: AppColors.textSecondary,
-      hintColor: AppColors.textTertiary,
+      hintColor: AppColors.textSecondary,
       navBarBackground: AppColors.surface,
       navIndicator: AppColors.primaryRed.withValues(alpha: 0.12),
       navSelected: AppColors.primaryRed,
       navUnselected: AppColors.textSecondary,
-      railBackground: AppColors.navy,
+      railBackground: PremiumTokens.light.surface,
       dividerColor: AppColors.borderSubtle,
       textPrimary: AppColors.textPrimary,
       textSecondary: AppColors.textSecondary,
-      textTertiary: AppColors.textTertiary,
+      textTertiary: AppColors.textSecondary,
     );
   }
 
   static ThemeData dark() {
-    const darkBg = Color(0xFF070A0F);
-    const darkSurface = Color(0xFF10151D);
-    const darkSurfaceMuted = Color(0xFF181F29);
-    const darkTextPrimary = Color(0xFFF0F7FA);
-    const darkTextSecondary = Color(0xFFAABDC8);
-    const darkTextTertiary = Color(0xFF78909F);
-    const darkBorder = Color(0xFF2B333D);
-    const darkBorderSubtle = Color(0xFF202731);
+    final darkBg = PremiumTokens.dark.canvas;
+    final darkSurface = PremiumTokens.dark.surface;
+    final darkSurfaceMuted = PremiumTokens.dark.surfaceElevated;
+    final darkTextPrimary = PremiumTokens.dark.text;
+    final darkTextSecondary = PremiumTokens.dark.mutedText;
+    final darkTextTertiary = PremiumTokens.dark.mutedText;
+    final darkBorder = PremiumTokens.dark.border;
+    final darkBorderSubtle = PremiumTokens.dark.border;
 
     final base = ThemeData(
       useMaterial3: true,
@@ -66,10 +66,10 @@ abstract final class AppTheme {
       fontFamily: 'Vazirmatn',
       visualDensity: VisualDensity.standard,
     );
-    final colorScheme = const ColorScheme.dark(
+    final colorScheme = ColorScheme.dark(
       primary: AppColors.primaryRed,
       onPrimary: AppColors.white,
-      secondary: Color(0xFFFF6B7A),
+      secondary: PremiumTokens.dark.accentForeground,
       onSecondary: Color(0xFF170307),
       surface: darkSurface,
       onSurface: darkTextPrimary,
@@ -87,14 +87,14 @@ abstract final class AppTheme {
       cardColor: darkSurface,
       inputFill: darkSurfaceMuted,
       borderColor: darkBorder,
-      focusedBorder: const Color(0xFFFF6B7A),
+      focusedBorder: PremiumTokens.dark.focus,
       labelColor: darkTextSecondary,
       hintColor: darkTextTertiary,
       navBarBackground: darkSurface,
       navIndicator: AppColors.primaryRed.withValues(alpha: 0.2),
-      navSelected: const Color(0xFFFF7685),
+      navSelected: PremiumTokens.dark.accentForeground,
       navUnselected: darkTextSecondary,
-      railBackground: const Color(0xFF090C12),
+      railBackground: PremiumTokens.dark.surface,
       dividerColor: darkBorderSubtle,
       textPrimary: darkTextPrimary,
       textSecondary: darkTextSecondary,
@@ -132,7 +132,52 @@ abstract final class AppTheme {
             : PremiumTokens.light,
       ],
       splashFactory: InkRipple.splashFactory,
-      colorScheme: colorScheme,
+      disabledColor: hintColor,
+      focusColor: focusedBorder.withValues(alpha: .16),
+      iconTheme: IconThemeData(color: textSecondary),
+      dialogTheme: DialogThemeData(
+        backgroundColor: cardColor,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.xl),
+          side: BorderSide(color: borderColor),
+        ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: cardColor,
+        surfaceTintColor: Colors.transparent,
+        showDragHandle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppRadii.xl),
+          ),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: textPrimary,
+        contentTextStyle: TextStyle(
+          color: scaffoldBackground,
+          fontFamily: 'Vazirmatn',
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.md),
+        ),
+      ),
+      chipTheme: base.chipTheme.copyWith(
+        backgroundColor: cardColor,
+        selectedColor: navIndicator,
+        side: BorderSide(color: borderColor),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.md),
+        ),
+      ),
+      colorScheme: colorScheme.copyWith(
+        onSurfaceVariant: textSecondary,
+        surfaceContainerHighest: inputFill,
+        surfaceContainerHigh: cardColor,
+        outlineVariant: borderColor,
+      ),
       scaffoldBackgroundColor: scaffoldBackground,
       appBarTheme: AppBarTheme(
         backgroundColor: appBarBackground,
@@ -253,15 +298,15 @@ abstract final class AppTheme {
         backgroundColor: railBackground,
         indicatorColor: AppColors.primaryRed,
         selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: IconThemeData(color: const Color(0xFFBCC7D6)),
+        unselectedIconTheme: IconThemeData(color: textSecondary),
         selectedLabelTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w700,
           fontFamily: 'Vazirmatn',
           letterSpacing: 0,
         ),
-        unselectedLabelTextStyle: const TextStyle(
-          color: Color(0xFFBCC7D6),
+        unselectedLabelTextStyle: TextStyle(
+          color: textSecondary,
           fontFamily: 'Vazirmatn',
           letterSpacing: 0,
         ),
@@ -279,7 +324,7 @@ abstract final class AppTheme {
             fontFamily: 'Vazirmatn',
             letterSpacing: 0,
             color: textPrimary,
-            height: 1.12,
+            height: 1.35,
           ),
           headlineMedium: TextStyle(
             fontSize: 26,
@@ -287,7 +332,7 @@ abstract final class AppTheme {
             fontFamily: 'Vazirmatn',
             letterSpacing: 0,
             color: textPrimary,
-            height: 1.18,
+            height: 1.35,
           ),
           titleLarge: TextStyle(
             fontSize: 20,

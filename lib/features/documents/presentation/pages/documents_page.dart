@@ -1,3 +1,6 @@
+import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -90,42 +93,62 @@ class DocumentsPage extends ConsumerWidget {
               );
         },
       ),
-      body: state.when(
-        loading: () => LoadingState.section(message: l10n.loadingDocuments),
-        error: (e, _) => ErrorState(
-          message: l10n.errorGeneric,
-          onRetry: () => ref.read(documentControllerProvider.notifier).load(),
-        ),
-        data: (docs) {
-          if (docs.isEmpty) {
-            return EmptyState(
-              title: l10n.noDocuments,
-              subtitle: l10n.noDocumentsSubtitle,
-              icon: Icons.folder_outlined,
-            );
-          }
+      body: PremiumCanvas(
+        child: state.when(
+          loading: () => LoadingState.section(message: l10n.loadingDocuments),
+          error: (e, _) => ErrorState(
+            message: localizedDataError(e, l10n),
+            onRetry: () => ref.read(documentControllerProvider.notifier).load(),
+          ),
+          data: (docs) {
+            if (docs.isEmpty) {
+              return EmptyState(
+                title: l10n.noDocuments,
+                subtitle: l10n.noDocumentsSubtitle,
+                icon: Icons.folder_outlined,
+              );
+            }
 
-          final missing = docs
-              .where((d) => d.status == DocumentVerificationStatus.missing)
-              .toList();
-          final rest = docs
-              .where((d) => d.status != DocumentVerificationStatus.missing)
-              .toList();
+            final missing = docs
+                .where((d) => d.status == DocumentVerificationStatus.missing)
+                .toList();
+            final rest = docs
+                .where((d) => d.status != DocumentVerificationStatus.missing)
+                .toList();
 
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 880),
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-                children: [
-                  if (missing.isNotEmpty) ...[
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 880),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
+                  children: [
+                    if (missing.isNotEmpty) ...[
+                      SectionHeader(
+                        title: l10n.missingSection,
+                        subtitle: l10n.missingSectionSubtitle,
+                      ),
+                      ...missing.asMap().entries.map(
+                        (entry) => MotionStagger(
+                          index: entry.key,
+                          child: _DocTile(
+                            doc: entry.value,
+                            tone: _tone(entry.value.status),
+                            kindLabel: _kindLabel(entry.value.kind, l10n),
+                            statusLabel: _statusLabel(entry.value.status, l10n),
+                            onTap: () => _openSheet(context, ref, entry.value),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     SectionHeader(
-                      title: l10n.missingSection,
-                      subtitle: l10n.missingSectionSubtitle,
+                      title: missing.isEmpty
+                          ? l10n.allDocuments
+                          : l10n.submittedSection,
                     ),
-                    ...missing.asMap().entries.map(
+                    ...rest.asMap().entries.map(
                       (entry) => MotionStagger(
-                        index: entry.key,
+                        index: entry.key + missing.length,
                         child: _DocTile(
                           doc: entry.value,
                           tone: _tone(entry.value.status),
@@ -135,30 +158,12 @@ class DocumentsPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
                   ],
-                  SectionHeader(
-                    title: missing.isEmpty
-                        ? l10n.allDocuments
-                        : l10n.submittedSection,
-                  ),
-                  ...rest.asMap().entries.map(
-                    (entry) => MotionStagger(
-                      index: entry.key + missing.length,
-                      child: _DocTile(
-                        doc: entry.value,
-                        tone: _tone(entry.value.status),
-                        kindLabel: _kindLabel(entry.value.kind, l10n),
-                        statusLabel: _statusLabel(entry.value.status, l10n),
-                        onTap: () => _openSheet(context, ref, entry.value),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

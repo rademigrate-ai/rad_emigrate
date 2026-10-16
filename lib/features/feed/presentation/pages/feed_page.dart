@@ -60,9 +60,9 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return PremiumHeroPanel(
-                          kicker: const EditorialKicker(
+                          kicker: EditorialKicker(
                             index: '05',
-                            label: 'RAD BRIEFING',
+                            label: AppLocalizations.of(context).radBriefing,
                             dark: true,
                           ),
                           title: l10n.radUpdates,

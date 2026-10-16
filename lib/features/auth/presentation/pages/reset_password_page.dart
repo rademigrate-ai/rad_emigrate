@@ -10,6 +10,8 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rad_brand.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../providers/password_recovery_controller.dart';
 
 /// Completes the Supabase recovery deep-link by setting a new password.
@@ -84,7 +86,6 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final wide = MediaQuery.sizeOf(context).width >= 800;
     final bootstrap = ref.watch(appBootstrapProvider);
     final service = ref.watch(supabaseClientServiceProvider);
     final activeUserId = service.isInitialized
@@ -94,119 +95,135 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
         .watch(passwordRecoveryControllerProvider)
         .isReadyFor(activeUserId);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: wide ? 440 : 480),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Center(child: RadBrand(size: RadBrandSize.medium)),
-                    const SizedBox(height: 24),
-                    Text(
-                      l10n.setNewPassword,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    if (_done) ...[
-                      Text(
-                        l10n.passwordUpdated,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 24),
-                      AppButton(
-                        label: l10n.signIn,
-                        onPressed: () => context.go('/login'),
-                      ),
-                    ] else if (bootstrap.isLoading) ...[
-                      const Center(child: CircularProgressIndicator()),
-                    ] else if (!hasRecoverySession) ...[
-                      Text(
-                        l10n.passwordResetLinkInvalid,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 24),
-                      AppButton(
-                        label: l10n.sendResetLink,
-                        onPressed: () => context.go('/forgot-password'),
-                      ),
-                      TextButton(
-                        onPressed: () => context.go('/login'),
-                        child: Text(l10n.backToSignIn),
-                      ),
-                    ] else ...[
-                      AppTextField(
-                        controller: _passwordCtrl,
-                        label: l10n.newPassword,
-                        prefixIcon: Icons.lock_outline,
-                        obscureText: _obscure,
-                        autofillHints: const [AutofillHints.newPassword],
-                        textInputAction: TextInputAction.next,
-                        validator: (v) {
-                          if (v == null || v.length < 8) {
-                            return l10n.passwordTooShort;
-                          }
-                          return null;
-                        },
-                        suffixIcon: IconButton(
-                          tooltip: _obscure
-                              ? l10n.showPassword
-                              : l10n.hidePassword,
-                          icon: Icon(
-                            _obscure
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
-                          onPressed: () => setState(() => _obscure = !_obscure),
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      AppTextField(
-                        controller: _confirmCtrl,
-                        label: l10n.confirmPassword,
-                        prefixIcon: Icons.lock_outline,
-                        obscureText: _obscure,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (_) => _submit(),
-                        validator: (v) {
-                          if (v != _passwordCtrl.text) {
-                            return l10n.passwordsDoNotMatch;
-                          }
-                          return null;
-                        },
-                      ),
-                      if (_error != null) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          _error!,
-                          style: TextStyle(color: theme.colorScheme.error),
-                        ),
-                      ],
-                      const SizedBox(height: 24),
-                      AppButton(
-                        label: l10n.save,
-                        loading: _loading,
-                        onPressed: _loading ? null : _submit,
-                      ),
-                      TextButton(
-                        onPressed: () => context.go('/login'),
-                        child: Text(l10n.backToSignIn),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+    return AuthCinematicFrame(
+      eyebrow: l10n.setNewPassword,
+      title: l10n.brandIntroTitle,
+      body: l10n.brandIntroBody,
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          IconButton(
+            tooltip: l10n.backToSignIn,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go(
+              Uri(
+                path: '/login',
+                queryParameters: {
+                  'from': ?GoRouterState.of(context)
+                      .uri
+                      .queryParameters['from'],
+                },
+              ).toString(),
             ),
           ),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined),
+            label: Text(
+              Localizations.localeOf(context).languageCode == 'fa'
+                  ? l10n.english
+                  : l10n.persian,
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
+      ),
+      form: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Center(child: RadBrand(size: RadBrandSize.medium)),
+            const SizedBox(height: 24),
+            Text(
+              l10n.setNewPassword,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            if (_done) ...[
+              Text(
+                l10n.passwordUpdated,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+              AppButton(
+                label: l10n.signIn,
+                onPressed: () => context.go('/login'),
+              ),
+            ] else if (bootstrap.isLoading) ...[
+              const Center(child: CircularProgressIndicator()),
+            ] else if (!hasRecoverySession) ...[
+              Text(
+                l10n.passwordResetLinkInvalid,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+              AppButton(
+                label: l10n.sendResetLink,
+                onPressed: () => context.go('/forgot-password'),
+              ),
+              TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text(l10n.backToSignIn),
+              ),
+            ] else ...[
+              AppTextField(
+                controller: _passwordCtrl,
+                label: l10n.newPassword,
+                prefixIcon: Icons.lock_outline,
+                obscureText: _obscure,
+                autofillHints: const [AutofillHints.newPassword],
+                textInputAction: TextInputAction.next,
+                validator: (v) {
+                  if (v == null || v.length < 8) {
+                    return l10n.passwordTooShort;
+                  }
+                  return null;
+                },
+                suffixIcon: IconButton(
+                  tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
+                  icon: Icon(
+                    _obscure
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              const SizedBox(height: 14),
+              AppTextField(
+                controller: _confirmCtrl,
+                label: l10n.confirmPassword,
+                prefixIcon: Icons.lock_outline,
+                obscureText: _obscure,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _submit(),
+                validator: (v) {
+                  if (v != _passwordCtrl.text) {
+                    return l10n.passwordsDoNotMatch;
+                  }
+                  return null;
+                },
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+              ],
+              const SizedBox(height: 24),
+              AppButton(
+                label: l10n.save,
+                loading: _loading,
+                onPressed: _loading ? null : _submit,
+              ),
+              TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text(l10n.backToSignIn),
+              ),
+            ],
+          ],
         ),
       ),
     );

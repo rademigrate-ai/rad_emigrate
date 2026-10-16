@@ -575,4 +575,182 @@ mixin AppLocalizationsEnA on AppLocalizations {
 
   @override
   String get adminLoadFailed => 'Admin operations could not be loaded.';
+  @override
+  String get collapseNavigation => "Collapse navigation";
+
+  @override
+  String get expandNavigation => "Expand navigation";
+
+  @override
+  String get editProfile => "Edit profile";
+
+  @override
+  String get supportInformation => "Support & information";
+
+  @override
+  String get secureSignOut => "Securely sign out of this account";
+
+  @override
+  String get accessPortal => "Access portal";
+
+  @override
+  String get createYourSpace => "Create your space";
+
+  @override
+  String get destinationsHeading => "Destinations";
+
+  @override
+  String get radIntelligence => "RAD intelligence";
+
+  @override
+  String get immigrationJourney => "Immigration journey";
+
+  @override
+  String get birdReady => "AI assistant is ready";
+
+  @override
+  String get birdListening => "AI assistant is listening";
+
+  @override
+  String get birdThinking => "AI assistant is thinking";
+
+  @override
+  String get birdResponding => "AI assistant is responding";
+
+  @override
+  String get birdNewMessage => "New message from AI assistant";
+
+  @override
+  String get requestDetailsHeading => "Request details";
+
+  @override
+  String get addCity => "Add";
+
+  @override
+  String get timezonePointUnresolved =>
+      "No timezone for this point (ocean or outside land zones).";
+
+  @override
+  String get timezoneDataUnavailable => "Timezone boundary data unavailable.";
+
+  @override
+  String get selectTimezoneManually => "Select timezone manually";
+
+  @override
+  String get preparingWorldClocks => "Preparing world clocks…";
+
+  @override
+  String get searchWorldClocks => "Search city, country, or timezone…";
+
+  @override
+  String get timeline24Hours => "24-Hour Timeline";
+
+  @override
+  String get timeNow => "Now";
+
+  @override
+  String get worldTimeTagline => "World time, aligned with your journey";
+
+  @override
+  String get worldTimeDescription =>
+      "Key city clocks, timezone comparison, and international meeting planning";
+
+  @override
+  String get noWorldCities => "No cities yet — add some in World Time";
+
+  @override
+  String get meetingPlannerDisclaimer =>
+      "Suggested overlapping working-hour windows (not confirmed availability)";
+
+  @override
+  String get meetingOrigin => "Origin";
+
+  @override
+  String get meetingDestination => "Destination";
+
+  @override
+  String get meetingShow => "Show";
+
+  @override
+  String get meetingSuggestedWindows => "Suggested windows";
+
+  @override
+  String get meetingSuitable => "Suitable";
+
+  @override
+  String get meetingPartial => "Partial";
+
+  @override
+  String get supportInformationLabel => "Support & information";
+
+  @override
+  String get secureSignOutLabel => "Securely sign out of this account";
+
+  @override
+  String get noPublishedDestinations => "No published destinations";
+
+  @override
+  String get publishedDestinationsEmpty =>
+      "Published visa destinations will appear here.";
+
+  @override
+  String get visaConfigurationUnavailable =>
+      "Visa discovery is unavailable in this build configuration.";
+
+  @override
+  String get visaContentAccessFailed =>
+      "Published visa content could not be accessed. Please retry.";
+
+  @override
+  String get visaConnectionFailed =>
+      "Check your connection and retry visa discovery.";
+
+  @override
+  String get visaContentIncomplete =>
+      "Published visa content is incomplete. Please try again later.";
+
+  @override
+  String get bookConsultationAction => "Book consultation";
+
+  @override
+  String get askAssistantAction => "Ask AI Assistant";
+
+  @override
+  String get nextStepsHeading => "Next steps";
+
+  @override
+  String get programOverview => "Overview";
+
+  @override
+  String get timingAndFees => "Timing & fees";
+
+  @override
+  String get processingTimeLabel => "Processing time";
+
+  @override
+  String get feesLabel => "Fees";
+  @override
+  String meetingMinutes(int minutes) => '$minutes min';
+  @override
+  String get caseRoom => "Case room";
+  @override
+  String get operationsConsole => "Operations console";
+  @override
+  String get radBriefing => "RAD briefing";
+  @override
+  String get continentNorthAmerica => "North America";
+  @override
+  String get continentEurope => "Europe";
+  @override
+  String get continentAsia => "Asia";
+  @override
+  String get continentOceania => "Oceania";
+  @override
+  String get continentMiddleEast => "Middle East";
+  @override
+  String get continentOther => "Other destinations";
+  @override
+  String get consultationContacted => "Contacted";
+  @override
+  String get consultationClosed => "Closed";
 }

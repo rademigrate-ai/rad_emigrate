@@ -11,6 +11,8 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../providers/auth_controller.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
@@ -171,127 +173,141 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     final theme = Theme.of(context);
     final identifier = _identifierCtrl.text.trim();
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(title: Text(l10n.otpTitle)),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(l10n.otpTitle, style: theme.textTheme.headlineMedium),
-                  const SizedBox(height: 8),
-                  Text(l10n.otpSubtitle, style: theme.textTheme.bodyMedium),
-                  if (identifier.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: Text(
-                        identifier,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodySmall,
-                      ),
-                    ),
-                  ],
-                  if (identifier.isEmpty) ...[
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller: _identifierCtrl,
-                      label: l10n.email,
-                      prefixIcon: Icons.email_outlined,
-                      keyboardType: TextInputType.emailAddress,
-                      textDirection: TextDirection.ltr,
-                      textInputAction: TextInputAction.next,
-                      autofillHints: const [AutofillHints.email],
-                    ),
-                  ],
-                  const SizedBox(height: 20),
-                  AppCard(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextField(
-                          controller: _otpCtrl,
-                          keyboardType: TextInputType.number,
-                          textDirection: TextDirection.ltr,
-                          maxLength: 6,
-                          textAlign: TextAlign.center,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          style: const TextStyle(
-                            fontSize: 24,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          decoration: InputDecoration(
-                            counterText: '',
-                            hintText: '------',
-                            labelText: l10n.otpCode,
-                          ),
-                          onSubmitted: (_) => _submit(),
-                        ),
-                        if (_error case final error?) ...[
-                          const SizedBox(height: 12),
-                          Semantics(
-                            liveRegion: true,
-                            child: Text(
-                              error,
-                              style: TextStyle(color: theme.colorScheme.error),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                        if (_notice case final notice?) ...[
-                          const SizedBox(height: 12),
-                          Semantics(
-                            liveRegion: true,
-                            child: Text(
-                              notice,
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: 20),
-                        AppButton(
-                          label: l10n.verify,
-                          loading: loading,
-                          onPressed: loading ? null : _submit,
-                        ),
-                        TextButton(
-                          onPressed: loading || _resending || _cooldown > 0
-                              ? null
-                              : _resend,
-                          child: _resending
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Text(
-                                  _cooldown > 0
-                                      ? l10n.resendIn(_cooldown)
-                                      : l10n.resendCode,
-                                ),
-                        ),
-                      ],
+    return AuthCinematicFrame(
+      eyebrow: l10n.otpTitle,
+      title: l10n.brandIntroTitle,
+      body: l10n.brandIntroBody,
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          IconButton(
+            tooltip: l10n.backToSignIn,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go(
+              Uri(
+                path: '/login',
+                queryParameters: {
+                  'from': ?GoRouterState.of(context)
+                      .uri
+                      .queryParameters['from'],
+                },
+              ).toString(),
+            ),
+          ),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined),
+            label: Text(
+              Localizations.localeOf(context).languageCode == 'fa'
+                  ? l10n.english
+                  : l10n.persian,
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
+      ),
+      form: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.otpTitle, style: theme.textTheme.headlineMedium),
+          const SizedBox(height: 8),
+          Text(l10n.otpSubtitle, style: theme.textTheme.bodyMedium),
+          if (identifier.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                identifier,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ],
+          if (identifier.isEmpty) ...[
+            const SizedBox(height: 16),
+            AppTextField(
+              controller: _identifierCtrl,
+              label: l10n.email,
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.email],
+            ),
+          ],
+          const SizedBox(height: 20),
+          AppCard(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: _otpCtrl,
+                  keyboardType: TextInputType.number,
+                  textDirection: TextDirection.ltr,
+                  maxLength: 6,
+                  textAlign: TextAlign.center,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: const TextStyle(
+                    fontSize: 24,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    hintText: '------',
+                    labelText: l10n.otpCode,
+                  ),
+                  onSubmitted: (_) => _submit(),
+                ),
+                if (_error case final error?) ...[
+                  const SizedBox(height: 12),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      error,
+                      style: TextStyle(color: theme.colorScheme.error),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
-              ),
+                if (_notice case final notice?) ...[
+                  const SizedBox(height: 12),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      notice,
+                      style: TextStyle(color: theme.colorScheme.primary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                AppButton(
+                  label: l10n.verify,
+                  loading: loading,
+                  onPressed: loading ? null : _submit,
+                ),
+                TextButton(
+                  onPressed: loading || _resending || _cooldown > 0
+                      ? null
+                      : _resend,
+                  child: _resending
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          _cooldown > 0
+                              ? l10n.resendIn(_cooldown)
+                              : l10n.resendCode,
+                        ),
+                ),
+              ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

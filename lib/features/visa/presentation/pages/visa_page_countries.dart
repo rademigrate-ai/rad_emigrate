@@ -32,8 +32,8 @@ class _CountriesStage extends StatelessWidget {
     };
 
     final width = MediaQuery.sizeOf(context).width;
-    final isTablet = width >= 600;
-    final isDesktop = width >= 1100;
+    final isTablet = width >= AppBreakpoints.tablet;
+    final isDesktop = width >= AppBreakpoints.wideDesktop;
     final grouped = <_VisaContinent, List<Country>>{};
     for (final country in catalog.countries) {
       grouped.putIfAbsent(_continentFor(country.code), () => []).add(country);
@@ -51,10 +51,9 @@ class _CountriesStage extends StatelessWidget {
           ),
           children: [
             PremiumHeroPanel(
-              kicker: const EditorialKicker(
+              kicker: EditorialKicker(
                 index: '02',
-                label: 'DESTINATIONS',
-                dark: true,
+                label: AppLocalizations.of(context).destinationsHeading,
               ),
               title: l10n.findPathway,
               body: l10n.catalogueDisclaimer,
@@ -157,14 +156,17 @@ class _ContinentHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fa = Localizations.localeOf(context).languageCode == 'fa';
     final label = switch (continent) {
-      _VisaContinent.northAmerica => fa ? 'آمریکای شمالی' : 'North America',
-      _VisaContinent.europe => fa ? 'اروپا' : 'Europe',
-      _VisaContinent.asia => fa ? 'آسیا' : 'Asia',
-      _VisaContinent.oceania => fa ? 'اقیانوسیه' : 'Oceania',
-      _VisaContinent.middleEast => fa ? 'خاورمیانه' : 'Middle East',
-      _VisaContinent.other => fa ? 'سایر مقصدها' : 'Other destinations',
+      _VisaContinent.northAmerica => AppLocalizations.of(
+        context,
+      ).continentNorthAmerica,
+      _VisaContinent.europe => AppLocalizations.of(context).continentEurope,
+      _VisaContinent.asia => AppLocalizations.of(context).continentAsia,
+      _VisaContinent.oceania => AppLocalizations.of(context).continentOceania,
+      _VisaContinent.middleEast => AppLocalizations.of(
+        context,
+      ).continentMiddleEast,
+      _VisaContinent.other => AppLocalizations.of(context).continentOther,
     };
     return Semantics(
       header: true,
@@ -175,7 +177,7 @@ class _ContinentHeading extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               color: AppColors.primaryRed,
-              borderRadius: BorderRadius.circular(99),
+              borderRadius: BorderRadius.circular(AppRadii.pill),
             ),
           ),
           const SizedBox(width: 10),
@@ -226,9 +228,9 @@ class _CountryGrid extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () => onSelect(country),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppRadii.lg),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppRadii.lg),
               child: Stack(
                 fit: StackFit.expand,
                 children: [

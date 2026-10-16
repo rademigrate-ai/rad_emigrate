@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../l10n/app_localizations.dart';
 import '../network/api_exception.dart';
 
@@ -46,6 +48,17 @@ String localizedAuthError(
       known.contains('wrong') ||
       known.contains('not found')) {
     return l10n.errorAuthInvalid;
+  }
+  return l10n.errorGeneric;
+}
+
+String localizedDataError(Object error, AppLocalizations l10n) {
+  if (error is TimeoutException) return l10n.errorNetwork;
+  if (error is ApiException) {
+    if (error.statusCode == 401 || error.statusCode == 403) {
+      return l10n.errorAuthSession;
+    }
+    return localizedAuthError(error, l10n);
   }
   return l10n.errorGeneric;
 }

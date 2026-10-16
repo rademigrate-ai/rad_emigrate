@@ -1,3 +1,5 @@
+import '../../../../core/errors/localized_error_message.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -185,78 +187,80 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             onPressed: () => setState(() => _selected = null),
           ),
         ),
-        body: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 880),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-              children: [
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        app.programName,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      StatusBadge(
-                        label: _statusLabel(app.status, l10n),
-                        tone: _tone(app.status),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        app.country,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      if (app.notes != null) ...[
-                        const SizedBox(height: 12),
+        body: PremiumCanvas(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 880),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+                children: [
+                  AppCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          app.notes!,
-                          style: Theme.of(context).textTheme.bodySmall,
+                          app.programName,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
+                        const SizedBox(height: 8),
+                        StatusBadge(
+                          label: _statusLabel(app.status, l10n),
+                          tone: _tone(app.status),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          app.country,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        if (app.notes != null) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            app.notes!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  l10n.progress,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                AppCard(
-                  child: ProgressSteps(steps: _timeline(app.status, l10n)),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  l10n.updateStatus,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.updateStatusHint,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: ApplicationStatus.values.map((status) {
-                    return FilterChip(
-                      label: Text(_statusLabel(status, l10n)),
-                      selected: app.status == status,
-                      onSelected: _updatingStatus
-                          ? null
-                          : (_) => _updateStatus(app, status),
-                    );
-                  }).toList(),
-                ),
-                if (_updatingStatus) ...[
+                  const SizedBox(height: 20),
+                  Text(
+                    l10n.progress,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 12),
-                  RadInlineLoading(label: l10n.loading),
+                  AppCard(
+                    child: ProgressSteps(steps: _timeline(app.status, l10n)),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    l10n.updateStatus,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.updateStatusHint,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: ApplicationStatus.values.map((status) {
+                      return FilterChip(
+                        label: Text(_statusLabel(status, l10n)),
+                        selected: app.status == status,
+                        onSelected: _updatingStatus
+                            ? null
+                            : (_) => _updateStatus(app, status),
+                      );
+                    }).toList(),
+                  ),
+                  if (_updatingStatus) ...[
+                    const SizedBox(height: 12),
+                    RadInlineLoading(label: l10n.loading),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -300,7 +304,7 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
           loading: () =>
               LoadingState.section(message: l10n.loadingApplications),
           error: (e, _) => ErrorState(
-            message: l10n.errorGeneric,
+            message: localizedDataError(e, l10n),
             onRetry: () =>
                 ref.read(applicationControllerProvider.notifier).load(),
           ),
@@ -324,9 +328,9 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return PremiumHeroPanel(
-                        kicker: const EditorialKicker(
+                        kicker: EditorialKicker(
                           index: '03',
-                          label: 'CASE ROOM',
+                          label: AppLocalizations.of(context).caseRoom,
                           dark: true,
                         ),
                         title: l10n.applications,
@@ -340,56 +344,59 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                       child: AppCard(
                         onTap: () => setState(() => _selected = app),
                         padding: EdgeInsets.zero,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              width: 8,
-                              color: _toneColor(_tone(app.status)),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'CASE ${(index).toString().padLeft(2, '0')}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.copyWith(
-                                            color: AppColors.teal,
-                                            fontWeight: FontWeight.w800,
-                                            letterSpacing: 1,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 7),
-                                    Text(
-                                      app.title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${app.programName} · ${app.country}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 14),
-                                    StatusBadge(
-                                      label: _statusLabel(app.status, l10n),
-                                      tone: _tone(app.status),
-                                    ),
-                                  ],
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                width: 8,
+                                color: _toneColor(_tone(app.status)),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${l10n.cases} ${(index).toString().padLeft(2, '0')}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall
+                                            ?.copyWith(
+                                              color: AppColors.teal,
+                                              fontWeight: FontWeight.w800,
+                                              letterSpacing: 1,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 7),
+                                      Text(
+                                        app.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        '${app.programName} · ${app.country}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 14),
+                                      StatusBadge(
+                                        label: _statusLabel(app.status, l10n),
+                                        tone: _tone(app.status),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );

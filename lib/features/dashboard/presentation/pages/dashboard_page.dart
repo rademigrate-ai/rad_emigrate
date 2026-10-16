@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_entrance.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_ai_bird.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../../feed/data/feed_repository.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -200,7 +202,7 @@ class DashboardPage extends ConsumerWidget {
                     ),
                     _ActionChip(
                       icon: Icons.schedule_outlined,
-                      label: locale == 'fa' ? 'ساعت جهانی' : 'World Time',
+                      label: l10n.worldTimeTitle,
                       onTap: () => context.go('/world-clock'),
                     ),
                   ],
@@ -302,14 +304,17 @@ class _JourneyHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return PremiumHeroPanel(
-      kicker: const EditorialKicker(
+      kicker: EditorialKicker(
         index: '01',
-        label: 'YOUR JOURNEY',
-        dark: true,
+        label: AppLocalizations.of(context).yourJourney,
       ),
       title: l10n.helloName(name),
       body: l10n.brandIntroBody,
-      trailing: const RadOrbit(size: 250, showBrand: true),
+      trailing: RadAiBird(
+        state: RadAiBirdState.idle,
+        size: 180,
+        semanticLabel: l10n.aiAssistant,
+      ),
       footer: Wrap(
         spacing: 12,
         runSpacing: 12,
@@ -322,8 +327,8 @@ class _JourneyHero extends StatelessWidget {
           ),
           OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.58)),
+              foregroundColor: context.premium.text,
+              side: BorderSide(color: context.premium.border),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             ),
             icon: Icon(
@@ -413,13 +418,12 @@ class _MetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(AppRadii.xl),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           child: PremiumCanvas(
-            dark: true,
             accent: icon == Icons.folder_outlined
                 ? AppColors.primaryRed
                 : AppColors.teal,
@@ -429,13 +433,13 @@ class _MetricTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(icon, size: 22, color: const Color(0xFF70E4DE)),
+                  Icon(icon, size: 22, color: context.premium.information),
                   const SizedBox(height: 12),
                   MotionCount(
                     value: value,
                     placeholder: '—',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
+                      color: context.premium.text,
                       fontFeatures: const [ui.FontFeature.tabularFigures()],
                     ),
                   ),
@@ -443,7 +447,7 @@ class _MetricTile extends StatelessWidget {
                   Text(
                     label,
                     style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xFFBFD1D6)),
+                        ?.copyWith(color: context.premium.mutedText),
                   ),
                 ],
               ),

@@ -26,6 +26,15 @@ Future<void> _pump(
 void main() {
   for (final screen in [
     'login',
+    'register',
+    'otp',
+    'forgot-password',
+    'reset-password',
+    'profile-completion',
+    'cases',
+    'documents',
+    'notifications',
+    'not-found',
     'dashboard',
     'visa',
     'ai',

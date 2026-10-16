@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/city.dart';
 import '../../domain/local_date_format.dart';
 import '../../domain/timezone_engine.dart';
@@ -40,30 +42,17 @@ class CityClockCard extends StatelessWidget {
     final name = city.localizedName(languageCode);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 220),
+      duration: AppMotion.duration(context, AppMotion.standard),
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDay
-              ? const [Color(0xFF1E3A5F), Color(0xFF0F1C2E)]
-              : const [Color(0xFF0A0F18), Color(0xFF121A28)],
-        ),
-        border: Border.all(color: AppColors.primaryRed.withValues(alpha: 0.25)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryRed.withValues(alpha: 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        color: context.premium.surface,
+        border: Border.all(color: context.premium.border),
       ),
       child: Material(
         color: Colors.transparent,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -73,14 +62,15 @@ class CityClockCard extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: isDay
-                        ? const [Color(0x33101D2D), Color(0xE60A111B)]
-                        : const [Color(0x66030810), Color(0xF2070A10)],
+                    colors: [
+                      context.premium.surface.withValues(alpha: .86),
+                      context.premium.surface,
+                    ],
                   ),
                 ),
               ),
               InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppRadii.lg),
                 onTap: onTap,
                 child: Padding(
                   padding: EdgeInsets.all(compact ? 12 : 16),
@@ -102,7 +92,7 @@ class CityClockCard extends StatelessWidget {
                               name,
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(
-                                    color: Colors.white,
+                                    color: context.premium.text,
                                     fontWeight: FontWeight.w700,
                                   ),
                               maxLines: 1,
@@ -115,22 +105,22 @@ class CityClockCard extends StatelessWidget {
                                 : Icons.nights_stay_rounded,
                             size: 18,
                             color: isDay
-                                ? const Color(0xFFFFC857)
-                                : const Color(0xFF8BA3C7),
+                                ? context.premium.warning
+                                : context.premium.information,
                           ),
                           if (onRemove != null) ...[
                             const SizedBox(width: 4),
                             IconButton(
                               icon: const Icon(Icons.close, size: 16),
-                              color: Colors.white54,
+                              color: context.premium.mutedText,
                               visualDensity: VisualDensity.compact,
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(
-                                minWidth: 28,
-                                minHeight: 28,
+                                minWidth: 44,
+                                minHeight: 44,
                               ),
                               onPressed: onRemove,
-                              tooltip: 'Remove',
+                              tooltip: AppLocalizations.of(context).delete,
                             ),
                           ],
                         ],
@@ -140,7 +130,7 @@ class CityClockCard extends StatelessWidget {
                         timeStr,
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(
-                              color: Colors.white,
+                              color: context.premium.text,
                               fontWeight: FontWeight.w800,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
@@ -152,13 +142,13 @@ class CityClockCard extends StatelessWidget {
                       Text(
                         dateStr,
                         style: Theme.of(context).textTheme.bodySmall
-                            ?.copyWith(color: Colors.white70),
+                            ?.copyWith(color: context.premium.mutedText),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         offset,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.primaryRed.withValues(alpha: 0.9),
+                          color: context.premium.accentForeground,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -207,17 +197,15 @@ class _CityPhotoFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF22354B), Color(0xFF0A111C)],
-        ),
-      ),
+    return ColoredBox(
+      color: context.premium.surfaceElevated,
       child: Align(
-        alignment: Alignment(0.78, -0.7),
-        child: Icon(Icons.location_city, color: Colors.white12, size: 52),
+        alignment: const Alignment(.78, -.7),
+        child: Icon(
+          Icons.location_city_outlined,
+          color: context.premium.accent.withValues(alpha: .12),
+          size: 64,
+        ),
       ),
     );
   }

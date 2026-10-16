@@ -8,6 +8,8 @@ import '../widgets/app_entrance.dart';
 import '../widgets/rad_ai_bird_nav_icon.dart';
 import '../widgets/rad_phoenix_navigation_surface.dart';
 import '../theme/app_motion.dart';
+import '../theme/premium_tokens.dart';
+import '../widgets/rad_ai_bird.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
 
@@ -44,7 +46,7 @@ class _AppShellState extends ConsumerState<AppShell> {
         selectedIcon: Icons.home,
       ),
       _NavItem(
-        label: l10n.visa,
+        label: l10n.explore,
         path: '/visa',
         icon: Icons.public_outlined,
         selectedIcon: Icons.public,
@@ -107,8 +109,38 @@ class _AppShellState extends ConsumerState<AppShell> {
         )
         .toList();
 
-    final selected = _selectedIndex(location, items);
-    final wide = MediaQuery.sizeOf(context).width >= 900;
+    final railItems = [
+      items[0],
+      items[1],
+      items[6],
+      items[2],
+      items[7],
+      _NavItem(
+        label: l10n.more,
+        path: '/more',
+        icon: Icons.more_horiz,
+        selectedIcon: Icons.more_horiz,
+      ),
+    ];
+    final secondary = [
+      ...overflow,
+      _NavItem(
+        label: l10n.consultationTitle,
+        path: '/consultation',
+        icon: Icons.support_agent_outlined,
+        selectedIcon: Icons.support_agent,
+      ),
+      _NavItem(
+        label: l10n.notificationsTitle,
+        path: '/notifications',
+        icon: Icons.notifications_outlined,
+        selectedIcon: Icons.notifications,
+      ),
+    ];
+    final selected = railItems.any((item) => location.startsWith(item.path))
+        ? _selectedIndex(location, railItems)
+        : 5;
+    final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
     final aiSelected = location.startsWith('/ai-assistant');
 
     return Scaffold(
@@ -133,7 +165,14 @@ class _AppShellState extends ConsumerState<AppShell> {
               child: NavigationRail(
                 extended: _railExtended,
                 selectedIndex: selected,
-                onDestinationSelected: (i) => context.go(items[i].path),
+                onDestinationSelected: (i) async {
+                  if (railItems[i].path != '/more') {
+                    context.go(railItems[i].path);
+                    return;
+                  }
+                  final path = await _showMore(context, secondary, location);
+                  if (path != null && context.mounted) context.go(path);
+                },
                 labelType: _railExtended
                     ? NavigationRailLabelType.none
                     : NavigationRailLabelType.all,
@@ -145,21 +184,16 @@ class _AppShellState extends ConsumerState<AppShell> {
                   padding: const EdgeInsets.only(top: 14, bottom: 20),
                   child: Column(
                     children: [
-                      const RadBrand(
+                      RadBrand(
                         size: RadBrandSize.small,
                         showInstituteName: false,
-                        darkSurface: true,
+                        darkSurface: context.premium.isDark,
                       ),
                       const SizedBox(height: 10),
                       IconButton(
-                        tooltip:
-                            Localizations.localeOf(context).languageCode == 'fa'
-                            ? (_railExtended
-                                  ? 'جمع کردن پیمایش'
-                                  : 'باز کردن پیمایش')
-                            : (_railExtended
-                                  ? 'Collapse navigation'
-                                  : 'Expand navigation'),
+                        tooltip: _railExtended
+                            ? l10n.collapseNavigation
+                            : l10n.expandNavigation,
                         onPressed: () =>
                             setState(() => _railExtended = !_railExtended),
                         icon: Icon(
@@ -172,10 +206,22 @@ class _AppShellState extends ConsumerState<AppShell> {
                   ),
                 ),
                 destinations: [
-                  for (final item in items)
+                  for (final item in railItems)
                     NavigationRailDestination(
-                      icon: Icon(item.icon),
-                      selectedIcon: Icon(item.selectedIcon),
+                      icon: item.path == '/ai-assistant'
+                          ? RadAiBird(
+                              state: RadAiBirdState.idle,
+                              size: 28,
+                              semanticLabel: item.label,
+                            )
+                          : Icon(item.icon),
+                      selectedIcon: item.path == '/ai-assistant'
+                          ? RadAiBird(
+                              state: RadAiBirdState.idle,
+                              size: 28,
+                              semanticLabel: item.label,
+                            )
+                          : Icon(item.selectedIcon),
                       label: Text(item.label),
                     ),
                 ],
@@ -200,7 +246,7 @@ class _AppShellState extends ConsumerState<AppShell> {
               onPrimarySelected: (path) => context.go(path),
               onAiTap: () => context.go('/ai-assistant'),
               onMore: () async {
-                final path = await _showMore(context, overflow, location);
+                final path = await _showMore(context, secondary, location);
                 if (path != null && context.mounted) context.go(path);
               },
             ),
@@ -313,12 +359,8 @@ class _NavSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = selected
-        ? (theme.brightness == Brightness.dark
-              ? const Color(0xFFFF6475)
-              : AppColors.primaryRed)
-        : (theme.brightness == Brightness.dark
-              ? const Color(0xFFADB3C0)
-              : const Color(0xFF596575));
+        ? context.premium.accentForeground
+        : context.premium.mutedText;
 
     return Semantics(
       label: item.label,
@@ -341,7 +383,11 @@ class _NavSlot extends StatelessWidget {
                     AppMotion.buttonFeedback,
                   ),
                   scale: selected ? 1.05 : 1,
-                  child: Icon(item.icon, size: 26, color: color),
+                  child: Icon(
+                    selected ? item.selectedIcon : item.icon,
+                    size: 26,
+                    color: color,
+                  ),
                 ),
               ),
               Positioned(

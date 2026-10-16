@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
@@ -120,11 +121,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   void _showResponseState() {
     _birdTimer?.cancel();
     setState(() => _birdState = RadAiBirdState.responding);
-    _birdTimer = Timer(const Duration(milliseconds: 800), () {
+    _birdTimer = Timer(AppMotion.assistantResponse, () {
       if (!mounted) return;
       setState(() => _birdState = RadAiBirdState.newMessage);
       ref.read(aiAssistantActivityProvider.notifier).markNewMessage();
-      _birdTimer = Timer(const Duration(milliseconds: 1400), () {
+      _birdTimer = Timer(AppMotion.assistantNotification, () {
         if (!mounted) return;
         setState(
           () => _birdState = _composerFocus.hasFocus
@@ -366,15 +367,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         : draftContext;
 
     final body = PremiumCanvas(
-      dark: true,
-      accent: AppColors.teal,
+      accent: context.premium.accent,
       child: AmbientBackdrop(
         active: _loading,
         child: Column(
           children: [
             if (!widget.embedded)
               Material(
-                color: const Color(0xFF0D2A35),
+                color: context.premium.surfaceElevated,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -385,7 +385,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                         ? l10n.untrustedResearchDisclaimer
                         : l10n.aiDisclaimer,
                     style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xFFC2D7DB)),
+                        ?.copyWith(color: context.premium.mutedText),
                   ),
                 ),
               ),
@@ -397,8 +397,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   child: Chip(
                     avatar: const Icon(Icons.place_outlined, size: 16),
                     label: Text(effectiveContext),
-                    backgroundColor: const Color(0xFF143743),
-                    labelStyle: const TextStyle(color: Color(0xFFE2F1F3)),
+                    backgroundColor: context.premium.surfaceElevated,
+                    labelStyle: TextStyle(color: context.premium.text),
                     side: BorderSide.none,
                   ),
                 ),
@@ -409,10 +409,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
                       children: [
                         PremiumHeroPanel(
-                          kicker: const EditorialKicker(
+                          kicker: EditorialKicker(
                             index: '04',
-                            label: 'RAD INTELLIGENCE',
-                            dark: true,
+                            label: AppLocalizations.of(context).radIntelligence,
                           ),
                           title: l10n.howCanWeHelp,
                           body: l10n.askAboutVisas,
@@ -440,7 +439,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                         color: AppColors.teal.withValues(
                                           alpha: 0.15,
                                         ),
-                                        borderRadius: BorderRadius.circular(11),
+                                        borderRadius: BorderRadius.circular(
+                                          AppRadii.sm,
+                                        ),
                                       ),
                                       child: const Icon(
                                         Icons.auto_awesome,
@@ -491,8 +492,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                         const SizedBox(width: 4),
                                         Text(
                                           l10n.loading,
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          style: TextStyle(
+                                            color: context.premium.text,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -522,15 +523,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                               ),
                               decoration: BoxDecoration(
                                 color: m.isUser
-                                    ? AppColors.primaryRed.withValues(
-                                        alpha: 0.92,
-                                      )
-                                    : const Color(0xFF10313D),
-                                borderRadius: BorderRadius.circular(14),
+                                    ? context.premium.accent
+                                    : context.premium.surface,
+                                borderRadius: BorderRadius.circular(
+                                  AppRadii.md,
+                                ),
                                 border: Border.all(
                                   color: m.isUser
-                                      ? const Color(0xFFFF848C)
-                                      : const Color(0xFF337988),
+                                      ? context.premium.accent
+                                      : context.premium.border,
                                 ),
                               ),
                               child: Column(
@@ -539,7 +540,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                   Text(
                                     m.text,
                                     style: Theme.of(context).textTheme.bodyLarge
-                                        ?.copyWith(color: Colors.white),
+                                        ?.copyWith(
+                                          color: m.isUser
+                                              ? context.premium.onAccent
+                                              : context.premium.text,
+                                        ),
                                   ),
                                   if (m.retryPrompt != null &&
                                       index == _messages.length - 1)
@@ -573,7 +578,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             ),
             SafeArea(
               child: Container(
-                color: const Color(0xFF081D28).withValues(alpha: 0.94),
+                color: context.premium.surface,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
                   child: Row(
@@ -588,9 +593,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                           onSubmitted: (_) => _send(),
                           decoration: InputDecoration(
                             hintText: l10n.askQuestionHint,
-                            fillColor: const Color(0xFF123440),
-                            hintStyle: const TextStyle(
-                              color: Color(0xFF9DB9C0),
+                            fillColor: context.premium.surfaceElevated,
+                            hintStyle: TextStyle(
+                              color: context.premium.mutedText,
                             ),
                           ),
                         ),
@@ -599,11 +604,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       IconButton.filled(
                         tooltip: l10n.sendMessage,
                         style: IconButton.styleFrom(
-                          backgroundColor: AppColors.primaryRed,
+                          backgroundColor: context.premium.accent,
+                          foregroundColor: context.premium.onAccent,
+                          disabledBackgroundColor:
+                              context.premium.disabledSurface,
+                          disabledForegroundColor: context.premium.disabledText,
                           minimumSize: const Size(48, 48),
                         ),
                         onPressed: _loading ? null : () => _send(),
-                        icon: const Icon(Icons.send, color: Colors.white),
+                        icon: const Icon(Icons.send),
                       ),
                     ],
                   ),
@@ -639,20 +648,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   }
 
   String _birdSemanticLabel(BuildContext context) {
-    final fa = Localizations.localeOf(context).languageCode == 'fa';
+    final l10n = AppLocalizations.of(context);
     return switch (_birdState) {
-      RadAiBirdState.idle =>
-        fa ? 'دستیار هوشمند آماده است' : 'AI assistant is ready',
-      RadAiBirdState.listening =>
-        fa ? 'دستیار هوشمند در حال گوش دادن است' : 'AI assistant is listening',
-      RadAiBirdState.thinking =>
-        fa ? 'دستیار هوشمند در حال فکر کردن است' : 'AI assistant is thinking',
-      RadAiBirdState.responding =>
-        fa
-            ? 'دستیار هوشمند در حال پاسخ دادن است'
-            : 'AI assistant is responding',
-      RadAiBirdState.newMessage =>
-        fa ? 'پیام جدید از دستیار هوشمند' : 'New message from AI assistant',
+      RadAiBirdState.idle => l10n.birdReady,
+      RadAiBirdState.listening => l10n.birdListening,
+      RadAiBirdState.thinking => l10n.birdThinking,
+      RadAiBirdState.responding => l10n.birdResponding,
+      RadAiBirdState.newMessage => l10n.birdNewMessage,
     };
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
+import '../theme/premium_tokens.dart';
 import '../../l10n/app_localizations.dart';
 
 enum StatusTone { neutral, info, warning, success, danger }
@@ -17,18 +17,18 @@ class StatusBadge extends StatelessWidget {
 
   Color _bg(BuildContext context) => switch (tone) {
     StatusTone.neutral => Theme.of(context).colorScheme.surfaceContainerHighest,
-    StatusTone.info => AppColors.info.withValues(alpha: 0.12),
-    StatusTone.warning => AppColors.warning.withValues(alpha: 0.14),
-    StatusTone.success => AppColors.success.withValues(alpha: 0.12),
-    StatusTone.danger => AppColors.error.withValues(alpha: 0.12),
+    StatusTone.info => context.premium.information.withValues(alpha: 0.12),
+    StatusTone.warning => context.premium.warning.withValues(alpha: 0.14),
+    StatusTone.success => context.premium.success.withValues(alpha: 0.12),
+    StatusTone.danger => context.premium.error.withValues(alpha: 0.12),
   };
 
   Color _fg(BuildContext context) => switch (tone) {
     StatusTone.neutral => Theme.of(context).colorScheme.onSurfaceVariant,
-    StatusTone.info => AppColors.info,
-    StatusTone.warning => AppColors.warning,
-    StatusTone.success => AppColors.success,
-    StatusTone.danger => AppColors.error,
+    StatusTone.info => context.premium.information,
+    StatusTone.warning => context.premium.warning,
+    StatusTone.success => context.premium.success,
+    StatusTone.danger => context.premium.error,
   };
 
   IconData get _icon => switch (tone) {
@@ -56,12 +56,14 @@ class StatusBadge extends StatelessWidget {
           children: [
             Icon(_icon, size: 14, color: foreground),
             const SizedBox(width: 5),
-            Text(
-              label,
-              style: TextStyle(
-                color: foreground,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: foreground,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],

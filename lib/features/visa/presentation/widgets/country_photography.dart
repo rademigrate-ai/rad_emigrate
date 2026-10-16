@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/premium_tokens.dart';
+
 /// Deterministic, bundled photography for destination cards when the schema
 /// has no image column.
 ///
@@ -42,19 +44,46 @@ abstract final class CountryPhotography {
     double? width,
     double? height,
   }) {
+    if (!_byCode.containsKey(code.toUpperCase())) {
+      return Builder(
+        builder: (context) => Container(
+          width: width,
+          height: height,
+          color: context.premium.surfaceElevated,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.public,
+                  color: context.premium.accentForeground,
+                  size: 40,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  code.toUpperCase(),
+                  textDirection: TextDirection.ltr,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Image(
       image: providerForCode(code),
       fit: fit,
       width: width,
       height: height,
       errorBuilder: (context, error, stack) => Container(
-        color: const Color(0xFF1A2A32),
+        color: context.premium.surfaceElevated,
         alignment: Alignment.center,
-        child: const Icon(Icons.public, color: Colors.white54, size: 36),
+        child: Icon(Icons.public, color: context.premium.mutedText, size: 36),
       ),
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded || frame != null) return child;
-        return Container(color: const Color(0xFF1A2A32));
+        return Container(color: context.premium.surfaceElevated);
       },
     );
   }

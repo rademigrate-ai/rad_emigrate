@@ -1,8 +1,9 @@
+import '../../../../core/widgets/inline_alert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -85,7 +86,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
     return AuthCinematicFrame(
-      eyebrow: 'RAD • CREATE YOUR SPACE',
+      eyebrow: l10n.createYourSpace,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
       localeControl: TextButton.icon(
@@ -103,7 +104,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const EditorialKicker(index: '02', label: 'CREATE ACCOUNT'),
+              EditorialKicker(
+                index: '02',
+                label: AppLocalizations.of(context).createAccount,
+              ),
               const SizedBox(height: 16),
               Text(
                 l10n.signUp,
@@ -116,15 +120,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               const SizedBox(height: 10),
               Text(l10n.signUpSubtitle, style: theme.textTheme.bodyMedium),
               const SizedBox(height: 24),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(99),
-                child: LinearProgressIndicator(
-                  value: 0.33,
-                  minHeight: 5,
-                  color: AppColors.primaryRed,
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                ),
-              ),
               const SizedBox(height: 26),
               AppTextField(
                 controller: _emailCtrl,
@@ -182,13 +177,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               ),
               if (_error case final error?) ...[
                 const SizedBox(height: 14),
-                Semantics(
-                  liveRegion: true,
-                  child: Text(
-                    error,
-                    style: TextStyle(color: theme.colorScheme.error),
-                  ),
-                ),
+                InlineAlert(message: error),
               ],
               const SizedBox(height: 24),
               AppButton(
@@ -201,7 +190,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               AppButton(
                 label: l10n.alreadyHaveAccount,
                 variant: AppButtonVariant.ghost,
-                onPressed: () => context.go('/login'),
+                onPressed: () => context.go(
+                  Uri(
+                    path: '/login',
+                    queryParameters: {
+                      if (widget.destination != null)
+                        'from': widget.destination!,
+                    },
+                  ).toString(),
+                ),
               ),
             ],
           ),

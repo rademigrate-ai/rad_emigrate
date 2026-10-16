@@ -1,3 +1,5 @@
+import '../../../../core/widgets/inline_alert.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,6 +11,8 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rad_brand.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 import '../providers/auth_controller.dart';
 
 class ForgotPasswordPage extends ConsumerStatefulWidget {
@@ -84,89 +88,110 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final wide = MediaQuery.sizeOf(context).width >= 800;
     final coolingDown = _cooldownSeconds > 0;
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: wide ? 440 : 480),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Center(child: RadBrand(size: RadBrandSize.medium)),
-                    const SizedBox(height: 24),
-                    Text(
-                      l10n.resetPassword,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    if (_sent)
-                      Text(
-                        l10n.passwordResetSent,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium,
-                      )
-                    else ...[
-                      Text(
-                        l10n.passwordResetSubtitle,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 28),
-                      AppTextField(
-                        controller: _emailCtrl,
-                        label: l10n.email,
-                        prefixIcon: Icons.email_outlined,
-                        keyboardType: TextInputType.emailAddress,
-                        textDirection: TextDirection.ltr,
-                        autofillHints: const [AutofillHints.email],
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (_) => _submit(),
-                        validator: (v) {
-                          if (v == null || v.trim().isEmpty) {
-                            return l10n.required;
-                          }
-                          if (!v.contains('@')) return l10n.invalidEmail;
-                          return null;
-                        },
-                      ),
-                      if (_error != null) ...[
-                        const SizedBox(height: 12),
-                        Semantics(
-                          liveRegion: true,
-                          child: Text(
-                            _error!,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.error,
-                            ),
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 24),
-                      AppButton(
-                        label: l10n.sendResetLink,
-                        loading: _loading,
-                        onPressed: _loading || coolingDown ? null : _submit,
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: Text(l10n.backToSignIn),
-                    ),
-                  ],
-                ),
-              ),
+    return AuthCinematicFrame(
+      eyebrow: l10n.resetPassword,
+      title: l10n.brandIntroTitle,
+      body: l10n.brandIntroBody,
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          IconButton(
+            tooltip: l10n.backToSignIn,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go(
+              Uri(
+                path: '/login',
+                queryParameters: {
+                  'from': ?GoRouterState.of(context)
+                      .uri
+                      .queryParameters['from'],
+                },
+              ).toString(),
             ),
           ),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined),
+            label: Text(
+              Localizations.localeOf(context).languageCode == 'fa'
+                  ? l10n.english
+                  : l10n.persian,
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
+      ),
+      form: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Center(child: RadBrand(size: RadBrandSize.medium)),
+            const SizedBox(height: 24),
+            Text(
+              l10n.resetPassword,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 12),
+            if (_sent)
+              Text(
+                l10n.passwordResetSent,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              )
+            else ...[
+              Text(
+                l10n.passwordResetSubtitle,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 28),
+              AppTextField(
+                controller: _emailCtrl,
+                label: l10n.email,
+                prefixIcon: Icons.email_outlined,
+                keyboardType: TextInputType.emailAddress,
+                textDirection: TextDirection.ltr,
+                autofillHints: const [AutofillHints.email],
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _submit(),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) {
+                    return l10n.required;
+                  }
+                  if (!v.contains('@')) return l10n.invalidEmail;
+                  return null;
+                },
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                InlineAlert(message: _error!),
+              ],
+              const SizedBox(height: 24),
+              AppButton(
+                label: l10n.sendResetLink,
+                loading: _loading,
+                onPressed: _loading || coolingDown ? null : _submit,
+              ),
+            ],
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => context.go(
+                Uri(
+                  path: '/login',
+                  queryParameters: {
+                    'from': ?GoRouterState.of(context)
+                        .uri
+                        .queryParameters['from'],
+                  },
+                ).toString(),
+              ),
+              child: Text(l10n.backToSignIn),
+            ),
+          ],
         ),
       ),
     );

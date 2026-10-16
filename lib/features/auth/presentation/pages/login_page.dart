@@ -1,3 +1,6 @@
+import '../../../../core/widgets/inline_alert.dart';
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -117,13 +120,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
     final viewport = MediaQuery.sizeOf(context);
-    final wide = viewport.width >= 860;
+    final wide = viewport.width >= AppBreakpoints.desktop;
     // Keep the dimensional Earth prominent without overflowing short laptops.
     final heroSize = wide
         ? (viewport.height * 0.43).clamp(240.0, 400.0)
         : 174.0;
     return AuthCinematicFrame(
-      eyebrow: 'RAD • IMMIGRATION JOURNEY',
+      eyebrow: l10n.immigrationJourney,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
       heroVisual: RadEarthBirdScene(
@@ -145,7 +148,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const EditorialKicker(index: '02', label: 'ACCESS PORTAL'),
+              EditorialKicker(
+                index: '02',
+                label: AppLocalizations.of(context).accessPortal,
+              ),
               const SizedBox(height: 16),
               Text(
                 l10n.signIn,
@@ -195,29 +201,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               if (_error case final error?) ...[
                 const SizedBox(height: 14),
-                Semantics(
-                  liveRegion: true,
-                  child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.error.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: theme.colorScheme.error.withValues(alpha: 0.22),
-                      ),
-                    ),
-                    child: Text(
-                      error,
-                      style: TextStyle(color: theme.colorScheme.error),
-                    ),
-                  ),
-                ),
+                InlineAlert(message: error),
               ],
               const SizedBox(height: 6),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
-                  onPressed: () => context.go('/forgot-password'),
+                  onPressed: () => context.go(
+                    Uri(
+                      path: '/forgot-password',
+                      queryParameters: {
+                        if (widget.destination != null)
+                          'from': widget.destination!,
+                      },
+                    ).toString(),
+                  ),
                   child: Text(l10n.forgotPassword),
                 ),
               ),

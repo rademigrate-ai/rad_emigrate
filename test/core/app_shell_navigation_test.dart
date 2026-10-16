@@ -79,7 +79,7 @@ void main() {
     final router = await _pumpShell(tester, role: 'user', width: 360);
 
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Visa'), findsOneWidget);
+    expect(find.text('Explore'), findsOneWidget);
     expect(find.text('Cases'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 

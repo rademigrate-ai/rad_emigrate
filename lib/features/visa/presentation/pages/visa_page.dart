@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,10 +21,6 @@ import '../widgets/country_photography.dart';
 part 'visa_page_countries.dart';
 part 'visa_page_country_detail.dart';
 part 'visa_page_program.dart';
-
-String _t(BuildContext context, String en, String fa) {
-  return Localizations.localeOf(context).languageCode == 'fa' ? fa : en;
-}
 
 enum _VisaStage { countries, countryDetail, programDetail }
 
@@ -108,16 +106,9 @@ class _VisaPageState extends ConsumerState<VisaPage> {
           data: (value) => value.countries.isEmpty
               ? EmptyState(
                   icon: Icons.public_off_outlined,
-                  title: _t(
-                    context,
-                    'No published destinations',
-                    'هنوز مقصد منتشرشده‌ای وجود ندارد',
-                  ),
-                  subtitle: _t(
-                    context,
-                    'Published visa destinations will appear here.',
-                    'مقصدهای منتشرشده ویزا در این بخش نمایش داده می‌شوند.',
-                  ),
+                  title: AppLocalizations.of(context).noPublishedDestinations,
+                  subtitle: AppLocalizations.of(context)
+                      .publishedDestinationsEmpty,
                 )
               : switch (_stage) {
                   _VisaStage.countries => _CountriesStage(
@@ -153,26 +144,18 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   ) {
     final kind = error is VisaCatalogException ? error.kind : null;
     return switch (kind) {
-      VisaCatalogFailureKind.configuration => _t(
+      VisaCatalogFailureKind.configuration => AppLocalizations.of(
         context,
-        'Visa discovery is unavailable in this build configuration.',
-        'بخش ویزا در پیکربندی فعلی برنامه در دسترس نیست.',
-      ),
-      VisaCatalogFailureKind.access => _t(
+      ).visaConfigurationUnavailable,
+      VisaCatalogFailureKind.access => AppLocalizations.of(
         context,
-        'Published visa content could not be accessed. Please retry.',
-        'دسترسی به محتوای منتشرشده ویزا ممکن نشد. دوباره تلاش کنید.',
-      ),
-      VisaCatalogFailureKind.network => _t(
+      ).visaContentAccessFailed,
+      VisaCatalogFailureKind.network => AppLocalizations.of(
         context,
-        'Check your connection and retry visa discovery.',
-        'اتصال اینترنت را بررسی و دوباره تلاش کنید.',
-      ),
-      VisaCatalogFailureKind.data => _t(
+      ).visaConnectionFailed,
+      VisaCatalogFailureKind.data => AppLocalizations.of(
         context,
-        'Published visa content is incomplete. Please try again later.',
-        'محتوای منتشرشده ویزا کامل نیست. بعداً دوباره تلاش کنید.',
-      ),
+      ).visaContentIncomplete,
       _ => l10n.catalogueUnavailable,
     };
   }

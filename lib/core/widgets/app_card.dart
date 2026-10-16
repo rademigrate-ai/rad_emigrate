@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_motion.dart';
+import '../theme/premium_tokens.dart';
 
 /// Shared RAD surface with touch, mouse, keyboard, and reduced-motion support.
 class AppCard extends StatefulWidget {
@@ -50,7 +51,7 @@ class _AppCardState extends State<AppCard> {
             scheme.primary.withValues(alpha: 0.06),
             scheme.surface,
           )
-        : theme.cardColor;
+        : context.premium.surface;
     final duration = AppMotion.duration(context, AppMotion.hover);
     final content = Padding(padding: widget.padding, child: widget.child);
 
@@ -67,7 +68,7 @@ class _AppCardState extends State<AppCard> {
         curve: AppMotion.curve(context, preferred: AppMotion.emphasizedCurve),
         decoration: BoxDecoration(
           color: surface,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           border: Border.all(color: borderColor),
           boxShadow: elevated
               ? [
@@ -81,7 +82,7 @@ class _AppCardState extends State<AppCard> {
         ),
         child: Material(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           clipBehavior: Clip.antiAlias,
           child: _interactive
               ? InkWell(

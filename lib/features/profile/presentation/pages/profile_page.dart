@@ -1,3 +1,5 @@
+import '../../../../core/errors/localized_error_message.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../../core/widgets/secondary_destinations.dart';
 import '../../../../core/theme/theme_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -169,7 +173,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             if (!_editing)
               IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                tooltip: l10n.settings,
+                tooltip: l10n.editProfile,
                 onPressed: () => setState(() => _editing = true),
               ),
             IconButton(
@@ -205,7 +209,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       )
                     : LoadingState.section(message: l10n.loading),
                 error: (e, _) => ErrorState(
-                  message: l10n.errorGeneric,
+                  message: localizedDataError(e, l10n),
                   onRetry: () =>
                       ref.read(profileControllerProvider.notifier).load(),
                 ),
@@ -321,6 +325,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             subtitle: l10n.guestConsultationBody,
           ),
           const SizedBox(height: 24),
+          const SecondaryDestinations(),
+          const SizedBox(height: 20),
           Text(
             l10n.settings,
             style: theme.textTheme.titleMedium?.copyWith(
@@ -470,6 +476,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
         ),
         const SizedBox(height: 16),
+        const SecondaryDestinations(),
+        const SizedBox(height: 20),
         Text(l10n.settings, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         AppCard(
@@ -504,9 +512,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ),
         const SizedBox(height: 20),
         Text(
-          Localizations.localeOf(context).languageCode == 'fa'
-              ? 'پشتیبانی و اطلاعات'
-              : 'Support & information',
+          AppLocalizations.of(context).supportInformationLabel,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 8),
@@ -526,9 +532,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
             _ProfileActionRow(
               title: l10n.logout,
-              subtitle: Localizations.localeOf(context).languageCode == 'fa'
-                  ? 'خروج امن از حساب کاربری'
-                  : 'Securely sign out of this account',
+              subtitle: AppLocalizations.of(context).secureSignOutLabel,
               icon: Icons.logout,
               destructive: true,
               onTap: _saving
@@ -692,7 +696,7 @@ class _ProfileActionRow extends StatelessWidget {
       enabled: onTap != null,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppRadii.lg),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 78),
           child: Padding(
@@ -708,7 +712,7 @@ class _ProfileActionRow extends StatelessWidget {
                                 ? Theme.of(context).colorScheme.error
                                 : AppColors.primaryRed)
                             .withValues(alpha: .1),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
                   child: Icon(
                     icon,
@@ -770,16 +774,14 @@ class _ProfileHero extends StatelessWidget {
     final dark = theme.brightness == Brightness.dark;
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppRadii.xl),
         border: Border.all(
           color: AppColors.primaryRed.withValues(alpha: dark ? .34 : .2),
         ),
         gradient: LinearGradient(
           begin: AlignmentDirectional.topStart,
           end: AlignmentDirectional.bottomEnd,
-          colors: dark
-              ? const [Color(0xFF211018), Color(0xFF111720), Color(0xFF0C1017)]
-              : const [Color(0xFFFFFFFF), Color(0xFFFFF3F4), Color(0xFFF6F8FA)],
+          colors: context.premium.heroGradient.colors,
         ),
         boxShadow: [
           BoxShadow(
@@ -895,7 +897,7 @@ class _GuestFeatureTile extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: AppColors.teal.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppRadii.md),
             ),
             child: Icon(icon, color: AppColors.teal, size: 22),
           ),
