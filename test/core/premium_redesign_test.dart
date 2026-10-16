@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rad_emigrate/core/theme/premium_tokens.dart';
+import 'package:rad_emigrate/core/theme/app_theme.dart';
 import 'package:rad_emigrate/core/widgets/secondary_destinations.dart';
 import 'package:rad_emigrate/features/admin/data/admin_operations_repository.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
@@ -19,6 +20,14 @@ double contrast(Color a, Color b) =>
 
 void main() {
   test('semantic text and status foregrounds are readable in both themes', () {
+    for (final theme in [AppTheme.light(), AppTheme.dark()]) {
+      final rail = theme.navigationRailTheme;
+      expect(
+        contrast(rail.selectedLabelTextStyle!.color!, rail.backgroundColor!),
+        greaterThanOrEqualTo(4.5),
+        reason: 'Selected desktop labels must remain readable outside the icon indicator',
+      );
+    }
     for (final tokens in [PremiumTokens.light, PremiumTokens.dark]) {
       for (final foreground in [
         tokens.text,

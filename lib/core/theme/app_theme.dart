@@ -299,8 +299,8 @@ abstract final class AppTheme {
         indicatorColor: AppColors.primaryRed,
         selectedIconTheme: const IconThemeData(color: Colors.white),
         unselectedIconTheme: IconThemeData(color: textSecondary),
-        selectedLabelTextStyle: const TextStyle(
-          color: Colors.white,
+        selectedLabelTextStyle: TextStyle(
+          color: textPrimary,
           fontWeight: FontWeight.w700,
           fontFamily: 'Vazirmatn',
           letterSpacing: 0,
