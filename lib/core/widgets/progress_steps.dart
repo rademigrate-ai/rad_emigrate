@@ -46,7 +46,7 @@ class _StepRow extends StatelessWidget {
     final color = done
         ? AppColors.success
         : current
-        ? scheme.secondary
+        ? scheme.primary
         : scheme.onSurfaceVariant;
     final duration = AppMotion.duration(context, AppMotion.progress);
 
@@ -120,7 +120,7 @@ class _StepRow extends StatelessWidget {
                 child: AnimatedDefaultTextStyle(
                   duration: duration,
                   curve: AppMotion.curve(context),
-                  style: TextStyle(
+                  style: theme.textTheme.bodyMedium!.copyWith(
                     fontSize: 14,
                     fontWeight: current ? FontWeight.w700 : FontWeight.w400,
                     color: current || done

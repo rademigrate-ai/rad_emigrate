@@ -1,8 +1,9 @@
 """Labelled, resized review indexes; original screenshot PNGs remain intact."""
+import os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageOps
 
-OUT = Path('docs/qa/pr54/redesign')
+OUT = Path(os.environ.get('RAD_QA_OUTPUT', 'docs/qa/pr54/redesign'))
 for size in ['mobile', 'tablet', 'desktop']:
     for locale in ['en', 'fa']:
         for theme in ['light', 'dark']:

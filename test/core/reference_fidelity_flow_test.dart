@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rad_emigrate/visual_qa_main.dart';
+import 'package:rad_emigrate/core/widgets/progress_steps.dart';
 import 'package:rad_emigrate/features/global_time/presentation/pages/world_clock_page.dart';
 import 'package:rad_emigrate/features/global_time/presentation/providers/global_time_controller.dart';
 import 'package:rad_emigrate/features/global_time/presentation/widgets/reference_city_clock.dart';
@@ -108,4 +109,32 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('Persian case timeline retains the bundled shaping typeface', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    await tester.pumpWidget(
+      VisualQaApp(
+        preferences: preferences,
+        initialScreen: 'cases',
+        locale: const Locale('fa'),
+      ),
+    );
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(find.textContaining('پرونده آزمایشی تحصیل'));
+    await tester.pump(const Duration(milliseconds: 400));
+    final labels = tester.widgetList<AnimatedDefaultTextStyle>(
+      find.descendant(
+        of: find.byType(ProgressSteps),
+        matching: find.byType(AnimatedDefaultTextStyle),
+      ),
+    );
+    expect(labels.length, 5);
+    for (final label in labels) {
+      expect(label.style.fontFamily, 'Vazirmatn');
+    }
+    expect(tester.takeException(), isNull);
+  });
 }

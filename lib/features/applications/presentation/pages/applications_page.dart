@@ -267,6 +267,12 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                       return FilterChip(
                         label: Text(_statusLabel(status, l10n)),
                         selected: app.status == status,
+                        selectedColor: context.premium.accent,
+                        labelStyle: TextStyle(
+                          color: app.status == status
+                              ? Colors.white
+                              : context.premium.mutedText,
+                        ),
                         onSelected: _updatingStatus
                             ? null
                             : (_) => _updateStatus(app, status),
