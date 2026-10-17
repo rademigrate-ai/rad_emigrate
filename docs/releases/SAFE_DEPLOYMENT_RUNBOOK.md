@@ -1,159 +1,105 @@
-# RAD EMIGRATE — STAGE 1 SAFE DEPLOYMENT & RECOVERY RUNBOOK
+# RAD Emigrate — Stage 1 production security cutover runbook (CORRECTED)
 
-**Target Project:** `inshddthftkhcdosoqcn` (Production Supabase)  
-**Execution Authority:** Production DBA / Project Owner Only  
-**Antigravity Agent Role:** Read-Only Verification & Artifact Preparation  
-**Required Window:** Low-traffic maintenance window (estimated execution time: < 3 minutes)  
-**Revision Date:** October 17, 2026  
+> **RELEASE GATE: NO-GO as of 2026-10-17. READ THIS BEFORE EXECUTING ANY SQL.**
+>
+> This supersedes the earlier unverified runbook, which mistakenly:
+> (1) instructed ordinary `psql -f` without recording new versions in `supabase_migrations.schema_migrations`;
+> (2) asserted deploying a quota-reservation-dependent Edge Function *before* the quota migration would be safe;
+> (3) used incorrect `ai_models` constraint names; and (4) assumed backup/PITR availability and old model counts without proof.
+>
+> **Do not apply anything to Production until the reconciliation and operator gates below PASS.** A successful clean-schema CI test proves only isolated reconstruction.
 
----
+**Master Task:** [#57](https://github.com/rademigrate-ai/rad_emigrate/issues/57)  
+**Security migration PR:** [#48](https://github.com/rademigrate-ai/rad_emigrate/pull/48) — 5 files; not merged or deployed.  
+**Client/Edge compatibility PR:** [#56](https://github.com/rademigrate-ai/rad_emigrate/pull/56) — under review.  
+**Combined integration trial:** [#59](https://github.com/rademigrate-ai/rad_emigrate/pull/59) — 7/7 CI jobs PASSED, local 491 Flutter tests passed, **DO NOT MERGE** integration probe.  
+**Live project:** `inshddthftkhcdosoqcn` (RAD Supabase).  
+**Read-only live forensic ledger:** [LIVE_MIGRATION_RECONCILIATION_20261017.md](LIVE_MIGRATION_RECONCILIATION_20261017.md).
 
-## 1. PRE-DEPLOYMENT PREREQUISITES & SAFETY CHECKLIST
+## 1. Exact production checks established by direct read-only queries
 
-Before executing ANY database migration in Production, the DBA and Project Owner must verify each prerequisite item:
+| Requirement | Observed on 2026-10-17 |
+|---|---|
+| Live migration ledger | **47** versions, latest `20261007212140_stage9_security_grant_hardening` |
+| `main` migration folder | **46** SQL files |
+| Historical aliases, name matches only | **16** names have different recorded versions |
+| Nonmatching named lineages | 4 live-only / 3 repo-only |
+| New Stage 1 versions recorded | **0 of 5** |
+| `consume_ai_daily_quota(uuid,text)` | count-only, **no** atomic reservation `request_id` |
+| `submit_consultation_request`, `list_admin_consultations` | both **absent** |
+| `ai_models` rows | **721**; **0** negative `consecutive_failures`, negative `measured_latency_ms`, or out-of-[0,1] `recent_success_rate` |
+| New numeric CHECK constraints | all **3 absent** |
+| `consultation_requests` | 0 records; direct table privileges exist, subject to RLS |
+| Backups / PITR / recovery test | **UNVERIFIED**, not assumed |
+| Real production SMTP/recovery end-to-end | **UNVERIFIED**, not assumed |
 
-- [ ] **1. Live Database Ledger Verification (Read-Only Pre-flight):**
-  - Run the following check against `inshddthftkhcdosoqcn` to confirm baseline parity:
-    ```sql
-    SELECT version, name FROM supabase_migrations.schema_migrations 
-    ORDER BY version DESC LIMIT 5;
-    -- Expected: Top version is 20261007212140. None of the five 20261010* or 20261012* migrations are present.
-    ```
-- [ ] **2. Client & Edge Code Deployed:** Companion PR from `security/stage1-reconciliation-20261017` is built and deployed to production web and edge runtimes.
-- [ ] **3. Live Backup & PITR Confirmed:** 
-  - Access Supabase Dashboard -> Database -> Backups.
-  - Verify a fresh backup snapshot exists.
-  - Confirm Point-In-Time-Recovery (PITR) is active and the recovery window includes the current timestamp.
-- [ ] **4. Write Traffic Quiescence:** 
-  - Coordinate scheduled maintenance banner or execute during minimum user activity.
-- [ ] **5. Checksums Verified on Execution Machine:**
-  - Verify SHA-256 hashes of the 5 migration files matching `docs/releases/PHASE_A_SECURITY_MANIFEST.json`.
-- [ ] **6. Strict Transaction Isolation:**
-  - Execute each migration within an explicit transaction block (`BEGIN ... COMMIT`).
-  - Set statement timeout (`SET statement_timeout = '15s';`) to prevent indefinite lock waits.
+**Consequence:** A blind `supabase db push` or `supabase migration repair` is unsafe: version-based matching may replay historical same-name migrations. **Do not mutate existing 47 records, fake equivalence, or drop data.**
 
----
+## 2. Five proposed additive migrations (in source order only)
 
-## 2. STEP-BY-STEP DBA EXECUTION SEQUENCE
+The following are **pending files in PR #48**, not commands to run today:
 
-Execute the 5 migrations in strict sequential order. Do NOT skip any step.
+| Step | Exact source file | Effect | Expected postcondition |
+|---|---|---|---|
+| 1 | `20261010010000_stage1_p0_security_completion.sql` | Consultation confidentiality, explicit admin RPC and Feed publication protection | RLS/column grants and admin RPC checked under cross-role tests |
+| 2 | `20261010055013_stage1_atomic_ai_quota_reservation.sql` | Serialized quota check + INSERT reservation row | `consume_ai_daily_quota` returns `request_id`, disallows anon/authenticated direct EXECUTE |
+| 3 | `20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql` | Reject loopback/link-local IPv4-mapped IPv6 URLs | Negative SSRF regression test passes |
+| 4 | `20261012110945_stage1_security_abuse_storage_alignment.sql` | Consultation submission RPC/abuse control; private Storage upsert ACLs | `submit_consultation_request` present; direct INSERT revoked; Storage ownership intact |
+| 5 | `20261012230000_ai_models_check_constraints_alignment.sql` | Non-negative and [0,1] numeric limits | All three **actual source-defined names** `ai_models_consecutive_failures_check`, `ai_models_measured_latency_ms_check`, `ai_models_recent_success_rate_check` exist and are validated |
 
-### Step 1: P0 Security Completion & Consultation Confidentiality
-**File:** `supabase/migrations/20261010010000_stage1_p0_security_completion.sql`  
-**Expected Duration:** < 500ms  
-**Pre-condition:** Production ledger at `20261007212140`.  
-**Execution:**
-```bash
-psql "$PROD_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20261010010000_stage1_p0_security_completion.sql
-```
-*Note: This script contains an internal `begin; ... commit;` block.*  
-**Post-Flight Check 1:**
+**Never use the three outdated constraint names** `ai_models_consecutive_failures_nonnegative`, `ai_models_last_latency_ms_nonnegative`, `ai_models_rolling_success_rate_range`; they are not defined in Step 5. Validate against actual source and `pg_constraint`, not an old report.
+
+## 3. Mandatory before any authorized change (STOP if any item incomplete)
+
+- [ ] Verify the exact source SHAs and the 5 SQL SHA-256 hashes against `docs/releases/PHASE_A_SECURITY_MANIFEST.json` before change.
+- [ ] Fully reconcile the **27 exact version/name matches, 16 timestamp aliases, 4 live-only and 3 repo-only names** to catalog effects. Obtain separate semantic-equality proof for aliased functions, RLS and grants; prevent any historical replay. No attempts to modify a remote ledger without separately reviewed migration-history plan.
+- [ ] Prove a disposable, production-equivalent clone reproduces live roles, RLS, functions, triggers, Storage predicates, Vault references (without secrets), cron and data constraints; compare **before/after** fingerprints.
+- [ ] Verify backups, PITR and recovery window via the authorized Supabase dashboard/operator. Document the actual restore procedure and practice a recovery on an isolated clone. Never assert backup availability from project tier alone.
+- [ ] Freeze mutually-dependent client, Edge and migrations at independently reviewed SHAs; have a tested canary and revert path. Confirm that the Flutter Web build includes compatible consultation RPC handling.
+- [ ] Prove negative tests: anon denied private RPCs; users denied admin notes/role escalation; ordinary users cannot publish Feed; AI quota concurrent requests never exceed the limit; Storage cannot leave owner's folder or accepted MIME/size; malformed provider URLs fail closed.
+- [ ] Obtain explicit release owner/DBA approval, defined change window, monitoring and a **write-traffic quiescence** mechanism covering consultation submission and AI. If traffic cannot be paused, demonstrate a backward-compatible dual-version deployment on a disposable clone before rollout.
+
+## 4. Safe **planned** release order (requires all gates; NOT EXECUTED)
+
+1. Take a verified backup; record the restore checkpoint and schema fingerprints, health metrics, Auth/Edge deployed versions, and 47-entry ledger fingerprint.
+2. Quiesce relevant writes or provide an independently proven compatibility bridge. **Never** deploy new PR #56 AI Edge handler while the production quota RPC still returns **no `request_id`**: it will correctly fail closed (500 `quota_reservation_invalid`). Conversely, new database quota reservation can double-count if an *old* Edge handler continues independently inserting requests.
+3. Install a tested Flutter client version capable of invoking the new consultation RPC and strict missing-RPC fallback. Keep critical actions disabled during cutover until API/DB align.
+4. Apply each forward-only migration in its intended transaction to Production **through an approved ledger-aware procedure** that records its **new** migration version exactly once. Raw `psql -f` alone executes SQL but does **not** record the migration in Supabase history. Do not repair or forge existing 47 entries to make pushes succeed. Confirm postconditions and exact new ledger entries after each operation.
+5. Deploy matching reviewed Edge Functions and client build only after the corresponding RPCs are operational. Confirm Edge digest/versions, auth modes and that the public client never receives service-role credentials.
+6. Run production authorized smoke canaries: ordinary/admin registration/login/recovery, consultation submit/list/update, AI successful request and exactly-once quota row, 429 quota enforcement, expired-reset denial, Feed review-only publish, document upload/download ownership, and full rollback readiness. No synthetic personal data beyond authorized test accounts.
+7. Restore traffic only if all checks pass; monitor rejected credentials, 5xx, quota failures, review publication, Admin access, and per-user isolation. If any fail: stop traffic, revert release components where safe and follow the verified recovery strategy. **Reverting a Git PR is not a database rollback.**
+
+## 5. Read-only SQL verification snippets for authorized operator
+
 ```sql
-SELECT count(*) FROM pg_proc WHERE proname IN ('list_admin_consultations', 'update_admin_consultation', 'publish_content_draft');
--- Expected: 3
-SELECT has_table_privilege('authenticated', 'public.consultation_requests', 'UPDATE');
--- Expected: false
+-- Existing history is authoritative:
+select version, name from supabase_migrations.schema_migrations
+order by version desc limit 10;
+
+-- Guard expected new versions; must currently return ZERO rows:
+select version, name from supabase_migrations.schema_migrations
+where version in ('20261010010000','20261010055013','20261010070000',
+                  '20261012110945','20261012230000');
+
+-- Validate exact CHECK names from the fifth migration AFTER it runs:
+select conname, convalidated, pg_get_constraintdef(oid) as definition
+from pg_constraint where conrelid='public.ai_models'::regclass
+and conname in ('ai_models_consecutive_failures_check',
+                'ai_models_measured_latency_ms_check',
+                'ai_models_recent_success_rate_check');
+
+-- After Step 2, check return shape through isolated role-gated integration tests.
+-- Never invoke quota RPC on live user data purely to probe it (it creates a row).
+select p.oid::regprocedure::text as signature,
+       p.prosecdef as security_definer,
+       has_function_privilege('authenticated',p.oid,'EXECUTE') as authenticated_execute
+from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+where n.nspname='public' and p.proname='consume_ai_daily_quota';
 ```
 
----
+## 6. Evidence and non-goals
 
-### Step 2: Atomic AI Quota Reservation
-**File:** `supabase/migrations/20261010055013_stage1_atomic_ai_quota_reservation.sql`  
-**Expected Duration:** < 300ms  
-**Execution:**
-```bash
-psql "$PROD_DB_URL" -v ON_ERROR_STOP=1 << 'EOF'
-BEGIN;
-\i supabase/migrations/20261010055013_stage1_atomic_ai_quota_reservation.sql
-COMMIT;
-EOF
-```
-*Note: Migration 2 does not contain an internal transaction block; wrap in `BEGIN; ... COMMIT;`.*  
-**Post-Flight Check 2:**
-```sql
-SELECT prosrc LIKE '%atomic_quota_reservation%' 
-FROM pg_proc 
-WHERE proname = 'consume_ai_daily_quota';
--- Expected: true
-```
-
----
-
-### Step 3: Dual-Stack SSRF Hardening (IPv4-Mapped IPv6)
-**File:** `supabase/migrations/20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql`  
-**Expected Duration:** < 300ms  
-**Execution:**
-```bash
-psql "$PROD_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql
-```
-**Post-Flight Check 3:**
-```sql
-SELECT private.is_safe_public_https_url('https://[::ffff:127.0.0.1]/api');
--- Expected: false (Loopback blocked)
-SELECT private.is_safe_public_https_url('https://[::ffff:169.254.169.254]/api');
--- Expected: false (Link-local blocked)
-SELECT private.is_safe_public_https_url('https://api.openai.com/v1');
--- Expected: true (Public safe URL allowed)
-```
-
----
-
-### Step 4: Abuse Control & Storage Upsert Alignment
-**File:** `supabase/migrations/20261012110945_stage1_security_abuse_storage_alignment.sql`  
-**Expected Duration:** < 500ms  
-**Execution:**
-```bash
-psql "$PROD_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20261012110945_stage1_security_abuse_storage_alignment.sql
-```
-**Post-Flight Check 4:**
-```sql
-SELECT count(*) FROM pg_proc WHERE proname = 'submit_consultation_request';
--- Expected: 1
-SELECT has_table_privilege('authenticated', 'public.consultation_requests', 'INSERT');
--- Expected: false (Direct table insert fully revoked)
-SELECT count(*) FROM pg_policies WHERE tablename = 'objects' AND policyname = 'users update own documents';
--- Expected: 1
-```
-
----
-
-### Step 5: AI Model Numeric CHECK Constraint Validation
-**File:** `supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql`  
-**Expected Duration:** < 1000ms (validates 682 rows)  
-**Execution:**
-```bash
-psql "$PROD_DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql
-```
-**Post-Flight Check 5:**
-```sql
-SELECT conname, convalidated 
-FROM pg_constraint 
-WHERE conname IN (
-  'ai_models_consecutive_failures_nonnegative',
-  'ai_models_last_latency_ms_nonnegative',
-  'ai_models_rolling_success_rate_range'
-);
--- Expected: 3 rows, all convalidated = true
-```
-
----
-
-## 3. ROLLBACK & DISASTER RECOVERY PROCEDURES
-
-> [!CAUTION]
-> Reverting the Git Pull Request DOES NOT revert database changes applied to PostgreSQL. Automatic down-migrations are not supported by Supabase.
-
-### 3.1 Failure During Apply
-If any migration fails midway through execution:
-1. The failing script will automatically roll back its active transaction due to `ON_ERROR_STOP=1` and `BEGIN ... COMMIT`.
-2. Do NOT attempt to run `supabase db push` or `migration repair`.
-3. Assess the exact error code from PostgreSQL.
-4. If remediation requires rolling back to the pre-change state:
-   - Restore from the verified Point-In-Time-Recovery (PITR) point created immediately prior to the change window.
-
-### 3.2 Post-Migration Health Probes & Alarms
-Run following end-to-end user checks immediately post-deployment:
-1. **Public Route Access:** Verify `/`, `/destinations`, `/visa` load anonymously.
-2. **Consultation Submission:** Submit a synthetic test consultation via authenticated user; confirm ticket is created with status `'submitted'`.
-3. **AI Chat Interaction:** Execute an AI question; confirm daily quota decreases by exactly 1, request status transitions to `'succeeded'`, and no double rows are created.
-4. **Admin Console:** Log in with admin credentials; confirm `/admin/consultations` lists tickets and allows updating status with internal notes.
+- Separate review gate PASS: PR #59 composite CI `39057208355` 7/7, Flutter 491/491, local static Phase-A 7/7, recovery 8/8.
+- Production gate **NO-GO** until ledger semantic differences, backup/PITR, release concurrency, Edge/DB ordering and real browser/user acceptance are verified.
+- No action in this document authorizes unreviewed Production DDL, migration-history modifications, reset, data deletion, Auth/Vault/Edge changes, or automatic Feed publication.
+- Supabase CLI authoritative reference: https://supabase.com/docs/reference/cli/supabase-db-push — its `--dry-run` lists pending migrations by **version**, not semantic alias equivalence.
