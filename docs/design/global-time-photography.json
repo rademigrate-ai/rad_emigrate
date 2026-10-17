@@ -1,0 +1,58 @@
+{
+  "notes": "Authentic editorial destination/city context; no endorsement, eligibility or immigration outcome implied. Downloaded and visually inspected; bundled for offline reliability.",
+  "photographs": [
+    {
+      "asset": "assets/images/destinations/ae.jpg",
+      "city": "Dubai",
+      "source": "https://www.pexels.com/photo/dubai-skyline-at-sunset-featuring-burj-khalifa-36454371/",
+      "download": "https://images.pexels.com/photos/36454371/pexels-photo-36454371.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "2c30c42683ad3b73433e07d001b96e91b20bb1731f3a07c61d078d91b155e333"
+    },
+    {
+      "asset": "assets/images/destinations/om.jpg",
+      "city": "Muscat",
+      "source": "https://www.pexels.com/photo/scenic-view-of-mosque-and-city-in-muscat-oman-30798979/",
+      "download": "https://images.pexels.com/photos/30798979/pexels-photo-30798979.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "1f8762414dc03aad6a810c9da8c4608530b97fbe08cfba61a48f99cc3e0f9531"
+    },
+    {
+      "asset": "assets/images/destinations/no.jpg",
+      "city": "Oslo",
+      "source": "https://www.pexels.com/photo/contemporary-architecture-in-oslo-s-skyline-32991340/",
+      "download": "https://images.pexels.com/photos/32991340/pexels-photo-32991340.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "9241bcff789e3043f93f3cc16c96af9e122583e7f7ba8f16bfda259c433f34a9"
+    },
+    {
+      "asset": "assets/images/destinations/my.jpg",
+      "city": "Kuala Lumpur",
+      "source": "https://www.pexels.com/photo/petronas-towers-in-kuala-lumpur-18622977/",
+      "download": "https://images.pexels.com/photos/18622977/pexels-photo-18622977.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "06fa744ee4b4880c939fc581bd17899f77217b9a2488a9719ef16d7b8f7ca997"
+    },
+    {
+      "asset": "assets/images/destinations/tehran.jpg",
+      "city": "Tehran",
+      "source": "https://www.pexels.com/photo/milad-tower-in-iran-at-night-3799150/",
+      "download": "https://images.pexels.com/photos/3799150/pexels-photo-3799150.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "c7d1842ac2bf54d380bd03866b9f6f29e92509acabd270e18cb9e530b18a9e35"
+    },
+    {
+      "asset": "assets/images/destinations/berlin.jpg",
+      "city": "Berlin",
+      "source": "https://www.pexels.com/photo/brandenburg-gate-in-berlin-20534333/",
+      "download": "https://images.pexels.com/photos/20534333/pexels-photo-20534333.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      "license": "https://www.pexels.com/license/",
+      "sha256": "3a85fc97fe9b55a83353798d1fa7f15fad6da1572dbae9c9353131c6b2e7f495"
+    }
+  ],
+  "land": {
+    "asset": "assets/images/world_land.geojson",
+    "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson",
+    "license": "Public domain: https://www.naturalearthdata.com/about/terms-of-use/"
+  }
+}

@@ -2,11 +2,11 @@
 {{flutter_build_config}}
 
 function showStartupFailure() {
-  document.getElementById('rad-startup-spinner')?.remove();
-  const fa = document.getElementById('rad-startup-fa');
-  const en = document.getElementById('rad-startup-en');
-  if (fa) fa.textContent = 'بارگذاری انجام نشد. دوباره تلاش کنید.';
-  if (en) en.textContent = 'RAD could not load. Please try again.';
+  document.querySelector('.rad-startup-bird')?.remove();
+  const message = document.getElementById('rad-startup-message');
+  if (message) message.textContent = window.radStartupFa
+    ? 'بارگذاری انجام نشد. دوباره تلاش کنید.'
+    : 'RAD could not load. Please try again.';
   const retry = document.getElementById('rad-startup-retry');
   if (retry) retry.hidden = false;
 }

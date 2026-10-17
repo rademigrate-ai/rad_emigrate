@@ -1,3 +1,5 @@
+import '../../../../core/widgets/rad_loading.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -296,7 +298,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: RadPending(),
                         )
                       : Text(
                           _cooldown > 0

@@ -35,15 +35,16 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    // A 48 px glass body plus the raised bird's headroom. The entire 60 px
+    // A 64 px glass body plus the raised bird's headroom. The entire 76 px
     // destination is interactive; device-safe insets remain outside it.
-    final height = 42.0 + labelHeight(context);
+    final height = 58.0 + labelHeight(context);
     const clipper = _PhoenixSurfaceClipper();
 
     return Material(
       color: Colors.transparent,
       child: SafeArea(
         top: false,
+        maintainBottomViewPadding: true,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: LayoutBuilder(
@@ -149,7 +150,7 @@ class _PhoenixSurfaceClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final rect = Rect.fromLTRB(1, 11, size.width - 1, size.height - 1);
     return Path()
-      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(24)));
+      ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(32)));
   }
 
   @override

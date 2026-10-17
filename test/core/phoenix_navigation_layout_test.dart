@@ -23,6 +23,7 @@ Future<GoRouter> _pump(
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = Size(width, 844);
   tester.view.padding = const FakeViewPadding(bottom: 34);
+  tester.view.viewPadding = const FakeViewPadding(bottom: 34);
   addTearDown(tester.view.reset);
   final router = GoRouter(
     initialLocation: '/dashboard',
@@ -103,6 +104,33 @@ void main() {
     expect(tester.takeException(), isNull);
     handle.dispose();
   });
+
+  testWidgets(
+    'browser resizing and keyboard preserve route and safe navigation',
+    (tester) async {
+      final router = await _pump(tester, locale: const Locale('en'));
+      await tester.tap(find.text('Explore'));
+      await tester.pumpAndSettle();
+      tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+      await tester.pumpAndSettle();
+      expect(find.byType(RadAiBirdNavIcon), findsNothing);
+      expect(router.routeInformationProvider.value.uri.path, '/visa');
+      tester.view.viewInsets = const FakeViewPadding();
+      tester.view.physicalSize = const Size(744, 620);
+      await tester.pumpAndSettle();
+      expect(find.byType(RadAiBirdNavIcon), findsOneWidget);
+      expect(
+        tester
+            .getRect(
+              find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
+            )
+            .bottom,
+        lessThanOrEqualTo(620 - 34 - 8),
+      );
+      expect(router.routeInformationProvider.value.uri.path, '/visa');
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final locale in ['fa', 'en']) {
     for (final dark in [false, true]) {
       testWidgets(
@@ -115,7 +143,7 @@ void main() {
           final phoenix = tester.getRect(find.byType(RadAiBirdNavIcon));
           expect(surface.bottom, lessThanOrEqualTo(844 - 34 - 8));
           expect(surface.left, 16);
-          expect(surface.height, 60);
+          expect(surface.height, 76);
           expect(phoenix.center.dx, closeTo(195, 0.1));
           expect(phoenix.width, greaterThan(100));
           final shapeFinder = find.descendant(
@@ -124,7 +152,7 @@ void main() {
           );
           final shape = tester.widget<PhysicalShape>(shapeFinder);
           final path = shape.clipper.getClip(tester.getSize(shapeFinder));
-          expect(path.getBounds().height, 48);
+          expect(path.getBounds().height, 64);
           expect(
             path.contains(Offset(surface.width / 2, 6)),
             isFalse,
@@ -146,7 +174,7 @@ void main() {
           );
           expect(bird.assetName, 'assets/branding/rad_flying_bird_1024.png');
           final birdRect = tester.getRect(find.byType(RadAiBird));
-          expect(birdRect.width, closeTo(44, 0.1));
+          expect(birdRect.width, closeTo(52, 0.1));
           expect(birdRect.top, lessThan(surface.top + path.getBounds().top));
           for (final label in find.byType(Text).evaluate()) {
             final semantics = find

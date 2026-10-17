@@ -67,7 +67,7 @@ class LoadingState extends StatelessWidget {
     final label = semanticsLabel ?? AppLocalizations.of(context).loading;
     final visual = _buildVisual(context, label);
     final darkSurface = dark || Theme.of(context).brightness == Brightness.dark;
-    final child = size == RadLoadingSize.fullScreen
+    final child = size == RadLoadingSize.fullScreen && !_isSplash
         ? DecoratedBox(
             decoration: BoxDecoration(
               gradient: RadialGradient(

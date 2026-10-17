@@ -17,6 +17,7 @@ class GlobalTimeState {
     this.scrubUtc,
     this.isLoading = true,
     this.lastResolve,
+    this.timezoneUnavailable = false,
   });
 
   final List<City> favorites;
@@ -26,6 +27,7 @@ class GlobalTimeState {
   final DateTime? scrubUtc;
   final bool isLoading;
   final GeoResolveResult? lastResolve;
+  final bool timezoneUnavailable;
 
   GlobalTimeState copyWith({
     List<City>? favorites,
@@ -38,6 +40,7 @@ class GlobalTimeState {
     bool? isLoading,
     GeoResolveResult? lastResolve,
     bool clearResolve = false,
+    bool? timezoneUnavailable,
   }) {
     return GlobalTimeState(
       favorites: favorites ?? this.favorites,
@@ -47,6 +50,7 @@ class GlobalTimeState {
       scrubUtc: clearScrub ? null : (scrubUtc ?? this.scrubUtc),
       isLoading: isLoading ?? this.isLoading,
       lastResolve: clearResolve ? null : (lastResolve ?? this.lastResolve),
+      timezoneUnavailable: timezoneUnavailable ?? this.timezoneUnavailable,
     );
   }
 }
@@ -62,22 +66,31 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
   Future<void> _init() async {
     try {
       await TimezoneEngine.ensureInitialized();
-      // Geographic boundaries are optional for the clock itself. A missing
-      // map dataset must never trap the entire page behind a loading spinner.
-      await GeoTimezoneResolver.ensureReady();
     } catch (_) {
       // Continue with city clocks and report unavailable boundary data
       // through GeoTimezoneResolver.resolve when the map is tapped.
     }
     if (!mounted) return;
+    if (!TimezoneEngine.isReady) {
+      state = state.copyWith(isLoading: false, timezoneUnavailable: true);
+      return;
+    }
     try {
-      final repo = _ref.read(favoritesRepositoryProvider);
-      final favs = repo?.load() ?? List<City>.from(CityCatalog.defaults);
-      state = state.copyWith(favorites: favs, isLoading: false);
+      final prefs = await _ref.read(sharedPreferencesProvider.future);
+      if (!mounted) return;
+      final repo = FavoritesRepository(prefs);
+      final favs = repo.load();
+      state = state.copyWith(
+        favorites: favs,
+        isLoading: false,
+        timezoneUnavailable: false,
+      );
     } catch (_) {
+      if (!mounted) return;
       state = state.copyWith(
         favorites: List<City>.from(CityCatalog.defaults),
         isLoading: false,
+        timezoneUnavailable: false,
       );
     }
     _startTicker();
@@ -90,6 +103,11 @@ class GlobalTimeController extends StateNotifier<GlobalTimeState> {
         state = state.copyWith();
       }
     });
+  }
+
+  Future<void> retryInitialization() async {
+    state = state.copyWith(isLoading: true);
+    await _init();
   }
 
   @override

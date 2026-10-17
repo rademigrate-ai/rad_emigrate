@@ -235,7 +235,7 @@ class _AppShellState extends ConsumerState<AppShell> {
           ),
         ],
       ),
-      bottomNavigationBar: wide
+      bottomNavigationBar: wide || MediaQuery.viewInsetsOf(context).bottom > 0
           ? null
           : _RadBottomBar(
               primary: primary,
@@ -377,10 +377,10 @@ class _NavSlot extends StatelessWidget {
             children: [
               if (selected)
                 Positioned(
-                  bottom: 2,
+                  bottom: 8,
                   child: Container(
                     width: 48,
-                    height: labelHeight + 26,
+                    height: labelHeight + 38,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: [
@@ -393,7 +393,7 @@ class _NavSlot extends StatelessWidget {
                   ),
                 ),
               Positioned(
-                bottom: labelHeight + 3,
+                bottom: labelHeight + 9,
                 child: AnimatedScale(
                   duration: AppMotion.duration(
                     context,
@@ -410,7 +410,7 @@ class _NavSlot extends StatelessWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 2,
+                bottom: 8,
                 child: SizedBox(
                   height: labelHeight,
                   child: Center(

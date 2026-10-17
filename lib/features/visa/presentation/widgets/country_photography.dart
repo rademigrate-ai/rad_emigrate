@@ -12,6 +12,10 @@ abstract final class CountryPhotography {
   static const _fallback = '$_root/fallback.jpg';
 
   static const Map<String, String> _byCode = {
+    'AE': '$_root/ae.jpg',
+    'OM': '$_root/om.jpg',
+    'NO': '$_root/no.jpg',
+    'MY': '$_root/my.jpg',
     'AT': '$_root/at.jpg',
     'AU': '$_root/au.jpg',
     'CA': '$_root/ca.jpg',
@@ -45,30 +49,14 @@ abstract final class CountryPhotography {
     double? height,
   }) {
     if (!_byCode.containsKey(code.toUpperCase())) {
-      return Builder(
-        builder: (context) => Container(
-          width: width,
-          height: height,
-          color: context.premium.surfaceElevated,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.public,
-                  color: context.premium.accentForeground,
-                  size: 40,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  code.toUpperCase(),
-                  textDirection: TextDirection.ltr,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
+      // The neutral travel photograph is not presented as a named city.
+      return Image.asset(
+        _fallback,
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (context, _, _) =>
+            ColoredBox(color: context.premium.surfaceElevated),
       );
     }
     return Image(

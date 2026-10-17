@@ -29,8 +29,8 @@ class FavoritesRepository {
           if (known != null) cities.add(known);
         }
       }
-      if (cities.isEmpty) return List<City>.from(CityCatalog.defaults);
-      return cities;
+      final seen = <String>{};
+      return cities.where((city) => seen.add(city.id)).toList();
     } catch (_) {
       return List<City>.from(CityCatalog.defaults);
     }
