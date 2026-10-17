@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Consultation Security RPC Integration', () {
-    test('ConsultationPage uses submit_consultation_request RPC with safe fallback', () {
+    test('ConsultationPage uses submit_consultation_request RPC with narrow isRpcMissingException fallback', () {
       final file = File(
         'lib/features/consultation/presentation/pages/consultation_page.dart',
       );
@@ -13,10 +13,11 @@ void main() {
       expect(content, contains("'submit_consultation_request'"));
       expect(content, contains("'p_topic': topic"));
       expect(content, contains("'p_message': message"));
-      expect(content, contains("client.from('consultation_requests').insert"));
+      expect(content, contains('isRpcMissingException(e)'));
+      expect(content, contains('rethrow;'));
     });
 
-    test('AdminConsultationsPage uses list_admin_consultations and update_admin_consultation RPCs', () {
+    test('AdminConsultationsPage uses list_admin_consultations and update_admin_consultation with isRpcMissingException', () {
       final file = File(
         'lib/features/admin/presentation/pages/admin_consultations_page.dart',
       );
@@ -27,6 +28,7 @@ void main() {
       expect(content, contains("'p_consultation_id': id"));
       expect(content, contains("'p_status': status"));
       expect(content, contains("'p_admin_note'"));
+      expect(content, contains('isRpcMissingException(e)'));
     });
 
     test('Stage 1 Migration 1 defines list_admin_consultations and update_admin_consultation', () {

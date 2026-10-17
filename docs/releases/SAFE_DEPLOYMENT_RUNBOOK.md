@@ -12,16 +12,23 @@
 
 Before executing ANY database migration in Production, the DBA and Project Owner must verify each prerequisite item:
 
-- [ ] **1. Client & Edge Code Deployed:** Companion commit `19127c6` (or PR #48 companion PR) is built and deployed to production web and edge runtimes.
-- [ ] **2. Live Backup & PITR Confirmed:** 
+- [ ] **1. Live Database Ledger Verification (Read-Only Pre-flight):**
+  - Run the following check against `inshddthftkhcdosoqcn` to confirm baseline parity:
+    ```sql
+    SELECT version, name FROM supabase_migrations.schema_migrations 
+    ORDER BY version DESC LIMIT 5;
+    -- Expected: Top version is 20261007212140. None of the five 20261010* or 20261012* migrations are present.
+    ```
+- [ ] **2. Client & Edge Code Deployed:** Companion PR from `security/stage1-reconciliation-20261017` is built and deployed to production web and edge runtimes.
+- [ ] **3. Live Backup & PITR Confirmed:** 
   - Access Supabase Dashboard -> Database -> Backups.
   - Verify a fresh backup snapshot exists.
   - Confirm Point-In-Time-Recovery (PITR) is active and the recovery window includes the current timestamp.
-- [ ] **3. Write Traffic Quiescence:** 
+- [ ] **4. Write Traffic Quiescence:** 
   - Coordinate scheduled maintenance banner or execute during minimum user activity.
-- [ ] **4. Checksums Verified on Execution Machine:**
+- [ ] **5. Checksums Verified on Execution Machine:**
   - Verify SHA-256 hashes of the 5 migration files matching `docs/releases/PHASE_A_SECURITY_MANIFEST.json`.
-- [ ] **5. Strict Transaction Isolation:**
+- [ ] **6. Strict Transaction Isolation:**
   - Execute each migration within an explicit transaction block (`BEGIN ... COMMIT`).
   - Set statement timeout (`SET statement_timeout = '15s';`) to prevent indefinite lock waits.
 

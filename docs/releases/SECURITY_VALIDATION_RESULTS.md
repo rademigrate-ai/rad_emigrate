@@ -16,13 +16,15 @@
 | Gate | Target Component | Command | Result | Duration | Notes |
 |---|---|---|---|---|---|
 | **Gate 1** | Migration SHA-256 Hashes | `Get-FileHash` vs Manifest | **PASS** | < 1s | 5/5 files match manifest byte-for-byte |
-| **Gate 2** | Code Formatting | `dart format --set-exit-if-changed lib test` | **PASS** | 2.29s | 247 files formatted (0 issues) |
-| **Gate 3** | Static Code Analysis | `flutter analyze --no-pub` | **PASS** | 68.9s | "No issues found!" |
-| **Gate 4** | Full Test Suite | `flutter test --no-pub` | **PASS** | 101s | 436 tests passed (100% green) |
-| **Gate 5** | Consultation Security RPCs | `flutter test test/features/consultation/...` | **PASS** | 0.8s | 4/4 assertions passed |
-| **Gate 6** | AI Orchestrator Tests | `ai_orchestrator_test.ts` (18 tests) | **PASS** | CI Deno | Tests 17 & 18 verify atomic reservation & limits |
-| **Gate 7** | Production Web Release Build | `flutter build web --no-pub` | **PASS** | 130.2s | Release JS bundle created in `build/web` |
-| **Gate 8** | Guest Mode & Auth Preservation | `test/features/guest_mode/...` | **PASS** | 4.2s | All PR #51 guest & auth behaviors intact |
+| **Gate 2** | Code Formatting | `dart format --set-exit-if-changed lib test` | **PASS** | 2.12s | 249 files formatted (0 issues) |
+| **Gate 3** | Static Code Analysis | `flutter analyze --no-pub` | **PASS** | 7.5s | "No issues found!" |
+| **Gate 4** | Full Test Suite | `flutter test --no-pub` | **PASS** | 104s | 446 tests passed (100% green) |
+| **Gate 5** | Consultation Security RPCs & Compat | `flutter test test/core/supabase/... test/features/consultation/...` | **PASS** | 1.8s | 14/14 tests passed (fail-closed negative tests) |
+| **Gate 6** | AI Orchestrator Edge Tests | `ai_orchestrator_test.ts` (20 tests) | **PASS** | CI Deno | Tests 17-20 verify atomic reservation, 429 limit, 503 fail-closed, 500 malformed |
+| **Gate 7** | Production Web Release Build | `flutter build web --no-pub` | **PASS** | 103.3s | Release JS bundle created in `build/web` |
+| **Gate 8** | Android Compilation | `flutter build apk --debug --no-pub` | **PASS** | 78.5s | APK generated at `build/app/outputs/flutter-apk/app-debug.apk` |
+| **Gate 9** | Android Release Signing Gate | `flutter build apk --release --no-pub` | **GATE HELD** | 12.1s | Enforces `:app:verifyReleaseSigning` guard without prod keys |
+| **Gate 10** | Guest Mode & Auth Preservation | `test/features/guest_mode/...` | **PASS** | 4.2s | All PR #51 guest & auth behaviors intact |
 
 ---
 
@@ -30,15 +32,15 @@
 
 ### 2.1 Full Flutter Test Suite Output
 ```text
-01:41 +436: All tests passed!
+01:44 +446: All tests passed!
 ```
-- Includes core navigation, routing, auth controller, profile management, visa catalog, AI assistant, document intelligence, guest mode hydration, visual QA smoke tests, and consultation RPC transitions.
+- Includes core navigation, routing, auth controller, profile management, visa catalog, AI assistant, document intelligence, guest mode hydration, visual QA smoke tests, RPC capability detection (`rpc_compat`), and fail-closed negative error paths.
 - Zero broken tests, zero skipped tests, zero regressions.
 
 ### 2.2 Flutter Analyze Output
 ```text
 Analyzing worktree-security-hardening...
-No issues found! (ran in 68.9s)
+No issues found! (ran in 7.5s)
 ```
 
 ### 2.3 Web Production Build Output
@@ -46,8 +48,14 @@ No issues found! (ran in 68.9s)
 Compiling lib\main.dart for the Web...
 Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 257628 to 1472 bytes (99.4% reduction).
 Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 22392 bytes (98.6% reduction).
-Compiling lib\main.dart for the Web...                            130.2s
+Compiling lib\main.dart for the Web...                            103.3s
 √ Built build\web
+```
+
+### 2.4 Android Toolchain Compilation Output
+```text
+Running Gradle task 'assembleDebug'...                             78.5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
 ```
 
 ---

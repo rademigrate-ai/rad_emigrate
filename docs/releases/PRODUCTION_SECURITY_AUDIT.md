@@ -45,12 +45,16 @@ Our audit identified three distinct layers of state that must be reconciled:
 +-----------------------------------------------------------------------------------+
 ```
 
-### 2.2 Forensic Analysis of the Live Production Ledger
+### 2.2 Forensic Analysis of the Live Production Ledger (Historical Baseline vs Current Session)
 
-1. **Missing Migrations:** The five Stage 1 migrations (`20261010010000`, `20261010055013`, `20261010070000`, `20261012110945`, `20261012230000`) have NOT been applied to Production.
+> [!IMPORTANT]
+> **Live Production State Status: UNVERIFIED in this Session**
+> No live database credentials or interactive database connections were provided for this session. Therefore, live production schema and ledger status are explicitly classified as **UNVERIFIED**. The findings below reflect documented forensic baselines established during the October 12–13, 2026 audits, not newly verified live telemetry. Live database execution remains strictly **NO-GO**.
+
+1. **Missing Migrations:** The five Stage 1 migrations (`20261010010000`, `20261010055013`, `20261010070000`, `20261012110945`, `20261012230000`) were confirmed absent in the historical production ledger.
 2. **Historical Timestamp Aliases (16 Entries):** Historical development resulted in 16 migration ledger entries where filenames in Production differ by seconds/minutes from early branch commits. These aliases MUST NOT be replayed or touched, as doing so would cause duplicate DDL conflicts or corrupt the migration history.
-3. **Live-Only Names (4 Entries):** Certain early migrations exist under alternate names in the live ledger.
-4. **Clean Baseline Parity:** For the 57 application tables, 47 functions, and 117 RLS policies currently active in Production, semantic baseline parity is confirmed. Existing AI models (682 rows) and document processor configurations satisfy all pending CHECK constraints.
+3. **Live-Only Names (4 Entries):** Certain early migrations exist under alternate names in the historical ledger.
+4. **Clean Baseline Parity:** In the baseline audit, 57 application tables, 47 functions, and 117 RLS policies were active in Production, satisfying semantic baseline parity. Existing AI models (682 rows) and document processor configurations satisfied all pending CHECK constraints.
 
 ---
 
@@ -58,33 +62,26 @@ Our audit identified three distinct layers of state that must be reconciled:
 
 Through comprehensive static analysis of the Flutter application and Supabase Edge Functions against the 5 security migrations, we identified three critical blockers that would cause immediate production incidents if PR #48 were deployed without client reconciliation:
 
-### 3.1 Defect 1: Client Consultation Submission Denial (HTTP 403 / 42501)
+### 3.1 Defect 1: Client Consultation Submission Denial & Unsafe Fallback Elimination
 - **Vulnerability / Security Action:** Migration 4 (`20261012110945_stage1_security_abuse_storage_alignment.sql`) revokes all direct `INSERT` privileges on `public.consultation_requests` from `authenticated` users, requiring all submissions to pass through `submit_consultation_request(p_topic, p_message, p_related_application_id)` to enforce 3/hour and 10/day abuse limits.
-- **Client Incompatibility:** `lib/features/consultation/presentation/pages/consultation_page.dart` performed direct table insert:
-  ```dart
-  await client.from('consultation_requests').insert({ ... });
-  ```
-- **Consequence:** Immediate breakage of applicant consultation requests upon migration execution.
-- **Resolution Applied:** Updated `consultation_page.dart` to call `client.rpc('submit_consultation_request', params: ...)` with an intelligent fallback to direct table insert if the RPC is absent (during the migration deployment window).
+- **Client Incompatibility:** `lib/features/consultation/presentation/pages/consultation_page.dart` originally performed direct table insert, and initial fallback attempts used a broad `catch (_)` which would dangerously bypass security on permission errors or timeouts.
+- **Consequence:** Immediate breakage of applicant consultation requests upon migration execution, or unsafe fallback bypassing security boundaries.
+- **Resolution Applied:** Updated `consultation_page.dart` and created `lib/core/supabase/rpc_compat.dart` with `isRpcMissingException`. Only missing-RPC errors (`PGRST202` / `42883`) fall back to direct insert during rolling deployments. All authorization failures (`42501`), rate limits (`P0001`), validation errors (`22023`), timeouts, and network failures fail closed and rethrow.
 
-### 3.2 Defect 2: Admin Consultation Console Failure (HTTP 403 / 42501)
+### 3.2 Defect 2: Admin Consultation Console Failure & Narrow Admin Fallback
 - **Vulnerability / Security Action:** Migration 1 (`20261010010000_stage1_p0_security_completion.sql`) revokes table-wide `SELECT` on `public.consultation_requests` from `authenticated`, specifically withholding `admin_note` from applicant column grants. It also revokes direct `UPDATE` privileges, replacing them with audited SECURITY DEFINER functions `list_admin_consultations()` and `update_admin_consultation(uuid, text, text)`.
-- **Admin Incompatibility:** `lib/features/admin/presentation/pages/admin_consultations_page.dart` directly selected `admin_note` and executed direct table updates:
-  ```dart
-  await client.from('consultation_requests').select('..., admin_note, ...');
-  await client.from('consultation_requests').update({ 'admin_note': note, ... });
-  ```
-- **Consequence:** Admin users would be unable to view or update consultation tickets once Migration 1 was executed.
-- **Resolution Applied:** Updated `admin_consultations_page.dart` to query `list_admin_consultations` RPC and update via `update_admin_consultation` RPC, with seamless fallback for preflight compatibility.
+- **Admin Incompatibility:** `lib/features/admin/presentation/pages/admin_consultations_page.dart` directly selected `admin_note` and executed direct table updates with broad `catch (_)` fallback.
+- **Consequence:** Admin users would be unable to view or update consultation tickets once Migration 1 was executed, or non-admin users could trigger fallbacks.
+- **Resolution Applied:** Updated `admin_consultations_page.dart` to query `list_admin_consultations` RPC and update via `update_admin_consultation` RPC, with narrow `isRpcMissingException` fallback. Permission errors (`42501`) and validation rejections fail closed immediately.
 
-### 3.3 Defect 3: AI Quota Double-Counting & Orphaned Reservations
+### 3.3 Defect 3: AI Quota Fail-Open, Double-Counting & Orphaned Reservations
 - **Vulnerability / Security Action:** Migration 2 (`20261010055013_stage1_atomic_ai_quota_reservation.sql`) modified `consume_ai_daily_quota` to atomically insert an `ai_requests` row with `status: 'running'` and `routing_reason: 'atomic_quota_reservation'` inside an advisory transaction lock, returning `request_id`.
-- **Edge Function Defect:** `supabase/functions/ai-orchestrator/handler.ts` ignored `quota.request_id` and proceeded to insert a *second* `ai_requests` row.
+- **Edge Function Defect:** `supabase/functions/ai-orchestrator/handler.ts` swallowed quota check errors (failing open), ignored `quota.request_id`, and proceeded to insert a *second* `ai_requests` row.
 - **Consequence:** 
-  1. Every chat query consumed TWO quota units instead of one, causing users to exhaust their quota in half the expected time.
-  2. The initial reservation row was never updated on success/failure, remaining orphaned in `status: 'running'`.
-  3. Quota check failures failed open, bypassing limits entirely.
-- **Resolution Applied:** Updated `handler.ts` to capture `quota.request_id`, attach `session_id` and update `routing_reason` via `PATCH`, and eliminate the duplicate insertion.
+  1. Failed quota checks allowed unmetered AI usage (fail-open).
+  2. Every valid query consumed TWO quota units instead of one, cutting user quota in half.
+  3. The initial reservation row was never updated on success/failure, remaining orphaned in `status: 'running'`.
+- **Resolution Applied:** Updated `handler.ts` to strictly fail closed: returns 503 on quota check errors, 500 on malformed quota responses, and 429 on daily limit reached. Captured `quota.request_id`, attached `session_id` and routing metadata via `PATCH`, and completely eliminated the duplicate direct `INSERT` fallback into `ai_requests`.
 
 ---
 
@@ -107,8 +104,9 @@ All five migration files in PR #48 were verified byte-for-byte against `docs/rel
 | Investigation Area | Result | Notes |
 |---|---|---|
 | Migration Integrity | PASS | SHA-256 hashes match byte-for-byte; no manual ledger alterations |
-| Application Compatibility | RESOLVED | Client & Edge Function PR companion implemented in commit `19127c6` |
-| Flutter Test Suite | PASS | 436 tests passing (100% green); static analysis 0 issues |
-| Web Production Build | PASS | Release compilation succeeded in 130.2s |
-| Live Production Status | PRESERVED | Zero write operations; 100% read-only forensics |
-| Overall Deployment Gate | HOLD | Awaiting owner approval of DBA execution window & client rollout |
+| Application Compatibility | RESOLVED | Client & Edge Function PR companion implemented with narrow capability detection & fail-closed quota |
+| Flutter Test Suite | PASS | 446 tests passing (100% green); static analysis 0 issues; 249 files formatted |
+| Web Production Build | PASS | Release compilation succeeded in 103.3s |
+| Android Toolchain Build | PASS | Debug APK compiled in 78.5s; Release signing gate enforced |
+| Live Production Status | UNVERIFIED / NO-GO | No credentials present in session; zero write operations permitted; strictly NO-GO |
+| Overall Deployment Gate | HOLD | Awaiting owner approval of PR #48, companion PR merge, and DBA change window |

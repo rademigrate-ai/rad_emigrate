@@ -26,26 +26,32 @@
 
 ### Gate 1: Repository & Codebase Quality — [ GO ]
 - **Migration Fingerprints:** All 5 Stage 1 migration files match manifest SHA-256 hashes byte-for-byte.
-- **Client & Edge Incompatibilities Resolved:** Commit `19127c6` on `security/stage1-reconciliation-20261017` resolves all three identified blockers (Consultation applicant intake, Admin consultation management, and AI Orchestrator quota double-counting) using backward-compatible dual-path RPC fallback.
+- **Client & Edge Incompatibilities Resolved (Fail-Closed Architecture):**
+  - **Blocker 1 (Consultation RPC Fallback):** Replaced broad `catch (_)` blocks in `consultation_page.dart` and `admin_consultations_page.dart` with narrow capability detection (`isRpcMissingException` in `lib/core/supabase/rpc_compat.dart`). Positively matches `PGRST202` / `42883`, while strictly failing closed on authorization errors (`42501`), validation errors (`22023`), rate limits (`P0001`), timeouts, and network drops.
+  - **Blocker 2 (AI Quota Fail-Closed):** In `supabase/functions/ai-orchestrator/handler.ts`, eradicated fail-open behavior. Returns 503 on RPC errors, 500 on malformed quota responses, and 429 on daily limit reached. Completely eliminated duplicate direct `INSERT` fallback into `ai_requests` and attached metadata via `PATCH` to the authoritative reservation ID. Guest mode quota checks remain strictly isolated.
 - **Verification Gates:**
-  - `dart format`: 100% clean across all 247 Dart files.
-  - `flutter analyze`: 0 errors, 0 warnings, 0 hints.
-  - `flutter test`: 436 tests passing (100% green).
-  - `flutter build web`: Production release compilation succeeds.
+  - `dart format`: 100% clean across all 249 Dart files.
+  - `flutter analyze`: 0 errors, 0 warnings, 0 hints (7.5s).
+  - `flutter test`: 446 tests passing (100% green, 104s).
+  - `flutter build web`: Production release compilation succeeds (103.3s).
+  - `flutter build apk --debug`: Android compilation succeeds (`app-debug.apk` in 78.5s).
+  - Android Release Signing: Enforces `:app:verifyReleaseSigning` gate as intended.
   - Guest mode and progressive auth features merged in PR #51 remain fully preserved.
 
 ### Gate 2: PR #48 Merge Approval — [ READY FOR OWNER APPROVAL ]
 - PR #48 is cleanly mergeable into `main`.
-- Recommendation: Merge PR #48 alongside companion branch `security/stage1-reconciliation-20261017` to guarantee client and database alignment.
+- Recommendation: Merge PR #48 alongside companion branch `security/stage1-reconciliation-20261017` to guarantee client, edge function, and database alignment.
 - **Stop Rule Enforced:** Antigravity will NOT merge PR #48 automatically. Owner review and explicit approval is required.
 
 ### Gate 3: Live Production Execution — [ NO-GO / PENDING APPROVAL ]
 - **Status:** **NO-GO for Production Execution in this session.**
-- **Non-Negotiable Reasons:**
-  1. Production database access is strictly read-only for agent operations.
-  2. Companion client/edge changes must be deployed to production frontend before or alongside database migration execution.
-  3. Live backup snapshot and PITR recovery range must be explicitly verified in the Supabase Dashboard by the DBA.
-  4. Database execution requires a dedicated maintenance window with write quiescence.
+- **Live Migration State:** **UNVERIFIED.** Direct production database credentials (`inshddthftkhcdosoqcn`) are not present in this session. Historical 47-version ledger counts and 16 timestamp aliases are documented as baseline context from prior October 12–13 audits, not newly verified live facts.
+- **Non-Negotiable Reasons & Safety Rules:**
+  1. Production database access is strictly read-only for agent operations; zero live writes, schema alterations, or migration executions permitted.
+  2. Automated migration push (`supabase db push`, `migration repair`, `db reset`) is strictly prohibited.
+  3. Companion client/edge changes must be deployed to production frontend before or alongside database migration execution.
+  4. Live backup snapshot and PITR recovery range must be explicitly verified in the Supabase Dashboard by the DBA.
+  5. DBA must execute read-only schema probes from `docs/releases/SAFE_DEPLOYMENT_RUNBOOK.md` to verify live schema status before applying migrations during an authorized maintenance window.
 
 ---
 

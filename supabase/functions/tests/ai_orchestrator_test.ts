@@ -16,7 +16,7 @@ type R = ReturnType<typeof runtime>;
 type Options = {
   chain?: R[]; status?: number[]; timeout?: boolean; discovery?: string[];
   persistFails?: boolean; chainFails?: boolean; role?: string;
-  atomicReservation?: boolean; quotaExceeded?: boolean;
+  quotaExceeded?: boolean; quotaError?: boolean; quotaMalformed?: boolean;
 };
 async function exercise(options: Options = {}, payload: Record<string, unknown> = {}) {
   Deno.env.set("SUPABASE_URL", "https://db.example.com");
@@ -35,9 +35,10 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
       if (path.startsWith("profiles?")) return response([{ role: options.role ?? "super_admin" }]);
       if (path.startsWith("ai_usage_limits?")) return response([{ daily_requests: 50, daily_output_tokens: 1000 }]);
       if (path === "rpc/consume_ai_daily_quota") {
+        if (options.quotaError) return response({ error: "database error" }, 500);
+        if (options.quotaMalformed) return response({ allowed: true });
         if (options.quotaExceeded) return response({ allowed: false, error: "daily_limit_reached", limit: 50, count: 50 });
-        if (options.atomicReservation) return response({ allowed: true, request_id: "reserved-req-id", limit: 50, count: 1 });
-        return response([]);
+        return response({ allowed: true, request_id: "reserved-req-id", limit: 50, count: 1 });
       }
       if (path === "ai_requests?select=id") return response([{ id: "request-one" }]);
       if (path.startsWith("ai_requests?id=")) return options.persistFails ? response({}, 500) : response(null);
@@ -138,15 +139,31 @@ Deno.test("ordinary users cannot discover providers or use Admin AI", async () =
   }
 });
 Deno.test("17 atomic quota reservation reuses request_id and avoids duplicate insert", async () => {
-  const x = await exercise({ atomicReservation: true });
+  const x = await exercise();
   equal(x.status, 200);
   equal(x.body.request_id, "reserved-req-id");
   equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
   equal(x.calls.filter(c => c.path.includes("ai_requests?id=eq.reserved-req-id")).length >= 1, true);
 });
-Deno.test("18 quota limit reached returns 429", async () => {
+Deno.test("18 quota limit reached returns 429 and never invokes providers", async () => {
   const x = await exercise({ quotaExceeded: true });
   equal(x.status, 429);
   equal(x.body.code, "daily_limit_reached");
+  equal(x.providerCalls, 0);
 });
+Deno.test("19 quota check failure fails closed with 503 and never invokes provider", async () => {
+  const x = await exercise({ quotaError: true });
+  equal(x.status, 503);
+  equal(x.body.code, "quota_check_failed");
+  equal(x.providerCalls, 0);
+  equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
+});
+Deno.test("20 malformed quota response fails closed with 500", async () => {
+  const x = await exercise({ quotaMalformed: true });
+  equal(x.status, 500);
+  equal(x.body.code, "quota_reservation_invalid");
+  equal(x.providerCalls, 0);
+  equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
+});
+
 

@@ -4,6 +4,7 @@ import '../../../../core/widgets/premium_visuals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/supabase/rpc_compat.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
@@ -41,17 +42,28 @@ class _AdminConsultationsPageState
       List<dynamic> rows;
       try {
         final rpcRes = await client.rpc('list_admin_consultations');
-        rows = rpcRes as List<dynamic>;
-      } catch (_) {
-        rows =
-            await client
-                    .from('consultation_requests')
-                    .select(
-                      'id, topic, message, status, admin_note, created_at, user_id',
-                    )
-                    .order('created_at', ascending: false)
-                    .limit(100)
-                as List<dynamic>;
+        if (rpcRes is List<dynamic>) {
+          rows = rpcRes;
+        } else {
+          throw const FormatException(
+            'Unexpected response from list_admin_consultations',
+          );
+        }
+      } catch (e) {
+        if (isRpcMissingException(e)) {
+          rows =
+              await client
+                      .from('consultation_requests')
+                      .select(
+                        'id, topic, message, status, admin_note, created_at, user_id',
+                      )
+                      .order('created_at', ascending: false)
+                      .limit(100)
+                  as List<dynamic>;
+        } else {
+          // Strictly fail closed on 42501 (forbidden), network, timeouts, format errors
+          rethrow;
+        }
       }
       if (mounted) {
         setState(() {
@@ -84,15 +96,20 @@ class _AdminConsultationsPageState
                 : null,
           },
         );
-      } catch (_) {
-        await client
-            .from('consultation_requests')
-            .update({
-              'status': status,
-              'admin_note': note,
-              'updated_at': DateTime.now().toIso8601String(),
-            })
-            .eq('id', id);
+      } catch (e) {
+        if (isRpcMissingException(e)) {
+          await client
+              .from('consultation_requests')
+              .update({
+                'status': status,
+                'admin_note': note,
+                'updated_at': DateTime.now().toIso8601String(),
+              })
+              .eq('id', id);
+        } else {
+          // Strictly fail closed on 42501 (forbidden), 22023 (validation), network drops
+          rethrow;
+        }
       }
       if (mounted) {
         setState(() => _notice = l10n.consultationUpdated);

@@ -9,6 +9,10 @@
 
 ## 1. RECONCILIATION LEGEND & SAFETY POLICIES
 
+> [!IMPORTANT]
+> **Live Production State Status: UNVERIFIED in this Session**
+> Interactive database connection credentials for `inshddthftkhcdosoqcn` are not present in this session. The matrix below reflects documented forensic baselines established during the October 12–13, 2026 audits. The live database state remains **UNVERIFIED** until the DBA performs the pre-flight verification queries specified in `SAFE_DEPLOYMENT_RUNBOOK.md`.
+
 - **MATCH:** Migration timestamp and name exist in both Repository and Production ledger, with schema effects active in live database.
 - **ALIAS (16 entries):** Historical migration applied to Production with an alternate timestamp or name. **NEVER REPLAY OR TOUCH IN PRODUCTION.**
 - **LIVE-ONLY (4 entries):** Schema modifications applied directly to Production during historical setup. Recorded in ledger; not present as standalone files in clean repo.
