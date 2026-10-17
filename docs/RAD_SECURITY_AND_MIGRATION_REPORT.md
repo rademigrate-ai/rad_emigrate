@@ -40,7 +40,7 @@
 
 ## Read-only current Production operational snapshot
 
-- Research: **16** findings, **16** drafts, **0** Feed items. This is not proof of regulatory correctness or of an actual live publishing journey.
+- Research (2026-10-18 read-only JOIN): **16** findings, **16** drafts, **16/16 linked by research_finding_id**, **0 unmatched**, **0 duplicate draft candidates**, **all 16 findings and drafts in review**, **0** linked Feed rows and **0** published Feed items. The research-to-draft candidate path is present in live data, but this is **not** proof of source accuracy, human review or end-to-end publishing.
 - Visa: **22** destinations, **10** programs, **18** structured steps. Government-source/editorial accuracy remains unverified.
 - AI: 49 recorded requests; **10 succeeded**, **39 failed**, **27 no_eligible_model**. Two providers have credential-rejected/offline health; a third is degraded. No secret value inspected.
 - Render service: Auto Deploy **off**, active deployed SHA `449cd3b6cb0a0b53e852015ad4a3648bd817ad65`, which predates the current `main`.
