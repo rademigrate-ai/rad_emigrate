@@ -170,6 +170,8 @@ abstract class AppLocalizations {
   String get search;
   String get filter;
   String get status;
+  String get reviewSourceSnapshotOnly;
+  String get reviewSourceUnavailable;
   String get documents;
   String get viewDocumentFile;
   String get applications;
