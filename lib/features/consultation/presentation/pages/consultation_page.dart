@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/supabase/rpc_compat.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -159,12 +160,28 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       final client = supabase.client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
-      await client.from('consultation_requests').insert({
-        'user_id': uid,
-        'topic': topic,
-        'message': message,
-        'status': 'submitted',
-      });
+
+      // Stage 1 Security Hardening: Use submit_consultation_request RPC
+      // with narrow fallback to direct insert ONLY when RPC is positively not installed.
+      try {
+        await client.rpc(
+          'submit_consultation_request',
+          params: {'p_topic': topic, 'p_message': message},
+        );
+      } catch (e) {
+        if (isRpcMissingException(e)) {
+          await client.from('consultation_requests').insert({
+            'user_id': uid,
+            'topic': topic,
+            'message': message,
+            'status': 'submitted',
+          });
+        } else {
+          // Fail closed: never fall back on permission errors, rate limits, validation, or network drops
+          rethrow;
+        }
+      }
+
       await ref.read(consultationDraftProvider.notifier).clearDraft();
       if (mounted) {
         setState(() {
