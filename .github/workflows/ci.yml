@@ -177,6 +177,8 @@ jobs:
         run: KEEP_SUPABASE_RUNNING=1 bash scripts/verify_clean_schema.sh
       - name: Test local Auth, RLS, and Storage with two JWTs
         run: python3 scripts/verify_local_auth_isolation.py
+      - name: Verify no authenticated cross-user entitlement RPC access
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/ai_entitlement_rpc_privacy.sql
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true
