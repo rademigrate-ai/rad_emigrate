@@ -12,9 +12,9 @@ Baseline: latest verified main `5257ca5b95fc7caa9612da29a9b207420778e01b`. One b
 
 ## Overlapping PRs preserved
 
-- [PR 48](https://github.com/rademigrate-ai/rad_emigrate/pull/48), head `cc74b338`: security migration review, no UI assets. No migration, contract or production changes are taken from it; it remains open and untouched.
+- [PR 48](https://github.com/rademigrate-ai/rad_emigrate/pull/48), head `cc74b338`: security migration review, no UI assets. No migration, contract or production changes are taken from it; it was not changed by this task.
 - [PR 49](https://github.com/rademigrate-ai/rad_emigrate/pull/49), head `ab503ed2`: reviewed its actual two-file patch. Its single-flight timezone future and removal of unawaited page initialization already exist in main. They are preserved. This task separates essential timezone data from optional map polygons and withholds clocks if the essential data is unavailable, rather than introducing a competing bootstrap.
-- [PR 51](https://github.com/rademigrate-ai/rad_emigrate/pull/51), head `25614157`: public auth routing and locale-resilient forms. These route protections, aliases, draft retention and existing regression coverage remain. Only pending visuals in OTP/reset controls change; submission callbacks and disabled conditions stay intact. PR 51 remains open and untouched.
+- [PR 51](https://github.com/rademigrate-ai/rad_emigrate/pull/51), head `25614157`: public auth routing and locale-resilient forms. These route protections, aliases, draft retention and existing regression coverage remain. Only pending visuals in OTP/reset controls change; submission callbacks and disabled conditions stay intact. PR 51 was subsequently merged by a separate actor while this task was validating. Its final auth-test and evidence changes were incorporated from main without changing this task's application source.
 
 ## Implementation
 
@@ -32,7 +32,7 @@ Favorites preserve ordering, additions, removals and intentionally empty lists a
 
 ## Acceptance gates and evidence budget
 
-Nine focused captures are planned: mobile navigation FA/light and EN/dark; actual web startup; in-app splash; the four previously missing destinations in FA/dark mobile and EN/light tablet; Global Time desktop overview, desktop planner/timeline and mobile clocks. This is one bounded pass, not a locale/theme/viewport matrix. Actual Flutter widgets and synthetic fixture repositories are used; no production customer data or fabricated immigration requirements are used.
+Nine focused captures were completed: mobile navigation FA/light and EN/dark; actual web startup; in-app splash; the four previously missing destinations in FA/dark mobile and EN/light tablet; Global Time desktop overview, desktop planner/timeline and mobile clocks. This is one bounded pass, not a locale/theme/viewport matrix. Actual Flutter widgets and synthetic fixture repositories are used; no production customer data or fabricated immigration requirements are used.
 
 Canonical format, analysis, complete Flutter tests, web release, Android arm64 debug and all seven GitHub CI jobs must pass on the final source. Results and final commit identity will be recorded in the PR for owner review.
 
@@ -59,3 +59,9 @@ The original bird master remains byte-identical at SHA-256 `5922e4874cdcaaddfd4e
 ## Limits
 
 The reference's photorealistic 3D globe and exact city photographs are not supplied as standalone production assets. The implementation uses real offline vector geography with red connections and licensed authentic photo substitutes. The existing shared desktop NavigationRail remains; World Time is a secondary destination under More rather than replacing the rail with the reference's separate full sidebar. Additional cities without an authentic matching photograph use a neutral city plate. Native physical Android/iOS, Safari browser chrome and native keyboards are not physically tested; inset, keyboard and resize regressions simulate their geometry. Browser fixture tests do not assert production Auth/Supabase operations. Android validation uses the debug variant; no iOS build, release signing, deployment, production Supabase modification, destructive cleanup or change to the second clone is part of this task.
+
+## Final baseline refresh
+
+Before pushing, a fresh fetch found main had advanced to `678e7a4c898995bb4a0519afd467df4126dd4a2e` through the separate PR 51 merge. That update adds auth tests and existing evidence only. It was merged into this feature branch without conflicts. The application lib tree remains `24e4b2884d90c95dfe05a9009f7d649efa6bbf87`, so all nine inspected captures remain valid and were not regenerated. All required local checks are rerun on the final reconciled HEAD and reported in the PR.
+
+A second strictly read-only Render inspection still reports deployment `dep-db9bopvbtjjs73b4kdlg` live at `5257ca5b95fc7caa9612da29a9b207420778e01b`. Render therefore **lags latest main `678e7a4c`** after that separate merge. The delta is auth tests/evidence rather than application source. Auto-deploy remains off; no deployment or setting was changed.
