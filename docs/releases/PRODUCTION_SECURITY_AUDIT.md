@@ -1,12 +1,12 @@
 # RAD EMIGRATE — STAGE 1 PRODUCTION SECURITY AUDIT & FORENSICS REPORT
 
-**Date:** October 17, 2026  
-**Auditor / Agent:** Antigravity Advanced Agentic Coding Assistant  
-**Repository:** `rademigrate-ai/rad_emigrate`  
-**Target Pull Request:** PR #48 (`rademigrate-ai:phase-a/security-migrations-20261015`)  
-**Production Supabase Reference:** `inshddthftkhcdosoqcn`  
-**Baseline Git Commit:** `678e7a4c898995bb4a0519afd467df4126dd4a2e` (PR #51 merged cleanly on `main`)  
-**Integration Branch:** `security/stage1-reconciliation-20261017` (HEAD: `19127c6`)  
+**Date:** October 17, 2026
+**Auditor / Agent:** Antigravity Advanced Agentic Coding Assistant
+**Repository:** `rademigrate-ai/rad_emigrate`
+**Target Pull Request:** PR #48 (`rademigrate-ai:phase-a/security-migrations-20261015`)
+**Production Supabase Reference:** `inshddthftkhcdosoqcn`
+**Baseline Git Commit:** `678e7a4c898995bb4a0519afd467df4126dd4a2e` (PR #51 merged cleanly on `main`)
+**Integration Branch:** `security/stage1-reconciliation-20261017` (HEAD: `19127c6`)
 **Status:** COMPLETE — AUDIT VERIFIED — NO LIVE WRITES PERFORMED
 
 ---
@@ -77,7 +77,7 @@ Through comprehensive static analysis of the Flutter application and Supabase Ed
 ### 3.3 Defect 3: AI Quota Fail-Open, Double-Counting & Orphaned Reservations
 - **Vulnerability / Security Action:** Migration 2 (`20261010055013_stage1_atomic_ai_quota_reservation.sql`) modified `consume_ai_daily_quota` to atomically insert an `ai_requests` row with `status: 'running'` and `routing_reason: 'atomic_quota_reservation'` inside an advisory transaction lock, returning `request_id`.
 - **Edge Function Defect:** `supabase/functions/ai-orchestrator/handler.ts` swallowed quota check errors (failing open), ignored `quota.request_id`, and proceeded to insert a *second* `ai_requests` row.
-- **Consequence:** 
+- **Consequence:**
   1. Failed quota checks allowed unmetered AI usage (fail-open).
   2. Every valid query consumed TWO quota units instead of one, cutting user quota in half.
   3. The initial reservation row was never updated on success/failure, remaining orphaned in `status: 'running'`.

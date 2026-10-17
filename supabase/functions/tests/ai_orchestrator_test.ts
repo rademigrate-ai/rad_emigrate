@@ -165,5 +165,3 @@ Deno.test("20 malformed quota response fails closed with 500", async () => {
   equal(x.providerCalls, 0);
   equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
 });
-
-

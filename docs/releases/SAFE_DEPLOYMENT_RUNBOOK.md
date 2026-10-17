@@ -9,11 +9,11 @@
 >
 > **Do not apply anything to Production until the reconciliation and operator gates below PASS.** A successful clean-schema CI test proves only isolated reconstruction.
 
-**Master Task:** [#57](https://github.com/rademigrate-ai/rad_emigrate/issues/57)  
-**Security migration PR:** [#48](https://github.com/rademigrate-ai/rad_emigrate/pull/48) — 5 files; not merged or deployed.  
-**Client/Edge compatibility PR:** [#56](https://github.com/rademigrate-ai/rad_emigrate/pull/56) — under review.  
-**Combined integration trial:** [#59](https://github.com/rademigrate-ai/rad_emigrate/pull/59) — 7/7 CI jobs PASSED, local 491 Flutter tests passed, **DO NOT MERGE** integration probe.  
-**Live project:** `inshddthftkhcdosoqcn` (RAD Supabase).  
+**Master Task:** [#57](https://github.com/rademigrate-ai/rad_emigrate/issues/57)
+**Security migration PR:** [#48](https://github.com/rademigrate-ai/rad_emigrate/pull/48) — 5 files; not merged or deployed.
+**Client/Edge compatibility PR:** [#56](https://github.com/rademigrate-ai/rad_emigrate/pull/56) — under review.
+**Combined integration trial:** [#59](https://github.com/rademigrate-ai/rad_emigrate/pull/59) — 7/7 CI jobs PASSED, local 491 Flutter tests passed, **DO NOT MERGE** integration probe.
+**Live project:** `inshddthftkhcdosoqcn` (RAD Supabase).
 **Read-only live forensic ledger:** [LIVE_MIGRATION_RECONCILIATION_20261017.md](LIVE_MIGRATION_RECONCILIATION_20261017.md).
 
 ## 1. Exact production checks established by direct read-only queries

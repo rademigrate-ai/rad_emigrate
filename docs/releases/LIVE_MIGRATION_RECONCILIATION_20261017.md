@@ -1,9 +1,9 @@
 # RAD Supabase — independently observed live migration ledger reconciliation
 
-**Checked:** 2026-10-17 (production read-only query via linked Supabase project **RAD**, id `inshddthftkhcdosoqcn`).  
-**Repository baseline:** `main` `449cd3b6cb0a0b53e852015ad4a3648bd817ad65`.  
-**Master delivery:** [#57](https://github.com/rademigrate-ai/rad_emigrate/issues/57).  
-**Integration probe:** [PR #59](https://github.com/rademigrate-ai/rad_emigrate/pull/59), 7/7 GitHub CI jobs green on SHA `2d367c2a1d5bb6cedcd968f039d6c427be94300f`.  
+**Checked:** 2026-10-17 (production read-only query via linked Supabase project **RAD**, id `inshddthftkhcdosoqcn`).
+**Repository baseline:** `main` `449cd3b6cb0a0b53e852015ad4a3648bd817ad65`.
+**Master delivery:** [#57](https://github.com/rademigrate-ai/rad_emigrate/issues/57).
+**Integration probe:** [PR #59](https://github.com/rademigrate-ai/rad_emigrate/pull/59), 7/7 GitHub CI jobs green on SHA `2d367c2a1d5bb6cedcd968f039d6c427be94300f`.
 **Status:** Ledger discrepancy **confirmed**; historical SQL/source equivalence **NOT PROVEN**; Production schema migration **NO-GO**.
 
 ## Measured counts and interpretation

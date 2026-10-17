@@ -1,8 +1,8 @@
 # RAD EMIGRATE — APPLICATION SECURITY DEPENDENCIES & COMPATIBILITY ARCHITECTURE
 
-**Commit Reference:** `19127c6` (`feat(security): reconcile consultation RPCs and atomic AI quota reservation`)  
-**Target:** Client (Flutter Web/Mobile) and Edge Functions (Deno) compatibility with PR #48  
-**Zero-Downtime Guarantee:** Dual-path RPC with graceful schema fallback  
+**Commit Reference:** `19127c6` (`feat(security): reconcile consultation RPCs and atomic AI quota reservation`)
+**Target:** Client (Flutter Web/Mobile) and Edge Functions (Deno) compatibility with PR #48
+**Release status:** NO-GO. Safe client/Edge/DB cutover has not been proven; no zero-downtime guarantee.
 
 ---
 
@@ -13,9 +13,9 @@ The Stage 1 Database Security Hardening enforces strict database-level security 
 - Removal of table-wide `SELECT` and `UPDATE` on `consultation_requests` to protect internal `admin_note` fields.
 - Atomic reservation of daily AI quota within advisory transaction locks.
 
-If these migrations were applied while legacy application code was running, end users would immediately experience HTTP 403 / PostgreSQL `42501 (insufficient_privilege)` errors. 
+If these migrations were applied while legacy application code was running, end users would immediately experience HTTP 403 / PostgreSQL `42501 (insufficient_privilege)` errors.
 
-To achieve **zero-downtime rolling deployments**, commit `19127c6` implements resilient dual-path compatibility across the Flutter frontend and Edge runtime.
+The compatibility shims narrow some failures, but do NOT prove zero downtime. The new Edge quota-reservation handler requires an atomic database RPC returning request_id; deploying it against the current count-only Production quota function will fail closed. Follow the corrected NO-GO cutover runbook before any production release.
 
 ---
 
@@ -131,7 +131,7 @@ To achieve **zero-downtime rolling deployments**, commit `19127c6` implements re
       "request_id": "c1f8d9e2-..."
     }
     ```
-- **Previous Fail-Open & Duplicate Insertion Flaws (Resolved):** 
+- **Previous Fail-Open & Duplicate Insertion Flaws (Resolved):**
   The old handler swallowed quota errors, ignored the returned `request_id`, and then executed a duplicate direct `POST` to `ai_requests?select=id`. This caused quota bypasses on error and double accounting when successful.
 - **Implemented Architecture (Fail Closed & Authoritative Reservation):**
   ```ts
@@ -161,11 +161,11 @@ To achieve **zero-downtime rolling deployments**, commit `19127c6` implements re
     }
 
     if (quota.allowed === false) {
-      return safeJson(429, { 
-        error: "daily_limit_reached", 
-        code: "daily_limit_reached", 
-        limit: quota.limit, 
-        count: quota.count 
+      return safeJson(429, {
+        error: "daily_limit_reached",
+        code: "daily_limit_reached",
+        limit: quota.limit,
+        count: quota.count
       });
     }
 
