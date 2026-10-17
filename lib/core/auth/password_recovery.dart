@@ -2,10 +2,11 @@ import '../network/api_exception.dart';
 
 /// Builds the exact Flutter Web route used after a Supabase recovery callback.
 ///
-/// Uses a path-based route to match [usePathUrlStrategy]. Supabase still
-/// appends the recovery session fragment/query parameters; with
-/// `detectSessionInUri: true` the client establishes the recovery session
-/// before GoRouter settles on `/reset-password`.
+/// Uses the exact hash callback currently allowlisted in Supabase Auth.
+/// The Web bootstrap normalizes this legacy hash route to the canonical
+/// path-based `/reset-password` *before* Supabase Flutter initializes, keeping
+/// PKCE query parameters intact for `detectSessionInUri: true`.
+/// Never switch the whole app to hash routing: other deep links use paths.
 ///
 /// `/reset-password` remains a public route in [authRedirect] so an active
 /// recovery session is never bounced to the dashboard.
@@ -13,7 +14,7 @@ String? passwordRecoveryRedirectTo(Uri currentUri) {
   if (!currentUri.hasScheme || currentUri.host.isEmpty) return null;
   final origin = currentUri.origin;
   if (origin.isEmpty || origin == 'null') return null;
-  return '$origin/reset-password';
+  return '$origin/#/reset-password';
 }
 
 /// Identifies the safe, retryable error returned when Auth mail is throttled.

@@ -5,6 +5,24 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../network/api_exception.dart';
 import 'supabase_client.dart';
 
+/// Restrict private-document previews to paths created by the RAD uploader.
+/// No signed URL is ever derived from a raw URL or an untrusted path.
+bool isOwnedDocumentStoragePath(String? path, String userId) {
+  if (path == null || userId.isEmpty) return false;
+  final parts = path.split('/');
+  if (parts.length != 3 || parts.first != userId) return false;
+  final safeSegment = RegExp(r'^[A-Za-z0-9._-]+$');
+  return parts
+      .skip(1)
+      .every(
+        (part) =>
+            part.isNotEmpty &&
+            part != '.' &&
+            part != '..' &&
+            safeSegment.hasMatch(part),
+      );
+}
+
 class SupabaseStorageService {
   SupabaseStorageService(this._service);
 
@@ -68,6 +86,23 @@ class SupabaseStorageService {
     return _service.client.storage
         .from(bucket)
         .createSignedUrl(path, expiresIn);
+  }
+
+  /// Create a short-lived URL only for the live session owner's uploaded file.
+  /// Storage RLS is the final authority, independent of this client check.
+  Future<String> createOwnedSignedUrl({
+    required String path,
+    required String userId,
+  }) {
+    if (!_service.isInitialized ||
+        _service.client.auth.currentUser?.id != userId ||
+        !isOwnedDocumentStoragePath(path, userId)) {
+      throw const ApiException(
+        message: 'Private document is unavailable for this session.',
+        code: 'document_access_denied',
+      );
+    }
+    return createSignedUrl(path, expiresIn: 300);
   }
 
   Future<void> delete(String path) {
