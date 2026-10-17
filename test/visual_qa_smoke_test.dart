@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 import 'package:rad_emigrate/core/widgets/premium_visuals.dart';
 import 'package:rad_emigrate/features/splash/presentation/pages/splash_page.dart';
 import 'package:rad_emigrate/visual_qa_main.dart';
@@ -24,7 +25,28 @@ Future<void> _pump(
 }
 
 void main() {
-  for (final screen in ['login', 'dashboard', 'visa', 'ai', 'feed', 'admin']) {
+  for (final screen in [
+    'login',
+    'register',
+    'otp',
+    'forgot-password',
+    'reset-password',
+    'profile-completion',
+    'cases',
+    'documents',
+    'notifications',
+    'not-found',
+    'dashboard',
+    'visa',
+    'ai',
+    'feed',
+    'admin',
+    'profile',
+    'consultation',
+    'world-time',
+    'bird-states',
+    'shell',
+  ]) {
     testWidgets('visual QA $screen composition builds', (tester) async {
       await _pump(tester, screen);
       expect(tester.takeException(), isNull);
@@ -47,16 +69,14 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('visual QA Login retains its default editorial rule', (
-    tester,
-  ) async {
+  testWidgets('visual QA Login uses the clean pearl canvas', (tester) async {
     await _pump(tester, 'login');
 
     final canvases = tester.widgetList<PremiumCanvas>(
       find.byType(PremiumCanvas),
     );
     expect(canvases, isNotEmpty);
-    expect(canvases.every((canvas) => canvas.showEditorialRule), isTrue);
+    expect(canvases.every((canvas) => !canvas.showEditorialRule), isTrue);
     expect(tester.takeException(), isNull);
   });
 
@@ -93,9 +113,7 @@ void main() {
     expect(find.byType(SplashPage), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.splash,
+        (widget) => widget is RadFlappingBird && widget.size == 128,
       ),
       findsOneWidget,
     );
@@ -103,9 +121,9 @@ void main() {
   });
 
   for (final entry in {
-    'loading-full': RadEarthBirdVariant.fullScreenLoading,
-    'loading-section': RadEarthBirdVariant.sectionLoading,
-    'loading-section-dark': RadEarthBirdVariant.sectionLoading,
+    'loading-full': 128.0,
+    'loading-section': 72.0,
+    'loading-section-dark': 72.0,
   }.entries) {
     testWidgets('visual QA ${entry.key} route presents its approved scene', (
       tester,
@@ -114,8 +132,7 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadEarthBirdScene && widget.variant == entry.value,
+          (widget) => widget is RadFlappingBird && widget.size == entry.value,
         ),
         findsOneWidget,
       );
@@ -124,7 +141,7 @@ void main() {
   }
 
   testWidgets(
-    'full-screen visual QA is clean and uses the enlarged Earth scene',
+    'full-screen visual QA is clean and uses the full-size wingbeat',
     (tester) async {
       await _pump(tester, 'loading-full');
 
@@ -136,9 +153,7 @@ void main() {
         isFalse,
       );
       final scene = find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+        (widget) => widget is RadFlappingBird,
       );
       expect(
         find.descendant(
@@ -146,8 +161,8 @@ void main() {
           matching: find.byWidgetPredicate(
             (widget) =>
                 widget is SizedBox &&
-                widget.width == 280 &&
-                widget.height == 280,
+                widget.width == 128 &&
+                widget.height == 128,
           ),
         ),
         findsOneWidget,
@@ -172,41 +187,32 @@ void main() {
     });
   }
 
-  testWidgets(
-    'full-screen loader scales down only when narrow width requires it',
-    (tester) async {
-      await _pump(tester, 'loading-full', viewport: const Size(320, 844));
+  testWidgets('full-screen loader retains reference scale at 320 px', (
+    tester,
+  ) async {
+    await _pump(tester, 'loading-full', viewport: const Size(320, 844));
 
-      final scene = find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.fullScreenLoading,
-      );
-      expect(
-        find.descendant(
-          of: scene,
-          matching: find.byWidgetPredicate(
-            (widget) =>
-                widget is SizedBox &&
-                widget.width == 272 &&
-                widget.height == 272,
-          ),
+    final scene = find.byWidgetPredicate((widget) => widget is RadFlappingBird);
+    expect(
+      find.descendant(
+        of: scene,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is SizedBox && widget.width == 128 && widget.height == 128,
         ),
-        findsOneWidget,
-      );
-      expect(tester.takeException(), isNull);
-    },
-  );
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
-    'full-screen loader preserves the 280 px scene at 390 px mobile',
+    'full-screen loader uses the reference-sized 128 px wingbeat at 390 px mobile',
     (tester) async {
       await _pump(tester, 'loading-full', viewport: const Size(390, 844));
 
       final scene = find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.fullScreenLoading,
+        (widget) => widget is RadFlappingBird,
       );
       expect(
         find.descendant(
@@ -214,8 +220,8 @@ void main() {
           matching: find.byWidgetPredicate(
             (widget) =>
                 widget is SizedBox &&
-                widget.width == 280 &&
-                widget.height == 280,
+                widget.width == 128 &&
+                widget.height == 128,
           ),
         ),
         findsOneWidget,
@@ -253,9 +259,7 @@ void main() {
       );
       expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadEarthBirdScene &&
-              widget.variant == RadEarthBirdVariant.compactLoading,
+          (widget) => widget is RadFlappingBird && widget.size == 32,
         ),
         findsNWidgets(2),
       );

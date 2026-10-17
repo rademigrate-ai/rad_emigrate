@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import '../theme/premium_tokens.dart';
+import 'rad_flapping_bird.dart';
 
 enum AppButtonVariant { primary, secondary, ghost }
 
@@ -44,12 +46,9 @@ class _AppButtonState extends State<AppButton> {
       child: widget.loading
           ? const SizedBox(
               key: ValueKey('loading'),
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
+              height: 28,
+              width: 28,
+              child: RadFlappingBird(size: 28, showAura: true),
             )
           : Row(
               key: const ValueKey('label'),
@@ -81,7 +80,8 @@ class _AppButtonState extends State<AppButton> {
         onPressed: widget.loading ? null : widget.onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primaryRed,
-          disabledBackgroundColor: AppColors.primaryRed.withValues(alpha: 0.45),
+          disabledBackgroundColor: context.premium.disabledSurface,
+          disabledForegroundColor: context.premium.disabledText,
           foregroundColor: AppColors.white,
           animationDuration: duration,
         ),

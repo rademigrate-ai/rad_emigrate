@@ -17,7 +17,7 @@ class _CountryDetailStage extends StatelessWidget {
   Widget build(BuildContext context) {
     final programs = catalog.programsForCountry(country.id);
     final width = MediaQuery.sizeOf(context).width;
-    final isDesktop = width >= 900;
+    final isDesktop = width >= AppBreakpoints.desktop;
 
     return Center(
       child: ConstrainedBox(
@@ -33,12 +33,9 @@ class _CountryDetailStage extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Hero(
-                          tag: 'country-hero-${country.id}',
-                          child: CountryPhotography.image(
-                            code: country.code,
-                            fit: BoxFit.cover,
-                          ),
+                        CountryPhotography.image(
+                          code: country.code,
+                          fit: BoxFit.cover,
                         ),
                         const DecoratedBox(
                           decoration: BoxDecoration(
@@ -58,7 +55,7 @@ class _CountryDetailStage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Material(
                         elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppRadii.lg),
                         color: Theme.of(context).colorScheme.surface,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
@@ -120,9 +117,9 @@ class _CountryDetailStage extends StatelessWidget {
                     final category = catalog.categoryById(program.categoryId);
                     return Material(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppRadii.lg),
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(AppRadii.lg),
                         onTap: () => onSelectProgram(program),
                         child: Padding(
                           padding: const EdgeInsets.all(16),

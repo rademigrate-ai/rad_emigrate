@@ -1,189 +1,237 @@
 part of 'visa_page.dart';
 
-class _CountriesStage extends StatelessWidget {
+class _CountriesStage extends StatefulWidget {
   const _CountriesStage({
     required this.catalog,
     required this.l10n,
-    required this.showSearch,
     required this.query,
     required this.onQuery,
     required this.onSelect,
   });
-
   final VisaCatalog catalog;
   final AppLocalizations l10n;
-  final bool showSearch;
   final String query;
   final ValueChanged<String> onQuery;
   final ValueChanged<Country> onSelect;
+  @override
+  State<_CountriesStage> createState() => _CountriesStageState();
+}
+
+class _CountriesStageState extends State<_CountriesStage> {
+  String? _category;
+  IconData _categoryIcon(VisaCategory category) {
+    final key = '${category.slug} ${category.name}'.toLowerCase();
+    if (RegExp('study|education|تحصیل').hasMatch(key)) {
+      return Icons.school_outlined;
+    }
+    if (RegExp('work|کار').hasMatch(key)) {
+      return Icons.work_outline;
+    }
+    if (RegExp('invest|سرمایه').hasMatch(key)) {
+      return Icons.trending_up;
+    }
+    if (RegExp('visit|tour|گردش').hasMatch(key)) {
+      return Icons.flight_outlined;
+    }
+    return Icons.public_outlined;
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (catalog.countries.isEmpty) {
-      return EmptyState(
-        title: l10n.catalogueUnavailable,
-        subtitle: l10n.catalogueDisclaimer,
-      );
-    }
-
-    final categoryLabels = <String, List<String>>{
-      for (final c in catalog.countries)
-        c.id: catalog.categoriesForCountry(c.id).map((x) => x.name).toList(),
-    };
-
-    final width = MediaQuery.sizeOf(context).width;
-    final isTablet = width >= 600;
-    final isDesktop = width >= 1100;
-
+    final catalog = widget.catalog;
+    final l10n = widget.l10n;
+    final query = widget.query.trim().toLowerCase();
+    final countries = catalog.countries.where((country) {
+      final programs = catalog.programsForCountry(country.id);
+      return (_category == null ||
+              programs.any((p) => p.categoryId == _category)) &&
+          (query.isEmpty ||
+              country.name.toLowerCase().contains(query) ||
+              country.code.toLowerCase().contains(query) ||
+              programs.any((p) => p.title.toLowerCase().contains(query)));
+    }).toList();
+    final colors = [
+      const Color(0xFFD91F2B),
+      const Color(0xFF345CFF),
+      const Color(0xFF00A986),
+      const Color(0xFF3186DA),
+    ];
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: isDesktop ? 1100 : 920),
+        constraints: const BoxConstraints(maxWidth: 1100),
         child: ListView(
-          padding: EdgeInsets.fromLTRB(
-            isDesktop ? 28 : 16,
-            12,
-            isDesktop ? 28 : 16,
-            32,
-          ),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            PremiumHeroPanel(
-              kicker: const EditorialKicker(
-                index: '02',
-                label: 'DESTINATIONS',
-                dark: true,
+            TextFormField(
+              initialValue: widget.query,
+              onChanged: widget.onQuery,
+              decoration: InputDecoration(
+                hintText: l10n.searchProgrammes,
+                prefixIcon: const Icon(Icons.search, size: 20),
+                isDense: true,
               ),
-              title: l10n.findPathway,
-              body: l10n.catalogueDisclaimer,
             ),
-            const SizedBox(height: 20),
-            if (showSearch)
-              CountrySearchPanel(
-                countries: catalog.countries,
-                query: query,
-                onQueryChanged: onQuery,
-                onSelect: onSelect,
-              )
-            else if (isDesktop)
-              _CountryGrid(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                columns: 3,
-                onSelect: onSelect,
-              )
-            else if (isTablet)
-              _CountryGrid(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                columns: 2,
-                onSelect: onSelect,
-              )
-            else
-              CountryCarousel(
-                countries: catalog.countries,
-                categoryLabels: categoryLabels,
-                onSelect: onSelect,
+            if (catalog.categories.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              LayoutBuilder(
+                builder: (context, constraints) => Wrap(
+                  spacing: 8,
+                  runSpacing: 10,
+                  children: [
+                    for (var i = 0; i < catalog.categories.length; i++)
+                      SizedBox(
+                        width: MediaQuery.textScalerOf(context).scale(14) > 20
+                            ? (constraints.maxWidth - 8) / 2
+                            : (constraints.maxWidth - 24) / 4,
+                        child: Semantics(
+                          selected: _category == catalog.categories[i].id,
+                          child: ReferenceQuickAction(
+                            icon: _categoryIcon(catalog.categories[i]),
+                            color: _category == catalog.categories[i].id
+                                ? context.premium.accent
+                                : colors[i % colors.length],
+                            label: catalog.categories[i].name,
+                            onTap: () => setState(
+                              () => _category =
+                                  _category == catalog.categories[i].id
+                                  ? null
+                                  : catalog.categories[i].id,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
+            ],
+            ReferenceSection(
+              title: l10n.destinationsHeading,
+              action: _category != null ? l10n.allItems : null,
+              onAction: () => setState(() => _category = null),
+            ),
+            if (countries.isEmpty)
+              EmptyState(
+                title: l10n.catalogueUnavailable,
+                subtitle: l10n.catalogueDisclaimer,
+              ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final columns =
+                    constraints.maxWidth < 600 &&
+                        MediaQuery.textScalerOf(context).scale(14) > 20
+                    ? 1
+                    : constraints.maxWidth >= 900
+                    ? 4
+                    : constraints.maxWidth >= 600
+                    ? 3
+                    : 2;
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: countries.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columns,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    mainAxisExtent:
+                        210 +
+                        (MediaQuery.textScalerOf(context).scale(14) - 14).clamp(
+                              0,
+                              30,
+                            ) *
+                            3,
+                  ),
+                  itemBuilder: (context, index) {
+                    final country = countries[index];
+                    final labels = catalog
+                        .categoriesForCountry(country.id)
+                        .map((c) => c.name)
+                        .toList();
+                    return Semantics(
+                      button: true,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Material(
+                          color: context.premium.surface,
+                          child: InkWell(
+                            onTap: () => widget.onSelect(country),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                CountryPhotography.image(
+                                  code: country.code,
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned.fill(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: const [.38, .72, 1],
+                                        colors: [
+                                          Colors.transparent,
+                                          context.premium.surface.withValues(
+                                            alpha: .78,
+                                          ),
+                                          context.premium.surface,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                PositionedDirectional(
+                                  start: 12,
+                                  end: 12,
+                                  bottom: 12,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        country.flagEmoji,
+                                        style: const TextStyle(fontSize: 25),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        country.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                      ),
+                                      if (labels.isNotEmpty)
+                                        Text(
+                                          labels.take(3).join(' / '),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.catalogueDisclaimer,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _CountryGrid extends StatelessWidget {
-  const _CountryGrid({
-    required this.countries,
-    required this.categoryLabels,
-    required this.columns,
-    required this.onSelect,
-  });
-
-  final List<Country> countries;
-  final Map<String, List<String>> categoryLabels;
-  final int columns;
-  final ValueChanged<Country> onSelect;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: countries.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 16 / 9,
-      ),
-      itemBuilder: (context, i) {
-        final country = countries[i];
-        final labels = categoryLabels[country.id] ?? const [];
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => onSelect(country),
-            borderRadius: BorderRadius.circular(20),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CountryPhotography.image(
-                    code: country.code,
-                    fit: BoxFit.cover,
-                  ),
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0x00000000), Color(0x99000000)],
-                      ),
-                    ),
-                  ),
-                  PositionedDirectional(
-                    top: 10,
-                    end: 10,
-                    child: Text(
-                      country.flagEmoji,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  PositionedDirectional(
-                    start: 14,
-                    end: 14,
-                    bottom: 14,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          country.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 18,
-                          ),
-                        ),
-                        if (labels.isNotEmpty)
-                          Text(
-                            labels.take(3).join(' · '),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFFE8F0F2),
-                              fontSize: 12,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }

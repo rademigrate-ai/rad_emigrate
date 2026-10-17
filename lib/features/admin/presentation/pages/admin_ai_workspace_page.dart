@@ -1,3 +1,5 @@
+import '../../../../core/widgets/premium_visuals.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,46 +32,48 @@ class AdminAiWorkspacePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Material(
-            color: theme.colorScheme.surfaceContainerHighest,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    l10n.untrustedResearchDisclaimer,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _CapabilityChip(
-                        icon: Icons.travel_explore_outlined,
-                        label: l10n.adminResearchSubtitle,
-                      ),
-                      _CapabilityChip(
-                        icon: Icons.rate_review_outlined,
-                        label: l10n.adminOperations,
-                      ),
-                      _CapabilityChip(
-                        icon: Icons.health_and_safety_outlined,
-                        label: l10n.providerModelConnection,
-                      ),
-                    ],
-                  ),
-                ],
+      body: PremiumCanvas(
+        child: Column(
+          children: [
+            Material(
+              color: theme.colorScheme.surfaceContainerHighest,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.untrustedResearchDisclaimer,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _CapabilityChip(
+                          icon: Icons.travel_explore_outlined,
+                          label: l10n.adminResearchSubtitle,
+                        ),
+                        _CapabilityChip(
+                          icon: Icons.rate_review_outlined,
+                          label: l10n.adminOperations,
+                        ),
+                        _CapabilityChip(
+                          icon: Icons.health_and_safety_outlined,
+                          label: l10n.providerModelConnection,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Expanded(
-            child: AiAssistantPage(adminMode: true, embedded: true),
-          ),
-        ],
+            const Expanded(
+              child: AiAssistantPage(adminMode: true, embedded: true),
+            ),
+          ],
+        ),
       ),
     );
   }

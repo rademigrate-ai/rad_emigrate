@@ -1,0 +1,3590 @@
+[
+  {
+    "file": "mobile-en-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-light-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-en-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-light-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "mobile-fa-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      390,
+      844
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-light-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-en-dark-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-light-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "tablet-fa-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      834,
+      1112
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-light-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-visa.png",
+    "screen": "visa",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-ai.png",
+    "screen": "ai",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-cases.png",
+    "screen": "cases",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-documents.png",
+    "screen": "documents",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-shell.png",
+    "screen": "shell",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-profile.png",
+    "screen": "profile",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-loading.png",
+    "screen": "loading",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-register.png",
+    "screen": "register",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-splash.png",
+    "screen": "splash",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-login.png",
+    "screen": "login",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-otp.png",
+    "screen": "otp",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-feed.png",
+    "screen": "feed",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-en-dark-admin.png",
+    "screen": "admin",
+    "locale": "en",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-light-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "light",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-visa.png",
+    "screen": "visa",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-dashboard.png",
+    "screen": "dashboard",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-shell.png",
+    "screen": "shell",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-ai.png",
+    "screen": "ai",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-documents.png",
+    "screen": "documents",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-cases.png",
+    "screen": "cases",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-world-time.png",
+    "screen": "world-time",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-splash.png",
+    "screen": "splash",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-profile.png",
+    "screen": "profile",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-ai-empty.png",
+    "screen": "ai-empty",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-login.png",
+    "screen": "login",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-loading.png",
+    "screen": "loading",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-bird-states.png",
+    "screen": "bird-states",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-forgot-password.png",
+    "screen": "forgot-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-register.png",
+    "screen": "register",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-otp.png",
+    "screen": "otp",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-consultation.png",
+    "screen": "consultation",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-profile-completion.png",
+    "screen": "profile-completion",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-reset-password.png",
+    "screen": "reset-password",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-feed.png",
+    "screen": "feed",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-admin.png",
+    "screen": "admin",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-notifications.png",
+    "screen": "notifications",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  },
+  {
+    "file": "desktop-fa-dark-not-found.png",
+    "screen": "not-found",
+    "locale": "fa",
+    "theme": "dark",
+    "viewport": [
+      1440,
+      900
+    ],
+    "status": 200,
+    "errors": [],
+    "retries": []
+  }
+]

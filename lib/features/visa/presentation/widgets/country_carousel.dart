@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_motion.dart';
@@ -32,7 +34,7 @@ class _CountryCarouselState extends State<CountryCarousel> {
     super.initState();
     _controller = PageController(viewportFraction: 0.52);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future<void>.delayed(const Duration(seconds: 4), () {
+      Future<void>.delayed(AppMotion.carouselPause, () {
         if (mounted) setState(() => _showHint = false);
       });
     });
@@ -47,7 +49,7 @@ class _CountryCarouselState extends State<CountryCarousel> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final pad = width >= 900 ? 28.0 : 16.0;
+    final pad = width >= AppBreakpoints.desktop ? 28.0 : 16.0;
     final reduceMotion = AppMotion.reduceMotion(context);
 
     return Column(
@@ -86,17 +88,15 @@ class _CountryCarouselState extends State<CountryCarousel> {
           children: [
             for (var i = 0; i < widget.countries.length; i++)
               AnimatedContainer(
-                duration: reduceMotion
-                    ? Duration.zero
-                    : const Duration(milliseconds: 220),
+                duration: reduceMotion ? Duration.zero : AppMotion.hover,
                 margin: const EdgeInsets.symmetric(horizontal: 3),
                 width: i == _index ? 16 : 6,
                 height: 6,
                 decoration: BoxDecoration(
                   color: i == _index
-                      ? const Color(0xFFE53935)
-                      : const Color(0xFFB0C4C8),
-                  borderRadius: BorderRadius.circular(99),
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.outline,
+                  borderRadius: BorderRadius.circular(AppRadii.pill),
                 ),
               ),
           ],
@@ -141,11 +141,11 @@ class _CountryCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppRadii.lg),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -177,7 +177,7 @@ class _CountryCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.35),
-                        borderRadius: BorderRadius.circular(99),
+                        borderRadius: BorderRadius.circular(AppRadii.pill),
                       ),
                       child: Text(
                         country.flagEmoji,
@@ -268,7 +268,9 @@ class CountrySearchPanel extends StatelessWidget {
               : 'Search countries…',
           leading: const Icon(Icons.search),
           elevation: const WidgetStatePropertyAll(0),
-          backgroundColor: const WidgetStatePropertyAll(Color(0xFFF5FAFA)),
+          backgroundColor: WidgetStatePropertyAll(
+            Theme.of(context).colorScheme.surface,
+          ),
           onChanged: onQueryChanged,
         ),
         const SizedBox(height: 8),

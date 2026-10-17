@@ -2,10 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/loading_state.dart';
 import 'package:rad_emigrate/core/widgets/motion_primitives.dart';
-import 'package:rad_emigrate/core/widgets/rad_earth_bird_scene.dart';
 import 'package:rad_emigrate/core/widgets/rad_loading.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
+import 'package:rad_emigrate/core/widgets/app_button.dart';
 
 void main() {
+  testWidgets(
+    'pending buttons retain original colors and reject duplicate submission',
+    (tester) async {
+      var submissions = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppButton(
+              label: 'Submit request',
+              loading: true,
+              onPressed: () => submissions++,
+            ),
+          ),
+        ),
+      );
+      final bird = tester.widget<RadFlappingBird>(find.byType(RadFlappingBird));
+      expect(
+        bird.color,
+        isNull,
+        reason: 'Pending feedback preserves the layered red artwork',
+      );
+      expect(
+        tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+        isNull,
+      );
+      await tester.tap(find.byType(FilledButton));
+      await tester.pump();
+      expect(submissions, 0);
+    },
+  );
   testWidgets('full-screen RAD loader exposes one live loading label', (
     tester,
   ) async {
@@ -33,67 +64,62 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('loading adapter maps every tier to the approved Earth scene', (
-    tester,
-  ) async {
-    final semantics = tester.ensureSemantics();
+  testWidgets(
+    'loading adapter maps every tier to the approved natural wingbeat',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
 
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: Column(
-            children: [
-              RadLoadingIndicator(
-                size: RadLoadingSize.fullScreen,
-                label: 'Loading RAD workspace',
-              ),
-              RadLoadingIndicator(
-                size: RadLoadingSize.section,
-                label: 'Loading applications',
-              ),
-              RadInlineLoading(label: 'Updating application'),
-            ],
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                RadLoadingIndicator(
+                  size: RadLoadingSize.fullScreen,
+                  label: 'Loading RAD workspace',
+                ),
+                RadLoadingIndicator(
+                  size: RadLoadingSize.section,
+                  label: 'Loading applications',
+                ),
+                RadInlineLoading(label: 'Updating application'),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.fullScreenLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.sectionLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is RadEarthBirdScene &&
-            widget.variant == RadEarthBirdVariant.compactLoading,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      tester.getSemantics(
+      expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadLoadingIndicator &&
-              widget.size == RadLoadingSize.fullScreen,
+          (widget) => widget is RadFlappingBird && widget.size == 128,
         ),
-      ),
-      matchesSemantics(label: 'Loading RAD workspace', isLiveRegion: true),
-    );
-    semantics.dispose();
-  });
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadFlappingBird && widget.size == 72,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RadFlappingBird && widget.size == 32,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        tester.getSemantics(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is RadLoadingIndicator &&
+                widget.size == RadLoadingSize.fullScreen,
+          ),
+        ),
+        matchesSemantics(label: 'Loading RAD workspace', isLiveRegion: true),
+      );
+      semantics.dispose();
+    },
+  );
 
   testWidgets('section and compact loaders preserve their declared tier', (
     tester,
@@ -306,6 +332,19 @@ void main() {
     );
 
     expect(
+      find.descendant(
+        of: find.byWidgetPredicate(
+          (widget) =>
+              widget is LoadingState &&
+              widget.size == RadLoadingSize.fullScreen,
+        ),
+        matching: find.byType(AppSkeleton),
+      ),
+      findsNothing,
+      reason:
+          'Full-screen loading centers the bird; skeletons belong to sections',
+    );
+    expect(
       find.byWidgetPredicate(
         (widget) =>
             widget is RadLoadingIndicator &&
@@ -347,9 +386,7 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is RadEarthBirdScene &&
-              widget.variant == RadEarthBirdVariant.splash,
+          (widget) => widget is RadFlappingBird && widget.size == 128,
         ),
         findsOneWidget,
       );

@@ -1,6 +1,6 @@
 // Generated-style localization facade for RAD Emigrate.
 // Keep in sync with lib/l10n/app_en.arb and app_fa.arb.
-// generate: false — this custom facade is intentional.
+// generate: false -- this custom facade is intentional.
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -35,6 +35,72 @@ abstract class AppLocalizations {
 
   static const List<Locale> supportedLocales = [Locale('en'), Locale('fa')];
 
+  String get migrationHeroTitle;
+  String get recentActivity;
+  String get allItems;
+  String get consultationShortLabel;
+  String get suggestionComparePathways;
+  String get collapseNavigation;
+  String get expandNavigation;
+  String get editProfile;
+  String get supportInformation;
+  String get secureSignOut;
+  String get accessPortal;
+  String get createYourSpace;
+  String get destinationsHeading;
+  String get radIntelligence;
+  String get immigrationJourney;
+  String get birdReady;
+  String get birdListening;
+  String get birdThinking;
+  String get birdResponding;
+  String get birdNewMessage;
+  String get requestDetailsHeading;
+  String get addCity;
+  String get timezonePointUnresolved;
+  String get timezoneDataUnavailable;
+  String get selectTimezoneManually;
+  String get preparingWorldClocks;
+  String get searchWorldClocks;
+  String get timeline24Hours;
+  String get timeNow;
+  String get worldTimeTagline;
+  String get worldTimeDescription;
+  String get noWorldCities;
+  String get meetingPlannerDisclaimer;
+  String get meetingOrigin;
+  String get meetingDestination;
+  String get meetingShow;
+  String get meetingSuggestedWindows;
+  String get meetingSuitable;
+  String get meetingPartial;
+  String get supportInformationLabel;
+  String get secureSignOutLabel;
+  String get noPublishedDestinations;
+  String get publishedDestinationsEmpty;
+  String get visaConfigurationUnavailable;
+  String get visaContentAccessFailed;
+  String get visaConnectionFailed;
+  String get visaContentIncomplete;
+  String get bookConsultationAction;
+  String get askAssistantAction;
+  String get nextStepsHeading;
+  String get programOverview;
+  String get timingAndFees;
+  String get processingTimeLabel;
+  String get feesLabel;
+  String meetingMinutes(int minutes);
+  String get caseRoom;
+  String get operationsConsole;
+  String get radBriefing;
+  String get continentNorthAmerica;
+  String get continentEurope;
+  String get continentAsia;
+  String get continentOceania;
+  String get continentMiddleEast;
+  String get continentOther;
+  String get consultationContacted;
+  String get consultationClosed;
   String get appTitle;
   String get signIn;
   String get signInSubtitle;
@@ -69,6 +135,7 @@ abstract class AppLocalizations {
   String get profileCompletionSubtitle;
   String get saveAndContinue;
   String get home;
+  String get explore;
   String get visa;
   String get cases;
   String get docs;

@@ -1,0 +1,487 @@
+{
+  "evidence": "Actual Flutter fixture rendering. Focused composer uses a reduced browser viewport; this is not native keyboard testing.",
+  "captures": [
+    {
+      "file": "en-light-case-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-document-actions.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-city-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-profile-edit.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-dashboard-image-cards.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-settings-more.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-dashboard.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-visa.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-ai-empty.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-cases.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-documents.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-profile.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-world-time.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-narrow-200pct-splash.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-light-focused-composer-reduced-viewport.png",
+      "viewport": {
+        "width": 320,
+        "height": 500
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-case-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-document-actions.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-city-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-profile-edit.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-dashboard-image-cards.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-settings-more.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-dashboard.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-visa.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-ai-empty.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-cases.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-documents.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-profile.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-world-time.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-narrow-200pct-splash.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "en-dark-focused-composer-reduced-viewport.png",
+      "viewport": {
+        "width": 320,
+        "height": 500
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-case-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-document-actions.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-city-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-profile-edit.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-dashboard-image-cards.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-settings-more.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-dashboard.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-visa.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-ai-empty.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-cases.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-documents.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-profile.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-world-time.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-narrow-200pct-splash.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-light-focused-composer-reduced-viewport.png",
+      "viewport": {
+        "width": 320,
+        "height": 500
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-case-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-document-actions.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-city-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-profile-edit.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-dashboard-image-cards.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-settings-more.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-dashboard.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-visa.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-ai-empty.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-cases.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-documents.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-profile.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-world-time.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-narrow-200pct-splash.png",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "errors": []
+    },
+    {
+      "file": "fa-dark-focused-composer-reduced-viewport.png",
+      "viewport": {
+        "width": 320,
+        "height": 500
+      },
+      "errors": []
+    }
+  ],
+  "source_head": "5ddfecffc80f6c5b1785eef8e8f791dc8136b5c8",
+  "lib_tree": "ef05b26462376bf15523121cb4d7c3e91d45ef31"
+}

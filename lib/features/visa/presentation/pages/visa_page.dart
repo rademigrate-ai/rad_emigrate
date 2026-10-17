@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,17 +13,14 @@ import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/visa_entities.dart';
+import '../../data/visa_repository.dart';
 import '../providers/visa_catalog_provider.dart';
-import '../widgets/country_carousel.dart';
+import '../../../../core/widgets/reference_widgets.dart';
 import '../widgets/country_photography.dart';
 
 part 'visa_page_countries.dart';
 part 'visa_page_country_detail.dart';
 part 'visa_page_program.dart';
-
-String _t(BuildContext context, String en, String fa) {
-  return Localizations.localeOf(context).languageCode == 'fa' ? fa : en;
-}
 
 enum _VisaStage { countries, countryDetail, programDetail }
 
@@ -37,14 +36,12 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   Country? _country;
   VisaProgram? _program;
   String _query = '';
-  var _showSearch = false;
 
   void _openCountry(Country country) {
     setState(() {
       _country = country;
       _program = null;
       _stage = _VisaStage.countryDetail;
-      _showSearch = false;
     });
   }
 
@@ -87,47 +84,68 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                 icon: Icon(directionalBack(context)),
                 onPressed: _back,
               ),
-        actions: [
-          if (_stage == _VisaStage.countries)
-            IconButton(
-              tooltip: l10n.searchProgrammes,
-              icon: Icon(_showSearch ? Icons.close : Icons.search),
-              onPressed: () => setState(() => _showSearch = !_showSearch),
-            ),
-        ],
       ),
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: catalog.when(
           loading: () => LoadingState.section(message: l10n.loadingCatalogue),
-          error: (_, _) => ErrorState(
-            message: l10n.catalogueUnavailable,
+          error: (error, _) => ErrorState(
+            message: _visaErrorMessage(context, error, l10n),
             onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
           ),
-          data: (value) => switch (_stage) {
-            _VisaStage.countries => _CountriesStage(
-              catalog: value,
-              l10n: l10n,
-              showSearch: _showSearch,
-              query: _query,
-              onQuery: (q) => setState(() => _query = q),
-              onSelect: _openCountry,
-            ),
-            _VisaStage.countryDetail => _CountryDetailStage(
-              catalog: value,
-              country: _country!,
-              l10n: l10n,
-              onSelectProgram: _openProgram,
-            ),
-            _VisaStage.programDetail => _ProgramDetailStage(
-              catalog: value,
-              country: _country!,
-              program: _program!,
-              l10n: l10n,
-            ),
-          },
+          data: (value) => value.countries.isEmpty
+              ? EmptyState(
+                  icon: Icons.public_off_outlined,
+                  title: AppLocalizations.of(context).noPublishedDestinations,
+                  subtitle: AppLocalizations.of(context)
+                      .publishedDestinationsEmpty,
+                )
+              : switch (_stage) {
+                  _VisaStage.countries => _CountriesStage(
+                    catalog: value,
+                    l10n: l10n,
+                    query: _query,
+                    onQuery: (q) => setState(() => _query = q),
+                    onSelect: _openCountry,
+                  ),
+                  _VisaStage.countryDetail => _CountryDetailStage(
+                    catalog: value,
+                    country: _country!,
+                    l10n: l10n,
+                    onSelectProgram: _openProgram,
+                  ),
+                  _VisaStage.programDetail => _ProgramDetailStage(
+                    catalog: value,
+                    country: _country!,
+                    program: _program!,
+                    l10n: l10n,
+                  ),
+                },
         ),
       ),
     );
+  }
+
+  String _visaErrorMessage(
+    BuildContext context,
+    Object error,
+    AppLocalizations l10n,
+  ) {
+    final kind = error is VisaCatalogException ? error.kind : null;
+    return switch (kind) {
+      VisaCatalogFailureKind.configuration => AppLocalizations.of(
+        context,
+      ).visaConfigurationUnavailable,
+      VisaCatalogFailureKind.access => AppLocalizations.of(
+        context,
+      ).visaContentAccessFailed,
+      VisaCatalogFailureKind.network => AppLocalizations.of(
+        context,
+      ).visaConnectionFailed,
+      VisaCatalogFailureKind.data => AppLocalizations.of(
+        context,
+      ).visaContentIncomplete,
+      _ => l10n.catalogueUnavailable,
+    };
   }
 }

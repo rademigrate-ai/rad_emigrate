@@ -26,7 +26,7 @@ class _ProgramDetailStage extends StatelessWidget {
   Widget build(BuildContext context) {
     final category = catalog.categoryById(program.categoryId);
     final width = MediaQuery.sizeOf(context).width;
-    final isDesktop = width >= 900;
+    final isDesktop = width >= AppBreakpoints.desktop;
     final hasDescription = (program.description ?? '').trim().isNotEmpty;
 
     final content = Column(
@@ -85,13 +85,13 @@ class _ProgramDetailStage extends StatelessWidget {
         if (!isDesktop) ...[
           const SizedBox(height: 24),
           AppButton(
-            label: _t(context, 'Book consultation', 'درخواست مشاوره'),
+            label: AppLocalizations.of(context).bookConsultationAction,
             icon: Icons.event_available_outlined,
             onPressed: () => _openConsultation(context),
           ),
           const SizedBox(height: 10),
           AppButton(
-            label: _t(context, 'Ask AI Assistant', 'پرسش از دستیار هوشمند'),
+            label: AppLocalizations.of(context).askAssistantAction,
             variant: AppButtonVariant.secondary,
             icon: Icons.auto_awesome_outlined,
             onPressed: () => _openAi(context),
@@ -116,7 +116,7 @@ class _ProgramDetailStage extends StatelessWidget {
                   width: 280,
                   child: Material(
                     elevation: 1,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppRadii.lg),
                     color: Theme.of(context).colorScheme.surface,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -124,26 +124,20 @@ class _ProgramDetailStage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            _t(context, 'Next steps', 'گام بعدی'),
+                            AppLocalizations.of(context).nextStepsHeading,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 14),
                           AppButton(
-                            label: _t(
-                              context,
-                              'Book consultation',
-                              'درخواست مشاوره',
-                            ),
+                            label: AppLocalizations.of(context)
+                                .bookConsultationAction,
                             onPressed: () => _openConsultation(context),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
-                            label: _t(
-                              context,
-                              'Ask AI Assistant',
-                              'پرسش از دستیار هوشمند',
-                            ),
+                            label: AppLocalizations.of(context)
+                                .askAssistantAction,
                             variant: AppButtonVariant.secondary,
                             onPressed: () => _openAi(context),
                           ),
@@ -217,7 +211,7 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
       panels.add(
         _accordion(
           keyName: 'overview',
-          title: _t(context, 'Overview', 'نمای کلی'),
+          title: AppLocalizations.of(context).programOverview,
           child: Text(widget.description!),
         ),
       );
@@ -308,16 +302,18 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
       panels.add(
         _accordion(
           keyName: 'timing',
-          title: _t(context, 'Timing & fees', 'زمان و هزینه'),
+          title: AppLocalizations.of(context).timingAndFees,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if ((widget.processingTime ?? '').isNotEmpty)
                 Text(
-                  '${_t(context, 'Processing time', 'زمان بررسی')}: ${widget.processingTime}',
+                  '${AppLocalizations.of(context).processingTimeLabel}: ${widget.processingTime}',
                 ),
               if ((widget.fees ?? '').isNotEmpty)
-                Text('${_t(context, 'Fees', 'هزینه')}: ${widget.fees}'),
+                Text(
+                  '${AppLocalizations.of(context).feesLabel}: ${widget.fees}',
+                ),
             ],
           ),
         ),
@@ -354,7 +350,9 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
     final open = _expanded.contains(keyName);
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadii.md),
+      ),
       child: ExpansionTile(
         key: PageStorageKey(keyName),
         initiallyExpanded: open,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -5,16 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/dependencies.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
-import '../../../../core/widgets/rad_loading.dart';
+import '../../../../core/widgets/rad_ai_bird.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../providers/ai_assistant_activity_provider.dart';
 import '../providers/ai_prompt_draft_provider.dart';
 
 class _ChatMessage {
@@ -59,8 +62,11 @@ class AiAssistantPage extends ConsumerStatefulWidget {
 class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _controller = TextEditingController();
   final _scroll = ScrollController();
+  final _composerFocus = FocusNode();
   final _messages = <_ChatMessage>[];
   var _loading = false;
+  var _birdState = RadAiBirdState.idle;
+  Timer? _birdTimer;
 
   String? _sessionId;
   late final Future<void> _historyRestore;
@@ -80,8 +86,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
       ]);
       _loading = true;
+      _birdState = RadAiBirdState.thinking;
     }
     _controller.addListener(_onPromptChanged);
+    _composerFocus.addListener(_onComposerFocusChanged);
     _historyRestore = _restoreHistory();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(aiPromptDraftProvider.notifier).ready;
@@ -99,6 +107,33 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     ref
         .read(aiPromptDraftProvider.notifier)
         .savePrompt(_controller.text, widget.contextLabel);
+  }
+
+  void _onComposerFocusChanged() {
+    if (!mounted || _loading) return;
+    setState(() {
+      _birdState = _composerFocus.hasFocus
+          ? RadAiBirdState.listening
+          : RadAiBirdState.idle;
+    });
+  }
+
+  void _showResponseState() {
+    _birdTimer?.cancel();
+    setState(() => _birdState = RadAiBirdState.responding);
+    _birdTimer = Timer(AppMotion.assistantResponse, () {
+      if (!mounted) return;
+      setState(() => _birdState = RadAiBirdState.newMessage);
+      ref.read(aiAssistantActivityProvider.notifier).markNewMessage();
+      _birdTimer = Timer(AppMotion.assistantNotification, () {
+        if (!mounted) return;
+        setState(
+          () => _birdState = _composerFocus.hasFocus
+              ? RadAiBirdState.listening
+              : RadAiBirdState.idle,
+        );
+      });
+    });
   }
 
   Future<void> _restoreHistory() async {
@@ -136,6 +171,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   @override
   void dispose() {
     _controller.removeListener(_onPromptChanged);
+    _composerFocus.removeListener(_onComposerFocusChanged);
+    _composerFocus.dispose();
+    _birdTimer?.cancel();
     _controller.dispose();
     _scroll.dispose();
     super.dispose();
@@ -169,7 +207,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       return;
     }
 
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _birdState = RadAiBirdState.thinking;
+    });
     await _historyRestore;
     if (!mounted) return;
     try {
@@ -186,7 +227,10 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       );
     } catch (_) {
       if (mounted) {
-        setState(() => _loading = false);
+        setState(() {
+          _loading = false;
+          _birdState = RadAiBirdState.idle;
+        });
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.couldNotSaveQuestion)));
       }
@@ -277,6 +321,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         );
         _loading = false;
       });
+      _showResponseState();
       _scrollToEnd();
     } catch (error) {
       if (!mounted) return;
@@ -290,6 +335,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         );
         _loading = false;
       });
+      _showResponseState();
       _scrollToEnd();
     }
   }
@@ -313,6 +359,19 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       l10n.suggestionStudyPermitDocuments,
       l10n.suggestionVisaProcessingTime,
       l10n.suggestionGteStatement,
+      l10n.suggestionComparePathways,
+    ];
+    const suggestionColors = [
+      Color(0xFFD91F2B),
+      Color(0xFF345CFF),
+      Color(0xFF00A986),
+      Color(0xFF3186DA),
+    ];
+    const suggestionIcons = [
+      Icons.school_outlined,
+      Icons.work_outline,
+      Icons.trending_up,
+      Icons.public_outlined,
     ];
     final draftContext = ref.watch(aiPromptDraftProvider).contextLabel;
     final effectiveContext =
@@ -321,29 +380,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         : draftContext;
 
     final body = PremiumCanvas(
-      dark: true,
-      accent: AppColors.teal,
+      accent: context.premium.accent,
       child: AmbientBackdrop(
         active: _loading,
         child: Column(
           children: [
-            if (!widget.embedded)
-              Material(
-                color: const Color(0xFF0D2A35),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  child: Text(
-                    widget.adminMode
-                        ? l10n.untrustedResearchDisclaimer
-                        : l10n.aiDisclaimer,
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xFFC2D7DB)),
-                  ),
-                ),
-              ),
             if (effectiveContext != null && effectiveContext.trim().isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -352,66 +393,101 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   child: Chip(
                     avatar: const Icon(Icons.place_outlined, size: 16),
                     label: Text(effectiveContext),
-                    backgroundColor: const Color(0xFF143743),
-                    labelStyle: const TextStyle(color: Color(0xFFE2F1F3)),
+                    backgroundColor: context.premium.surfaceElevated,
+                    labelStyle: TextStyle(color: context.premium.text),
                     side: BorderSide.none,
                   ),
                 ),
               ),
             Expanded(
               child: _messages.isEmpty
-                  ? ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-                      children: [
-                        PremiumHeroPanel(
-                          kicker: const EditorialKicker(
-                            index: '04',
-                            label: 'RAD INTELLIGENCE',
-                            dark: true,
-                          ),
-                          title: l10n.howCanWeHelp,
-                          body: l10n.askAboutVisas,
-                          trailing: const RadOrbit(
-                            size: 180,
-                            showBrand: false,
-                            active: false,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ...suggestions.asMap().entries.map(
-                          (entry) => MotionStagger(
-                            index: entry.key,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: AppCard(
-                                onTap: () => _send(entry.value),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 32,
-                                      height: 32,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.teal.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                        borderRadius: BorderRadius.circular(11),
-                                      ),
-                                      child: const Icon(
-                                        Icons.auto_awesome,
-                                        size: 17,
-                                        color: AppColors.teal,
-                                      ),
+                  ? Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 640),
+                        child: ListView(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  RadAiBird(
+                                    state: _birdState,
+                                    semanticLabel: _birdSemanticLabel(context),
+                                    size: 140,
+                                    showBackgroundOrb: false,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    l10n.howCanWeHelp,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.w800),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 380,
                                     ),
-                                    const SizedBox(width: 12),
-                                    Expanded(child: Text(entry.value)),
-                                  ],
+                                    child: Text(
+                                      l10n.askAboutVisas,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ...suggestions.asMap().entries.map(
+                              (entry) => MotionStagger(
+                                index: entry.key,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: AppCard(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    onTap: () => _send(entry.value),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 32,
+                                          height: 32,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: suggestionColors[entry.key]
+                                                .withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(
+                                              AppRadii.sm,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            suggestionIcons[entry.key],
+                                            size: 17,
+                                            color: suggestionColors[entry.key],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(child: Text(entry.value)),
+                                        Icon(
+                                          directionalChevron(context),
+                                          size: 18,
+                                          color: context.premium.mutedText,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     )
                   : ListView.builder(
                       controller: _scroll,
@@ -423,9 +499,38 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                             padding: const EdgeInsets.all(8),
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
-                              child: RadInlineLoading(
-                                label: l10n.loading,
-                                dark: true,
+                              child: Semantics(
+                                liveRegion: true,
+                                label: _birdSemanticLabel(context),
+                                child: ExcludeSemantics(
+                                  child: AppCard(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          8,
+                                          6,
+                                          18,
+                                          6,
+                                        ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        RadAiBird(
+                                          state: RadAiBirdState.thinking,
+                                          semanticLabel: l10n.loading,
+                                          size: 64,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          l10n.loading,
+                                          style: TextStyle(
+                                            color: context.premium.text,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           );
@@ -448,15 +553,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                               ),
                               decoration: BoxDecoration(
                                 color: m.isUser
-                                    ? AppColors.primaryRed.withValues(
-                                        alpha: 0.92,
-                                      )
-                                    : const Color(0xFF10313D),
-                                borderRadius: BorderRadius.circular(14),
+                                    ? context.premium.accent
+                                    : context.premium.surface,
+                                borderRadius: BorderRadius.circular(
+                                  AppRadii.md,
+                                ),
                                 border: Border.all(
                                   color: m.isUser
-                                      ? const Color(0xFFFF848C)
-                                      : const Color(0xFF337988),
+                                      ? context.premium.accent
+                                      : context.premium.border,
                                 ),
                               ),
                               child: Column(
@@ -465,7 +570,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                   Text(
                                     m.text,
                                     style: Theme.of(context).textTheme.bodyLarge
-                                        ?.copyWith(color: Colors.white),
+                                        ?.copyWith(
+                                          color: m.isUser
+                                              ? context.premium.onAccent
+                                              : context.premium.text,
+                                        ),
                                   ),
                                   if (m.retryPrompt != null &&
                                       index == _messages.length - 1)
@@ -497,9 +606,26 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       },
                     ),
             ),
+            if (!widget.embedded)
+              Material(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
+                  child: Text(
+                    widget.adminMode
+                        ? l10n.untrustedResearchDisclaimer
+                        : l10n.aiDisclaimer,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: context.premium.mutedText),
+                  ),
+                ),
+              ),
             SafeArea(
               child: Container(
-                color: const Color(0xFF081D28).withValues(alpha: 0.94),
+                color: context.premium.surface,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
                   child: Row(
@@ -507,15 +633,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       Expanded(
                         child: TextField(
                           controller: _controller,
+                          focusNode: _composerFocus,
                           minLines: 1,
                           maxLines: 4,
                           textInputAction: TextInputAction.send,
                           onSubmitted: (_) => _send(),
                           decoration: InputDecoration(
                             hintText: l10n.askQuestionHint,
-                            fillColor: const Color(0xFF123440),
-                            hintStyle: const TextStyle(
-                              color: Color(0xFF9DB9C0),
+                            fillColor: context.premium.surfaceElevated,
+                            hintStyle: TextStyle(
+                              color: context.premium.mutedText,
                             ),
                           ),
                         ),
@@ -524,11 +651,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       IconButton.filled(
                         tooltip: l10n.sendMessage,
                         style: IconButton.styleFrom(
-                          backgroundColor: AppColors.primaryRed,
+                          backgroundColor: context.premium.accent,
+                          foregroundColor: context.premium.onAccent,
+                          disabledBackgroundColor:
+                              context.premium.disabledSurface,
+                          disabledForegroundColor: context.premium.disabledText,
                           minimumSize: const Size(48, 48),
                         ),
                         onPressed: _loading ? null : () => _send(),
-                        icon: const Icon(Icons.send, color: Colors.white),
+                        icon: const Icon(Icons.send),
                       ),
                     ],
                   ),
@@ -561,5 +692,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
       ),
     );
+  }
+
+  String _birdSemanticLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return switch (_birdState) {
+      RadAiBirdState.idle => l10n.birdReady,
+      RadAiBirdState.listening => l10n.birdListening,
+      RadAiBirdState.thinking => l10n.birdThinking,
+      RadAiBirdState.responding => l10n.birdResponding,
+      RadAiBirdState.newMessage => l10n.birdNewMessage,
+    };
   }
 }
