@@ -67,10 +67,21 @@ current_unapplied = [
     '20261008020000_stage9_security_grant_hardening.sql',
 ]
 actual_names = sorted(p.name for p in root.glob('*.sql'))
-assert actual_names == sorted(expected_names + current_unapplied), actual_names
+baseline_names = sorted(expected_names + current_unapplied)
+assert all(name in actual_names for name in baseline_names), "Historical baseline changed or missing"
+forward_additions = [name for name in actual_names if name not in baseline_names]
+# Permit ONLY timestamped, strictly forward SQL proposals in the synthetic
+# reconstruction. Never treat version aliases as safe Production replay.
+import re
+assert all(
+    re.fullmatch(r'[0-9]{14}_[a-z0-9_]+[.]sql', name)
+    and name[:14] > '20261008020000'
+    for name in forward_additions
+), forward_additions
+assert actual_names == sorted(baseline_names + forward_additions)
 for name in expected_names:
     assert (root/name).read_bytes() == (Path('supabase/reconciliation/candidate')/name).read_bytes(), name
-print('Canonical active lineage: PASS (25 authoritative + 21 current additive migrations).')
+print(f'Canonical active lineage: PASS (25 authoritative + 21 pinned additive + {len(forward_additions)} forward proposals).')
 PY
 # Apply the same ordered additive SQL files through one psql session.
 # ON_ERROR_STOP still fails the job at the first SQL error; no SQL is skipped.
@@ -97,6 +108,21 @@ additive_sql_files=(
   "$backup/20261008010000_stage7_ops_consultation_app_status.sql"
   "$backup/20261008020000_stage9_security_grant_hardening.sql"
 )
+# Additional proposal migrations are applied only in this disposable
+# reconstructed clone, in strict version order after the pinned historical
+# additive sequence. The Production ledger is NEVER edited by this script.
+while IFS= read -r sql_file; do
+  additive_sql_files+=("$sql_file")
+done < <(
+  find "$backup" -maxdepth 1 -type f -name '*.sql' | LC_ALL=C sort |
+  while IFS= read -r path; do
+    name="${path##*/}"
+    if [[ "$name" > "20261008020000_stage9_security_grant_hardening.sql" ]]; then
+      printf '%s\n' "$path"
+    fi
+  done
+)
+
 psql_args=(-X -v ON_ERROR_STOP=1)
 for sql_file in "${additive_sql_files[@]}"; do
   psql_args+=(-f "$sql_file")
