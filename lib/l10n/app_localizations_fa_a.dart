@@ -5,6 +5,14 @@ mixin AppLocalizationsFaA on AppLocalizations {
   String get viewDocumentFile => 'مشاهده فایل';
 
   @override
+  String get reviewSourceSnapshotOnly =>
+      'منبع از نسخهٔ ثبت‌شدهٔ پژوهش بازیابی شده است. پیش از انتشار، آن را مستقلاً بررسی کنید.';
+
+  @override
+  String get reviewSourceUnavailable =>
+      'اعتبار منبع قابل بررسی نبود. بدون بازبینی منبع اصلی، منتشر نکنید.';
+
+  @override
   String get consultationShortLabel => 'مشاوره';
 
   @override
