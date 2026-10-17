@@ -66,13 +66,32 @@ begin
      or not has_column_privilege('authenticated','public.consultation_requests','status','SELECT') then
     raise exception 'Consultation internal/public column privilege boundary invalid';
   end if;
-  if not exists (select 1 from pg_proc
-                 where oid='public.get_ai_access_decision(uuid,text)'::regprocedure
-                   and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0)
-     or not exists (select 1 from pg_proc
-                    where oid='public.get_ai_daily_quota_status(uuid,text)'::regprocedure
-                      and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0) then
-    raise exception 'Entitlement or quota RPC accepts arbitrary target user';
+  -- E1-04: the newer entitlement privacy migration preserves
+  -- authenticated SELF-service, but rejects a different target p_user_id.
+  -- Untrusted p_role is ignored by the quota RPC. The separate behavioral
+  -- test (ai_entitlement_rpc_privacy.sql) attempts owner, forged-role,
+  -- cross-user, service-role and anonymous calls with isolated JWTs.
+  if not exists (
+      select 1 from pg_proc
+      where oid='public.get_ai_access_decision(uuid,text)'::regprocedure
+        and prosecdef
+        and proconfig @> array['search_path=""']
+        and position('auth.uid() is distinct from p_user_id' in lower(prosrc)) > 0
+    )
+    or not exists (
+      select 1 from pg_proc
+      where oid='public.get_ai_daily_quota_status(uuid,text)'::regprocedure
+        and prosecdef
+        and proconfig @> array['search_path=""']
+        and position('auth.uid() is distinct from p_user_id' in lower(prosrc)) > 0
+    )
+    or has_function_privilege('anon','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or not has_function_privilege('authenticated','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or has_function_privilege('anon','public.get_ai_daily_quota_status(uuid,text)','EXECUTE')
+    or not has_function_privilege('authenticated','public.get_ai_daily_quota_status(uuid,text)','EXECUTE')
+    or not has_function_privilege('service_role','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or not has_function_privilege('service_role','public.get_ai_daily_quota_status(uuid,text)','EXECUTE') then
+    raise exception 'Entitlement or quota RPC owner scope or ACL regressed';
   end if;
   if not exists (
     select 1
