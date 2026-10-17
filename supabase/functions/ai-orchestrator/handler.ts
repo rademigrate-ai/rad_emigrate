@@ -98,6 +98,7 @@ export async function handler(req: Request): Promise<Response> {
   const requireStructured = payload.require_structured === true;
   const minContext = typeof payload.min_context === "number" ? payload.min_context : null;
 
+  let requestId: string | null = null;
   if (user) {
     try {
       const quota = await db("rpc/consume_ai_daily_quota", {
@@ -106,6 +107,9 @@ export async function handler(req: Request): Promise<Response> {
       });
       if (quota && quota.allowed === false) {
         return safeJson(429, { error: "daily_limit_reached", code: "daily_limit_reached", limit: quota.limit, count: quota.count });
+      }
+      if (quota && typeof quota.request_id === "string") {
+        requestId = quota.request_id;
       }
     } catch {
       /* fallback omitted: RPC is production source of truth */
@@ -124,7 +128,6 @@ export async function handler(req: Request): Promise<Response> {
       `<SYSTEM>\n${system}\n</SYSTEM>\n<TRUSTED_APPLICATION_CONTEXT>scope=${requestedScope}; role=${role}; locale=${grounding.locale}; has_approved_evidence=${grounding.hasApprovedEvidence}</TRUSTED_APPLICATION_CONTEXT>\n<UNTRUSTED_RETRIEVED_CONTENT>\n${grounding.text || "No approved evidence is currently available."}\n</UNTRUSTED_RETRIEVED_CONTENT>`,
   });
 
-  let requestId: string | null = null;
   if (user) {
     const sessionCandidate = typeof payload.session_id === "string" ? payload.session_id.trim() : "";
     let sessionId: string | null = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sessionCandidate)
@@ -141,26 +144,38 @@ export async function handler(req: Request): Promise<Response> {
         sessionId = null;
       }
     }
-    const bodyBase = {
-      user_id: user.id,
-      capability: "chat",
-      status: "running",
-      routing_reason: "ranked_eligible_pool",
-    };
-    try {
-      const created = await db("ai_requests?select=id", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(sessionId ? { ...bodyBase, session_id: sessionId } : bodyBase),
-      });
-      requestId = created[0].id;
-    } catch {
-      const created = await db("ai_requests?select=id", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(bodyBase),
-      });
-      requestId = created[0].id;
+    if (requestId) {
+      // Stage 1 Atomic Quota: attach session_id and update routing reason on the reserved request
+      try {
+        await db(`ai_requests?id=eq.${encodeURIComponent(requestId)}`, {
+          method: "PATCH",
+          body: JSON.stringify(sessionId ? { session_id: sessionId, routing_reason: "ranked_eligible_pool" } : { routing_reason: "ranked_eligible_pool" }),
+        });
+      } catch {
+        /* ignore attach error */
+      }
+    } else {
+      const bodyBase = {
+        user_id: user.id,
+        capability: "chat",
+        status: "running",
+        routing_reason: "ranked_eligible_pool",
+      };
+      try {
+        const created = await db("ai_requests?select=id", {
+          method: "POST",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(sessionId ? { ...bodyBase, session_id: sessionId } : bodyBase),
+        });
+        requestId = created[0]?.id ?? null;
+      } catch {
+        const created = await db("ai_requests?select=id", {
+          method: "POST",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(bodyBase),
+        });
+        requestId = created[0]?.id ?? null;
+      }
     }
   }
 

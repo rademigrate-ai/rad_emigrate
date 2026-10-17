@@ -38,14 +38,24 @@ class _AdminConsultationsPageState
     });
     try {
       final client = ref.read(supabaseClientServiceProvider).client;
-      final rows = await client
-          .from('consultation_requests')
-          .select('id, topic, message, status, admin_note, created_at, user_id')
-          .order('created_at', ascending: false)
-          .limit(100);
+      List<dynamic> rows;
+      try {
+        final rpcRes = await client.rpc('list_admin_consultations');
+        rows = rpcRes as List<dynamic>;
+      } catch (_) {
+        rows =
+            await client
+                    .from('consultation_requests')
+                    .select(
+                      'id, topic, message, status, admin_note, created_at, user_id',
+                    )
+                    .order('created_at', ascending: false)
+                    .limit(100)
+                as List<dynamic>;
+      }
       if (mounted) {
         setState(() {
-          _rows = List<Map<String, dynamic>>.from(rows as List);
+          _rows = List<Map<String, dynamic>>.from(rows);
           _loading = false;
         });
       }
@@ -63,14 +73,27 @@ class _AdminConsultationsPageState
     final l10n = AppLocalizations.of(context);
     try {
       final client = ref.read(supabaseClientServiceProvider).client;
-      await client
-          .from('consultation_requests')
-          .update({
-            'status': status,
-            'admin_note': ?note,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', id);
+      try {
+        await client.rpc(
+          'update_admin_consultation',
+          params: {
+            'p_consultation_id': id,
+            'p_status': status,
+            'p_admin_note': (note != null && note.trim().isNotEmpty)
+                ? note.trim()
+                : null,
+          },
+        );
+      } catch (_) {
+        await client
+            .from('consultation_requests')
+            .update({
+              'status': status,
+              'admin_note': note,
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .eq('id', id);
+      }
       if (mounted) {
         setState(() => _notice = l10n.consultationUpdated);
         await _load();

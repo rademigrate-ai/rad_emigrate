@@ -5,6 +5,7 @@ import '../../../../core/theme/premium_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -158,12 +159,38 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       final client = supabase.client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
-      await client.from('consultation_requests').insert({
-        'user_id': uid,
-        'topic': topic,
-        'message': message,
-        'status': 'submitted',
-      });
+
+      // Stage 1 Security Hardening: Use submit_consultation_request RPC
+      // with safe fallback to direct insert if RPC not present in pre-migration environments.
+      try {
+        await client.rpc(
+          'submit_consultation_request',
+          params: {'p_topic': topic, 'p_message': message},
+        );
+      } on PostgrestException catch (e) {
+        final isMissingRpc =
+            e.code == 'PGRST202' ||
+            e.code == '42883' ||
+            e.message.contains('Could not find the function');
+        if (isMissingRpc) {
+          await client.from('consultation_requests').insert({
+            'user_id': uid,
+            'topic': topic,
+            'message': message,
+            'status': 'submitted',
+          });
+        } else {
+          rethrow;
+        }
+      } catch (_) {
+        await client.from('consultation_requests').insert({
+          'user_id': uid,
+          'topic': topic,
+          'message': message,
+          'status': 'submitted',
+        });
+      }
+
       await ref.read(consultationDraftProvider.notifier).clearDraft();
       if (mounted) {
         setState(() {
