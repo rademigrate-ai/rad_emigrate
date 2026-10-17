@@ -1,8 +1,13 @@
+import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
 import '../admin_ai_labels.dart';
@@ -29,6 +34,7 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
     final console = ref.watch(adminConsoleProvider);
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/admin'),
         title: Text(l10n.adminOperations),
         actions: [
           IconButton(
@@ -41,36 +47,41 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
           ),
         ],
       ),
-      body: snapshot.when(
-        loading: () => LoadingState.section(message: l10n.loadingOperational),
-        error: (error, _) => ErrorState(
-          message: l10n.adminLoadFailed,
-          onRetry: () => ref.invalidate(adminSnapshotProvider),
-        ),
-        data: (summary) {
-          if (!summary.canAccess) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(l10n.adminRestricted, textAlign: TextAlign.center),
+      body: PremiumCanvas(
+        child: snapshot.when(
+          loading: () => LoadingState.section(message: l10n.loadingOperational),
+          error: (error, _) => ErrorState(
+            message: l10n.adminLoadFailed,
+            onRetry: () => ref.invalidate(adminSnapshotProvider),
+          ),
+          data: (summary) {
+            if (!summary.canAccess) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    l10n.adminRestricted,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+            return console.when(
+              loading: () =>
+                  LoadingState.section(message: l10n.loadingOperational),
+              error: (error, _) => ErrorState(
+                message: l10n.adminLoadFailed,
+                onRetry: () => ref.invalidate(adminConsoleProvider),
+              ),
+              data: (data) => _AdminConsole(
+                summary: summary,
+                data: data,
+                section: _section,
+                onSectionChanged: (value) => setState(() => _section = value),
               ),
             );
-          }
-          return console.when(
-            loading: () =>
-                LoadingState.section(message: l10n.loadingOperational),
-            error: (error, _) => ErrorState(
-              message: l10n.adminLoadFailed,
-              onRetry: () => ref.invalidate(adminConsoleProvider),
-            ),
-            data: (data) => _AdminConsole(
-              summary: summary,
-              data: data,
-              section: _section,
-              onSectionChanged: (value) => setState(() => _section = value),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -142,7 +153,7 @@ class _AdminConsole extends StatelessWidget {
                         title: Text(sections[index].label),
                         onTap: () => onSectionChanged(index),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppRadii.md),
                         ),
                       ),
                     ),

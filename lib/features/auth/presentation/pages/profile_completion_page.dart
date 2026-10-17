@@ -1,3 +1,6 @@
+import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/inline_alert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +12,8 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/l10n/locale_controller.dart';
+import '../../../../core/widgets/premium_visuals.dart';
 
 class ProfileCompletionPage extends ConsumerStatefulWidget {
   const ProfileCompletionPage({super.key, this.destination});
@@ -66,81 +71,78 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.profile)),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      l10n.profileCompletionTitle,
-                      style: theme.textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.profileCompletionSubtitle,
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 20),
-                    const LinearProgressIndicator(value: 0.5, minHeight: 6),
-                    const SizedBox(height: 24),
-                    AppCard(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            l10n.aboutYou,
-                            style: theme.textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          AppTextField(
-                            controller: _nameCtrl,
-                            label: l10n.fullName,
-                            prefixIcon: Icons.badge_outlined,
-                            validator: (v) => (v == null || v.trim().length < 2)
-                                ? l10n.required
-                                : null,
-                          ),
-                          const SizedBox(height: 16),
-                          AppTextField(
-                            controller: _nationalityCtrl,
-                            label: l10n.nationalityOptional,
-                            prefixIcon: Icons.public_outlined,
-                          ),
-                          if (_error != null) ...[
-                            const SizedBox(height: 12),
-                            Semantics(
-                              liveRegion: true,
-                              child: Text(
-                                _error!,
-                                style: TextStyle(
-                                  color: theme.colorScheme.error,
-                                ),
-                              ),
-                            ),
-                          ],
-                          const SizedBox(height: 24),
-                          AppButton(
-                            label: l10n.saveAndContinue,
-                            loading: loading,
-                            onPressed: loading ? null : _submit,
-                          ),
-                        ],
-                      ),
-                    ),
+    return AuthCinematicFrame(
+      backFallback: '/dashboard',
+      eyebrow: l10n.profileCompletionTitle,
+      title: l10n.brandIntroTitle,
+      body: l10n.brandIntroBody,
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          const AppBackButton(fallback: '/dashboard'),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined),
+            label: Text(
+              Localizations.localeOf(context).languageCode == 'fa'
+                  ? l10n.english
+                  : l10n.persian,
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
+      ),
+      form: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.profileCompletionTitle,
+              style: theme.textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.profileCompletionSubtitle,
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 20),
+            const SizedBox(height: 24),
+            AppCard(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(l10n.aboutYou, style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 16),
+                  AppTextField(
+                    controller: _nameCtrl,
+                    label: l10n.fullName,
+                    prefixIcon: Icons.badge_outlined,
+                    validator: (v) => (v == null || v.trim().length < 2)
+                        ? l10n.required
+                        : null,
+                  ),
+                  const SizedBox(height: 16),
+                  AppTextField(
+                    controller: _nationalityCtrl,
+                    label: l10n.nationalityOptional,
+                    prefixIcon: Icons.public_outlined,
+                  ),
+                  if (_error != null) ...[
+                    const SizedBox(height: 12),
+                    InlineAlert(message: _error!),
                   ],
-                ),
+                  const SizedBox(height: 24),
+                  AppButton(
+                    label: l10n.saveAndContinue,
+                    loading: loading,
+                    onPressed: loading ? null : _submit,
+                  ),
+                ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

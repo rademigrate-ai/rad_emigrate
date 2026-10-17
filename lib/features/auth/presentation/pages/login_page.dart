@@ -1,3 +1,7 @@
+import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/inline_alert.dart';
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -75,7 +79,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await ref
           .read(authControllerProvider.notifier)
           .resendOtp(identifier: email);
-      if (mounted) context.go('/otp?identifier=${Uri.encodeComponent(email)}');
+      if (mounted) {
+        final uri = Uri(
+          path: '/otp',
+          queryParameters: {
+            'identifier': email,
+            if (widget.destination != null) 'from': widget.destination!,
+          },
+        );
+        context.go(uri.toString());
+      }
     } catch (error) {
       if (mounted) {
         final message = error.toString().toLowerCase();
@@ -108,13 +121,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
     final viewport = MediaQuery.sizeOf(context);
-    final wide = viewport.width >= 860;
+    final wide = viewport.width >= AppBreakpoints.desktop;
     // Keep the dimensional Earth prominent without overflowing short laptops.
     final heroSize = wide
         ? (viewport.height * 0.43).clamp(240.0, 400.0)
         : 174.0;
     return AuthCinematicFrame(
-      eyebrow: 'RAD • IMMIGRATION JOURNEY',
+      backFallback: '/dashboard',
+      eyebrow: l10n.immigrationJourney,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
       heroVisual: RadEarthBirdScene(
@@ -122,12 +136,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         semanticLabel: l10n.appTitle,
         size: heroSize,
       ),
-      localeControl: TextButton.icon(
-        icon: const Icon(Icons.language_outlined, size: 18),
-        label: Text(
-          ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
-        ),
-        onPressed: () => ref.read(localeControllerProvider.notifier).toggle(),
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          AppBackButton(fallback: '/dashboard'),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined, size: 18),
+            label: Text(
+              ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
       ),
       form: MotionReveal(
         offset: const Offset(0, 0.04),
@@ -136,7 +157,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const EditorialKicker(index: '02', label: 'ACCESS PORTAL'),
+              EditorialKicker(
+                index: '02',
+                label: AppLocalizations.of(context).accessPortal,
+              ),
               const SizedBox(height: 16),
               Text(
                 l10n.signIn,
@@ -186,29 +210,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               if (_error case final error?) ...[
                 const SizedBox(height: 14),
-                Semantics(
-                  liveRegion: true,
-                  child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.error.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: theme.colorScheme.error.withValues(alpha: 0.22),
-                      ),
-                    ),
-                    child: Text(
-                      error,
-                      style: TextStyle(color: theme.colorScheme.error),
-                    ),
-                  ),
-                ),
+                InlineAlert(message: error),
               ],
               const SizedBox(height: 6),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
-                  onPressed: () => context.go('/forgot-password'),
+                  onPressed: () => context.go(
+                    Uri(
+                      path: '/forgot-password',
+                      queryParameters: {
+                        if (widget.destination != null)
+                          'from': widget.destination!,
+                      },
+                    ).toString(),
+                  ),
                   child: Text(l10n.forgotPassword),
                 ),
               ),
@@ -223,7 +239,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               AppButton(
                 label: l10n.createAccount,
                 variant: AppButtonVariant.secondary,
-                onPressed: () => context.go('/register'),
+                onPressed: () => context.go(
+                  widget.destination != null
+                      ? Uri(
+                          path: '/register',
+                          queryParameters: {'from': widget.destination!},
+                        ).toString()
+                      : '/register',
+                ),
               ),
               TextButton(
                 onPressed: loading ? null : _continueWithOtp,

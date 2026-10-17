@@ -1,0 +1,22 @@
+{
+  "evidence": "Actual production entrypoint with non-production CI placeholder configuration; guest only.",
+  "results": [
+    {
+      "flow": "five localized primary destinations",
+      "status": "PASS"
+    },
+    {
+      "flow": "Profile to World Time without long-press",
+      "status": "PASS"
+    },
+    {
+      "flow": "language/theme persist across refresh",
+      "status": "PASS"
+    },
+    {
+      "flow": "guest AI gate and draft restoration; no auto-submit",
+      "status": "PASS"
+    }
+  ],
+  "page_errors": []
+}

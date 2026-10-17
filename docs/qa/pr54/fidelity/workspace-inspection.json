@@ -1,0 +1,27 @@
+{
+  "relationship": "Separate clones: distinct git/common directories. The Projects clone has additional linked temporary worktrees; none were changed.",
+  "directories": [
+    {
+      "path": "C:\\Users\\Mehrshad\\Desktop\\Projects\\rad_emigrate",
+      "git_dir": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/.git",
+      "common_dir": "C:/Users/Mehrshad/Desktop/Projects/rad_emigrate/.git",
+      "head": "1c8e97e09a5f81c7b51be3c5e67aa2bb7fd4aa29",
+      "branch": "integration/approved-profile-ai-bird-20261014",
+      "has_uncommitted_changes": true
+    },
+    {
+      "path": "C:\\Users\\Mehrshad\\Desktop\\Rad Emigrate\\rad_emigrate",
+      "git_dir": "C:/Users/Mehrshad/Desktop/Rad Emigrate/rad_emigrate/.git",
+      "common_dir": "C:/Users/Mehrshad/Desktop/Rad Emigrate/rad_emigrate/.git",
+      "head": "5ddfecffc80f6c5b1785eef8e8f791dc8136b5c8",
+      "branch": "feature/premium-ui-ux-overhaul-20261016",
+      "has_uncommitted_changes": true
+    }
+  ],
+  "disk_at_closeout": {
+    "free_gib": 16.56,
+    "workspace_build_gib": 2.21,
+    "qa_pr54_mib": 126.04
+  },
+  "actions": "Read-only inspection. No delete, reset, merge, move or cleanup of either project directory."
+}

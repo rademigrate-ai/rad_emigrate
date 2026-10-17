@@ -4,6 +4,7 @@ class Country {
   final String code;
   final String flagEmoji;
   final String slug;
+  final String summary;
 
   const Country({
     required this.id,
@@ -11,6 +12,7 @@ class Country {
     required this.code,
     required this.flagEmoji,
     required this.slug,
+    this.summary = '',
   });
 }
 
@@ -102,4 +104,26 @@ class VisaCatalog {
   final List<Country> countries;
   final List<VisaCategory> categories;
   final List<VisaProgram> programs;
+
+  List<VisaProgram> programsForCountry(String countryId) =>
+      programs.where((p) => p.countryId == countryId).toList(growable: false);
+
+  List<VisaCategory> categoriesForCountry(String countryId) {
+    final ids = programsForCountry(countryId).map((p) => p.categoryId).toSet();
+    return categories.where((c) => ids.contains(c.id)).toList(growable: false);
+  }
+
+  Country? countryById(String id) {
+    for (final c in countries) {
+      if (c.id == id) return c;
+    }
+    return null;
+  }
+
+  VisaCategory? categoryById(String id) {
+    for (final c in categories) {
+      if (c.id == id) return c;
+    }
+    return null;
+  }
 }

@@ -1,0 +1,62 @@
+[
+  {
+    "test": "Mobile Persian Dark Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-dashboard.png"
+  },
+  {
+    "test": "Mobile Persian Nav Dock Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-nav-dock-crop.png"
+  },
+  {
+    "test": "Center Nav Bird Close-up",
+    "file": "docs\\qa\\pr54\\verification\\final-center-nav-bird-closeup.png"
+  },
+  {
+    "test": "Animated Bird Wing Flapping GIF",
+    "file": "docs\\qa\\pr54\\verification\\final-bird-wing-flapping.gif"
+  },
+  {
+    "test": "Mobile Persian Dark AI Assistant",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-fa-dark-ai-assistant.png"
+  },
+  {
+    "test": "Mobile English Light Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-en-light-dashboard.png"
+  },
+  {
+    "test": "Mobile English Nav Dock Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-mobile-en-nav-dock-crop.png"
+  },
+  {
+    "test": "Desktop English Dark Sidebar Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-dark-dashboard.png"
+  },
+  {
+    "test": "Desktop English Sidebar Logo Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-sidebar-logo-crop.png"
+  },
+  {
+    "test": "Desktop English Dark AI Assistant",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-en-dark-ai-assistant.png"
+  },
+  {
+    "test": "Desktop AI Assistant Hero Bird Crop",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-ai-bird-hero-crop.png"
+  },
+  {
+    "test": "Desktop Persian Light Dashboard",
+    "file": "docs\\qa\\pr54\\verification\\final-desktop-fa-light-dashboard.png"
+  },
+  {
+    "test": "Side-by-side Bird Identity Comparison",
+    "file": "docs\\qa\\pr54\\verification\\comparison-bird-identity.png"
+  },
+  {
+    "test": "Bottom Dock Navigation Comparison",
+    "file": "docs\\qa\\pr54\\verification\\comparison-bottom-dock.png"
+  },
+  {
+    "test": "Authoritative 5 AI Assistant Bird States Grid",
+    "file": "docs\\qa\\pr54\\verification\\all_five_states_grid.png"
+  }
+]

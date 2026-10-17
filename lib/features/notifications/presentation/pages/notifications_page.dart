@@ -1,3 +1,6 @@
+import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
@@ -106,63 +111,82 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final session = ref.watch(authControllerProvider).valueOrNull;
     if (session?.authenticated != true) {
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.notificationsTitle)),
-        body: Center(
-          child: TextButton(
-            onPressed: () => context.go('/login'),
-            child: Text(l10n.signIn),
+        appBar: AppBar(
+          leading: const AppBackButton(fallback: '/profile'),
+          title: Text(l10n.notificationsTitle),
+        ),
+        body: PremiumCanvas(
+          child: Center(
+            child: TextButton(
+              onPressed: () => context.go('/login?from=%2Fnotifications'),
+              child: Text(l10n.signIn),
+            ),
           ),
         ),
       );
     }
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.notificationsTitle),
         actions: [
-          TextButton(onPressed: _markAllRead, child: Text(l10n.markAllRead)),
-          IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
+          IconButton(
+            tooltip: l10n.markAllRead,
+            onPressed: _markAllRead,
+            icon: const Icon(Icons.done_all),
+          ),
+          IconButton(
+            tooltip: l10n.refresh,
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+          ),
         ],
       ),
-      body: _loading
-          ? LoadingState.section(message: l10n.loading)
-          : _error != null
-          ? Center(child: Text(_error!))
-          : _items.isEmpty
-          ? Center(child: Text(l10n.noNotifications))
-          : ListView.separated(
-              itemCount: _items.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
-              itemBuilder: (context, i) {
-                final n = _items[i];
-                final unread = n['read_at'] == null;
-                return MotionStagger(
-                  index: i,
-                  child: AppCard(
-                    padding: EdgeInsets.zero,
-                    onTap: () async {
-                      final id = n['id'] as String?;
-                      if (id != null && unread && !await _markRead(id)) {
-                        if (context.mounted) _showUpdateError();
-                        return;
-                      }
-                      final path = n['action_path'] as String?;
-                      if (path != null && path.startsWith('/')) {
-                        if (context.mounted) context.go(path);
-                      }
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        unread
-                            ? Icons.notifications_active
-                            : Icons.notifications_none,
+      body: PremiumCanvas(
+        child: _loading
+            ? LoadingState.section(message: l10n.loading)
+            : _error != null
+            ? ErrorState(message: _error!, onRetry: _load)
+            : _items.isEmpty
+            ? EmptyState(
+                title: l10n.noNotifications,
+                icon: Icons.notifications_none,
+              )
+            : ListView.separated(
+                itemCount: _items.length,
+                separatorBuilder: (_, _) => const Divider(height: 1),
+                itemBuilder: (context, i) {
+                  final n = _items[i];
+                  final unread = n['read_at'] == null;
+                  return MotionStagger(
+                    index: i,
+                    child: AppCard(
+                      padding: EdgeInsets.zero,
+                      onTap: () async {
+                        final id = n['id'] as String?;
+                        if (id != null && unread && !await _markRead(id)) {
+                          if (context.mounted) _showUpdateError();
+                          return;
+                        }
+                        final path = n['action_path'] as String?;
+                        if (path != null && path.startsWith('/')) {
+                          if (context.mounted) context.go(path);
+                        }
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          unread
+                              ? Icons.notifications_active
+                              : Icons.notifications_none,
+                        ),
+                        title: Text('${n['title'] ?? ''}'),
+                        subtitle: Text('${n['body'] ?? ''}'),
                       ),
-                      title: Text('${n['title'] ?? ''}'),
-                      subtitle: Text('${n['body'] ?? ''}'),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

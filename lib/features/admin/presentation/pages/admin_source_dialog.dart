@@ -1,3 +1,5 @@
+import '../../../../core/widgets/rad_loading.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -159,11 +161,7 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
           FilledButton(
             onPressed: _saving ? null : _save,
             child: _saving
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
+                ? const SizedBox(width: 20, height: 20, child: RadPending())
                 : Text(l10n.save),
           ),
         ],

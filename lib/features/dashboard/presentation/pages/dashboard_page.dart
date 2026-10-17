@@ -1,27 +1,17 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/app_entrance.dart';
-import '../../../../core/widgets/motion_primitives.dart';
-import '../../../../core/widgets/premium_visuals.dart';
-import '../../../../core/widgets/rad_loading.dart';
-import '../../../feed/data/feed_repository.dart';
-import '../../../../core/widgets/app_button.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/directional_icons.dart';
-import '../../../../core/widgets/section_header.dart';
-import '../../../../core/widgets/status_badge.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/reference_widgets.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../applications/domain/entities/application_status.dart';
 import '../../../applications/presentation/providers/application_controller.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../documents/domain/entities/document.dart';
 import '../../../documents/presentation/providers/document_controller.dart';
-import '../../../global_time/presentation/widgets/home_global_time_widget.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -30,245 +20,209 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
-    final name = session?.fullName ?? l10n.travelerFallback;
-    final appsState = ref.watch(applicationControllerProvider);
-    final docsState = ref.watch(documentControllerProvider);
-    final apps = appsState.valueOrNull ?? [];
-    final locale = Localizations.localeOf(context).languageCode;
-    final updates = ref.watch(feedProvider(locale));
-    final docs = docsState.valueOrNull ?? [];
-    final activeApps = apps
-        .where((a) => a.status != ApplicationStatus.completed)
-        .length;
-    final missingDocs = docs
+    final isAuthed = session != null && session.isAuthenticated;
+    final name = isAuthed
+        ? (session.fullName ?? l10n.travelerFallback)
+        : l10n.travelerFallback;
+    final apps = ref.watch(applicationControllerProvider).valueOrNull ?? [];
+    final docs = ref.watch(documentControllerProvider).valueOrNull ?? [];
+    final missing = docs
         .where((d) => d.status == DocumentVerificationStatus.missing)
         .length;
-    final profileDone = session?.profileComplete == true;
-    final needsAction = !profileDone || missingDocs > 0;
-
+    final profileDone = isAuthed && session.profileComplete;
+    final quick = [
+      (
+        Icons.chat_bubble_outline,
+        const Color(0xFF345CFF),
+        l10n.consultationShortLabel,
+        '/consultation',
+      ),
+      (
+        Icons.schedule_outlined,
+        const Color(0xFF345CFF),
+        l10n.worldTimeTitle,
+        '/world-clock',
+      ),
+      (
+        Icons.description_outlined,
+        const Color(0xFF00A986),
+        l10n.documents,
+        '/documents',
+      ),
+      (Icons.article_outlined, const Color(0xFFD91F2B), l10n.feed, '/feed'),
+    ];
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(l10n.yourJourney),
+        toolbarHeight: 64,
+        titleSpacing: 16,
+        title: InkWell(
+          onTap: () => context.go('/profile'),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 21,
+                backgroundColor: context.premium.surfaceElevated,
+                child: Text(
+                  name.trim().isEmpty ? 'R' : name.trim()[0],
+                  style: TextStyle(color: context.premium.text),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.helloName(name),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Text(
+                      l10n.yourJourney,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: l10n.notificationsTitle,
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => context.go('/notifications'),
+            icon: const Icon(Icons.notifications_outlined, size: 22),
+            onPressed: () => context.push('/notifications'),
           ),
           IconButton(
             tooltip: l10n.aiAssistant,
-            icon: const Icon(Icons.smart_toy_outlined),
+            icon: const Icon(Icons.smart_toy_outlined, size: 22),
             onPressed: () => context.go('/ai-assistant'),
           ),
-          const SizedBox(width: 8),
         ],
       ),
       body: PremiumCanvas(
-        accent: AppColors.teal,
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1120),
+            constraints: const BoxConstraints(maxWidth: 1040),
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
               children: [
-                AppEntrance(
-                  child: _JourneyHero(
-                    name: name,
-                    needsAction: needsAction,
-                    onPrimaryAction: () => context.go(
-                      !profileDone
-                          ? '/profile-completion'
-                          : needsAction
-                          ? '/documents'
-                          : '/applications',
-                    ),
+                ReferenceJourneyHero(
+                  title: l10n.migrationHeroTitle,
+                  body: l10n.brandIntroBody,
+                  action: l10n.exploreVisa,
+                  onAction: () => context.go('/visa'),
+                ),
+                ReferenceSection(
+                  title: l10n.quickActions,
+                  action: l10n.shortcuts,
+                  onAction: () => context.go('/profile'),
+                ),
+                LayoutBuilder(
+                  builder: (context, constraints) => Wrap(
+                    runSpacing: 8,
+                    children: [
+                      for (final item in quick)
+                        SizedBox(
+                          width:
+                              constraints.maxWidth /
+                              (MediaQuery.textScalerOf(context).scale(14) > 20
+                                  ? 2
+                                  : 4),
+                          child: ReferenceQuickAction(
+                            icon: item.$1,
+                            color: item.$2,
+                            label: item.$3,
+                            onTap: () => context.go(item.$4),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 28),
-                if (needsAction) ...[
-                  SectionHeader(
-                    title: l10n.needsYourAction,
-                    subtitle: l10n.needsActionSubtitle,
-                  ),
-                  if (!profileDone)
-                    _ActionRow(
-                      icon: Icons.badge_outlined,
-                      title: l10n.completeProfileTitle,
-                      subtitle: l10n.completeProfileSubtitle,
-                      tone: AppColors.warning,
-                      onTap: () => context.go('/profile-completion'),
-                    ),
-                  if (missingDocs > 0)
-                    _ActionRow(
-                      icon: Icons.folder_outlined,
-                      title: missingDocs == 1
-                          ? l10n.documentMissingOne
-                          : l10n.documentsMissingCount(missingDocs),
-                      subtitle: l10n.reviewRequiredFiles,
-                      tone: AppColors.warning,
-                      badge: StatusBadge(
-                        label: l10n.actionBadge,
-                        tone: StatusTone.warning,
-                      ),
-                      onTap: () => context.go('/documents'),
-                    ),
-                  const SizedBox(height: 16),
-                ],
-                SectionHeader(
-                  title: l10n.caseOverview,
-                  subtitle: l10n.caseOverviewSubtitle,
-                  actionLabel: l10n.allCases,
+                ReferenceSection(
+                  title: l10n.recentActivity,
+                  action: l10n.allCases,
                   onAction: () => context.go('/applications'),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MotionStagger(
-                        index: 0,
-                        child: _MetricTile(
-                          value: appsState.hasValue ? activeApps : null,
-                          label: l10n.activeCases,
-                          icon: Icons.assignment_outlined,
-                          onTap: () => context.go('/applications'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: MotionStagger(
-                        index: 1,
-                        child: _MetricTile(
-                          value: docsState.hasValue ? missingDocs : null,
-                          label: l10n.documentsMissing,
-                          icon: Icons.folder_outlined,
-                          onTap: () => context.go('/documents'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 28),
-                SectionHeader(
-                  title: l10n.quickActions,
-                  subtitle: l10n.quickActionsSubtitle,
-                ),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _ActionChip(
-                      icon: Icons.public_outlined,
-                      label: l10n.visaPrograms,
-                      onTap: () => context.go('/visa'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.article_outlined,
-                      label: l10n.radUpdates,
-                      onTap: () => context.go('/feed'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.assignment_outlined,
-                      label: l10n.applications,
-                      onTap: () => context.go('/applications'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.folder_outlined,
-                      label: l10n.documents,
-                      onTap: () => context.go('/documents'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.support_agent_outlined,
-                      label: l10n.openConsultation,
-                      onTap: () => context.go('/consultation'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.notifications_outlined,
-                      label: l10n.openNotifications,
-                      onTap: () => context.go('/notifications'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.smart_toy_outlined,
-                      label: l10n.aiAssistant,
-                      onTap: () => context.go('/ai-assistant'),
-                    ),
-                    _ActionChip(
-                      icon: Icons.schedule_outlined,
-                      label: locale == 'fa' ? 'ساعت جهانی' : 'World Time',
-                      onTap: () => context.go('/world-clock'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 28),
-                const HomeGlobalTimeWidget(),
-                const SizedBox(height: 28),
-                SectionHeader(
-                  title: l10n.radUpdates,
-                  actionLabel: l10n.feed,
-                  onAction: () => context.go('/feed'),
-                ),
-                updates.when(
-                  loading: () => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: RadInlineLoading(label: l10n.loadingUpdates),
+                if (!isAuthed)
+                  _ActivityRow(
+                    icon: Icons.login_outlined,
+                    title: l10n.signIn,
+                    subtitle: l10n.caseOverviewSubtitle,
+                    onTap: () => context.go('/login?from=%2Fdashboard'),
                   ),
-                  error: (_, _) => _ShortcutRow(
-                    icon: Icons.refresh,
-                    title: l10n.updatesLoadFailed,
-                    subtitle: l10n.retry,
-                    onTap: () => ref.invalidate(feedProvider(locale)),
+                for (final app in apps.take(1))
+                  _ActivityRow(
+                    country: app.country,
+                    icon: Icons.assignment_outlined,
+                    title: app.title,
+                    subtitle: app.programName,
+                    onTap: () => context.go('/applications'),
                   ),
-                  data: (items) => items.isEmpty
-                      ? AppCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                l10n.noReviewedUpdates,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(l10n.catalogueDisclaimer),
-                            ],
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            for (final item in items.take(3))
-                              _ShortcutRow(
-                                icon: Icons.article_outlined,
-                                title: item.title,
-                                subtitle: item.summary,
-                                onTap: () => context.go('/feed'),
-                              ),
-                          ],
-                        ),
-                ),
-                const SizedBox(height: 28),
-                SectionHeader(title: l10n.shortcuts),
-                _ShortcutRow(
-                  icon: Icons.person_outline,
-                  title: l10n.profile,
-                  subtitle: l10n.profileShortcutSubtitle,
-                  onTap: () => context.go('/profile'),
-                ),
-                _ShortcutRow(
-                  icon: Icons.smart_toy_outlined,
-                  title: l10n.askAssistant,
-                  subtitle: l10n.askAssistantSubtitle,
-                  onTap: () => context.go('/ai-assistant'),
-                ),
-                _ShortcutRow(
-                  icon: Icons.support_agent_outlined,
-                  title: l10n.openConsultation,
-                  subtitle: l10n.consultationIntro,
-                  onTap: () => context.go('/consultation'),
-                ),
-                _ShortcutRow(
-                  icon: Icons.notifications_outlined,
-                  title: l10n.openNotifications,
-                  subtitle: l10n.noNotifications,
-                  onTap: () => context.go('/notifications'),
+                if (missing > 0)
+                  _ActivityRow(
+                    icon: Icons.description_outlined,
+                    title: missing == 1
+                        ? l10n.documentMissingOne
+                        : l10n.documentsMissingCount(missing),
+                    subtitle: l10n.reviewRequiredFiles,
+                    onTap: () => context.push('/documents'),
+                  ),
+                if (isAuthed && !profileDone)
+                  _ActivityRow(
+                    icon: Icons.badge_outlined,
+                    title: l10n.completeProfileTitle,
+                    subtitle: l10n.completeProfileSubtitle,
+                    onTap: () => context.go('/profile-completion'),
+                  ),
+                if (isAuthed && apps.isEmpty && missing == 0 && profileDone)
+                  _ActivityRow(
+                    icon: Icons.assignment_outlined,
+                    title: l10n.noApplications,
+                    subtitle: l10n.noApplicationsSubtitle,
+                    onTap: () => context.go('/applications'),
+                  ),
+                const SizedBox(height: 12),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final tiles = [
+                      _InformationCard(
+                        image: 'assets/images/destinations/gb.jpg',
+                        title: l10n.worldTimeTitle,
+                        subtitle: l10n.searchWorldClocks,
+                        onTap: () => context.push('/world-clock'),
+                      ),
+                      _InformationCard(
+                        image: 'assets/images/destinations/ca.jpg',
+                        title: l10n.openConsultation,
+                        subtitle: l10n.consultationIntro,
+                        onTap: () => context.push('/consultation'),
+                      ),
+                    ];
+                    if (MediaQuery.textScalerOf(context).scale(14) > 21) {
+                      return Column(
+                        children: [
+                          for (final tile in tiles)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: tile,
+                            ),
+                        ],
+                      );
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: tiles[0]),
+                        const SizedBox(width: 12),
+                        Expanded(child: tiles[1]),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
@@ -279,231 +233,136 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
-class _JourneyHero extends StatelessWidget {
-  const _JourneyHero({
-    required this.name,
-    required this.needsAction,
-    required this.onPrimaryAction,
-  });
-
-  final String name;
-  final bool needsAction;
-  final VoidCallback onPrimaryAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return PremiumHeroPanel(
-      kicker: const EditorialKicker(
-        index: '01',
-        label: 'YOUR JOURNEY',
-        dark: true,
-      ),
-      title: l10n.helloName(name),
-      body: l10n.brandIntroBody,
-      trailing: const RadOrbit(size: 250, showBrand: true),
-      footer: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          AppButton(
-            label: l10n.exploreVisa,
-            icon: Icons.public_outlined,
-            expanded: false,
-            onPressed: () => context.go('/visa'),
-          ),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.58)),
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            ),
-            icon: Icon(
-              needsAction
-                  ? directionalForward(context)
-                  : Icons.assignment_outlined,
-              size: 18,
-            ),
-            label: Text(
-              needsAction ? l10n.reviewNextStep : l10n.viewApplications,
-            ),
-            onPressed: onPrimaryAction,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionRow extends StatelessWidget {
-  const _ActionRow({
+class _ActivityRow extends StatelessWidget {
+  const _ActivityRow({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.tone,
     required this.onTap,
-    this.badge,
+    this.country,
   });
-
   final IconData icon;
   final String title;
   final String subtitle;
-  final Color tone;
+  final String? country;
   final VoidCallback onTap;
-  final Widget? badge;
-
   @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      margin: const EdgeInsets.only(bottom: 10),
-      onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-      child: Row(
-        children: [
-          Icon(icon, color: tone),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 3),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ),
-          badge ??
-              Icon(
-                directionalChevron(context),
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+  Widget build(BuildContext context) => AppCard(
+    onTap: onTap,
+    margin: const EdgeInsets.only(bottom: 8),
+    padding: const EdgeInsets.all(12),
+    child: Row(
+      children: [
+        if (country != null)
+          ReferenceFlag(country: country!)
+        else
+          ReferenceIcon(icon: icon, color: context.premium.information),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-        ],
-      ),
-    );
-  }
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        Icon(
+          directionalChevron(context),
+          size: 18,
+          color: context.premium.mutedText,
+        ),
+      ],
+    ),
+  );
 }
 
-class _MetricTile extends StatelessWidget {
-  const _MetricTile({
-    required this.value,
-    required this.label,
-    required this.icon,
+class _InformationCard extends StatelessWidget {
+  const _InformationCard({
+    required this.image,
+    required this.title,
+    required this.subtitle,
     required this.onTap,
   });
-
-  final int? value;
-  final String label;
-  final IconData icon;
+  final String image;
+  final String title;
+  final String subtitle;
   final VoidCallback onTap;
-
   @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: PremiumCanvas(
-            dark: true,
-            accent: icon == Icons.folder_outlined
-                ? AppColors.primaryRed
-                : AppColors.teal,
-            compact: true,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 19, 20, 20),
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(18),
+    child: Material(
+      color: const Color(0xFF101A2B),
+      child: InkWell(
+        onTap: onTap,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                image,
+                fit: BoxFit.cover,
+                excludeFromSemantics: true,
+              ),
+            ),
+            const Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x100B1220), Color(0xF00B1220)],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 40, 12, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(icon, size: 22, color: const Color(0xFF70E4DE)),
-                  const SizedBox(height: 12),
-                  MotionCount(
-                    value: value,
-                    placeholder: '—',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  Text(
+                    title,
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontFeatures: const [ui.FontFeature.tabularFigures()],
+                      fontWeight: FontWeight.w800,
+                      fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xFFBFD1D6)),
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Color(0xFFEDF3FF),
+                      fontSize: 11,
+                    ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Icon(
+                      directionalChevron(context),
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
-    );
-  }
-}
-
-class _ActionChip extends StatelessWidget {
-  const _ActionChip({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ActionChip(
-      avatar: Icon(icon, size: 18),
-      label: Text(label),
-      onPressed: onTap,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      side: BorderSide(color: Theme.of(context).dividerColor),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-    );
-  }
-}
-
-class _ShortcutRow extends StatelessWidget {
-  const _ShortcutRow({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      onTap: onTap,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 3),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ),
-          Icon(
-            directionalChevron(context),
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ],
-      ),
-    );
-  }
+    ),
+  );
 }

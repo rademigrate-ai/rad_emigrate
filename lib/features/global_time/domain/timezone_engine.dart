@@ -6,15 +6,26 @@ import 'geo_bootstrap.dart';
 /// Accurate IANA timezone conversions for RAD Global Time.
 abstract final class TimezoneEngine {
   static bool _initialized = false;
+  static Future<void>? _initialization;
 
-  static Future<void> ensureInitialized() async {
-    if (_initialized) return;
+  static bool get isReady => _initialized;
+
+  /// Share a single bootstrap across concurrent callers. The timezone database
+  /// must be ready before clock widgets attempt to resolve IANA locations.
+  static Future<void> ensureInitialized() {
+    if (_initialized) return Future<void>.value();
+    return _initialization ??= _bootstrap();
+  }
+
+  static Future<void> _bootstrap() async {
     try {
-      await bootstrapGeoTimezone();
+      await bootstrapTimezoneDatabase();
       _initialized = true;
     } catch (_) {
-      // Do not rethrow: page must still render catalog clocks.
-      // markInitialized may already have run for the tz db portion.
+      // Boundary polygons are optional. Clear the shared future so a later
+      // caller can retry if the first attempt failed before markInitialized.
+    } finally {
+      _initialization = null;
     }
   }
 
@@ -29,8 +40,9 @@ abstract final class TimezoneEngine {
       try {
         return tz.getLocation('UTC');
       } catch (_) {
-        // Extremely defensive: database not loaded yet.
-        rethrow;
+        // Database not loaded yet — never rethrow into the widget tree.
+        // [tz.UTC] is a compile-time Location and does not require the DB.
+        return tz.UTC;
       }
     }
   }
@@ -41,6 +53,32 @@ abstract final class TimezoneEngine {
   }
 
   static tz.TZDateTime nowInCity(City city) => nowIn(city.timezone);
+
+  /// Every real instant matching a civil wall time: none in a DST gap, two
+  /// in a fold. Callers must let the user select a repeated occurrence.
+  static List<tz.TZDateTime> localCandidates(
+    String ianaId,
+    DateTime date,
+    int hour,
+    int minute,
+  ) {
+    if (!isReady) throw StateError('Timezone database is not ready');
+    final loc = tz.getLocation(ianaId);
+    final civil = DateTime.utc(date.year, date.month, date.day, hour, minute);
+    final matches = <int, tz.TZDateTime>{};
+    for (final offset in loc.zones.map((zone) => zone.offset).toSet()) {
+      final candidate = tz.TZDateTime.from(civil.subtract(offset), loc);
+      if (candidate.year == date.year &&
+          candidate.month == date.month &&
+          candidate.day == date.day &&
+          candidate.hour == hour &&
+          candidate.minute == minute) {
+        matches[candidate.millisecondsSinceEpoch] = candidate;
+      }
+    }
+    final result = matches.values.toList()..sort((a, b) => a.compareTo(b));
+    return result;
+  }
 
   static tz.TZDateTime convert({
     required String fromIana,

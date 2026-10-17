@@ -8,13 +8,9 @@ IconData directionalChevron(BuildContext context) {
 }
 
 IconData directionalBack(BuildContext context) {
-  return Directionality.of(context) == TextDirection.rtl
-      ? Icons.arrow_forward
-      : Icons.arrow_back;
+  return Icons.arrow_back;
 }
 
 IconData directionalForward(BuildContext context) {
-  return Directionality.of(context) == TextDirection.rtl
-      ? Icons.arrow_back
-      : Icons.arrow_forward;
+  return Icons.arrow_forward;
 }

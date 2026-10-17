@@ -1,0 +1,79 @@
+{
+  "application_source": "c5eda9600018b5bf4ba0907169379ba6571c050d",
+  "lib_tree": "1b61ae036430da3ff6221c3d3854e00c364619e9",
+  "existing_capture_source": "5ddfecffc80f6c5b1785eef8e8f791dc8136b5c8",
+  "existing_capture_lib_tree": "ef05b26462376bf15523121cb4d7c3e91d45ef31",
+  "final_source_delta": "Selected desktop navigation label now uses theme textPrimary instead of white. A contrast regression check covers light/dark. No further screenshots generated.",
+  "flutter_tests": 430,
+  "analysis_issues": 0,
+  "formatted_files": 246,
+  "format_changes": 0,
+  "web_release": "PASS (non-production CI placeholder configuration)",
+  "qa_web_release": "PASS (separate synthetic-fixture entrypoint)",
+  "android_arm64_debug": "PASS (final application source; existing SDK/Java/Kotlin warnings)",
+  "builds": [
+    {
+      "artifact": "build\\qa-fidelity-reviewed\\main.dart.js",
+      "sha256": "cc01fdb8507a4fe48fa632a48ec7a097be331ec8fceaf7f43a74b301354e1923"
+    },
+    {
+      "artifact": "build\\app-fidelity-closeout\\main.dart.js",
+      "sha256": "f3421f29f4ac5cd6d25ea75d4f0e89f7ccbe58c512f0d17d53640fc3319eda3b"
+    },
+    {
+      "artifact": "build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "sha256": "48ddfe6bc1b13561c0a08d3e8e6e9169fb7d14efeb2d27beccd88deb9f919e3d"
+    }
+  ],
+  "matrix": {
+    "captures": 276,
+    "browser_errors": 0,
+    "retries": 0,
+    "viewports": [
+      "390x844",
+      "834x1112",
+      "1440x900"
+    ],
+    "locales": [
+      "en",
+      "fa"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "detail_and_accessibility_captures": 60,
+  "baseline_additional_captures": 10,
+  "before_after_comparisons": 8,
+  "focused_existing_acceptance_captures": 44,
+  "reviewed_mobile_contact_sheets": 4,
+  "reviewed_detail_contact_sheets": 4,
+  "real_guest_flows": 4,
+  "real_guest_page_errors": 0,
+  "preceding_implementation_ci": {
+    "source": "5ddfecf",
+    "run": 577,
+    "url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/38971769132",
+    "jobs_successful": 7,
+    "jobs_total": 7
+  },
+  "final_documentation_head_ci": "Recorded on the updated Draft PR after the evidence commit.",
+  "limitations": [
+    "Browser captures use synthetic fixture repositories, not private customer records.",
+    "Focused composer uses a reduced browser viewport; native soft-keyboard behavior was not physically tested.",
+    "No physical Android/iOS run, live authenticated AI response, production OTP/email or private file access.",
+    "Fixed five-slot dock labels ellipsize at 320px/200% text; full accessible labels remain. Content reflows and scrolls.",
+    "Country flag emoji depend on Flutter/browser fallback-font loading. Accepted clock captures wait for that network phase."
+  ],
+  "repository_safety": {
+    "pr": 54,
+    "draft": true,
+    "merged": false,
+    "deployed": false,
+    "production_supabase_changed": false,
+    "migrations_created": false,
+    "dependencies_changed": false,
+    "bird_assets_and_renderers_unchanged": true
+  }
+}

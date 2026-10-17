@@ -1,9 +1,14 @@
+import 'app_back_button.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import '../theme/premium_tokens.dart';
+import '../../l10n/app_localizations.dart';
+import 'rad_glass_surface.dart';
 import 'motion_primitives.dart';
 import 'rad_brand.dart';
 
@@ -18,7 +23,7 @@ class PremiumCanvas extends StatelessWidget {
     this.dark = false,
     this.accent = AppColors.teal,
     this.compact = false,
-    this.showEditorialRule = true,
+    this.showEditorialRule = false,
   });
 
   final Widget child;
@@ -29,25 +34,18 @@ class PremiumCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = dark ? AppColors.midnight : const Color(0xFFF3F7F8);
+    final effectiveDark =
+        dark || Theme.of(context).brightness == Brightness.dark;
+    final tokens = effectiveDark ? PremiumTokens.dark : context.premium;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: background,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: dark
-              ? const [Color(0xFF071620), Color(0xFF0B2632), Color(0xFF071620)]
-              : const [Color(0xFFF7FAFA), Color(0xFFEAF4F5), Color(0xFFF9FBFB)],
-        ),
-      ),
+      decoration: BoxDecoration(color: tokens.canvas),
       child: Stack(
         children: [
           Positioned.fill(
             child: IgnorePointer(
               child: CustomPaint(
                 painter: _CanvasGridPainter(
-                  dark: dark,
+                  dark: effectiveDark,
                   accent: accent,
                   compact: compact,
                   showEditorialRule: showEditorialRule,
@@ -55,7 +53,7 @@ class PremiumCanvas extends StatelessWidget {
               ),
             ),
           ),
-          child,
+          Material(color: Colors.transparent, child: child),
         ],
       ),
     );
@@ -76,19 +74,26 @@ class EditorialKicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = dark ? const Color(0xFF8EE9E4) : AppColors.teal;
+    final color = context.premium.accentForeground;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(width: 28, height: 2, color: AppColors.primaryRed),
         const SizedBox(width: 10),
-        Text(
-          '$index / $label',
-          style: TextStyle(
-            color: color,
-            fontSize: 11,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.15,
+        // The kicker must never overflow narrow mobile headers; ellipsize
+        // instead of breaking layout when the label is long.
+        Flexible(
+          child: Text(
+            '$index / $label',
+            maxLines: 1,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0,
+            ),
           ),
         ),
       ],
@@ -198,6 +203,7 @@ class AuthCinematicFrame extends StatelessWidget {
     required this.body,
     required this.localeControl,
     this.heroVisual,
+    this.backFallback,
   });
 
   final Widget form;
@@ -206,10 +212,11 @@ class AuthCinematicFrame extends StatelessWidget {
   final String body;
   final Widget localeControl;
   final Widget? heroVisual;
+  final String? backFallback;
 
   @override
   Widget build(BuildContext context) {
-    final wide = MediaQuery.sizeOf(context).width >= 860;
+    final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
     final theme = Theme.of(context);
     final visual = PremiumCanvas(
       dark: true,
@@ -260,12 +267,14 @@ class AuthCinematicFrame extends StatelessWidget {
               const SizedBox(height: 24),
               const _RouteLegend(),
             ] else ...[
-              const Spacer(),
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: heroVisual ?? const RadOrbit(size: 174),
+              Expanded(
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: heroVisual ?? const RadOrbit(size: 174),
+                  ),
+                ),
               ),
-              const Spacer(),
             ],
           ],
         ),
@@ -293,20 +302,8 @@ class AuthCinematicFrame extends StatelessWidget {
                     child: localeControl,
                   ),
                   const SizedBox(height: 26),
-                  Container(
+                  RadGlassSurface(
                     padding: EdgeInsets.all(wide ? 32 : 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.92),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.white),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x1A083344),
-                          blurRadius: 38,
-                          offset: Offset(0, 20),
-                        ),
-                      ],
-                    ),
                     child: form,
                   ),
                   if (!wide) ...[
@@ -315,8 +312,8 @@ class AuthCinematicFrame extends StatelessWidget {
                       child: Text(
                         eyebrow,
                         style: theme.textTheme.labelMedium?.copyWith(
-                          color: AppColors.teal,
-                          letterSpacing: 1,
+                          color: context.premium.mutedText,
+                          letterSpacing: 0,
                         ),
                       ),
                     ),
@@ -329,7 +326,7 @@ class AuthCinematicFrame extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
+    final frame = Scaffold(
       body: wide
           ? Row(
               children: [
@@ -339,11 +336,21 @@ class AuthCinematicFrame extends StatelessWidget {
             )
           : Column(
               children: [
-                SizedBox(height: 264, child: visual),
+                SizedBox(
+                  height:
+                      MediaQuery.sizeOf(context).height < 700 ||
+                          MediaQuery.viewInsetsOf(context).bottom > 0
+                      ? 120
+                      : 220,
+                  child: visual,
+                ),
                 Expanded(child: formSurface),
               ],
             ),
     );
+    return backFallback == null
+        ? frame
+        : BackFallbackScope(fallback: backFallback!, child: frame);
   }
 }
 
@@ -355,7 +362,7 @@ class PremiumHeroPanel extends StatelessWidget {
     required this.body,
     this.trailing,
     this.footer,
-    this.dark = true,
+    this.dark = false,
   });
 
   final Widget kicker;
@@ -367,78 +374,75 @@ class PremiumHeroPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = dark
-        ? Colors.white
-        : Theme.of(context).colorScheme.onSurface;
-    final secondary = dark
-        ? const Color(0xFFBDD2D7)
-        : Theme.of(context).colorScheme.onSurfaceVariant;
-    final compact = MediaQuery.sizeOf(context).width < 600;
-    final height = footer == null
-        ? (compact ? 320.0 : 292.0)
-        : (compact ? 410.0 : 350.0);
-    return SizedBox(
-      height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
-        child: PremiumCanvas(
-          dark: dark,
-          accent: AppColors.teal,
-          child: Container(
-            padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: dark
-                    ? const Color(0xFF4CBFBD).withValues(alpha: 0.32)
-                    : const Color(0xFFBBD5D7),
-              ),
-            ),
-            child: Stack(
-              children: [
-                if (trailing != null && !compact)
-                  PositionedDirectional(
-                    end: -18,
-                    bottom: -40,
-                    child: Opacity(
-                      opacity: dark ? 0.88 : 0.6,
-                      child: trailing!,
+    final tokens = dark ? PremiumTokens.dark : context.premium;
+    final foreground = tokens.text;
+    final secondary = tokens.mutedText;
+    final compact = MediaQuery.sizeOf(context).width < AppBreakpoints.tablet;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppRadii.hero),
+      child: PremiumCanvas(
+        dark: dark,
+        accent: AppColors.teal,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            gradient: tokens.heroGradient,
+            border: Border.all(color: tokens.border),
+          ),
+          child: Stack(
+            children: [
+              if (trailing != null && !compact)
+                PositionedDirectional(
+                  end: -18,
+                  bottom: -40,
+                  child: Opacity(opacity: dark ? 0.88 : 0.6, child: trailing!),
+                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (compact && trailing != null)
+                    Row(
+                      children: [
+                        Expanded(child: kicker),
+                        const SizedBox(width: 12),
+                        SizedBox(
+                          width: 72,
+                          height: 72,
+                          child: FittedBox(child: trailing!),
+                        ),
+                      ],
+                    )
+                  else
+                    kicker,
+                  const SizedBox(height: 22),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.headlineLarge
+                          ?.copyWith(
+                            color: foreground,
+                            fontSize: compact ? 28 : 32,
+                            height: 1.4,
+                            letterSpacing: 0,
+                          ),
                     ),
                   ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    kicker,
-                    const SizedBox(height: 22),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 600),
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.headlineLarge
-                            ?.copyWith(
-                              color: foreground,
-                              fontSize: 34,
-                              height: 1.1,
-                              letterSpacing: -0.5,
-                            ),
-                      ),
+                  const SizedBox(height: 12),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 540),
+                    child: Text(
+                      body,
+                      style: Theme.of(context).textTheme.bodyLarge
+                          ?.copyWith(color: secondary, height: 1.55),
                     ),
-                    const SizedBox(height: 12),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 540),
-                      child: Text(
-                        body,
-                        style: Theme.of(context).textTheme.bodyLarge
-                            ?.copyWith(color: secondary, height: 1.55),
-                      ),
-                    ),
-                    if (footer != null) ...[
-                      const SizedBox(height: 24),
-                      footer!,
-                    ],
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  if (footer != null) ...[const SizedBox(height: 24), footer!],
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -451,7 +455,8 @@ class _RouteLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['Explore', 'Organize', 'Follow'];
+    final l10n = AppLocalizations.of(context);
+    final labels = [l10n.explore, l10n.documents, l10n.cases];
     return Wrap(
       spacing: 12,
       runSpacing: 8,
@@ -494,20 +499,11 @@ class _CanvasGridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final grid = Paint()
-      ..color = (dark ? Colors.white : AppColors.navy).withValues(
-        alpha: dark ? 0.045 : 0.035,
-      )
-      ..strokeWidth = 1;
-    final step = compact ? 52.0 : 72.0;
-    for (var x = -size.height; x < size.width + size.height; x += step) {
-      canvas.drawLine(Offset(x, 0), Offset(x + size.height, size.height), grid);
-    }
     final glow = Paint()
       ..shader =
           RadialGradient(
             colors: [
-              accent.withValues(alpha: dark ? 0.20 : 0.14),
+              accent.withValues(alpha: dark ? 0.06 : 0.025),
               Colors.transparent,
             ],
           ).createShader(
@@ -523,7 +519,7 @@ class _CanvasGridPainter extends CustomPainter {
     );
     if (showEditorialRule) {
       final red = Paint()
-        ..color = AppColors.primaryRed.withValues(alpha: dark ? 0.38 : 0.24)
+        ..color = AppColors.primaryRed.withValues(alpha: dark ? 0.12 : 0.06)
         ..strokeWidth = 2;
       canvas.drawLine(
         Offset(size.width * 0.06, size.height * 0.87),

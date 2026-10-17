@@ -249,4 +249,57 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get consultationLoadFailed =>
       'بارگذاری درخواست‌های مشاوره ممکن نشد. لطفاً دوباره تلاش کنید.';
+
+  @override
+  String get guestVisitor => 'کاربر مهمان';
+
+  @override
+  String get guestProfileSubtitle =>
+      'برای دسترسی به نقشه راه اختصاصی، پیگیری پرونده، مدیریت مدارک و گفت‌وگو با هوش مصنوعی وارد شوید.';
+
+  @override
+  String get guestWhySignIn => 'امکانات ویژه حساب کاربری';
+
+  @override
+  String get guestTrackCasesTitle => 'پیگیری پرونده‌ها';
+
+  @override
+  String get guestTrackCasesBody =>
+      'مشاهده وضعیت لحظه‌ای پرونده و مراحل صدور ویزا.';
+
+  @override
+  String get guestManageDocsTitle => 'صندوق امن مدارک';
+
+  @override
+  String get guestManageDocsBody =>
+      'بارگذاری، اعتبارسنجی و نگهداری اسناد هویتی و تحصیلی.';
+
+  @override
+  String get guestAiTitle => 'دستیار هوشمند مهاجرت';
+
+  @override
+  String get guestAiBody => 'راهنمایی اختصاصی به همراه تاریخچه گفت‌وگوها.';
+
+  @override
+  String get guestConsultationTitle => 'مشاوره با متخصصین';
+
+  @override
+  String get guestConsultationBody =>
+      'درخواست و رزرو وقت مشاوره با مشاوران رسمی راد.';
+
+  @override
+  String get signInToViewConsultations =>
+      'برای مشاهده تاریخچه مشاوره‌ها وارد شوید';
+
+  @override
+  String get signInToChatAi => 'برای گفت‌وگو با دستیار هوشمند وارد شوید';
+
+  @override
+  String get signInToSave => 'برای ذخیره خبرها وارد شوید';
+
+  @override
+  String get consultationDraftRestored => 'پیش‌نویس مشاوره شما بازیابی شد.';
+
+  @override
+  String get aiPromptRestored => 'پرسش شما بازیابی شد.';
 }

@@ -1,3 +1,5 @@
+import '../../../../core/widgets/app_back_button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +13,7 @@ import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/feed_repository.dart';
 
 class FeedPage extends ConsumerStatefulWidget {
@@ -27,7 +30,10 @@ class _FeedPageState extends ConsumerState<FeedPage> {
     final locale = Localizations.localeOf(context).languageCode;
     final feed = ref.watch(feedProvider(locale));
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.feedTitle)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallback: '/dashboard'),
+        title: Text(l10n.feedTitle),
+      ),
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: feed.when(
@@ -59,9 +65,9 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return PremiumHeroPanel(
-                          kicker: const EditorialKicker(
+                          kicker: EditorialKicker(
                             index: '05',
-                            label: 'RAD BRIEFING',
+                            label: AppLocalizations.of(context).radBriefing,
                             dark: true,
                           ),
                           title: l10n.radUpdates,
@@ -87,6 +93,18 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                             }
                           },
                           onSaved: () async {
+                            final session = ref
+                                .read(authControllerProvider)
+                                .valueOrNull;
+                            if (session == null || !session.isAuthenticated) {
+                              context.go(
+                                Uri(
+                                  path: '/login',
+                                  queryParameters: {'from': '/feed'},
+                                ).toString(),
+                              );
+                              return;
+                            }
                             try {
                               await ref
                                   .read(feedRepositoryProvider)

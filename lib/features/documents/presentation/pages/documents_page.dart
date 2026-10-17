@@ -1,23 +1,34 @@
+import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/errors/localized_error_message.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
 import '../../../../core/widgets/loading_state.dart';
-import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/rad_loading.dart';
-import '../../../../core/widgets/section_header.dart';
+import '../../../../core/widgets/reference_widgets.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/document.dart';
 import '../../domain/entities/document_type.dart';
 import '../providers/document_controller.dart';
 
-class DocumentsPage extends ConsumerWidget {
+class DocumentsPage extends ConsumerStatefulWidget {
   const DocumentsPage({super.key});
+  @override
+  ConsumerState<DocumentsPage> createState() => _DocumentsPageState();
+}
+
+class _DocumentsPageState extends ConsumerState<DocumentsPage> {
+  DocumentTypeKind? _filter;
 
   StatusTone _tone(DocumentVerificationStatus s) {
     switch (s) {
@@ -59,13 +70,14 @@ class DocumentsPage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(documentControllerProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.documents),
         actions: [
           IconButton(
@@ -76,89 +88,104 @@ class DocumentsPage extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primaryRed,
-        foregroundColor: Colors.white,
-        icon: const Icon(Icons.add),
-        label: Text(l10n.addType),
-        onPressed: () async {
-          await ref
-              .read(documentControllerProvider.notifier)
-              .addDocumentType(
-                name: l10n.newDocument,
-                kind: DocumentTypeKind.other,
-              );
-        },
-      ),
-      body: state.when(
-        loading: () => LoadingState.section(message: l10n.loadingDocuments),
-        error: (e, _) => ErrorState(
-          message: l10n.errorGeneric,
-          onRetry: () => ref.read(documentControllerProvider.notifier).load(),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: FilledButton.icon(
+            icon: const Icon(Icons.add),
+            label: Text(l10n.addType),
+            onPressed: () async {
+              await ref
+                  .read(documentControllerProvider.notifier)
+                  .addDocumentType(
+                    name: l10n.newDocument,
+                    kind: DocumentTypeKind.other,
+                  );
+            },
+          ),
         ),
-        data: (docs) {
-          if (docs.isEmpty) {
-            return EmptyState(
-              title: l10n.noDocuments,
-              subtitle: l10n.noDocumentsSubtitle,
-              icon: Icons.folder_outlined,
-            );
-          }
+      ),
+      body: PremiumCanvas(
+        child: state.when(
+          loading: () => LoadingState.section(message: l10n.loadingDocuments),
+          error: (e, _) => ErrorState(
+            message: localizedDataError(e, l10n),
+            onRetry: () => ref.read(documentControllerProvider.notifier).load(),
+          ),
+          data: (docs) {
+            if (docs.isEmpty) {
+              return EmptyState(
+                title: l10n.noDocuments,
+                subtitle: l10n.noDocumentsSubtitle,
+                icon: Icons.folder_outlined,
+              );
+            }
 
-          final missing = docs
-              .where((d) => d.status == DocumentVerificationStatus.missing)
-              .toList();
-          final rest = docs
-              .where((d) => d.status != DocumentVerificationStatus.missing)
-              .toList();
-
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 880),
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 88),
-                children: [
-                  if (missing.isNotEmpty) ...[
-                    SectionHeader(
-                      title: l10n.missingSection,
-                      subtitle: l10n.missingSectionSubtitle,
-                    ),
-                    ...missing.asMap().entries.map(
-                      (entry) => MotionStagger(
-                        index: entry.key,
-                        child: _DocTile(
-                          doc: entry.value,
-                          tone: _tone(entry.value.status),
-                          kindLabel: _kindLabel(entry.value.kind, l10n),
-                          statusLabel: _statusLabel(entry.value.status, l10n),
-                          onTap: () => _openSheet(context, ref, entry.value),
-                        ),
+            final filtered = docs
+                .where((doc) => _filter == null || doc.kind == _filter)
+                .toList();
+            final kinds = docs.map((doc) => doc.kind).toSet();
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 880),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(end: 6),
+                            child: ChoiceChip(
+                              label: Text(l10n.allItems),
+                              selected: _filter == null,
+                              selectedColor: context.premium.accent,
+                              showCheckmark: false,
+                              labelStyle: TextStyle(
+                                color: _filter == null
+                                    ? Colors.white
+                                    : context.premium.mutedText,
+                              ),
+                              onSelected: (_) => setState(() => _filter = null),
+                            ),
+                          ),
+                          for (final kind in kinds)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(end: 6),
+                              child: ChoiceChip(
+                                label: Text(_kindLabel(kind, l10n)),
+                                selected: _filter == kind,
+                                selectedColor: context.premium.accent,
+                                showCheckmark: false,
+                                labelStyle: TextStyle(
+                                  color: _filter == kind
+                                      ? Colors.white
+                                      : context.premium.mutedText,
+                                ),
+                                onSelected: (_) =>
+                                    setState(() => _filter = kind),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
+                    for (final doc in filtered)
+                      _DocTile(
+                        doc: doc,
+                        tone: _tone(doc.status),
+                        kindLabel: _kindLabel(doc.kind, l10n),
+                        statusLabel: _statusLabel(doc.status, l10n),
+                        onTap: () => _openSheet(context, ref, doc),
+                      ),
                   ],
-                  SectionHeader(
-                    title: missing.isEmpty
-                        ? l10n.allDocuments
-                        : l10n.submittedSection,
-                  ),
-                  ...rest.asMap().entries.map(
-                    (entry) => MotionStagger(
-                      index: entry.key + missing.length,
-                      child: _DocTile(
-                        doc: entry.value,
-                        tone: _tone(entry.value.status),
-                        kindLabel: _kindLabel(entry.value.kind, l10n),
-                        statusLabel: _statusLabel(entry.value.status, l10n),
-                        onTap: () => _openSheet(context, ref, entry.value),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -179,6 +206,20 @@ class DocumentsPage extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Container(
+                    height: 150,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: context.premium.surfaceElevated,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Icon(
+                      Icons.description_outlined,
+                      size: 64,
+                      color: context.premium.information,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(doc.name, style: Theme.of(ctx).textTheme.titleLarge),
                   const SizedBox(height: 8),
                   Text(
@@ -281,6 +322,43 @@ class DocumentsPage extends ConsumerWidget {
                       label: Text(sheetL10n.chooseFileUpload),
                     ),
                   const SizedBox(height: 8),
+                  if (doc.storagePath != null &&
+                      doc.status != DocumentVerificationStatus.missing) ...[
+                    OutlinedButton.icon(
+                      onPressed: isUploading
+                          ? null
+                          : () async {
+                              try {
+                                uploading.value = true;
+                                final preview = await ref
+                                    .read(documentControllerProvider.notifier)
+                                    .previewDocument(doc.id);
+                                final opened = await launchUrl(
+                                  preview,
+                                  mode: LaunchMode.externalApplication,
+                                );
+                                if (!opened) {
+                                  throw StateError('Preview unavailable');
+                                }
+                              } catch (_) {
+                                if (ctx.mounted) {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    SnackBar(
+                                      content: Text(sheetL10n.errorGeneric),
+                                    ),
+                                  );
+                                }
+                              } finally {
+                                if (ctx.mounted) {
+                                  uploading.value = false;
+                                }
+                              }
+                            },
+                      icon: const Icon(Icons.visibility_outlined),
+                      label: Text(sheetL10n.viewDocumentFile),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   OutlinedButton.icon(
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(
@@ -350,31 +428,64 @@ class _DocTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: AppCard(
-        onTap: onTap,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    doc.name,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(kindLabel, style: Theme.of(context).textTheme.bodySmall),
-                ],
+    final color = switch (doc.kind) {
+      DocumentTypeKind.passport => const Color(0xFFE59B13),
+      DocumentTypeKind.education => const Color(0xFF345CFF),
+      DocumentTypeKind.financial => const Color(0xFF00A986),
+      DocumentTypeKind.identity => const Color(0xFFD91F2B),
+      _ => const Color(0xFF4385DA),
+    };
+    return AppCard(
+      onTap: onTap,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: Row(
+        children: [
+          ReferenceIcon(
+            icon: doc.kind == DocumentTypeKind.education
+                ? Icons.school_outlined
+                : Icons.description_outlined,
+            color: color,
+            size: 38,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  doc.name,
+                  style: Theme.of(context).textTheme.titleSmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  [
+                    kindLabel,
+                    if (doc.mimeType != null)
+                      doc.mimeType!.split('/').last.toUpperCase(),
+                  ].join(' / '),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  statusLabel,
+                  style: Theme.of(context).textTheme.labelSmall
+                      ?.copyWith(color: context.premium.mutedText),
+                ),
+              ],
+            ),
+          ),
+          if (doc.updatedAt != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 8),
+              child: Text(
+                MaterialLocalizations.of(context)
+                    .formatShortDate(doc.updatedAt!),
+                style: Theme.of(context).textTheme.labelSmall,
               ),
             ),
-            const SizedBox(width: 8),
-            StatusBadge(label: statusLabel, tone: tone),
-          ],
-        ),
+        ],
       ),
     );
   }

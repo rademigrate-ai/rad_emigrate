@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="سامانه RAD برای مدیریت پرونده مهاجرت، مدارک، راهنمای ویزا و دستیار هوشمند با محتوای بررسی‌شده.">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <meta name="theme-color" content="#172235">
+  <meta name="theme-color" content="#070A0F">
   <meta name="color-scheme" content="light dark">
   <meta name="application-name" content="RAD Emigrate">
 
@@ -37,29 +37,56 @@
   <title>RAD Emigrate | مهاجرت، ویزا و مدیریت پرونده</title>
   <style>
     @font-face{font-family:Vazirmatn;src:url("assets/assets/fonts/Vazirmatn-Regular.ttf") format("truetype");font-display:swap}
-    html,body{margin:0;background:#172235;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
-    /* Accessibility rectangles use physical coordinates. Keep only their DOM
-       host LTR; Flutter Directionality still owns Persian RTL widget layout. */
+    html,body{margin:0;background:#070A0F;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+    /* Flutter engine hosts (including its shadow DOM semantics) use physical
+       left-origin coordinates. Set direction on their light-DOM ancestor, not
+       just flt-semantics-host, which is inside a shadow root. Flutter owns RTL. */
+    flutter-view{direction:ltr}
     flt-semantics-host{direction:ltr}
-    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:16px;padding:24px;background:#172235;color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
-    #rad-startup img{background:#fff;border-radius:8px;padding:8px;object-fit:contain;max-width:calc(100vw - 64px)}
+    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;background:radial-gradient(circle at 50% 44%,#3b0c14 0,#13090e 28%,#070a0f 62%);color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
+    #rad-startup img{object-fit:contain;filter:drop-shadow(0 0 24px rgba(217,31,43,.42));max-width:calc(100vw - 64px)}
     #rad-startup p{margin:0}
-    #rad-startup .en{color:#bcc7d6;font-size:14px}
-    #rad-startup-spinner{width:24px;height:24px;border:3px solid #47546a;border-top-color:#fff;border-radius:50%;animation:rad-turn 1s linear infinite}
+    .rad-startup-bird{position:relative;width:112px;height:112px;animation:rad-float 1.8s ease-in-out infinite}
+    #rad-startup .rad-startup-bird img{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 14px #d91f2b55)}
+    .rad-startup-wing{clip-path:polygon(0 0,70% 0,68% 45%,60% 58%,35% 62%,0 62%);transform-origin:60% 52%;animation:rad-wing 1.8s ease-in-out infinite}
+    .rad-startup-body{clip-path:polygon(58% 0,100% 0,100% 100%,0 100%,0 58%,35% 58%,50% 60%,62% 40%)}
     #rad-startup-retry{font:inherit;color:#172235;background:#fff;border:0;border-radius:12px;min-height:48px;padding:8px 24px;cursor:pointer}
-    @keyframes rad-turn{to{transform:rotate(360deg)}}
-    @media(prefers-reduced-motion:reduce){#rad-startup-spinner{animation:none}}
+    @keyframes rad-wing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(5deg)}}
+    @keyframes rad-float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-2px)}}
+    @media(prefers-reduced-motion:reduce){.rad-startup-bird,.rad-startup-wing{animation:none}}
   </style>
 </head>
 <body>
   <div id="rad-startup" role="status" aria-live="polite">
-    <img src="assets/assets/branding/rad_official_logo.png" width="116" height="116" alt="RAD International Institute">
-    <div id="rad-startup-spinner" aria-hidden="true"></div>
-    <p id="rad-startup-fa" lang="fa" dir="rtl">در حال بارگذاری راد…</p>
-    <p id="rad-startup-en" class="en" lang="en" dir="ltr">Loading RAD…</p>
-    <button id="rad-startup-retry" type="button" hidden>تلاش دوباره / Retry</button>
+    <div class="rad-startup-bird" aria-hidden="true">
+      <img class="rad-startup-body" src="assets/assets/branding/rad_flying_bird_1024.png" alt="">
+      <img class="rad-startup-wing" src="assets/assets/branding/rad_flying_bird_1024.png" alt="">
+    </div>
+    <p id="rad-startup-message">در حال بارگذاری راد…</p>
+    <button id="rad-startup-retry" type="button" hidden>تلاش دوباره</button>
   </div>
   <noscript>برای استفاده از RAD Emigrate باید JavaScript در مرورگر فعال باشد.</noscript>
+  <script>
+    (() => {
+      let locale = 'fa', mode = 'system';
+      try { locale = JSON.parse(localStorage.getItem('flutter.rad_locale')) || locale;
+            mode = JSON.parse(localStorage.getItem('flutter.rad_theme_mode')) || mode; } catch (_) {}
+      const fa = locale !== 'en';
+      document.documentElement.lang = fa ? 'fa' : 'en';
+      document.documentElement.dir = fa ? 'rtl' : 'ltr';
+      window.radStartupFa = fa;
+      document.getElementById('rad-startup-message').textContent = fa ? 'در حال بارگذاری راد…' : 'Loading RAD…';
+      document.getElementById('rad-startup-retry').textContent = fa ? 'تلاش دوباره' : 'Retry';
+      if (mode === 'light' || (mode === 'system' && !matchMedia('(prefers-color-scheme:dark)').matches)) {
+        const loading = document.getElementById('rad-startup');
+        loading.style.background = 'radial-gradient(circle at 50% 44%,#fbe8ed,#f7fafe 65%)';
+        loading.style.color = '#0f172a';
+      }
+    })();
+  </script>
+  <!-- Normalize allowlisted legacy recovery links before Supabase initializes. -->
+  <script src="rad_recovery_redirect.js"></script>
+  <script src="rad_pointer_alignment.js"></script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

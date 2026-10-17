@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../constants/app_colors.dart';
 
 enum RadBrandSize { small, medium, large }
 
@@ -38,21 +39,17 @@ class RadBrand extends StatelessWidget {
       fit: BoxFit.contain,
       filterQuality: FilterQuality.medium,
       excludeFromSemantics: true,
+      errorBuilder: (context, error, stackTrace) {
+        // Avoid the intermittent blank white square when the asset fails to
+        // decode on a given route/frame (BUG-A04).
+        return Icon(
+          Icons.flight_takeoff_rounded,
+          size: _height * 0.72,
+          color: AppColors.primaryRed,
+        );
+      },
     );
 
-    return Semantics(
-      label: label,
-      image: true,
-      child: darkSurface
-          ? image
-          : Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: image,
-            ),
-    );
+    return Semantics(label: label, image: true, child: image);
   }
 }

@@ -42,6 +42,10 @@ Future<void> _showRecovery(
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         home: const ForgotPasswordPage(),
       ),
     ),
@@ -65,6 +69,7 @@ void main() {
           find.byType(TextFormField),
           'recovery@example.test',
         );
+        await tester.ensureVisible(find.text(l10n.sendResetLink));
         await tester.tap(find.text(l10n.sendResetLink));
         await tester.pumpAndSettle();
 
@@ -75,6 +80,7 @@ void main() {
         expect(find.text(l10n.sendResetLink), findsOneWidget);
 
         repository.error = null;
+        await tester.ensureVisible(find.text(l10n.sendResetLink));
         await tester.tap(find.text(l10n.sendResetLink));
         await tester.pumpAndSettle();
 
@@ -96,6 +102,7 @@ void main() {
     final l10n = lookupAppLocalizations(const Locale('en'));
     await _showRecovery(tester, repository, const Locale('en'));
     await tester.enterText(find.byType(TextFormField), 'recovery@example.test');
+    await tester.ensureVisible(find.text(l10n.sendResetLink));
     await tester.tap(find.text(l10n.sendResetLink));
     await tester.pump();
     await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -121,12 +128,14 @@ void main() {
     await _showRecovery(tester, repository, const Locale('en'));
     await tester.enterText(find.byType(TextFormField), 'recovery@example.test');
 
+    await tester.ensureVisible(find.text(l10n.sendResetLink));
     await tester.tap(find.text(l10n.sendResetLink));
     await tester.pump();
 
     expect(find.text(l10n.passwordResetRateLimited), findsOneWidget);
     expect(repository.emails, ['recovery@example.test']);
 
+    await tester.ensureVisible(find.text(l10n.sendResetLink));
     await tester.tap(find.text(l10n.sendResetLink));
     await tester.pump();
     expect(repository.emails, ['recovery@example.test']);

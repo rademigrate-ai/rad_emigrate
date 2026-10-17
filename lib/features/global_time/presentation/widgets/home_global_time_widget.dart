@@ -1,3 +1,5 @@
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +31,7 @@ class HomeGlobalTimeWidget extends ConsumerWidget {
             width: 160,
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppRadii.lg),
               border: Border.all(color: theme.dividerColor),
             ),
           );
@@ -38,9 +40,7 @@ class HomeGlobalTimeWidget extends ConsumerWidget {
     } else if (cities.isEmpty) {
       body = Center(
         child: Text(
-          lang == 'fa'
-              ? 'شهری برای نمایش نیست — از ساعت جهانی اضافه کنید'
-              : 'No cities yet — add some in World Time',
+          AppLocalizations.of(context).noWorldCities,
           style: theme.textTheme.bodySmall,
         ),
       );
@@ -77,7 +77,10 @@ class HomeGlobalTimeWidget extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 8),
-        SizedBox(height: 190, child: body),
+        SizedBox(
+          height: 220 * MediaQuery.textScalerOf(context).scale(1).clamp(1, 2),
+          child: body,
+        ),
       ],
     );
   }

@@ -1,0 +1,72 @@
+{
+  "baseline": "9e81a366e07186da916946756720c2a8a6ccc755",
+  "implementation_source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+  "lib_tree": "063a30b8298b8727b79c7c69e8ed7d878eb1ac4e",
+  "original_assets": [
+    {
+      "path": "assets/branding/rad_flying_bird_64.png",
+      "unchanged": true,
+      "sha256": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5"
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_128.png",
+      "unchanged": true,
+      "sha256": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e"
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_256.png",
+      "unchanged": true,
+      "sha256": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1"
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_512.png",
+      "unchanged": true,
+      "sha256": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4"
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_1024.png",
+      "unchanged": true,
+      "sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06"
+    }
+  ],
+  "preserved_behavior": [
+    {
+      "area": "six_stage_kinetics",
+      "unchanged": true,
+      "sha256": "c0d35e12cb1c2b4eb02c4afe86334863f8d0c5a8f98a3310003a903cdb6ce761"
+    },
+    {
+      "area": "anatomy_clippers",
+      "unchanged": true,
+      "sha256": "42ff1933d6be3203e289dd71f12bc001c32b7a1fc8106f173d6f95b6d18e613c"
+    },
+    {
+      "area": "wingbeat_lifecycle",
+      "unchanged": true,
+      "sha256": "af190cf963561223929af74e7074e1f6031216eb85943bc3c94092cae503ff9f"
+    },
+    {
+      "area": "navigation_tap_float_lifecycle",
+      "unchanged": true,
+      "sha256": "f39334b3333390446b0cdbbb7009e3f7f0c83231c0ca257de8d6ab347f0e0688"
+    },
+    {
+      "area": "navigation_semantics_keyboard",
+      "unchanged": true,
+      "sha256": "575c590c2d57727fd334f03168bf4917a1bc302d0fabd7e4a5603e29da2325cf"
+    }
+  ],
+  "changed_lib_files": [
+    "lib/core/routing/app_shell.dart",
+    "lib/core/widgets/app_button.dart",
+    "lib/core/widgets/loading_state.dart",
+    "lib/core/widgets/rad_ai_bird.dart",
+    "lib/core/widgets/rad_ai_bird_nav_icon.dart",
+    "lib/core/widgets/rad_flapping_bird.dart",
+    "lib/core/widgets/rad_loading.dart",
+    "lib/core/widgets/rad_phoenix_navigation_surface.dart",
+    "lib/visual_qa_main.dart"
+  ],
+  "business_backend_auth_content_migrations_dependencies_unchanged": true,
+  "navigation_routes_unchanged": true
+}

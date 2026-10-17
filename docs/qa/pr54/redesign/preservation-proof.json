@@ -1,0 +1,62 @@
+[
+  {
+    "path": "assets/branding/rad_flying_bird_1024.png",
+    "unchanged": true,
+    "baseline_sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06",
+    "working_sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06"
+  },
+  {
+    "path": "assets/branding/rad_flying_bird_128.png",
+    "unchanged": true,
+    "baseline_sha256": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e",
+    "working_sha256": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e"
+  },
+  {
+    "path": "assets/branding/rad_flying_bird_256.png",
+    "unchanged": true,
+    "baseline_sha256": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1",
+    "working_sha256": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1"
+  },
+  {
+    "path": "assets/branding/rad_flying_bird_512.png",
+    "unchanged": true,
+    "baseline_sha256": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4",
+    "working_sha256": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4"
+  },
+  {
+    "path": "assets/branding/rad_flying_bird_64.png",
+    "unchanged": true,
+    "baseline_sha256": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5",
+    "working_sha256": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5"
+  },
+  {
+    "path": "lib/core/widgets/rad_ai_bird.dart",
+    "unchanged": true,
+    "baseline_sha256": "ceab64b50b9b25073024cb95cad34ea9d48843d0248333c6f3a32d0d2c6d35dd",
+    "working_sha256": "940275e18da56565486fdbad7b76c5313134217dece56bb549c28b417fe6dace"
+  },
+  {
+    "path": "lib/core/widgets/rad_ai_bird_nav_icon.dart",
+    "unchanged": true,
+    "baseline_sha256": "b4cd7b0c5e79e796afe043d8364f8860381f66e434db05f804d51be560e30d5c",
+    "working_sha256": "f979bdbe50127478358bc29a9402aad9c00885af4ef75bf7e06fb82a1cce0a96"
+  },
+  {
+    "path": "lib/core/widgets/rad_phoenix_navigation_surface.dart",
+    "unchanged": true,
+    "baseline_sha256": "8a90d4e705d4fcce7942b541ac502f05ca809dd3c273800da9ef0f7fa3198af5",
+    "working_sha256": "637033c2f62001ce7e781a2c3caa8a395372779819d6ad6ff02e791e070549bb"
+  },
+  {
+    "path": "lib/core/widgets/rad_flapping_bird.dart",
+    "unchanged": true,
+    "baseline_sha256": "dd03df00789f63d2d25110f7d2e4da7c7e2803c689324c914c6535d1b1c9ef3a",
+    "working_sha256": "87de47e60558c00faa498ef45ee82aa32fdae35a1a0e179c4addbea719639dc0"
+  },
+  {
+    "path": "lib/core/widgets/rad_earth_bird_scene.dart",
+    "unchanged": true,
+    "baseline_sha256": "82d4875e2c13ad709c1ad7ea479fe5b51b63e8d6425770603bad4f9c9cf9593d",
+    "working_sha256": "7884d12fc15520b3600278aa28f076d29b1780e20294bbfae27fcc716018b0db"
+  }
+]

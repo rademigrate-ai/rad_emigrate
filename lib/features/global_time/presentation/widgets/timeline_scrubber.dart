@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/premium_tokens.dart';
 
 /// 24-hour interactive timeline. Dragging updates [onScrub] with a UTC instant
 /// for the selected local hour relative to "today" in the reference zone.
@@ -42,29 +43,26 @@ class TimelineScrubber extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              spacing: 12,
+              runSpacing: 8,
+              children: [
+                for (final label in [
                   '00:00',
-                  style: TextStyle(color: Colors.white54, fontSize: 11),
-                ),
-                Text(
                   '06:00',
-                  style: TextStyle(color: Colors.white54, fontSize: 11),
-                ),
-                Text(
                   '12:00',
-                  style: TextStyle(color: Colors.white54, fontSize: 11),
-                ),
-                Text(
                   '18:00',
-                  style: TextStyle(color: Colors.white54, fontSize: 11),
-                ),
-                Text(
                   '24:00',
-                  style: TextStyle(color: Colors.white54, fontSize: 11),
-                ),
+                ])
+                  Text(
+                    label,
+                    textDirection: TextDirection.ltr,
+                    style: TextStyle(
+                      color: context.premium.mutedText,
+                      fontSize: 11,
+                    ),
+                  ),
               ],
             ),
           ],

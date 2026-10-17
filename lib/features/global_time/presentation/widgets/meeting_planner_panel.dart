@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/city.dart';
+import '../../domain/city_catalog.dart';
+import '../../domain/local_date_format.dart';
 import '../../domain/meeting_planner.dart';
+import '../../domain/timezone_engine.dart';
+import 'global_time_labels.dart';
 
 class MeetingPlannerPanel extends StatefulWidget {
   const MeetingPlannerPanel({
@@ -11,172 +16,351 @@ class MeetingPlannerPanel extends StatefulWidget {
     required this.cities,
     required this.languageCode,
   });
-
   final List<City> cities;
   final String languageCode;
-
   @override
   State<MeetingPlannerPanel> createState() => _MeetingPlannerPanelState();
 }
 
 class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
-  City? _origin;
-  City? _destination;
-  DateTime _date = DateTime.now();
-  int _durationMinutes = 60;
+  late City _origin;
+  late City _destination;
+  late DateTime _date;
+  TimeOfDay _time = const TimeOfDay(hour: 14, minute: 0);
+  int _duration = 60;
+  int? _occurrence;
+  bool _computed = false;
+  List<tz.TZDateTime> _candidates = [];
   List<MeetingWindow> _windows = [];
-
+  tz.TZDateTime? _converted;
+  List<City> get _cities => {
+    for (final c in [...CityCatalog.all, ...widget.cities]) c.id: c,
+  }.values.toList();
   @override
   void initState() {
     super.initState();
-    if (widget.cities.length >= 2) {
-      _origin = widget.cities[0];
-      _destination = widget.cities[1];
-    } else if (widget.cities.isNotEmpty) {
-      _origin = widget.cities.first;
-    }
+    _origin = widget.cities.isNotEmpty
+        ? widget.cities.first
+        : CityCatalog.defaults.first;
+    _destination = widget.cities.length > 1
+        ? widget.cities[1]
+        : CityCatalog.defaults[1];
+    _date = TimezoneEngine.nowInCity(_origin);
   }
 
-  @override
-  void didUpdateWidget(covariant MeetingPlannerPanel old) {
-    super.didUpdateWidget(old);
-    if (_origin == null && widget.cities.isNotEmpty) {
-      _origin = widget.cities.first;
-    }
+  void _clear() {
+    _computed = false;
+    _converted = null;
+    _windows = [];
+    _candidates = [];
+    _occurrence = null;
   }
 
   void _compute() {
-    if (_origin == null || _destination == null) return;
+    final candidates = TimezoneEngine.localCandidates(
+      _origin.timezone,
+      _date,
+      _time.hour,
+      _time.minute,
+    );
     setState(() {
+      _computed = true;
+      _candidates = candidates;
+      _converted = null;
+      _windows = [];
+      if (candidates.isEmpty || candidates.length > 1 && _occurrence == null) {
+        return;
+      }
+      _converted = tz.TZDateTime.from(
+        candidates[_occurrence ?? 0],
+        TimezoneEngine.locationOf(_destination.timezone),
+      );
       _windows = MeetingPlanner.suggestWindows(
-        origin: _origin!,
-        destination: _destination!,
+        origin: _origin,
+        destination: _destination,
         year: _date.year,
         month: _date.month,
         day: _date.day,
-        durationMinutes: _durationMinutes,
+        durationMinutes: _duration,
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final lang = widget.languageCode;
+    final l = AppLocalizations.of(context);
+    final labels = GlobalTimeLabels(widget.languageCode);
+    Widget cityField(
+      String title,
+      City value,
+      ValueChanged<City> change,
+    ) => InputDecorator(
+      decoration: InputDecoration(labelText: title, isDense: true),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<City>(
+          value: _cities.firstWhere((c) => c.id == value.id),
+          isExpanded: true,
+          items: [
+            for (final c in _cities)
+              DropdownMenuItem(
+                value: c,
+                child: Text(
+                  '${c.flagEmoji ?? ''} ${c.localizedName(widget.languageCode)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+          ],
+          onChanged: (v) {
+            if (v != null) {
+              setState(() {
+                change(v);
+                _clear();
+              });
+            }
+          },
+        ),
+      ),
+    );
+    final fields = [
+      SizedBox(
+        width: 210,
+        child: cityField(l.meetingOrigin, _origin, (v) => _origin = v),
+      ),
+      IconButton(
+        tooltip: l.meetingDestination,
+        onPressed: () => setState(() {
+          final c = _origin;
+          _origin = _destination;
+          _destination = c;
+          _clear();
+        }),
+        icon: const Icon(Icons.swap_horiz),
+      ),
+      SizedBox(
+        width: 210,
+        child: cityField(
+          l.meetingDestination,
+          _destination,
+          (v) => _destination = v,
+        ),
+      ),
+    ];
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF141C28),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primaryRed.withValues(alpha: 0.2)),
+        color: context.premium.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: context.premium.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
-              const Icon(Icons.event_available, color: AppColors.primaryRed),
-              const SizedBox(width: 8),
-              Text(
-                lang == 'fa'
-                    ? 'برنامه‌ریزی تماس بین‌المللی'
-                    : 'International Meeting Planner',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
+              const Icon(
+                Icons.calendar_month_outlined,
+                color: Color(0xFFFF7685),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l.meetingPlannerTitle,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
-            lang == 'fa'
-                ? 'پنجره‌های پیشنهادی همپوشانی ساعات کاری (نه تأیید دسترسی)'
-                : 'Suggested overlapping working-hour windows (not confirmed availability)',
-            style: Theme.of(context).textTheme.bodySmall
-                ?.copyWith(color: Colors.white60),
+            labels.assumptions,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _CityDropdown(
-                  label: lang == 'fa' ? 'مبدأ' : 'Origin',
-                  value: _origin,
-                  cities: widget.cities,
-                  languageCode: lang,
-                  onChanged: (c) => setState(() => _origin = c),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(Icons.swap_horiz, color: Colors.white54),
-              ),
-              Expanded(
-                child: _CityDropdown(
-                  label: lang == 'fa' ? 'مقصد' : 'Destination',
-                  value: _destination,
-                  cities: widget.cities,
-                  languageCode: lang,
-                  onChanged: (c) => setState(() => _destination = c),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: _date,
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 1),
+          const SizedBox(height: 20),
+          LayoutBuilder(
+            builder: (context, box) => box.maxWidth >= 500
+                ? Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: fields,
+                  )
+                : Column(
+                    children: [
+                      cityField(l.meetingOrigin, _origin, (v) => _origin = v),
+                      const SizedBox(height: 12),
+                      cityField(
+                        l.meetingDestination,
+                        _destination,
+                        (v) => _destination = v,
                       ),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    );
-                    if (picked != null) setState(() => _date = picked);
-                  },
-                  icon: const Icon(Icons.calendar_today, size: 16),
-                  label: Text(DateFormat('yyyy-MM-dd').format(_date)),
-                ),
-              ),
-              const SizedBox(width: 8),
-              DropdownButton<int>(
-                value: _durationMinutes,
-                dropdownColor: const Color(0xFF1A222D),
-                style: const TextStyle(color: Colors.white),
-                items: const [
-                  DropdownMenuItem(value: 30, child: Text('30 min')),
-                  DropdownMenuItem(value: 60, child: Text('60 min')),
-                  DropdownMenuItem(value: 90, child: Text('90 min')),
-                ],
-                onChanged: (v) {
-                  if (v != null) setState(() => _durationMinutes = v);
+                    ],
+                  ),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              OutlinedButton.icon(
+                key: const ValueKey('meeting-date'),
+                icon: const Icon(Icons.calendar_today, size: 18),
+                label: Text(formatLocalDate(_date, widget.languageCode)),
+                onPressed: () async {
+                  final chosen = await showDatePicker(
+                    context: context,
+                    initialDate: _date,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2100),
+                  );
+                  if (chosen != null && mounted) {
+                    setState(() {
+                      _date = chosen;
+                      _clear();
+                    });
+                  }
                 },
               ),
-              const SizedBox(width: 8),
-              FilledButton(
+              OutlinedButton.icon(
+                key: const ValueKey('meeting-time'),
+                icon: const Icon(Icons.schedule, size: 18),
+                label: Text(
+                  '${labels.originTime}: ${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}',
+                ),
+                onPressed: () async {
+                  final chosen = await showTimePicker(
+                    context: context,
+                    initialTime: _time,
+                    builder: (ctx, child) => MediaQuery(
+                      data: MediaQuery.of(ctx)
+                          .copyWith(alwaysUse24HourFormat: true),
+                      child: child!,
+                    ),
+                  );
+                  if (chosen != null && mounted) {
+                    setState(() {
+                      _time = chosen;
+                      _clear();
+                    });
+                  }
+                },
+              ),
+              DropdownButton<int>(
+                value: _duration,
+                items: [
+                  for (final m in [30, 60, 90])
+                    DropdownMenuItem(
+                      value: m,
+                      child: Text(l.meetingMinutes(m)),
+                    ),
+                ],
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() {
+                      _duration = v;
+                      _clear();
+                    });
+                  }
+                },
+              ),
+              FilledButton.icon(
+                key: const ValueKey('meeting-convert'),
                 onPressed: _compute,
-                child: Text(lang == 'fa' ? 'نمایش' : 'Show'),
+                icon: const Icon(Icons.compare_arrows),
+                label: Text(l.meetingShow),
               ),
             ],
           ),
-          if (_windows.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text(
-              lang == 'fa' ? 'پنجره‌های پیشنهادی' : 'Suggested windows',
-              style: Theme.of(context).textTheme.titleSmall
-                  ?.copyWith(color: Colors.white),
+          if (_computed && _candidates.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text(
+                labels.gap,
+                style: TextStyle(color: context.premium.accentForeground),
+              ),
             ),
-            const SizedBox(height: 8),
+          if (_candidates.length > 1) ...[
+            const SizedBox(height: 12),
+            Text(labels.fold),
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 12,
               children: [
-                for (final w in _windows.take(4))
-                  _WindowChip(window: w, languageCode: lang),
+                for (var i = 0; i < _candidates.length; i++)
+                  ChoiceChip(
+                    label: Text(
+                      '${i == 0 ? labels.first : labels.second} (${_candidates[i].timeZoneName})',
+                    ),
+                    selected: _occurrence == i,
+                    onSelected: (_) {
+                      setState(() => _occurrence = i);
+                      _compute();
+                    },
+                  ),
+              ],
+            ),
+          ],
+          if (_converted != null) ...[
+            const Divider(height: 32),
+            Text(
+              labels.converted,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 24,
+              runSpacing: 16,
+              children: [
+                _Result(
+                  city: _origin,
+                  instant: _candidates[_occurrence ?? 0],
+                  language: widget.languageCode,
+                ),
+                _Result(
+                  city: _destination,
+                  instant: _converted!,
+                  language: widget.languageCode,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l.meetingSuggestedWindows,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 10),
+            if (_windows.isEmpty) Text(labels.noOverlap),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                for (final w in _windows.take(3))
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFF207D69)),
+                      borderRadius: BorderRadius.circular(12),
+                      color: const Color(0xFF0D4D3D).withValues(alpha: .12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${_origin.localizedName(widget.languageCode)} ${formatLocalTime(w.startLocalOrigin)} - ${formatLocalTime(w.endLocalOrigin)}',
+                        ),
+                        Text(
+                          '${_destination.localizedName(widget.languageCode)} ${formatLocalTime(w.startLocalDestination)} - ${formatLocalTime(w.endLocalDestination)}',
+                        ),
+                        Text(
+                          formatLocalDate(
+                            w.startLocalDestination,
+                            widget.languageCode,
+                          ),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ],
@@ -186,104 +370,30 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
   }
 }
 
-class _CityDropdown extends StatelessWidget {
-  const _CityDropdown({
-    required this.label,
-    required this.value,
-    required this.cities,
-    required this.languageCode,
-    required this.onChanged,
+class _Result extends StatelessWidget {
+  const _Result({
+    required this.city,
+    required this.instant,
+    required this.language,
   });
-
-  final String label;
-  final City? value;
-  final List<City> cities;
-  final String languageCode;
-  final ValueChanged<City?> onChanged;
-
+  final City city;
+  final tz.TZDateTime instant;
+  final String language;
   @override
-  Widget build(BuildContext context) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.white70),
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('${city.flagEmoji ?? ''} ${city.localizedName(language)}'),
+      Text(
+        formatLocalTime(instant),
+        textDirection: TextDirection.ltr,
+        style: Theme.of(context).textTheme.headlineMedium,
       ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<City>(
-          value: value != null && cities.any((c) => c.id == value!.id)
-              ? cities.firstWhere((c) => c.id == value!.id)
-              : null,
-          isExpanded: true,
-          dropdownColor: const Color(0xFF1A222D),
-          style: const TextStyle(color: Colors.white),
-          hint: Text(label, style: const TextStyle(color: Colors.white38)),
-          items: [
-            for (final c in cities)
-              DropdownMenuItem(
-                value: c,
-                child: Text(
-                  '${c.flagEmoji ?? ''} ${c.localizedName(languageCode)}',
-                ),
-              ),
-          ],
-          onChanged: onChanged,
-        ),
+      Text(formatLocalDate(instant, language)),
+      Text(
+        '${city.timezone}  ${TimezoneEngine.offsetLabel(city.timezone, at: instant)}',
+        style: Theme.of(context).textTheme.bodySmall,
       ),
-    );
-  }
-}
-
-class _WindowChip extends StatelessWidget {
-  const _WindowChip({required this.window, required this.languageCode});
-  final MeetingWindow window;
-  final String languageCode;
-
-  @override
-  Widget build(BuildContext context) {
-    final fmt = DateFormat('HH:mm');
-    final origin =
-        '${fmt.format(window.startLocalOrigin)}–${fmt.format(window.endLocalOrigin)}';
-    final dest =
-        '${fmt.format(window.startLocalDestination)}–${fmt.format(window.endLocalDestination)}';
-    final good = window.quality >= 0.9;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: good ? AppColors.success.withValues(alpha: 0.2) : Colors.white10,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: good
-              ? AppColors.success.withValues(alpha: 0.5)
-              : Colors.white24,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            origin,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Text(
-            dest,
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-          Text(
-            good
-                ? (languageCode == 'fa' ? 'مناسب' : 'Suitable')
-                : (languageCode == 'fa' ? 'نسبی' : 'Partial'),
-            style: TextStyle(
-              color: good ? AppColors.success : Colors.white54,
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    ],
+  );
 }
