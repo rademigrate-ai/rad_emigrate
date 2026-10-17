@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/**'
       - 'lib/**'
+      - 'web/**'
       - 'test/**'
       - 'android/**'
       - 'gradle/**'
@@ -22,6 +23,7 @@ on:
     paths:
       - '.github/workflows/**'
       - 'lib/**'
+      - 'web/**'
       - 'test/**'
       - 'android/**'
       - 'gradle/**'
@@ -46,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify production recovery callback normalization
+        run: node scripts/check_password_recovery_redirect.cjs
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.5.4
