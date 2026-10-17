@@ -21,9 +21,12 @@ class PhaseASecurity(unittest.TestCase):
 
     def test_complete_unique_ordered_chain(self):
         names=sorted(p.name for p in (ROOT/'supabase/migrations').glob('*.sql'))
-        self.assertEqual(len(names),51)
-        self.assertEqual(len({n[:14] for n in names}),51)
-        self.assertEqual(names[-5:],list(FILES))
+        # Preserve the exact 46-migration historical base and the five pinned
+        # Stage 1 additions while allowing later reviewed forward migrations.
+        self.assertGreaterEqual(len(names),51)
+        self.assertEqual(len({n[:14] for n in names}),len(names))
+        self.assertEqual(names[46:51],list(FILES))
+        self.assertTrue(all(n[:14] > '20261012230000' for n in names[51:]))
 
     def test_reconstruction_does_not_omit_security_files(self):
         script=(ROOT/'scripts/verify_migration_reconstruction.sh').read_text()
