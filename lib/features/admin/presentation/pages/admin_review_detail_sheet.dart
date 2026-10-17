@@ -217,6 +217,20 @@ Future<void> showAdminReviewDetail(
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
+                    if (detail['source_url_from_snapshot'] == true) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        l10n.reviewSourceSnapshotOnly,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ],
+                  if (detail?['source_verification_unavailable'] == true) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.reviewSourceUnavailable,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ],
                   const SizedBox(height: 16),
                   Wrap(
