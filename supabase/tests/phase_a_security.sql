@@ -30,6 +30,28 @@ begin
     and ((tgrelid='public.feed_items'::regclass and tgname='trg_guard_human_feed_item_mutation')
       or (tgrelid='public.feed_item_localizations'::regclass and tgname='trg_guard_human_feed_localization_mutation'));
   if n<>2 then raise exception 'Both active human Feed guards required'; end if;
+  -- Even an authenticated Admin must use the reviewed-draft publication
+  -- SECURITY DEFINER RPC; plain Data API INSERT/UPDATE/DELETE is forbidden.
+  -- This also blocks research/AI from exploiting a generic authenticated
+  -- table mutation path to publish to Feed.
+  if has_table_privilege('authenticated','public.feed_items','INSERT')
+     or has_table_privilege('authenticated','public.feed_items','UPDATE')
+     or has_table_privilege('authenticated','public.feed_items','DELETE')
+     or has_table_privilege('authenticated','public.feed_item_localizations','INSERT')
+     or has_table_privilege('authenticated','public.feed_item_localizations','UPDATE')
+     or has_table_privilege('authenticated','public.feed_item_localizations','DELETE')
+     or has_table_privilege('anon','public.feed_items','INSERT')
+     or has_table_privilege('anon','public.feed_item_localizations','INSERT') then
+    raise exception 'Untrusted Data API role retains direct Feed mutation privilege';
+  end if;
+  if not has_function_privilege(
+      'authenticated','public.publish_content_draft(uuid,text,text)','EXECUTE')
+     or has_function_privilege(
+      'anon','public.publish_content_draft(uuid,text,text)','EXECUTE')
+     or has_function_privilege(
+      'service_role','public.publish_content_draft(uuid,text,text)','EXECUTE') then
+    raise exception 'Human publication RPC grants are unsafe';
+  end if;
   select count(*) into n from pg_constraint where conrelid='public.ai_models'::regclass
     and contype='c' and convalidated and conname in ('ai_models_consecutive_failures_check',
       'ai_models_measured_latency_ms_check','ai_models_recent_success_rate_check');
@@ -47,6 +69,32 @@ begin
   end if;
 end
 $verify$;
+
+-- The trusted service role is permitted to run controlled infrastructure
+-- operations, but must not bypass human Feed publication on its own.
+-- These INSERT attempts are inside an outer rollback-only CI transaction.
+-- A trigger denial is the ONLY accepted outcome; not-null or FK errors fail.
+set local role service_role;
+do $feed_direct_denial$
+begin
+  perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  perform set_config('rad.human_publish_actor','',true);
+  begin
+    insert into public.feed_items(slug,category,status)
+      values('phase-a-test-no-human-'||substr(gen_random_uuid()::text,1,8),
+             'update','published');
+    raise exception 'Service role inserted Feed item without human approval';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    insert into public.feed_item_localizations(feed_item_id,locale,title,body)
+      values(gen_random_uuid(),'en','Synthetic test','Synthetic test');
+    raise exception 'Service role inserted Feed localization without human approval';
+  exception when insufficient_privilege then null;
+  end;
+end
+$feed_direct_denial$;
+reset role;
 
 do $fixture$
 declare u uuid:=gen_random_uuid(); other_user uuid:=gen_random_uuid();
