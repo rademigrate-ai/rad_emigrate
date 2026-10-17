@@ -1,0 +1,20 @@
+{
+  "baseline_main": "5257ca5b95fc7caa9612da29a9b207420778e01b",
+  "render_service": "rad_emigrate",
+  "url": "https://rad-emigrate.onrender.com",
+  "deploy_id": "dep-db9bopvbtjjs73b4kdlg",
+  "status": "live",
+  "deployed_commit": "5257ca5b95fc7caa9612da29a9b207420778e01b",
+  "matches_verified_main": true,
+  "deploy_finished_utc": "2026-10-17T00:09:48.53471Z",
+  "auto_deploy": "off",
+  "public_html_http": 200,
+  "public_html_sha256": "10aafecc7eab367dcf7db33c1db35ac3296c5f0b7c7d54f6aa152ae2cb836cc0",
+  "public_html_alternate_bird": true,
+  "public_html_circular_spinner": true,
+  "limit": "Render metadata verifies the deployed revision; a preexisting individual Safari cache/session was not inspected. The public HTML embeds no commit SHA.",
+  "operations": "Strictly read-only Render inspection, approved workspace Rad. No deploy, settings, environment or production-data writes.",
+  "latest_verified_main": "678e7a4c898995bb4a0519afd467df4126dd4a2e",
+  "matches_latest_verified_main": false,
+  "latest_comparison": "Render still live at baseline 5257ca5; main advanced through an independently merged PR 51. Delta contains auth tests and evidence only; no application source difference."
+}

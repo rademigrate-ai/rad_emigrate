@@ -41,7 +41,15 @@ abstract final class MeetingPlanner {
     int workStartHour = defaultWorkStartHour,
     int workEndHour = defaultWorkEndHour,
   }) {
-    TimezoneEngine.ensureInitialized();
+    if (!TimezoneEngine.isReady) {
+      throw StateError('Timezone data must be initialized before planning');
+    }
+    if (durationMinutes <= 0 ||
+        workStartHour < 0 ||
+        workEndHour > 24 ||
+        workStartHour >= workEndHour) {
+      throw ArgumentError('Invalid meeting duration or working hours');
+    }
     final originLoc = TimezoneEngine.locationOf(origin.timezone);
     final destLoc = TimezoneEngine.locationOf(destination.timezone);
 
@@ -79,7 +87,7 @@ abstract final class MeetingPlanner {
           workEndHour,
         );
 
-        if (!originOk && !destOk) continue;
+        if (!originOk || !destOk) continue;
 
         double quality = 0;
         if (originOk && destOk) {

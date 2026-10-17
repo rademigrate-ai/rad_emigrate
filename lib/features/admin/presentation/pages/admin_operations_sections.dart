@@ -200,7 +200,7 @@ class _ResearchState extends ConsumerState<_Research> {
                           ? const SizedBox(
                               width: 18,
                               height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: RadPending(),
                             )
                           : const Icon(Icons.play_arrow),
                       label: Text(

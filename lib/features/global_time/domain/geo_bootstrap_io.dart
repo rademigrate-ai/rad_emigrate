@@ -5,7 +5,12 @@ import 'timezone_engine.dart';
 
 /// Native / VM / mobile / desktop: boundaries are compiled into timezone_finder.
 Future<void> bootstrapGeoTimezone() async {
-  tz_data.initializeTimeZones();
+  await bootstrapTimezoneDatabase();
   await tf.ensurePreloaded();
+}
+
+Future<void> bootstrapTimezoneDatabase() async {
+  if (TimezoneEngine.isReady) return;
+  tz_data.initializeTimeZones();
   TimezoneEngine.markInitialized();
 }

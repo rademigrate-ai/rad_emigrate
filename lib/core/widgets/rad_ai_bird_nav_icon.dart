@@ -20,7 +20,7 @@ class RadAiBirdNavIcon extends StatefulWidget {
     required this.moreLabel,
     required this.onTap,
     required this.onLongPress,
-    this.size = 44,
+    this.size = 52,
   });
 
   final bool selected;
@@ -179,7 +179,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                  bottom: labelHeight + 1,
+                  bottom: labelHeight + 7,
                   child: AnimatedOpacity(
                     duration: AppMotion.duration(context, AppMotion.fast),
                     opacity: selected ? 0.45 : 0.18,
@@ -200,7 +200,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                   ),
                 ),
                 Positioned(
-                  bottom: labelHeight + 1,
+                  bottom: labelHeight + 7,
                   child: AnimatedBuilder(
                     animation: Listenable.merge([
                       _floatController,
@@ -242,7 +242,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 2,
+                  bottom: 8,
                   child: SizedBox(
                     height: labelHeight,
                     child: Center(

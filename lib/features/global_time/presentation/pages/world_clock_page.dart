@@ -1,9 +1,12 @@
+import '../widgets/city_clock_card.dart';
+import '../widgets/global_time_labels.dart';
+import '../widgets/global_time_overview.dart';
+import '../../domain/city_catalog.dart';
 import '../../../../l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/loading_state.dart';
@@ -13,7 +16,6 @@ import '../providers/global_time_controller.dart';
 import '../widgets/reference_city_clock.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../widgets/meeting_planner_panel.dart';
-import '../widgets/timeline_scrubber.dart';
 import '../widgets/world_map_panel.dart';
 
 class WorldClockPage extends ConsumerStatefulWidget {
@@ -24,6 +26,7 @@ class WorldClockPage extends ConsumerStatefulWidget {
 }
 
 class _WorldClockPageState extends ConsumerState<WorldClockPage> {
+  bool _showOverviewMap = false;
   final _searchCtrl = TextEditingController();
   final _searchFocus = FocusNode();
   double _scrubHour = DateTime.now().hour + DateTime.now().minute / 60.0;
@@ -148,38 +151,48 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
     final ctrl = ref.read(globalTimeControllerProvider.notifier);
     final l10n = AppLocalizations.of(context);
     final lang = Localizations.localeOf(context).languageCode;
-    final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
+    final labels = GlobalTimeLabels(lang);
+    final now = DateTime.now().toUtc();
+    final instant = state.scrubUtc ?? now;
+    final wide = MediaQuery.sizeOf(context).width >= 700;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.worldTimeTitle)),
-      floatingActionButton: FloatingActionButton(
-        tooltip: l10n.addCity,
-        backgroundColor: AppColors.primaryRed,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          ctrl.setSearchQuery(_searchCtrl.text, languageCode: lang);
-          _searchFocus.requestFocus();
-        },
-        child: const Icon(Icons.add),
-      ),
+      appBar: AppBar(title: Text(labels.title)),
       body: PremiumCanvas(
         child: state.isLoading
             ? LoadingState.section(
                 message: l10n.preparingWorldClocks,
                 dark: context.premium.isDark,
               )
+            : state.timezoneUnavailable
+            ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(labels.timezoneError, textAlign: TextAlign.center),
+                    TextButton(
+                      onPressed: ctrl.retryInitialization,
+                      child: Text(labels.retry),
+                    ),
+                  ],
+                ),
+              )
             : Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1100),
+                  constraints: const BoxConstraints(maxWidth: 1400),
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                     children: [
                       TextField(
                         controller: _searchCtrl,
                         focusNode: _searchFocus,
                         decoration: InputDecoration(
                           hintText: l10n.searchWorldClocks,
-                          prefixIcon: const Icon(Icons.search, size: 20),
-                          isDense: true,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: IconButton(
+                            tooltip: l10n.addCity,
+                            icon: const Icon(Icons.add),
+                            onPressed: () => _searchFocus.requestFocus(),
+                          ),
                         ),
                         onChanged: (q) =>
                             ctrl.setSearchQuery(q, languageCode: lang),
@@ -194,118 +207,186 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                             subtitle: Text(city.timezone),
                             trailing: IconButton(
                               tooltip: l10n.addCity,
-                              icon: const Icon(Icons.add_circle_outline),
-                              onPressed: () => ctrl.addFavorite(city),
+                              icon: Icon(
+                                state.favorites.contains(city)
+                                    ? Icons.check_circle
+                                    : Icons.add_circle_outline,
+                              ),
+                              onPressed: state.favorites.contains(city)
+                                  ? null
+                                  : () async {
+                                      await ctrl.addFavorite(city);
+                                      if (mounted) {
+                                        _searchCtrl.clear();
+                                        ctrl.setSearchQuery('');
+                                        _searchFocus.unfocus();
+                                      }
+                                    },
                             ),
                             onTap: () => _openCity(city),
                           ),
                       ],
                       const SizedBox(height: 16),
-                      if (wide)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  for (final city in state.favorites)
-                                    ReferenceCityRow(
-                                      city: city,
-                                      languageCode: lang,
-                                      atUtc: state.scrubUtc,
-                                      onTap: () => _openCity(city),
-                                    ),
-                                ],
-                              ),
+                      GlobalTimeOverview(
+                        cities: state.favorites,
+                        language: lang,
+                        instant: instant,
+                        onSelect: _openCity,
+                        showMap: wide || _showOverviewMap,
+                      ),
+                      if (!wide) ...[
+                        const SizedBox(height: 12),
+                        SegmentedButton<bool>(
+                          segments: [
+                            ButtonSegment(
+                              value: false,
+                              label: Text(labels.clocks),
+                              icon: const Icon(Icons.schedule),
                             ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              child: SizedBox(
-                                height: 370,
-                                child: WorldMapPanel(
-                                  cities: state.favorites,
-                                  selected: state.selectedCity,
-                                  onTapCoordinate: (lat, lng) =>
-                                      _onMapTap(lat, lng, lang),
-                                  onSelectCity: _openCity,
-                                ),
-                              ),
+                            ButtonSegment(
+                              value: true,
+                              label: Text(labels.map),
+                              icon: const Icon(Icons.public),
                             ),
                           ],
-                        )
-                      else ...[
-                        for (final city in state.favorites)
-                          ReferenceCityRow(
-                            city: city,
-                            languageCode: lang,
-                            atUtc: state.scrubUtc,
-                            onTap: () => _openCity(city),
-                          ),
-                        const SizedBox(height: 12),
-                        AppCard(
-                          padding: EdgeInsets.zero,
-                          child: ExpansionTile(
-                            title: Text(l10n.worldTimeTagline),
-                            leading: const Icon(Icons.public_outlined),
-                            children: [
-                              SizedBox(
-                                height: 280,
-                                child: WorldMapPanel(
-                                  cities: state.favorites,
-                                  selected: state.selectedCity,
-                                  onTapCoordinate: (lat, lng) =>
-                                      _onMapTap(lat, lng, lang),
-                                  onSelectCity: _openCity,
-                                ),
-                              ),
-                            ],
-                          ),
+                          selected: {_showOverviewMap},
+                          onSelectionChanged: (v) =>
+                              setState(() => _showOverviewMap = v.single),
                         ),
                       ],
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              labels.clocks,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () => _searchFocus.requestFocus(),
+                            icon: const Icon(Icons.add),
+                            label: Text(l10n.addCity),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      if (state.favorites.isEmpty) Text(l10n.noWorldCities),
+                      LayoutBuilder(
+                        builder: (context, box) {
+                          final largeText =
+                              MediaQuery.textScalerOf(context).scale(14) > 20;
+                          final columns = largeText
+                              ? (box.maxWidth >= 800 ? 2 : 1)
+                              : box.maxWidth >= 960
+                              ? 6
+                              : box.maxWidth >= 800
+                              ? 3
+                              : box.maxWidth >= 600
+                              ? 2
+                              : 1;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.favorites.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: columns,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
+                                  mainAxisExtent: largeText
+                                      ? 360
+                                      : columns == 1
+                                      ? 180
+                                      : 220,
+                                ),
+                            itemBuilder: (context, i) => CityClockCard(
+                              city: state.favorites[i],
+                              languageCode: lang,
+                              atUtc: instant,
+                              compact: columns >= 4 || columns == 1,
+                              onRemove: columns >= 4 || columns == 1
+                                  ? null
+                                  : () => ctrl.removeFavorite(
+                                      state.favorites[i].id,
+                                    ),
+                              onTap: () => _openCity(state.favorites[i]),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      MeetingPlannerPanel(
+                        cities: state.favorites,
+                        languageCode: lang,
+                      ),
+                      const SizedBox(height: 20),
+                      GlobalTimeTimeline(
+                        cities: state.favorites,
+                        language: lang,
+                        instant: now,
+                        selected: state.scrubUtc == null ? null : _scrubHour,
+                        onChanged: (h) {
+                          setState(() => _scrubHour = h);
+                          ctrl.setScrubUtc(
+                            DateTime.utc(
+                              now.year,
+                              now.month,
+                              now.day,
+                            ).add(Duration(minutes: (h * 60).round())),
+                          );
+                        },
+                        onLive: () => ctrl.setScrubUtc(null),
+                      ),
+                      const SizedBox(height: 20),
+                      AppCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              labels.favorites,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                for (final city in state.favorites)
+                                  InputChip(
+                                    label: Text(
+                                      '${city.flagEmoji ?? ''} ${city.localizedName(lang)}',
+                                    ),
+                                    onPressed: () => _openCity(city),
+                                    onDeleted: () =>
+                                        ctrl.removeFavorite(city.id),
+                                    deleteButtonTooltipMessage: labels.remove,
+                                  ),
+                                ActionChip(
+                                  avatar: const Icon(Icons.add, size: 18),
+                                  label: Text(l10n.addCity),
+                                  onPressed: () => _showCityPicker(lang),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       AppCard(
                         padding: EdgeInsets.zero,
                         child: ExpansionTile(
-                          title: Text(l10n.timeline24Hours),
-                          leading: const Icon(Icons.schedule_outlined),
+                          title: Text(labels.map),
+                          leading: const Icon(Icons.public),
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  MeetingPlannerPanel(
-                                    cities: state.favorites,
-                                    languageCode: lang,
-                                  ),
-                                  const SizedBox(height: 20),
-                                  TimelineScrubber(
-                                    selectedHour: _scrubHour,
-                                    onChanged: (h) {
-                                      setState(() => _scrubHour = h);
-                                      final now = DateTime.now().toUtc();
-                                      ctrl.setScrubUtc(
-                                        DateTime.utc(
-                                          now.year,
-                                          now.month,
-                                          now.day,
-                                          h.floor(),
-                                          ((h % 1) * 60).round(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(
-                                        () => _scrubHour =
-                                            DateTime.now().hour +
-                                            DateTime.now().minute / 60.0,
-                                      );
-                                      ctrl.setScrubUtc(null);
-                                    },
-                                    child: Text(l10n.timeNow),
-                                  ),
-                                ],
+                            SizedBox(
+                              height: 320,
+                              child: WorldMapPanel(
+                                cities: state.favorites,
+                                selected: state.selectedCity,
+                                onTapCoordinate: (lat, lng) =>
+                                    _onMapTap(lat, lng, lang),
+                                onSelectCity: _openCity,
                               ),
                             ),
                           ],
@@ -317,5 +398,30 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
               ),
       ),
     );
+  }
+
+  Future<void> _showCityPicker(String lang) async {
+    final ctrl = ref.read(globalTimeControllerProvider.notifier);
+    final city = await showModalBottomSheet<City>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (ctx) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(ctx).height * .65,
+          child: ListView(
+            children: [
+              for (final c in CityCatalog.all)
+                ListTile(
+                  title: Text('${c.flagEmoji ?? ''} ${c.localizedName(lang)}'),
+                  subtitle: Text(c.timezone),
+                  onTap: () => Navigator.pop(ctx, c),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (city != null && mounted) await ctrl.addFavorite(city);
   }
 }

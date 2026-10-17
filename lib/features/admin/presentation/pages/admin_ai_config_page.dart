@@ -1,3 +1,4 @@
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
-import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_ai_config_repository.dart';
 import '../../data/admin_operations_repository.dart';
@@ -207,7 +207,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                       ? const SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: RadPending(),
                         )
                       : Text(l10n.save),
                 ),

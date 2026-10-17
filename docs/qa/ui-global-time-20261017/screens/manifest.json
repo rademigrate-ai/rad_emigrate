@@ -1,0 +1,122 @@
+{
+  "base_head": "5257ca5b95fc7caa9612da29a9b207420778e01b",
+  "lib_tree": "24e4b2884d90c95dfe05a9009f7d649efa6bbf87",
+  "captures": [
+    {
+      "file": "navigation-fa-light.png",
+      "screen": "shell",
+      "locale": "fa",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "a8074da0dbc3353a9599cbf029026c2d5ff8ce8d63f691a7e674073bcebff9aa"
+    },
+    {
+      "file": "navigation-en-dark.png",
+      "screen": "shell",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "91d00565a603842b839d08c9205b79291cad78f1dc9ee4da1ed19a2b93c46410"
+    },
+    {
+      "file": "startup-fa-dark.png",
+      "screen": "startup",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "7d94989c56500c2bee6ea0b3c4f83fce5e7ca8364e6f1115477c26872bb6673f"
+    },
+    {
+      "file": "splash-en-light.png",
+      "screen": "splash",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "748887383d6ffa2a3082b7a9a4d40bae8a5d07ea09ad33c00f6cc18c702d1fa7"
+    },
+    {
+      "file": "visa-fa-dark.png",
+      "screen": "visa",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        1000
+      ],
+      "errors": [],
+      "sha256": "cacd229c68b4e7b6def8291839628e36c81a6ae0ff7b4ec58921d1880c90dbff"
+    },
+    {
+      "file": "visa-tablet-en-light.png",
+      "screen": "visa",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        744,
+        1000
+      ],
+      "errors": [],
+      "sha256": "e2a3f99115b23523623472bf8ee943021d5e657d4dc248c27a1fb8c91087ca14"
+    },
+    {
+      "file": "global-desktop-fa-dark.png",
+      "screen": "world-time",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        1440,
+        1100
+      ],
+      "errors": [],
+      "sha256": "455787d9d979e4e7df17ec753a66e1acdc51397a69385bac8790974e0f1d9b34"
+    },
+    {
+      "file": "global-planner-en-dark.png",
+      "screen": "world-time",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        1440,
+        1300
+      ],
+      "errors": [],
+      "sha256": "578b6bcf9a126472c123f1434e92028f2d6397aac3efe550856d449179536753"
+    },
+    {
+      "file": "global-mobile-en-light.png",
+      "screen": "world-time",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        1000
+      ],
+      "errors": [],
+      "sha256": "0757a020ee0fefcd0decb1c1a56df89c33d6caa7ca7e635a1953766709d543f8"
+    }
+  ],
+  "flows": [
+    {
+      "flow": "Real planner converts chosen origin civil time and exposes converted date/offset and suggested overlaps",
+      "status": "PASS"
+    }
+  ],
+  "capture_note": "Seven valid captures preserved; planner selector diagnosed as grouped ARIA text, then only planner and the unattempted mobile view completed. No screenshots overwritten.",
+  "description": "Actual Flutter product widgets with synthetic repositories; original HTML startup is intentionally paused before engine initialization. One focused pass, Reduced Motion."
+}
