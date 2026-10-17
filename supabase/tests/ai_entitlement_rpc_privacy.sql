@@ -23,6 +23,40 @@ begin
 end;
 $test$;
 
+-- Exercise actual untrusted callers as well as checking ACL metadata.
+-- Do not use real user IDs and do not write live fixture data.
+set local role authenticated;
+do $deny_auth$
+begin
+  begin
+    perform public.get_ai_access_decision('11111111-1111-4111-8111-111111111111'::uuid, null);
+    raise exception 'authenticated entitlement lookup was unexpectedly allowed';
+  exception when insufficient_privilege then
+    null;
+  end;
+  begin
+    perform public.get_ai_daily_quota_status('22222222-2222-4222-8222-222222222222'::uuid, 'super_admin');
+    raise exception 'authenticated cross-user quota lookup was unexpectedly allowed';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$deny_auth$;
+reset role;
+
+set local role anon;
+do $deny_anon$
+begin
+  begin
+    perform public.get_ai_access_decision('11111111-1111-4111-8111-111111111111'::uuid, null);
+    raise exception 'anonymous entitlement lookup was unexpectedly allowed';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$deny_anon$;
+reset role;
+
 -- A valid service principal may still invoke the canonical decision RPC.
 -- The empty identity branch is read-only and must not fabricate entitlement.
 set local role service_role;
