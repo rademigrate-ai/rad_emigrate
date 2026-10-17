@@ -20,12 +20,14 @@ export 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 bool isRpcMissingException(Object error) {
   if (error is PostgrestException) {
     final code = error.code?.trim().toUpperCase();
-    if (code == 'PGRST202' || code == '42883') {
-      return true;
+    if (code != null && code.isNotEmpty) {
+      // An explicit authorization, rate-limit or validation error must never
+      // be reclassified as a missing-RPC error based on its message body.
+      return code == 'PGRST202' || code == '42883';
     }
     final message = error.message.toLowerCase();
-    if (message.contains('could not find the function') ||
-        (message.contains('function') && message.contains('does not exist'))) {
+    if (message.contains('could not find the function') &&
+        message.contains('in the schema cache')) {
       return true;
     }
   }
