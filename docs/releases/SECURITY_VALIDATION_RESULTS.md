@@ -16,9 +16,9 @@
 | Gate | Target Component | Command | Result | Duration | Notes |
 |---|---|---|---|---|---|
 | **Gate 1** | Migration SHA-256 Hashes | `Get-FileHash` vs Manifest | **PASS** | < 1s | 5/5 files match manifest byte-for-byte |
-| **Gate 2** | Code Formatting | `dart format --set-exit-if-changed lib test` | **PASS** | 2.12s | 249 files formatted (0 issues) |
-| **Gate 3** | Static Code Analysis | `flutter analyze --no-pub` | **PASS** | 7.5s | "No issues found!" |
-| **Gate 4** | Full Test Suite | `flutter test --no-pub` | **PASS** | 104s | 446 tests passed (100% green) |
+| **Gate 2** | Code Formatting | `dart format --set-exit-if-changed lib test` | **PASS** | 2.25s | 254 files formatted (0 issues) |
+| **Gate 3** | Static Code Analysis | `flutter analyze --no-pub` | **PASS** | 12.0s | "No issues found!" |
+| **Gate 4** | Full Test Suite | `flutter test --no-pub` | **PASS** | 89s | 459 tests passed (100% green) |
 | **Gate 5** | Consultation Security RPCs & Compat | `flutter test test/core/supabase/... test/features/consultation/...` | **PASS** | 1.8s | 14/14 tests passed (fail-closed negative tests) |
 | **Gate 6** | AI Orchestrator Edge Tests | `ai_orchestrator_test.ts` (20 tests) | **PASS** | CI Deno | Tests 17-20 verify atomic reservation, 429 limit, 503 fail-closed, 500 malformed |
 | **Gate 7** | Production Web Release Build | `flutter build web --no-pub` | **PASS** | 103.3s | Release JS bundle created in `build/web` |
@@ -32,15 +32,15 @@
 
 ### 2.1 Full Flutter Test Suite Output
 ```text
-01:44 +446: All tests passed!
+01:29 +459: All tests passed!
 ```
-- Includes core navigation, routing, auth controller, profile management, visa catalog, AI assistant, document intelligence, guest mode hydration, visual QA smoke tests, RPC capability detection (`rpc_compat`), and fail-closed negative error paths.
+- Includes core navigation, routing, auth controller, profile management, visa catalog, AI assistant, document intelligence, guest mode hydration, visual QA smoke tests, RPC capability detection (`rpc_compat`), fail-closed negative error paths, and newly integrated PR #55 Global Time tests.
 - Zero broken tests, zero skipped tests, zero regressions.
 
 ### 2.2 Flutter Analyze Output
 ```text
 Analyzing worktree-security-hardening...
-No issues found! (ran in 7.5s)
+No issues found! (ran in 12.0s)
 ```
 
 ### 2.3 Web Production Build Output
