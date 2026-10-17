@@ -31,11 +31,11 @@
 
 ## Proposed minimal privacy fix (PR #62)
 
-- Revokes `authenticated` and `anon`/`PUBLIC` EXECUTE on the **two** cross-user entitlement/status RPCs while retaining `service_role`.
-- Privilege postconditions checked transactionally in proposed additive migration.
-- Isolated clean-schema CI runs SQL negative/positive ACL tests, including a read-only service-role decision.
-- No current `lib/` or `supabase/functions/` direct RPC call sites for either method found in `main`; the access-decision function calls the quota-status helper **internally**.
-- Intentional API compatibility caveat: any external/custom authenticated client calling these RPCs will receive an authorization failure after deployment. A separately reviewed **owner-scoped** replacement could restore self-service access without exposing arbitrary user IDs.
+- Replaces both SECURITY DEFINER bodies with **owner-scoped lookups**: non-service JWT callers must provide `p_user_id = auth.uid()`, otherwise they receive SQLSTATE `42501`. The genuine service_role retains cross-user server-side access.
+- Ignores caller-supplied `p_role` for signed-in users and derives the effective quota role from `public.profiles`; prevents request-parameter privilege inflation.
+- Preserves authenticated **own-user** RPC access and service_role EXECUTE; anon/PUBLIC remain denied. Existing expected self-service behavior is retained rather than breaking it.
+- Isolated clean-schema CI runs actual positive self and service-role tests plus negative cross-user, forged-role and anon tests. PR #48's Stage 1 role/isolation tests remain required on the composite HEAD.
+- No current `lib/` or `supabase/functions/` direct RPC call sites for either method found in `main`; access-decision calls quota-status **internally**.
 
 ## Gates not yet passed
 
