@@ -13,6 +13,7 @@ import 'package:rad_emigrate/features/auth/domain/entities/user_session.dart';
 import 'package:rad_emigrate/features/auth/domain/repositories/auth_repository.dart';
 import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class _AuthRepository implements AuthRepository {
   @override
@@ -115,7 +116,12 @@ Future<void> _pump(
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: AiAssistantPage(adminMode: admin),
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(disableAnimations: true),
+            child: AiAssistantPage(adminMode: admin),
+          ),
+        ),
       ),
     ),
   );
@@ -129,6 +135,10 @@ Future<void> _send(WidgetTester tester, String prompt) async {
 }
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   testWidgets(
     'provider failure retries without duplicating persisted user question',
     (tester) async {

@@ -180,10 +180,10 @@ void main() {
       expect(restoredProtectedDestination('/world-clock'), '/world-clock');
     });
 
-    test('world-clock is a protected route for deep-link restoration', () {
-      final uri = Uri.parse('/world-clock');
+    test('protected route preserves deep-link restoration; public route does not block', () {
+      final protectedUri = Uri.parse('/applications');
       final redirected = authRedirect(
-        uri: uri,
+        uri: protectedUri,
         isRestoring: true,
         isAuthenticated: false,
         profileComplete: false,
@@ -193,14 +193,50 @@ void main() {
       expect(splashUri.path, '/splash');
       expect(
         restoredProtectedDestination(splashUri.queryParameters['from']),
-        uri.toString(),
+        protectedUri.toString(),
       );
       expect(
         authRedirect(
-          uri: uri,
+          uri: protectedUri,
           isRestoring: false,
           isAuthenticated: true,
           profileComplete: true,
+        ),
+        isNull,
+      );
+
+      // Public in-app routes (guest mode) are not sent to splash during restore.
+      final publicUri = Uri.parse('/world-clock');
+      expect(
+        authRedirect(
+          uri: publicUri,
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
+
+    test('unknown path is not forced to login so NotFound can render', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/does-not-exist-xyz'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+    });
+
+    test('unknown path during restore is not forced through splash', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/random-unknown'),
+          isRestoring: true,
+          isAuthenticated: false,
+          profileComplete: false,
         ),
         isNull,
       );
@@ -244,6 +280,7 @@ void main() {
         '/loginn',
         '/dashboard/extra',
         '/register/x',
+        '/totally/missing',
       ]) {
         expect(
           authRedirect(
@@ -277,14 +314,15 @@ void main() {
     });
 
     test('known protected routes still enforce authentication', () {
+      // Strictly protected routes (require login).
       expect(
         authRedirect(
-          uri: Uri.parse('/dashboard'),
+          uri: Uri.parse('/applications'),
           isRestoring: false,
           isAuthenticated: false,
           profileComplete: false,
         ),
-        '/login?from=%2Fdashboard',
+        '/login?from=%2Fapplications',
       );
       expect(
         authRedirect(
@@ -294,6 +332,16 @@ void main() {
           profileComplete: false,
         ),
         '/login?from=%2Fadmin%2Foperations',
+      );
+      // Guest-accessible (explore-first) routes must NOT force login.
+      expect(
+        authRedirect(
+          uri: Uri.parse('/dashboard'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
       );
     });
 

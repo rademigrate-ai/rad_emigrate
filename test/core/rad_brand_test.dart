@@ -57,7 +57,7 @@ void main() {
     expect(File(source['path'] as String).lengthSync(), 95420);
     final index = File('web/index.html').readAsStringSync();
     expect(index, contains('icons/apple-touch-icon.png'));
-    expect(index, contains('width="116" height="116"'));
+    expect(index, contains('width="144" height="144"'));
     expect(index, contains('assets/assets/branding/rad_official_logo.png'));
   });
 

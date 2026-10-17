@@ -60,7 +60,7 @@ Future<void> _pumpRegister(
 }
 
 Future<void> _toggleLocale(WidgetTester tester) async {
-  final toPersian = find.text('فارسی');
+  final toPersian = find.text('\u0641\u0627\u0631\u0633\u06cc');
   final target = toPersian.evaluate().isNotEmpty
       ? toPersian
       : find.text('English');

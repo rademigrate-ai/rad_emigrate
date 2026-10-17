@@ -1,7 +1,10 @@
+import '../../../../l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/premium_tokens.dart';
 import '../../domain/city.dart';
 import '../../domain/meeting_planner.dart';
 
@@ -65,8 +68,8 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF141C28),
-        borderRadius: BorderRadius.circular(16),
+        color: context.premium.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
         border: Border.all(color: AppColors.primaryRed.withValues(alpha: 0.2)),
       ),
       child: Column(
@@ -76,44 +79,42 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
             children: [
               const Icon(Icons.event_available, color: AppColors.primaryRed),
               const SizedBox(width: 8),
-              Text(
-                lang == 'fa'
-                    ? 'برنامه‌ریزی تماس بین‌المللی'
-                    : 'International Meeting Planner',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context).meetingPlannerTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: context.premium.text,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            lang == 'fa'
-                ? 'پنجره‌های پیشنهادی همپوشانی ساعات کاری (نه تأیید دسترسی)'
-                : 'Suggested overlapping working-hour windows (not confirmed availability)',
+            AppLocalizations.of(context).meetingPlannerDisclaimer,
             style: Theme.of(context).textTheme.bodySmall
-                ?.copyWith(color: Colors.white60),
+                ?.copyWith(color: context.premium.mutedText),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: _CityDropdown(
-                  label: lang == 'fa' ? 'مبدأ' : 'Origin',
+                  label: AppLocalizations.of(context).meetingOrigin,
                   value: _origin,
                   cities: widget.cities,
                   languageCode: lang,
                   onChanged: (c) => setState(() => _origin = c),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(Icons.swap_horiz, color: Colors.white54),
+                child: Icon(Icons.swap_horiz, color: context.premium.mutedText),
               ),
               Expanded(
                 child: _CityDropdown(
-                  label: lang == 'fa' ? 'مقصد' : 'Destination',
+                  label: AppLocalizations.of(context).meetingDestination,
                   value: _destination,
                   cities: widget.cities,
                   languageCode: lang,
@@ -123,9 +124,12 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              Expanded(
+              SizedBox(
+                width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () async {
                     final picked = await showDatePicker(
@@ -139,18 +143,26 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
                     if (picked != null) setState(() => _date = picked);
                   },
                   icon: const Icon(Icons.calendar_today, size: 16),
-                  label: Text(DateFormat('yyyy-MM-dd').format(_date)),
+                  label: Text(
+                    DateFormat.yMMMd(
+                      Localizations.localeOf(context).languageCode,
+                    ).format(_date),
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               DropdownButton<int>(
                 value: _durationMinutes,
-                dropdownColor: const Color(0xFF1A222D),
-                style: const TextStyle(color: Colors.white),
-                items: const [
-                  DropdownMenuItem(value: 30, child: Text('30 min')),
-                  DropdownMenuItem(value: 60, child: Text('60 min')),
-                  DropdownMenuItem(value: 90, child: Text('90 min')),
+                dropdownColor: context.premium.surfaceElevated,
+                style: TextStyle(color: context.premium.text),
+                items: [
+                  for (final minutes in [30, 60, 90])
+                    DropdownMenuItem(
+                      value: minutes,
+                      child: Text(
+                        AppLocalizations.of(context).meetingMinutes(minutes),
+                      ),
+                    ),
                 ],
                 onChanged: (v) {
                   if (v != null) setState(() => _durationMinutes = v);
@@ -159,16 +171,16 @@ class _MeetingPlannerPanelState extends State<MeetingPlannerPanel> {
               const SizedBox(width: 8),
               FilledButton(
                 onPressed: _compute,
-                child: Text(lang == 'fa' ? 'نمایش' : 'Show'),
+                child: Text(AppLocalizations.of(context).meetingShow),
               ),
             ],
           ),
           if (_windows.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(
-              lang == 'fa' ? 'پنجره‌های پیشنهادی' : 'Suggested windows',
+              AppLocalizations.of(context).meetingSuggestedWindows,
               style: Theme.of(context).textTheme.titleSmall
-                  ?.copyWith(color: Colors.white),
+                  ?.copyWith(color: context.premium.text),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -206,7 +218,7 @@ class _CityDropdown extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white70),
+        labelStyle: TextStyle(color: context.premium.mutedText),
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
@@ -216,9 +228,9 @@ class _CityDropdown extends StatelessWidget {
               ? cities.firstWhere((c) => c.id == value!.id)
               : null,
           isExpanded: true,
-          dropdownColor: const Color(0xFF1A222D),
-          style: const TextStyle(color: Colors.white),
-          hint: Text(label, style: const TextStyle(color: Colors.white38)),
+          dropdownColor: context.premium.surfaceElevated,
+          style: TextStyle(color: context.premium.text),
+          hint: Text(label, style: TextStyle(color: context.premium.mutedText)),
           items: [
             for (final c in cities)
               DropdownMenuItem(
@@ -251,12 +263,14 @@ class _WindowChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: good ? AppColors.success.withValues(alpha: 0.2) : Colors.white10,
-        borderRadius: BorderRadius.circular(10),
+        color: good
+            ? AppColors.success.withValues(alpha: 0.2)
+            : context.premium.surfaceElevated,
+        borderRadius: BorderRadius.circular(AppRadii.sm),
         border: Border.all(
           color: good
               ? AppColors.success.withValues(alpha: 0.5)
-              : Colors.white24,
+              : context.premium.border,
         ),
       ),
       child: Column(
@@ -264,21 +278,21 @@ class _WindowChip extends StatelessWidget {
         children: [
           Text(
             origin,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: context.premium.text,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
             dest,
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
+            style: TextStyle(color: context.premium.mutedText, fontSize: 12),
           ),
           Text(
             good
-                ? (languageCode == 'fa' ? 'مناسب' : 'Suitable')
-                : (languageCode == 'fa' ? 'نسبی' : 'Partial'),
+                ? (AppLocalizations.of(context).meetingSuitable)
+                : (AppLocalizations.of(context).meetingPartial),
             style: TextStyle(
-              color: good ? AppColors.success : Colors.white54,
+              color: good ? AppColors.success : context.premium.mutedText,
               fontSize: 11,
             ),
           ),

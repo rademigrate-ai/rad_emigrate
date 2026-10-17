@@ -1,3 +1,6 @@
+import '../../../../core/theme/premium_tokens.dart';
+import '../../../../core/theme/app_motion.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -32,7 +35,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final bg = isDark ? const Color(0xFF0A1018) : const Color(0xFFE8EEF4);
+    final bg = context.premium.surfaceElevated;
     // Free Esri Canvas tiles — no API key, no watermark.
     // Note: Esri uses {z}/{y}/{x} order (not z/x/y).
     final tileUrl = isDark
@@ -40,7 +43,7 @@ class _WorldMapPanelState extends State<WorldMapPanel> {
         : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppRadii.lg),
       child: Stack(
         children: [
           FlutterMap(
@@ -134,7 +137,7 @@ class _CityMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: AppMotion.duration(context, AppMotion.hover),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: selected
@@ -174,8 +177,8 @@ class _MapBtn extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: SizedBox(
-          width: 36,
-          height: 36,
+          width: 44,
+          height: 44,
           child: Icon(icon, color: theme.colorScheme.onSurface, size: 18),
         ),
       ),

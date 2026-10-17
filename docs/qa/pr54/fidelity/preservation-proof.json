@@ -1,0 +1,102 @@
+{
+  "baseline": "20e2f3b25d0af3de13fd2013f12da183e4c168bf",
+  "implementation_head": "c5eda9600018b5bf4ba0907169379ba6571c050d",
+  "normalization": "Dart LF/CRLF normalized; PNGs compared as exact bytes",
+  "authoritative_bird_and_surface": [
+    {
+      "path": "assets/branding/rad_flying_bird_64.png",
+      "baseline_sha256": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5",
+      "working_sha256": "032c28b7bff419d30ebaeaa1c76d883578ef9558197b1a0e02b4855a1de7f1f5",
+      "unchanged": true
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_128.png",
+      "baseline_sha256": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e",
+      "working_sha256": "afc27e295b5c226e72823333bab45bfee6deef629a8ca4cf36aae2a75574222e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_256.png",
+      "baseline_sha256": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1",
+      "working_sha256": "f73eeb88d1e1daa629e92e26853980cd1b21b2f200e4ed99ae9256d4b55031d1",
+      "unchanged": true
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_512.png",
+      "baseline_sha256": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4",
+      "working_sha256": "943627bdddd8f20c973d8d49dce0548135b83a39b13eee98aa045e45020210b4",
+      "unchanged": true
+    },
+    {
+      "path": "assets/branding/rad_flying_bird_1024.png",
+      "baseline_sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06",
+      "working_sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06",
+      "unchanged": true
+    },
+    {
+      "path": "lib/core/widgets/rad_ai_bird.dart",
+      "baseline_sha256": "ceab64b50b9b25073024cb95cad34ea9d48843d0248333c6f3a32d0d2c6d35dd",
+      "working_sha256": "ceab64b50b9b25073024cb95cad34ea9d48843d0248333c6f3a32d0d2c6d35dd",
+      "unchanged": true
+    },
+    {
+      "path": "lib/core/widgets/rad_ai_bird_nav_icon.dart",
+      "baseline_sha256": "b4cd7b0c5e79e796afe043d8364f8860381f66e434db05f804d51be560e30d5c",
+      "working_sha256": "b4cd7b0c5e79e796afe043d8364f8860381f66e434db05f804d51be560e30d5c",
+      "unchanged": true
+    },
+    {
+      "path": "lib/core/widgets/rad_phoenix_navigation_surface.dart",
+      "baseline_sha256": "8a90d4e705d4fcce7942b541ac502f05ca809dd3c273800da9ef0f7fa3198af5",
+      "working_sha256": "8a90d4e705d4fcce7942b541ac502f05ca809dd3c273800da9ef0f7fa3198af5",
+      "unchanged": true
+    },
+    {
+      "path": "lib/core/widgets/rad_flapping_bird.dart",
+      "baseline_sha256": "dd03df00789f63d2d25110f7d2e4da7c7e2803c689324c914c6535d1b1c9ef3a",
+      "working_sha256": "dd03df00789f63d2d25110f7d2e4da7c7e2803c689324c914c6535d1b1c9ef3a",
+      "unchanged": true
+    },
+    {
+      "path": "lib/core/widgets/rad_earth_bird_scene.dart",
+      "baseline_sha256": "82d4875e2c13ad709c1ad7ea479fe5b51b63e8d6425770603bad4f9c9cf9593d",
+      "working_sha256": "82d4875e2c13ad709c1ad7ea479fe5b51b63e8d6425770603bad4f9c9cf9593d",
+      "unchanged": true
+    }
+  ],
+  "changed_lib_files": [
+    "lib/core/constants/app_colors.dart",
+    "lib/core/routing/app_shell.dart",
+    "lib/core/theme/app_theme.dart",
+    "lib/core/theme/premium_tokens.dart",
+    "lib/core/widgets/app_card.dart",
+    "lib/core/widgets/premium_visuals.dart",
+    "lib/core/widgets/progress_steps.dart",
+    "lib/core/widgets/rad_loading.dart",
+    "lib/core/widgets/reference_widgets.dart",
+    "lib/features/ai_assistant/presentation/pages/ai_assistant_page.dart",
+    "lib/features/applications/presentation/pages/applications_page.dart",
+    "lib/features/dashboard/presentation/pages/dashboard_page.dart",
+    "lib/features/documents/presentation/pages/documents_page.dart",
+    "lib/features/global_time/presentation/pages/world_clock_page.dart",
+    "lib/features/global_time/presentation/widgets/reference_city_clock.dart",
+    "lib/features/profile/presentation/pages/profile_page.dart",
+    "lib/features/splash/presentation/pages/splash_page.dart",
+    "lib/features/visa/presentation/pages/visa_page.dart",
+    "lib/features/visa/presentation/pages/visa_page_countries.dart",
+    "lib/l10n/app_en.arb",
+    "lib/l10n/app_fa.arb",
+    "lib/l10n/app_localizations.dart",
+    "lib/l10n/app_localizations_en_a.dart",
+    "lib/l10n/app_localizations_fa_a.dart",
+    "lib/visual_qa_capture_signal_stub.dart",
+    "lib/visual_qa_capture_signal_web.dart",
+    "lib/visual_qa_main.dart"
+  ],
+  "domain_data_providers_auth_and_service_contracts_unchanged": true,
+  "lib_tree": "1b61ae036430da3ff6221c3d3854e00c364619e9",
+  "map_coordinate_resolution_method": {
+    "unchanged": true,
+    "sha256": "805b74510de3a6463a3b831fe6ae404a75eef280a3a6b5d77ec7f8f70541e54c"
+  }
+}

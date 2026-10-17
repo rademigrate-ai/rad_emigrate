@@ -1,14 +1,22 @@
+import '../../../../core/widgets/record_labels.dart';
+import '../../../../core/widgets/inline_alert.dart';
+import '../../../../core/theme/premium_tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/motion_primitives.dart';
+import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../providers/consultation_draft_provider.dart';
 
 /// Explicit user-initiated consultation / human-handoff request.
 class ConsultationPage extends ConsumerStatefulWidget {
@@ -21,6 +29,7 @@ class ConsultationPage extends ConsumerStatefulWidget {
 }
 
 class _ConsultationPageState extends ConsumerState<ConsultationPage> {
+  final _formKey = GlobalKey<FormState>();
   late final TextEditingController _topic;
   late final TextEditingController _message;
   bool _submitting = false;
@@ -33,20 +42,58 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   @override
   void initState() {
     super.initState();
-    _topic = TextEditingController(text: widget.initialTopic ?? '');
-    _message = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadMine());
+    final draft = ref.read(consultationDraftProvider);
+    final initialTopic = widget.initialTopic?.trim();
+    final effectiveTopic = (initialTopic != null && initialTopic.isNotEmpty)
+        ? initialTopic
+        : draft.topic;
+    _topic = TextEditingController(text: effectiveTopic);
+    _message = TextEditingController(text: draft.message);
+
+    _topic.addListener(_onFieldChanged);
+    _message.addListener(_onFieldChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(consultationDraftProvider.notifier).ready;
+      if (!mounted) return;
+      final restored = ref.read(consultationDraftProvider);
+      if (_topic.text.isEmpty && restored.topic.isNotEmpty) {
+        _topic.text = restored.topic;
+      }
+      if (_message.text.isEmpty && restored.message.isNotEmpty) {
+        _message.text = restored.message;
+      }
+      await _loadMine();
+    });
+  }
+
+  void _onFieldChanged() {
+    ref
+        .read(consultationDraftProvider.notifier)
+        .updateDraft(topic: _topic.text, message: _message.text);
   }
 
   @override
   void dispose() {
+    _topic.removeListener(_onFieldChanged);
+    _message.removeListener(_onFieldChanged);
     _topic.dispose();
     _message.dispose();
     super.dispose();
   }
 
   Future<void> _loadMine() async {
-    final client = ref.read(supabaseClientServiceProvider).client;
+    final session = ref.read(authControllerProvider).valueOrNull;
+    if (session?.authenticated != true || session?.userId == null) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    final supabase = ref.read(supabaseClientServiceProvider);
+    if (!supabase.isInitialized) {
+      if (mounted) setState(() => _historyLoading = false);
+      return;
+    }
+    final client = supabase.client;
     final uid = client.auth.currentUser?.id;
     if (uid == null) {
       if (mounted) setState(() => _historyLoading = false);
@@ -85,18 +132,30 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     final l10n = AppLocalizations.of(context);
     final topic = _topic.text.trim();
     final message = _message.text.trim();
-    if (topic.isEmpty || message.isEmpty) {
+    if (!(_formKey.currentState?.validate() ?? false)) {
       setState(() => _error = l10n.consultationFieldsRequired);
       return;
     }
+
+    final session = ref.read(authControllerProvider).valueOrNull;
+    if (session?.authenticated != true) {
+      if (mounted) {
+        context.go('/login?from=%2Fconsultation');
+      }
+      return;
+    }
+
     if (_submitting) return;
     setState(() {
       _submitting = true;
       _error = null;
       _success = null;
     });
+
     try {
-      final client = ref.read(supabaseClientServiceProvider).client;
+      final supabase = ref.read(supabaseClientServiceProvider);
+      if (!supabase.isInitialized) throw Exception('supabase_not_initialized');
+      final client = supabase.client;
       final uid = client.auth.currentUser?.id;
       if (uid == null) throw Exception('auth');
       await client.from('consultation_requests').insert({
@@ -105,6 +164,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
         'message': message,
         'status': 'submitted',
       });
+      await ref.read(consultationDraftProvider.notifier).clearDraft();
       if (mounted) {
         setState(() {
           _success = l10n.consultationSubmitted;
@@ -125,104 +185,209 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
-    if (session?.authenticated != true) {
-      return Scaffold(
-        appBar: AppBar(title: Text(l10n.consultationTitle)),
-        body: Center(
-          child: TextButton(
-            onPressed: () => context.go('/login'),
-            child: Text(l10n.signIn),
-          ),
-        ),
-      );
-    }
+    final isAuthed = session?.authenticated == true;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.consultationTitle)),
-      body: MotionReveal(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(
-              l10n.consultationIntro,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: PremiumCanvas(
+        accent: AppColors.primaryRed,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 820),
+            child: MotionReveal(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
                 children: [
-                  AppTextField(
-                    controller: _topic,
-                    label: l10n.consultationTopic,
-                    prefixIcon: Icons.topic_outlined,
-                    textInputAction: TextInputAction.next,
+                  _ConsultationHeader(
+                    title: l10n.consultationTitle,
+                    body: l10n.consultationIntro,
                   ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    controller: _message,
-                    label: l10n.consultationMessage,
-                    prefixIcon: Icons.message_outlined,
-                    minLines: 4,
-                    maxLines: 8,
-                  ),
-                ],
-              ),
-            ),
-            if (_error != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                _error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ],
-            if (_success != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                _success!,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
-            ],
-            const SizedBox(height: 16),
-            AppButton(
-              label: l10n.submitConsultation,
-              icon: Icons.send_outlined,
-              loading: _submitting,
-              onPressed: _submitting ? null : _submit,
-            ),
-            const SizedBox(height: 28),
-            Text(
-              l10n.myConsultations,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            if (_historyLoading)
-              const Center(child: CircularProgressIndicator())
-            else if (_historyFailed)
-              TextButton.icon(
-                onPressed: _loadMine,
-                icon: const Icon(Icons.refresh),
-                label: Text(l10n.refresh),
-              )
-            else if (_mine.isEmpty)
-              Text(l10n.noConsultations)
-            else
-              ..._mine.asMap().entries.map((entry) {
-                final r = entry.value;
-                return MotionStagger(
-                  index: entry.key,
-                  child: AppCard(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text('${r['topic'] ?? ''}'),
-                      subtitle: Text(
-                        '${r['status'] ?? ''} · ${r['created_at'] ?? ''}',
+                  const SizedBox(height: 20),
+                  AppCard(
+                    padding: const EdgeInsets.all(22),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).requestDetailsHeading,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(height: 18),
+                          AppTextField(
+                            controller: _topic,
+                            label: l10n.consultationTopic,
+                            prefixIcon: Icons.topic_outlined,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) =>
+                                value == null || value.trim().isEmpty
+                                ? l10n.consultationFieldsRequired
+                                : null,
+                          ),
+                          const SizedBox(height: 14),
+                          AppTextField(
+                            controller: _message,
+                            label: l10n.consultationMessage,
+                            prefixIcon: Icons.message_outlined,
+                            minLines: 5,
+                            maxLines: 8,
+                            validator: (value) =>
+                                value == null || value.trim().isEmpty
+                                ? l10n.consultationFieldsRequired
+                                : null,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                );
-              }),
+                  if (_error != null) ...[
+                    const SizedBox(height: 8),
+                    InlineAlert(message: _error!),
+                  ],
+                  if (_success != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      _success!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  AppButton(
+                    label: l10n.submitConsultation,
+                    icon: Icons.send_outlined,
+                    loading: _submitting,
+                    onPressed: _submitting ? null : _submit,
+                  ),
+                  const SizedBox(height: 28),
+                  Text(
+                    l10n.myConsultations,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  if (!isAuthed)
+                    AppCard(
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        leading: const Icon(Icons.lock_outline),
+                        title: Text(l10n.signInToViewConsultations),
+                        trailing: TextButton(
+                          onPressed: () =>
+                              context.go('/login?from=%2Fconsultation'),
+                          child: Text(l10n.signIn),
+                        ),
+                      ),
+                    )
+                  else if (_historyLoading)
+                    RadInlineLoading(label: l10n.loading)
+                  else if (_historyFailed)
+                    TextButton.icon(
+                      onPressed: _loadMine,
+                      icon: const Icon(Icons.refresh),
+                      label: Text(l10n.refresh),
+                    )
+                  else if (_mine.isEmpty)
+                    Text(l10n.noConsultations)
+                  else
+                    ..._mine.asMap().entries.map((entry) {
+                      final r = entry.value;
+                      return MotionStagger(
+                        index: entry.key,
+                        child: AppCard(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text('${r['topic'] ?? ''}'),
+                            subtitle: Text(
+                              '${consultationStatusLabel(r['status'], l10n)} · ${recordDateLabel(r['created_at'], context)}',
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ConsultationHeader extends StatelessWidget {
+  const _ConsultationHeader({required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Semantics(
+      header: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: AlignmentDirectional.topStart,
+            end: AlignmentDirectional.bottomEnd,
+            colors: context.premium.heroGradient.colors,
+          ),
+          borderRadius: BorderRadius.circular(AppRadii.hero),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryRed.withValues(alpha: dark ? .14 : .08),
+              blurRadius: 30,
+              offset: const Offset(0, 14),
+            ),
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            children: [
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryRed,
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                ),
+                child: const Icon(
+                  Icons.support_agent_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 18),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      body,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.45,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

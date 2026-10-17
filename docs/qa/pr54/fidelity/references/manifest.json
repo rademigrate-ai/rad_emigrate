@@ -1,0 +1,44 @@
+{
+  "references": [
+    {
+      "file": "Luminous Bird Assistant UI Showcase.png",
+      "sha256": "a01b201dd92dd4e35003e72ef1fb94c1a89841cdc3a8677c68f26f55060b8171",
+      "unaltered": true
+    },
+    {
+      "file": "Natural Wingbeat Loading UI.png",
+      "sha256": "5882286c53d3317b9a49eb46ce0a9fd8359f0092b06c5f5c780bdec4c6184ddf",
+      "unaltered": true
+    },
+    {
+      "file": "Phoenix Assistant Asset Showcase.png",
+      "sha256": "387fbb5b9269cfb36d23b7343493136acd15523c6732c389dcac80775b88681c",
+      "unaltered": true
+    },
+    {
+      "file": "RAD Emigrate Bilingual Dashboard Design.png",
+      "sha256": "01644ec57fa21729466236cf2a949adae274867b37a76fe5f43915ab0dd3a012",
+      "unaltered": true
+    },
+    {
+      "file": "RAD Emigrate Bilingual UI Showcase.png",
+      "sha256": "f2d8abf64843873be10d2e4fce1a6c131928453c1b9bd183356c17789fbe4d99",
+      "unaltered": true
+    },
+    {
+      "file": "RAD Emigrate Design System Showcase.png",
+      "sha256": "ba2f64f3ee76b4af614e5ce62da6d5173101227b961ff46291c77bec3af0fda3",
+      "unaltered": true
+    },
+    {
+      "file": "RAD Emigrate Glass UI Showcase.png",
+      "sha256": "8ed233f447cfdc11ddaa8d066e6f0cbef6493e0b1f040749c4cc62e4e4396e5f",
+      "unaltered": true
+    },
+    {
+      "file": "RAD Emigrate Light and Dark UI Flow.png",
+      "sha256": "0841f394cdb47c0eb1353f4335c5dde176f313072b69b7453d91f45c5857cdc0",
+      "unaltered": true
+    }
+  ]
+}

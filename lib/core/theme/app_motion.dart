@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 /// the operating system requests reduced motion. Widgets must use these tokens
 /// rather than introducing ad-hoc durations or curves.
 abstract final class AppMotion {
+  static const Duration assistantResponse = Duration(milliseconds: 800);
+  static const Duration assistantNotification = Duration(milliseconds: 1400);
+  static const Duration carouselPause = Duration(seconds: 4);
   static const Duration instant = Duration(milliseconds: 100);
   static const Duration buttonFeedback = Duration(milliseconds: 140);
   static const Duration fast = Duration(milliseconds: 180);

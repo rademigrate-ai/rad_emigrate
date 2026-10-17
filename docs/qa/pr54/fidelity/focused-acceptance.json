@@ -1,0 +1,271 @@
+{
+  "source_head": "5ddfecffc80f6c5b1785eef8e8f791dc8136b5c8",
+  "lib_tree": "ef05b26462376bf15523121cb4d7c3e91d45ef31",
+  "evidence": "Focused index of 44 already-existing screenshots; no new captures.",
+  "captures": [
+    {
+      "file": "screens/mobile-en-light-dashboard.png",
+      "purpose": "dashboard",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-visa.png",
+      "purpose": "visa",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-ai-empty.png",
+      "purpose": "ai-empty",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-cases.png",
+      "purpose": "cases",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-documents.png",
+      "purpose": "documents",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-profile.png",
+      "purpose": "profile",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-world-time.png",
+      "purpose": "world-time",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-light-shell.png",
+      "purpose": "shell",
+      "locale": "en",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-en-dark-dashboard.png",
+      "purpose": "dashboard",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-visa.png",
+      "purpose": "visa",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-ai-empty.png",
+      "purpose": "ai-empty",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-cases.png",
+      "purpose": "cases",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-documents.png",
+      "purpose": "documents",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-profile.png",
+      "purpose": "profile",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-world-time.png",
+      "purpose": "world-time",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-en-dark-shell.png",
+      "purpose": "shell",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-light-dashboard.png",
+      "purpose": "dashboard",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-visa.png",
+      "purpose": "visa",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-ai-empty.png",
+      "purpose": "ai-empty",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-cases.png",
+      "purpose": "cases",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-documents.png",
+      "purpose": "documents",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-profile.png",
+      "purpose": "profile",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-world-time.png",
+      "purpose": "world-time",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-light-shell.png",
+      "purpose": "shell",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "screens/mobile-fa-dark-dashboard.png",
+      "purpose": "dashboard",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-visa.png",
+      "purpose": "visa",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-ai-empty.png",
+      "purpose": "ai-empty",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-cases.png",
+      "purpose": "cases",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-documents.png",
+      "purpose": "documents",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-profile.png",
+      "purpose": "profile",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-world-time.png",
+      "purpose": "world-time",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "screens/mobile-fa-dark-shell.png",
+      "purpose": "shell",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-light-case-detail.png",
+      "purpose": "case-detail",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "details/fa-light-document-actions.png",
+      "purpose": "document-actions",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "details/fa-light-city-detail.png",
+      "purpose": "city-detail",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "details/fa-light-profile-edit.png",
+      "purpose": "profile-edit",
+      "locale": "fa",
+      "theme": "light"
+    },
+    {
+      "file": "details/fa-dark-case-detail.png",
+      "purpose": "case-detail",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-dark-document-actions.png",
+      "purpose": "document-actions",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-dark-city-detail.png",
+      "purpose": "city-detail",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-dark-profile-edit.png",
+      "purpose": "profile-edit",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/en-dark-narrow-200pct-dashboard.png",
+      "purpose": "narrow-200pct-dashboard",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "details/en-dark-focused-composer-reduced-viewport.png",
+      "purpose": "focused-composer-reduced-viewport",
+      "locale": "en",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-dark-narrow-200pct-dashboard.png",
+      "purpose": "narrow-200pct-dashboard",
+      "locale": "fa",
+      "theme": "dark"
+    },
+    {
+      "file": "details/fa-dark-focused-composer-reduced-viewport.png",
+      "purpose": "focused-composer-reduced-viewport",
+      "locale": "fa",
+      "theme": "dark"
+    }
+  ]
+}

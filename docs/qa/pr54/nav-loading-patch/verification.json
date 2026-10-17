@@ -1,0 +1,81 @@
+{
+  "application_source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+  "lib_tree": "063a30b8298b8727b79c7c69e8ed7d878eb1ac4e",
+  "local_checks": [
+    {
+      "check": "format",
+      "exit": 0,
+      "source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+      "log": "build\\nav-loading-verified-format.log"
+    },
+    {
+      "check": "analyze",
+      "exit": 0,
+      "source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+      "log": "build\\nav-loading-verified-analyze.log"
+    },
+    {
+      "check": "tests",
+      "exit": 0,
+      "source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+      "log": "build\\nav-loading-verified-tests.log"
+    },
+    {
+      "check": "web",
+      "exit": 0,
+      "source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+      "log": "build\\nav-loading-verified-web.log"
+    },
+    {
+      "check": "android",
+      "exit": 0,
+      "source": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+      "log": "build\\nav-loading-verified-android.log"
+    }
+  ],
+  "flutter_tests_passed": 431,
+  "analysis_issues": 0,
+  "formatted_files": 246,
+  "format_changes": 0,
+  "web_release": "PASS",
+  "android_arm64_debug": "PASS",
+  "qa_web_release": "PASS",
+  "focused_after_captures": 7,
+  "capture_passes": 1,
+  "browser_errors": 0,
+  "assets_and_behavior_proof": "preservation.json",
+  "required_ci": "Final pushed head CI is recorded on Draft PR 54 and in the final delivery response.",
+  "artifacts": [
+    {
+      "file": "build\\qa-nav-loading-patch\\main.dart.js",
+      "sha256": "85e87ade8ac69a7c8a14a62d4a0b5b7e6931326b8ffd1159836f964df33fa117"
+    },
+    {
+      "file": "build\\app-nav-loading-patch\\main.dart.js",
+      "sha256": "ea2b732c7184fbcc2bccc1e3d007f6e986506d2ce2c2352bc62e5b5b55dab405"
+    },
+    {
+      "file": "build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "sha256": "82d540ae78d4f3de932dc56d2b14aad2fa45153371a4ad579ab423e01e7efb2a"
+    }
+  ],
+  "limitations": [
+    "Screenshots use synthetic fixture repositories and fixed Reduced Motion pose, not production customer data.",
+    "No physical Android/iOS or native keyboard testing.",
+    "Original bird silhouette differs from some illustrated wider poses.",
+    "Short-operation buttons retain their neutral disabled surface.",
+    "Existing Android SDK/Java/Kotlin warnings remain."
+  ],
+  "safety": {
+    "pr": 54,
+    "draft": true,
+    "merged": false,
+    "deployed": false,
+    "production_supabase_changed": false,
+    "migrations_created": false,
+    "dependencies_changed": false,
+    "original_bird_pngs_changed": false,
+    "other_clone_changed": false,
+    "capture_job_and_task_server_stopped": true
+  }
+}

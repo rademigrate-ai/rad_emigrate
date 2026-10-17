@@ -348,4 +348,59 @@ mixin AppLocalizationsEnB2 on AppLocalizations {
   @override
   String get consultationLoadFailed =>
       'Could not load your consultation requests. Please try again.';
+
+  @override
+  String get guestVisitor => 'Guest Visitor';
+
+  @override
+  String get guestProfileSubtitle =>
+      'Sign in to access your personal roadmap, track cases, manage documents, and chat with AI.';
+
+  @override
+  String get guestWhySignIn => 'Explore with an account';
+
+  @override
+  String get guestTrackCasesTitle => 'Track Applications';
+
+  @override
+  String get guestTrackCasesBody =>
+      'Follow your visa status and deadlines in real-time.';
+
+  @override
+  String get guestManageDocsTitle => 'Document Vault';
+
+  @override
+  String get guestManageDocsBody =>
+      'Store, organize, and submit your personal documents.';
+
+  @override
+  String get guestAiTitle => 'AI Immigration Assistant';
+
+  @override
+  String get guestAiBody =>
+      'Get tailored guidance with saved conversation history.';
+
+  @override
+  String get guestConsultationTitle => 'Specialist Consultation';
+
+  @override
+  String get guestConsultationBody =>
+      'Book dedicated sessions with certified immigration advisors.';
+
+  @override
+  String get signInToViewConsultations =>
+      'Sign in to view your consultation history';
+
+  @override
+  String get signInToChatAi => 'Sign in to chat with the AI assistant';
+
+  @override
+  String get signInToSave => 'Sign in to bookmark updates';
+
+  @override
+  String get consultationDraftRestored =>
+      'Your consultation draft has been restored.';
+
+  @override
+  String get aiPromptRestored => 'Your question has been restored.';
 }

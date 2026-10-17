@@ -8,12 +8,21 @@ import '../widgets/app_entrance.dart';
 import '../widgets/rad_ai_bird_nav_icon.dart';
 import '../widgets/rad_phoenix_navigation_surface.dart';
 import '../theme/app_motion.dart';
+import '../theme/premium_tokens.dart';
+import '../widgets/rad_ai_bird.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/admin/data/admin_operations_repository.dart';
 
-class AppShell extends ConsumerWidget {
+class AppShell extends ConsumerStatefulWidget {
   final Widget child;
   const AppShell({super.key, required this.child});
+
+  @override
+  ConsumerState<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends ConsumerState<AppShell> {
+  var _railExtended = true;
 
   int _selectedIndex(String location, List<_NavItem> items) {
     for (var i = 0; i < items.length; i++) {
@@ -23,7 +32,7 @@ class AppShell extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final location = GoRouterState.of(context).matchedLocation;
     final canAccessAdmin =
@@ -37,10 +46,10 @@ class AppShell extends ConsumerWidget {
         selectedIcon: Icons.home,
       ),
       _NavItem(
-        label: l10n.visa,
+        label: l10n.explore,
         path: '/visa',
-        icon: Icons.public_outlined,
-        selectedIcon: Icons.public,
+        icon: Icons.explore_outlined,
+        selectedIcon: Icons.explore,
       ),
       _NavItem(
         label: l10n.cases,
@@ -100,12 +109,44 @@ class AppShell extends ConsumerWidget {
         )
         .toList();
 
-    final selected = _selectedIndex(location, items);
-    final wide = MediaQuery.sizeOf(context).width >= 900;
+    final railItems = [
+      items[0],
+      items[1],
+      items[6],
+      items[2],
+      items[7],
+      _NavItem(
+        label: l10n.more,
+        path: '/more',
+        icon: Icons.more_horiz,
+        selectedIcon: Icons.more_horiz,
+      ),
+    ];
+    final secondary = [
+      ...overflow,
+      _NavItem(
+        label: l10n.consultationTitle,
+        path: '/consultation',
+        icon: Icons.support_agent_outlined,
+        selectedIcon: Icons.support_agent,
+      ),
+      _NavItem(
+        label: l10n.notificationsTitle,
+        path: '/notifications',
+        icon: Icons.notifications_outlined,
+        selectedIcon: Icons.notifications,
+      ),
+    ];
+    final selected = railItems.any((item) => location.startsWith(item.path))
+        ? _selectedIndex(location, railItems)
+        : 5;
+    final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
     final aiSelected = location.startsWith('/ai-assistant');
 
     return Scaffold(
-      extendBody: !wide,
+      // Keep route content above the navigation surface. Extending behind the
+      // bar made the last controls unreadable and untappable on compact views.
+      extendBody: false,
       body: Row(
         children: [
           if (wide)
@@ -122,24 +163,65 @@ class AppShell extends ConsumerWidget {
                 ),
               ),
               child: NavigationRail(
+                extended: _railExtended,
                 selectedIndex: selected,
-                onDestinationSelected: (i) => context.go(items[i].path),
-                labelType: NavigationRailLabelType.all,
+                onDestinationSelected: (i) async {
+                  if (railItems[i].path != '/more') {
+                    context.go(railItems[i].path);
+                    return;
+                  }
+                  final path = await _showMore(context, secondary, location);
+                  if (path != null && context.mounted) context.go(path);
+                },
+                labelType: _railExtended
+                    ? NavigationRailLabelType.none
+                    : NavigationRailLabelType.all,
                 backgroundColor: Colors.transparent,
                 groupAlignment: -0.55,
-                minWidth: 116,
-                leading: const Padding(
-                  padding: EdgeInsets.only(top: 18, bottom: 28),
-                  child: RadBrand(
-                    size: RadBrandSize.small,
-                    showInstituteName: false,
+                minWidth: 80,
+                minExtendedWidth: 236,
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 14, bottom: 20),
+                  child: Column(
+                    children: [
+                      RadBrand(
+                        size: RadBrandSize.small,
+                        showInstituteName: false,
+                        darkSurface: context.premium.isDark,
+                      ),
+                      const SizedBox(height: 10),
+                      IconButton(
+                        tooltip: _railExtended
+                            ? l10n.collapseNavigation
+                            : l10n.expandNavigation,
+                        onPressed: () =>
+                            setState(() => _railExtended = !_railExtended),
+                        icon: Icon(
+                          _railExtended
+                              ? Icons.keyboard_double_arrow_left
+                              : Icons.keyboard_double_arrow_right,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 destinations: [
-                  for (final item in items)
+                  for (final item in railItems)
                     NavigationRailDestination(
-                      icon: Icon(item.icon),
-                      selectedIcon: Icon(item.selectedIcon),
+                      icon: item.path == '/ai-assistant'
+                          ? RadAiBird(
+                              state: RadAiBirdState.idle,
+                              size: 28,
+                              semanticLabel: item.label,
+                            )
+                          : Icon(item.icon),
+                      selectedIcon: item.path == '/ai-assistant'
+                          ? RadAiBird(
+                              state: RadAiBirdState.idle,
+                              size: 28,
+                              semanticLabel: item.label,
+                            )
+                          : Icon(item.selectedIcon),
                       label: Text(item.label),
                     ),
                 ],
@@ -148,7 +230,7 @@ class AppShell extends ConsumerWidget {
           Expanded(
             child: ColoredBox(
               color: Theme.of(context).scaffoldBackgroundColor,
-              child: AppEntrance(key: ValueKey(location), child: child),
+              child: AppEntrance(key: ValueKey(location), child: widget.child),
             ),
           ),
         ],
@@ -164,7 +246,7 @@ class AppShell extends ConsumerWidget {
               onPrimarySelected: (path) => context.go(path),
               onAiTap: () => context.go('/ai-assistant'),
               onMore: () async {
-                final path = await _showMore(context, overflow, location);
+                final path = await _showMore(context, secondary, location);
                 if (path != null && context.mounted) context.go(path);
               },
             ),
@@ -252,7 +334,6 @@ class _RadBottomBar extends StatelessWidget {
       ],
       phoenix: RadAiBirdNavIcon(
         selected: aiSelected,
-        size: (MediaQuery.sizeOf(context).width * 0.285).clamp(86.0, 118.0),
         label: aiLabel,
         moreLabel: moreLabel,
         onTap: onAiTap,
@@ -276,13 +357,10 @@ class _NavSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final labelHeight = RadPhoenixNavigationSurface.labelHeight(context);
     final color = selected
-        ? (theme.brightness == Brightness.dark
-              ? const Color(0xFFFF6475)
-              : AppColors.primaryRed)
-        : (theme.brightness == Brightness.dark
-              ? const Color(0xFFADB3C0)
-              : const Color(0xFF596575));
+        ? context.premium.accentForeground
+        : context.premium.mutedText;
 
     return Semantics(
       label: item.label,
@@ -293,27 +371,68 @@ class _NavSlot extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedScale(
-              duration: AppMotion.duration(context, AppMotion.buttonFeedback),
-              scale: selected ? 1.05 : 1,
-              child: Icon(item.icon, size: 27, color: color),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              item.label,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: color,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                fontSize: 11,
+        child: SizedBox.expand(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              if (selected)
+                Positioned(
+                  bottom: 2,
+                  child: Container(
+                    width: 48,
+                    height: labelHeight + 26,
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        colors: [
+                          context.premium.accent.withValues(alpha: .18),
+                          context.premium.accent.withValues(alpha: .04),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(23),
+                    ),
+                  ),
+                ),
+              Positioned(
+                bottom: labelHeight + 3,
+                child: AnimatedScale(
+                  duration: AppMotion.duration(
+                    context,
+                    AppMotion.buttonFeedback,
+                  ),
+                  scale: selected ? 1.05 : 1,
+                  child: Icon(
+                    selected ? item.selectedIcon : item.icon,
+                    size: 24,
+                    color: color,
+                  ),
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 2,
+                child: SizedBox(
+                  height: labelHeight,
+                  child: Center(
+                    child: Text(
+                      item.label,
+                      textAlign: TextAlign.center,
+                      maxLines: RadPhoenixNavigationSurface.labelLines(context),
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: color,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        fontSize: 11,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,0 +1,29 @@
+{
+  "evidence": "Flutter shell fixture, synthetic dashboard",
+  "captures": [
+    {
+      "filename": "mobile-en-light.png",
+      "locale": "en",
+      "theme": "light",
+      "errors": []
+    },
+    {
+      "filename": "mobile-en-dark.png",
+      "locale": "en",
+      "theme": "dark",
+      "errors": []
+    },
+    {
+      "filename": "mobile-fa-light.png",
+      "locale": "fa",
+      "theme": "light",
+      "errors": []
+    },
+    {
+      "filename": "mobile-fa-dark.png",
+      "locale": "fa",
+      "theme": "dark",
+      "errors": []
+    }
+  ]
+}

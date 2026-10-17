@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/app_motion.dart';
+import 'rad_flapping_bird.dart';
 
 /// The visual context in which the shared RAD Earth-and-bird identity appears.
 ///
@@ -126,12 +127,17 @@ class _RadEarthBirdSceneState extends State<RadEarthBirdScene>
                 dimension: sceneSize,
                 child: AnimatedBuilder(
                   animation: _controller,
-                  child: _RadBirdMark(dimension: birdSize),
+                  child: _RadBirdMark(
+                    dimension: birdSize,
+                    active: widget.active,
+                  ),
                   builder: (context, bird) {
                     final orbit = _OrbitGeometry.fromProgress(
                       progress: _controller.value,
                       side: sceneSize,
                       compact: isCompact,
+                      isLoginHero:
+                          widget.variant == RadEarthBirdVariant.loginHero,
                     );
                     final birdLayer = _PositionedBird(
                       geometry: orbit,
@@ -251,7 +257,16 @@ class _OrbitGeometry {
     required double progress,
     required double side,
     required bool compact,
+    bool isLoginHero = true,
   }) {
+    if (!isLoginHero) {
+      return _OrbitGeometry(
+        position: Offset(side / 2, side / 2),
+        bank: 0.0,
+        scale: 1.0,
+        isForeground: true,
+      );
+    }
     // Deterministic, seamlessly looping flight: multiple low-frequency
     // harmonics produce natural variation without per-frame random jumps.
     // Compact loading deliberately retains its simple, predictable orbit.
@@ -311,26 +326,14 @@ class _PositionedBird extends StatelessWidget {
 }
 
 class _RadBirdMark extends StatelessWidget {
-  const _RadBirdMark({required this.dimension});
+  const _RadBirdMark({required this.dimension, this.active = true});
 
   final double dimension;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: dimension,
-      child: ColorFiltered(
-        colorFilter: const ColorFilter.mode(
-          AppColors.primaryRed,
-          BlendMode.srcIn,
-        ),
-        child: Image.asset(
-          'assets/branding/rad_bird_silhouette.png',
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
-        ),
-      ),
-    );
+    return RadFlappingBird(size: dimension, active: active);
   }
 }
 
@@ -347,6 +350,9 @@ class _BackdropOrbitPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (variant != RadEarthBirdVariant.loginHero) {
+      return;
+    }
     final center = size.center(Offset.zero);
     final side = math.min(size.width, size.height);
     final compact = variant == RadEarthBirdVariant.compactLoading;
@@ -853,10 +859,7 @@ class _ForegroundOrbitPainter extends CustomPainter {
 double _earthRadiusFor(RadEarthBirdVariant variant) {
   return switch (variant) {
     RadEarthBirdVariant.loginHero => 0.315,
-    RadEarthBirdVariant.splash => 0.31,
-    RadEarthBirdVariant.fullScreenLoading => 0.305,
-    RadEarthBirdVariant.sectionLoading => 0.3,
-    RadEarthBirdVariant.compactLoading => 0,
+    _ => 0,
   };
 }
 

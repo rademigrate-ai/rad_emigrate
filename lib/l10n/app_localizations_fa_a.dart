@@ -2,6 +2,21 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get consultationShortLabel => 'مشاوره';
+
+  @override
+  String get suggestionComparePathways => 'چطور مسیرهای مهاجرت را مقایسه کنم؟';
+
+  @override
+  String get migrationHeroTitle => 'مسیر مهاجرت شما از اینجا شروع می‌شود';
+
+  @override
+  String get recentActivity => 'آخرین فعالیت‌ها';
+
+  @override
+  String get allItems => 'همه';
+
+  @override
   String get appTitle => 'موسسه بین‌المللی راد';
   @override
   String get signIn => 'ورود';
@@ -35,6 +50,8 @@ mixin AppLocalizationsFaA on AppLocalizations {
   String get next => 'بعدی';
   @override
   String get home => 'خانه';
+  @override
+  String get explore => 'کاوش';
   @override
   String get visa => 'ویزا';
   @override
@@ -377,4 +394,182 @@ mixin AppLocalizationsFaA on AppLocalizations {
   String get loadingOperational => 'بارگذاری داده عملیاتی…';
   @override
   String get adminLoadFailed => 'بارگذاری مدیریت ممکن نشد.';
+  @override
+  String get collapseNavigation => "جمع کردن پیمایش";
+
+  @override
+  String get expandNavigation => "باز کردن پیمایش";
+
+  @override
+  String get editProfile => "ویرایش پروفایل";
+
+  @override
+  String get supportInformation => "پشتیبانی و اطلاعات";
+
+  @override
+  String get secureSignOut => "خروج امن از حساب کاربری";
+
+  @override
+  String get accessPortal => "ورود به حساب";
+
+  @override
+  String get createYourSpace => "ساخت حساب کاربری";
+
+  @override
+  String get destinationsHeading => "مقصدها";
+
+  @override
+  String get radIntelligence => "هوش راد";
+
+  @override
+  String get immigrationJourney => "مسیر مهاجرت";
+
+  @override
+  String get birdReady => "دستیار هوشمند آماده است";
+
+  @override
+  String get birdListening => "دستیار هوشمند در حال گوش دادن است";
+
+  @override
+  String get birdThinking => "دستیار هوشمند در حال فکر کردن است";
+
+  @override
+  String get birdResponding => "دستیار هوشمند در حال پاسخ دادن است";
+
+  @override
+  String get birdNewMessage => "پیام جدید از دستیار هوشمند";
+
+  @override
+  String get requestDetailsHeading => "جزئیات درخواست";
+
+  @override
+  String get addCity => "افزودن";
+
+  @override
+  String get timezonePointUnresolved =>
+      "منطقه زمانی برای این نقطه یافت نشد (اقیانوس یا خارج از مرزها).";
+
+  @override
+  String get timezoneDataUnavailable => "داده‌های مرز زمانی در دسترس نیست.";
+
+  @override
+  String get selectTimezoneManually => "انتخاب دستی منطقه زمانی";
+
+  @override
+  String get preparingWorldClocks => "در حال آماده‌سازی ساعت‌های جهانی…";
+
+  @override
+  String get searchWorldClocks => "جستجوی شهر، کشور یا منطقه زمانی…";
+
+  @override
+  String get timeline24Hours => "خط زمانی ۲۴ ساعته";
+
+  @override
+  String get timeNow => "اکنون";
+
+  @override
+  String get worldTimeTagline => "زمان جهان، هماهنگ با مسیر شما";
+
+  @override
+  String get worldTimeDescription =>
+      "ساعت شهرهای مهم، مقایسه زمان و برنامه‌ریزی جلسات بین‌المللی";
+
+  @override
+  String get noWorldCities => "شهری برای نمایش نیست — از ساعت جهانی اضافه کنید";
+
+  @override
+  String get meetingPlannerDisclaimer =>
+      "پنجره‌های پیشنهادی همپوشانی ساعات کاری (نه تأیید دسترسی)";
+
+  @override
+  String get meetingOrigin => "مبدأ";
+
+  @override
+  String get meetingDestination => "مقصد";
+
+  @override
+  String get meetingShow => "نمایش";
+
+  @override
+  String get meetingSuggestedWindows => "پنجره‌های پیشنهادی";
+
+  @override
+  String get meetingSuitable => "مناسب";
+
+  @override
+  String get meetingPartial => "نسبی";
+
+  @override
+  String get supportInformationLabel => "پشتیبانی و اطلاعات";
+
+  @override
+  String get secureSignOutLabel => "خروج امن از حساب کاربری";
+
+  @override
+  String get noPublishedDestinations => "هنوز مقصد منتشرشده‌ای وجود ندارد";
+
+  @override
+  String get publishedDestinationsEmpty =>
+      "مقصدهای منتشرشده ویزا در این بخش نمایش داده می‌شوند.";
+
+  @override
+  String get visaConfigurationUnavailable =>
+      "بخش ویزا در پیکربندی فعلی برنامه در دسترس نیست.";
+
+  @override
+  String get visaContentAccessFailed =>
+      "دسترسی به محتوای منتشرشده ویزا ممکن نشد. دوباره تلاش کنید.";
+
+  @override
+  String get visaConnectionFailed =>
+      "اتصال اینترنت را بررسی و دوباره تلاش کنید.";
+
+  @override
+  String get visaContentIncomplete =>
+      "محتوای منتشرشده ویزا کامل نیست. بعداً دوباره تلاش کنید.";
+
+  @override
+  String get bookConsultationAction => "درخواست مشاوره";
+
+  @override
+  String get askAssistantAction => "پرسش از دستیار هوشمند";
+
+  @override
+  String get nextStepsHeading => "گام بعدی";
+
+  @override
+  String get programOverview => "نمای کلی";
+
+  @override
+  String get timingAndFees => "زمان و هزینه";
+
+  @override
+  String get processingTimeLabel => "زمان بررسی";
+
+  @override
+  String get feesLabel => "هزینه";
+  @override
+  String meetingMinutes(int minutes) => '$minutes دقیقه';
+  @override
+  String get caseRoom => "پرونده‌های من";
+  @override
+  String get operationsConsole => "میز عملیات";
+  @override
+  String get radBriefing => "تازه‌های راد";
+  @override
+  String get continentNorthAmerica => "آمریکای شمالی";
+  @override
+  String get continentEurope => "اروپا";
+  @override
+  String get continentAsia => "آسیا";
+  @override
+  String get continentOceania => "اقیانوسیه";
+  @override
+  String get continentMiddleEast => "خاورمیانه";
+  @override
+  String get continentOther => "سایر مقصدها";
+  @override
+  String get consultationContacted => "تماس گرفته شده";
+  @override
+  String get consultationClosed => "بسته شده";
 }

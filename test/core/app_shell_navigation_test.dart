@@ -79,7 +79,7 @@ void main() {
     final router = await _pumpShell(tester, role: 'user', width: 360);
 
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Visa'), findsOneWidget);
+    expect(find.text('Explore'), findsOneWidget);
     expect(find.text('Cases'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
@@ -99,7 +99,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.text('Docs'), findsOneWidget);
-    expect(find.text('AI Assistant'), findsNothing);
+    expect(find.text('AI Assistant'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.text('AI Assistant'),
+      ),
+      findsNothing,
+    );
     expect(
       find.descendant(
         of: find.byType(BottomSheet),
@@ -147,4 +154,107 @@ void main() {
     expect(find.byType(RadAiBirdNavIcon), findsNothing);
     expect(find.byType(BottomNavigationBar), findsNothing);
   });
+
+  testWidgets('desktop rail can collapse without changing the route', (
+    tester,
+  ) async {
+    final router = await _pumpShell(tester, role: 'user', width: 1200);
+
+    expect(
+      tester.widget<NavigationRail>(find.byType(NavigationRail)).extended,
+      isTrue,
+    );
+    await tester.tap(find.byTooltip('Collapse navigation'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(
+      tester.widget<NavigationRail>(find.byType(NavigationRail)).extended,
+      isFalse,
+    );
+    expect(router.routeInformationProvider.value.uri.path, '/dashboard');
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final localeCode in ['en', 'fa']) {
+    testWidgets(
+      'mobile bottom navigation labels share identical vertical baselines ($localeCode)',
+      (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = const Size(390, 844);
+        addTearDown(tester.view.reset);
+
+        final router = GoRouter(
+          initialLocation: '/dashboard',
+          routes: [
+            ShellRoute(
+              builder: (_, _, child) => AppShell(child: child),
+              routes: [
+                GoRoute(
+                  path: '/dashboard',
+                  builder: (_, _) => const Scaffold(),
+                ),
+                GoRoute(
+                  path: '/ai-assistant',
+                  builder: (_, _) => const Scaffold(),
+                ),
+              ],
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adminSnapshotProvider.overrideWith(
+                (ref) async => _snapshot('user'),
+              ),
+            ],
+            child: MaterialApp.router(
+              routerConfig: router,
+              locale: Locale(localeCode),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+
+        final navTexts = tester.widgetList<Text>(
+          find.descendant(
+            of: find.byType(AppShell),
+            matching: find.byType(Text),
+          ),
+        );
+        final labelRects = <String, Rect>{};
+        for (final text in navTexts) {
+          final data = text.data ?? '';
+          if (data.isEmpty) continue;
+          final finder = find.text(data);
+          if (finder.evaluate().isNotEmpty) {
+            final rect = tester.getRect(finder.first);
+            if (rect.top > 700) {
+              labelRects[data] = rect;
+            }
+          }
+        }
+
+        expect(labelRects.length, 5);
+        final firstBottom = labelRects.values.first.bottom;
+        final firstTop = labelRects.values.first.top;
+        for (final entry in labelRects.entries) {
+          expect(
+            entry.value.bottom,
+            closeTo(firstBottom, 0.5),
+            reason: 'Label ${entry.key} bottom baseline must match precisely',
+          );
+          expect(
+            entry.value.top,
+            closeTo(firstTop, 0.5),
+            reason: 'Label ${entry.key} top baseline must match precisely',
+          );
+        }
+      },
+    );
+  }
 }

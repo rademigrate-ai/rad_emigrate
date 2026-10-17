@@ -1,0 +1,91 @@
+{
+  "source_head": "ab13c5a18c4f84a3ea91427e8feb6cbd7f915360",
+  "lib_tree": "063a30b8298b8727b79c7c69e8ed7d878eb1ac4e",
+  "evidence": "Seven actual Flutter fixture renderings only. Reduced Motion fixes the loading pose; no native-device or production-service execution is claimed.",
+  "captures": [
+    {
+      "file": "nav-en-light.png",
+      "screen": "shell",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "e2805d0f59c6b48b9b9d496a80c6fa4c5cebec60cd503dc7a3a1999a7375a693"
+    },
+    {
+      "file": "nav-en-dark.png",
+      "screen": "shell",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "3a8c0a8f568620937b8bb302dfb13bc2e9249e1479b5d62c3d8b4e90ec94d461"
+    },
+    {
+      "file": "nav-fa-light.png",
+      "screen": "shell",
+      "locale": "fa",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "606935aa54ace83fbc6e37d47d911dae57f7dc2fdd5b82580be68017188084f2"
+    },
+    {
+      "file": "nav-fa-dark.png",
+      "screen": "shell",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "799c69f915360f133216bf3ba347af78cee630db3a2a129d3173b48d7b016b7c"
+    },
+    {
+      "file": "loading-full.png",
+      "screen": "loading-full",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "35801c5a48a9ad60353a4cebd074fa1fa2d6293daa537a4ebd44a3c4b98d2817"
+    },
+    {
+      "file": "loading-section.png",
+      "screen": "loading-section-dark",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "ab312e884e632d7c2f24739a9f48619491b6eaf98dd9cc6c863d92aceb7a62fb"
+    },
+    {
+      "file": "loading-inline-short.png",
+      "screen": "loading-compact",
+      "locale": "fa",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "4919bef3d17624b0ced79fc238a809fffcb5719422b6ade6c6abe405bc4a9799"
+    }
+  ]
+}

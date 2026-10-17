@@ -1,0 +1,57 @@
+{
+  "base_head": "83eaa513c3778149b17f5411528724e943427302",
+  "lib_tree": "3db2a11bdb7f0d7831bedb7a0be10aeadc7179c8",
+  "source_sha256": {
+    "lib/core/routing/app_shell.dart": "7ff3f01780c5a2fbc2cd7d3f3e7c0b39fd93c181c82add7ede8a37403b22f554",
+    "lib/core/widgets/rad_phoenix_navigation_surface.dart": "ba29646a23862ff24828c3130e034dc5e052275a363489a1f6218d6baaf1415d",
+    "lib/core/widgets/rad_ai_bird_nav_icon.dart": "f3062dffe29326270d4eba44b45f61967eff97a16e331b0914c34f912c295418",
+    "lib/core/widgets/rad_ai_bird.dart": "76b08ba25b91b3d7117c08b41962f164e0c3a54753f45a55c51fafb3da7c1950"
+  },
+  "evidence": "Four actual Flutter dashboard/AppShell renders; one pass, Reduced Motion. No native-device/system chrome simulation.",
+  "captures": [
+    {
+      "file": "nav-fa-light.png",
+      "locale": "fa",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "f9e7edb5bd7c080fd2fccebfed5daca1b39368a7f9431f1f35d2515a58ee5a08"
+    },
+    {
+      "file": "nav-fa-dark.png",
+      "locale": "fa",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "a7ca41dec89fc906436228ae5f56dd12fa08855e101ec81c440557b064937f98"
+    },
+    {
+      "file": "nav-en-light.png",
+      "locale": "en",
+      "theme": "light",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "108fc9c22a78d1b7980b04d459594b20ac0c064e358b63b34c4ecff0188ac221"
+    },
+    {
+      "file": "nav-en-dark.png",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": [
+        390,
+        844
+      ],
+      "errors": [],
+      "sha256": "394a690ba1a07fe958fb2ae406dcba695641bd39fbd2ac49e11f635875d80495"
+    }
+  ]
+}

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="سامانه RAD برای مدیریت پرونده مهاجرت، مدارک، راهنمای ویزا و دستیار هوشمند با محتوای بررسی‌شده.">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <meta name="theme-color" content="#172235">
+  <meta name="theme-color" content="#070A0F">
   <meta name="color-scheme" content="light dark">
   <meta name="application-name" content="RAD Emigrate">
 
@@ -37,15 +37,15 @@
   <title>RAD Emigrate | مهاجرت، ویزا و مدیریت پرونده</title>
   <style>
     @font-face{font-family:Vazirmatn;src:url("assets/assets/fonts/Vazirmatn-Regular.ttf") format("truetype");font-display:swap}
-    html,body{margin:0;background:#172235;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:#070A0F;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
     /* Accessibility rectangles use physical coordinates. Keep only their DOM
        host LTR; Flutter Directionality still owns Persian RTL widget layout. */
     flt-semantics-host{direction:ltr}
-    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:16px;padding:24px;background:#172235;color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
-    #rad-startup img{background:#fff;border-radius:8px;padding:8px;object-fit:contain;max-width:calc(100vw - 64px)}
+    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;background:radial-gradient(circle at 50% 44%,#3b0c14 0,#13090e 28%,#070a0f 62%);color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
+    #rad-startup img{object-fit:contain;filter:drop-shadow(0 0 24px rgba(217,31,43,.42));max-width:calc(100vw - 64px)}
     #rad-startup p{margin:0}
     #rad-startup .en{color:#bcc7d6;font-size:14px}
-    #rad-startup-spinner{width:24px;height:24px;border:3px solid #47546a;border-top-color:#fff;border-radius:50%;animation:rad-turn 1s linear infinite}
+    #rad-startup-spinner{width:24px;height:24px;border:3px solid #43232a;border-top-color:#ff5364;border-radius:50%;animation:rad-turn 1s linear infinite}
     #rad-startup-retry{font:inherit;color:#172235;background:#fff;border:0;border-radius:12px;min-height:48px;padding:8px 24px;cursor:pointer}
     @keyframes rad-turn{to{transform:rotate(360deg)}}
     @media(prefers-reduced-motion:reduce){#rad-startup-spinner{animation:none}}
@@ -53,7 +53,7 @@
 </head>
 <body>
   <div id="rad-startup" role="status" aria-live="polite">
-    <img src="assets/assets/branding/rad_official_logo.png" width="116" height="116" alt="RAD International Institute">
+    <img src="assets/assets/branding/rad_phoenix_final_256.png" width="144" height="144" alt="RAD AI assistant bird">
     <div id="rad-startup-spinner" aria-hidden="true"></div>
     <p id="rad-startup-fa" lang="fa" dir="rtl">در حال بارگذاری راد…</p>
     <p id="rad-startup-en" class="en" lang="en" dir="ltr">Loading RAD…</p>

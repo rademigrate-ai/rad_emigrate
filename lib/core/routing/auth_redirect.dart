@@ -1,5 +1,5 @@
-const Set<String> _publicRoutes = {
-  '/splash',
+/// Authentication flow routes (login, registration, password recovery).
+const Set<String> _authRoutes = {
   '/login',
   '/register',
   // BUG-002: /signup is a compatibility alias for /register.
@@ -8,14 +8,22 @@ const Set<String> _publicRoutes = {
   '/forgot-password',
   '/reset-password',
 };
-const Set<String> _protectedRoutes = {
+
+/// Public in-app explore routes accessible to anonymous guest visitors.
+const Set<String> _publicInAppRoutes = {
   '/dashboard',
   '/visa',
-  '/applications',
-  '/documents',
+  '/feed',
+  '/world-clock',
   '/profile',
   '/ai-assistant',
   '/consultation',
+};
+
+/// Personal or administrative routes that strictly require authentication.
+const Set<String> _protectedRoutes = {
+  '/applications',
+  '/documents',
   '/notifications',
   '/profile-completion',
   '/admin',
@@ -23,17 +31,25 @@ const Set<String> _protectedRoutes = {
   '/admin/operations',
   '/admin/ai-research',
   '/admin/consultations',
-  '/feed',
-  '/world-clock',
 };
 
-/// True when the location is a route the router actually declares.
+/// True if the given path requires authentication.
+bool isProtectedPath(String location) {
+  if (_protectedRoutes.contains(location)) return true;
+  // Nested admin paths under /admin/
+  if (location.startsWith('/admin/')) return true;
+  return false;
+}
+
+/// True when the location is a route declared by the application.
 ///
 /// Unknown locations must fall through to the router's NotFound page instead
-/// of being treated as protected destinations (they previously redirected
-/// unauthenticated visitors to /login).
+/// of redirecting visitors to login (BUG-003).
 bool _isKnownLocation(String location) =>
-    _publicRoutes.contains(location) || _protectedRoutes.contains(location);
+    location == '/splash' ||
+    _authRoutes.contains(location) ||
+    _publicInAppRoutes.contains(location) ||
+    isProtectedPath(location);
 
 /// True when an OTP page visit carries a pending verification flow.
 ///
@@ -45,7 +61,11 @@ bool hasOtpFlowContext(Uri uri) {
   return identifier.contains('@');
 }
 
-/// Resolves auth routing while distinguishing session restoration from logout.
+/// Resolves auth routing distinguishing session restoration, guest mode,
+/// and protected route enforcement.
+///
+/// Unknown paths are left unhandled so GoRouter [errorBuilder] can show
+/// NotFound instead of incorrectly sending users to login.
 ///
 /// Authorization for `/admin` remains server-side (RLS + role). Including
 /// `/admin` here only preserves deep-link restoration after session restore;
@@ -67,7 +87,8 @@ String? authRedirect({
 
   if (isRestoring &&
       location != '/splash' &&
-      !_publicRoutes.contains(location)) {
+      !_authRoutes.contains(location) &&
+      isProtectedPath(location)) {
     return Uri(
       path: '/splash',
       queryParameters: {'from': uri.toString()},
@@ -85,14 +106,18 @@ String? authRedirect({
     return '/login';
   }
 
-  if (!isAuthenticated && _protectedRoutes.contains(location)) {
+  // Unauthenticated guests: only force login for known protected routes.
+  // Explore-First routes (/dashboard, /visa, /feed, /profile, /ai-assistant,
+  // /consultation, /world-clock) remain accessible to guests.
+  if (!isAuthenticated && isProtectedPath(location)) {
     return Uri(
       path: '/login',
       queryParameters: {'from': restoredProtectedDestination(uri.toString())},
     ).toString();
   }
 
-  if (isAuthenticated && _publicRoutes.contains(location)) {
+  // Authenticated users on auth routes are redirected to their target destination.
+  if (isAuthenticated && _authRoutes.contains(location)) {
     final destination = restoredProtectedDestination(
       uri.queryParameters['from'],
     );
@@ -104,9 +129,10 @@ String? authRedirect({
           ).toString();
   }
 
+  // Authenticated users with incomplete profile on protected routes must finish setup.
   if (isAuthenticated &&
       !profileComplete &&
-      _protectedRoutes.contains(location) &&
+      isProtectedPath(location) &&
       location != '/profile-completion' &&
       location != '/profile') {
     return Uri(
@@ -118,14 +144,23 @@ String? authRedirect({
   return null;
 }
 
-/// Accepts only known in-app protected routes from a pending deep link.
+/// Accepts known in-app destinations (public or protected) from a pending flow.
+/// External URLs and unknown paths fall back to the explore home (/dashboard).
 String restoredProtectedDestination(String? value) {
   final uri = Uri.tryParse(value ?? '');
   if (uri == null ||
       uri.hasScheme ||
       uri.hasAuthority ||
-      !_protectedRoutes.contains(uri.path)) {
+      uri.path.isEmpty ||
+      !_isKnownInAppDestination(uri.path)) {
     return '/dashboard';
   }
   return uri.toString();
+}
+
+bool _isKnownInAppDestination(String path) {
+  if (path == '/splash') return false;
+  if (_publicInAppRoutes.contains(path)) return true;
+  if (isProtectedPath(path)) return true;
+  return false;
 }

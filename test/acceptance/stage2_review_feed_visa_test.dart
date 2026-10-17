@@ -100,7 +100,10 @@ void main() {
     );
 
     test('visa page uses localization facade not language ternaries', () {
-      final page = read('lib/features/visa/presentation/pages/visa_page.dart');
+      final page = [
+        read('lib/features/visa/presentation/pages/visa_page.dart'),
+        read('lib/features/visa/presentation/pages/visa_page_program.dart'),
+      ].join('\n');
       expect(page.contains("fa ? '"), isFalse);
       expect(page.contains('applicationSteps'), isTrue);
       expect(page.contains('structuredSourceNote'), isTrue);

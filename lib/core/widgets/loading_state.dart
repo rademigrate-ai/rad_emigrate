@@ -24,7 +24,7 @@ class LoadingState extends StatelessWidget {
     this.semanticsLabel,
     this.dark = false,
   }) : size = RadLoadingSize.fullScreen,
-       showSkeleton = true,
+       showSkeleton = false,
        _isSplash = false;
 
   const LoadingState.section({
@@ -65,7 +65,22 @@ class LoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = semanticsLabel ?? AppLocalizations.of(context).loading;
-    final child = _buildVisual(context, label);
+    final visual = _buildVisual(context, label);
+    final darkSurface = dark || Theme.of(context).brightness == Brightness.dark;
+    final child = size == RadLoadingSize.fullScreen
+        ? DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: const Alignment(-.8, .9),
+                radius: 1.5,
+                colors: darkSurface
+                    ? const [Color(0xFF1C0C16), Color(0xFF080D14)]
+                    : const [Color(0xFFFBEFF4), Color(0xFFF7FAFE)],
+              ),
+            ),
+            child: visual,
+          )
+        : visual;
     return Semantics(
       label: label,
       liveRegion: true,
