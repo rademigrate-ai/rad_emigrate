@@ -205,6 +205,7 @@ void main() {
         isNull,
       );
 
+      // Public in-app routes (guest mode) are not sent to splash during restore.
       final publicUri = Uri.parse('/world-clock');
       expect(
         authRedirect(
@@ -274,7 +275,13 @@ void main() {
     });
 
     test('unknown routes fall through to NotFound for every auth state', () {
-      for (final path in ['/does-not-exist', '/totally/missing']) {
+      for (final path in [
+        '/does-not-exist',
+        '/loginn',
+        '/dashboard/extra',
+        '/register/x',
+        '/totally/missing',
+      ]) {
         expect(
           authRedirect(
             uri: Uri.parse(path),
@@ -283,18 +290,9 @@ void main() {
             profileComplete: false,
           ),
           isNull,
-          reason: path,
+          reason: '$path must reach NotFound, not login',
         );
       }
-      expect(
-        authRedirect(
-          uri: Uri.parse('/does-not-exist'),
-          isRestoring: false,
-          isAuthenticated: true,
-          profileComplete: true,
-        ),
-        isNull,
-      );
       expect(
         authRedirect(
           uri: Uri.parse('/does-not-exist'),
@@ -316,6 +314,7 @@ void main() {
     });
 
     test('known protected routes still enforce authentication', () {
+      // Strictly protected routes (require login).
       expect(
         authRedirect(
           uri: Uri.parse('/applications'),
@@ -334,6 +333,7 @@ void main() {
         ),
         '/login?from=%2Fadmin%2Foperations',
       );
+      // Guest-accessible (explore-first) routes must NOT force login.
       expect(
         authRedirect(
           uri: Uri.parse('/dashboard'),
