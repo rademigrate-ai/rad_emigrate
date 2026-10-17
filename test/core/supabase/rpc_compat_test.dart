@@ -41,6 +41,21 @@ void main() {
       expect(isRpcMissingException(error), isFalse);
     });
 
+    test('REJECTS permission error even with missing-function message', () {
+      const error = PostgrestException(
+        message: 'Could not find the function in the schema cache',
+        code: '42501',
+      );
+      expect(isRpcMissingException(error), isFalse);
+    });
+
+    test('REJECTS ambiguous no-code function messages', () {
+      const error = PostgrestException(
+        message: 'function public.test_rpc does not exist',
+      );
+      expect(isRpcMissingException(error), isFalse);
+    });
+
     test('REJECTS validation error (22023)', () {
       final error = const PostgrestException(
         message: 'invalid consultation status',
