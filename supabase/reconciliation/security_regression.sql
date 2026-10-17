@@ -68,10 +68,10 @@ begin
   end if;
   if not exists (select 1 from pg_proc
                  where oid='public.get_ai_access_decision(uuid,text)'::regprocedure
-                   and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0)
+                   and prosecdef and position('auth.uid() is distinct from p_user_id' in lower(prosrc))>0)
      or not exists (select 1 from pg_proc
                     where oid='public.get_ai_daily_quota_status(uuid,text)'::regprocedure
-                      and prosecdef and position('auth.uid() is distinct from p_user_id' in prosrc)>0) then
+                      and prosecdef and position('auth.uid() is distinct from p_user_id' in lower(prosrc))>0) then
     raise exception 'Entitlement or quota RPC accepts arbitrary target user';
   end if;
   if not exists (
