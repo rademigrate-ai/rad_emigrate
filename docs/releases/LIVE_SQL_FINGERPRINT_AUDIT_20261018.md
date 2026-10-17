@@ -1,7 +1,7 @@
 # E1-02 — Production-Recorded Migration SQL Fingerprints (2026-10-18)
 
-**Master objective:** [RAD ONE TASK #57](https://github.com/rademigrate-ai/rad_emigrate/issues/57).  
-**Production project:** `inshddthftkhcdosoqcn`. **Repository baseline:** `a9dc7b14d611efe7f7195d51308ab8a3a1f3f4f1`.  
+**Master objective:** [RAD ONE TASK #57](https://github.com/rademigrate-ai/rad_emigrate/issues/57).
+**Production project:** `inshddthftkhcdosoqcn`. **Repository baseline:** `a9dc7b14d611efe7f7195d51308ab8a3a1f3f4f1`.
 **Production access:** SELECT-only metadata; no SQL statements were executed. **Release decision: NO-GO.**
 
 ## New evidence beyond migration filename comparisons
@@ -35,8 +35,8 @@ Examples of material source-layout differences:
 
 ### Two multi-chunk entries
 
-`ai_base_url_ssrf_hardening`: **9** recorded SQL chunks.  
-`fix_profile_update_rls_recursion`: **6** recorded SQL chunks.  
+`ai_base_url_ssrf_hardening`: **9** recorded SQL chunks.
+`fix_profile_update_rls_recursion`: **6** recorded SQL chunks.
 This checker explicitly reports `MULTI_OR_EMPTY_STATEMENTS_NOT_COMPARABLE` rather than asserting that joining stored chunks recreates the original file byte-for-byte.
 
 ### Four live-only entries
