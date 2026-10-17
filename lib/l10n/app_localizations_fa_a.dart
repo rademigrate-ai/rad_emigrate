@@ -2,6 +2,9 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get viewDocumentFile => 'مشاهده فایل';
+
+  @override
   String get consultationShortLabel => 'مشاوره';
 
   @override

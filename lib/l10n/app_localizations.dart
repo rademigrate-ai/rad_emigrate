@@ -171,6 +171,7 @@ abstract class AppLocalizations {
   String get filter;
   String get status;
   String get documents;
+  String get viewDocumentFile;
   String get applications;
   String get noDocuments;
   String get noApplications;

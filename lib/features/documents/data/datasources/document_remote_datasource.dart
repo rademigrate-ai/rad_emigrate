@@ -125,6 +125,49 @@ class DocumentRemoteDataSource {
     }
   }
 
+  /// Generate a fresh, 5-minute private file URL at the moment the owner
+  /// explicitly requests a preview. Never reuse potentially expired cached URLs.
+  Future<Uri> previewDocument(Document document) async {
+    if (_backend is ApiClient || _storage == null) {
+      throw const ApiException(
+        message: 'Document previews require private Storage.',
+        code: 'storage_unavailable',
+      );
+    }
+    try {
+      final userId = _service.client.auth.currentUser?.id;
+      if (userId == null ||
+          document.userId != userId ||
+          document.storagePath == null) {
+        throw const ApiException(
+          message: 'This document is not available to the current user.',
+          code: 'document_access_denied',
+        );
+      }
+      final url = await _storage.createOwnedSignedUrl(
+        path: document.storagePath!,
+        userId: userId,
+      );
+      final uri = Uri.tryParse(url);
+      final localHost =
+          uri != null &&
+          (uri.host == 'localhost' ||
+              uri.host == '127.0.0.1' ||
+              uri.host == '::1');
+      if (uri == null ||
+          !uri.hasAuthority ||
+          (uri.scheme != 'https' && !(uri.scheme == 'http' && localHost))) {
+        throw const ApiException(
+          message: 'Storage returned an invalid preview URL.',
+          code: 'invalid_preview_url',
+        );
+      }
+      return uri;
+    } catch (error) {
+      throw _toApiException(error);
+    }
+  }
+
   Future<void> delete(Document document) async {
     if (_backend is ApiClient) {
       await (_backend).delete<void>('/documents/${document.id}');
@@ -155,15 +198,9 @@ class DocumentRemoteDataSource {
   SupabaseClientService get _service => _backend as SupabaseClientService;
 
   Future<Document> _fromRow(Map<String, dynamic> row) async {
+    // Never generate preview tokens while listing documents. Repository caches
+    // this model locally; only a user-triggered preview creates a signed URL.
     final path = row['file_path'] as String?;
-    String? signedUrl;
-    if (path != null && _storage != null) {
-      try {
-        signedUrl = await _storage.createSignedUrl(path);
-      } catch (_) {
-        signedUrl = null;
-      }
-    }
     return Document(
       id: row['id'] as String,
       typeId: row['name'] as String? ?? 'other',
@@ -171,7 +208,7 @@ class DocumentRemoteDataSource {
       status: _statusFromDb(row['status'] as String? ?? 'missing'),
       kind: DocumentTypeKindX.fromString(row['name'] as String? ?? 'other'),
       userId: row['user_id'] as String?,
-      fileUrl: signedUrl ?? path,
+      fileUrl: null,
       storagePath: path,
       updatedAt: DateTime.tryParse(
         row['updated_at']?.toString() ?? row['created_at']?.toString() ?? '',
