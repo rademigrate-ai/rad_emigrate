@@ -151,6 +151,7 @@ class _CountryCard extends StatelessWidget {
                 children: [
                   CountryPhotography.image(
                     code: country.code,
+                    destination: country.slug,
                     fit: BoxFit.cover,
                   ),
                   const DecoratedBox(

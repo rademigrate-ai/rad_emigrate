@@ -86,7 +86,7 @@ class CityClockCard extends StatelessWidget {
                               city.flagEmoji!,
                               style: const TextStyle(fontSize: 18),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: compact ? 5 : 8),
                           ],
                           Expanded(
                             child: Text(
@@ -95,8 +95,9 @@ class CityClockCard extends StatelessWidget {
                                   ?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
+                                    fontSize: compact ? 14 : null,
                                   ),
-                              maxLines: 1,
+                              maxLines: compact ? 2 : 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -104,7 +105,7 @@ class CityClockCard extends StatelessWidget {
                             isDay
                                 ? Icons.wb_sunny_rounded
                                 : Icons.nights_stay_rounded,
-                            size: 18,
+                            size: compact ? 16 : 18,
                             color: isDay
                                 ? context.premium.warning
                                 : context.premium.information,
@@ -134,6 +135,7 @@ class CityClockCard extends StatelessWidget {
                             ?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w800,
+                              fontSize: compact ? 28 : null,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
                               ],

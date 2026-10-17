@@ -2,6 +2,17 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsEnA on AppLocalizations {
   @override
+  String get viewDocumentFile => 'Open file';
+
+  @override
+  String get reviewSourceSnapshotOnly =>
+      'Source from research snapshot. Verify independently before publishing.';
+
+  @override
+  String get reviewSourceUnavailable =>
+      'Source evidence could not be verified. Do not publish without reviewing the original source.';
+
+  @override
   String get consultationShortLabel => 'Consultation';
 
   @override

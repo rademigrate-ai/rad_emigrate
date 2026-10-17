@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/record_labels.dart';
 import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -205,7 +206,10 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     final isAuthed = session?.authenticated == true;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consultationTitle)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallback: '/dashboard'),
+        title: Text(l10n.consultationTitle),
+      ),
       body: PremiumCanvas(
         accent: AppColors.primaryRed,
         child: Center(

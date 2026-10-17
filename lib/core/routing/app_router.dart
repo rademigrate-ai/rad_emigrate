@@ -25,7 +25,7 @@ import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/global_time/presentation/pages/world_clock_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
-import '../../features/visa/presentation/pages/visa_page.dart';
+import '../../features/visa/presentation/visa_routes.dart';
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -41,6 +41,9 @@ final authRefreshNotifierProvider = Provider<AuthRefreshNotifier>(
 );
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  // Every pushed secondary destination is also a declared, deep-linkable route.
+  // Retain its source page for Back without leaving the browser URL on that page.
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   return GoRouter(
     initialLocation: '/splash',
     refreshListenable: ref.watch(authRefreshNotifierProvider),
@@ -102,7 +105,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, _, child) => AppShell(child: child),
         routes: [
           GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
-          GoRoute(path: '/visa', builder: (_, _) => const VisaPage()),
+          visaRoute(),
           GoRoute(
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),

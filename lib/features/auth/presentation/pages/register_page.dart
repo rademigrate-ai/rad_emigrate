@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/inline_alert.dart';
 
 import 'package:flutter/material.dart';
@@ -86,15 +87,37 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final theme = Theme.of(context);
     final loading = ref.watch(authControllerProvider).isLoading || _submitting;
     return AuthCinematicFrame(
+      backFallback: Uri(
+        path: '/login',
+        queryParameters: {
+          'from': ?GoRouter.maybeOf(context)
+              ?.routeInformationProvider
+              .value
+              .uri
+              .queryParameters['from'],
+        },
+      ).toString(),
       eyebrow: l10n.createYourSpace,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
-      localeControl: TextButton.icon(
-        icon: const Icon(Icons.language_outlined, size: 18),
-        label: Text(
-          ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
-        ),
-        onPressed: () => ref.read(localeControllerProvider.notifier).toggle(),
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          AppBackButton(
+            fallback: Uri(
+              path: '/login',
+              queryParameters: {'from': ?widget.destination},
+            ).toString(),
+          ),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined, size: 18),
+            label: Text(
+              ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
       ),
       form: MotionReveal(
         key: ValueKey(ref.watch(localeControllerProvider).isRtl),

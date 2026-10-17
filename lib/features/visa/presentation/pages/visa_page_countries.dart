@@ -117,8 +117,9 @@ class _CountriesStageState extends State<_CountriesStage> {
             LayoutBuilder(
               builder: (context, constraints) {
                 final columns =
-                    constraints.maxWidth < 600 &&
-                        MediaQuery.textScalerOf(context).scale(14) > 20
+                    (constraints.maxWidth < 304 ||
+                        (constraints.maxWidth < 600 &&
+                            MediaQuery.textScalerOf(context).scale(14) > 20))
                     ? 1
                     : constraints.maxWidth >= 1100
                     ? 4
@@ -133,13 +134,7 @@ class _CountriesStageState extends State<_CountriesStage> {
                     crossAxisCount: columns,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    mainAxisExtent:
-                        210 +
-                        (MediaQuery.textScalerOf(context).scale(14) - 14).clamp(
-                              0,
-                              30,
-                            ) *
-                            3,
+                    childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
                     final country = countries[index];
@@ -148,6 +143,8 @@ class _CountriesStageState extends State<_CountriesStage> {
                         .map((c) => c.name)
                         .toList();
                     return Semantics(
+                      key: ValueKey('destination-card-${country.id}'),
+                      label: country.name,
                       button: true,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(18),
@@ -160,6 +157,7 @@ class _CountriesStageState extends State<_CountriesStage> {
                               children: [
                                 CountryPhotography.image(
                                   code: country.code,
+                                  destination: country.slug,
                                   fit: BoxFit.cover,
                                 ),
                                 Positioned.fill(
@@ -193,6 +191,8 @@ class _CountriesStageState extends State<_CountriesStage> {
                                       const SizedBox(height: 4),
                                       Text(
                                         country.name,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium

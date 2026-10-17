@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/inline_alert.dart';
 
 import 'dart:async';
@@ -91,6 +92,16 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     final coolingDown = _cooldownSeconds > 0;
 
     return AuthCinematicFrame(
+      backFallback: Uri(
+        path: '/login',
+        queryParameters: {
+          'from': ?GoRouter.maybeOf(context)
+              ?.routeInformationProvider
+              .value
+              .uri
+              .queryParameters['from'],
+        },
+      ).toString(),
       eyebrow: l10n.resetPassword,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
@@ -100,8 +111,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
           IconButton(
             tooltip: l10n.backToSignIn,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go(
-              Uri(
+            onPressed: () => AppBackButton.goBack(
+              context,
+              fallback: Uri(
                 path: '/login',
                 queryParameters: {
                   'from': ?GoRouterState.of(context)

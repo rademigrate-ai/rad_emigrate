@@ -1,4 +1,5 @@
-import '../widgets/city_clock_card.dart';
+import '../../../../core/widgets/app_back_button.dart';
+import '../widgets/city_clock_grid.dart';
 import '../widgets/global_time_labels.dart';
 import '../widgets/global_time_overview.dart';
 import '../../domain/city_catalog.dart';
@@ -156,7 +157,10 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
     final instant = state.scrubUtc ?? now;
     final wide = MediaQuery.sizeOf(context).width >= 700;
     return Scaffold(
-      appBar: AppBar(title: Text(labels.title)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallback: '/dashboard'),
+        title: Text(labels.title),
+      ),
       body: PremiumCanvas(
         child: state.isLoading
             ? LoadingState.section(
@@ -272,48 +276,12 @@ class _WorldClockPageState extends ConsumerState<WorldClockPage> {
                       ),
                       const SizedBox(height: 8),
                       if (state.favorites.isEmpty) Text(l10n.noWorldCities),
-                      LayoutBuilder(
-                        builder: (context, box) {
-                          final largeText =
-                              MediaQuery.textScalerOf(context).scale(14) > 20;
-                          final columns = largeText
-                              ? (box.maxWidth >= 800 ? 2 : 1)
-                              : box.maxWidth >= 960
-                              ? 6
-                              : box.maxWidth >= 800
-                              ? 3
-                              : box.maxWidth >= 600
-                              ? 2
-                              : 1;
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.favorites.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: columns,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
-                                  mainAxisExtent: largeText
-                                      ? 360
-                                      : columns == 1
-                                      ? 180
-                                      : 220,
-                                ),
-                            itemBuilder: (context, i) => CityClockCard(
-                              city: state.favorites[i],
-                              languageCode: lang,
-                              atUtc: instant,
-                              compact: columns >= 4 || columns == 1,
-                              onRemove: columns >= 4 || columns == 1
-                                  ? null
-                                  : () => ctrl.removeFavorite(
-                                      state.favorites[i].id,
-                                    ),
-                              onTap: () => _openCity(state.favorites[i]),
-                            ),
-                          );
-                        },
+                      CityClockGrid(
+                        cities: state.favorites,
+                        languageCode: lang,
+                        atUtc: instant,
+                        onSelect: _openCity,
+                        onRemove: ctrl.removeFavorite,
                       ),
                       const SizedBox(height: 20),
                       MeetingPlannerPanel(

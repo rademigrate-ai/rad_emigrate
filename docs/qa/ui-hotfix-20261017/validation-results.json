@@ -1,0 +1,47 @@
+{
+  "baseline": "3b76c3bcff80d075bfb5000b139384fa7f1edca8",
+  "lib_tree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+  "checks": [
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-format.log",
+      "check": "format"
+    },
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-analyze.log",
+      "check": "analyze"
+    },
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-tests.log",
+      "check": "tests"
+    },
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-pointer.log",
+      "check": "pointer"
+    },
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-web.log",
+      "check": "web"
+    },
+    {
+      "exit": 0,
+      "libTree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+      "log": "build/verified-hotfix-android.log",
+      "check": "android"
+    }
+  ],
+  "flutter_tests_passed": 477,
+  "node_tests_passed": 6,
+  "bird_sha256": "5922e4874cdcaaddfd4ec90e133d764733a7dfc7039b134ca66b8a59c0c22a06",
+  "render_auto_deploy": "off (read-only metadata inspection)",
+  "production_writes": false
+}

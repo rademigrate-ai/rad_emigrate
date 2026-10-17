@@ -138,6 +138,7 @@ class _RadAiBirdNavIconState extends State<RadAiBirdNavIcon>
     final labelHeight = RadPhoenixNavigationSurface.labelHeight(context);
 
     return Semantics(
+      identifier: 'rad-navigation-ai-assistant',
       label: widget.label,
       button: true,
       selected: selected,

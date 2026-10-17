@@ -15,9 +15,19 @@ class DocumentLocalDataSource {
     if (raw == null || raw.isEmpty) return [];
     try {
       final list = jsonDecode(raw) as List<dynamic>;
-      return list
-          .map((e) => Document.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final sanitized = list.map((entry) {
+        final item = Map<String, dynamic>.from(entry as Map<String, dynamic>);
+        // Legacy clients cached signed private download URLs. Never restore
+        // or keep a bearer-token link in persistent preferences.
+        item['fileUrl'] = null;
+        return item;
+      }).toList();
+      if (list.any(
+        (entry) => (entry as Map<String, dynamic>)['fileUrl'] != null,
+      )) {
+        await _prefs.setString(_key, jsonEncode(sanitized));
+      }
+      return sanitized.map(Document.fromJson).toList();
     } catch (_) {
       return [];
     }
@@ -26,7 +36,7 @@ class DocumentLocalDataSource {
   Future<void> writeAll(List<Document> items) async {
     await _prefs.setString(
       _key,
-      jsonEncode(items.map((e) => e.toJson()).toList()),
+      jsonEncode(items.map((e) => e.toJson()..['fileUrl'] = null).toList()),
     );
   }
 }

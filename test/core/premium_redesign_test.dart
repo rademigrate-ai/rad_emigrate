@@ -74,6 +74,11 @@ void main() {
   testWidgets(
     'secondary destinations are visible and navigate without a long press',
     (tester) async {
+      final priorReflection = GoRouter.optionURLReflectsImperativeAPIs;
+      GoRouter.optionURLReflectsImperativeAPIs = true;
+      addTearDown(
+        () => GoRouter.optionURLReflectsImperativeAPIs = priorReflection,
+      );
       final router = GoRouter(
         routes: [
           GoRoute(
@@ -122,6 +127,10 @@ void main() {
       await tester.tap(find.text('World Time'));
       await tester.pumpAndSettle();
       expect(router.routeInformationProvider.value.uri.path, '/world-clock');
+      expect(router.canPop(), isTrue);
+      router.pop();
+      await tester.pumpAndSettle();
+      expect(router.routeInformationProvider.value.uri.path, '/');
       for (final destination in [
         ('Feed', '/feed'),
         ('Documents', '/documents'),

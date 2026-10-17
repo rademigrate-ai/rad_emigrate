@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class AdminAiWorkspacePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/admin'),
         title: Text(l10n.adminResearchAssistant),
         actions: [
           IconButton(

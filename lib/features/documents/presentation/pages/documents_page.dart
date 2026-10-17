@@ -1,9 +1,11 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -75,6 +77,7 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.documents),
         actions: [
           IconButton(
@@ -319,6 +322,43 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
                       label: Text(sheetL10n.chooseFileUpload),
                     ),
                   const SizedBox(height: 8),
+                  if (doc.storagePath != null &&
+                      doc.status != DocumentVerificationStatus.missing) ...[
+                    OutlinedButton.icon(
+                      onPressed: isUploading
+                          ? null
+                          : () async {
+                              try {
+                                uploading.value = true;
+                                final preview = await ref
+                                    .read(documentControllerProvider.notifier)
+                                    .previewDocument(doc.id);
+                                final opened = await launchUrl(
+                                  preview,
+                                  mode: LaunchMode.externalApplication,
+                                );
+                                if (!opened) {
+                                  throw StateError('Preview unavailable');
+                                }
+                              } catch (_) {
+                                if (ctx.mounted) {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    SnackBar(
+                                      content: Text(sheetL10n.errorGeneric),
+                                    ),
+                                  );
+                                }
+                              } finally {
+                                if (ctx.mounted) {
+                                  uploading.value = false;
+                                }
+                              }
+                            },
+                      icon: const Icon(Icons.visibility_outlined),
+                      label: Text(sheetL10n.viewDocumentFile),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   OutlinedButton.icon(
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(

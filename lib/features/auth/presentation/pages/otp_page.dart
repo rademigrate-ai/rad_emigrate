@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
 
 import 'dart:async';
@@ -176,6 +177,16 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     final identifier = _identifierCtrl.text.trim();
 
     return AuthCinematicFrame(
+      backFallback: Uri(
+        path: '/login',
+        queryParameters: {
+          'from': ?GoRouter.maybeOf(context)
+              ?.routeInformationProvider
+              .value
+              .uri
+              .queryParameters['from'],
+        },
+      ).toString(),
       eyebrow: l10n.otpTitle,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
@@ -185,8 +196,9 @@ class _OtpPageState extends ConsumerState<OtpPage> {
           IconButton(
             tooltip: l10n.backToSignIn,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go(
-              Uri(
+            onPressed: () => AppBackButton.goBack(
+              context,
+              fallback: Uri(
                 path: '/login',
                 queryParameters: {
                   'from': ?GoRouterState.of(context)

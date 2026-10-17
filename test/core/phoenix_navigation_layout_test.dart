@@ -96,6 +96,7 @@ void main() {
   test('web semantics coordinates are not mirrored by HTML RTL direction', () {
     final html = File('web/index.html').readAsStringSync();
     expect(html, contains('<html lang="fa" dir="rtl">'));
+    expect(html, contains('flutter-view{direction:ltr}'));
     expect(html, contains('flt-semantics-host{direction:ltr}'));
   });
   testWidgets('navigation lays out with active semantics', (tester) async {
@@ -104,6 +105,79 @@ void main() {
     expect(tester.takeException(), isNull);
     handle.dispose();
   });
+
+  for (final language in ['fa', 'en']) {
+    testWidgets(
+      '$language visible centers icons labels and outer boundary hit correctly',
+      (tester) async {
+        final router = await _pump(tester, locale: Locale(language));
+        final strings = AppLocalizations.of(
+          tester.element(find.byType(AppShell)),
+        );
+        final labels = [
+          strings.home,
+          strings.explore,
+          strings.cases,
+          strings.profile,
+        ];
+        final paths = ['/dashboard', '/visa', '/applications', '/profile'];
+        final surface = tester.getRect(
+          find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
+        );
+        for (var i = 0; i < labels.length; i++) {
+          final label = find.text(labels[i]);
+          final x = tester.getCenter(label).dx;
+          // Label, icon and visual capsule center, not semantic programmatic taps.
+          for (final y in [
+            surface.bottom - 17,
+            surface.bottom - 38,
+            surface.top + 43,
+          ]) {
+            router.go('/ai-assistant');
+            await tester.pumpAndSettle();
+            await tester.tapAt(Offset(x, y));
+            await tester.pumpAndSettle();
+            expect(router.routeInformationProvider.value.uri.path, paths[i]);
+          }
+          final before = router.routeInformationProvider.value.uri.path;
+          for (final point in [
+            Offset(x, surface.top + 3),
+            Offset(x, surface.bottom + 5),
+            Offset(4, surface.center.dy),
+          ]) {
+            await tester.tapAt(point);
+            await tester.pumpAndSettle();
+            expect(router.routeInformationProvider.value.uri.path, before);
+          }
+          final ink = find
+              .ancestor(of: label, matching: find.byType(InkWell))
+              .first;
+          final localMaterial = find
+              .ancestor(of: ink, matching: find.byType(Material))
+              .first;
+          expect(
+            tester.getRect(localMaterial),
+            Rect.fromLTRB(
+              surface.left,
+              surface.top + 11,
+              surface.right,
+              surface.bottom - 1,
+            ),
+            reason: 'Ripple must share the local surface, not include safe-area padding',
+          );
+          expect(
+            find.ancestor(of: localMaterial, matching: find.byType(ClipRRect)),
+            findsOneWidget,
+          );
+        }
+        final bird = tester.getRect(find.byType(RadAiBirdNavIcon));
+        await tester.tapAt(Offset(bird.center.dx, bird.top + 15));
+        await tester.pumpAndSettle();
+        expect(router.routeInformationProvider.value.uri.path, '/ai-assistant');
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets(
     'browser resizing and keyboard preserve route and safe navigation',

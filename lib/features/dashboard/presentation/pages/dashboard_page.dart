@@ -95,7 +95,7 @@ class DashboardPage extends ConsumerWidget {
           IconButton(
             tooltip: l10n.notificationsTitle,
             icon: const Icon(Icons.notifications_outlined, size: 22),
-            onPressed: () => context.go('/notifications'),
+            onPressed: () => context.push('/notifications'),
           ),
           IconButton(
             tooltip: l10n.aiAssistant,
@@ -170,7 +170,7 @@ class DashboardPage extends ConsumerWidget {
                         ? l10n.documentMissingOne
                         : l10n.documentsMissingCount(missing),
                     subtitle: l10n.reviewRequiredFiles,
-                    onTap: () => context.go('/documents'),
+                    onTap: () => context.push('/documents'),
                   ),
                 if (isAuthed && !profileDone)
                   _ActivityRow(
@@ -194,13 +194,13 @@ class DashboardPage extends ConsumerWidget {
                         image: 'assets/images/destinations/gb.jpg',
                         title: l10n.worldTimeTitle,
                         subtitle: l10n.searchWorldClocks,
-                        onTap: () => context.go('/world-clock'),
+                        onTap: () => context.push('/world-clock'),
                       ),
                       _InformationCard(
                         image: 'assets/images/destinations/ca.jpg',
                         title: l10n.openConsultation,
                         subtitle: l10n.consultationIntro,
-                        onTap: () => context.go('/consultation'),
+                        onTap: () => context.push('/consultation'),
                       ),
                     ];
                     if (MediaQuery.textScalerOf(context).scale(14) > 21) {

@@ -38,7 +38,7 @@ class SecondaryDestinations extends ConsumerWidget {
               leading: Icon(item.$2),
               title: Text(item.$1),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.go(item.$3),
+              onTap: () => context.push(item.$3),
             ),
         ],
       ),

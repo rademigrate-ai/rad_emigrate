@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/supabase/supabase_client.dart';
 import '../../../core/supabase/supabase_providers.dart';
+import 'review_snapshot_provenance.dart';
 
 /// Stage 2 editorial actions: reject / keep / approve / explicit publish.
 /// Server-side RPCs enforce admin/super_admin; Flutter never auto-publishes.
@@ -69,12 +70,64 @@ class AdminReviewActions {
         .from('content_drafts')
         .select(
           'id,title,body,status,language_code,category,source_url,'
-          'primary_source_id,research_job_id,feed_item_id,created_at,updated_at,'
+          'primary_source_id,research_job_id,research_finding_id,feed_item_id,created_at,updated_at,'
           'content_sources:primary_source_id(title,url,publisher,source_type)',
         )
         .eq('id', draftId)
         .maybeSingle();
-    return row;
+    if (row == null) return null;
+
+    // The production finding→draft pipeline preserves snapshot provenance,
+    // but legacy drafts can have no source_url / content source FK.
+    // Reconstruct the source reference for the human reviewer, without
+    // modifying the draft, approving claims, or publishing anything.
+    final findingId = row['research_finding_id'];
+    if (findingId == null ||
+        (row['source_url'] is String &&
+            (row['source_url'] as String).trim().isNotEmpty)) {
+      return row;
+    }
+
+    try {
+      final finding = await _supabase.client
+          .from('research_findings')
+          .select('snapshot_id')
+          .eq('id', findingId)
+          .maybeSingle();
+      final snapshotId = finding?['snapshot_id'];
+      if (snapshotId == null) return row;
+
+      final snapshot = await _supabase.client
+          .from('source_snapshots')
+          .select('document_id,http_status')
+          .eq('id', snapshotId)
+          .maybeSingle();
+      final documentId = snapshot?['document_id'];
+      if (documentId == null) return row;
+
+      final document = await _supabase.client
+          .from('source_documents')
+          .select('canonical_url,removed_at,source_authority')
+          .eq('id', documentId)
+          .maybeSingle();
+
+      final sourceUrl = verifiedReviewSnapshotUrl(
+        canonicalUrl: document?['canonical_url'],
+        httpStatus: snapshot?['http_status'],
+        removedAt: document?['removed_at'],
+      );
+      if (sourceUrl == null) return row;
+      return {
+        ...row,
+        'source_url': sourceUrl,
+        'source_url_from_snapshot': true,
+        'source_authority': document?['source_authority'],
+      };
+    } catch (_) {
+      // Provenance failure must never be mistaken for verified source.
+      // Preserve normal draft review/editing; the link stays absent.
+      return {...row, 'source_verification_unavailable': true};
+    }
   }
 }
 

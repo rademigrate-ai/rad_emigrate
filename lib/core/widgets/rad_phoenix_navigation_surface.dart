@@ -40,70 +40,66 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
     final height = 58.0 + labelHeight(context);
     const clipper = _PhoenixSurfaceClipper();
 
-    return Material(
-      color: Colors.transparent,
-      child: SafeArea(
-        top: false,
-        maintainBottomViewPadding: true,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final centreWidth = (constraints.maxWidth * 0.28).clamp(
-                88.0,
-                104.0,
-              );
-              return SizedBox(
-                key: const ValueKey('rad-phoenix-navigation-surface'),
-                height: height,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned.fill(
-                      child: PhysicalShape(
-                        clipper: clipper,
-                        color: Colors.transparent,
-                        shadowColor: Colors.black.withValues(
-                          alpha: dark ? 0.32 : 0.10,
-                        ),
-                        elevation: dark ? 8 : 3,
-                        clipBehavior: Clip.antiAlias,
-                        child: BackdropFilter(
-                          filter: ui.ImageFilter.blur(sigmaX: 32, sigmaY: 32),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: dark
-                                    ? [
-                                        const Color(0xFF272936)
-                                            .withValues(alpha: 0.72),
-                                        const Color(0xFF101925)
-                                            .withValues(alpha: 0.86),
-                                      ]
-                                    : [
-                                        Colors.white.withValues(alpha: 0.76),
-                                        const Color(0xFFE9F1FC)
-                                            .withValues(alpha: 0.86),
-                                      ],
-                              ),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: centreWidth * 1.32,
-                                decoration: BoxDecoration(
-                                  gradient: RadialGradient(
-                                    center: const Alignment(0, -0.28),
-                                    radius: 0.62,
-                                    colors: [
-                                      const Color(
-                                        0xFFFF1835,
-                                      ).withValues(alpha: dark ? 0.06 : 0.02),
-                                      const Color(0xFFFF1835)
-                                          .withValues(alpha: 0),
+    return SafeArea(
+      top: false,
+      maintainBottomViewPadding: true,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final centreWidth = (constraints.maxWidth * 0.28).clamp(
+              88.0,
+              104.0,
+            );
+            return SizedBox(
+              key: const ValueKey('rad-phoenix-navigation-surface'),
+              height: height,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned.fill(
+                    child: PhysicalShape(
+                      clipper: clipper,
+                      color: Colors.transparent,
+                      shadowColor: Colors.black.withValues(
+                        alpha: dark ? 0.32 : 0.10,
+                      ),
+                      elevation: dark ? 8 : 3,
+                      clipBehavior: Clip.antiAlias,
+                      child: BackdropFilter(
+                        filter: ui.ImageFilter.blur(sigmaX: 32, sigmaY: 32),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: dark
+                                  ? [
+                                      const Color(0xFF272936)
+                                          .withValues(alpha: 0.72),
+                                      const Color(0xFF101925)
+                                          .withValues(alpha: 0.86),
+                                    ]
+                                  : [
+                                      Colors.white.withValues(alpha: 0.76),
+                                      const Color(0xFFE9F1FC)
+                                          .withValues(alpha: 0.86),
                                     ],
-                                  ),
+                            ),
+                          ),
+                          child: Center(
+                            child: Container(
+                              width: centreWidth * 1.32,
+                              decoration: BoxDecoration(
+                                gradient: RadialGradient(
+                                  center: const Alignment(0, -0.28),
+                                  radius: 0.62,
+                                  colors: [
+                                    const Color(0xFFFF1835)
+                                        .withValues(alpha: dark ? 0.06 : 0.02),
+                                    const Color(0xFFFF1835)
+                                        .withValues(alpha: 0),
+                                  ],
                                 ),
                               ),
                             ),
@@ -111,32 +107,56 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: CustomPaint(
-                          painter: _PhoenixBorderPainter(
-                            dark
-                                ? Colors.white.withValues(alpha: 0.16)
-                                : Colors.white.withValues(alpha: 0.90),
-                          ),
+                  ),
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        painter: _PhoenixBorderPainter(
+                          dark
+                              ? Colors.white.withValues(alpha: 0.16)
+                              : Colors.white.withValues(alpha: 0.90),
                         ),
                       ),
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (final destination in leading)
-                          Expanded(child: destination),
-                        SizedBox(width: centreWidth, child: phoenix),
-                        for (final destination in trailing)
-                          Expanded(child: destination),
-                      ],
+                  ),
+                  // Ink is painted above the glass, in the same local
+                  // coordinate system as its controls, and clipped for paint
+                  // AND hit testing. Safe-area/headroom is not an ink surface.
+                  Positioned(
+                    top: 11,
+                    bottom: 1,
+                    left: 0,
+                    right: 0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            for (final destination in leading)
+                              Expanded(child: destination),
+                            SizedBox(width: centreWidth),
+                            for (final destination in trailing)
+                              Expanded(child: destination),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                  // Only the original bird occupies the raised center area;
+                  // it keeps its gesture, focus and animation contracts.
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: (constraints.maxWidth - centreWidth) / 2,
+                    width: centreWidth,
+                    child: phoenix,
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

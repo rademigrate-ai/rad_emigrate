@@ -1,3 +1,5 @@
+import '../widgets/app_back_button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -143,7 +145,19 @@ class _AppShellState extends ConsumerState<AppShell> {
     final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
     final aiSelected = location.startsWith('/ai-assistant');
 
-    return Scaffold(
+    const fallbacks = {
+      '/world-clock': '/dashboard',
+      '/feed': '/dashboard',
+      '/consultation': '/dashboard',
+      '/documents': '/profile',
+      '/notifications': '/profile',
+      '/admin': '/profile',
+      '/admin/ai-config': '/admin',
+      '/admin/operations': '/admin',
+      '/admin/consultations': '/admin',
+      '/admin/ai-research': '/admin',
+    };
+    final shell = Scaffold(
       // Keep route content above the navigation surface. Extending behind the
       // bar made the last controls unreadable and untappable on compact views.
       extendBody: false,
@@ -171,7 +185,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                     return;
                   }
                   final path = await _showMore(context, secondary, location);
-                  if (path != null && context.mounted) context.go(path);
+                  if (path != null && context.mounted) context.push(path);
                 },
                 labelType: _railExtended
                     ? NavigationRailLabelType.none
@@ -247,10 +261,14 @@ class _AppShellState extends ConsumerState<AppShell> {
               onAiTap: () => context.go('/ai-assistant'),
               onMore: () async {
                 final path = await _showMore(context, secondary, location);
-                if (path != null && context.mounted) context.go(path);
+                if (path != null && context.mounted) context.push(path);
               },
             ),
     );
+    final fallback = fallbacks[location];
+    return fallback == null
+        ? shell
+        : BackFallbackScope(fallback: fallback, child: shell);
   }
 
   Future<String?> _showMore(
@@ -363,6 +381,7 @@ class _NavSlot extends StatelessWidget {
         : context.premium.mutedText;
 
     return Semantics(
+      identifier: 'rad-navigation-${item.path.substring(1)}',
       label: item.label,
       button: true,
       selected: selected,
@@ -377,7 +396,7 @@ class _NavSlot extends StatelessWidget {
             children: [
               if (selected)
                 Positioned(
-                  bottom: 8,
+                  bottom: 7,
                   child: Container(
                     width: 48,
                     height: labelHeight + 38,
@@ -393,7 +412,7 @@ class _NavSlot extends StatelessWidget {
                   ),
                 ),
               Positioned(
-                bottom: labelHeight + 9,
+                bottom: labelHeight + 8,
                 child: AnimatedScale(
                   duration: AppMotion.duration(
                     context,
@@ -410,7 +429,7 @@ class _NavSlot extends StatelessWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 8,
+                bottom: 7,
                 child: SizedBox(
                   height: labelHeight,
                   child: Center(

@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
 import 'package:flutter/material.dart';
@@ -110,7 +111,10 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final session = ref.watch(authControllerProvider).valueOrNull;
     if (session?.authenticated != true) {
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.notificationsTitle)),
+        appBar: AppBar(
+          leading: const AppBackButton(fallback: '/profile'),
+          title: Text(l10n.notificationsTitle),
+        ),
         body: PremiumCanvas(
           child: Center(
             child: TextButton(
@@ -123,6 +127,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.notificationsTitle),
         actions: [
           IconButton(

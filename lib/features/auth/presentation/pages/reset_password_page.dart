@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
 
 import 'package:flutter/material.dart';
@@ -98,6 +99,16 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
         .isReadyFor(activeUserId);
 
     return AuthCinematicFrame(
+      backFallback: Uri(
+        path: '/login',
+        queryParameters: {
+          'from': ?GoRouter.maybeOf(context)
+              ?.routeInformationProvider
+              .value
+              .uri
+              .queryParameters['from'],
+        },
+      ).toString(),
       eyebrow: l10n.setNewPassword,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
@@ -107,8 +118,9 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
           IconButton(
             tooltip: l10n.backToSignIn,
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go(
-              Uri(
+            onPressed: () => AppBackButton.goBack(
+              context,
+              fallback: Uri(
                 path: '/login',
                 queryParameters: {
                   'from': ?GoRouterState.of(context)

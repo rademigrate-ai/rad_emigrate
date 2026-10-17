@@ -1,4 +1,7 @@
 {
+  "viewDocumentFile": "Open file",
+  "reviewSourceSnapshotOnly": "Source from research snapshot. Verify independently before publishing.",
+  "reviewSourceUnavailable": "Source evidence could not be verified. Do not publish without reviewing the original source.",
   "consultationShortLabel": "Consultation",
   "suggestionComparePathways": "How can I compare immigration pathways?",
 
