@@ -2,6 +2,10 @@
 set -euo pipefail
 
 DB_URL="${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}"
+python3 - "$DB_URL" <<'PY'
+import sys, urllib.parse
+assert urllib.parse.urlsplit(sys.argv[1]).hostname in ('127.0.0.1', 'localhost', '::1'), 'Disposable schema checks refuse non-loopback databases'
+PY
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT"
@@ -75,7 +79,7 @@ BEGIN
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened',function_count,hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %',rls_count; END IF;
   IF app_policy_count <> 40 THEN RAISE EXCEPTION 'Expected 40 public policies, got %',app_policy_count; END IF;
-  IF storage_policy_count <> 3 THEN RAISE EXCEPTION 'Expected 3 documents Storage policies, got %',storage_policy_count; END IF;
+  IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 owner-scoped documents Storage policies, got %',storage_policy_count; END IF;
   IF trigger_count <> 17 THEN RAISE EXCEPTION 'Expected auth, update, and audit trigger events, got %',trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %',bucket_count; END IF;
 END
@@ -88,7 +92,9 @@ SQL
 # Stage 2/7 additive triggers (knowledge search/citation integrity, research
 # review-candidate, application status guard, consultation field guard) update
 # triggers fingerprint only (CI Stage 11 recovery).
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"c52042a2489e9129526327c3fa0933b9","triggers":"4e10fd766fe20b3c7c4aafc3f04cfd9c","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# Five security migrations add one owner-only Storage UPDATE policy. Retain all
+# eight pinned fingerprint dimensions; do not weaken the existing drift gate.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"5b8620228bf8c9346092eb66f1afa4cb","triggers":"4e10fd766fe20b3c7c4aafc3f04cfd9c","functions":"e05d93ee347104597a7b8b458b0d03da","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2
@@ -96,5 +102,10 @@ if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Actual:   $actual_fingerprint" >&2
   exit 1
 fi
+
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
+psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
+python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py
 
 echo "Canonical active lineage rebuilt and verified from an empty Supabase project."
