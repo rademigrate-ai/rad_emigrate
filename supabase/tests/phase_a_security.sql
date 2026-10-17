@@ -177,4 +177,79 @@ begin
   end if;
 end
 $no_publish$;
+
+-- Human editorial publication E2E: rejected until an Admin explicitly
+-- approves, then a single Feed row with a single localization; idempotent
+-- repeat publication must never duplicate a Feed item. Entire test rolls back.
+do $editor_fixture$
+declare
+  v_admin uuid := gen_random_uuid();
+  v_draft uuid;
+begin
+  perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  insert into auth.users(id,email)
+    values(v_admin,v_admin::text||'@example.invalid');
+  update public.profiles set role='admin' where id=v_admin;
+  if not found then
+    raise exception 'Synthetic editor profile bootstrap missing';
+  end if;
+  insert into public.content_drafts(
+    language_code,title,body,status,created_by
+  ) values (
+    'en','Synthetic editorial test','This is synthetic CI content only.',
+    'review',v_admin
+  ) returning id into v_draft;
+  perform set_config('rad.phase_a.editor_id',v_admin::text,true);
+  perform set_config('rad.phase_a.draft_id',v_draft::text,true);
+  perform set_config('request.jwt.claims',
+    jsonb_build_object('role','authenticated','sub',v_admin)::text,true);
+  perform set_config('request.jwt.claim.sub',v_admin::text,true);
+end
+$editor_fixture$;
+
+set local role authenticated;
+do $editor_publish$
+declare
+  v_draft uuid := current_setting('rad.phase_a.draft_id')::uuid;
+  v_feed uuid;
+begin
+  begin
+    perform public.publish_content_draft(v_draft,'update',null);
+    raise exception 'Nonapproved draft was published';
+  exception when invalid_parameter_value then null;
+  end;
+  perform public.set_content_draft_status(v_draft,'approved');
+  v_feed := public.publish_content_draft(v_draft,'update',null);
+  if v_feed is null then
+    raise exception 'Approved draft did not publish';
+  end if;
+  if public.publish_content_draft(v_draft,'update',null) is distinct from v_feed then
+    raise exception 'Repeated publish returned a different Feed item';
+  end if;
+  perform set_config('rad.phase_a.published_feed_id',v_feed::text,true);
+end
+$editor_publish$;
+reset role;
+
+do $editor_verify$
+declare
+  v_draft uuid := current_setting('rad.phase_a.draft_id')::uuid;
+  v_feed uuid := current_setting('rad.phase_a.published_feed_id')::uuid;
+  v_admin uuid := current_setting('rad.phase_a.editor_id')::uuid;
+begin
+  if (select count(*) from public.feed_items where id=v_feed
+      and status='published' and reviewed_by=v_admin)<>1
+    or (select count(*) from public.feed_item_localizations
+        where feed_item_id=v_feed and locale='en')<>1
+    or not exists(select 1 from public.content_drafts
+        where id=v_draft and feed_item_id=v_feed
+          and status='published' and reviewed_by=v_admin)
+    or (select count(*) from public.admin_audit_logs
+        where actor_id=v_admin and action='publish'
+          and resource_type='content_draft'
+          and resource_id=v_draft::text)<>1 then
+    raise exception 'Human draft approval, publication, or audit was not atomic';
+  end if;
+end
+$editor_verify$;
 rollback;
