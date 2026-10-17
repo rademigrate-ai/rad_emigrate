@@ -2,6 +2,9 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get viewDocumentFile => 'مشاهده فایل';
+
+  @override
   String get reviewSourceSnapshotOnly =>
       'منبع از نسخهٔ ثبت‌شدهٔ پژوهش بازیابی شده است. پیش از انتشار، آن را مستقلاً بررسی کنید.';
 

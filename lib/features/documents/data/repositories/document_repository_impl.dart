@@ -95,6 +95,12 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
+  Future<Uri> previewDocument(Document document) {
+    // Preview requires a fresh owner-bound signed URL; no offline fallback.
+    return remote.previewDocument(document);
+  }
+
+  @override
   Future<void> deleteDocument(Document document) async {
     await remote.delete(document);
     final cached = await local.readAll();

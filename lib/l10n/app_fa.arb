@@ -1,4 +1,5 @@
 {
+  "viewDocumentFile": "مشاهده فایل",
   "reviewSourceSnapshotOnly": "منبع از نسخهٔ ثبت‌شدهٔ پژوهش بازیابی شده است. پیش از انتشار، آن را مستقلاً بررسی کنید.",
   "reviewSourceUnavailable": "اعتبار منبع قابل بررسی نبود. بدون بازبینی منبع اصلی، منتشر نکنید.",
   "consultationShortLabel": "مشاوره",
