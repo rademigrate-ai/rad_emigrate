@@ -716,6 +716,9 @@ class _VisualDocuments implements DocumentRepository {
   @override
   Future<void> deleteDocument(Document document) async {}
   @override
+  Future<Uri> previewDocument(Document document) async =>
+      throw StateError('Visual QA does not access private files.');
+  @override
   Future<Document?> getDocument(String id) async => null;
   @override
   Future<List<Document>> listDocuments({String? userId}) async => fa

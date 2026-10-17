@@ -88,6 +88,19 @@ class DocumentController extends StateNotifier<AsyncValue<List<Document>>> {
     );
   }
 
+  Future<Uri> previewDocument(String id) async {
+    if (_userId == null || _userId.isEmpty) {
+      throw StateError('Authentication required for a private file preview.');
+    }
+    final current = state.valueOrNull ?? [];
+    for (final document in current) {
+      if (document.id == id && document.userId == _userId) {
+        return _repository.previewDocument(document);
+      }
+    }
+    throw StateError('Document not found for the active user.');
+  }
+
   Future<void> deleteDocument(String id) async {
     final current = state.valueOrNull ?? [];
     Document? document;
@@ -134,6 +147,10 @@ class _EmptyDocumentRepository implements DocumentRepository {
 
   @override
   Future<void> deleteDocument(Document document) async {}
+
+  @override
+  Future<Uri> previewDocument(Document document) async =>
+      throw StateError('Private document preview is not configured.');
 
   @override
   Future<Document> uploadDocument({
