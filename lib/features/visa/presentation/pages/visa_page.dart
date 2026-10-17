@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/error_state.dart';
@@ -25,7 +26,9 @@ part 'visa_page_program.dart';
 enum _VisaStage { countries, countryDetail, programDetail }
 
 class VisaPage extends ConsumerStatefulWidget {
-  const VisaPage({super.key});
+  const VisaPage({super.key, this.countryId, this.programId});
+  final String? countryId;
+  final String? programId;
 
   @override
   ConsumerState<VisaPage> createState() => _VisaPageState();
@@ -38,6 +41,10 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   String _query = '';
 
   void _openCountry(Country country) {
+    if (GoRouter.maybeOf(context) != null) {
+      context.go('/visa/${Uri.encodeComponent(country.id)}');
+      return;
+    }
     setState(() {
       _country = country;
       _program = null;
@@ -46,6 +53,12 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   }
 
   void _openProgram(VisaProgram program) {
+    if (GoRouter.maybeOf(context) != null) {
+      context.go(
+        '/visa/${Uri.encodeComponent(program.countryId)}/programs/${Uri.encodeComponent(program.id)}',
+      );
+      return;
+    }
     setState(() {
       _program = program;
       _stage = _VisaStage.programDetail;
@@ -69,6 +82,21 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final catalog = ref.watch(visaCatalogProvider(locale));
+    // Routed detail pages derive selection from the catalog instead of requiring
+    // a preceding tap. Invalid/stale IDs offer a visible route back to Visa.
+    if (widget.countryId != null) {
+      final value = catalog.valueOrNull;
+      _country = value?.countryById(widget.countryId!);
+      _program = null;
+      if (widget.programId != null && value != null) {
+        for (final program in value.programsForCountry(widget.countryId!)) {
+          if (program.id == widget.programId) _program = program;
+        }
+      }
+      _stage = widget.programId != null
+          ? _VisaStage.programDetail
+          : _VisaStage.countryDetail;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -77,8 +105,11 @@ class _VisaPageState extends ConsumerState<VisaPage> {
           _VisaStage.countryDetail => _country?.name ?? l10n.visaPathways,
           _VisaStage.programDetail => _program?.title ?? l10n.visaPathways,
         }),
+        automaticallyImplyLeading: false,
         leading: _stage == _VisaStage.countries
             ? null
+            : widget.countryId != null
+            ? AppBackButton(fallback: '/visa')
             : IconButton(
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
                 icon: Icon(directionalBack(context)),
@@ -93,7 +124,16 @@ class _VisaPageState extends ConsumerState<VisaPage> {
             message: _visaErrorMessage(context, error, l10n),
             onRetry: () => ref.invalidate(visaCatalogProvider(locale)),
           ),
-          data: (value) => value.countries.isEmpty
+          data: (value) =>
+              widget.countryId != null &&
+                  (_country == null ||
+                      (widget.programId != null && _program == null))
+              ? EmptyState(
+                  title: l10n.catalogueUnavailable,
+                  actionLabel: l10n.visaPathways,
+                  onAction: () => context.go('/visa'),
+                )
+              : value.countries.isEmpty
               ? EmptyState(
                   icon: Icons.public_off_outlined,
                   title: AppLocalizations.of(context).noPublishedDestinations,

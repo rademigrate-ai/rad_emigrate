@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/theme/premium_tokens.dart';
 
@@ -126,6 +127,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ? (viewport.height * 0.43).clamp(240.0, 400.0)
         : 174.0;
     return AuthCinematicFrame(
+      backFallback: '/dashboard',
       eyebrow: l10n.immigrationJourney,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
@@ -134,12 +136,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         semanticLabel: l10n.appTitle,
         size: heroSize,
       ),
-      localeControl: TextButton.icon(
-        icon: const Icon(Icons.language_outlined, size: 18),
-        label: Text(
-          ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
-        ),
-        onPressed: () => ref.read(localeControllerProvider.notifier).toggle(),
+      localeControl: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          AppBackButton(fallback: '/dashboard'),
+          TextButton.icon(
+            icon: const Icon(Icons.language_outlined, size: 18),
+            label: Text(
+              ref.watch(localeControllerProvider).isRtl ? 'English' : 'فارسی',
+            ),
+            onPressed: () =>
+                ref.read(localeControllerProvider.notifier).toggle(),
+          ),
+        ],
       ),
       form: MotionReveal(
         offset: const Offset(0, 0.04),

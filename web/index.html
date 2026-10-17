@@ -38,8 +38,10 @@
   <style>
     @font-face{font-family:Vazirmatn;src:url("assets/assets/fonts/Vazirmatn-Regular.ttf") format("truetype");font-display:swap}
     html,body{margin:0;background:#070A0F;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
-    /* Accessibility rectangles use physical coordinates. Keep only their DOM
-       host LTR; Flutter Directionality still owns Persian RTL widget layout. */
+    /* Flutter engine hosts (including its shadow DOM semantics) use physical
+       left-origin coordinates. Set direction on their light-DOM ancestor, not
+       just flt-semantics-host, which is inside a shadow root. Flutter owns RTL. */
+    flutter-view{direction:ltr}
     flt-semantics-host{direction:ltr}
     #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;background:radial-gradient(circle at 50% 44%,#3b0c14 0,#13090e 28%,#070a0f 62%);color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
     #rad-startup img{object-fit:contain;filter:drop-shadow(0 0 24px rgba(217,31,43,.42));max-width:calc(100vw - 64px)}
@@ -82,6 +84,7 @@
       }
     })();
   </script>
+  <script src="rad_pointer_alignment.js"></script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

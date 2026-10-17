@@ -49,6 +49,7 @@ import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/splash/presentation/pages/splash_page.dart';
 import 'features/visa/domain/entities/visa_entities.dart';
 import 'features/visa/presentation/pages/visa_page.dart';
+import 'features/visa/presentation/visa_routes.dart';
 import 'features/visa/presentation/providers/visa_catalog_provider.dart';
 import 'l10n/app_localizations.dart';
 import 'visual_qa_capture_signal_stub.dart'
@@ -60,6 +61,7 @@ import 'visual_qa_capture_signal_stub.dart'
 /// records, and is never referenced by the production main/router.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   final preferences = await SharedPreferences.getInstance();
   runApp(VisualQaApp(preferences: preferences));
 }
@@ -284,9 +286,9 @@ class _ShellQaAppState extends State<_ShellQaApp> {
       ShellRoute(
         builder: (_, _, child) => AppShell(child: child),
         routes: [
+          visaRoute(),
           for (final path in [
             '/dashboard',
-            '/visa',
             '/ai-assistant',
             '/applications',
             '/world-clock',

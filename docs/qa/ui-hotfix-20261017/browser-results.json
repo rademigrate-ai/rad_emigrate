@@ -1,0 +1,52 @@
+{
+  "browser": "Chrome headless, Playwright touchscreen/CDP real pointer input; synthetic repositories only",
+  "results": [
+    {
+      "flow": "en real touchscreen center/icon/label, five tabs, portrait/landscape/viewport resize, DPR 3, semantics aligned, outside points ignored",
+      "status": "PASS"
+    },
+    {
+      "flow": "fa real touchscreen center/icon/label, five tabs, portrait/landscape/viewport resize, DPR 2, semantics aligned, outside points ignored",
+      "status": "PASS"
+    },
+    {
+      "flow": "Visa program direct link -> country -> catalog, visible card interaction, browser Back and Forward",
+      "status": "PASS"
+    }
+  ],
+  "captures": [
+    {
+      "file": "nav-press-before-en-dark.png",
+      "sha256": "73e1aba7706d954d4425e82d8660b6ee13a62ef0c41018b0822dcf2a18c05238",
+      "reused": true
+    },
+    {
+      "file": "nav-press-after-en-dark.png",
+      "sha256": "ec8f32bb05a94d6726e4f028c44f40cc2cbeb5a409622f1408b431c10de9d472",
+      "reused": true
+    },
+    {
+      "file": "visa-square-fa-dark.png",
+      "sha256": "45167868380272a61932b8ef47d7b86ed1e276299a791b8784470b1c6e8d5e5f"
+    },
+    {
+      "file": "clocks-two-column-en-light.png",
+      "sha256": "b4fb6046a15e35625f27a6c9d724f29b7a0a2e05cfda511f556c05ef83e64abd"
+    }
+  ],
+  "limits": "No physical Safari, Android or iOS. Browser viewport/DPR/orientation and resize are emulated; native browser chrome and pinch zoom are not physically verified.",
+  "final_url_history": [
+    {
+      "locale": "en",
+      "flow": "secondary push reflects URL, browser Back/Forward and visible Back preserve source route",
+      "status": "PASS"
+    },
+    {
+      "locale": "fa",
+      "flow": "secondary push reflects URL, browser Back/Forward and visible Back preserve source route",
+      "status": "PASS"
+    }
+  ],
+  "final_lib_tree": "c42b41507ce6f1f5254c2d5559e65ec0ae8e95d4",
+  "pointer_guard_sha256": "45dfa7c78af3d95d96cf5332a696ac797141304acd998cee58fbbf90fd17d01d"
+}

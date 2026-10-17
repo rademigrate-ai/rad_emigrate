@@ -7,6 +7,7 @@ import 'package:rad_emigrate/features/visa/data/visa_repository.dart';
 import 'package:rad_emigrate/features/visa/presentation/widgets/country_photography.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('all supported destination photographs decode locally including the four reported gaps', () async {
     for (final code in [
       'AE',
@@ -32,7 +33,7 @@ void main() {
       'TR',
       'US',
     ]) {
-      final path = CountryPhotography.pathForCode(code);
+      final path = await CountryPhotography.pathForCode(code);
       expect(path, isNot(endsWith('/fallback.jpg')), reason: code);
       final codec = await ui.instantiateImageCodec(
         File(path).readAsBytesSync(),
@@ -64,10 +65,13 @@ void main() {
 
   test(
     'known destination images are bundled and unknown codes use fallback',
-    () {
-      expect(CountryPhotography.pathForCode('CA'), endsWith('/ca.jpg'));
-      expect(CountryPhotography.pathForCode('ca'), endsWith('/ca.jpg'));
-      expect(CountryPhotography.pathForCode('ZZ'), endsWith('/fallback.jpg'));
+    () async {
+      expect(await CountryPhotography.pathForCode('CA'), endsWith('/ca.jpg'));
+      expect(await CountryPhotography.pathForCode('ca'), endsWith('/ca.jpg'));
+      expect(
+        await CountryPhotography.pathForCode('ZZ'),
+        endsWith('/fallback.jpg'),
+      );
     },
   );
 }

@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/inline_alert.dart';
 
 import 'package:flutter/material.dart';
@@ -71,26 +72,14 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
     final theme = Theme.of(context);
 
     return AuthCinematicFrame(
+      backFallback: '/dashboard',
       eyebrow: l10n.profileCompletionTitle,
       title: l10n.brandIntroTitle,
       body: l10n.brandIntroBody,
       localeControl: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
-          IconButton(
-            tooltip: l10n.backToSignIn,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go(
-              Uri(
-                path: '/login',
-                queryParameters: {
-                  'from': ?GoRouterState.of(context)
-                      .uri
-                      .queryParameters['from'],
-                },
-              ).toString(),
-            ),
-          ),
+          const AppBackButton(fallback: '/dashboard'),
           TextButton.icon(
             icon: const Icon(Icons.language_outlined),
             label: Text(

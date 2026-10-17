@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
@@ -285,7 +286,10 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.adminAiConfig)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallback: '/admin'),
+        title: Text(l10n.adminAiConfig),
+      ),
       body: PremiumCanvas(
         child: Center(
           child: ConstrainedBox(

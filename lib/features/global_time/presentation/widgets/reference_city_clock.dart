@@ -1,3 +1,5 @@
+import '../../../../core/widgets/app_back_button.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -141,6 +143,10 @@ class ReferenceCityDetail extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
         child: Column(
           children: [
+            const Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: AppBackButton(fallback: '/world-clock'),
+            ),
             if (city.flagEmoji != null)
               Text(city.flagEmoji!, style: const TextStyle(fontSize: 42)),
             Text(

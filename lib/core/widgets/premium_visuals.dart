@@ -1,3 +1,5 @@
+import 'app_back_button.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -201,6 +203,7 @@ class AuthCinematicFrame extends StatelessWidget {
     required this.body,
     required this.localeControl,
     this.heroVisual,
+    this.backFallback,
   });
 
   final Widget form;
@@ -209,6 +212,7 @@ class AuthCinematicFrame extends StatelessWidget {
   final String body;
   final Widget localeControl;
   final Widget? heroVisual;
+  final String? backFallback;
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +326,7 @@ class AuthCinematicFrame extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
+    final frame = Scaffold(
       body: wide
           ? Row(
               children: [
@@ -344,6 +348,9 @@ class AuthCinematicFrame extends StatelessWidget {
               ],
             ),
     );
+    return backFallback == null
+        ? frame
+        : BackFallbackScope(fallback: backFallback!, child: frame);
   }
 }
 

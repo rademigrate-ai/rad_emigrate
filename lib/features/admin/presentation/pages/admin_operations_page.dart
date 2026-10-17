@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
@@ -33,6 +34,7 @@ class _AdminOperationsPageState extends ConsumerState<AdminOperationsPage> {
     final console = ref.watch(adminConsoleProvider);
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/admin'),
         title: Text(l10n.adminOperations),
         actions: [
           IconButton(

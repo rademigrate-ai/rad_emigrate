@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/errors/localized_error_message.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
@@ -75,6 +76,7 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.documents),
         actions: [
           IconButton(

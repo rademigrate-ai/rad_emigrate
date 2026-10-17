@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/theme/premium_tokens.dart';
 
 import 'package:flutter/material.dart';
@@ -46,7 +47,10 @@ class AdminHubPage extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.adminOperations)),
+      appBar: AppBar(
+        leading: const AppBackButton(fallback: '/profile'),
+        title: Text(l10n.adminOperations),
+      ),
       body: PremiumCanvas(
         accent: AppColors.teal,
         child: SafeArea(

@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/record_labels.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 
@@ -85,7 +86,10 @@ class _AdminConsultationsPageState
     final l10n = AppLocalizations.of(context);
     if (_loading) {
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.adminConsultations)),
+        appBar: AppBar(
+          leading: const AppBackButton(fallback: '/admin'),
+          title: Text(l10n.adminConsultations),
+        ),
         body: PremiumCanvas(
           child: LoadingState.section(message: l10n.loadingOperational),
         ),
@@ -93,7 +97,10 @@ class _AdminConsultationsPageState
     }
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.adminConsultations)),
+        appBar: AppBar(
+          leading: const AppBackButton(fallback: '/admin'),
+          title: Text(l10n.adminConsultations),
+        ),
         body: PremiumCanvas(
           child: ErrorState(message: _error!, onRetry: _load),
         ),
@@ -101,6 +108,7 @@ class _AdminConsultationsPageState
     }
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(fallback: '/admin'),
         title: Text(l10n.adminConsultations),
         actions: [
           IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),

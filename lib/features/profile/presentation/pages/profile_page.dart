@@ -1,3 +1,4 @@
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/errors/localized_error_message.dart';
 
 import 'package:flutter/material.dart';
@@ -164,66 +165,85 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       profileState.whenData(_hydrate);
     }
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(l10n.profile),
-        actions: [
-          if (!isGuest) ...[
-            if (!_editing)
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                tooltip: l10n.editProfile,
-                onPressed: () => setState(() => _editing = true),
-              ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              tooltip: l10n.logout,
-              onPressed: _saving
-                  ? null
-                  : () async {
-                      await ref.read(authControllerProvider.notifier).logout();
-                      if (context.mounted) context.go('/login');
-                    },
-            ),
-            const SizedBox(width: 8),
-          ],
-        ],
-      ),
-      body: PremiumCanvas(
-        accent: AppColors.primaryRed,
-        child: isGuest
-            ? _buildGuestProfileContent(context, themePref, localePref, l10n)
-            : profileState.when(
-                skipError: true,
-                loading: () => _saving
-                    ? _ProfileContent(
-                        child: _buildProfileContent(
-                          context,
-                          null,
-                          session,
-                          themePref,
-                          localePref,
-                          l10n,
-                        ),
-                      )
-                    : LoadingState.section(message: l10n.loading),
-                error: (e, _) => ErrorState(
-                  message: localizedDataError(e, l10n),
-                  onRetry: () =>
-                      ref.read(profileControllerProvider.notifier).load(),
+    return PopScope(
+      canPop: !_editing,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _editing && !_saving) {
+          _cancelEditing(profileState.valueOrNull);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: _editing
+              ? AppBackButton(
+                  fallback: '/profile',
+                  onPressed: _saving
+                      ? () {}
+                      : () => _cancelEditing(profileState.valueOrNull),
+                )
+              : null,
+          title: Text(l10n.profile),
+          actions: [
+            if (!isGuest) ...[
+              if (!_editing)
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  tooltip: l10n.editProfile,
+                  onPressed: () => setState(() => _editing = true),
                 ),
-                data: (profile) => _ProfileContent(
-                  child: _buildProfileContent(
-                    context,
-                    profile,
-                    session,
-                    themePref,
-                    localePref,
-                    l10n,
+              IconButton(
+                icon: const Icon(Icons.logout),
+                tooltip: l10n.logout,
+                onPressed: _saving
+                    ? null
+                    : () async {
+                        await ref
+                            .read(authControllerProvider.notifier)
+                            .logout();
+                        if (context.mounted) context.go('/login');
+                      },
+              ),
+              const SizedBox(width: 8),
+            ],
+          ],
+        ),
+        body: PremiumCanvas(
+          accent: AppColors.primaryRed,
+          child: isGuest
+              ? _buildGuestProfileContent(context, themePref, localePref, l10n)
+              : profileState.when(
+                  skipError: true,
+                  loading: () => _saving
+                      ? _ProfileContent(
+                          child: _buildProfileContent(
+                            context,
+                            null,
+                            session,
+                            themePref,
+                            localePref,
+                            l10n,
+                          ),
+                        )
+                      : LoadingState.section(message: l10n.loading),
+                  error: (e, _) => ErrorState(
+                    message: localizedDataError(e, l10n),
+                    onRetry: () =>
+                        ref.read(profileControllerProvider.notifier).load(),
+                  ),
+                  data: (profile) => _ProfileContent(
+                    child: _buildProfileContent(
+                      context,
+                      profile,
+                      session,
+                      themePref,
+                      localePref,
+                      l10n,
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }
@@ -449,7 +469,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         title: l10n.documents,
                         subtitle: l10n.uploadDocument,
                         icon: Icons.folder_outlined,
-                        onTap: () => context.go('/documents'),
+                        onTap: () => context.push('/documents'),
                       ),
                       _ProfileActionRow(
                         title: l10n.aiAssistant,
@@ -508,13 +528,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               title: l10n.consultationTitle,
               subtitle: l10n.consultationIntro,
               icon: Icons.support_agent_outlined,
-              onTap: () => context.go('/consultation'),
+              onTap: () => context.push('/consultation'),
             ),
             _ProfileActionRow(
               title: l10n.feed,
               subtitle: l10n.feedPublishedOnly,
               icon: Icons.info_outline,
-              onTap: () => context.go('/feed'),
+              onTap: () => context.push('/feed'),
             ),
             _ProfileActionRow(
               title: l10n.logout,
