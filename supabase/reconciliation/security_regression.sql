@@ -45,13 +45,79 @@ begin
   if not exists (select 1 from pg_proc where oid='public.publish_content_draft(uuid,text,text)'::regprocedure
                  and prosecdef and proconfig @> array['search_path=""']
                  and position('admin' in prosrc)>0
-                 and position('rejected draft cannot be published' in prosrc)>0) then
-    raise exception 'Stage 2 publish RPC lost admin gate or rejection guard';
+                 and position('explicit approval' in prosrc)>0
+                 and position('rad.human_publish_actor' in prosrc)>0) then
+    raise exception 'Publish RPC lost human approval or mutation guard';
+  end if;
+  if has_table_privilege('authenticated','public.feed_items','INSERT')
+     or has_table_privilege('authenticated','public.feed_items','UPDATE')
+     or has_table_privilege('authenticated','public.feed_item_localizations','INSERT')
+     or has_table_privilege('authenticated','public.content_drafts','UPDATE') then
+    raise exception 'Direct draft approval or Feed mutation privilege remains';
+  end if;
+  if not exists (select 1 from pg_trigger
+                 where tgrelid='public.feed_items'::regclass
+                   and tgname='trg_guard_human_feed_item_mutation'
+                   and not tgisinternal) then
+    raise exception 'Feed human mutation trigger missing';
+  end if;
+  if has_column_privilege('authenticated','public.consultation_requests','admin_note','SELECT')
+     or has_column_privilege('authenticated','public.consultation_requests','assigned_to','SELECT')
+     or not has_column_privilege('authenticated','public.consultation_requests','status','SELECT') then
+    raise exception 'Consultation internal/public column privilege boundary invalid';
+  end if;
+  -- E1-04: the newer entitlement privacy migration preserves
+  -- authenticated SELF-service, but rejects a different target p_user_id.
+  -- Untrusted p_role is ignored by the quota RPC. The separate behavioral
+  -- test (ai_entitlement_rpc_privacy.sql) attempts owner, forged-role,
+  -- cross-user, service-role and anonymous calls with isolated JWTs.
+  if not exists (
+      select 1 from pg_proc
+      where oid='public.get_ai_access_decision(uuid,text)'::regprocedure
+        and prosecdef
+        and proconfig @> array['search_path=""']
+        and position('auth.uid() is distinct from p_user_id' in lower(prosrc)) > 0
+    )
+    or not exists (
+      select 1 from pg_proc
+      where oid='public.get_ai_daily_quota_status(uuid,text)'::regprocedure
+        and prosecdef
+        and proconfig @> array['search_path=""']
+        and position('auth.uid() is distinct from p_user_id' in lower(prosrc)) > 0
+    )
+    or has_function_privilege('anon','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or not has_function_privilege('authenticated','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or has_function_privilege('anon','public.get_ai_daily_quota_status(uuid,text)','EXECUTE')
+    or not has_function_privilege('authenticated','public.get_ai_daily_quota_status(uuid,text)','EXECUTE')
+    or not has_function_privilege('service_role','public.get_ai_access_decision(uuid,text)','EXECUTE')
+    or not has_function_privilege('service_role','public.get_ai_daily_quota_status(uuid,text)','EXECUTE') then
+    raise exception 'Entitlement or quota RPC owner scope or ACL regressed';
+  end if;
+  if not exists (
+    select 1
+    from pg_proc
+    where oid = 'public.consume_ai_daily_quota(uuid,text)'::regprocedure
+      and prosecdef
+      and position('pg_advisory_xact_lock' in prosrc) > 0
+      and position('insert into public.ai_requests' in lower(prosrc)) > 0
+  ) then
+    raise exception 'Authenticated AI quota reservation is not atomic';
+  end if;
+  if not exists (select 1 from pg_proc
+                 where oid='private.prevent_profile_role_escalation()'::regprocedure
+                   and prosecdef
+                   and position('service_role' in prosrc)>0
+                   and position('super_admin' in prosrc)>0) then
+    raise exception 'Role bootstrap or authenticated escalation guard missing';
   end if;
   if private.is_safe_public_https_url('https://127.0.0.1/')
      or private.is_safe_public_https_url('https://10.0.0.1/')
      or private.is_safe_public_https_url('https://169.254.169.254/')
      or private.is_safe_public_https_url('https://metadata.google.internal/')
+     or private.is_safe_public_https_url('https://[::ffff:169.254.169.254]/')
+     or private.is_safe_public_https_url('https://[::ffff:127.0.0.1]/')
+     or private.is_safe_public_https_url('https://[0:0:0:0:0:ffff:a9fe:a9fe]/')
+     or private.is_safe_public_https_url('https://[0:0:0:0:0:0:7f00:1]/')
      or not private.is_safe_public_https_url('https://api.openai.com/v1') then
     raise exception 'Existing SSRF regression';
   end if;

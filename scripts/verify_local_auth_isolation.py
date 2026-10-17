@@ -9,6 +9,7 @@ No production URL, credentials, or data are used.
 from __future__ import annotations
 
 import json
+import os
 import secrets
 import shlex
 import subprocess
@@ -16,6 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 
 def fail(label: str, detail: str = "") -> None:
@@ -29,8 +31,14 @@ def require(condition: bool, label: str) -> None:
 
 
 def load_local_keys() -> tuple[str, str, str]:
+    supabase_command = ["supabase"]
+    if os.name == "nt":
+        # Windows CreateProcess cannot execute .cmd shims directly. Resolve
+        # through cmd.exe so local npx/portable CLI adapters work like the
+        # native binary used by Linux CI.
+        supabase_command = ["cmd.exe", "/d", "/s", "/c", "supabase"]
     result = subprocess.run(
-        ["supabase", "status", "--output", "env"],
+        [*supabase_command, "status", "--output", "env"],
         check=True,
         capture_output=True,
         text=True,
@@ -59,6 +67,8 @@ def load_local_keys() -> tuple[str, str, str]:
     ]
     if missing:
         fail("local Supabase status is missing " + ", ".join(missing))
+    if urllib.parse.urlsplit(api_url).hostname not in ("127.0.0.1", "localhost", "::1"):
+        fail("refusing non-loopback Supabase acceptance target")
     return api_url.rstrip("/"), anon_key, service_key
 
 
@@ -367,6 +377,74 @@ def main() -> None:
         == [],
         "cross-user document metadata read",
     )
+    expect_denied(
+        "POST",
+        "/rest/v1/document_processing_jobs",
+        token_b,
+        [{
+            "document_id": document_id,
+            "user_id": user_b,
+            "status": "queued",
+        }],
+        extra_headers={"Prefer": "return=representation"},
+        label="OCR job cannot target another user's document",
+    )
+
+    expect_denied(
+        "POST",
+        "/rest/v1/consultation_requests",
+        token_a,
+        [{
+            "user_id": user_a,
+            "topic": "Temporary local consultation",
+            "message": "Disposable two-user confidentiality fixture",
+            "status": "submitted",
+        }],
+        label="consultation direct INSERT must stay forbidden",
+    )
+    consultation_id, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/submit_consultation_request",
+        token_a,
+        {
+            "p_topic": "Temporary local consultation",
+            "p_message": "Disposable two-user confidentiality fixture",
+            "p_related_application_id": None,
+        },
+        label="owner-bound consultation submission RPC",
+    )
+    require(isinstance(consultation_id, str), "consultation RPC returns UUID")
+    consultation_rows = rows(
+        "GET",
+        f"/rest/v1/consultation_requests?select=id,user_id,topic,status&id=eq.{consultation_id}",
+        token_a,
+    )
+    require(
+        len(consultation_rows) == 1
+        and consultation_rows[0]["user_id"] == user_a,
+        "consultation owner create",
+    )
+    consultation_id = str(consultation_rows[0]["id"])
+    require(
+        rows(
+            "GET",
+            f"/rest/v1/consultation_requests?select=id,topic,status&id=eq.{consultation_id}",
+            token_b,
+        )
+        == [],
+        "unrelated user cannot read consultation",
+    )
+    status, body, _ = request(
+        "GET",
+        f"/rest/v1/consultation_requests?select=id&id=eq.{consultation_id}",
+    )
+    require(status == 200 and json_body(body) == [], "anonymous consultation read")
+    expect_denied(
+        "GET",
+        f"/rest/v1/consultation_requests?select=id,admin_note&id=eq.{consultation_id}",
+        token_a,
+        label="applicant cannot select internal consultation note",
+    )
 
     session_rows = rows(
         "POST",
@@ -532,6 +610,252 @@ def main() -> None:
     )
     require(status >= 400, "owner Storage delete took effect")
 
+    # SECURITY DEFINER identity tests: authenticated callers are bound to self,
+    # while the trusted Edge service may evaluate the requested owner.
+    rows(
+        "POST",
+        "/rest/v1/ai_entitlements?select=id,user_id,status",
+        SERVICE_ROLE_KEY,
+        [{"user_id": user_a, "status": "active", "plan_code": "base"}],
+    )
+    own_access, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/get_ai_access_decision",
+        token_a,
+        {"p_user_id": user_a, "p_guest_key_hash": None},
+        label="owner entitlement decision",
+    )
+    require(
+        isinstance(own_access, dict) and own_access.get("user_id") == user_a,
+        "owner entitlement decision identity",
+    )
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/get_ai_access_decision",
+        token_b,
+        {"p_user_id": user_a, "p_guest_key_hash": None},
+        label="arbitrary target entitlement decision",
+    )
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/get_ai_daily_quota_status",
+        token_b,
+        {"p_user_id": user_a, "p_role": "super_admin"},
+        label="arbitrary target quota and role",
+    )
+
+    # F-04 regression: the service-side quota RPC must reserve at most the
+    # database-configured number of authenticated requests even when more calls
+    # arrive concurrently.  A read-only count check is insufficient here: each
+    # successful RPC must return a unique request reservation created in the
+    # same transaction as the quota decision.
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/consume_ai_daily_quota",
+        token_a,
+        {"p_user_id": user_a, "p_role": "super_admin"},
+        label="authenticated client cannot invoke service quota reservation",
+    )
+    usage_limits = rows(
+        "GET",
+        "/rest/v1/ai_usage_limits?select=daily_requests&role=eq.user",
+        SERVICE_ROLE_KEY,
+    )
+    require(len(usage_limits) == 1, "user AI usage limit fixture")
+    daily_limit = int(usage_limits[0]["daily_requests"])
+    concurrency_calls = daily_limit + 16
+
+    def reserve_quota(_: int) -> object:
+        result, _ = expect_success(
+            "POST",
+            "/rest/v1/rpc/consume_ai_daily_quota",
+            SERVICE_ROLE_KEY,
+            {"p_user_id": user_a, "p_role": "super_admin"},
+            label="concurrent authenticated quota reservation",
+        )
+        return result
+
+    with ThreadPoolExecutor(max_workers=min(32, concurrency_calls)) as pool:
+        quota_results = list(pool.map(reserve_quota, range(concurrency_calls)))
+    allowed_results = [
+        result
+        for result in quota_results
+        if isinstance(result, dict) and result.get("allowed") is True
+    ]
+    denied_results = [
+        result
+        for result in quota_results
+        if isinstance(result, dict) and result.get("allowed") is False
+    ]
+    reservation_ids = [str(result.get("request_id")) for result in allowed_results]
+    require(len(allowed_results) == daily_limit, "atomic quota accepted exact limit")
+    require(
+        len(denied_results) == concurrency_calls - daily_limit,
+        "atomic quota rejected excess concurrent calls",
+    )
+    require(
+        len(reservation_ids) == len(set(reservation_ids))
+        and all(value and value != "None" for value in reservation_ids),
+        "atomic quota returned unique request reservations",
+    )
+    reserved_requests = rows(
+        "GET",
+        f"/rest/v1/ai_requests?select=id,status,routing_reason&user_id=eq.{user_a}",
+        SERVICE_ROLE_KEY,
+    )
+    require(
+        len(reserved_requests) == daily_limit
+        and all(
+            row.get("status") == "running"
+            and row.get("routing_reason") == "atomic_quota_reservation"
+            for row in reserved_requests
+        ),
+        "atomic quota persisted exactly the accepted reservations",
+    )
+
+    # Promote the disposable second identity with service_role only after all
+    # unrelated-user checks above have run. Authorization reads the DB role,
+    # never an email or client-provided claim.
+    rows(
+        "PATCH",
+        f"/rest/v1/profiles?id=eq.{user_b}",
+        SERVICE_ROLE_KEY,
+        {"role": "admin"},
+    )
+    admin_consultations, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/list_admin_consultations",
+        token_b,
+        {},
+        label="admin consultation list",
+    )
+    require(
+        isinstance(admin_consultations, list)
+        and any(row.get("id") == consultation_id for row in admin_consultations),
+        "admin reads consultation including internal fields",
+    )
+    expect_success(
+        "POST",
+        "/rest/v1/rpc/update_admin_consultation",
+        token_b,
+        {
+            "p_consultation_id": consultation_id,
+            "p_status": "in_review",
+            "p_admin_note": "Temporary internal-only note",
+        },
+        label="admin consultation update",
+    )
+    visible_consultation = rows(
+        "GET",
+        f"/rest/v1/consultation_requests?select=id,status&id=eq.{consultation_id}",
+        token_a,
+    )
+    require(
+        len(visible_consultation) == 1
+        and visible_consultation[0]["status"] == "in_review",
+        "applicant sees public consultation status",
+    )
+    expect_denied(
+        "GET",
+        f"/rest/v1/consultation_requests?select=admin_note&id=eq.{consultation_id}",
+        token_a,
+        label="internal note remains confidential after admin update",
+    )
+
+    draft_rows = rows(
+        "POST",
+        "/rest/v1/content_drafts?select=id,status",
+        SERVICE_ROLE_KEY,
+        [{
+            "language_code": "en",
+            "title": "Temporary human approval fixture",
+            "body": "This disposable item verifies explicit approval before publication.",
+            "status": "review",
+        }],
+    )
+    draft_id = str(draft_rows[0]["id"])
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/publish_content_draft",
+        token_a,
+        {"p_draft_id": draft_id, "p_category": "update", "p_slug": None},
+        label="ordinary user publication",
+    )
+    expect_denied(
+        "POST",
+        "/rest/v1/rpc/publish_content_draft",
+        token_b,
+        {"p_draft_id": draft_id, "p_category": "update", "p_slug": None},
+        label="admin publication before approval",
+    )
+    expect_denied(
+        "POST",
+        "/rest/v1/feed_items",
+        token_b,
+        [{
+            "slug": f"direct-admin-{seed}",
+            "category": "update",
+            "status": "published",
+            "published_at": "2026-10-10T00:00:00Z",
+        }],
+        extra_headers={"Prefer": "return=representation"},
+        label="admin direct Feed insert bypass",
+    )
+    expect_denied(
+        "POST",
+        "/rest/v1/feed_items",
+        SERVICE_ROLE_KEY,
+        [{
+            "slug": f"direct-service-{seed}",
+            "category": "update",
+            "status": "published",
+            "published_at": "2026-10-10T00:00:00Z",
+        }],
+        extra_headers={"Prefer": "return=representation"},
+        label="service direct Feed insert bypass",
+    )
+    expect_success(
+        "POST",
+        "/rest/v1/rpc/set_content_draft_status",
+        token_b,
+        {"p_draft_id": draft_id, "p_status": "approved"},
+        label="explicit human draft approval",
+    )
+    published_id, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/publish_content_draft",
+        token_b,
+        {"p_draft_id": draft_id, "p_category": "update", "p_slug": None},
+        label="authorized human publication after approval",
+    )
+    require(isinstance(published_id, str) and bool(published_id), "published Feed id")
+    published_again, _ = expect_success(
+        "POST",
+        "/rest/v1/rpc/publish_content_draft",
+        token_b,
+        {"p_draft_id": draft_id, "p_category": "update", "p_slug": None},
+        label="idempotent repeated human publication",
+    )
+    require(published_again == published_id, "idempotent publication returns same Feed id")
+
+    rows(
+        "PATCH",
+        f"/rest/v1/profiles?id=eq.{user_b}",
+        SERVICE_ROLE_KEY,
+        {"role": "super_admin"},
+    )
+    expect_success(
+        "POST",
+        "/rest/v1/rpc/update_admin_consultation",
+        token_b,
+        {
+            "p_consultation_id": consultation_id,
+            "p_status": "contacted",
+            "p_admin_note": "Super Admin authorization fixture",
+        },
+        label="Super Admin consultation update",
+    )
+
     expect_success(
         "POST",
         "/auth/v1/logout",
@@ -558,7 +882,11 @@ def main() -> None:
     require(revoked_status >= 400, "second logout revokes refresh token")
     print(
         "Local Supabase E2E passed: two authenticated users, password login/logout, "
-        "profile/application/document/AI RLS, and Storage ownership/validation."
+        "profile/application/document/OCR/consultation/entitlement RLS, Storage "
+        f"ownership, atomic authenticated AI quota reservation ({daily_limit} "
+        f"accepted/{concurrency_calls - daily_limit} rejected with "
+        f"{daily_limit} unique persisted reservations), and explicit human Feed "
+        "publication."
     )
 
 
