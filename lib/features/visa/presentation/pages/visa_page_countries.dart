@@ -120,9 +120,9 @@ class _CountriesStageState extends State<_CountriesStage> {
                     constraints.maxWidth < 600 &&
                         MediaQuery.textScalerOf(context).scale(14) > 20
                     ? 1
-                    : constraints.maxWidth >= 900
+                    : constraints.maxWidth >= 1100
                     ? 4
-                    : constraints.maxWidth >= 600
+                    : constraints.maxWidth >= 840
                     ? 3
                     : 2;
                 return GridView.builder(
@@ -171,10 +171,8 @@ class _CountriesStageState extends State<_CountriesStage> {
                                         stops: const [.38, .72, 1],
                                         colors: [
                                           Colors.transparent,
-                                          context.premium.surface.withValues(
-                                            alpha: .78,
-                                          ),
-                                          context.premium.surface,
+                                          Colors.black.withValues(alpha: .35),
+                                          Colors.black.withValues(alpha: .88),
                                         ],
                                       ),
                                     ),
@@ -200,6 +198,7 @@ class _CountriesStageState extends State<_CountriesStage> {
                                             .titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.w800,
+                                              color: Colors.white,
                                             ),
                                       ),
                                       if (labels.isNotEmpty)
@@ -209,7 +208,8 @@ class _CountriesStageState extends State<_CountriesStage> {
                                           overflow: TextOverflow.ellipsis,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall,
+                                              .bodySmall
+                                              ?.copyWith(color: Colors.white),
                                         ),
                                     ],
                                   ),

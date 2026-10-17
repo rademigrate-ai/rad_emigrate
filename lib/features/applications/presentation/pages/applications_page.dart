@@ -1,3 +1,4 @@
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/errors/localized_error_message.dart';
 
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ import '../../../../core/theme/premium_tokens.dart';
 import '../../../visa/presentation/widgets/country_photography.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/progress_steps.dart';
-import '../../../../core/widgets/rad_loading.dart';
 import '../../../../core/widgets/status_badge.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/application_status.dart';
@@ -300,11 +300,7 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             tooltip: _creatingDraft ? l10n.creating : l10n.newDraft,
             onPressed: _creatingDraft ? null : _createDraft,
             icon: _creatingDraft
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
+                ? const SizedBox(width: 20, height: 20, child: RadPending())
                 : const Icon(Icons.add),
           ),
           IconButton(

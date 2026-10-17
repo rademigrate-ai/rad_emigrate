@@ -110,9 +110,16 @@ class VisualQaApp extends StatelessWidget {
               DocumentController(_VisualDocuments(fa: fixtureFa), 'visual-qa'),
         ),
         feedProvider('en').overrideWith((ref) async => _visualFeed),
-        visaCatalogProvider('en').overrideWith((ref) async => _visualCatalog),
-        visaCatalogProvider('fa')
-            .overrideWith((ref) async => _localizedVisualCatalog()),
+        visaCatalogProvider('en').overrideWith(
+          (ref) async => Uri.base.queryParameters['countries'] == 'missing'
+              ? _missingPhotoCatalog('en')
+              : _visualCatalog,
+        ),
+        visaCatalogProvider('fa').overrideWith(
+          (ref) async => Uri.base.queryParameters['countries'] == 'missing'
+              ? _missingPhotoCatalog('fa')
+              : _localizedVisualCatalog(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -830,6 +837,27 @@ final _visualCatalog = VisaCatalog(
           ),
         ),
   ],
+);
+
+/// Photography-only fixture: country identities, no invented visa programs.
+VisaCatalog _missingPhotoCatalog(String language) => VisaCatalog(
+  countries: [
+    for (final entry in [
+      ('AE', 'United Arab Emirates', 'امارات متحده عربی', '🇦🇪'),
+      ('OM', 'Oman', 'عمان', '🇴🇲'),
+      ('NO', 'Norway', 'نروژ', '🇳🇴'),
+      ('MY', 'Malaysia', 'مالزی', '🇲🇾'),
+    ])
+      Country(
+        id: 'visual-${entry.$1}',
+        name: language == 'fa' ? entry.$3 : entry.$2,
+        code: entry.$1,
+        flagEmoji: entry.$4,
+        slug: entry.$1.toLowerCase(),
+      ),
+  ],
+  categories: const [],
+  programs: const [],
 );
 
 VisaCatalog _localizedVisualCatalog() => VisaCatalog(

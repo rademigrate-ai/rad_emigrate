@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/city.dart';
 import '../../domain/local_date_format.dart';
 import '../../domain/timezone_engine.dart';
+import '../../domain/solar_daylight.dart';
 
 class CityClockCard extends StatelessWidget {
   const CityClockCard({
@@ -35,7 +36,7 @@ class CityClockCard extends StatelessWidget {
           )
         : TimezoneEngine.nowInCity(city);
 
-    final isDay = TimezoneEngine.isDaytime(city.timezone, at: atUtc);
+    final isDay = SolarDaylight.at(city, atUtc ?? DateTime.now().toUtc());
     final offset = TimezoneEngine.offsetLabel(city.timezone, at: atUtc);
     final timeStr = formatLocalTime(now);
     final dateStr = formatLocalDate(now, languageCode);
@@ -63,8 +64,8 @@ class CityClockCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      context.premium.surface.withValues(alpha: .86),
-                      context.premium.surface,
+                      Colors.black.withValues(alpha: .10),
+                      Colors.black.withValues(alpha: .86),
                     ],
                   ),
                 ),
@@ -92,7 +93,7 @@ class CityClockCard extends StatelessWidget {
                               name,
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(
-                                    color: context.premium.text,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w700,
                                   ),
                               maxLines: 1,
@@ -112,7 +113,7 @@ class CityClockCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             IconButton(
                               icon: const Icon(Icons.close, size: 16),
-                              color: context.premium.mutedText,
+                              color: const Color(0xFFE2E8F0),
                               visualDensity: VisualDensity.compact,
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(
@@ -128,9 +129,10 @@ class CityClockCard extends StatelessWidget {
                       SizedBox(height: compact ? 8 : 12),
                       Text(
                         timeStr,
+                        textDirection: TextDirection.ltr,
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(
-                              color: context.premium.text,
+                              color: Colors.white,
                               fontWeight: FontWeight.w800,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
@@ -142,13 +144,13 @@ class CityClockCard extends StatelessWidget {
                       Text(
                         dateStr,
                         style: Theme.of(context).textTheme.bodySmall
-                            ?.copyWith(color: context.premium.mutedText),
+                            ?.copyWith(color: const Color(0xFFE2E8F0)),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         offset,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: context.premium.accentForeground,
+                          color: const Color(0xFFFFA1AC),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -170,18 +172,20 @@ class _CityPhotography extends StatelessWidget {
   final City city;
 
   static const _photos = <String, String>{
-    'AU': 'assets/images/destinations/au.jpg',
-    'CA': 'assets/images/destinations/ca.jpg',
-    'DE': 'assets/images/destinations/de.jpg',
-    'FR': 'assets/images/destinations/fr.jpg',
-    'GB': 'assets/images/destinations/gb.jpg',
-    'JP': 'assets/images/destinations/jp.jpg',
-    'US': 'assets/images/destinations/us.jpg',
+    'sydney': 'assets/images/destinations/au.jpg',
+    'tehran': 'assets/images/destinations/tehran.jpg',
+    'dubai': 'assets/images/destinations/ae.jpg',
+    'berlin': 'assets/images/destinations/berlin.jpg',
+    'toronto': 'assets/images/destinations/ca.jpg',
+    'paris': 'assets/images/destinations/fr.jpg',
+    'london': 'assets/images/destinations/gb.jpg',
+    'tokyo': 'assets/images/destinations/jp.jpg',
+    'new_york': 'assets/images/destinations/us.jpg',
   };
 
   @override
   Widget build(BuildContext context) {
-    final url = _photos[city.countryCode.toUpperCase()];
+    final url = _photos[city.id];
     if (url == null) return const _CityPhotoFallback();
     return Image.asset(
       url,

@@ -5,3 +5,4 @@ import 'geo_bootstrap_stub.dart'
 
 /// Platform-specific timezone + boundary polygon initialization.
 Future<void> bootstrapGeoTimezone() => impl.bootstrapGeoTimezone();
+Future<void> bootstrapTimezoneDatabase() => impl.bootstrapTimezoneDatabase();

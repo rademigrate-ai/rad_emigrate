@@ -1,3 +1,5 @@
+import '../../../../core/widgets/rad_loading.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -153,7 +155,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                 onPressed: () => context.go('/login'),
               ),
             ] else if (bootstrap.isLoading) ...[
-              const Center(child: CircularProgressIndicator()),
+              const Center(child: RadPending()),
             ] else if (!hasRecoverySession) ...[
               Text(
                 l10n.passwordResetLinkInvalid,

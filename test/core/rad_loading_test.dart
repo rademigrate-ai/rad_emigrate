@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/widgets/loading_state.dart';
@@ -7,6 +9,49 @@ import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 import 'package:rad_emigrate/core/widgets/app_button.dart';
 
 void main() {
+  test('web bootstrap shares original identity and one localized status without a spinner', () {
+    final html = File('web/index.html').readAsStringSync();
+    expect(html, contains('rad_flying_bird_1024.png'));
+    expect(html, isNot(contains('rad_phoenix_final')));
+    expect(html, isNot(contains('rad-startup-spinner')));
+    expect(html, contains('prefers-reduced-motion'));
+    expect(RegExp(r'<p id="rad-startup-message"').allMatches(html).length, 1);
+    for (final file
+        in Directory('lib')
+            .listSync(recursive: true)
+            .whereType<File>()
+            .where((f) => f.path.endsWith('.dart'))) {
+      expect(
+        file.readAsStringSync(),
+        isNot(contains('CircularProgressIndicator(')),
+        reason: file.path,
+      );
+    }
+  });
+  testWidgets(
+    'splash loading paints no rectangular background over its parent scene',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: LoadingState.splash(
+              semanticsLabel: 'Loading',
+              message: 'Loading',
+            ),
+          ),
+        ),
+      );
+      expect(
+        find.descendant(
+          of: find.byType(LoadingState),
+          matching: find.byType(DecoratedBox),
+        ),
+        findsNothing,
+      );
+      expect(find.byType(RadFlappingBird), findsOneWidget);
+    },
+  );
+
   testWidgets(
     'pending buttons retain original colors and reject duplicate submission',
     (tester) async {

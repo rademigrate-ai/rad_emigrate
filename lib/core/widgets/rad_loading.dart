@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'rad_flapping_bird.dart';
+import '../../l10n/app_localizations.dart';
+
+/// Localized compact feedback for controls that already own their pending state.
+class RadPending extends StatelessWidget {
+  const RadPending({super.key});
+  @override
+  Widget build(BuildContext context) => RadLoadingIndicator(
+    size: RadLoadingSize.compact,
+    label: AppLocalizations.of(context).loading,
+  );
+}
 
 /// The visual density appropriate for a real pending operation.
 enum RadLoadingSize { fullScreen, section, compact }

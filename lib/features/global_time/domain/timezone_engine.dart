@@ -19,7 +19,7 @@ abstract final class TimezoneEngine {
 
   static Future<void> _bootstrap() async {
     try {
-      await bootstrapGeoTimezone();
+      await bootstrapTimezoneDatabase();
       _initialized = true;
     } catch (_) {
       // Boundary polygons are optional. Clear the shared future so a later
@@ -53,6 +53,32 @@ abstract final class TimezoneEngine {
   }
 
   static tz.TZDateTime nowInCity(City city) => nowIn(city.timezone);
+
+  /// Every real instant matching a civil wall time: none in a DST gap, two
+  /// in a fold. Callers must let the user select a repeated occurrence.
+  static List<tz.TZDateTime> localCandidates(
+    String ianaId,
+    DateTime date,
+    int hour,
+    int minute,
+  ) {
+    if (!isReady) throw StateError('Timezone database is not ready');
+    final loc = tz.getLocation(ianaId);
+    final civil = DateTime.utc(date.year, date.month, date.day, hour, minute);
+    final matches = <int, tz.TZDateTime>{};
+    for (final offset in loc.zones.map((zone) => zone.offset).toSet()) {
+      final candidate = tz.TZDateTime.from(civil.subtract(offset), loc);
+      if (candidate.year == date.year &&
+          candidate.month == date.month &&
+          candidate.day == date.day &&
+          candidate.hour == hour &&
+          candidate.minute == minute) {
+        matches[candidate.millisecondsSinceEpoch] = candidate;
+      }
+    }
+    final result = matches.values.toList()..sort((a, b) => a.compareTo(b));
+    return result;
+  }
 
   static tz.TZDateTime convert({
     required String fromIana,
