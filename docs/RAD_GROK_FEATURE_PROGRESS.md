@@ -2,106 +2,93 @@
 
 **Worktree:** `C:\Users\Mehrshad\Desktop\RAD - Emigrate\rad_grok_feature_completion`  
 **Branch:** `feat/grok-independent-feature-completion`  
-**Base:** `89e1fc7` (integration coordination HEAD at branch create)  
-**Latest HEAD:** `02f6352`  
+**Base:** `89e1fc7`  
+**Latest HEAD:** `548444b`  
 **Policy:** Local commits only. No push. No PR. Integration via Claude Code.
-
-Integration note: prior domain commits (`6427d91`, `c604568`) were already cherry-picked into `rad_final_47_integration` @ `8d82623` as `1915de2` / `d9a5d5f`.
 
 ---
 
 ## Completed modules
 
-### 1. Immigration Profile Domain + Validation (E8-01 base)
+### Prior: E8-01 / E8-02 / E9-02 domain foundation
+
+| Commit | Gates | Tests |
+|--------|-------|-------|
+| `6427d91` | E8-01 profile validation | 10 PASS |
+| `c604568` | E8-02 case checklist | 10 PASS |
+| `02f6352` | E8-01 pathway + lifecycle + E9-02 catalog | 47 PASS total regression |
+
+### E9-01 Knowledge integrity + E9-04 Recommendations — `548444b`
 
 | Item | Value |
 |------|-------|
-| Commit | `6427d91` |
-| Tests | 10/10 PASS |
-| Files | `profile_entity.dart`, `immigration_profile_validator.dart`, tests |
+| Commit | **`548444b`** |
+| Gates | E9-01, E9-04 |
+| Test command | `flutter test test/knowledge/knowledge_integrity_test.dart test/profile/recommendation_engine_test.dart` |
+| Test result | **17/17 PASS** |
+| Analyze | `dart analyze` on new modules → **No issues found** |
 
-### 2. Case Checklist Domain (E8-02 base)
+#### E9-01 Knowledge integrity (`lib/features/knowledge/domain/knowledge_integrity.dart`)
 
-| Item | Value |
-|------|-------|
-| Commit | `c604568` |
-| Tests | 10/10 PASS |
-| Files | `case_checklist.dart`, tests |
+- `SourceAuthorityClass`: government | institutional | radProject | aiGenerated | unverified
+- AI-generated never treated as sole authoritative eligibility evidence
+- `KnowledgeSourceIdentity`: canonical URL, jurisdiction, program applicability, version/hash
+- Freshness: fresh | aging | expired | unknown
+- Conflict detection across claims with same topicKey (requires human review)
+- Duplicate source id/URL detection; invalid metadata reasons
+- Version change comparison; full `KnowledgeIntegrityReport` for UI
 
-### 3. Pathway Assessment + Profile Persistence + Case Lifecycle + University/Scholarship (E8-01 / E8-02 / E9-02)
+#### E9-04 Recommendation engine (`lib/features/profile/domain/recommendation_engine.dart`)
 
-| Item | Value |
-|------|-------|
-| Commit | **`02f6352`** |
-| Gate IDs | E8-01, E8-02, E9-02 (domain/search layer) |
-| Test command | `flutter test test/profile/pathway_assessment_test.dart test/applications/case_lifecycle_test.dart test/visa/university_scholarship_test.dart test/profile/immigration_profile_validator_test.dart test/applications/case_checklist_test.dart` |
-| Test result | **47/47 PASS** |
-| Analyze | `dart analyze` on new domain modules → **No issues found** |
+- Consumes `PathwayAssessmentService` + profile completeness
+- Include only `potentiallyEligible` under curated rules
+- Explicit exclude decisions with explanations (insufficient evidence/profile, ineligible, requires review)
+- Preference ranking **separate** from eligibility (destinationPreference + country aliases)
+- Deterministic sort: included by rankScore desc, then programId; exclusions by programId
+- No approval probability or fabricated thresholds
 
-#### Implemented behavior
+#### Files in `548444b`
 
-**E8-01 Pathway assessment**
-- `PathwayOutcome`: potentiallyEligible | insufficientInformation | potentiallyIneligible | requiresProfessionalReview | insufficientVerifiedEvidence
-- Rules require curated `PathwayEligibilityRule` with jurisdiction, source URL, retrievedAt, optional validUntil
-- Empty rule set → insufficientVerifiedEvidence (never invents eligibility)
-- Structural validation remains separate from rule evaluation
-- `ImmigrationProfileRepository` + local per-user draft persistence
-
-**E8-02 Case lifecycle**
-- `CaseLifecycleService` with ownership isolation (`assertOwnership`, `filterOwned`)
-- Application status transition matrix + checklist transition matrix
-- Duplicate complete prevention; reopen paths; history entries
-- `CaseReminderMeta` (local metadata only — no delivery claims)
-- UTC-oriented due-date handling
-
-**E9-02 University/scholarship foundation**
-- `UniversityProgram`, `ScholarshipListing`, filters, catalog search
-- Explicit states: empty | unknownSource | expiredSource | conflict | data
-- Freshness classification; no fabricated listings or acceptance rates
-
-#### Files added in `02f6352`
-
-- `lib/features/profile/domain/pathway_assessment.dart`
-- `lib/features/profile/domain/repositories/immigration_profile_repository.dart`
-- `lib/features/profile/data/datasources/immigration_profile_local_datasource.dart`
-- `lib/features/profile/data/repositories/immigration_profile_repository_impl.dart`
-- `lib/features/applications/domain/case_lifecycle.dart`
-- `lib/features/visa/domain/entities/university_scholarship.dart`
-- `test/profile/pathway_assessment_test.dart`
-- `test/applications/case_lifecycle_test.dart`
-- `test/visa/university_scholarship_test.dart`
-
-#### Integration contracts for Antigravity
-
-| Contract | Entry points |
-|----------|--------------|
-| Profile validate / completeness | `ImmigrationProfileValidator.validate`, `completenessPercent` |
-| Profile read/write (local draft) | `ImmigrationProfileRepository.getImmigrationProfile` / `saveImmigrationProfile` |
-| Pathway assessment | `PathwayAssessmentService.assess` or repository `assessPathway` |
-| Case ownership + transitions | `CaseLifecycleService` |
-| Reminder metadata | `CaseLifecycleService.pendingReminders` → `CaseReminderMeta` |
-| University/scholarship search | `UniversityScholarshipCatalog.searchPrograms` / `searchScholarships` |
-
-Do **not** claim production RLS security from these unit tests. Production ownership remains Supabase RLS.
-
-#### Known limitations / blockers for VERIFIED_PASS
-
-- No curated production eligibility rule dataset loaded (rules are caller-supplied)
-- University/scholarship catalog ships empty unless verified data is provided
-- No push/email/SMS delivery for reminders
-- UI wiring is Antigravity-owned (not modified)
-- Acceptance gates remain evidence-based; implementation ≠ VERIFIED_PASS
+- `lib/features/knowledge/domain/knowledge_integrity.dart`
+- `lib/features/profile/domain/recommendation_engine.dart`
+- `test/knowledge/knowledge_integrity_test.dart`
+- `test/profile/recommendation_engine_test.dart`
 
 ---
 
-## Local commit chain (Claude Code handoff)
+## Antigravity integration contracts
+
+| Contract | API |
+|----------|-----|
+| Knowledge integrity | `KnowledgeIntegrityService.evaluate` → `KnowledgeIntegrityReport` |
+| Source authority | `SourceAuthorityClass` / `KnowledgeSourceIdentity` |
+| Conflicts | `KnowledgeConflict` list on report |
+| Recommendations | `RecommendationEngine.recommend` → `RecommendationReport` |
+| Include/exclude + explanation | `ProgramRecommendation.decision` / `.explanation` |
+| Preference vs eligibility | `preferenceMatch` + `rankScore` only among included |
+| Profile / pathway (prior) | `ImmigrationProfileRepository`, `PathwayAssessmentService` |
+| Case lifecycle (prior) | `CaseLifecycleService` |
+| Uni/scholarship (prior) | `UniversityScholarshipCatalog` |
+
+Domain ownership tests ≠ Supabase RLS. Production isolation remains RLS.
+
+---
+
+## Local commit chain (Claude handoff)
 
 ```
-02f6352  feat(immigration): pathway assessment, case lifecycle, university/scholarship domain
-5982a42  docs: Grok progress — E8-01 and E8-02 domain modules complete
-c604568  feat(applications): case checklist domain models and progress (E8-02)
-9134e59  docs: Grok feature progress — E8-01
-6427d91  feat(profile): immigration profile domain validation and completeness (E8-01)
+548444b  feat(knowledge): integrity layer + evidence-aware recommendations (E9-01/E9-04)
+98ed83c  docs: progress E8-01/E8-02/E9-02
+02f6352  feat(immigration): pathway, lifecycle, university/scholarship
+c604568  feat(applications): case checklist
+6427d91  feat(profile): immigration profile validation
 ```
 
-Primary integration SHA for this checkpoint: **`02f6352`**
+**Primary SHA this checkpoint:** `548444b`
+
+## Remaining dependencies (not VERIFIED_PASS)
+
+- Curated production rule datasets must be supplied by human/editorial process
+- University/scholarship rows require verified inventory (catalog ships empty-safe)
+- UI wiring owned by Antigravity
+- Production RLS / Edge knowledge conflicts remain Codex/integration scope
