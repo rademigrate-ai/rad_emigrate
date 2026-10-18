@@ -33,3 +33,9 @@ python scripts/verify_local47_document_http.py --supabase <supabase.exe> --psql 
 ```
 
 Run the owned local stack with the complete proposal first. Never apply this proposal against production without the independent rollout/backup/review gate.
+
+## Clean immutable checkpoint replay
+
+[Retained clean `cceebae` evidence](local47_clean_cceebae.json) now contains ten successful reports: fresh canonical replay of all 57 files, captured 25-version historical baseline plus 32 forward files, full security/Auth/Storage suites on both, 27 matching catalog groups, document concurrency and HTTP/Storage composition, CRM/outbox/payment concurrency, sandbox HTTP and mailbox recovery. Embedded source metadata records `source_dirty=false`; the operations concurrency report predates that field and is explicitly identified as an invocation within this same clean-checkpoint sequence. It does not prove final integrated acceptance or production restore.
+
+The first parallel CLI stop collided in Docker container pruning. The failed attempt is retained, owned remaining containers were inspected, and a sequential retry succeeded before either fresh replay. No unrelated project was stopped. Future Docker lifecycle changes should run sequentially.
