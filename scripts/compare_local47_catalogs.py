@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+from datetime import datetime, timezone
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -27,11 +28,18 @@ def main():
     env=os.environ.copy();env['PGPASSWORD']='postgres'
     catalogs=[]
     for port in (55322,57322):
+        project='rad_codex_local47' if port==55322 else 'rad_codex_local47_reconstruct'
+        runtime=Path(os.environ.get('TEMP','/tmp'))/(project if port==55322 else project+'_57322')
+        assert json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8'))=={
+          'project':project,'source':str(ROOT),'port':port},'wrong local runtime owner'
         result=subprocess.run([str(args.psql.resolve()),'-XAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p',str(port),
           '-U','postgres','-d','postgres','-f',str(ROOT/'supabase/reconciliation/catalog_fingerprint.sql')],
           capture_output=True,text=True,encoding='utf-8',env=env,check=True)
         catalogs.append(json.loads(result.stdout))
     report={'scope':'two_disposable_loopback_catalogs','production_mutations':False,'groups':{}}
+    report.update(captured_at=datetime.now(timezone.utc).isoformat(),
+      source_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+      source_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).strip()))
     failed=False
     for group in sorted(set(catalogs[0])|set(catalogs[1])):
         left,right=[normalize(group,catalog.get(group,[])) for catalog in catalogs]

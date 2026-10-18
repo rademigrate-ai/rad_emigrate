@@ -27,6 +27,7 @@ type Options = {
   providerError?: Error;
   databaseFailure?: string;
   runtimeFailure?: boolean;
+  claim?: unknown;
 };
 
 async function exercise(
@@ -59,8 +60,16 @@ async function exercise(
           }],
         );
       }
-      if (path.endsWith("document_processing_jobs?select=id")) {
-        return json([{ id: "job-one" }]);
+      if (path.endsWith("rpc/begin_document_processing")) {
+        return json(
+          options.claim ??
+            {
+              job_id: "job-one",
+              lease_token: "private-lease",
+              claimed: true,
+              status: "running",
+            },
+        );
       }
       if (path.endsWith("rpc/get_document_processor_runtime")) {
         if (options.runtimeFailure) throw new Error("private-runtime-canary");
@@ -74,8 +83,11 @@ async function exercise(
           }],
         );
       }
-      if (path.endsWith("document_extractions?select=id")) {
-        return json([{ id: "extraction-one" }]);
+      if (path.endsWith("rpc/complete_document_processing")) {
+        return json({
+          extraction_id: "extraction-one",
+          status: "review_required",
+        });
       }
       return json(null);
     }
@@ -152,12 +164,19 @@ Deno.test("OCR: successful synthetic file stays owner-bound and requires human r
     field_count: 1,
   });
   const extraction =
-    x.calls.find((c) => c.path.endsWith("document_extractions?select=id"))!
-      .body;
-  equal(extraction.user_id, user);
+    x.calls.find((c) => c.path.endsWith("rpc/complete_document_processing"))!
+      .body.p_extraction;
+  equal(extraction.input_sha256.length, 64);
+  equal(
+    x.calls.find((c) => c.path.endsWith("rpc/begin_document_processing"))!.body
+      .p_user_id,
+    user,
+  );
   equal(extraction.extracted_text, "متن ساختگی");
   equal(extraction.overall_confidence, 1);
-  const fields = x.calls.find((c) => c.path.endsWith("document_fields"))!.body;
+  const fields =
+    x.calls.find((c) => c.path.endsWith("rpc/complete_document_processing"))!
+      .body.p_fields;
   equal(fields[0].confidence, 0);
   equal(fields[0].review_status, "unreviewed");
   const provider = x.calls.find((c) =>
@@ -245,7 +264,7 @@ Deno.test("OCR: no configured provider fails honestly without sending a document
   equal(x.status, 503);
   equal(x.body.code, "no_ocr_provider_configured");
   equal(x.calls.some((c) => c.path.includes("/storage/v1/")), false);
-  equal(x.calls.at(-1)!.body.status, "failed");
+  equal(x.calls.at(-1)!.body.p_error_code, "no_ocr_provider_configured");
 });
 
 Deno.test("OCR: private, literal-IP and credential-bearing endpoints fail before file retrieval", async () => {
@@ -334,11 +353,12 @@ Deno.test("OCR: upstream text and thrown secrets never appear in responses or au
     equal(
       JSON.stringify([
         x.body,
-        x.calls.filter((c) => c.init?.method === "PATCH").map((c) => c.body),
+        x.calls.filter((c) => c.path.endsWith("rpc/fail_document_processing"))
+          .map((c) => c.body),
       ]).includes("canary"),
       false,
     );
-    equal(x.calls.at(-1)!.body.status, "failed");
+    equal(x.calls.at(-1)!.path.endsWith("rpc/fail_document_processing"), true);
   }
 });
 
@@ -375,8 +395,8 @@ Deno.test("OCR: database failures and failed audit writes never expose backend d
   for (
     const databaseFailure of [
       "documents?",
-      "document_extractions?",
-      "document_processing_jobs?",
+      "complete_document_processing",
+      "begin_document_processing",
     ]
   ) {
     const x = await exercise({ databaseFailure });
@@ -384,4 +404,47 @@ Deno.test("OCR: database failures and failed audit writes never expose backend d
     equal(x.body.code, "database_unavailable");
     equal(JSON.stringify(x.body).includes("canary"), false);
   }
+});
+
+Deno.test("OCR: active claims and rate limits never repeat provider processing", async () => {
+  for (
+    const [claim, status] of [[{
+      claimed: false,
+      status: "running",
+      job_id: "existing-job",
+    }, 202], [{ claimed: false, status: "rate_limited" }, 429]] as const
+  ) {
+    const x = await exercise({ claim });
+    equal(x.status, status);
+    equal(
+      x.calls.some((c) =>
+        c.path.includes("/storage/v1/") || c.path.startsWith("https://ocr.")
+      ),
+      false,
+    );
+    equal(JSON.stringify(x.body).includes("lease"), false);
+  }
+});
+Deno.test("OCR: atomic completion and failure use only the private claim token", async () => {
+  const x = await exercise({ databaseFailure: "complete_document_processing" });
+  equal(x.status, 503);
+  equal(
+    x.calls.some((c) =>
+      c.path.includes("document_extractions?") ||
+      c.path.endsWith("document_fields")
+    ),
+    false,
+  );
+  equal(x.calls.at(-1)!.body.p_lease_token, "private-lease");
+  equal(JSON.stringify(x.body).includes("private-lease"), false);
+});
+Deno.test("OCR: configured credential echoes cannot enter persisted extraction fields", async () => {
+  const x = await exercise({
+    providerBody: { text: "synthetic-provider-canary", fields: [] },
+  });
+  equal(x.body.code, "provider_malformed_response");
+  equal(
+    x.calls.some((c) => c.path.endsWith("rpc/complete_document_processing")),
+    false,
+  );
 });

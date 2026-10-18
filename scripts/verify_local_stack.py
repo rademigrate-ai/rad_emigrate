@@ -82,6 +82,9 @@ def main() -> None:
     try:
         if args.operation == "stop":
             run("stop owned disposable stack", [*cli, "stop", "--no-backup"])
+            # Forward-application proof belongs to the destroyed database, not
+            # its next incarnation. Clear only this marked runtime's proof.
+            (runtime / "RAD_FORWARD_REPLAY.json").unlink(missing_ok=True)
             report["status"] = "PASS"
             return
         if args.operation == "start":
@@ -186,6 +189,7 @@ additional_redirect_urls = ["http://127.0.0.1:{port-1}/reset-password"]
                 "supabase/tests/local47_crm_notifications.sql",
                 "supabase/tests/local47_payment_sandbox.sql",
                 "supabase/tests/local47_definer_acl.sql",
+                "supabase/tests/local47_document_processing.sql",
             ]:
                 if not (ROOT / sql).exists():
                     continue
