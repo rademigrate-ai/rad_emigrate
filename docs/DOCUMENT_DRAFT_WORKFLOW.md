@@ -8,7 +8,7 @@
 2. Select the **Create CV or statement of purpose** toolbar action; deep link: `/documents/draft` (protected route).
 3. Choose CV or Statement of Purpose. Complete the fields with **your own** information.
 4. Select **Build editable draft**. The draft renders locally and remains editable in a text input.
-5. Explicitly choose **Copy edited text** to use it in a separate editor. Closing this page loses the unsaved draft by design; users are warned before entering data that no draft is automatically stored.
+5. Explicitly choose **Save as TXT** to export the exact edited draft using the platform save dialog, or **Copy edited text** to use it in a separate editor. Closing this page loses the unsaved draft by design; users are warned before entering data that no draft is automatically stored.
 
 Persian (`fa`) and English (`en`) are supported. The mode uses the app's currently selected locale, not a guessed locale. Email and phone entries are left-to-right under RTL.
 
@@ -17,9 +17,9 @@ Persian (`fa`) and English (`en`) are supported. The mode uses the app's current
 - `DocumentDraftGenerator` performs deterministic string assembly. **No network calls, AI provider, Supabase access, Storage API, logging, encryption key, persistence, or automatic publishing** are involved.
 - User facts are **not inferred**. Missing CV sections are omitted; SOP requires an applicant, target program, personally authored motivation, preparation and goals. No invented institution, grades, work history, scholarship, fees, visa eligibility or guaranteed outcomes.
 - Control characters, invalid email and unexpectedly long input are rejected with visible errors. The output is editable, and the user is explicitly told to verify every claim and official institutional requirements.
-- Copying to the clipboard is a **user-initiated action**; it hands the data to the operating system, where privacy/retention depends on the user/device. No automatic clipboard action occurs.
+- **Saving TXT** and copying to the clipboard are **user-initiated actions**; they hand the data to the operating system's file picker/clipboard, where privacy and retention depend on the user/device. No automatic export occurs. A canceled save produces no success message.
 - `/documents/draft` is an **explicit** protected route. Unknown nested document paths retain NotFound behavior, rather than broadly redirecting.
-- This text-only workflow does not promise PDF/DOCX export, template styling, cloud backup, digital signature, automatic source checking or live submission. These remain later product scope if approved.
+- This workflow can export UTF-8 TXT when the platform save dialog supports it. It does **not** promise PDF/DOCX export, template styling, cloud backup, digital signature, automatic source checking or live submission. These remain later product scope if approved.
 
 ## Reproducible tests
 
