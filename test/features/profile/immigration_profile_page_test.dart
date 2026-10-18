@@ -59,6 +59,11 @@ class _FakeImmigrationProfileRepo implements ImmigrationProfileRepository {
       now: now,
     );
   }
+
+  @override
+  Future<void> clearLocalDraft(String userId) async {
+    profile = const ImmigrationProfile();
+  }
 }
 
 void main() {
@@ -297,5 +302,69 @@ void main() {
       }
       tester.view.reset();
     });
+
+    testWidgets(
+      'renders evidence-grounded recommendations and supports clearDraft',
+      (tester) async {
+        tester.view.physicalSize = const Size(1000, 2600);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeImmigrationProfileRepo(
+          initial: const ImmigrationProfile(
+            fullName: 'Sahar Rezai',
+            email: 'sahar@example.com',
+            phone: '+14165550199',
+            nationality: 'IR',
+            education: 'Master of Science in Software Engineering',
+            workExperience: '5 years senior software engineer',
+            languages: ['English', 'Persian'],
+          ),
+        );
+
+        final auth = AuthController(_MockAuthRepo())
+          ..applySession(
+            const UserSession(
+              userId: 'test-user-001',
+              token: 'token-001',
+              authenticated: true,
+              fullName: 'Sahar Rezai',
+            ),
+          );
+
+        final controller = ImmigrationProfileController(repo, 'test-user-001');
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedPreferencesProvider.overrideWithValue(prefs),
+              authControllerProvider.overrideWith((ref) => auth),
+              immigrationProfileRepositoryProvider.overrideWithValue(repo),
+              immigrationProfileControllerProvider.overrideWith(
+                (ref) => controller,
+              ),
+            ],
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: ImmigrationProfilePage(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text('Evidence-Grounded Pathway Recommendations'),
+          findsOneWidget,
+        );
+
+        await controller.clearDraft();
+        await tester.pumpAndSettle();
+
+        expect(repo.profile.fullName, isNull);
+        expect(find.text('0%'), findsOneWidget);
+      },
+    );
   });
 }

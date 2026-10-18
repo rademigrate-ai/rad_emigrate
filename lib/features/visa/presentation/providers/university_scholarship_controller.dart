@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/university_scholarship.dart';
 
-/// Authoritative verified catalog of universities and scholarships from official sources.
-/// Never contains AI-hallucinated acceptance rates or unverified listings.
-final defaultVerifiedCatalog = UniversityScholarshipCatalog(
+/// Candidate research catalog containing official university and scholarship portals.
+/// Kept pending formal ministerial and editorial sign-off per Grok evidence policy.
+final candidateResearchCatalog = UniversityScholarshipCatalog(
   programs: [
     UniversityProgram(
       id: 'ca-uoft-cs',
@@ -189,8 +189,58 @@ class UniversityScholarshipState {
   }
 }
 
+/// Explicit editorial approval package envelope for university/scholarship catalog.
+class CuratedCatalogPackage {
+  const CuratedCatalogPackage({
+    required this.packageId,
+    required this.catalog,
+    required this.editorialApproved,
+    required this.approvedAt,
+    this.approverLabel,
+    this.status = 'pending_editorial_review',
+    this.reasons = const [],
+  });
+
+  final String packageId;
+  final UniversityScholarshipCatalog catalog;
+  final bool editorialApproved;
+  final DateTime approvedAt;
+  final String? approverLabel;
+  final String status;
+  final List<String> reasons;
+}
+
+/// Seed package envelope per docs/seed/university_scholarship_seed_v1.json.
+/// Fails closed (empty) unless editorialApproved is explicitly granted.
+final defaultCandidatePackage = CuratedCatalogPackage(
+  packageId: 'uni-scholarship-seed-v1',
+  catalog: candidateResearchCatalog,
+  editorialApproved: false, // Pending editorial review per Grok evidence policy
+  status: 'empty_by_design',
+  approvedAt: DateTime.utc(2026, 10, 18),
+  reasons: const [
+    'No institution-specific tuition, deadline, or award amount was verified against an official university or scholarship provider page for product seed inclusion in this pass.',
+    'UniversityScholarshipCatalog already fails closed on empty inventory (CatalogResultState.empty).',
+    'Future seeds must include official institution URL, retrievedAt, and editorial reviewStatus before any amount or deadline fields are populated.',
+  ],
+);
+
+final curatedCatalogPackageProvider = Provider<CuratedCatalogPackage>(
+  (ref) => defaultCandidatePackage,
+);
+
 final universityScholarshipCatalogProvider =
-    Provider<UniversityScholarshipCatalog>((ref) => defaultVerifiedCatalog);
+    Provider<UniversityScholarshipCatalog>((ref) {
+      final package = ref.watch(curatedCatalogPackageProvider);
+      if (!package.editorialApproved) {
+        // Fail closed: never display unapproved or unverified catalog entries as active
+        return const UniversityScholarshipCatalog(
+          programs: [],
+          scholarships: [],
+        );
+      }
+      return package.catalog;
+    });
 
 final universityScholarshipControllerProvider =
     StateNotifierProvider<
@@ -221,6 +271,11 @@ class UniversityScholarshipController
 
   final UniversityScholarshipCatalog _catalog;
   final DateTime? _clock;
+
+  bool get isCatalogEmpty =>
+      _catalog.programs.isEmpty && _catalog.scholarships.isEmpty;
+  bool get isProgramsEmpty => _catalog.programs.isEmpty;
+  bool get isScholarshipsEmpty => _catalog.scholarships.isEmpty;
 
   void switchTab(int tabIndex) {
     state = state.copyWith(activeTab: tabIndex);

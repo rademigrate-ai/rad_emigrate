@@ -16,12 +16,14 @@ class CaseTrackerState {
   const CaseTrackerState({
     required this.case_,
     this.isLoading = false,
+    this.isTransitioning = false,
     this.errorMessage,
     this.now,
   });
 
   final ImmigrationCase case_;
   final bool isLoading;
+  final bool isTransitioning;
   final String? errorMessage;
   final DateTime? now;
 
@@ -38,6 +40,7 @@ class CaseTrackerState {
   CaseTrackerState copyWith({
     ImmigrationCase? case_,
     bool? isLoading,
+    bool? isTransitioning,
     String? errorMessage,
     bool clearError = false,
     DateTime? now,
@@ -45,6 +48,7 @@ class CaseTrackerState {
     return CaseTrackerState(
       case_: case_ ?? this.case_,
       isLoading: isLoading ?? this.isLoading,
+      isTransitioning: isTransitioning ?? this.isTransitioning,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       now: now ?? this.now,
     );
@@ -150,12 +154,16 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
   final ApplicationRepository? _appRepository;
   final CaseLifecycleService _service;
 
-  String get _storageKey => 'rad_case_checklist_${state.case_.caseId}';
+  String get _scopedStorageKey =>
+      'rad_case_checklist_${_userId.isNotEmpty ? "${_userId}_" : ""}${state.case_.caseId}';
+  String get _legacyStorageKey => 'rad_case_checklist_${state.case_.caseId}';
 
   void load() {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final raw = _prefs.getString(_storageKey);
+      final raw =
+          _prefs.getString(_scopedStorageKey) ??
+          _prefs.getString(_legacyStorageKey);
       CaseChecklist checklist;
       if (raw != null && raw.isNotEmpty) {
         final decoded = jsonDecode(raw) as Map<String, dynamic>;
@@ -191,7 +199,7 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
 
   Future<void> _persistChecklist(CaseChecklist checklist) async {
     final encoded = jsonEncode(checklist.toJson());
-    await _prefs.setString(_storageKey, encoded);
+    await _prefs.setString(_scopedStorageKey, encoded);
   }
 
   void setCustomChecklist(List<CaseChecklistItem> items) {
@@ -212,7 +220,8 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
     ChecklistItemStatus next, {
     DateTime? nowUtc,
   }) async {
-    state = state.copyWith(clearError: true);
+    if (state.isTransitioning) return false;
+    state = state.copyWith(isTransitioning: true, clearError: true);
     try {
       final updatedCase = _service.transitionChecklistItem(
         case_: state.case_,
@@ -222,13 +231,16 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
         nowUtc: nowUtc ?? state.now,
       );
       await _persistChecklist(updatedCase.checklist);
-      state = state.copyWith(case_: updatedCase);
+      state = state.copyWith(case_: updatedCase, isTransitioning: false);
       return true;
     } on CaseLifecycleException catch (e) {
-      state = state.copyWith(errorMessage: e.message);
+      state = state.copyWith(errorMessage: e.message, isTransitioning: false);
       return false;
     } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
+      state = state.copyWith(
+        errorMessage: e.toString(),
+        isTransitioning: false,
+      );
       return false;
     }
   }
@@ -237,7 +249,8 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
     ApplicationStatus next, {
     DateTime? nowUtc,
   }) async {
-    state = state.copyWith(clearError: true);
+    if (state.isTransitioning) return false;
+    state = state.copyWith(isTransitioning: true, clearError: true);
     try {
       final updatedCase = _service.transitionApplicationStatus(
         case_: state.case_,
@@ -249,13 +262,16 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
       if (_appRepository != null) {
         await _appRepository.updateApplication(updatedCase.application);
       }
-      state = state.copyWith(case_: updatedCase);
+      state = state.copyWith(case_: updatedCase, isTransitioning: false);
       return true;
     } on CaseLifecycleException catch (e) {
-      state = state.copyWith(errorMessage: e.message);
+      state = state.copyWith(errorMessage: e.message, isTransitioning: false);
       return false;
     } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
+      state = state.copyWith(
+        errorMessage: e.toString(),
+        isTransitioning: false,
+      );
       return false;
     }
   }
