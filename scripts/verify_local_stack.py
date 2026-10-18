@@ -43,6 +43,7 @@ def main() -> None:
     parser.add_argument("--runtime", type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--proposal", type=Path)
+    parser.add_argument("--confirm-email", action="store_true", help="Require local signup confirmation; start only")
     args = parser.parse_args()
     if not args.supabase or not Path(args.supabase).is_file():
         parser.error("--supabase must name an installed native CLI executable")
@@ -111,6 +112,9 @@ pop3_port = {port+4}
 site_url = "http://127.0.0.1:{port-1}"
 additional_redirect_urls = ["http://127.0.0.1:{port-1}/reset-password"]
 '''
+            if args.confirm_email:
+                config += '[auth.email]\nenable_confirmations = true\n'
+            report['signup_confirmation_required'] = args.confirm_email
             existing = target / "config.toml"
             if existing.exists() and existing.read_text() != config:
                 raise RuntimeError("owned runtime config changed; inspect before proceeding")
@@ -192,6 +196,7 @@ additional_redirect_urls = ["http://127.0.0.1:{port-1}/reset-password"]
                 "supabase/tests/stage4_user_ai.sql",
                 "supabase/tests/local47_crm_notifications.sql",
                 "supabase/tests/local47_payment_sandbox.sql",
+                "supabase/tests/phase24_mock_checkout_search.sql",
                 "supabase/tests/local47_definer_acl.sql",
                 "supabase/tests/local47_document_processing.sql",
                 "supabase/tests/local47_observability.sql",
@@ -202,6 +207,8 @@ additional_redirect_urls = ["http://127.0.0.1:{port-1}/reset-password"]
                 if "constraint_backfill" in sql:
                     command += ["-v", "phase_a_migration=" + str(ROOT / "supabase/migrations/20261012230000_ai_models_check_constraints_alignment.sql")]
                 run(sql, [*command, "-f", str(ROOT / sql)], ROOT)
+            if args.lineage == "canonical":
+                run("read-only staging initialization readiness", [*db_args, "-f", str(ROOT / "supabase/staging/readiness.sql")], ROOT)
             run("two-user Auth RLS Storage quotas and human Feed", [sys.executable, str(ROOT / "scripts/verify_local_auth_isolation.py")])
             catalog = run("final metadata-only catalog capture", [*db_args, "-At", "-f", str(ROOT / "supabase/reconciliation/catalog_fingerprint.sql")])
             (runtime / "final-catalog.json").write_text(catalog, encoding="utf-8")

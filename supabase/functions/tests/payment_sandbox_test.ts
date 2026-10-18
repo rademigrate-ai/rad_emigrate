@@ -1,5 +1,6 @@
 import {
   createPaymentSandboxHandler,
+  SandboxEventRejected,
   type SandboxPaymentEvent,
 } from "../payment-sandbox/handler.ts";
 const now = Date.UTC(2026, 9, 18, 12, 0, 0);
@@ -53,6 +54,8 @@ type Options = {
   tamper?: boolean;
   result?: unknown;
   databaseError?: boolean;
+  databaseRejected?: boolean;
+  timeout?: boolean;
   method?: string;
 };
 async function exercise(value: unknown = event(), options: Options = {}) {
@@ -64,8 +67,13 @@ async function exercise(value: unknown = event(), options: Options = {}) {
     supabaseUrl: options.url ?? "http://127.0.0.1:55321",
     secret,
     now: () => now,
+    timeoutMs: options.timeout ? 5 : undefined,
     apply: async (event, sha) => {
       calls.push({ event, sha });
+      if (options.databaseRejected) {
+        throw new SandboxEventRejected("private-canary");
+      }
+      if (options.timeout) return await new Promise(() => {});
       if (options.databaseError) throw new Error("private-database-canary");
       return options.result ??
         { mode: "sandbox", duplicate: false, decision: "applied" };
@@ -228,4 +236,14 @@ Deno.test("payment sandbox: safe methods never invoke persistence", async () => 
     equal(x.status, method === "OPTIONS" ? 200 : 405);
     equal(x.calls.length, 0);
   }
+});
+Deno.test("payment sandbox: semantic rejection is permanent and never leaks diagnostics", async () => {
+  const x = await exercise(event(), { databaseRejected: true });
+  equal(x.status, 422);
+  equal(x.body, { error: "sandbox_event_rejected" });
+});
+Deno.test("payment sandbox: persistence has a bounded response deadline", async () => {
+  const x = await exercise(event(), { timeout: true });
+  equal(x.status, 503);
+  equal(x.body, { error: "payment_sandbox_unavailable" });
 });

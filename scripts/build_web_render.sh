@@ -22,6 +22,12 @@ case "$APP_ENV_VALUE" in
     ;;
 esac
 
+# A staging label alone must never build a client against production. Check
+# before downloading dependencies or invoking Flutter; do not print key values.
+if [[ "$APP_ENV_VALUE" == staging || "${RAD_DEPLOYMENT_KIND:-}" == staging || -n "${RAD_STAGING_PROJECT_REF:-}" ]]; then
+  python3 scripts/staging_environment.py --scope public-build
+fi
+
 # Install Flutter if not already on PATH (Render static build environment).
 if ! command -v flutter >/dev/null 2>&1; then
   RAD_FLUTTER_DIR="${FLUTTER_ROOT:-$HOME/flutter}"

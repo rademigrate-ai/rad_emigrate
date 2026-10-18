@@ -2,6 +2,7 @@
 import { handler as paymentHandler } from "../supabase/functions/payment-sandbox/handler.ts";
 import { dispatchSandboxNotifications } from "../supabase/functions/notification-dispatch/worker.ts";
 import { createDocumentHandler } from "../supabase/functions/document-intelligence/handler.ts";
+import { createNotificationDispatchHandler } from "../supabase/functions/notification-dispatch/handler.ts";
 
 const url = Deno.env.get("SUPABASE_URL")!;
 const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -10,6 +11,24 @@ const port = Number(Deno.env.get("RAD_LOCAL47_TEST_PORT"));
 if (
   new URL(url).hostname !== "127.0.0.1" || !token || !Number.isInteger(port)
 ) throw new Error("local_harness_configuration");
+const dispatchHandler = createNotificationDispatchHandler({
+  enabled: true,
+  supabaseUrl: url,
+  invocationToken: token,
+  database: async (path, init) => {
+    const response = await fetch(`${url}/rest/v1/${path}`, {
+      ...init,
+      redirect: "error",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) throw new Error("backend_unavailable");
+    return await response.json();
+  },
+});
 let releaseOcr: (() => void) | undefined;
 let ocrStarted = false;
 let ocrCalls = 0;
@@ -42,6 +61,7 @@ const documentHandler = createDocumentHandler({
 Deno.serve({ hostname: "127.0.0.1", port }, async (req) => {
   const path = new URL(req.url).pathname;
   if (path === "/payment") return await paymentHandler(req);
+  if (path === "/dispatch-endpoint") return await dispatchHandler(req);
   if (path === "/documents" || path === "/ocr-control") {
     if (req.headers.get("x-rad-local-test-token") !== token) {
       return Response.json({ error: "forbidden" }, { status: 403 });

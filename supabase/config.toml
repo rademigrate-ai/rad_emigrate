@@ -7,3 +7,7 @@ major_version = 17
 # calls are independently validated as admin/super_admin inside the handler.
 [functions.research-sync]
 verify_jwt = false
+
+# Gateway authentication and the dedicated worker token are both required.
+[functions.notification-dispatch]
+verify_jwt = true

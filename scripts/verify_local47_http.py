@@ -49,7 +49,7 @@ def main():
     original=sql('select to_json(enabled) from private.payment_sandbox_config where singleton;')
     assert sql("select to_json(count(*)) from public.notification_deliveries where status in ('queued','processing');")==0,'pending work from another test'
     before=sql("select to_json(md5(coalesce(jsonb_agg(to_jsonb(e) order by id)::text,'[]'))) from public.ai_entitlements e;")
-    owner=str(uuid.uuid4());notification=str(uuid.uuid4());subscription='http-'+uuid.uuid4().hex
+    owner=None;owned_users=[];notification=str(uuid.uuid4());subscription='http-'+uuid.uuid4().hex
     api_port=port-1  # captured before `port` is reused for the random harness listener
     with socket.socket() as probe:
         probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]
@@ -70,6 +70,22 @@ def main():
         raw=json.dumps(event,separators=(',',':')).encode();timestamp=str(int(time.time())-(301 if old else 0))
         digest=hmac.new(('wrong-key' if wrong else secret).encode(),timestamp.encode()+b'.'+raw,hashlib.sha256).hexdigest()
         return request('/payment',raw,{'x-rad-sandbox-signature':f't={timestamp},v1={digest}'})
+    def api_request(path,payload,token=None):
+        credential=token or service
+        req=urllib.request.Request(api+path,data=json.dumps(payload).encode(),
+          headers={'apikey':values['ANON_KEY'] if token else service,'Authorization':'Bearer '+credential,
+                   'Content-Type':'application/json'},method='POST')
+        try:
+            with urllib.request.urlopen(req,timeout=20) as response:return response.status,json.loads(response.read())
+        except urllib.error.HTTPError as error:return error.code,json.loads(error.read())
+    def account():
+        email='phase24-'+uuid.uuid4().hex+'@example.invalid';password=secrets.token_urlsafe(32)
+        code,user=api_request('/auth/v1/admin/users',{'email':email,'password':password,'email_confirm':True})
+        assert code in (200,201),'synthetic account creation status '+str(code)
+        owned_users.append(user['id'])
+        code,login=api_request('/auth/v1/token?grant_type=password',{'email':email,'password':password},values['ANON_KEY'])
+        assert code==200,'synthetic login status '+str(code)
+        return user['id'],login['access_token']
     report={'scope':'local_Deno_HTTP_PostgREST_SQL','production_mutations':False,'external_provider_calls':0}
     report.update(captured_at=datetime.now(timezone.utc).isoformat(),
       source_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
@@ -83,12 +99,39 @@ def main():
             except OSError:
                 if time.monotonic()>deadline:raise AssertionError('local Deno harness did not start')
                 time.sleep(.1)
+        owner,owner_token=account();other,other_token=account()
         sql(f"""begin; set local request.jwt.claims='{{"role":"service_role"}}';
-insert into auth.users(id,email,raw_user_meta_data) values('{owner}','{owner}@example.invalid','{{}}');
 insert into public.notification_preferences(user_id,email_enabled) values('{owner}',true) on conflict(user_id) do update set email_enabled=true;
 insert into public.notifications(id,user_id,type,title,body) values('{notification}','{owner}','system','Synthetic HTTP notice','No external recipient');
 update private.payment_sandbox_config set enabled=true;commit;""")
         now=datetime.now(timezone.utc)
+        request_key=str(uuid.uuid4())
+        def create_checkout(_):return api_request('/rest/v1/rpc/create_mock_checkout',{'p_request_key':request_key},owner_token)
+        with ThreadPoolExecutor(max_workers=8) as pool:created=list(pool.map(create_checkout,range(16)))
+        assert all(code==200 for code,_ in created),'mock checkout creation failed'
+        checkout=created[0][1]
+        assert all(body['order_id']==checkout['order_id'] for _,body in created),'duplicate checkout orders'
+        assert checkout['mode']=='mock' and checkout['no_charge'] and not checkout['mock_access_active']
+        order={'p_order_id':checkout['order_id']}
+        assert api_request('/rest/v1/rpc/get_mock_checkout',order,other_token)[0]==404
+        assert api_request('/rest/v1/rpc/request_mock_checkout_cancellation',order,other_token)[0]==404
+        assert api_request('/rest/v1/rpc/create_mock_checkout',{'p_request_key':str(uuid.uuid4()),'user_id':other},owner_token)[0] in (400,404)
+        mock_event={'mode':'sandbox','event_id':'mock-'+uuid.uuid4().hex,'subscription_id':checkout['subscription_id'],
+          'user_id':owner,'type':'payment_succeeded','sequence':1,'amount_minor':checkout['amount_minor'],
+          'currency':checkout['currency'],'occurred_at':now.isoformat(),'period_end':checkout['period_end']}
+        assert payment(mock_event,wrong=True)[0]==401
+        assert payment({**mock_event,'amount_minor':1})[0]==422
+        assert payment({**mock_event,'user_id':other})[0]==422
+        with ThreadPoolExecutor(max_workers=8) as pool:confirmed=list(pool.map(lambda _:payment(mock_event),range(16)))
+        assert all(code==200 for code,_ in confirmed) and sum(not body['duplicate'] for _,body in confirmed)==1
+        assert api_request('/rest/v1/rpc/get_mock_checkout',order,owner_token)[1]['mock_access_active']
+        assert api_request('/rest/v1/rpc/request_mock_checkout_cancellation',order,owner_token)[1]['cancellation_requested']
+        assert payment({**mock_event,'event_id':'cancel-'+uuid.uuid4().hex,'type':'subscription_cancelled','sequence':2,'amount_minor':0})[0]==200
+        assert not api_request('/rest/v1/rpc/get_mock_checkout',order,owner_token)[1]['mock_access_active']
+        refund={**mock_event,'event_id':'refund-'+uuid.uuid4().hex,'type':'payment_refunded','sequence':3}
+        with ThreadPoolExecutor(max_workers=8) as pool:refunded=list(pool.map(lambda _:payment(refund),range(16)))
+        assert all(code==200 for code,_ in refunded) and sum(not body['duplicate'] for _,body in refunded)==1
+        assert api_request('/rest/v1/rpc/get_mock_checkout',order,owner_token)[1]['status']=='refunded'
         event={'mode':'sandbox','event_id':'http-'+uuid.uuid4().hex,'subscription_id':subscription,'user_id':owner,'type':'payment_succeeded',
           'sequence':1,'amount_minor':100,'currency':'TST','occurred_at':now.isoformat(),'period_end':(now+timedelta(days=1)).isoformat()}
         assert payment(event,wrong=True)[0]==401
@@ -105,19 +148,26 @@ update private.payment_sandbox_config set enabled=true;commit;""")
           headers={'apikey':service,'Authorization':'Bearer '+service,'Content-Type':'application/json'},method='POST')
         with urllib.request.urlopen(queued,timeout=10) as response:delivery=json.loads(response.read())
         assert delivery['transport']=='sandbox'
-        assert request('/notifications',{}, {'x-rad-local-test-token':'wrong'})[0]==403
-        code,dispatch=request('/notifications',{}, {'x-rad-local-test-token':test_token})
+        assert request('/dispatch-endpoint',{}, {'x-rad-notification-token':'wrong'})[0]==403
+        assert request('/dispatch-endpoint',{}, {'Authorization':'Bearer '+service})[0]==403
+        assert request('/dispatch-endpoint',{'limit':21}, {'x-rad-notification-token':test_token})[0]==400
+        code,dispatch=request('/dispatch-endpoint',{}, {'x-rad-notification-token':test_token})
         assert code==200 and dispatch['mode']=='sandbox' and dispatch['sandbox_receipts']==1
         assert sql(f"select to_json(status) from public.notification_deliveries where id='{delivery['delivery_id']}';")=='sandbox_delivered'
-        assert request('/notifications',{}, {'x-rad-local-test-token':test_token})[1]['sandbox_receipts']==0
+        assert request('/dispatch-endpoint',{}, {'x-rad-notification-token':test_token})[1]['sandbox_receipts']==0
         after=sql("select to_json(md5(coalesce(jsonb_agg(to_jsonb(e) order by id)::text,'[]'))) from public.ai_entitlements e;")
         assert before==after,'HTTP sandbox changed canonical entitlements'
         report.update(status='PASS',payment_retry_requests=16,payment_insert_winners=1,forged_signature_denied=True,stale_signature_denied=True,
           delayed_event_ignored=True,terminal_subscription_not_reactivated=True,notification_sandbox_receipts=1,notification_replay_receipts=0,
-          canonical_entitlements_unchanged=True)
+          canonical_entitlements_unchanged=True,notification_endpoint_purpose_token_required=True,
+          notification_endpoint_factory_tested=True,edge_gateway_tested=False,
+          mock_checkout_concurrent_creations=16,mock_confirmation_concurrent_callbacks=16,mock_refund_concurrent_callbacks=16,
+          mock_checkout_owner_isolation=True,mock_creation_confirmation_cancellation_refund=True,real_auth_login=True)
     finally:
         try:
-            sql(f"begin;set local request.jwt.claims='{{\"role\":\"service_role\"}}';delete from auth.users where id='{owner}';update private.payment_sandbox_config set enabled={'true' if original else 'false'};commit;")
+            ids=','.join("'"+str(uuid.UUID(uid))+"'" for uid in owned_users)
+            cleanup='delete from auth.users where id in ('+ids+');' if ids else ''
+            sql(f"begin;set local request.jwt.claims='{{\"role\":\"service_role\"}}';{cleanup}update private.payment_sandbox_config set enabled={'true' if original else 'false'};commit;")
         finally:
             process.terminate()
             try:process.wait(timeout=5)
