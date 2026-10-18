@@ -4,8 +4,8 @@ from pathlib import Path
 import sys
 
 root = Path(__file__).resolve().parents[1]
-expected = json.loads((root / 'supabase/reconciliation/production_catalog.json').read_text())
-actual = json.loads(Path(sys.argv[1]).read_text())
+expected = json.loads((root / 'supabase/reconciliation/production_catalog.json').read_text(encoding='utf-8'))
+actual = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
 report = {}
 blocking = False
 
@@ -57,5 +57,5 @@ for key in sorted(expected):
                 print(f'  {label}: {json.dumps(row, sort_keys=True)[:1400]}')
     print(f'{key}: {report[key]["status"]}')
 
-Path('reconciliation-report.json').write_text(json.dumps(report, indent=2) + '\n')
+Path('reconciliation-report.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
 raise SystemExit(1 if blocking else 0)

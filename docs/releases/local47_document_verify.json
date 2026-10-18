@@ -1,0 +1,79 @@
+{
+  "project": "rad_codex_local47",
+  "lineage": "canonical",
+  "production_mutations": false,
+  "started_at": "2026-10-18T15:34:04.192153+00:00",
+  "fingerprint": {
+    "rls": "f774d2521876438405d177897df727d3",
+    "bucket": "4082dda1bd1da983bda51a025c66ac93",
+    "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+    "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+    "policies": "5b8620228bf8c9346092eb66f1afa4cb",
+    "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+    "functions": "fc57d0f49dfab1be19b4469a05b19cf8",
+    "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+  },
+  "final_catalog_sha256": "2b0909867515efb33dbf48807d636587de79b8449eeec730d4f39f3a656eb3e1",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "clean-schema pinned fingerprint",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/reconciliation/security_regression.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_constraint_backfill.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_security.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/ai_entitlement_rpc_privacy.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/corrective_routing_research.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage2_knowledge_completion.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage4_user_ai.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_crm_notifications.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_payment_sandbox.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_definer_acl.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_document_processing.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "two-user Auth RLS Storage quotas and human Feed",
+      "exit_code": 0
+    },
+    {
+      "check": "final metadata-only catalog capture",
+      "exit_code": 0
+    }
+  ],
+  "finished_at": "2026-10-18T15:34:19.422877+00:00",
+  "source_head": "bb572b4da8f8edd3573b603330d245513ca206f1",
+  "source_dirty": true
+}

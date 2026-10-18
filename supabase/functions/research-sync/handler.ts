@@ -1,4 +1,5 @@
 import { researchCorsHeaders } from "../_shared/cors.ts";
+import { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -28,14 +29,8 @@ function safeUrl(value: string, allowedHost: string) {
   let url: URL;
   try { url = new URL(value); } catch { return false; }
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
-  if (url.protocol !== "https:" || url.username || url.password || host !== allowedHost.toLowerCase()) return false;
-  if (["localhost", "0.0.0.0", "metadata", "metadata.google.internal"].includes(host) || host.endsWith(".local") || host === "::1" || /^(fe80:|fc|fd)/.test(host)) return false;
-  const ip = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (ip) {
-    const [a, b] = ip.slice(1).map(Number);
-    if (a === 0 || a === 10 || a === 127 || a >= 224 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127)) return false;
-  }
-  return true;
+  if (host !== allowedHost.toLowerCase()) return false;
+  return isSafePublicHttpsUrl(value);
 }
 
 async function fetchSource(start: string, allowedHost: string, timeout: number) {

@@ -1,0 +1,168 @@
+{
+  "canonical_start": {
+    "project": "rad_codex_local47",
+    "lineage": "canonical",
+    "production_mutations": false,
+    "started_at": "2026-10-18T14:55:27.497212+00:00",
+    "migration_sha256": {
+      "20261001191421_initial_rad_core_schema.sql": "a1ddb94ce6bd7132d200a4e04522d407b07249b67f5d4cd9548ccea4d8cb628d",
+      "20261001191653_create_profile_trigger_and_storage_setup_v2.sql": "50ae3f36ba23a43765b1331b31d41a15acc20818e073eaded8594a7fc9d522e9",
+      "20261001194638_security_hardening_handle_new_user.sql": "f434ef0201c10b6916d700a44de3527b8c1dce83976e3643b461900a66c1b309",
+      "20261001194715_add_rad_backend_indexes.sql": "c77beb940272ab0bb0d1906f88d8e0a1e47a70e6941c93d31d90638cfe6377b2",
+      "20261001195750_security_hardening.sql": "2d8e97227ef2c5e05ad57744faf47ee1cc340b16be4ccc625890cca34b055c02",
+      "20261001195754_rls_policies.sql": "89c1f8d65c0bb33bc08a261910bb3732de6368f27b2f420cf575a6caaaf34abe",
+      "20261001195756_storage_policies.sql": "7e9439d7561f431028d8f6b0d030417986a7f7291b9a8e32cb89410284451c46",
+      "20261001200202_ai_sessions_and_document_bootstrap.sql": "16fd94e89e49e87b2e13f3e42310928a89dd056159e4c38ee1b595f55f7d6a24",
+      "20261001214952_project05_launch_hardening.sql": "0567e3c15abde9e00ec3838e591110efb4f72c071ee63d9ff744bcee9885169c",
+      "20261001215315_project05_storage_upload_limits.sql": "4cc13c862f53c64bc0434b6f3102f8f24a8d30cb6a52402a6570633901174ce3",
+      "20261001215758_project05_minimize_table_privileges.sql": "1eec561ac96fb19efde99c0e28c49101fa798fcee87d1ad7036e2edd228f0363",
+      "20261001225237_profile_bootstrap_policy.sql": "7f4949354e0125fc0b053f9dc9c42c5f84692dc85e8d9103085f4f468f1048c2",
+      "20261001225632_storage_validation_policies.sql": "900f09a2790e51d076b83c63a283f868433833773e1d1a6016b850390cea74b9",
+      "20261001225634_ai_message_ownership_policies.sql": "46c1c82ad1f27fbeadef2c30cfb1d0d70f035ff66493eb838bfcd3d6966a2059",
+      "20261001233027_signup_trigger_search_path.sql": "ccc91a27946eb376a96555047c545a112e0a69fc457a9e1ff24826a59d15e3a4",
+      "20261001233048_relationship_policies_and_indexes.sql": "fef578241b9a34a5e1ec05d40cde09251d16c716ae59ea27ba6106c225f4c061",
+      "20261003102347_restrict_documents_bucket_uploads.sql": "2778cac24b61ca2c97fd24468fb0a92e567f272d7e6c135680f911ba1edb0ebd",
+      "20261003210302_project09_visa_catalog.sql": "03adf8374c2943d0e4a54599d6d35353b2b9baf534a740f4d9058f2da064989e",
+      "20261003211635_project10_knowledge_research.sql": "817a4cee3b51edc7b9cb08f3ddddc3a573da4466ca0bf9044ba04144835cbee7",
+      "20261003212339_project10_security_hardening.sql": "3b525ef4a71dabf40f1bf87de8b4c695b271b25782699809e19f635373155776",
+      "20261003213219_project11_ai_orchestration.sql": "6aea905fb8353b24467db116afba035f3ebecdf876bc8ca32ddac9c2074ffc6b",
+      "20261003214031_project12_document_intelligence.sql": "35c8c62f992b1f53f8d5ef8b3189a159f0e0fe87f49be696c6aadcfae2222868",
+      "20261003221324_project13_admin_operations.sql": "0bffdc02b211d47c6797abc85591b417179aaeb03267718edaf7df30428b600f",
+      "20261003222909_project14_feed_notifications.sql": "1483f4586aae53e2ac3f31a004f4db04b5f515cf0991be8ccb385e687467edb6",
+      "20261003223717_project15_observability.sql": "88c44df0ea7491e77a42449f3bd0a36194d25b0a67b513af25e212f2b782b656",
+      "20261003235000_ai_base_url_ssrf_hardening.sql": "f1effcf08e9f312f861d259f63d80236f996d30841124ffed30e288e457a5530",
+      "20261004190000_fix_profile_update_rls_recursion.sql": "68052d7b10861bff36c3a0e211e9b78feb780a16e6071439583eb028835ec941",
+      "20261004203000_client_delivery_ai_scopes.sql": "5cc55e647cfa98102a5d5e4515a1c0e3c32d5409a510f88fb0b1f728c5e30cb7",
+      "20261005102000_stage1_ai_research_completion.sql": "20bf04125a4164f8e2e19203da912e45fe15452952c6036c661ce3687ee77286",
+      "20261005120000_stage2_review_feed_publish.sql": "171df894bc49b849bcc8c478c45c741a8033769825ab6ae0d2c7d2f2d9be1b53",
+      "20261005130000_stage2_visa_structured_steps.sql": "d3f6fd01b0e1976693449d4d6e9b0eeec1cb36892ef4d7df8477d1ad49c72012",
+      "20261005190000_stage3_fk_covering_indexes.sql": "6dc796e8000794252ee23610608804888cb4e02663291e3f4de9574f5144ef54",
+      "20261006132931_stage5_research_review_candidate_backfill.sql": "1354b526683e46c7a177c61d1ec88bfdf20ef3971a38d152b03f86279b18fcf4",
+      "20261006180000_fix_profile_update_with_check_role_escalation.sql": "8971c63a70bc0cdd410cf7a4eee51952acec8a6cb5fec69f6aeed227f7ba71c9",
+      "20261007080000_ai_dynamic_routing_architecture.sql": "dec33255715f550e5a99bacc84cfe398c59fb64d8678b5a193fb12c81220c0d6",
+      "20261007080001_ai_credential_failure_routing.sql": "a12a0dffd60aeef2e3b024ed230434b40084e0fb40e426d38c8d800b3a8c8a78",
+      "20261007080002_research_atomic_review_candidate.sql": "287cb21e959353b833e44f04daf90918fd817bdef34d880cbdd6e9f57a94541d",
+      "20261007180000_stage2_knowledge_completion.sql": "1c29816f2da63053177e945da599341b54dd86fafc2c2ad6718ad3ca29836f2c",
+      "20261007180001_stage2_knowledge_promote.sql": "d82a16534d3d50ff340e627f793c9dfe60daaab59a0fa8ba07f4ac8d645b397a",
+      "20261007180002_stage2_knowledge_retrieve_conflict.sql": "e09b0d9b8eb3468cfa29d3532b52ac6cb74e31eab553172b60dfe9142257e12c",
+      "20261007210000_stage4_user_ai_quota_grounding.sql": "157be5813c4087268b20ff94bca58c4a7cf73e79da3db1819b456692d2be16ed",
+      "20261007212000_stage4_limit_ai_runtime_chain.sql": "9812b55f4cc8b5fe211d84947d870dbec19e70499be3dd00926311f35d92b45a",
+      "20261007220000_stage5_visa_editorial_summaries.sql": "f1dfaa42a40274e04611d698c3bdfda654ceace67e814b62d3eeb388701374cc",
+      "20261007230000_stage6_entitlement_access_decision.sql": "4767c2504eea1847b3cf98c9c6df8e48bf05db32d37af63151f4f6072dedcfc7",
+      "20261008010000_stage7_ops_consultation_app_status.sql": "5549ea0d2984fe960356d7e5d6497aa3e79918a6d9fe2ed73f839b0ad6e1d396",
+      "20261008020000_stage9_security_grant_hardening.sql": "9c634d3e195c38a7426e6e5a1ef23ceea6801bfc2e7c785395d600115df2ab8f",
+      "20261010010000_stage1_p0_security_completion.sql": "76a28a9aa6294f6a8ca8f108394b801a2ee85f85827104246324f69787610bd5",
+      "20261010055013_stage1_atomic_ai_quota_reservation.sql": "51ab2b39fb63655fea7e67e1a7aef69bb1ba15297877bc39168b90b2b1c8b646",
+      "20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql": "b94878391d4fddb9887e74d9a2a1dc809360de46f989a3d599a5471cc7c42fc5",
+      "20261012110945_stage1_security_abuse_storage_alignment.sql": "9de2fdb764aae7068c9355b07cd3593823bd66b5da73448687693fe5cc535119",
+      "20261012230000_ai_models_check_constraints_alignment.sql": "d4563930461176e6481df29cf587c9dca0eb7b4987395c05af2f613758452fbc",
+      "20261017190000_security_ai_entitlement_rpc_privacy.sql": "a70e5567035706ac00721c22dcfeb683225477438bf1451d0e9e9690f9827a33",
+      "20261018125432_local47_crm_notification_outbox.sql": "9bfbb8ec2c2d6a02c57dcb14287d1546dd5e44ffa229f8bbc5d11f476b60c2b6",
+      "20261018142313_local47_payment_sandbox_integrity.sql": "38290929fbbfe3d9c17333608c4f3ae5fd77602dcc22b0befdfd25f12b02c9b5",
+      "20261018143455_local47_notification_privilege_alignment.sql": "98ab1986a4b23dd291bfe8f947cc122d72897e8825aadafd7afbd97988093919",
+      "20261018210000_stage10_covering_fk_indexes_completion.sql": "332d6101d12698367820263d6cfab048f9cd0aebebb2a427656f770d39b4b7c2"
+    },
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "local Supabase startup and migration replay",
+        "exit_code": 0
+      }
+    ],
+    "finished_at": "2026-10-18T14:56:54.928368+00:00",
+    "source_head": "47835e83dcef2f24bc9519be8282e739d5d202c0",
+    "source_dirty": false
+  },
+  "canonical_verify": {
+    "project": "rad_codex_local47",
+    "lineage": "canonical",
+    "production_mutations": false,
+    "started_at": "2026-10-18T14:56:55.773605+00:00",
+    "fingerprint": {
+      "rls": "f774d2521876438405d177897df727d3",
+      "bucket": "4082dda1bd1da983bda51a025c66ac93",
+      "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+      "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+      "policies": "5b8620228bf8c9346092eb66f1afa4cb",
+      "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+      "functions": "fc57d0f49dfab1be19b4469a05b19cf8",
+      "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+    },
+    "final_catalog_sha256": "2f759fce434ec2de8089fdee7c89320835c7f5a1ab406cd72291276bec2e8229",
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "clean-schema pinned fingerprint",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/reconciliation/security_regression.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/phase_a_constraint_backfill.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/phase_a_security.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/ai_entitlement_rpc_privacy.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/corrective_routing_research.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/stage2_knowledge_completion.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/stage4_user_ai.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/local47_crm_notifications.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/local47_payment_sandbox.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "supabase/tests/local47_definer_acl.sql",
+        "exit_code": 0
+      },
+      {
+        "check": "two-user Auth RLS Storage quotas and human Feed",
+        "exit_code": 0
+      },
+      {
+        "check": "final metadata-only catalog capture",
+        "exit_code": 0
+      }
+    ],
+    "finished_at": "2026-10-18T14:57:09.129328+00:00",
+    "source_head": "47835e83dcef2f24bc9519be8282e739d5d202c0",
+    "source_dirty": false
+  },
+  "concurrency": {
+    "target": "127.0.0.1:55322",
+    "production_mutations": false,
+    "mode": "synthetic_sandbox",
+    "status": "PASS",
+    "outbox_requests": 32,
+    "unique_leases": 12,
+    "ack_requests": 20,
+    "ack_winners": 1,
+    "crm_requests": 20,
+    "crm_winners": 1,
+    "payment_duplicate_requests": 20,
+    "payment_insert_winners": 1,
+    "payment_refund_race_requests": 13,
+    "final_sandbox_status": "refunded",
+    "canonical_entitlements_unchanged": true
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "owned_local_Auth_Mailpit",
+  "production_mutations": false,
+  "external_email_delivery": false,
+  "frontend_browser_flow_tested": false,
+  "source_head": "4b083db3abd8c2a1808741dc4ef0645db0916367",
+  "source_dirty": true,
+  "captured_at": "2026-10-18T15:23:33.496557+00:00",
+  "checks": [
+    "signup_profile_trigger_ignores_untrusted_role",
+    "mailbox_recovery_redirect_identity_forgery_and_replay",
+    "password_replacement_session_refresh_and_logout_revocation",
+    "fixture_aged_recovery_denied_and_unapproved_redirect_contained",
+    "passwordless_mailbox_token_identity_forgery_and_replay"
+  ],
+  "status": "PASS",
+  "synthetic_users_removed": 3,
+  "owned_messages_removed": 3,
+  "signup_email_confirmation_tested": false,
+  "expiry_method": "synthetic_user_recovery_sent_at_aged_two_hours"
+}

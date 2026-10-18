@@ -1,0 +1,50 @@
+{
+  "scope": "synthetic_local_57322",
+  "production_mutations": false,
+  "transaction_rolled_back": true,
+  "planner_switches_forced": false,
+  "fixture_consultations": 10000,
+  "fixture_claims": 20001,
+  "probes": [
+    {
+      "index": "knowledge_claims_superseded_by_idx",
+      "indexed_nodes": [
+        "Index Scan"
+      ],
+      "without_index_nodes": [
+        "Seq Scan"
+      ],
+      "actual_rows": 100,
+      "indexed_execution_ms": 0.137,
+      "without_index_execution_ms": 5.059
+    },
+    {
+      "index": "consultation_requests_assigned_to_idx",
+      "indexed_nodes": [
+        "Index Scan"
+      ],
+      "without_index_nodes": [
+        "Seq Scan"
+      ],
+      "actual_rows": 100,
+      "indexed_execution_ms": 0.187,
+      "without_index_execution_ms": 3.892
+    },
+    {
+      "index": "consultation_requests_related_application_id_idx",
+      "indexed_nodes": [
+        "Index Scan"
+      ],
+      "without_index_nodes": [
+        "Seq Scan"
+      ],
+      "actual_rows": 100,
+      "indexed_execution_ms": 0.15,
+      "without_index_execution_ms": 2.908
+    }
+  ],
+  "captured_at": "2026-10-18T15:19:30.847518+00:00",
+  "source_head": "416a26aaa318851aa5aa68af15808b9d65ce2005",
+  "source_dirty": true,
+  "status": "PASS"
+}

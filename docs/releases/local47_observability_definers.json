@@ -1,0 +1,833 @@
+{
+  "scope": "disposable_local_runtime_catalog",
+  "functions": [
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.attribute_incident_action()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.audit_content_change()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.consultation_event()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.consultation_revision()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.enforce_claim_citation_integrity()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.enqueue_scheduled_rad_sync()",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.guard_application_status()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.guard_consultation_fields()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.guard_human_feed_mutation()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.has_role(text[])",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.knowledge_items_search_vector_update()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.notification_channel_enabled(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.notification_due_at(uuid,timestamp with time zone)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.notify_feed_publication()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.observability_retention()",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.prevent_profile_role_escalation()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.record_application_status_change()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.research_finding_review_candidate()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.sanitize_operational_event()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "private",
+      "routine": "private.validate_notification_time_zone()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "apply_sandbox_payment_event(jsonb,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "assign_admin_consultation(uuid,uuid,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "begin_document_processing(uuid,uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "claim_sandbox_notification()",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "complete_document_processing(uuid,uuid,jsonb,jsonb)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "configure_ai_provider(text,text,text,text,text,boolean,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "consume_ai_daily_quota(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "consume_ai_guest_quota(text,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=public"
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "create_research_review_candidate(uuid,uuid,text,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "create_user_notification(uuid,text,text,text,text,uuid)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "fail_document_processing(uuid,uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "finish_sandbox_notification(uuid,uuid,boolean)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_access_decision(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_daily_quota_status(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_provider_runtime(uuid)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_provider_runtime_versioned(uuid)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_runtime_chain(text,text,boolean,boolean,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_runtime_chain(text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_runtime_chain(text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_ai_runtime_chain_versioned(text,text,boolean,boolean,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "get_document_processor_runtime()",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "handle_new_user()",
+      "trigger": true,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "ingest_ai_model_catalogue(uuid,bigint,jsonb)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "ingest_research_snapshot(uuid,uuid,text,text,integer,jsonb)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "list_admin_consultations()",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "promote_knowledge_from_evidence(text,text,text,text,text,uuid,text,text,text,text,text,text,boolean)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "publish_content_draft(uuid,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "queue_notification_delivery(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "record_ai_model_outcome(uuid,boolean,integer,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "record_ai_provider_outcome(uuid,bigint,text,boolean)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "record_component_health(text,text,integer,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "register_knowledge_conflict(text,text,text,uuid,uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "retrieve_knowledge(text,text,text,text,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "set_ai_model_configuration(uuid,boolean,text,integer,integer)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "set_content_draft_status(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "set_research_finding_status(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "set_research_source_configuration(uuid,text,boolean,text,text,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "set_user_role(uuid,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "submit_consultation_request(text,text,uuid)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "transition_admin_consultation(uuid,text,integer,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "update_admin_consultation(uuid,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "update_content_draft(uuid,text,text,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "owner": "postgres",
+      "schema": "public",
+      "routine": "upsert_research_source(uuid,text,text,text,text,text,boolean,text,text)",
+      "trigger": false,
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": true,
+      "authenticated_execute": true
+    }
+  ],
+  "captured_at": "2026-10-18T15:57:53.243463+00:00",
+  "unique_runtime_definers": 63,
+  "untrusted_public_schema_create": {
+    "anon": false,
+    "authenticated": false
+  },
+  "source_head": "c2e58b78ea13f16bf9cc8a306e4be9ea2b0e2a3b",
+  "source_dirty": true,
+  "production_mutations": false
+}

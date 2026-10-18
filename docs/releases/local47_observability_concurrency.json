@@ -1,0 +1,18 @@
+{
+  "scope": "owned_local_health_alert_parallel_sessions",
+  "production_mutations": false,
+  "external_alerts_sent": 0,
+  "source_head": "c2e58b78ea13f16bf9cc8a306e4be9ea2b0e2a3b",
+  "source_dirty": true,
+  "captured_at": "2026-10-18T15:54:14.703954+00:00",
+  "status": "PASS",
+  "concurrent_failure_samples": 32,
+  "incident_count": 1,
+  "opening_alert_count": 1,
+  "concurrent_healthy_samples": 20,
+  "recovery_event_count": 1,
+  "recovery_requires_human_resolution": true,
+  "unknown_breaks_consecutive_samples": true,
+  "relapse_reuses_existing_incident": true,
+  "original_alert_policy_restored": true
+}

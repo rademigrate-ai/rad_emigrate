@@ -20,4 +20,4 @@ Ranking: FTS relevance + locale match + destination/program + inverse authority_
 
 ## Orchestrator integration
 
-`ai-orchestrator` `loadGrounding` calls `rpc/retrieve_knowledge` first; falls back to approved `knowledge_items` select only if the RPC fails.
+`ai-orchestrator` `loadGrounding` calls `rpc/retrieve_knowledge`. Empty, malformed or unavailable retrieval yields insufficient evidence; it does not fall back to unrelated recent items. Explicit parent approval, current/approved claims and usable citations are required for approved evidence. Included open conflicts force uncertainty. Retrieved text remains untrusted data inside the user message; application instructions use each provider's native system field.
