@@ -1,102 +1,52 @@
 # RAD Grok — Independent Feature Completion Progress
 
-**Worktree:** `rad_grok_feature_completion`  
 **Branch:** `feat/grok-independent-feature-completion`  
-**Latest HEAD:** `8df9916`  
-**Policy:** Local commits only. No push. No PR.
+**Latest HEAD:** `4b851ee`  
+**Policy:** Local commits only. No push. No PR. No production writes.
 
 ---
 
-## Domain delivery summary
+## Latest: Evidence foundation `4b851ee`
 
-| SHA | Scope |
-|-----|--------|
-| `6427d91` | E8-01 profile validation |
-| `c604568` | E8-02 case checklist |
-| `02f6352` | Pathway + lifecycle + E9-02 catalog |
-| `548444b` | E9-01 knowledge integrity + E9-04 recommendations |
-| **`8df9916`** | **Hardening: storage isolation + cross-module pipeline** |
+| Item | Detail |
+|------|--------|
+| Evidence registry | `lib/features/knowledge/domain/evidence_registry.dart` |
+| Curated rules gate | `lib/features/profile/domain/curated_rules_gate.dart` (fail-closed) |
+| Seed packages | `docs/seed/evidence_registry_v1.json`, `visa_initialization_package_v1.json`, `university_scholarship_seed_v1.json` |
+| Editorial checklist | `docs/seed/EDITORIAL_REVIEW_CHECKLIST.md` |
+| Tests | `test/knowledge/evidence_registry_test.dart` → **9/9 PASS** |
+| Analyze | **No issues found** |
 
----
+### Source inventory (v1)
 
-## Hardening checkpoint `8df9916`
+| Source | URL | Retrieved |
+|--------|-----|-----------|
+| IRCC study permit documents | https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents.html | 2026-10-18 |
+| IRCC apply online study permit | https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/portal-application-process-study.html | 2026-10-18 |
+| IRCC Express Entry who can apply | https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply.html | 2026-10-18 |
+| IRCC Express Entry create profile | https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/create-profile.html | 2026-10-18 |
 
-### Defect found and fixed
+All seed records: **`pendingReview`**. No eligibility rules auto-enabled. Fees/CRS/processing times **omitted**. University catalog **empty by design**.
 
-**Cross-user local application cache leak risk:** `ApplicationLocalDataSource` stored all applications under a single key `rad_applications`, so offline cache on a shared device could mix users.
+### Audit note (live catalog)
 
-**Fix:**
-- Per-user keys `rad_applications_{userId}`
-- `writeForUser` strips foreign-owned rows
-- Legacy unscoped key removed on scoped write
-- Corrupt JSON fails closed to empty list
-- `ApplicationRepositoryImpl` prefers scoped R/W when `userId` known
-- Profile: `clearLocalDraft`, `clearAllImmigrationDrafts`, `hasDraft`
-
-**Not claimed:** encryption at rest. SharedPreferences remains plaintext device storage. Production isolation = Supabase RLS.
-
-### Tests
-
-```
-flutter test test/profile/immigration_profile_validator_test.dart \
-  test/profile/pathway_assessment_test.dart \
-  test/profile/recommendation_engine_test.dart \
-  test/profile/immigration_profile_local_isolation_test.dart \
-  test/applications/case_checklist_test.dart \
-  test/applications/case_lifecycle_test.dart \
-  test/applications/application_local_isolation_test.dart \
-  test/knowledge/knowledge_integrity_test.dart \
-  test/visa/university_scholarship_test.dart \
-  test/domain_integration/cross_module_pipeline_test.dart
-```
-
-**Result: 84/84 PASS** (exit 0)  
-**dart analyze** (changed modules): **No issues found**
-
-### Changed files (`8df9916`)
-
-- `lib/features/applications/data/datasources/application_local_datasource.dart`
-- `lib/features/applications/data/repositories/application_repository_impl.dart`
-- `lib/features/profile/data/datasources/immigration_profile_local_datasource.dart`
-- `lib/features/profile/data/repositories/immigration_profile_repository_impl.dart`
-- `lib/features/profile/domain/repositories/immigration_profile_repository.dart`
-- `test/domain_integration/cross_module_pipeline_test.dart`
-- `test/profile/immigration_profile_local_isolation_test.dart`
-- `test/applications/application_local_isolation_test.dart`
-- `docs/RAD_GROK_DOMAIN_API_CONTRACT.md`
-
-### Antigravity handoff
-
-See **`docs/RAD_GROK_DOMAIN_API_CONTRACT.md`** for typed usage examples.
-
-API note: prefer `ApplicationLocalDataSource.readForUser` / `writeForUser`; call `ImmigrationProfileRepository.clearLocalDraft` on logout.
+App loads destinations/programs from Supabase (`VisaRepository`). No production query was run in this pass. Seed packages are additive review artifacts only.
 
 ---
 
-## Gate classification (Grok domain scope only)
-
-| Gate | Classification |
-|------|----------------|
-| E8-01 profile/pathway domain | **Verified by local tests** (implementation); UI + production data still open |
-| E8-02 case lifecycle domain | **Verified by local tests**; delivery/reminders not claimed |
-| E9-01 knowledge integrity | **Verified by local tests** (synthetic); live conflict monitor open |
-| E9-02 university/scholarship | **Implemented but not verified** (empty catalog; needs authoritative data) |
-| E9-04 recommendations | **Verified by local tests** (curated rules required at runtime) |
-
-### Top 5 remaining blockers
-
-1. **Curated eligibility rule dataset** — Owner/editorial + Codex content path. Without rules, pathway/recommendations stay fail-closed `insufficientVerifiedEvidence`.
-2. **Verified university/scholarship inventory** — Owner/content. Catalog is empty-safe by design.
-3. **Supabase RLS + production security path** — Codex/owner. Domain tests ≠ RLS proof.
-4. **UI wiring** — Antigravity. Domain contracts ready; pages not modified by Grok.
-5. **Real-device / production E2E + client acceptance** — Owner/Claude integration. Issue #57 VERIFIED_PASS requires independent evidence beyond unit tests.
-
----
-
-## Handoff SHAs for Claude Code
+## Prior domain SHAs
 
 ```
-8df9916  fix(domain): local storage isolation + cross-module pipeline hardening
-548444b  feat(knowledge): integrity + recommendations
-02f6352  feat(immigration): pathway, lifecycle, catalog
+4b851ee  evidence registry + seed packages
+8df9916  local storage isolation hardening
+548444b  knowledge integrity + recommendations
+02f6352  pathway + lifecycle + uni foundation
 ```
+
+## Remaining blockers
+
+1. Editorial promotion of seed `reviewStatus`
+2. Human-approved `CuratedRulePackage` if eligibility automation is desired
+3. Codex staging import (not Grok)
+4. Broader destination coverage with official sources
+5. University/scholarship official rows when verified
