@@ -1,0 +1,69 @@
+{
+  "project": "rad_codex_local47",
+  "production_mutations": false,
+  "started_at": "2026-10-18T14:38:08.170006+00:00",
+  "fingerprint": {
+    "rls": "f774d2521876438405d177897df727d3",
+    "bucket": "4082dda1bd1da983bda51a025c66ac93",
+    "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+    "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+    "policies": "5b8620228bf8c9346092eb66f1afa4cb",
+    "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+    "functions": "fc57d0f49dfab1be19b4469a05b19cf8",
+    "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+  },
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "clean-schema pinned fingerprint",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/reconciliation/security_regression.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_constraint_backfill.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_security.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/ai_entitlement_rpc_privacy.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/corrective_routing_research.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage2_knowledge_completion.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage4_user_ai.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_crm_notifications.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_payment_sandbox.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_definer_acl.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "two-user Auth RLS Storage quotas and human Feed",
+      "exit_code": 0
+    }
+  ],
+  "finished_at": "2026-10-18T14:38:34.992188+00:00",
+  "source_head": "4b9e0afb89b03833b6699a58a218f629cdbf0dab",
+  "source_dirty": true
+}

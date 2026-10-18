@@ -48,3 +48,7 @@ supabase/.temp/
 android/key.properties
 *.jks
 *.keystore
+
+# Generated analysis cache (gitleaks noise)
+graphify-out/
+

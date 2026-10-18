@@ -1,0 +1,44 @@
+{
+  "project": "rad_codex_local47_reconstruct",
+  "lineage": "historical",
+  "production_mutations": false,
+  "started_at": "2026-10-18T14:39:50.191425+00:00",
+  "migration_sha256": {
+    "20261001191421_initial_rad_core_schema.sql": "a1ddb94ce6bd7132d200a4e04522d407b07249b67f5d4cd9548ccea4d8cb628d",
+    "20261001191653_create_profile_trigger_and_storage_setup_v2.sql": "50ae3f36ba23a43765b1331b31d41a15acc20818e073eaded8594a7fc9d522e9",
+    "20261001194638_security_hardening_handle_new_user.sql": "f434ef0201c10b6916d700a44de3527b8c1dce83976e3643b461900a66c1b309",
+    "20261001194715_add_rad_backend_indexes.sql": "c77beb940272ab0bb0d1906f88d8e0a1e47a70e6941c93d31d90638cfe6377b2",
+    "20261001195750_security_hardening.sql": "2d8e97227ef2c5e05ad57744faf47ee1cc340b16be4ccc625890cca34b055c02",
+    "20261001195754_rls_policies.sql": "89c1f8d65c0bb33bc08a261910bb3732de6368f27b2f420cf575a6caaaf34abe",
+    "20261001195756_storage_policies.sql": "7e9439d7561f431028d8f6b0d030417986a7f7291b9a8e32cb89410284451c46",
+    "20261001200202_ai_sessions_and_document_bootstrap.sql": "16fd94e89e49e87b2e13f3e42310928a89dd056159e4c38ee1b595f55f7d6a24",
+    "20261001214952_project05_launch_hardening.sql": "0567e3c15abde9e00ec3838e591110efb4f72c071ee63d9ff744bcee9885169c",
+    "20261001215315_project05_storage_upload_limits.sql": "4cc13c862f53c64bc0434b6f3102f8f24a8d30cb6a52402a6570633901174ce3",
+    "20261001215758_project05_minimize_table_privileges.sql": "1eec561ac96fb19efde99c0e28c49101fa798fcee87d1ad7036e2edd228f0363",
+    "20261001225237_profile_bootstrap_policy.sql": "7f4949354e0125fc0b053f9dc9c42c5f84692dc85e8d9103085f4f468f1048c2",
+    "20261001225632_storage_validation_policies.sql": "900f09a2790e51d076b83c63a283f868433833773e1d1a6016b850390cea74b9",
+    "20261001225634_ai_message_ownership_policies.sql": "46c1c82ad1f27fbeadef2c30cfb1d0d70f035ff66493eb838bfcd3d6966a2059",
+    "20261001233027_signup_trigger_search_path.sql": "ccc91a27946eb376a96555047c545a112e0a69fc457a9e1ff24826a59d15e3a4",
+    "20261001233048_relationship_policies_and_indexes.sql": "fef578241b9a34a5e1ec05d40cde09251d16c716ae59ea27ba6106c225f4c061",
+    "20261003102347_restrict_documents_bucket_uploads.sql": "2778cac24b61ca2c97fd24468fb0a92e567f272d7e6c135680f911ba1edb0ebd",
+    "20261003210302_project09_visa_catalog.sql": "03adf8374c2943d0e4a54599d6d35353b2b9baf534a740f4d9058f2da064989e",
+    "20261003211635_project10_knowledge_research.sql": "817a4cee3b51edc7b9cb08f3ddddc3a573da4466ca0bf9044ba04144835cbee7",
+    "20261003212339_project10_security_hardening.sql": "3b525ef4a71dabf40f1bf87de8b4c695b271b25782699809e19f635373155776",
+    "20261003213219_project11_ai_orchestration.sql": "6aea905fb8353b24467db116afba035f3ebecdf876bc8ca32ddac9c2074ffc6b",
+    "20261003214031_project12_document_intelligence.sql": "35c8c62f992b1f53f8d5ef8b3189a159f0e0fe87f49be696c6aadcfae2222868",
+    "20261003221324_project13_admin_operations.sql": "0bffdc02b211d47c6797abc85591b417179aaeb03267718edaf7df30428b600f",
+    "20261003222909_project14_feed_notifications.sql": "1483f4586aae53e2ac3f31a004f4db04b5f515cf0991be8ccb385e687467edb6",
+    "20261003223717_project15_observability.sql": "88c44df0ea7491e77a42449f3bd0a36194d25b0a67b513af25e212f2b782b656"
+  },
+  "status": "FAIL",
+  "error": "local Supabase startup and migration replay failed (exit 1)",
+  "checks": [
+    {
+      "check": "local Supabase startup and migration replay",
+      "exit_code": 1
+    }
+  ],
+  "finished_at": "2026-10-18T14:40:49.606162+00:00",
+  "source_head": "4b9e0afb89b03833b6699a58a218f629cdbf0dab",
+  "source_dirty": true
+}

@@ -1,5 +1,10 @@
--- Stage 4 User AI regression (executed on production harness 2026-10-07)
+-- Stage 4 User AI regression; disposable local database only.
 begin;
+
+-- Human-approved synthetic publication from an earlier acceptance suite may
+-- legitimately exist. AI operations must leave the entire Feed unchanged.
+select set_config('rad.stage4_feed_hash',
+  (select md5(coalesce(jsonb_agg(to_jsonb(f) order by f.id)::text,'[]')) from public.feed_items f), true);
 do $$
 declare r jsonb; i int; k text := 'stage4_sql_test_guest_key_hash_abcdef';
 begin
@@ -34,9 +39,9 @@ begin
   assert v ? 'results';
 end $$;
 do $$
-declare c int;
+declare v_hash text;
 begin
-  select count(*) into c from public.feed_items;
-  assert c = 0;
+  select md5(coalesce(jsonb_agg(to_jsonb(f) order by f.id)::text,'[]')) into v_hash from public.feed_items f;
+  assert v_hash = current_setting('rad.stage4_feed_hash'), 'AI regression changed Feed content';
 end $$;
 rollback;
