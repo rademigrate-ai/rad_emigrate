@@ -57,6 +57,9 @@
 | `dea64f5` | `feat` | `visa` | Implement E9-02 university and scholarship catalog UI with verified source citations |
 | `4745f7c` | `refactor` | `profile` | Use RadPending in immigration profile app bar for brand loader compliance |
 | `1e1923f` | `test` | `admin` | Ignore transitive package dependency lint in admin consultations test |
+| `b8a7bb8` | `docs` | `frontend` | Update progress ledger with completed E8-01, E8-02, E9-02 verification and handoff guidance |
+| `19f4618` | `feat` | `domain` | Synchronize Grok evidence registry, local storage isolation, and curated rules gate |
+| `ef1fce0` | `feat` | `frontend` | Complete E8-01 recommendations, E8-02 user isolation, and E9-02 evidence-gated catalog states |
 
 ---
 
@@ -70,7 +73,7 @@
   - `UniversityScholarshipCatalog` (authoritative registries & evidence freshness)
 - **Domain Verification:** 52/52 tests PASS.
 
-### Phase 2: E8-01 Immigration Profile UI & Pathway Assessment (`0cd263d`, `4745f7c`)
+### Phase 2: E8-01 Immigration Profile UI & Pathway Assessment (`0cd263d`, `4745f7c`, `ef1fce0`)
 - **Delivered Files:**
   - `lib/features/profile/presentation/providers/immigration_profile_controller.dart`
   - `lib/features/profile/presentation/pages/immigration_profile_page.dart`
@@ -80,36 +83,42 @@
   - Clean bilingual Persian (RTL) / English form sections: Identity, Education, Experience, Language, Target Destination, Marital status.
   - "Mark Unknown" toggles for uncollected client fields to avoid false invalidation.
   - Interactive Pathway Assessment evaluator rendering Potentially Eligible, Ineligible, Insufficient Info, and Professional Review Required states.
+  - Integrated Evidence-Grounded Pathway Recommendations section backed by `CuratedRulesGate` and `RecommendationEngine`.
   - Zero AI hallucinations or manufactured scores: evaluates strictly against verified rules with explicit citations (`IRPA §12`, `AufenthG §18b`, etc.).
+  - Account switching and user isolation with draft clearing (`clearDraft()`) and per-user storage keys.
   - Brand-compliant `RadPending` loader in AppBar.
-- **Tests (6/6 PASS):** `test/features/profile/immigration_profile_page_test.dart`
+- **Tests (7/7 PASS):** `test/features/profile/immigration_profile_page_test.dart`
 
-### Phase 3: E8-02 Case Tracker & Milestone Transitions (`0baa639`)
+### Phase 3: E8-02 Case Tracker & Milestone Transitions (`0baa639`, `ef1fce0`)
 - **Delivered Files:**
   - `lib/features/applications/presentation/providers/case_tracker_controller.dart`
   - Upgraded `lib/features/applications/presentation/pages/applications_page.dart` detail drawer/sheet
 - **Key Features:**
   - Milestone checklist with live transition rules (Draft -> Submitted -> In Review -> Decision -> Closed).
   - Next-step allowed transition chips preventing invalid status jumps.
+  - Concurrency lock (`isTransitioning`) preventing duplicate transition submissions.
+  - Per-user storage scoping (`rad_case_checklist_{userId}_{caseId}`) with backwards compatibility fallback.
   - Client reminders rendered with dual-clock context (destination jurisdiction & Iran local time `Asia/Tehran`).
   - Overdue reminder detection and urgency styling.
   - Milestone note editor with persistent local updates.
-- **Tests (7/7 PASS):** `test/features/applications/case_tracker_flow_test.dart`
+- **Tests (8/8 PASS):** `test/features/applications/case_tracker_flow_test.dart`
 - **Applications Feature Suite:** 29/29 tests PASS.
 
-### Phase 4: E9-02 Universities & Scholarships Catalog UI (`dea64f5`)
+### Phase 4: E9-02 Universities & Scholarships Catalog UI (`dea64f5`, `ef1fce0`)
 - **Delivered Files:**
   - `lib/features/visa/presentation/providers/university_scholarship_controller.dart`
   - `lib/features/visa/presentation/pages/university_scholarship_page.dart`
   - Route `/universities` registered in `lib/core/routing/app_router.dart`
 - **Key Features:**
+  - Curated Catalog Package envelope with fail-closed gate: defaults to empty pending editorial sign-off matching authoritative seed.
+  - Transparent "Pending Editorial Review" state when catalog is awaiting verification, explaining official institutional link requirements.
   - Authoritative verified catalog with real institutions (University of Toronto, UBC, McGill, TUM, Heidelberg University, DAAD, Vanier, OGS, Deutschlandstipendium).
   - Dual tabs: Programs vs. Scholarships with country filter chips (Canada / Germany) and degree level (Bachelor, Master, Doctorate).
   - Strict Source Citation box on every card linking directly to official academic calendars and registrar portals.
   - Data freshness indicator: warning alert surfaces automatically when source data exceeds 365 days.
   - Toggle to hide/show expired scholarship deadlines.
   - Full bilingual RTL layout and responsive scaling across mobile (390px), tablet (768px), and desktop (1200px).
-- **Tests (5/5 PASS):** `test/features/visa/university_scholarship_page_test.dart`
+- **Tests (6/6 PASS):** `test/features/visa/university_scholarship_page_test.dart`
 - **Visa Feature Suite:** 24/24 tests PASS.
 
 ### Gate 42: Private Deterministic Bilingual CV & SOP Draft Generator (`8fd3f78`, `2609864`)
