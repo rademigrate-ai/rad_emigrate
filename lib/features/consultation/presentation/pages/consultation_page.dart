@@ -132,10 +132,15 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
 
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context);
+    if (_submitting) return;
+
     final topic = _topic.text.trim();
     final message = _message.text.trim();
     if (!(_formKey.currentState?.validate() ?? false)) {
-      setState(() => _error = l10n.consultationFieldsRequired);
+      setState(() {
+        _error = l10n.consultationFieldsRequired;
+        _success = null;
+      });
       return;
     }
 
@@ -147,7 +152,6 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       return;
     }
 
-    if (_submitting) return;
     setState(() {
       _submitting = true;
       _error = null;
@@ -186,7 +190,12 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       if (mounted) {
         setState(() {
           _success = l10n.consultationSubmitted;
+          _topic.removeListener(_onFieldChanged);
+          _message.removeListener(_onFieldChanged);
+          _topic.clear();
           _message.clear();
+          _topic.addListener(_onFieldChanged);
+          _message.addListener(_onFieldChanged);
         });
         await _loadMine();
       }
@@ -269,12 +278,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
                   ],
                   if (_success != null) ...[
                     const SizedBox(height: 8),
-                    Text(
-                      _success!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
+                    InlineAlert(message: _success!, error: false),
                   ],
                   const SizedBox(height: 16),
                   AppButton(
@@ -308,10 +312,22 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
                   else if (_historyLoading)
                     RadInlineLoading(label: l10n.loading)
                   else if (_historyFailed)
-                    TextButton.icon(
-                      onPressed: _loadMine,
-                      icon: const Icon(Icons.refresh),
-                      label: Text(l10n.refresh),
+                    AppCard(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            InlineAlert(message: l10n.errorGeneric),
+                            const SizedBox(height: 12),
+                            AppButton(
+                              label: l10n.retry,
+                              icon: Icons.refresh,
+                              variant: AppButtonVariant.secondary,
+                              onPressed: _loadMine,
+                            ),
+                          ],
+                        ),
+                      ),
                     )
                   else if (_mine.isEmpty)
                     Text(l10n.noConsultations)

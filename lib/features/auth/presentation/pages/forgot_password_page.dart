@@ -108,20 +108,17 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       localeControl: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
-          IconButton(
-            tooltip: l10n.backToSignIn,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => AppBackButton.goBack(
-              context,
-              fallback: Uri(
-                path: '/login',
-                queryParameters: {
-                  'from': ?GoRouterState.of(context)
-                      .uri
-                      .queryParameters['from'],
-                },
-              ).toString(),
-            ),
+          AppBackButton(
+            fallback: Uri(
+              path: '/login',
+              queryParameters: {
+                'from': ?GoRouter.maybeOf(context)
+                    ?.routeInformationProvider
+                    .value
+                    .uri
+                    .queryParameters['from'],
+              },
+            ).toString(),
           ),
           TextButton.icon(
             icon: const Icon(Icons.language_outlined),

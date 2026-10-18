@@ -1,4 +1,5 @@
 import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/widgets/rad_loading.dart';
 
 import 'package:flutter/material.dart';
@@ -115,20 +116,17 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       localeControl: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
-          IconButton(
-            tooltip: l10n.backToSignIn,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => AppBackButton.goBack(
-              context,
-              fallback: Uri(
-                path: '/login',
-                queryParameters: {
-                  'from': ?GoRouterState.of(context)
-                      .uri
-                      .queryParameters['from'],
-                },
-              ).toString(),
-            ),
+          AppBackButton(
+            fallback: Uri(
+              path: '/login',
+              queryParameters: {
+                'from': ?GoRouter.maybeOf(context)
+                    ?.routeInformationProvider
+                    .value
+                    .uri
+                    .queryParameters['from'],
+              },
+            ).toString(),
           ),
           TextButton.icon(
             icon: const Icon(Icons.language_outlined),
@@ -224,7 +222,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
               ),
               if (_error != null) ...[
                 const SizedBox(height: 12),
-                Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+                InlineAlert(message: _error!),
               ],
               const SizedBox(height: 24),
               AppButton(
