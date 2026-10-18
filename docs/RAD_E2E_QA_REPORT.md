@@ -22,7 +22,7 @@ PR #68 was initially reported `mergeable=false` by GitHub, but the isolated code
 
 ## New E8-04 implementation candidate — separate branch
 
-[PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70) adds an offline bilingual CV/SOP editable draft page under authenticated `/documents/draft`, using only the applicant's own input, with no generated claims, network calls or automatic storage. Locally, `flutter analyze --no-pub` returned zero issues, 27 focused tests and 512 complete Flutter tests passed on its own immutable HEAD `9ad1c3455fc474b0f7e74666d9758d680a740d6d`. This remains a separate Draft branch and is **not** a deployed or client-accepted PDF/DOCX generator. Exact live route, export workflows and accessibility UAT remain open.
+[PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70) adds an offline bilingual CV/SOP editable draft page under authenticated `/documents/draft`, with explicit user-triggered UTF-8 TXT export and clipboard copying. It uses only applicant input, without generated claims, network calls or automatic storage. Locally, `flutter analyze --no-pub` returned zero issues, 27 focused tests and 512 complete Flutter tests passed on its own immutable HEAD `9ad1c3455fc474b0f7e74666d9758d680a740d6d`. This remains a separate Draft branch and is **not** a deployed or client-accepted PDF/DOCX generator. Exact live route, export workflows and accessibility UAT remain open.
 
 ## Required E2E / negative tests not yet accepted
 

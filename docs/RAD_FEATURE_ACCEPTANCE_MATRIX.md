@@ -53,7 +53,7 @@ Verified engineering review: 2026-10-18. Original source: [`CORRECTIVE_FEATURE_A
 
 ## New document draft flow (candidate, not merged/deployed)
 
-| `/documents/draft` | User enters own CV or SOP facts, generates editable plain text, optionally copies it | `lib/features/documents/domain/document_draft_generator.dart`, `document_draft_page.dart`; no database/network calls | Persian/English headings, required validation, no invented educational/visa claims, user-triggered clipboard only, authenticated and profile-complete route | Missing content, email injection, control characters, overlong text, unknown nested paths, unsaved edits | [PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70): 27 focused tests PASS, full Flutter 512 PASS, analyzer clean | **OPEN**: Draft source not in main or deployed, no full UAT or PDF/DOCX export | **IN_PROGRESS** E8-04 |
+| `/documents/draft` | User enters own CV or SOP facts, generates editable plain text, optionally copies it | `lib/features/documents/domain/document_draft_generator.dart`, `document_draft_page.dart`; no database/network calls | Persian/English headings, required validation, no invented educational/visa claims, user-triggered TXT export/clipboard only, authenticated and profile-complete route | Missing content, email injection, control characters, overlong text, unknown nested paths, unsaved edits | [PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70): 27 focused tests PASS, full Flutter 512 PASS, analyzer clean | **OPEN**: Draft source not in main or deployed, no full UAT or PDF/DOCX export | **IN_PROGRESS** E8-04 |
 
 ## Concrete acceptance recording requirements
 

@@ -7,7 +7,7 @@
 | Gate | Evidence | Result |
 |---|---|---|
 | GitHub main | SHA `2739567cc0c228c0b190da177266de9df811be5a`, [CI #39072163776](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39072163776) | **PASS 7/7** engineering CI |
-| Documents CV/SOP editor candidate | [Draft PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70), locally 512 Flutter tests PASS and analyzer clean | **IN_PROGRESS** E8-04; not in main/deployed; rich export and client signoff open |
+| Documents CV/SOP editor candidate | [Draft PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70), locally 512 Flutter tests PASS and analyzer clean | **IN_PROGRESS** E8-04; not in main/deployed; TXT export included; rich PDF/DOCX export and client signoff open |
 | Flutter UI patch (not integrated) | [Draft PR #68](https://github.com/rademigrate-ai/rad_emigrate/pull/68), own HEAD `f616078...`; code merges cleanly in scratch; Flutter analyzer pass, **515/515** full Flutter tests | **IMPLEMENTED candidate**, separate source; full current-HEAD E2E still OPEN |
 | Production web version | Render live deploy `449cd3b6cb0a0b53e852015ad4a3648bd817ad65`, auto-deploy `off` | **BLOCKED**: stale deployed SHA vs main; no release permission granted |
 | Production migrations | 47 recorded vs 52 repo, 16 version aliases, 4 live-only / 9 repo-only; 12 SQL mismatches + 2 multi-chunk histories | **NO-GO**; cannot replay/repair blindly |
