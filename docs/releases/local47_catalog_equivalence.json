@@ -1,0 +1,151 @@
+{
+  "scope": "two_disposable_loopback_catalogs",
+  "production_mutations": false,
+  "groups": {
+    "ai_models": {
+      "status": "MATCH",
+      "canonical_rows": 1,
+      "reconstructed_rows": 1
+    },
+    "ai_providers": {
+      "status": "MATCH",
+      "canonical_rows": 1,
+      "reconstructed_rows": 1
+    },
+    "buckets": {
+      "status": "MATCH",
+      "canonical_rows": 1,
+      "reconstructed_rows": 1
+    },
+    "column_grants": {
+      "status": "MATCH",
+      "canonical_rows": 6046,
+      "reconstructed_rows": 6046
+    },
+    "columns": {
+      "status": "MATCH",
+      "canonical_rows": 565,
+      "reconstructed_rows": 565
+    },
+    "constraints": {
+      "status": "MATCH",
+      "canonical_rows": 318,
+      "reconstructed_rows": 318
+    },
+    "cron": {
+      "status": "MATCH",
+      "canonical_rows": 3,
+      "reconstructed_rows": 3
+    },
+    "default_acl": {
+      "status": "MATCH",
+      "canonical_rows": 6,
+      "reconstructed_rows": 6
+    },
+    "document_processor": {
+      "status": "MATCH",
+      "canonical_rows": 1,
+      "reconstructed_rows": 1
+    },
+    "extensions": {
+      "status": "MATCH",
+      "canonical_rows": 4,
+      "reconstructed_rows": 4
+    },
+    "function_grants": {
+      "status": "MATCH",
+      "canonical_rows": 62,
+      "reconstructed_rows": 62
+    },
+    "functions": {
+      "status": "MATCH",
+      "canonical_rows": 62,
+      "reconstructed_rows": 62
+    },
+    "history": {
+      "status": "EXPECTED_REPLAY_METHOD_DIFFERENCE",
+      "canonical_versions": 53,
+      "historical_versions": 25
+    },
+    "indexes": {
+      "status": "MATCH",
+      "canonical_rows": 201,
+      "reconstructed_rows": 201
+    },
+    "policies": {
+      "status": "MATCH",
+      "canonical_rows": 125,
+      "reconstructed_rows": 125
+    },
+    "research_sources": {
+      "status": "MATCH",
+      "canonical_rows": 3,
+      "reconstructed_rows": 3
+    },
+    "rls": {
+      "status": "MATCH",
+      "canonical_rows": 62,
+      "reconstructed_rows": 62
+    },
+    "schemas": {
+      "status": "MATCH",
+      "canonical_rows": 2,
+      "reconstructed_rows": 2
+    },
+    "search_providers": {
+      "status": "MATCH",
+      "canonical_rows": 1,
+      "reconstructed_rows": 1
+    },
+    "sequences": {
+      "status": "MATCH",
+      "canonical_rows": 4,
+      "reconstructed_rows": 4
+    },
+    "table_acl": {
+      "status": "MATCH",
+      "canonical_rows": 66,
+      "reconstructed_rows": 66
+    },
+    "table_grants": {
+      "status": "MATCH",
+      "canonical_rows": 1094,
+      "reconstructed_rows": 1094
+    },
+    "tables": {
+      "status": "MATCH",
+      "canonical_rows": 62,
+      "reconstructed_rows": 62
+    },
+    "triggers": {
+      "status": "MATCH",
+      "canonical_rows": 30,
+      "reconstructed_rows": 30
+    },
+    "types": {
+      "status": "MATCH",
+      "canonical_rows": 0,
+      "reconstructed_rows": 0
+    },
+    "vault_client_access": {
+      "status": "MATCH",
+      "canonical_rows": 2,
+      "reconstructed_rows": 2
+    },
+    "vault_metadata": {
+      "status": "MATCH",
+      "canonical_rows": 0,
+      "reconstructed_rows": 0
+    },
+    "views": {
+      "status": "MATCH",
+      "canonical_rows": 0,
+      "reconstructed_rows": 0
+    }
+  },
+  "status": "PASS",
+  "catalog_sha256": [
+    "b018353bfebbe012fc3d63ed4f3c38e6bac35e8200268a3917c2050a23e2c9fb",
+    "7cafd4b059f70ce44a8e74362d156593c95a464db75b0cd02bc07c8bf5f9ec31"
+  ]
+}
