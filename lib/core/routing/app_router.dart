@@ -28,6 +28,7 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/immigration_profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
+import '../../features/visa/presentation/pages/university_scholarship_page.dart';
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -131,6 +132,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile/immigration',
             builder: (_, _) => const ImmigrationProfilePage(),
+          ),
+          GoRoute(
+            path: '/universities',
+            builder: (_, _) => const UniversityScholarshipPage(),
           ),
           GoRoute(
             path: '/ai-assistant',
