@@ -17,6 +17,7 @@ type Options = {
   chain?: R[]; status?: number[]; timeout?: boolean; discovery?: string[];
   persistFails?: boolean; chainFails?: boolean; role?: string;
   quotaExceeded?: boolean; quotaError?: boolean; quotaMalformed?: boolean;
+  knowledgeResults?: unknown; knowledgeUnavailable?: boolean;
 };
 async function exercise(options: Options = {}, payload: Record<string, unknown> = {}) {
   Deno.env.set("SUPABASE_URL", "https://db.example.com");
@@ -34,6 +35,9 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
       const path = url.split("/rest/v1/")[1];
       if (path.startsWith("profiles?")) return response([{ role: options.role ?? "super_admin" }]);
       if (path.startsWith("ai_usage_limits?")) return response([{ daily_requests: 50, daily_output_tokens: 1000 }]);
+      if (path === "rpc/retrieve_knowledge") return options.knowledgeUnavailable
+        ? response({ error: "private knowledge diagnostic" }, 503)
+        : response({ results: options.knowledgeResults ?? [] });
       if (path === "rpc/consume_ai_daily_quota") {
         if (options.quotaError) return response({ error: "database error" }, 500);
         if (options.quotaMalformed) return response({ allowed: true });
@@ -164,4 +168,44 @@ Deno.test("20 malformed quota response fails closed with 500", async () => {
   equal(x.body.code, "quota_reservation_invalid");
   equal(x.providerCalls, 0);
   equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
+});
+
+function evidenceWithConflicts(open_conflicts: unknown[] = []) {
+  return [{
+    title: "Reviewed source", review_status: "approved", summary: "Reviewed facts",
+    claims: [{
+      claim_text: "Current reviewed claim", review_status: "approved", is_current: true,
+      citations: [{ source: { title: "Official source", canonical_url: "https://example.gov/policy", source_authority: "government" } }],
+    }],
+    open_conflicts,
+  }];
+}
+
+Deno.test("grounded response: conflicts force uncertainty despite approved citations", async () => {
+  const x = await exercise({ knowledgeResults: evidenceWithConflicts([{ statement_a: "A", statement_b: "B" }]) });
+  equal(x.status, 200);
+  equal(x.body.has_approved_evidence, true);
+  equal(x.body.sources.length, 1);
+  equal(x.body.uncertain, true);
+  equal(x.calls.find(c => c.path.endsWith("/chat/completions"))?.body.messages[0].content.includes("[OPEN CONFLICT]"), true);
+});
+
+Deno.test("grounded response: approved current cited result retains certainty and locale", async () => {
+  const x = await exercise({ knowledgeResults: evidenceWithConflicts() }, { locale: "fa" });
+  equal(x.status, 200);
+  equal(x.body.uncertain, false);
+  equal(x.body.locale, "fa");
+  equal(x.body.sources[0].url, "https://example.gov/policy");
+});
+
+Deno.test("grounded response: missing or unavailable search cannot claim verified evidence", async () => {
+  for (const options of [{ knowledgeResults: [] }, { knowledgeUnavailable: true }]) {
+    const x = await exercise(options);
+    equal(x.status, 200);
+    equal(x.body.uncertain, true);
+    equal(x.body.has_approved_evidence, false);
+    equal(x.body.sources, []);
+    equal(x.calls.some(c => c.path.includes("knowledge_items?")), false);
+    equal(JSON.stringify(x.body).includes("private knowledge diagnostic"), false);
+  }
 });
