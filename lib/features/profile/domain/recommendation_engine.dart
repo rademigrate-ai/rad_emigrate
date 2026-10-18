@@ -1,4 +1,4 @@
-// Deterministic, evidence-aware recommendation foundation for RAD Emigrate.
+﻿// Deterministic, evidence-aware recommendation foundation for RAD Emigrate.
 // Consumes immigration profile + pathway assessment contracts.
 // Never fabricates eligibility requirements or approval probabilities.
 

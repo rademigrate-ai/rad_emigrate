@@ -1,4 +1,4 @@
-# Codex backend local progress
+﻿# Codex backend local progress
 
 Policy: local development, tests and commits only until final delivery. No production mutations. Accepted count remains 3/47; implementation evidence does not confer owner acceptance.
 
@@ -18,7 +18,7 @@ Integration handoff: consume tested local commits from feat/codex-master-47-exec
 
 ## Provider/HTTP/performance checkpoint
 
-Provider boundaries and shared URL guards pass **102/102 Edge tests**; Python **27/27**. The existing grounding audit alignment was reused from authored `66c5820` as local `416a26a` (integration already contains its equivalent); its focused Flutter audit passes 9/9. Local Deno HTTP → PostgREST → SQL verifies signed sandbox retries, stale/terminal handling and notification replay without external calls. Measured FK EXPLAIN probes choose all three indexes naturally, compare against rolled-back index removal and restore schema. Exact clean-HEAD database proof for earlier `47835e8` is retained separately. See releases/LOCAL47_PROVIDER_AND_HTTP_CHECKPOINT.md. This is another backend handoff, not final integrated acceptance. Next independent local work: controlled disposable mailbox recovery/OTP verification, then remaining document-processing integrity.
+Provider boundaries and shared URL guards pass **102/102 Edge tests**; Python **27/27**. The existing grounding audit alignment was reused from authored `66c5820` as local `416a26a` (integration already contains its equivalent); its focused Flutter audit passes 9/9. Local Deno HTTP ΓåÆ PostgREST ΓåÆ SQL verifies signed sandbox retries, stale/terminal handling and notification replay without external calls. Measured FK EXPLAIN probes choose all three indexes naturally, compare against rolled-back index removal and restore schema. Exact clean-HEAD database proof for earlier `47835e8` is retained separately. See releases/LOCAL47_PROVIDER_AND_HTTP_CHECKPOINT.md. This is another backend handoff, not final integrated acceptance. Next independent local work: controlled disposable mailbox recovery/OTP verification, then remaining document-processing integrity.
 
 Local handoff `4b083db` is ready for integration (no push). Disposable Mailpit/Auth verification then passed five grouped recovery/password/OTP/session/expiry/redirect tests, with three synthetic users/messages removed. See releases/LOCAL47_AUTH_RECOVERY.md; signup confirmation is explicitly untested in the default autoconfirm local config, and no frontend deep-link or production-email acceptance is claimed.
 

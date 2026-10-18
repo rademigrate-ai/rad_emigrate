@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Real concurrent sessions against Codex's dedicated loopback-only test stack."""
 from __future__ import annotations
 import argparse
