@@ -114,10 +114,17 @@ class _AdminConsultationsPageState
       }
       if (mounted) {
         setState(() => _notice = l10n.consultationUpdated);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.consultationUpdated)),
+        );
         await _load();
       }
     } catch (_) {
-      if (mounted) setState(() => _error = l10n.consultationUpdateFailed);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.consultationUpdateFailed)),
+        );
+      }
     }
   }
 
