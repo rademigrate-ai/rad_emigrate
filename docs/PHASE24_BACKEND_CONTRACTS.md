@@ -22,15 +22,15 @@ Malformed callback 400, bad/stale signature 401, semantic database rejection 422
 
 ## CRM search
 
-`search_admin_consultations(p_query text='', p_status text=null, p_limit integer=25, p_offset integer=0)` returns a bounded JSON array of existing consultation fields plus revision. Only profile-authorized admin/super_admin callers may use it. Query length is at most 200, limit 1–100, offset 0–10000, status one of submitted/in_review/contacted/closed. Case-insensitive **literal** topic/message substring search treats `%` and `_` as data. Results order by created_at descending then UUID descending. Existing revision-checked transition/assignment APIs and their audits remain unchanged.
+`search_admin_consultations(p_query text='', p_status text=null, p_limit integer=25, p_offset integer=0)` returns a bounded JSON array of existing consultation fields plus revision. Only profile-authorized admin/super_admin callers may use it. Query length is at most 200, limit 1-100, offset 0-10000, status one of submitted/in_review/contacted/closed. Case-insensitive **literal** topic/message substring search treats `%` and `_` as data. Results order by created_at descending then UUID descending. Existing revision-checked transition/assignment APIs and their audits remain unchanged.
 
 ## Sandbox notification dispatch
 
-`notification-dispatch` now has an Edge entrypoint with gateway `verify_jwt=true`. POST additionally requires purpose header `x-rad-notification-token`, matching `RAD_NOTIFICATION_WORKER_TOKEN` (32–512 characters). A user/service JWT alone cannot dispatch. `RAD_NOTIFICATION_SANDBOX_ENABLED` defaults false. The handler accepts only loopback targets or `APP_ENV=staging` plus explicit nonproduction `RAD_STAGING_PROJECT_REF` matching the canonical Supabase URL. No production target is accepted.
+`notification-dispatch` now has an Edge entrypoint with gateway `verify_jwt=true`. POST additionally requires purpose header `x-rad-notification-token`, matching `RAD_NOTIFICATION_WORKER_TOKEN` (32-512 characters). A user/service JWT alone cannot dispatch. `RAD_NOTIFICATION_SANDBOX_ENABLED` defaults false. The handler accepts only loopback targets or `APP_ENV=staging` plus explicit nonproduction `RAD_STAGING_PROJECT_REF` matching the canonical Supabase URL. No production target is accepted.
 
 JSON is empty object or `{ "limit": 1..20 }`, default 10, maximum 4 KiB, no other keys. Existing SKIP LOCKED leases, attempt limits, consent rechecks and fenced acknowledgements remain authoritative. Dispatch has a 10-second database deadline and abort signal. It uses a no-op transport and records **sandbox receipts**, never actual email/SMS/push delivery. Disabled/unsafe target 503; missing/wrong purpose token 403; malformed 400; oversized 413; unavailable/timeout 503. Responses do not contain lease tokens or raw database errors. After ambiguous timeout, allow the existing lease expiry/retry policy to recover work.
 
-The loopback test harness exercises the actual handler factory with Auth/PostgREST/outbox. That proves ordinary Deno HTTP integration, not hosted Edge runtime/gateway or external transport delivery.
+The loopback test harness exercises the enabled handler factory with Auth/PostgREST/outbox through ordinary Deno HTTP. A separate actual local Edge Runtime 1.77.1 smoke verifies forged-JWT 401 and default-disabled 503 with valid anon/service JWTs. Hosted Edge behavior and external transport delivery remain unverified.
 
 ## Owner activation dependencies
 
