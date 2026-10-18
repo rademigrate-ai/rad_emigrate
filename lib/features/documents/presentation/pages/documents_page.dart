@@ -4,6 +4,7 @@ import '../../../../core/widgets/premium_visuals.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,6 +81,14 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
         leading: const AppBackButton(fallback: '/profile'),
         title: Text(l10n.documents),
         actions: [
+          IconButton(
+            key: const ValueKey('open_document_draft'),
+            tooltip: Localizations.localeOf(context).languageCode == 'fa'
+                ? 'ساخت رزومه و انگیزه‌نامه'
+                : 'Create CV or statement of purpose',
+            icon: const Icon(Icons.edit_document),
+            onPressed: () => context.push('/documents/draft'),
+          ),
           IconButton(
             tooltip: l10n.refresh,
             icon: const Icon(Icons.refresh),
