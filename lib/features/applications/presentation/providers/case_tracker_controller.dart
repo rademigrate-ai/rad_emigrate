@@ -114,7 +114,11 @@ final caseTrackerControllerProvider = StateNotifierProvider.autoDispose
     ) {
       final prefs = ref.watch(sharedPreferencesProvider);
       final session = ref.watch(authControllerProvider).valueOrNull;
-      final userId = session?.userId ?? app.userId ?? 'test-user-id';
+      final userId =
+          (session?.isAuthenticated == true ? session?.userId : null) ??
+          (session?.userId?.isNotEmpty == true ? session!.userId : null) ??
+          (app.userId?.isNotEmpty == true ? app.userId : null) ??
+          'guest';
       final appRepo = ref.watch(applicationRepositoryProvider);
       return CaseTrackerController(
         initialApp: app,
@@ -154,29 +158,69 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
   final ApplicationRepository? _appRepository;
   final CaseLifecycleService _service;
 
+  String get _effectiveUserId =>
+      _userId.trim().isNotEmpty ? _userId.trim() : 'guest';
+
   String get _scopedStorageKey =>
-      'rad_case_checklist_${_userId.isNotEmpty ? "${_userId}_" : ""}${state.case_.caseId}';
+      'rad_case_checklist_${_effectiveUserId}_${state.case_.caseId}';
+
   String get _legacyStorageKey => 'rad_case_checklist_${state.case_.caseId}';
 
   void load() {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final raw =
-          _prefs.getString(_scopedStorageKey) ??
-          _prefs.getString(_legacyStorageKey);
-      CaseChecklist checklist;
-      if (raw != null && raw.isNotEmpty) {
-        final decoded = jsonDecode(raw) as Map<String, dynamic>;
-        checklist = CaseChecklist.fromJson(decoded);
-      } else {
-        checklist = CaseChecklist(
-          caseId: state.case_.caseId,
-          applicationStatus: state.case_.application.status,
-          items: defaultMilestoneItems(
-            state.case_.application,
-            clock: state.now,
-          ),
-        );
+      final effectiveUser = _effectiveUserId;
+      CaseChecklist? loadedChecklist;
+
+      // 1. Authoritative per-user scoped storage check
+      final scopedRaw = _prefs.getString(_scopedStorageKey);
+      if (scopedRaw != null && scopedRaw.isNotEmpty) {
+        final decoded = jsonDecode(scopedRaw) as Map<String, dynamic>;
+        final storedOwner =
+            decoded['userId'] as String? ?? decoded['ownerId'] as String?;
+        if (storedOwner == null || storedOwner == effectiveUser) {
+          loadedChecklist = CaseChecklist.fromJson(decoded);
+        }
+      }
+
+      // 2. Legacy unscoped storage fallback ONLY with demonstrably verified ownership.
+      // An unowned legacy key contains no owner identity to authorize migration and MUST fail closed.
+      if (loadedChecklist == null) {
+        final legacyRaw = _prefs.getString(_legacyStorageKey);
+        if (legacyRaw != null && legacyRaw.isNotEmpty) {
+          final decoded = jsonDecode(legacyRaw) as Map<String, dynamic>;
+          final legacyOwner =
+              decoded['userId'] as String? ??
+              decoded['ownerId'] as String? ??
+              decoded['creatorUserId'] as String? ??
+              _prefs.getString(
+                'rad_case_checklist_owner_${state.case_.caseId}',
+              );
+
+          if (legacyOwner != null &&
+              legacyOwner.isNotEmpty &&
+              legacyOwner == effectiveUser) {
+            loadedChecklist = CaseChecklist.fromJson(decoded);
+            // Migrate to user-scoped storage and purge legacy unscoped key
+            _persistChecklist(loadedChecklist);
+            _prefs.remove(_legacyStorageKey);
+          }
+          // Otherwise fail closed: never disclose unowned or foreign account checklist
+        }
+      }
+
+      final checklist =
+          loadedChecklist ??
+          CaseChecklist(
+            caseId: state.case_.caseId,
+            applicationStatus: state.case_.application.status,
+            items: defaultMilestoneItems(
+              state.case_.application,
+              clock: state.now,
+            ),
+          );
+
+      if (loadedChecklist == null) {
         _persistChecklist(checklist);
       }
 
@@ -198,7 +242,9 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
   }
 
   Future<void> _persistChecklist(CaseChecklist checklist) async {
-    final encoded = jsonEncode(checklist.toJson());
+    final payload = checklist.toJson();
+    payload['userId'] = _effectiveUserId;
+    final encoded = jsonEncode(payload);
     await _prefs.setString(_scopedStorageKey, encoded);
   }
 

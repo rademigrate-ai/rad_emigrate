@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -463,6 +465,230 @@ void main() {
             (i) => i.title == 'User A Confidential Step',
           ),
           isFalse,
+        );
+      },
+    );
+
+    testWidgets(
+      'unowned legacy checklist storage fails closed and does not disclose data to another user with missing scoped key',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({
+          'rad_case_checklist_${sampleApp.id}': jsonEncode({
+            'caseId': sampleApp.id,
+            'applicationStatus': 'draft',
+            'items': [
+              {
+                'id': 'unowned-legacy-step',
+                'title': 'User A Unowned Confidential Item',
+                'status': 'notStarted',
+              },
+            ],
+          }),
+        });
+
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+
+        // User B opens the case with no prior scoped key
+        final userBCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-B',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // Fails closed: User B must NOT see User A's unowned legacy item
+        expect(
+          userBCtrl.state.checklist.items.any(
+            (i) => i.title == 'User A Unowned Confidential Item',
+          ),
+          isFalse,
+        );
+
+        // Scoped key is created for User B with clean default milestones
+        expect(
+          prefs.getString('rad_case_checklist_user-B_${sampleApp.id}'),
+          isNotNull,
+        );
+      },
+    );
+
+    testWidgets(
+      'legitimate user legacy checklist migrates safely with verifiable ownership and purges legacy key',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({
+          'rad_case_checklist_${sampleApp.id}': jsonEncode({
+            'caseId': sampleApp.id,
+            'userId': 'user-A',
+            'applicationStatus': 'draft',
+            'items': [
+              {
+                'id': 'owned-legacy-step',
+                'title': 'User A Legitimate Preserved Milestone',
+                'status': 'inProgress',
+              },
+            ],
+          }),
+        });
+
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+
+        // User A opens their case having verifiable ownership in the legacy payload
+        final userACtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-A',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // Ownership verified: User A recovers their legitimate milestone
+        expect(
+          userACtrl.state.checklist.items.any(
+            (i) => i.title == 'User A Legitimate Preserved Milestone',
+          ),
+          isTrue,
+        );
+
+        // Migrated to user-A scoped key
+        expect(
+          prefs.getString('rad_case_checklist_user-A_${sampleApp.id}'),
+          isNotNull,
+        );
+        // Legacy unscoped key purged to prevent foreign access
+        expect(prefs.getString('rad_case_checklist_${sampleApp.id}'), isNull);
+
+        // User B opens the case
+        final userBCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-B',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // User B cannot see User A's milestone
+        expect(
+          userBCtrl.state.checklist.items.any(
+            (i) => i.title == 'User A Legitimate Preserved Milestone',
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    testWidgets(
+      'account switching cycle preserves isolated checklists and scoped key precedence',
+      (tester) async {
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+
+        // User Alpha session
+        final ctrlA = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-alpha',
+          prefs: prefs,
+          appRepository: repo,
+        );
+        await ctrlA.addChecklistItem(title: 'Alpha Exclusive Milestone');
+
+        // User Beta session on same case
+        final ctrlB = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-beta',
+          prefs: prefs,
+          appRepository: repo,
+        );
+        await ctrlB.addChecklistItem(title: 'Beta Exclusive Milestone');
+
+        expect(
+          ctrlB.state.checklist.items.any(
+            (i) => i.title == 'Alpha Exclusive Milestone',
+          ),
+          isFalse,
+        );
+        expect(
+          ctrlB.state.checklist.items.any(
+            (i) => i.title == 'Beta Exclusive Milestone',
+          ),
+          isTrue,
+        );
+
+        // Switch back to User Alpha
+        final ctrlAResumed = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-alpha',
+          prefs: prefs,
+          appRepository: repo,
+        );
+        expect(
+          ctrlAResumed.state.checklist.items.any(
+            (i) => i.title == 'Alpha Exclusive Milestone',
+          ),
+          isTrue,
+        );
+        expect(
+          ctrlAResumed.state.checklist.items.any(
+            (i) => i.title == 'Beta Exclusive Milestone',
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    testWidgets(
+      'logout/login session cycle preserves user scoped checklist and denies guest access',
+      (tester) async {
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+
+        // 1. Authenticated User creates private checklist item
+        final authCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-authenticated',
+          prefs: prefs,
+          appRepository: repo,
+        );
+        await authCtrl.addChecklistItem(
+          title: 'Confidential Client Passport Copy',
+        );
+
+        expect(
+          authCtrl.state.checklist.items.any(
+            (i) => i.title == 'Confidential Client Passport Copy',
+          ),
+          isTrue,
+        );
+
+        // 2. User logs out: Guest mode accesses the same case
+        final guestCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'guest',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // Guest must NOT see authenticated user's private checklist
+        expect(
+          guestCtrl.state.checklist.items.any(
+            (i) => i.title == 'Confidential Client Passport Copy',
+          ),
+          isFalse,
+        );
+
+        // 3. User logs back in
+        final userBackCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-authenticated',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // User's private checklist is restored from scoped key
+        expect(
+          userBackCtrl.state.checklist.items.any(
+            (i) => i.title == 'Confidential Client Passport Copy',
+          ),
+          isTrue,
         );
       },
     );

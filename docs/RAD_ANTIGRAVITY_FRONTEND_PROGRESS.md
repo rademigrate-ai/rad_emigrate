@@ -28,6 +28,8 @@
 | `b8a7bb8` | `docs` | `frontend` | Update progress ledger with completed E8-01, E8-02, E9-02 verification and handoff guidance |
 | `19f4618` | `feat` | `domain` | Synchronize Grok evidence registry, local storage isolation, and curated rules gate |
 | `ef1fce0` | `feat` | `frontend` | Complete E8-01 recommendations, E8-02 user isolation, and E9-02 evidence-gated catalog states |
+| `77baa9a` | `docs` | `frontend` | Record E8-01, E8-02, E9-02 completion and test verification evidence |
+| `pending` | `fix` | `applications` | Fix cross-account case tracker isolation leak: fail-closed legacy storage and verified ownership migration |
 
 ---
 
@@ -65,12 +67,19 @@
   - Milestone checklist with live transition rules (Draft -> Submitted -> In Review -> Decision -> Closed).
   - Next-step allowed transition chips preventing invalid status jumps.
   - Concurrency lock (`isTransitioning`) preventing duplicate transition submissions.
-  - Per-user storage scoping (`rad_case_checklist_{userId}_{caseId}`) with backwards compatibility fallback.
+  - Per-user storage scoping (`rad_case_checklist_{userId}_{caseId}`) with strict fail-closed legacy fallback.
+  - Demonstrably ownership-safe migration: unowned legacy keys fail closed; legacy keys migrate only when verified owner identity is explicitly recorded in payload.
   - Client reminders rendered with dual-clock context (destination jurisdiction & Iran local time `Asia/Tehran`).
   - Overdue reminder detection and urgency styling.
   - Milestone note editor with persistent local updates.
-- **Tests (8/8 PASS):** `test/features/applications/case_tracker_flow_test.dart`
-- **Applications Feature Suite:** 29/29 tests PASS.
+- **Tests (12/12 PASS):** `test/features/applications/case_tracker_flow_test.dart`
+  - Isolates case checklist storage per user and prevents cross-user leakage on account switch.
+  - Unowned legacy checklist storage fails closed and does not disclose data to another user with missing scoped key.
+  - Legitimate user legacy checklist migrates safely with verifiable ownership and purges legacy key.
+  - Account switching cycle preserves isolated checklists and scoped key precedence.
+  - Logout/login session cycle preserves user scoped checklist and denies guest access.
+- **Targeted QA Regression PASS:** `qa/handoffs/antigravity_case_tracker_legacy_isolation_test.dart`
+- **Applications Feature Suite:** 33/33 tests PASS.
 
 ### Phase 4: E9-02 Universities & Scholarships Catalog UI (`dea64f5`, `ef1fce0`)
 - **Delivered Files:**
