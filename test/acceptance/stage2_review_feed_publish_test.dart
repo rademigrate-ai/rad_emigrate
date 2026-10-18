@@ -90,4 +90,40 @@ void main() {
     expect(feed.contains("status='published'"), isTrue);
     expect(feed.contains('published feed public read'), isTrue);
   });
+
+  test('Stage1 security requires approved before publish', () {
+    final sql = read(
+      'supabase/migrations/20261010010000_stage1_p0_security_completion.sql',
+    );
+    expect(
+      sql.contains("draft requires explicit approval before publication"),
+      isTrue,
+    );
+    expect(sql.contains("status <> 'approved'"), isTrue);
+    expect(sql.contains('guard_human_feed_mutation'), isTrue);
+    expect(
+      sql.contains('revoke insert, update, delete on table public.feed_items'),
+      isTrue,
+    );
+  });
+
+  test('atomic finding trigger creates review candidate only', () {
+    final sql = read(
+      'supabase/migrations/20261007080002_research_atomic_review_candidate.sql',
+    );
+    expect(sql.contains('research_finding_review_candidate'), isTrue);
+    expect(sql.contains('create_research_review_candidate'), isTrue);
+    expect(sql.contains('ingest_research_snapshot'), isTrue);
+    // Trigger path must not touch Feed.
+    final triggerStart = sql.indexOf(
+      'private.research_finding_review_candidate',
+    );
+    expect(triggerStart, greaterThanOrEqualTo(0));
+    final window = sql.substring(
+      triggerStart,
+      (triggerStart + 800).clamp(0, sql.length),
+    );
+    expect(window.contains('feed_items'), isFalse);
+    expect(window.contains('publish_content_draft'), isFalse);
+  });
 }
