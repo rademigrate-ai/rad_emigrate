@@ -25,6 +25,10 @@ Runtime: Deno **2.5.4**, matching the repository CI pin, invoked through `npx --
 
 No Flutter source, migration, infrastructure, production SQL, Auth, Storage, Edge deployment, Feed publication, payment charge or shared-main merge is part of this candidate. Other writers' newly appearing files in the earlier Codex worktree were not staged or reverted. The four owned AI files were copied into this clean worktree to avoid branch changes under another writer.
 
+Initial candidate CI [39127673456](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39127673456) on `c0954fc` passed 6/7 jobs. Flutter reported 500 PASS / 1 FAIL: the existing backend-source audit required the removed fallback query's literal `review_status=eq.approved`. That assertion is updated to check all three explicit approval/current guards; behavioral tests remain in Deno. This is an existing backend contract audit file, not a UI/widget change. Final CI must rerun; the initial run is not reported as all green.
+
+After updating that audit, `flutter test --no-pub test/acceptance/stage1_ai_research_completion_test.dart` passed **9/9** locally; Dart format check passed with zero changes. No dependency versions were upgraded.
+
 ## Acceptance limits
 
 E2-04 remains **IN_PROGRESS**, canonical **3/47 VERIFIED_PASS** unchanged. CI must independently pass on this candidate's exact commit before combined acceptance is considered. Actual provider output quality, evidence freshness, authoritative-source review, multilingual factual evaluation and deployed end-to-end behavior remain open. Release remains **NO-GO**. Unavailable retrieval now deliberately reduces answer specificity instead of silently using unrelated evidence.
