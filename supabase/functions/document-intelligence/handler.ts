@@ -1,4 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
 
 type Row = Record<string, unknown>;
 type Options = { url: string; serviceKey: string; fetch: typeof fetch };
@@ -24,7 +25,7 @@ function safeEndpoint(value: unknown): string | null {
   try {
     const url = new URL(text(value));
     const host = url.hostname.toLowerCase().replace(/\.$/, "");
-    if (
+    if (!isSafePublicHttpsUrl(text(value)) ||
       url.protocol !== "https:" || url.username || url.password || url.hash ||
       !host.includes(".") || /[:\[\]]/.test(host) || /^[\d.]+$/.test(host) ||
       /(?:^|\.)(localhost|local|internal|test|invalid)$/.test(host)

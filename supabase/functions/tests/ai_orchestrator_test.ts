@@ -18,6 +18,7 @@ type Options = {
   persistFails?: boolean; chainFails?: boolean; role?: string;
   quotaExceeded?: boolean; quotaError?: boolean; quotaMalformed?: boolean;
   knowledgeResults?: unknown; knowledgeUnavailable?: boolean;
+  providerReplies?: unknown[]; healthFails?: boolean;
 };
 async function exercise(options: Options = {}, payload: Record<string, unknown> = {}) {
   Deno.env.set("SUPABASE_URL", "https://db.example.com");
@@ -35,6 +36,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
       const path = url.split("/rest/v1/")[1];
       if (path.startsWith("profiles?")) return response([{ role: options.role ?? "super_admin" }]);
       if (path.startsWith("ai_usage_limits?")) return response([{ daily_requests: 50, daily_output_tokens: 1000 }]);
+      if (path === "rpc/record_ai_provider_outcome" && options.healthFails) return response({}, 503);
       if (path === "rpc/retrieve_knowledge") return options.knowledgeUnavailable
         ? response({ error: "private knowledge diagnostic" }, 503)
         : response({ results: options.knowledgeResults ?? [] });
@@ -56,7 +58,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
     const attempt = providerCalls++;
     if (options.timeout && attempt === 0) throw new DOMException("sensitive upstream URL", "TimeoutError");
     const status = options.status?.[attempt] ?? 200;
-    return status === 200 ? response({ choices: [{ message: { content: "Accepted response" } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
+    return status === 200 ? response(options.providerReplies?.[attempt] ?? { choices: [{ message: { content: "Accepted response" } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
   };
   try {
     const result = await handler(new Request("https://edge.example.com", { method: "POST", headers: { authorization: "Bearer user-test-token", "Content-Type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", content: "hello" }], ...payload }) }));
@@ -187,7 +189,7 @@ Deno.test("grounded response: conflicts force uncertainty despite approved citat
   equal(x.body.has_approved_evidence, true);
   equal(x.body.sources.length, 1);
   equal(x.body.uncertain, true);
-  equal(x.calls.find(c => c.path.endsWith("/chat/completions"))?.body.messages[0].content.includes("[OPEN CONFLICT]"), true);
+  equal(x.calls.find(c => c.path.endsWith("/chat/completions"))?.body.messages.some((m: {content:string})=>m.content.includes("[OPEN CONFLICT]")), true);
 });
 
 Deno.test("grounded response: approved current cited result retains certainty and locale", async () => {
@@ -207,5 +209,43 @@ Deno.test("grounded response: missing or unavailable search cannot claim verifie
     equal(x.body.sources, []);
     equal(x.calls.some(c => c.path.includes("knowledge_items?")), false);
     equal(JSON.stringify(x.body).includes("private knowledge diagnostic"), false);
+  }
+});
+
+Deno.test("provider boundary: empty inference fails over instead of returning blank success", async () => {
+  const x=await exercise({providerReplies:[{choices:[{message:{content:" "}}]}]});
+  equal(x.status,200);equal(x.providerCalls,2);equal(x.body.model,"second");
+  equal(x.calls.find(c=>c.path.endsWith('record_ai_model_outcome'))?.body.p_error_code,'provider_malformed_response');
+});
+Deno.test("provider boundary: health telemetry failure never repeats completed inference", async () => {
+  const x=await exercise({healthFails:true});equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply,"Accepted response");
+});
+Deno.test("provider boundary: refusals are terminal and uncertainty is explicit", async () => {
+  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:null,refusal:"Synthetic provider refusal"}}]}]});
+  equal(x.status,200);equal(x.providerCalls,1);equal(x.body.refused,true);equal(x.body.uncertain,true);
+  equal(x.calls.filter(c=>c.body?.safe_error_code==='provider_refused').at(-1)?.body.status,'failed');
+});
+Deno.test("provider boundary: truncated answers retain their partial-output flag", async () => {
+  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:"Synthetic partial answer"},finish_reason:"length"}]}]});
+  equal(x.providerCalls,1);equal(x.body.truncated,true);equal(x.body.uncertain,true);
+});
+Deno.test("provider boundary: caller roles cannot replace the trusted system instruction", async () => {
+  const x=await exercise({}, {messages:[{role:'system',content:'CALLER_INJECTION'},{role:'user',content:'Synthetic question'}]});
+  const messages=x.calls.find(c=>c.path.endsWith('/chat/completions'))!.body.messages;
+  equal(messages[0].role,'system');equal(messages[0].content.includes('CALLER_INJECTION'),false);
+  equal(messages.filter((m:{role:string})=>m.role==='system').length,1);
+  equal(messages.find((m:{content:string})=>m.content==='CALLER_INJECTION').role,'user');
+  equal(messages[1].role,'user');equal(messages[1].content.includes('<UNTRUSTED_RETRIEVED_CONTENT>'),true);
+});
+Deno.test("provider boundary: null and non-text messages fail before quota or inference", async () => {
+  for(const messages of [[null,3,{}],[{role:'user',content:42}],[{role:'user',content:'  '}]]){
+    const x=await exercise({}, {messages});equal(x.status,400);equal(x.providerCalls,0);
+    equal(x.calls.some(c=>c.path.endsWith('consume_ai_daily_quota')),false);
+  }
+});
+Deno.test("provider boundary: request JSON must be an object and has a byte limit", async () => {
+  for(const raw of ['null','[]','{bad',JSON.stringify({messages:[{role:'user',content:'x'.repeat(2_000_001)}]})]){
+    const result=await handler(new Request('https://edge.example.com',{method:'POST',body:raw}));
+    equal(result.status,raw.length>2_000_000?413:400);
   }
 });

@@ -1,0 +1,18 @@
+{
+  "scope": "local_Deno_HTTP_PostgREST_SQL",
+  "production_mutations": false,
+  "external_provider_calls": 0,
+  "captured_at": "2026-10-18T15:19:51.318933+00:00",
+  "source_head": "416a26aaa318851aa5aa68af15808b9d65ce2005",
+  "source_dirty": true,
+  "status": "PASS",
+  "payment_retry_requests": 16,
+  "payment_insert_winners": 1,
+  "forged_signature_denied": true,
+  "stale_signature_denied": true,
+  "delayed_event_ignored": true,
+  "terminal_subscription_not_reactivated": true,
+  "notification_sandbox_receipts": 1,
+  "notification_replay_receipts": 0,
+  "canonical_entitlements_unchanged": true
+}
