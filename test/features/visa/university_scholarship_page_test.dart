@@ -271,5 +271,35 @@ void main() {
       }
       tester.view.reset();
     });
+
+    testWidgets(
+      'displays accurate pending review empty state when default unapproved catalog is used',
+      (tester) async {
+        final prefs = await SharedPreferences.getInstance();
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: UniversityScholarshipPage(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text('University Catalog Pending Editorial Review'),
+          findsOneWidget,
+        );
+        expect(
+          find.textContaining(
+            'To prevent misinformation, institutions and tuition data are only displayed after authoritative verification',
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
 }

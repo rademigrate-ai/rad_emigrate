@@ -426,5 +426,45 @@ void main() {
         tester.view.reset();
       },
     );
+
+    testWidgets(
+      'isolates case checklist storage per user and prevents cross-user leakage on account switch',
+      (tester) async {
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+
+        // User A loads the case and adds a custom item
+        final userACtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-A',
+          prefs: prefs,
+          appRepository: repo,
+        );
+        await userACtrl.addChecklistItem(title: 'User A Confidential Step');
+
+        expect(
+          userACtrl.state.checklist.items.any(
+            (i) => i.title == 'User A Confidential Step',
+          ),
+          isTrue,
+        );
+
+        // User B opens the same case
+        final userBCtrl = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-B',
+          prefs: prefs,
+          appRepository: repo,
+        );
+
+        // User B must NOT see User A's custom milestone
+        expect(
+          userBCtrl.state.checklist.items.any(
+            (i) => i.title == 'User A Confidential Step',
+          ),
+          isFalse,
+        );
+      },
+    );
   });
 }

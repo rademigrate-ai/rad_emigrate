@@ -14,6 +14,7 @@ import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/pathway_assessment.dart';
+import '../../domain/recommendation_engine.dart';
 import '../providers/immigration_profile_controller.dart';
 
 class ImmigrationProfilePage extends ConsumerStatefulWidget {
@@ -110,6 +111,7 @@ class _ImmigrationProfilePageState
   Widget build(BuildContext context) {
     final state = ref.watch(immigrationProfileControllerProvider);
     final controller = ref.read(immigrationProfileControllerProvider.notifier);
+    final recReport = ref.watch(recommendationReportProvider);
     final l10n = AppLocalizations.of(context);
     final isFa = Localizations.localeOf(context).languageCode == 'fa';
 
@@ -132,11 +134,7 @@ class _ImmigrationProfilePageState
             const Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: RadPending(),
-                ),
+                child: SizedBox(width: 24, height: 24, child: RadPending()),
               ),
             )
           else
@@ -707,6 +705,9 @@ class _ImmigrationProfilePageState
                           context,
                         ),
 
+                      // Evidence-Grounded Recommendations Section
+                      _buildRecommendationsSection(recReport, isFa, context),
+
                       const SizedBox(height: 12),
                       // Uncertainty and Legal Notice Banner
                       InlineAlert(
@@ -937,5 +938,165 @@ class _ImmigrationProfilePageState
         ],
       ),
     );
+  }
+
+  Widget _buildRecommendationsSection(
+    RecommendationReport report,
+    bool isFa,
+    BuildContext context,
+  ) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.premium.surfaceElevated,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: context.premium.accent.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.auto_awesome_outlined,
+                color: context.premium.accent,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  isFa
+                      ? 'پیشنهادات مسیرهای قانونی (مبتنی بر شواهد)'
+                      : 'Evidence-Grounded Pathway Recommendations',
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            isFa
+                ? 'سیستم راد بر اساس شواهد معتبر و معیارهای قوانین رسمی، برنامه‌های واجد شرایط را پیشنهاد می‌دهد.'
+                : 'Recommendations are evaluated deterministically against verified government rules without hallucinated approval chances.',
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: context.premium.mutedText),
+          ),
+          const SizedBox(height: 12),
+          if (report.included.isEmpty) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: context.premium.warning.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: context.premium.warning.withValues(alpha: 0.25),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    color: context.premium.warning,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      isFa
+                          ? 'هیچ مسیری با اطلاعات فعلی پرونده تطابق کامل ندارد. با تکمیل فیلدهای ناشناخته یا رزرو مشاوره، شرایط خود را بسنجید.'
+                          : 'No pathway currently matches full verified criteria. Complete missing profile fields or schedule a consultation.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            for (final rec in report.included)
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: context.premium.success.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: context.premium.success.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle_outline,
+                      color: context.premium.success,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _programName(rec.programId, isFa),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            rec.explanation,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontSize: 11),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (rec.preferenceMatch == PreferenceMatch.strong)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: context.premium.accent.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          isFa ? 'اولویت بالا' : 'Top Match',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: context.premium.accent,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  String _programName(String id, bool isFa) {
+    switch (id) {
+      case 'express-entry':
+        return isFa
+            ? 'اکسپرس اینتری کانادا (نیروی متخصص)'
+            : 'Canada Express Entry (Federal Skilled Worker)';
+      case 'de-chancenkarte':
+        return isFa
+            ? 'کارت فرصت آلمان (Chancenkarte)'
+            : 'Germany Opportunity Card (Chancenkarte)';
+      case 'ca-startup':
+        return isFa ? 'ویزای استارتاپ کانادا' : 'Canada Start-up Visa';
+      default:
+        return id;
+    }
   }
 }

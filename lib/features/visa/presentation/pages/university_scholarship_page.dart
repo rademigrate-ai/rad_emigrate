@@ -380,6 +380,17 @@ class _UniversityScholarshipPageState
     UniversityScholarshipController controller,
   ) {
     if (result.state == CatalogResultState.empty || result.isEmpty) {
+      if (controller.isProgramsEmpty) {
+        return EmptyState(
+          title: isFa
+              ? 'فهرست دانشگاه‌ها در انتظار بررسی مراجع رسمی'
+              : 'University Catalog Pending Editorial Review',
+          subtitle: isFa
+              ? 'جهت حفظ بالاترین استانداردهای قانونی و جلوگیری از اطلاعات نادرست، اطلاعات شهریه و رشته‌های دانشگاهی صرفاً پس از اعتبارسنجی کامل مراجع دولتی و تأیید هیئت تحریریه منتشر خواهند شد.'
+              : 'To prevent misinformation, institutions and tuition data are only displayed after authoritative verification against official registries and editorial approval.',
+          icon: Icons.verified_user_outlined,
+        );
+      }
       return EmptyState(
         title: isFa
             ? 'هیچ برنامه دانشگاهی مطابق با جستجو یافت نشد'
@@ -603,6 +614,17 @@ class _UniversityScholarshipPageState
     UniversityScholarshipController controller,
   ) {
     if (result.state == CatalogResultState.empty || result.isEmpty) {
+      if (controller.isScholarshipsEmpty) {
+        return EmptyState(
+          title: isFa
+              ? 'فهرست بورسیه‌ها در انتظار تأیید مراجع رسمی'
+              : 'Scholarships Pending Editorial Review',
+          subtitle: isFa
+              ? 'جهت حفظ بالاترین استانداردهای قانونی، شروط و مهلت‌های بورسیه صرفاً پس از تطبیق با آخرین اطلاعیه‌های رسمی ارائه‌دهندگان منتشر خواهند شد.'
+              : 'To prevent misinformation, scholarship criteria and deadlines are published strictly following verification against official donor announcements and editorial approval.',
+          icon: Icons.verified_user_outlined,
+        );
+      }
       return EmptyState(
         title: isFa
             ? 'هیچ بورسیه‌ای مطابق با جستجو یافت نشد'

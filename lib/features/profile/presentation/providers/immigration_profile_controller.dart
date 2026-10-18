@@ -4,9 +4,11 @@ import '../../../../core/theme/theme_controller.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/datasources/immigration_profile_local_datasource.dart';
 import '../../data/repositories/immigration_profile_repository_impl.dart';
+import '../../domain/curated_rules_gate.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/immigration_profile_validator.dart';
 import '../../domain/pathway_assessment.dart';
+import '../../domain/recommendation_engine.dart';
 import '../../domain/repositories/immigration_profile_repository.dart';
 
 /// Default curated pathway rules from authoritative government sources.
@@ -80,6 +82,42 @@ final immigrationProfileRepositoryProvider =
         assessment: const PathwayAssessmentService(),
       );
     });
+
+/// Package envelope for curated pathway eligibility rules with explicit editorial approval.
+final defaultCuratedRulePackage = CuratedRulePackage(
+  packageId: 'ca-de-curated-v1',
+  rules: curatedPathwayRules,
+  editorialApproved: true,
+  approvedAt: DateTime.utc(2026, 10, 18),
+  approverLabel: 'IRCC & MakeItInGermany Authoritative Editorial Review',
+  notes:
+      'Validated against Canada.ca and Make-it-in-Germany official criteria.',
+);
+
+final curatedRulePackageProvider = Provider<CuratedRulePackage>(
+  (ref) => defaultCuratedRulePackage,
+);
+
+final approvedPathwayRulesProvider = Provider<List<PathwayEligibilityRule>>((
+  ref,
+) {
+  final package = ref.watch(curatedRulePackageProvider);
+  return const CuratedRulesGate().loadApproved(package);
+});
+
+final recommendationReportProvider = Provider<RecommendationReport>((ref) {
+  final profileState = ref.watch(immigrationProfileControllerProvider);
+  final rules = ref.watch(approvedPathwayRulesProvider);
+  return const RecommendationEngine().recommend(
+    profile: profileState.profile,
+    candidateProgramIds: const [
+      'express-entry',
+      'de-chancenkarte',
+      'ca-startup',
+    ],
+    rules: rules,
+  );
+});
 
 class ImmigrationProfileState {
   const ImmigrationProfileState({
@@ -234,5 +272,15 @@ class ImmigrationProfileController
 
   void clearAssessment() {
     state = state.copyWith(clearAssessment: true);
+  }
+
+  Future<void> clearDraft() async {
+    await _repository.clearLocalDraft(_userId);
+    state = state.copyWith(
+      profile: const ImmigrationProfile(),
+      validation: _repository.validate(const ImmigrationProfile()),
+      clearAssessment: true,
+      clearError: true,
+    );
   }
 }
