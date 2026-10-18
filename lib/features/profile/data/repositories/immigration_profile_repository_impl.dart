@@ -49,4 +49,7 @@ class ImmigrationProfileRepositoryImpl implements ImmigrationProfileRepository {
       now: now,
     );
   }
+
+  @override
+  Future<void> clearLocalDraft(String userId) => local.clear(userId);
 }

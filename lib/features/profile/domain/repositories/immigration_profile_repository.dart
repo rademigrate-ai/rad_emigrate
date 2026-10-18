@@ -25,4 +25,7 @@ abstract class ImmigrationProfileRepository {
     required List<PathwayEligibilityRule> rules,
     DateTime? now,
   });
+
+  /// Clears the local draft for [userId] (logout / account switch).
+  Future<void> clearLocalDraft(String userId);
 }

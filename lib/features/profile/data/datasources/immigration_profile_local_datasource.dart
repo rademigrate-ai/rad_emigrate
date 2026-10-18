@@ -35,4 +35,24 @@ class ImmigrationProfileLocalDataSource {
     if (userId.isEmpty) return;
     await _prefs.remove('$_keyPrefix$userId');
   }
+
+  /// Clears every immigration-profile draft key (logout / factory reset).
+  /// Prefer [clear] with the known userId when available.
+  Future<int> clearAllImmigrationDrafts() async {
+    final keys = _prefs
+        .getKeys()
+        .where((k) => k.startsWith(_keyPrefix))
+        .toList(growable: false);
+    for (final k in keys) {
+      await _prefs.remove(k);
+    }
+    return keys.length;
+  }
+
+  /// Returns true when a draft exists for [userId] without decoding it.
+  bool hasDraft(String userId) {
+    if (userId.isEmpty) return false;
+    final raw = _prefs.getString('$_keyPrefix$userId');
+    return raw != null && raw.isNotEmpty;
+  }
 }
