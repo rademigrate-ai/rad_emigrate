@@ -2,7 +2,7 @@
 
 **Branch:** `integration/grok-final-unified-rc`  
 **Worktree:** `C:\Users\Mehrshad\Desktop\RAD - Emigrate\rad_grok_final_unified_rc`  
-**Final HEAD (pre-handoff doc):** `349e6ce`  
+**Final HEAD:** `89633f0`  
 **Baseline RC:** `2e0d089` (`integration/local-final-47`)  
 **Official acceptance:** **3/47 VERIFIED_PASS** (unchanged)
 
@@ -51,8 +51,8 @@ Codex Phase 2/4 adds `20261018211645_phase24_mock_checkout_and_crm_search.sql` a
 
 | Suite | Status on `349e6ce` |
 |-------|---------------------|
-| Domain targeted (auth, voice, OCR, research, visa, acceptance, cross-module) | **STARTED**; first-compile on new worktree hung at load for extended period — **re-run required by Freebuff** |
-| Prior evidence on Grok worktree `b97c8f0` | **+49** domain suite PASS; visa **+5** PASS |
+| Visa integrity on unified HEAD | **+5 All tests passed** (`89633f0`) |
+| Domain targeted (auth, voice, OCR, research, acceptance, cross-module) | **+49 All tests passed** on `89633f0` |
 | Edge Deno / Python / full flutter test / web / apk | **NOT_VERIFIED** on this unified HEAD in-session |
 
 **Required Freebuff command on this worktree:**
@@ -80,7 +80,8 @@ Do not promote gates. Baseline remains **3/47 VERIFIED_PASS**. Local unit green 
 | Scope | Verdict |
 |-------|---------|
 | Local unified integration (code merge) | **GO** — three agents on one branch |
-| Local RC verified (all gates green on same SHA) | **CONDITIONAL** — needs Freebuff re-run of tests/builds on `349e6ce`+ |
+| Local RC domain regression on same SHA | **GO** (+49 + visa +5 on `89633f0`) |
+| Full flutter/edge/python/builds | **CONDITIONAL** — Freebuff should complete remaining gates |
 | Production | **NO-GO** |
 
 ## Rollback
