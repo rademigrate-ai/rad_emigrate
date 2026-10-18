@@ -12,11 +12,23 @@ Verification so far: **16 staging/plan unit tests PASS** (including grouped mali
 
 Remaining locally executable work includes final RC-based disposable replay/security/Auth/Storage/Edge checks, confirmed-email local signup coverage, initialization contracts, secret-finding classification and the final exact-HEAD evidence inventory. Existing earlier 57-file clean proof and 58-file proposal checks remain historical evidence, not an invented final RC-based pass.
 
+First new integration-ready commit: `fc7c535` (staging guard/templates/plan). Local runtime reservation: project `rad_codex_phase24_20261019`, canonical ports 58320–58329 and historical ports 59320–59329. These are Docker test identifiers, not fabricated hosted Supabase project refs. Only this branch's dedicated marked runtimes may be started/reset. Signup-confirmation support is being added to the local harness; old default autoconfirm evidence will not be relabelled as confirmed signup.
+
 ## Current Phase 4 work
 
 The RC contains the disabled-by-default synthetic signed-payment protocol, sandbox subscription ordering/deduplication/terminal states, CRM optimistic revisions/history and sandbox outbox leases/retries. Those checkpoints have earlier local SQL/HTTP/concurrency evidence. They do not establish payment creation or a real merchant, hosted notification transport or canonical paid-entitlement activation. Review and complete the missing mock checkout/confirmation/owner billing transitions, deployable authorized sandbox dispatch, search and operational negative/retry paths; re-run the combined backend tests before final handoff.
 
 Merchant/provider selection, real plan/price/tax/legal/store rules, live credentials, real-service activation and external notifications are **BLOCKED_BY_OWNER**. No real transaction is permitted. Mock results must remain explicitly labelled and must not grant canonical paid AI access.
+
+Notification contract reservation: add a default-disabled sandbox-only Edge entrypoint around the existing outbox worker. It requires a dedicated invocation token in addition to gateway JWT verification, accepts only a bounded batch limit, refuses production/ambiguous targets and reports sandbox receipts without invoking an external transport. Existing queue/claim/finish SQL contracts are retained. This adds no Flutter dependency and does not enable email/SMS/push.
+
+## Implementation checkpoint
+
+Implemented the missing mock checkout and owner billing API, bound signed confirmation/full refund/cancellation, per-owner idempotent creation and bounded literal admin CRM search in one CLI-created forward migration. Added authorized default-disabled sandbox notification entrypoint and payment persistence timeout/permanent semantic rejection handling. Contracts and activation dependencies are in [backend contracts](PHASE24_BACKEND_CONTRACTS.md). Mocks never charge, invoke external notification transport or grant canonical paid AI access.
+
+Working-tree verification: all SQL regression groups and real two-user Auth/RLS/Storage suite PASS; confirmed-email signup, forged/replayed confirmation, mailbox recovery/OTP, expiry, refresh and logout PASS; actual Deno HTTP to real Auth/PostgREST/SQL mock create/confirm/cancel/refund, concurrent callbacks and notification endpoint PASS. Python tests 43 PASS. Earlier initial signup attempt returned local 504/context deadline exceeded; preserved its log and reran successfully. First HTTP attempt exposed `P0002` translating to 500 for foreign orders; changed the unpublished local migration to explicit `PT404` and verified actual 404 on rerun. These are working-tree results; the clean immutable replay and final evidence follow separately.
+
+Added a read-only post-initialization SQL check and exact plan command. Canonical migrations initialize schema/config; no staging administrator or credentials are fabricated. Final verification must replay all 59 canonical files from the new immutable backend commit.
 
 ## Final handoff requirements
 

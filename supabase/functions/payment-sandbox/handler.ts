@@ -20,9 +20,15 @@ type Options = {
   enabled: boolean;
   supabaseUrl: string;
   secret: string;
-  apply: (event: SandboxPaymentEvent, sha256: string) => Promise<unknown>;
+  apply: (
+    event: SandboxPaymentEvent,
+    sha256: string,
+    signal?: AbortSignal,
+  ) => Promise<unknown>;
   now?: () => number;
+  timeoutMs?: number;
 };
+export class SandboxEventRejected extends Error {}
 const encoder = new TextEncoder();
 const headers = {
   ...corsHeaders,
@@ -191,6 +197,8 @@ export function createPaymentSandboxHandler(options: Options) {
       event = null;
     }
     if (!event) return json(400, { error: "invalid_sandbox_event" });
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const sha256 = hex(
         await crypto.subtle.digest(
@@ -198,7 +206,16 @@ export function createPaymentSandboxHandler(options: Options) {
           encoder.encode(JSON.stringify(event)),
         ),
       );
-      const result = await options.apply(event, sha256);
+      const deadline = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => {
+          controller.abort();
+          reject(new Error("payment_timeout"));
+        }, options.timeoutMs ?? 15000);
+      });
+      const result = await Promise.race([
+        options.apply(event, sha256, controller.signal),
+        deadline,
+      ]);
       const row = result as Record<string, unknown> | null;
       if (
         !row || row.mode !== "sandbox" || typeof row.duplicate !== "boolean" ||
@@ -211,8 +228,13 @@ export function createPaymentSandboxHandler(options: Options) {
         duplicate: row.duplicate,
         decision: row.decision,
       });
-    } catch {
+    } catch (error) {
+      if (error instanceof SandboxEventRejected) {
+        return json(422, { error: "sandbox_event_rejected" });
+      }
       return json(503, { error: "payment_sandbox_unavailable" });
+    } finally {
+      if (timer !== undefined) clearTimeout(timer);
     }
   };
 }
@@ -225,13 +247,13 @@ export async function handler(req: Request): Promise<Response> {
       !!serviceKey,
     supabaseUrl: url,
     secret: Deno.env.get("RAD_PAYMENT_SANDBOX_SECRET") ?? "",
-    apply: async (event, sha256) => {
+    apply: async (event, sha256, signal) => {
       const response = await fetch(
         `${url}/rest/v1/rpc/apply_sandbox_payment_event`,
         {
           method: "POST",
           redirect: "error",
-          signal: AbortSignal.timeout(15000),
+          signal,
           headers: {
             apikey: serviceKey,
             Authorization: `Bearer ${serviceKey}`,
@@ -240,7 +262,13 @@ export async function handler(req: Request): Promise<Response> {
           body: JSON.stringify({ p_event: event, p_payload_sha256: sha256 }),
         },
       );
-      if (!response.ok) throw new Error("sandbox_database_unavailable");
+      if (!response.ok) {
+        const failure = await response.json().catch(() => ({}));
+        if (["22023", "23503"].includes(failure?.code)) {
+          throw new SandboxEventRejected();
+        }
+        throw new Error("sandbox_database_unavailable");
+      }
       return await response.json();
     },
   })(req);

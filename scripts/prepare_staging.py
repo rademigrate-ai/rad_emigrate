@@ -28,6 +28,8 @@ def prepare_plan(values: dict[str,str], revision: str, migrations: list[dict], f
         {'purpose':'target-bound migration preview','argv':['supabase','db','push','--db-url','${RAD_STAGING_DB_URL}','--dry-run']},
         {'purpose':'apply only after owner authorization and backup review','argv':['supabase','db','push','--db-url','${RAD_STAGING_DB_URL}']},
     ]
+    commands.append({'purpose':'read-only initialization verification after approved migration apply',
+        'argv':['psql','-X','-v','ON_ERROR_STOP=1','--dbname','${RAD_STAGING_DB_URL}','-f','supabase/staging/readiness.sql']})
     eligible=[name for name in functions if name!='payment-sandbox']
     for name in eligible:
         commands.append({'purpose':'deploy only after owner authorization','argv':['supabase','functions','deploy',name,'--project-ref',project]})

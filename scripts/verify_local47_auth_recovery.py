@@ -111,8 +111,8 @@ def main():
             time.sleep(.2)
         raise AssertionError('synthetic email did not arrive in owned local mailbox')
 
-    def verify_denied(token_hash, label):
-        response = request(api, '/auth/v1/verify', 'POST', {'token_hash': token_hash, 'type': 'recovery'})
+    def verify_denied(token_hash, label, verification_type='recovery'):
+        response = request(api, '/auth/v1/verify', 'POST', {'token_hash': token_hash, 'type': verification_type})
         require_status(response, [400, 401, 403, 422], label)
         assert not response[1].get('access_token'), label + ': session unexpectedly issued'
 
@@ -125,17 +125,34 @@ def main():
         report['checks'].append(label)
         print('PASS ' + label, flush=True)
 
+    signup_confirmation_tested = False
     try:
-        # Default local CLI config has email confirmations disabled; do not claim a signup-confirmation test.
+        # Exercise either explicit confirmation or the default local autoconfirm
+        # path, and report which behavior was actually observed.
         email = 'rad-local47-' + uuid.uuid4().hex + '@example.invalid'
         password = secrets.token_urlsafe(32)
         signup = require_status(request(api, '/auth/v1/signup', 'POST',
             {'email': email, 'password': password, 'data': {'role': 'super_admin'}}), [200], 'synthetic signup')
-        user_id = signup['user']['id']
+        signup_user = signup['user'] if isinstance(signup.get('user'),dict) else signup
+        user_id = signup_user['id']
         owned_users.append(user_id)
-        assert signup.get('access_token'), 'this probe expects default local autoconfirm configuration'
+        signup_access = signup.get('access_token')
+        if not signup_access:
+            require_status(request(api, '/auth/v1/token?grant_type=password', 'POST',
+                {'email':email,'password':password}), [400,401,403,422], 'unconfirmed account cannot login')
+            confirmation_link, confirmation_query = message_link(email,'signup')
+            verify_denied('0'*64,'forged signup confirmation','signup')
+            status, _, headers = request(api,confirmation_link)
+            assert status in (302,303),'signup confirmation did not redirect'
+            location=urllib.parse.urlsplit(headers.get('Location',''))
+            assert location.scheme=='http' and location.netloc==urllib.parse.urlsplit(api).netloc,'signup redirect escaped local site'
+            signup_access=urllib.parse.parse_qs(location.fragment).get('access_token',[''])[0]
+            assert signup_access,'confirmed signup did not issue a session'
+            verify_denied(confirmation_query['token'][0],'signup confirmation replay','signup')
+            signup_confirmation_tested=True
+            passed('signup_mailbox_confirmation_required_forgery_and_replay')
         profile = require_status(request(api, '/rest/v1/profiles?select=role&id=eq.' + user_id,
-            token=signup['access_token']), [200], 'new profile')
+            token=signup_access), [200], 'new profile')
         assert profile == [{'role': 'user'}], 'untrusted signup metadata escalated profile role'
         passed('signup_profile_trigger_ignores_untrusted_role')
 
@@ -197,7 +214,7 @@ def main():
         if owned_messages:
             require_status(request(mailbox, '/api/v1/messages', 'DELETE', {'IDs': sorted(owned_messages)}), [200, 204], 'cleanup owned messages')
     report.update(status='PASS', synthetic_users_removed=len(owned_users), owned_messages_removed=len(owned_messages),
-                  signup_email_confirmation_tested=False, expiry_method='synthetic_user_recovery_sent_at_aged_two_hours')
+                  signup_email_confirmation_tested=signup_confirmation_tested, expiry_method='synthetic_user_recovery_sent_at_aged_two_hours')
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(report, indent=2))
