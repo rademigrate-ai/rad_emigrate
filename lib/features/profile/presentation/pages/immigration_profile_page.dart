@@ -10,6 +10,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/widgets/premium_visuals.dart';
+import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/pathway_assessment.dart';
@@ -132,9 +133,9 @@ class _ImmigrationProfilePageState
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  width: 24,
+                  height: 24,
+                  child: RadPending(),
                 ),
               ),
             )
