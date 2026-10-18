@@ -25,7 +25,8 @@ function safeEndpoint(value: unknown): string | null {
   try {
     const url = new URL(text(value));
     const host = url.hostname.toLowerCase().replace(/\.$/, "");
-    if (!isSafePublicHttpsUrl(text(value)) ||
+    if (
+      !isSafePublicHttpsUrl(text(value)) ||
       url.protocol !== "https:" || url.username || url.password || url.hash ||
       !host.includes(".") || /[:\[\]]/.test(host) || /^[\d.]+$/.test(host) ||
       /(?:^|\.)(localhost|local|internal|test|invalid)$/.test(host)
@@ -132,6 +133,7 @@ export function createDocumentHandler(options: Options) {
       return json(503, { error: "document_intelligence_unavailable" });
     }
     let jobId: string | undefined;
+    let leaseToken: string | undefined;
     try {
       const auth = await options.fetch(`${options.url}/auth/v1/user`, {
         headers: { apikey: options.serviceKey, Authorization: authorization },
@@ -180,21 +182,36 @@ export function createDocumentHandler(options: Options) {
       ) {
         return json(403, { error: "document_path_forbidden" });
       }
-      const job = first(
-        await db("document_processing_jobs?select=id", {
+      const job = object(
+        await db("rpc/begin_document_processing", {
           method: "POST",
-          headers: { Prefer: "return=representation" },
           body: JSON.stringify({
-            document_id: document.id,
-            user_id: userId,
-            status: "running",
-            attempt_count: 1,
-            started_at: new Date().toISOString(),
+            p_document_id: document.id,
+            p_user_id: userId,
+            p_file_path: path,
           }),
         }),
       );
-      jobId = text(job.id);
-      if (!jobId) throw new ProcessingError("database_unavailable", 503);
+      if (job.claimed === false && job.status === "rate_limited") {
+        return json(429, {
+          error: "document_processing_rate_limited",
+          retry_after_seconds: 3600,
+        });
+      }
+      if (
+        job.claimed === false && job.status === "running" && text(job.job_id)
+      ) {
+        return json(202, {
+          job_id: job.job_id,
+          status: "running",
+          retry_after_seconds: 5,
+        });
+      }
+      jobId = text(job.job_id);
+      leaseToken = text(job.lease_token);
+      if (
+        !jobId || !leaseToken || job.claimed !== true
+      ) throw new ProcessingError("database_unavailable", 503);
       const config = first(
         await db("rpc/get_document_processor_runtime", {
           method: "POST",
@@ -275,7 +292,7 @@ export function createDocumentHandler(options: Options) {
       try {
         parsed = object(
           JSON.parse(
-            new TextDecoder().decode(
+            new TextDecoder("utf-8", { fatal: true }).decode(
               await boundedBytes(
                 result,
                 1_000_000,
@@ -289,40 +306,36 @@ export function createDocumentHandler(options: Options) {
         throw new ProcessingError("provider_malformed_response");
       }
       if (
-        typeof parsed.text !== "string" || !parsed.text.trim()
+        typeof parsed.text !== "string" || !parsed.text.trim() ||
+        [key, options.serviceKey].some((secret) =>
+          secret.length > 0 && JSON.stringify(parsed).includes(secret)
+        )
       ) throw new ProcessingError("provider_malformed_response");
-      const extraction = first(
-        await db("document_extractions?select=id", {
-          method: "POST",
-          headers: { Prefer: "return=representation" },
-          body: JSON.stringify({
-            job_id: jobId,
-            document_id: document.id,
-            user_id: userId,
-            engine: text(config.provider_slug).slice(0, 100),
-            engine_version: text(parsed.version).slice(0, 100) || "unknown",
-            extracted_text: parsed.text.slice(0, 200000),
-            language_code: text(parsed.language_code).slice(0, 10) || null,
-            overall_confidence: typeof parsed.confidence === "number" &&
-                Number.isFinite(parsed.confidence)
-              ? Math.max(0, Math.min(1, parsed.confidence))
-              : null,
-            page_count: Number.isInteger(parsed.page_count) &&
-                Number(parsed.page_count) > 0
-              ? parsed.page_count
-              : null,
-          }),
-        }),
-      );
-      const extractionId = text(extraction.id);
-      if (!extractionId) throw new ProcessingError("database_unavailable", 503);
+      const inputSha256 = [
+        ...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
+      ]
+        .map((value) => value.toString(16).padStart(2, "0")).join("");
+      const extraction = {
+        input_sha256: inputSha256,
+        engine: text(config.provider_slug).slice(0, 100),
+        engine_version: text(parsed.version).slice(0, 100) || "unknown",
+        extracted_text: parsed.text.slice(0, 200000),
+        language_code: text(parsed.language_code).slice(0, 10) || null,
+        overall_confidence: typeof parsed.confidence === "number" &&
+            Number.isFinite(parsed.confidence)
+          ? Math.max(0, Math.min(1, parsed.confidence))
+          : null,
+        page_count: Number.isInteger(parsed.page_count) &&
+            Number(parsed.page_count) > 0
+          ? parsed.page_count
+          : null,
+      };
       const fields = (Array.isArray(parsed.fields) ? parsed.fields : []).slice(
         0,
         200,
       ).map((value) => {
         const field = object(value);
         return {
-          extraction_id: extractionId,
           field_key: text(field.key).replace(/[^a-zA-Z0-9_.-]/g, "_").slice(
             0,
             100,
@@ -340,20 +353,21 @@ export function createDocumentHandler(options: Options) {
           review_status: "unreviewed",
         };
       }).filter((field) => field.field_key);
-      if (fields.length) {
-        await db("document_fields", {
+      const completed = object(
+        await db("rpc/complete_document_processing", {
           method: "POST",
-          headers: { Prefer: "return=minimal" },
-          body: JSON.stringify(fields),
-        });
-      }
-      await db(`document_processing_jobs?id=eq.${encodeURIComponent(jobId)}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          status: "review_required",
-          finished_at: new Date().toISOString(),
+          body: JSON.stringify({
+            p_job_id: jobId,
+            p_lease_token: leaseToken,
+            p_extraction: extraction,
+            p_fields: fields,
+          }),
         }),
-      });
+      );
+      const extractionId = text(completed.extraction_id);
+      if (
+        !extractionId || completed.status !== "review_required"
+      ) throw new ProcessingError("database_unavailable", 503);
       return json(200, {
         job_id: jobId,
         extraction_id: extractionId,
@@ -367,15 +381,15 @@ export function createDocumentHandler(options: Options) {
             (error.name === "TimeoutError" || error.name === "AbortError")
         ? "provider_timeout"
         : "processing_unavailable";
-      if (jobId) {
+      if (jobId && leaseToken) {
         await db(
-          `document_processing_jobs?id=eq.${encodeURIComponent(jobId)}`,
+          "rpc/fail_document_processing",
           {
-            method: "PATCH",
+            method: "POST",
             body: JSON.stringify({
-              status: "failed",
-              safe_error_code: code,
-              finished_at: new Date().toISOString(),
+              p_job_id: jobId,
+              p_lease_token: leaseToken,
+              p_error_code: code,
             }),
           },
         ).catch(() => undefined);

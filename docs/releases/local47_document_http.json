@@ -1,0 +1,22 @@
+{
+  "scope": "owned_local_Deno_Auth_Storage_PostgREST_SQL",
+  "production_mutations": false,
+  "ocr_adapter": "synthetic_in_memory_fixture",
+  "external_provider_calls": 0,
+  "captured_at": "2026-10-18T15:33:49.305871+00:00",
+  "source_head": "bb572b4da8f8edd3573b603330d245513ca206f1",
+  "source_dirty": true,
+  "status": "PASS",
+  "busy_requests": 12,
+  "provider_fixture_calls": 1,
+  "extraction_count": 1,
+  "fields_initially_unreviewed": true,
+  "cross_owner_denied": true,
+  "raw_field_tampering_denied": true,
+  "human_review_identity_attributed": true,
+  "review_audit_count": 1,
+  "synthetic_users_removed": 2,
+  "original_processor_configuration_restored": true,
+  "synthetic_vault_secret_removed": true,
+  "synthetic_storage_object_removed": true
+}

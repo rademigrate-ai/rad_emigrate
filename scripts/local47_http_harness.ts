@@ -1,6 +1,7 @@
 /** Test-only loopback server. This file is not an Edge deployment entrypoint. */
 import { handler as paymentHandler } from "../supabase/functions/payment-sandbox/handler.ts";
 import { dispatchSandboxNotifications } from "../supabase/functions/notification-dispatch/worker.ts";
+import { createDocumentHandler } from "../supabase/functions/document-intelligence/handler.ts";
 
 const url = Deno.env.get("SUPABASE_URL")!;
 const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -9,9 +10,46 @@ const port = Number(Deno.env.get("RAD_LOCAL47_TEST_PORT"));
 if (
   new URL(url).hostname !== "127.0.0.1" || !token || !Number.isInteger(port)
 ) throw new Error("local_harness_configuration");
+let releaseOcr: (() => void) | undefined;
+let ocrStarted = false;
+let ocrCalls = 0;
+const ocrBarrier = new Promise<void>((resolve) => {
+  releaseOcr = resolve;
+});
+const documentHandler = createDocumentHandler({
+  url,
+  serviceKey: key,
+  fetch: async (input, init) => {
+    if (String(input) === "https://ocr-fixture.example.com/process") {
+      ocrCalls++;
+      ocrStarted = true;
+      await ocrBarrier;
+      return Response.json({
+        text: "Synthetic local fixture text",
+        language_code: "en",
+        confidence: 0.9,
+        fields: [{
+          key: "synthetic_name",
+          value: "Synthetic fixture",
+          page_number: 1,
+          confidence: 0.9,
+        }],
+      });
+    }
+    return await fetch(input, init);
+  },
+});
 Deno.serve({ hostname: "127.0.0.1", port }, async (req) => {
   const path = new URL(req.url).pathname;
   if (path === "/payment") return await paymentHandler(req);
+  if (path === "/documents" || path === "/ocr-control") {
+    if (req.headers.get("x-rad-local-test-token") !== token) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    if (path === "/documents") return await documentHandler(req);
+    if (req.method === "POST") releaseOcr?.();
+    return Response.json({ ocr_started: ocrStarted, ocr_calls: ocrCalls });
+  }
   if (path !== "/notifications" || req.method !== "POST") {
     return Response.json({ error: "not_found" }, { status: 404 });
   }
