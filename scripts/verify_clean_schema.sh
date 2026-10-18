@@ -106,7 +106,7 @@ fi
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
-for regression in stage2_knowledge_completion stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing; do
+for regression in stage2_knowledge_completion stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability; do
   psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "supabase/tests/${regression}.sql"
 done
 python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py
