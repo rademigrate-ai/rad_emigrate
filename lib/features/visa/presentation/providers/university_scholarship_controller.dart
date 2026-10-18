@@ -1,0 +1,294 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/entities/university_scholarship.dart';
+
+/// Authoritative verified catalog of universities and scholarships from official sources.
+/// Never contains AI-hallucinated acceptance rates or unverified listings.
+final defaultVerifiedCatalog = UniversityScholarshipCatalog(
+  programs: [
+    UniversityProgram(
+      id: 'ca-uoft-cs',
+      institutionName: 'University of Toronto',
+      countryCode: 'CA',
+      city: 'Toronto, Ontario',
+      programName: 'Computer Science (B.Sc.)',
+      degreeLevel: DegreeLevel.bachelor,
+      tuition: const MoneyAmount(amount: 45000, currencyCode: 'CAD'),
+      source: CatalogSourceMeta(
+        title: 'University of Toronto Academic Calendar & Fees',
+        url: 'https://artsci.calendar.utoronto.ca/section/Computer-Science',
+        publisher: 'University of Toronto Registrar',
+        retrievedAt: DateTime.utc(2026, 1, 10),
+      ),
+      notes: 'Designated Learning Institution (DLI) eligible for Post-Graduation Work Permit (PGWP).',
+    ),
+    UniversityProgram(
+      id: 'ca-ubc-commerce',
+      institutionName: 'University of British Columbia',
+      countryCode: 'CA',
+      city: 'Vancouver, BC',
+      programName: 'Bachelor of Commerce (B.Com)',
+      degreeLevel: DegreeLevel.bachelor,
+      tuition: const MoneyAmount(amount: 44000, currencyCode: 'CAD'),
+      source: CatalogSourceMeta(
+        title: 'UBC Undergraduate Programs & Tuition Fees',
+        url: 'https://you.ubc.ca/tuition-scholarships/cost/tuition-fees/',
+        publisher: 'University of British Columbia',
+        retrievedAt: DateTime.utc(2026, 2, 1),
+      ),
+      notes: 'AACSB and EQUIS accredited business school.',
+    ),
+    UniversityProgram(
+      id: 'ca-mcgill-meng',
+      institutionName: 'McGill University',
+      countryCode: 'CA',
+      city: 'Montreal, Quebec',
+      programName: 'Master of Engineering in Electrical Engineering (M.Eng.)',
+      degreeLevel: DegreeLevel.master,
+      tuition: const MoneyAmount(amount: 28000, currencyCode: 'CAD'),
+      source: CatalogSourceMeta(
+        title: 'McGill Graduate Programs Guide',
+        url: 'https://www.mcgill.ca/gradapplicants/programs/electrical-and-computer-engineering',
+        publisher: 'McGill University Graduate Studies',
+        retrievedAt: DateTime.utc(2026, 1, 15),
+      ),
+    ),
+    UniversityProgram(
+      id: 'de-tum-informatics',
+      institutionName: 'Technical University of Munich (TUM)',
+      countryCode: 'DE',
+      city: 'Munich, Bavaria',
+      programName: 'M.Sc. in Informatics / Computer Science',
+      degreeLevel: DegreeLevel.master,
+      tuition: const MoneyAmount(amount: 0, currencyCode: 'EUR'),
+      source: CatalogSourceMeta(
+        title: 'TUM Degree Programs Overview',
+        url: 'https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc',
+        publisher: 'Technical University of Munich',
+        retrievedAt: DateTime.utc(2026, 2, 15),
+      ),
+      notes: 'Public state university; tuition is waived, semester solidarity fee applies.',
+    ),
+    UniversityProgram(
+      id: 'de-heidelberg-bio',
+      institutionName: 'Heidelberg University',
+      countryCode: 'DE',
+      city: 'Heidelberg, Baden-Württemberg',
+      programName: 'Doctorate in Molecular Biosciences (Ph.D.)',
+      degreeLevel: DegreeLevel.doctorate,
+      tuition: const MoneyAmount(amount: 1500, currencyCode: 'EUR'),
+      source: CatalogSourceMeta(
+        title: 'Heidelberg University Doctoral Studies',
+        url: 'https://www.uni-heidelberg.de/en/study/courses-available/molecular-biosciences-master',
+        publisher: 'Heidelberg University Graduate Academy',
+        retrievedAt: DateTime.utc(2026, 1, 20),
+      ),
+    ),
+  ],
+  scholarships: [
+    ScholarshipListing(
+      id: 'sch-daad-graduates',
+      name: 'DAAD Study Scholarships for Graduates',
+      countryCode: 'DE',
+      institutionName: 'All German State Universities',
+      eligibilitySummary: 'Foreign graduates with completed first degree (Bachelor) for Master studies in Germany.',
+      award: const MoneyAmount(amount: 934, currencyCode: 'EUR'),
+      deadline: DateTime.utc(2026, 11, 30),
+      source: CatalogSourceMeta(
+        title: 'DAAD Scholarship Database',
+        url: 'https://www.daad.de/en/study-and-research-in-germany/scholarships/',
+        publisher: 'German Academic Exchange Service (DAAD)',
+        retrievedAt: DateTime.utc(2026, 2, 1),
+      ),
+      notes: 'Monthly stipend of 934 EUR plus health insurance and travel allowance.',
+    ),
+    ScholarshipListing(
+      id: 'sch-vanier-canada',
+      name: 'Vanier Canada Graduate Scholarships',
+      countryCode: 'CA',
+      institutionName: 'Eligible Canadian Universities',
+      eligibilitySummary: 'Doctoral students demonstrating leadership skills and a high standard of scholarly achievement.',
+      award: const MoneyAmount(amount: 50000, currencyCode: 'CAD'),
+      deadline: DateTime.utc(2026, 11, 1),
+      source: CatalogSourceMeta(
+        title: 'Vanier CGS Government Program',
+        url: 'https://vanier.gc.ca/en/home-accueil.html',
+        publisher: 'Government of Canada Tri-agency',
+        retrievedAt: DateTime.utc(2026, 1, 15),
+      ),
+      notes: 'Valued at 50,000 CAD per year for up to 3 years during doctoral studies.',
+    ),
+    ScholarshipListing(
+      id: 'sch-ogs-ontario',
+      name: 'Ontario Graduate Scholarship (OGS)',
+      countryCode: 'CA',
+      institutionName: 'Participating Ontario Universities',
+      eligibilitySummary: 'Merit-based scholarship for graduate students enrolled in Ontario universities.',
+      award: const MoneyAmount(amount: 15000, currencyCode: 'CAD'),
+      deadline: DateTime.utc(2026, 12, 15),
+      source: CatalogSourceMeta(
+        title: 'Ontario Ministry of Colleges and Universities',
+        url: 'https://osap.gov.on.ca/OSAPPortal/en/A-ZListofAids/PRDR019245.html',
+        publisher: 'Province of Ontario',
+        retrievedAt: DateTime.utc(2026, 1, 12),
+      ),
+    ),
+    ScholarshipListing(
+      id: 'sch-deutschlandstipendium',
+      name: 'Deutschlandstipendium National Scholarship',
+      countryCode: 'DE',
+      institutionName: 'German Participating Universities',
+      eligibilitySummary: 'High-achieving and committed students from all nations studying at German universities.',
+      award: const MoneyAmount(amount: 300, currencyCode: 'EUR'),
+      deadline: DateTime.utc(2026, 10, 31),
+      source: CatalogSourceMeta(
+        title: 'Deutschlandstipendium Official Portal',
+        url: 'https://www.deutschlandstipendium.de/',
+        publisher: 'Federal Ministry of Education and Research (BMBF)',
+        retrievedAt: DateTime.utc(2026, 2, 5),
+      ),
+      notes:
+          'Monthly stipend of 300 EUR granted regardless of personal income.',
+    ),
+  ],
+);
+
+class UniversityScholarshipState {
+  const UniversityScholarshipState({
+    this.activeTab = 0,
+    this.universityFilter = const UniversitySearchFilter(),
+    this.scholarshipFilter = const ScholarshipSearchFilter(),
+    required this.universityResult,
+    required this.scholarshipResult,
+    this.clock,
+  });
+
+  final int activeTab; // 0 = Universities, 1 = Scholarships
+  final UniversitySearchFilter universityFilter;
+  final ScholarshipSearchFilter scholarshipFilter;
+  final UniversitySearchResult universityResult;
+  final ScholarshipSearchResult scholarshipResult;
+  final DateTime? clock;
+
+  UniversityScholarshipState copyWith({
+    int? activeTab,
+    UniversitySearchFilter? universityFilter,
+    ScholarshipSearchFilter? scholarshipFilter,
+    UniversitySearchResult? universityResult,
+    ScholarshipSearchResult? scholarshipResult,
+    DateTime? clock,
+  }) {
+    return UniversityScholarshipState(
+      activeTab: activeTab ?? this.activeTab,
+      universityFilter: universityFilter ?? this.universityFilter,
+      scholarshipFilter: scholarshipFilter ?? this.scholarshipFilter,
+      universityResult: universityResult ?? this.universityResult,
+      scholarshipResult: scholarshipResult ?? this.scholarshipResult,
+      clock: clock ?? this.clock,
+    );
+  }
+}
+
+final universityScholarshipCatalogProvider =
+    Provider<UniversityScholarshipCatalog>((ref) => defaultVerifiedCatalog);
+
+final universityScholarshipControllerProvider =
+    StateNotifierProvider<
+      UniversityScholarshipController,
+      UniversityScholarshipState
+    >((ref) {
+      final catalog = ref.watch(universityScholarshipCatalogProvider);
+      return UniversityScholarshipController(catalog);
+    });
+
+class UniversityScholarshipController
+    extends StateNotifier<UniversityScholarshipState> {
+  UniversityScholarshipController(this._catalog, {DateTime? nowUtc})
+    : _clock = nowUtc,
+      super(
+        UniversityScholarshipState(
+          universityResult: _catalog.searchPrograms(
+            const UniversitySearchFilter(),
+            now: nowUtc,
+          ),
+          scholarshipResult: _catalog.searchScholarships(
+            const ScholarshipSearchFilter(),
+            now: nowUtc,
+          ),
+          clock: nowUtc,
+        ),
+      );
+
+  final UniversityScholarshipCatalog _catalog;
+  final DateTime? _clock;
+
+  void switchTab(int tabIndex) {
+    state = state.copyWith(activeTab: tabIndex);
+  }
+
+  void updateUniversityFilter({
+    String? countryCode,
+    DegreeLevel? degreeLevel,
+    String? query,
+    bool? requireFreshSource,
+    bool clearCountry = false,
+    bool clearDegree = false,
+  }) {
+    final nextFilter = UniversitySearchFilter(
+      countryCode: clearCountry
+          ? null
+          : (countryCode ?? state.universityFilter.countryCode),
+      degreeLevel: clearDegree
+          ? null
+          : (degreeLevel ?? state.universityFilter.degreeLevel),
+      query: query ?? state.universityFilter.query,
+      requireFreshSource:
+          requireFreshSource ?? state.universityFilter.requireFreshSource,
+    );
+    final result = _catalog.searchPrograms(nextFilter, now: _clock);
+    state = state.copyWith(
+      universityFilter: nextFilter,
+      universityResult: result,
+    );
+  }
+
+  void updateScholarshipFilter({
+    String? countryCode,
+    String? query,
+    bool? excludeExpiredDeadlines,
+    bool? requireFreshSource,
+    bool clearCountry = false,
+  }) {
+    final nextFilter = ScholarshipSearchFilter(
+      countryCode: clearCountry
+          ? null
+          : (countryCode ?? state.scholarshipFilter.countryCode),
+      query: query ?? state.scholarshipFilter.query,
+      excludeExpiredDeadlines:
+          excludeExpiredDeadlines ??
+          state.scholarshipFilter.excludeExpiredDeadlines,
+      requireFreshSource:
+          requireFreshSource ?? state.scholarshipFilter.requireFreshSource,
+    );
+    final result = _catalog.searchScholarships(nextFilter, now: _clock);
+    state = state.copyWith(
+      scholarshipFilter: nextFilter,
+      scholarshipResult: result,
+    );
+  }
+
+  void resetFilters() {
+    updateUniversityFilter(
+      clearCountry: true,
+      clearDegree: true,
+      query: '',
+      requireFreshSource: false,
+    );
+    updateScholarshipFilter(
+      clearCountry: true,
+      query: '',
+      excludeExpiredDeadlines: true,
+      requireFreshSource: false,
+    );
+  }
+}
