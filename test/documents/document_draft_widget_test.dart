@@ -42,7 +42,8 @@ void main() {
     expect(output.controller!.text, contains('User-authored only'));
     expect(output.controller!.text, isNot(contains('scholarship')));
 
-    // Draft stays editable; only the explicit copy control exports text.
+    expect(find.byKey(const ValueKey('draft_export_txt')), findsOneWidget);
+    // Draft stays editable; exporting or copying requires explicit action.
     await tester.enterText(
       find.byKey(const ValueKey('draft_output')),
       'Personally reviewed user text',

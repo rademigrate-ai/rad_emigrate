@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -118,6 +121,35 @@ class _DocumentDraftPageState extends State<DocumentDraftPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(_t('Draft copied.', 'متن پیش‌نویس کپی شد.'))),
     );
+  }
+
+  Future<void> _saveTxt() async {
+    if (_draft.text.trim().isEmpty) return;
+    try {
+      final location = await FilePicker.saveFile(
+        dialogTitle: _t('Save plain text draft', 'ذخیره پیش‌نویس متنی'),
+        fileName: _kind == _DraftKind.cv ? 'RAD-CV.txt' : 'RAD-SOP.txt',
+        type: FileType.custom,
+        allowedExtensions: const ['txt'],
+        bytes: Uint8List.fromList(utf8.encode(_draft.text)),
+      );
+      if (!mounted || location == null) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_t('Draft saved.', 'پیش‌نویس ذخیره شد.'))),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            _t(
+              'Could not save. Try copying the text.',
+              'ذخیره انجام نشد؛ متن را کپی کنید.',
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _field(
@@ -284,6 +316,13 @@ class _DocumentDraftPageState extends State<DocumentDraftPage> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  key: const ValueKey('draft_export_txt'),
+                  onPressed: _saveTxt,
+                  icon: const Icon(Icons.download_outlined),
+                  label: Text(_t('Save as TXT', 'ذخیره به‌صورت TXT')),
                 ),
                 const SizedBox(height: 10),
                 OutlinedButton.icon(
