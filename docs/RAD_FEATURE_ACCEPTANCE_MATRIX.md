@@ -51,6 +51,10 @@ Verified engineering review: 2026-10-18. Original source: [`CORRECTIVE_FEATURE_A
 | Notifications boundary | Publication generates owned notifications | `notifications`, preferences/push tables, feed trigger | Per-user protected rows; server-only creation | Ownership, unread/update policy, disabled delivery | Schema/security CI | **No notification inbox/preferences/push control found in current Flutter routes.** Backend presence is not a completed UI | OPEN: new-deploy E2E |
 | Not-found screen | Unknown route and return action | Router errorBuilder | Safe localized recovery to app/auth | Invalid path, unauthenticated route | auth redirects; widget smoke | Pending public route check | OPEN: new-deploy E2E |
 
+## New document draft flow (candidate, not merged/deployed)
+
+| `/documents/draft` | User enters own CV or SOP facts, generates editable plain text, optionally copies it | `lib/features/documents/domain/document_draft_generator.dart`, `document_draft_page.dart`; no database/network calls | Persian/English headings, required validation, no invented educational/visa claims, user-triggered clipboard only, authenticated and profile-complete route | Missing content, email injection, control characters, overlong text, unknown nested paths, unsaved edits | [PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70): 27 focused tests PASS, full Flutter 512 PASS, analyzer clean | **OPEN**: Draft source not in main or deployed, no full UAT or PDF/DOCX export | **IN_PROGRESS** E8-04 |
+
 ## Concrete acceptance recording requirements
 
 1. For every row, capture source SHA and deployed SHA, timestamp, platform, viewport, locale, identity/role and test transport.
