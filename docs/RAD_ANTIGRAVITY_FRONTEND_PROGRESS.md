@@ -61,7 +61,7 @@
 | `19f4618` | `feat` | `domain` | Synchronize Grok evidence registry, local storage isolation, and curated rules gate |
 | `ef1fce0` | `feat` | `frontend` | Complete E8-01 recommendations, E8-02 user isolation, and E9-02 evidence-gated catalog states |
 | `77baa9a` | `docs` | `frontend` | Record E8-01, E8-02, E9-02 completion and test verification evidence |
-| `pending` | `fix` | `applications` | Fix cross-account case tracker isolation leak: fail-closed legacy storage and verified ownership migration |
+| `178a2e9` | `fix` | `applications` | Fix cross-account case tracker isolation leak: fail-closed legacy storage and verified ownership migration |
 
 ---
 
