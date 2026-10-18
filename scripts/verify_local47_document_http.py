@@ -53,6 +53,7 @@ def main():
         lines = [line for line in result.stdout.splitlines() if line.strip()]
         return json.loads(lines[-1]) if lines else None
 
+    api_port = port-1  # captured before `port` is reused for the random harness listener
     with socket.socket() as probe:
         probe.bind(('127.0.0.1', 0))
         port = probe.getsockname()[1]
@@ -116,7 +117,7 @@ def main():
         server_env.update(SUPABASE_URL=api,SUPABASE_SERVICE_ROLE_KEY=service,RAD_LOCAL47_TEST_TOKEN=test_token,RAD_LOCAL47_TEST_PORT=str(port))
         allowed = 'SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,RAD_LOCAL47_TEST_TOKEN,RAD_LOCAL47_TEST_PORT,RAD_PAYMENT_SANDBOX_ENABLED,RAD_PAYMENT_SANDBOX_SECRET'
         process = subprocess.Popen([str(args.deno.resolve()), 'run', '--allow-env='+allowed,
-            f'--allow-net=127.0.0.1:55321,127.0.0.1:{port}', str(ROOT/'scripts/local47_http_harness.ts')],
+            f'--allow-net=127.0.0.1:{api_port},127.0.0.1:{port}', str(ROOT/'scripts/local47_http_harness.ts')],
             env=server_env, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
             creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
         deadline = time.monotonic()+20

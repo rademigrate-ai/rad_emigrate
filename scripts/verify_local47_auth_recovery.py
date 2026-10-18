@@ -105,7 +105,7 @@ def main():
                     parsed = urllib.parse.urlsplit(link)
                     query = urllib.parse.parse_qs(parsed.query)
                     if parsed.path == '/auth/v1/verify' and query.get('type') == [expected_type]:
-                        assert parsed.scheme == 'http' and parsed.netloc == '127.0.0.1:55321', 'non-local verification URL'
+                        assert parsed.scheme == 'http' and parsed.netloc == f'127.0.0.1:{port-1}', 'non-local verification URL'
                         assert len(query.get('token', [''])[0]) >= 20, 'missing verification token'
                         return parsed.path + '?' + parsed.query, query
             time.sleep(.2)
@@ -178,7 +178,7 @@ def main():
         verify_denied(expired_query['token'][0], 'expired recovery')
         status, _, headers = request(api, expired_link)
         location = urllib.parse.urlsplit(headers.get('Location', ''))
-        assert status in (302, 303) and location.netloc == '127.0.0.1:55321', 'unapproved redirect escaped local site'
+        assert status in (302, 303) and location.netloc == f'127.0.0.1:{port-1}', 'unapproved redirect escaped local site'
         assert 'access_token' not in urllib.parse.parse_qs(location.fragment), 'expired link issued session'
         passed('fixture_aged_recovery_denied_and_unapproved_redirect_contained')
 
