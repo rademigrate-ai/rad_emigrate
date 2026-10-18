@@ -1,4 +1,7 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { isSafePublicHttpsUrl } from "../_shared/public_url.ts";
+import { ProviderError, readProviderJson, parseProviderResponse } from "./provider_response.ts";
+export { ProviderError } from "./provider_response.ts";
 
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 export const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -13,26 +16,6 @@ export async function db(path: string, init: RequestInit = {}) {
 }
 export const safeJson = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
-function isSafePublicHttpsUrl(value: string): boolean {
-  let parsed: URL;
-  try { parsed = new URL(value); } catch { return false; }
-  if (parsed.protocol !== "https:" || parsed.username || parsed.password) return false;
-  const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, "");
-  if (!host || ["localhost", "localhost.localdomain", "0.0.0.0", "metadata", "metadata.google.internal"].includes(host)) return false;
-  if (host.endsWith(".localhost") || host.endsWith(".local") || host === "::1" || /^(fe80:|fc|fd)/.test(host)) return false;
-  const match = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (match) {
-    const octets = match.slice(1).map(Number);
-    if (octets.some((part) => part > 255)) return false;
-    const [a, b] = octets;
-    if (a === 0 || a === 10 || a === 127 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127) || a >= 224) return false;
-  }
-  return true;
-}
-
-export class ProviderError extends Error {
-  constructor(readonly code: string, readonly status = 502) { super(code); }
-}
 export type Runtime = {
   provider_id: string; provider_slug: string; adapter: string; base_url: string;
   model_id: string; model_slug: string; max_output_tokens: number;
@@ -89,7 +72,7 @@ export async function discover(runtime: ProviderRuntime): Promise<DiscoveredMode
   let nextUrl = url;
   for (let page = 0; page < 10; page++) {
     const response = await providerFetch(nextUrl, { headers: providerHeaders(runtime) }, Math.min(runtime.request_timeout_seconds, 10));
-    const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
+    const data: any = await readProviderJson(response, 5_000_000);
     const current = Array.isArray(data?.data) ? data.data : Array.isArray(data?.models) ? data.models : null;
     if (!current || rows.length + current.length > 5000) throw new ProviderError("provider_malformed_response");
     rows.push(...current);
@@ -124,27 +107,24 @@ export async function discover(runtime: ProviderRuntime): Promise<DiscoveredMode
 }
 
 export async function callProvider(runtime: Runtime, messages: Array<{ role: string; content: string }>) {
+  const system = messages.filter(message=>message.role==="system").map(message=>message.content).join("\n");
+  const conversation = messages.filter(message=>message.role!=="system");
   if (runtime.adapter === "openai_compatible") {
     const response = await providerFetch(`${runtime.base_url}/chat/completions`, {
       method: "POST", headers: providerHeaders(runtime),
       body: JSON.stringify({ model: runtime.model_slug, messages, max_tokens: runtime.max_output_tokens, temperature: 0.2 }),
     }, runtime.request_timeout_seconds);
-    const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
-    return { text: String(data?.choices?.[0]?.message?.content ?? ""), usage: data?.usage ?? {} };
+    return parseProviderResponse(runtime.adapter, await readProviderJson(response), [runtime.api_key,SERVICE_KEY]);
   }
   if (runtime.adapter === "anthropic") {
     const response = await providerFetch(`${runtime.base_url}/v1/messages`, {
       method: "POST", headers: providerHeaders(runtime),
-      body: JSON.stringify({ model: runtime.model_slug, max_tokens: runtime.max_output_tokens, messages }),
+      body: JSON.stringify({ model: runtime.model_slug, max_tokens: runtime.max_output_tokens, messages: conversation, ...(system ? {system} : {}) }),
     }, runtime.request_timeout_seconds);
-    const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
-    return {
-      text: String(data?.content?.[0]?.text ?? ""),
-      usage: { prompt_tokens: data?.usage?.input_tokens, completion_tokens: data?.usage?.output_tokens },
-    };
+    return parseProviderResponse(runtime.adapter, await readProviderJson(response), [runtime.api_key,SERVICE_KEY]);
   }
   if (runtime.adapter === "gemini") {
-    const contents = messages.map((message) => ({
+    const contents = conversation.map((message) => ({
       role: message.role === "assistant" ? "model" : "user",
       parts: [{ text: message.content }],
     }));
@@ -152,16 +132,9 @@ export async function callProvider(runtime: Runtime, messages: Array<{ role: str
     const response = await providerFetch(url, {
       method: "POST",
       headers: providerHeaders(runtime),
-      body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: runtime.max_output_tokens, temperature: 0.2 } }),
+      body: JSON.stringify({ contents, ...(system ? {systemInstruction:{parts:[{text:system}]}} : {}), generationConfig: { maxOutputTokens: runtime.max_output_tokens, temperature: 0.2 } }),
     }, runtime.request_timeout_seconds);
-    const data = await response.json().catch(() => { throw new ProviderError("provider_malformed_response"); });
-    return {
-      text: String(data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ""),
-      usage: {
-        prompt_tokens: data?.usageMetadata?.promptTokenCount,
-        completion_tokens: data?.usageMetadata?.candidatesTokenCount,
-      },
-    };
+    return parseProviderResponse(runtime.adapter, await readProviderJson(response), [runtime.api_key,SERVICE_KEY]);
   }
   throw new ProviderError("unsupported_adapter", 400);
 }
