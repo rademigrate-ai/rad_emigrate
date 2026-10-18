@@ -24,6 +24,7 @@ const Set<String> _publicInAppRoutes = {
 const Set<String> _protectedRoutes = {
   '/applications',
   '/documents',
+  '/documents/draft',
   '/notifications',
   '/profile-completion',
   '/admin',
@@ -36,7 +37,8 @@ const Set<String> _protectedRoutes = {
 /// True if the given path requires authentication.
 bool isProtectedPath(String location) {
   if (_protectedRoutes.contains(location)) return true;
-  // Nested admin paths under /admin/
+  // Nested Admin paths require authentication. Other unknown paths should
+  // reach the NotFound page rather than being captured by a broad prefix.
   if (location.startsWith('/admin/')) return true;
   return false;
 }

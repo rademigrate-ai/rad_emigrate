@@ -19,6 +19,7 @@ import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/documents/presentation/pages/documents_page.dart';
+import '../../features/documents/presentation/pages/document_draft_page.dart';
 import '../../features/consultation/presentation/pages/consultation_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
@@ -111,6 +112,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const ApplicationsPage(),
           ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
+          GoRoute(
+            path: '/documents/draft',
+            builder: (_, _) => const DocumentDraftPage(),
+          ),
           GoRoute(
             path: '/consultation',
             builder: (context, state) => ConsultationPage(
