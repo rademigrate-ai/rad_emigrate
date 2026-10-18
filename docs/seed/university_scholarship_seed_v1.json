@@ -1,0 +1,20 @@
+{
+  "packageId": "uni-scholarship-seed-v1",
+  "generatedAt": "2026-10-18T15:00:00.000Z",
+  "status": "empty_by_design",
+  "programs": [],
+  "scholarships": [],
+  "reasons": [
+    "No institution-specific tuition, deadline, or award amount was verified against an official university or scholarship provider page for product seed inclusion in this pass.",
+    "UniversityScholarshipCatalog already fails closed on empty inventory (CatalogResultState.empty).",
+    "Future seeds must include official institution URL, retrievedAt, and editorial reviewStatus before any amount or deadline fields are populated."
+  ],
+  "candidate_research_notes": [
+    {
+      "topic": "Canadian DLI list",
+      "note": "IRCC maintains the designated learning institutions list; product may deep-link rather than mirror incomplete subsets.",
+      "suggestedSource": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/prepare/designated-learning-institutions-list.html",
+      "reviewStatus": "missingEvidence"
+    }
+  ]
+}
