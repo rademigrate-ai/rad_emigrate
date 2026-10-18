@@ -27,9 +27,11 @@ def main():
     parser.add_argument('--deno',required=True,type=Path)
     parser.add_argument('--report',type=Path)
     args=parser.parse_args()
-    runtime=Path(os.environ.get('TEMP','/tmp'))/'rad_codex_local47'
+    project=os.environ.get('RAD_LOCAL47_PROJECT','rad_codex_local47')
+    port=int(os.environ.get('RAD_LOCAL47_PORT','55322'))
+    runtime=Path(os.environ.get('TEMP','/tmp'))/project
     marker=json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8'))
-    assert marker=={'project':'rad_codex_local47','source':str(ROOT),'port':55322},'wrong local runtime owner'
+    assert marker=={'project':project,'source':str(ROOT),'port':port},'wrong local runtime owner'
     status=subprocess.run([str(args.supabase.resolve()),'--workdir',str(runtime),'status','--output','env'],capture_output=True,text=True,encoding='utf-8',check=True)
     values={}
     for line in status.stdout.splitlines():
@@ -37,9 +39,9 @@ def main():
         if parts and '=' in parts[0]:
             key,value=parts[0].split('=',1);values[key]=value
     api=values['API_URL'];service=values['SERVICE_ROLE_KEY']
-    assert api.rstrip('/')=='http://127.0.0.1:55321','refusing non-owned API target'
+    assert api.rstrip('/')==f'http://127.0.0.1:{port-1}','refusing non-owned API target'
     env=os.environ.copy();env['PGPASSWORD']='postgres'
-    psql=[str(args.psql.resolve()),'-XqAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','55322','-U','postgres','-d','postgres']
+    psql=[str(args.psql.resolve()),'-XqAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p',str(port),'-U','postgres','-d','postgres']
     def sql(source):
         result=subprocess.run(psql,input=source,env=env,capture_output=True,text=True,encoding='utf-8',check=True)
         lines=[line for line in result.stdout.splitlines() if line.strip()]

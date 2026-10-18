@@ -27,9 +27,11 @@ def main():
     args=parser.parse_args()
     env=os.environ.copy();env['PGPASSWORD']='postgres'
     catalogs=[]
-    for port in (55322,57322):
-        project='rad_codex_local47' if port==55322 else 'rad_codex_local47_reconstruct'
-        runtime=Path(os.environ.get('TEMP','/tmp'))/(project if port==55322 else project+'_57322')
+    base=os.environ.get('RAD_LOCAL47_PROJECT','rad_codex_local47')
+    canon_port=int(os.environ.get('RAD_LOCAL47_PORT','55322'))
+    hist_port=int(os.environ.get('RAD_LOCAL47_HIST_PORT','57322'))
+    for port,project in ((canon_port,base),(hist_port,base+'_reconstruct')):
+        runtime=Path(os.environ.get('TEMP','/tmp'))/(project if port==canon_port else project+'_'+str(port))
         assert json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8'))=={
           'project':project,'source':str(ROOT),'port':port},'wrong local runtime owner'
         result=subprocess.run([str(args.psql.resolve()),'-XAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p',str(port),

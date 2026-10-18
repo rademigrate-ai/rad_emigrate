@@ -35,9 +35,11 @@ def main():
     parser.add_argument('--psql', required=True, type=Path)
     parser.add_argument('--report', required=True, type=Path)
     args = parser.parse_args()
-    runtime = Path(os.environ.get('TEMP', '/tmp')) / 'rad_codex_local47'
+    project = os.environ.get('RAD_LOCAL47_PROJECT', 'rad_codex_local47')
+    port = int(os.environ.get('RAD_LOCAL47_PORT', '55322'))
+    runtime = Path(os.environ.get('TEMP', '/tmp')) / project
     marker = json.loads((runtime / 'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8'))
-    assert marker == {'project': 'rad_codex_local47', 'source': str(ROOT), 'port': 55322}, 'wrong local runtime owner'
+    assert marker == {'project': project, 'source': str(ROOT), 'port': port}, 'wrong local runtime owner'
     result = subprocess.run([str(args.supabase.resolve()), '--workdir', str(runtime), 'status', '--output', 'env'],
                             capture_output=True, text=True, encoding='utf-8', check=True)
     values = {}
@@ -47,14 +49,14 @@ def main():
             key, value = parts[0].split('=', 1)
             values[key] = value
     api = values['API_URL'].rstrip('/')
-    assert api == 'http://127.0.0.1:55321', 'refusing non-owned API'
-    mailbox = 'http://127.0.0.1:55324'
+    assert api == f'http://127.0.0.1:{port-1}', 'refusing non-owned API'
+    mailbox = f'http://127.0.0.1:{port+2}'
     anon, service = values['ANON_KEY'], values['SERVICE_ROLE_KEY']
     opener = urllib.request.build_opener(NoRedirect())
     owned_users, owned_messages = [], set()
     env = os.environ.copy()
     env['PGPASSWORD'] = 'postgres'
-    psql = [str(args.psql.resolve()), '-XqAt', '-v', 'ON_ERROR_STOP=1', '-h', '127.0.0.1', '-p', '55322', '-U', 'postgres', '-d', 'postgres']
+    psql = [str(args.psql.resolve()), '-XqAt', '-v', 'ON_ERROR_STOP=1', '-h', '127.0.0.1', '-p', str(port), '-U', 'postgres', '-d', 'postgres']
 
     def request(base, path, method='GET', payload=None, token=None, elevated=False):
         assert base in (api, mailbox), 'external HTTP target prohibited'

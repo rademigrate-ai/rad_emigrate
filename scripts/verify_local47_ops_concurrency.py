@@ -18,8 +18,9 @@ def main() -> None:
     parser.add_argument('--report',type=Path)
     args=parser.parse_args()
     env=os.environ.copy();env['PGPASSWORD']='postgres'
+    port=int(os.environ.get('RAD_LOCAL47_PORT','55322'))
     command=[str(args.psql.resolve()),'-XqAt','-v','ON_ERROR_STOP=1','-v','VERBOSITY=sqlstate',
-             '-h','127.0.0.1','-p','55322','-U','postgres','-d','postgres']
+             '-h','127.0.0.1','-p',str(port),'-U','postgres','-d','postgres']
     owner,admin,consultation=[str(uuid.uuid4()) for _ in range(3)]
     subscription='local47-'+uuid.uuid4().hex
     claim_service="begin; set local request.jwt.claims='{\"role\":\"service_role\"}'; set local request.jwt.claim.sub=''; set local role service_role;"
@@ -31,7 +32,7 @@ def main() -> None:
         lines=[line for line in result.stdout.splitlines() if line.strip()]
         return json.loads(lines[-1]) if lines else None
     def service(statement: str): return sql(claim_service+statement+';commit;')
-    report={'target':'127.0.0.1:55322','production_mutations':False,'mode':'synthetic_sandbox'}
+    report={'target':f'127.0.0.1:{port}','production_mutations':False,'mode':'synthetic_sandbox'}
     original_enabled=sql('select to_json(enabled) from private.payment_sandbox_config where singleton;')
     assert sql("select to_json(count(*)) from public.notification_deliveries where status in ('queued','processing');")==0, 'outbox has other pending work; refusing to consume it'
     before=sql("select to_json(md5(coalesce(jsonb_agg(to_jsonb(e) order by id)::text,'[]'))) from public.ai_entitlements e;")

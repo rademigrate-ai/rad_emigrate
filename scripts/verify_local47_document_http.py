@@ -27,9 +27,11 @@ def main():
     for name in ['supabase', 'psql', 'deno', 'report']:
         parser.add_argument('--'+name, required=True, type=Path)
     args = parser.parse_args()
-    runtime = Path(os.environ.get('TEMP', '/tmp'))/'rad_codex_local47'
+    project = os.environ.get('RAD_LOCAL47_PROJECT', 'rad_codex_local47')
+    port = int(os.environ.get('RAD_LOCAL47_PORT', '55322'))
+    runtime = Path(os.environ.get('TEMP', '/tmp'))/project
     assert json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8')) == {
-        'project':'rad_codex_local47','source':str(ROOT),'port':55322}, 'wrong runtime owner'
+        'project':project,'source':str(ROOT),'port':port}, 'wrong runtime owner'
     status = subprocess.run([str(args.supabase.resolve()), '--workdir', str(runtime), 'status', '--output', 'env'],
         capture_output=True, text=True, encoding='utf-8', check=True)
     values = {}
@@ -39,11 +41,11 @@ def main():
             key, value = parts[0].split('=', 1)
             values[key] = value
     api = values['API_URL'].rstrip('/')
-    assert api == 'http://127.0.0.1:55321', 'refusing non-owned API'
+    assert api == f'http://127.0.0.1:{port-1}', 'refusing non-owned API'
     service, anon = values['SERVICE_ROLE_KEY'], values['ANON_KEY']
     env = os.environ.copy()
     env['PGPASSWORD'] = 'postgres'
-    command = [str(args.psql.resolve()), '-XqAt', '-v', 'ON_ERROR_STOP=1', '-h', '127.0.0.1', '-p', '55322', '-U', 'postgres', '-d', 'postgres']
+    command = [str(args.psql.resolve()), '-XqAt', '-v', 'ON_ERROR_STOP=1', '-h', '127.0.0.1', '-p', str(port), '-U', 'postgres', '-d', 'postgres']
 
     def sql(source):
         result = subprocess.run(command, input=source, env=env, capture_output=True, text=True, encoding='utf-8', timeout=30)

@@ -17,13 +17,15 @@ def main():
     parser.add_argument('--psql', required=True, type=Path)
     parser.add_argument('--report', required=True, type=Path)
     args = parser.parse_args()
-    runtime = Path(os.environ.get('TEMP', '/tmp')) / 'rad_codex_local47'
+    project = os.environ.get('RAD_LOCAL47_PROJECT', 'rad_codex_local47')
+    port = int(os.environ.get('RAD_LOCAL47_PORT', '55322'))
+    runtime = Path(os.environ.get('TEMP', '/tmp')) / project
     assert json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8')) == {
-        'project': 'rad_codex_local47', 'source': str(ROOT), 'port': 55322}, 'wrong runtime owner'
+        'project': project, 'source': str(ROOT), 'port': port}, 'wrong runtime owner'
     env = os.environ.copy()
     env['PGPASSWORD'] = 'postgres'
     command = [str(args.psql.resolve()), '-XqAt', '-v', 'ON_ERROR_STOP=1', '-v', 'VERBOSITY=sqlstate',
-               '-h', '127.0.0.1', '-p', '55322', '-U', 'postgres', '-d', 'postgres']
+               '-h', '127.0.0.1', '-p', str(port), '-U', 'postgres', '-d', 'postgres']
     owner, document = str(uuid.uuid4()), str(uuid.uuid4())
     path = owner + '/synthetic.pdf'
 

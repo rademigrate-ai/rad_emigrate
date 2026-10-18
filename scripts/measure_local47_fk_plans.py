@@ -21,9 +21,11 @@ def main():
     parser.add_argument('--psql',required=True,type=Path)
     parser.add_argument('--report',required=True,type=Path)
     args=parser.parse_args()
-    runtime=Path(os.environ.get('TEMP','/tmp'))/'rad_codex_local47_reconstruct_57322'
+    base=os.environ.get('RAD_LOCAL47_PROJECT','rad_codex_local47')
+    hist_port=int(os.environ.get('RAD_LOCAL47_HIST_PORT','57322'))
+    runtime=Path(os.environ.get('TEMP','/tmp'))/(base+'_reconstruct_'+str(hist_port))
     marker=json.loads((runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text(encoding='utf-8'))
-    assert marker=={'project':'rad_codex_local47_reconstruct','source':str(ROOT),'port':57322},'wrong local runtime owner'
+    assert marker=={'project':base+'_reconstruct','source':str(ROOT),'port':hist_port},'wrong local runtime owner'
     owner,admin,application,item,target=[str(uuid.uuid4()) for _ in range(5)]
     indexes=['knowledge_claims_superseded_by_idx','consultation_requests_assigned_to_idx','consultation_requests_related_application_id_idx']
     queries=[f"select id from public.knowledge_claims where superseded_by='{target}'::uuid",
@@ -52,7 +54,7 @@ analyze public.consultation_requests; analyze public.knowledge_claims;
     source+='\n'+'\n'.join('drop index public.'+name+';' for name in indexes)+'\n'
     source+='\n'.join('explain (analyze,buffers,format json) '+query+';' for query in queries)+'\nrollback;'
     env=os.environ.copy();env['PGPASSWORD']='postgres'
-    command=[str(args.psql.resolve()),'-XqAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','57322','-U','postgres','-d','postgres']
+    command=[str(args.psql.resolve()),'-XqAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p',str(hist_port),'-U','postgres','-d','postgres']
     result=subprocess.run(command,input=source,env=env,capture_output=True,text=True,encoding='utf-8',check=True,timeout=120)
     remaining=result.stdout.strip();plans=[];decoder=json.JSONDecoder()
     while remaining:
@@ -62,7 +64,7 @@ analyze public.consultation_requests; analyze public.knowledge_claims;
         found=[plan]
         for child in plan.get('Plans',[]):found+=nodes(child)
         return found
-    report={'scope':'synthetic_local_57322','production_mutations':False,'transaction_rolled_back':True,
+    report={'scope':f'synthetic_local_{hist_port}','production_mutations':False,'transaction_rolled_back':True,
       'planner_switches_forced':False,'fixture_consultations':10000,'fixture_claims':20001,'probes':[]}
     report.update(captured_at=datetime.now(timezone.utc).isoformat(),
       source_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),

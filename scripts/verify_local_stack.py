@@ -19,8 +19,12 @@ import tempfile
 from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECT = "rad_codex_local47"
-PORT = 55322
+# Disposable-stack identity is overridable so parallel checkouts can run their
+# own marked runtime without touching another owner's containers. Defaults keep
+# the documented Codex commands byte-for-byte compatible.
+PROJECT = os.environ.get("RAD_LOCAL47_PROJECT", "rad_codex_local47")
+PORT = int(os.environ.get("RAD_LOCAL47_PORT", "55322"))
+HIST_PORT = int(os.environ.get("RAD_LOCAL47_HIST_PORT", "57322"))
 
 
 def safe_output(value: str) -> str:
@@ -43,7 +47,7 @@ def main() -> None:
     if not args.supabase or not Path(args.supabase).is_file():
         parser.error("--supabase must name an installed native CLI executable")
     project = PROJECT if args.lineage == "canonical" else PROJECT + "_reconstruct"
-    port = PORT if args.lineage == "canonical" else 57322
+    port = PORT if args.lineage == "canonical" else HIST_PORT
     runtime_name = project if args.lineage == "canonical" else f"{project}_{port}"
     runtime = (args.runtime or Path(tempfile.gettempdir()) / runtime_name).resolve()
     if runtime == ROOT or ROOT in runtime.parents:
