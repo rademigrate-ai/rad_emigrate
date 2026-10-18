@@ -233,10 +233,12 @@ class RecommendationEngine {
             pid.startsWith('${alias}_'))) {
       return PreferenceMatch.partial;
     }
-    final prefTokens =
-        pref.split(RegExp(r'[^a-z0-9]+')).where((t) => t.length > 1);
-    final pidTokens =
-        pid.split(RegExp(r'[^a-z0-9]+')).where((t) => t.length > 1);
+    final prefTokens = pref
+        .split(RegExp(r'[^a-z0-9]+'))
+        .where((t) => t.length > 1);
+    final pidTokens = pid
+        .split(RegExp(r'[^a-z0-9]+'))
+        .where((t) => t.length > 1);
     if (prefTokens.any(pidTokens.contains)) return PreferenceMatch.partial;
     return PreferenceMatch.none;
   }
