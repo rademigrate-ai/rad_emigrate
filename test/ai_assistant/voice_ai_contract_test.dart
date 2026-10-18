@@ -62,4 +62,33 @@ void main() {
       isNot(contains('stack')),
     );
   });
+
+  test('persian session starts', () {
+    final s = contract.startListening(locale: 'fa');
+    expect(s.state, VoiceSessionState.listening);
+  });
+
+  test('recover after timeout returns to listening', () {
+    final failed = contract.fail(
+      current: const VoiceSession(state: VoiceSessionState.listening),
+      kind: VoiceFailureKind.timeout,
+    );
+    final recovered = contract.recoverAfterRetryableFailure(
+      current: failed,
+      locale: 'en',
+    );
+    expect(recovered.state, VoiceSessionState.listening);
+  });
+
+  test('permission denied is not retryable recovery', () {
+    final failed = contract.fail(
+      current: const VoiceSession(state: VoiceSessionState.listening),
+      kind: VoiceFailureKind.permissionDenied,
+    );
+    final recovered = contract.recoverAfterRetryableFailure(
+      current: failed,
+      locale: 'en',
+    );
+    expect(recovered.state, VoiceSessionState.failed);
+  });
 }

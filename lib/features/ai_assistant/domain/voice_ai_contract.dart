@@ -163,6 +163,24 @@ class VoiceAiContract {
     );
   }
 
+  /// Retryable failures may return to listening for the same locale.
+  VoiceSession recoverAfterRetryableFailure({
+    required VoiceSession current,
+    required String locale,
+  }) {
+    if (current.state != VoiceSessionState.failed) {
+      return current;
+    }
+    final kind = current.failure;
+    final retryable =
+        kind == VoiceFailureKind.timeout ||
+        kind == VoiceFailureKind.transcriptionFailed ||
+        kind == VoiceFailureKind.providerUnavailable ||
+        kind == VoiceFailureKind.generationFailed;
+    if (!retryable) return current;
+    return startListening(locale: locale);
+  }
+
   /// Sanitized user-visible messages — no provider internals.
   static String failureMessage(VoiceFailureKind kind) => switch (kind) {
     VoiceFailureKind.permissionDenied =>

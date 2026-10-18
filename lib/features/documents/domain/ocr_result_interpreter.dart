@@ -44,6 +44,8 @@ class OcrJobSnapshot {
     this.fields = const [],
     this.failure,
     this.retryAfterSeconds,
+    this.completedAt,
+    this.reviewedAt,
   });
 
   final String jobId;
@@ -53,6 +55,8 @@ class OcrJobSnapshot {
   final List<OcrFieldExtraction> fields;
   final OcrFailureCode? failure;
   final int? retryAfterSeconds;
+  final DateTime? completedAt;
+  final DateTime? reviewedAt;
 }
 
 class OcrInterpretation {
@@ -132,6 +136,34 @@ class OcrResultInterpreter {
           message: 'Human review required before use.',
         );
     }
+  }
+
+  /// Stale OCR must not overwrite newer human-reviewed values.
+  bool isStaleRelativeToReview(OcrJobSnapshot job) {
+    if (job.completedAt == null || job.reviewedAt == null) return false;
+    return job.completedAt!.isBefore(job.reviewedAt!);
+  }
+
+  OcrInterpretation interpretPreferringReview({
+    required OcrJobSnapshot job,
+    required String callerUserId,
+    bool isService = false,
+  }) {
+    final base = interpret(
+      job: job,
+      callerUserId: callerUserId,
+      isService: isService,
+    );
+    if (!base.safeForClient) return base;
+    if (isStaleRelativeToReview(job)) {
+      return OcrInterpretation(
+        status: job.status,
+        safeForClient: true,
+        displayableFields: const [],
+        message: 'A newer human review takes precedence over this extraction.',
+      );
+    }
+    return base;
   }
 
   static String _failureMessage(OcrFailureCode code) => switch (code) {
