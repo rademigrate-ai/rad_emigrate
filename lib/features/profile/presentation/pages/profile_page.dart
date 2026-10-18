@@ -460,6 +460,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         onTap: () => setState(() => _editing = true),
                       ),
                       _ProfileActionRow(
+                        title:
+                            Localizations.localeOf(context).languageCode == 'fa'
+                            ? 'پرونده مهاجرتی و سنجش مسیر'
+                            : 'Immigration Profile & Assessment',
+                        subtitle:
+                            Localizations.localeOf(context).languageCode == 'fa'
+                            ? 'سنجش مسیر و بررسی معیارهای قانونی'
+                            : 'Evidence assessment & completeness',
+                        icon: Icons.verified_user_outlined,
+                        onTap: () => context.push('/profile/immigration'),
+                      ),
+                      _ProfileActionRow(
                         title: l10n.applications,
                         subtitle: l10n.viewDetails,
                         icon: Icons.assignment_outlined,

@@ -16,6 +16,8 @@ const Set<String> _publicInAppRoutes = {
   '/feed',
   '/world-clock',
   '/profile',
+  '/profile/immigration',
+  '/universities',
   '/ai-assistant',
   '/consultation',
 };

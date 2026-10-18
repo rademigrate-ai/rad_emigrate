@@ -25,6 +25,7 @@ import '../../features/notifications/presentation/pages/notifications_page.dart'
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/global_time/presentation/pages/world_clock_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/profile/presentation/pages/immigration_profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
 import '../widgets/not_found_page.dart';
@@ -127,6 +128,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const NotificationsPage(),
           ),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
+          GoRoute(
+            path: '/profile/immigration',
+            builder: (_, _) => const ImmigrationProfilePage(),
+          ),
           GoRoute(
             path: '/ai-assistant',
             builder: (_, state) => AiAssistantPage(
