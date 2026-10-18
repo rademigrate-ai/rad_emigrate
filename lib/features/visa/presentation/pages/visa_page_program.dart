@@ -132,12 +132,14 @@ class _ProgramDetailStage extends StatelessWidget {
                           AppButton(
                             label: AppLocalizations.of(context)
                                 .bookConsultationAction,
+                            icon: Icons.event_available_outlined,
                             onPressed: () => _openConsultation(context),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
                             label: AppLocalizations.of(context)
                                 .askAssistantAction,
+                            icon: Icons.auto_awesome_outlined,
                             variant: AppButtonVariant.secondary,
                             onPressed: () => _openAi(context),
                           ),
@@ -327,8 +329,20 @@ class _ProgramAccordionsState extends State<_ProgramAccordions> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.source.title} — ${widget.source.publisher}\n${widget.source.url}',
+              '${widget.source.title} — ${widget.source.publisher}',
+              style: Theme.of(context).textTheme.titleSmall,
             ),
+            if (widget.source.url.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: SelectableText(
+                  widget.source.url,
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: AppColors.teal),
+                ),
+              ),
+            ],
             const SizedBox(height: 8),
             Text(
               widget.l10n.structuredSourceNote,

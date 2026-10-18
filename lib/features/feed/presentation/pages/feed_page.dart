@@ -38,18 +38,40 @@ class _FeedPageState extends ConsumerState<FeedPage> {
         accent: AppColors.teal,
         child: feed.when(
           loading: () => LoadingState.section(message: l10n.loadingUpdates),
-          error: (error, _) => ErrorState(
-            message: l10n.updatesLoadFailed,
-            onRetry: () => ref.invalidate(feedProvider(locale)),
+          error: (error, _) => RefreshIndicator(
+            onRefresh: () => ref.refresh(feedProvider(locale).future),
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.7,
+                  child: ErrorState(
+                    message: l10n.updatesLoadFailed,
+                    onRetry: () => ref.invalidate(feedProvider(locale)),
+                  ),
+                ),
+              ],
+            ),
           ),
           data: (items) {
             if (items.isEmpty) {
-              return EmptyState(
-                title: l10n.noReviewedUpdates,
-                subtitle: l10n.catalogueDisclaimer,
-                icon: Icons.newspaper_outlined,
-                actionLabel: l10n.visaPrograms,
-                onAction: () => context.go('/visa'),
+              return RefreshIndicator(
+                onRefresh: () => ref.refresh(feedProvider(locale).future),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.7,
+                      child: EmptyState(
+                        title: l10n.noReviewedUpdates,
+                        subtitle: l10n.catalogueDisclaimer,
+                        icon: Icons.newspaper_outlined,
+                        actionLabel: l10n.visaPrograms,
+                        onAction: () => context.go('/visa'),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return RefreshIndicator(
@@ -132,7 +154,7 @@ class _FeedPageState extends ConsumerState<FeedPage> {
   }
 }
 
-class _EditorialFeedCard extends StatelessWidget {
+class _EditorialFeedCard extends StatefulWidget {
   const _EditorialFeedCard({
     required this.index,
     required this.item,
@@ -148,9 +170,27 @@ class _EditorialFeedCard extends StatelessWidget {
   final Future<void> Function() onSaved;
 
   @override
+  State<_EditorialFeedCard> createState() => _EditorialFeedCardState();
+}
+
+class _EditorialFeedCardState extends State<_EditorialFeedCard> {
+  bool _saving = false;
+
+  Future<void> _handleSaved() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      await widget.onSaved();
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final item = widget.item;
     final dateLabel = item.publishedAt
         ?.toLocal()
         .toIso8601String()
@@ -160,14 +200,14 @@ class _EditorialFeedCard extends StatelessWidget {
       button: true,
       label: item.title,
       child: AppCard(
-        onTap: onRead,
+        onTap: widget.onRead,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Text(
-                  'UPDATE ${index.toString().padLeft(2, '0')}',
+                  'UPDATE ${widget.index.toString().padLeft(2, '0')}',
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: AppColors.teal,
                     fontWeight: FontWeight.w800,
@@ -180,7 +220,7 @@ class _EditorialFeedCard extends StatelessWidget {
                   icon: Icon(
                     item.saved ? Icons.bookmark : Icons.bookmark_border,
                   ),
-                  onPressed: onSaved,
+                  onPressed: _saving ? null : _handleSaved,
                 ),
               ],
             ),

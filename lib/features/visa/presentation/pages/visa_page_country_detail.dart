@@ -103,8 +103,10 @@ class _CountryDetailStage extends StatelessWidget {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: EmptyState(
-                  title: l10n.catalogueUnavailable,
+                  title: l10n.publishedDestinationsEmpty,
                   subtitle: l10n.catalogueDisclaimer,
+                  actionLabel: l10n.visaPathways,
+                  onAction: () => context.go('/visa'),
                 ),
               )
             else
