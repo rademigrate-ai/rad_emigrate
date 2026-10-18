@@ -190,6 +190,7 @@ additional_redirect_urls = ["http://127.0.0.1:{port-1}/reset-password"]
                 "supabase/tests/local47_payment_sandbox.sql",
                 "supabase/tests/local47_definer_acl.sql",
                 "supabase/tests/local47_document_processing.sql",
+                "supabase/tests/local47_observability.sql",
             ]:
                 if not (ROOT / sql).exists():
                     continue
