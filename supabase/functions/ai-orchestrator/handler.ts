@@ -226,7 +226,7 @@ export async function handler(req: Request): Promise<Response> {
       return safeJson(200, {
         reply: result.text,
         sources: grounding.sources,
-        uncertain: !grounding.hasApprovedEvidence || grounding.sources.length === 0,
+        uncertain: !grounding.hasApprovedEvidence || grounding.sources.length === 0 || grounding.hasConflicts,
         has_approved_evidence: grounding.hasApprovedEvidence,
         locale: grounding.locale,
         provider: runtime.provider_slug,
