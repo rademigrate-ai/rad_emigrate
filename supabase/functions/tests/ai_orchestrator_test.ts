@@ -37,14 +37,14 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
       if (path.startsWith("profiles?")) return response([{ role: options.role ?? "super_admin" }]);
       if (path.startsWith("ai_usage_limits?")) return response([{ daily_requests: 50, daily_output_tokens: 1000 }]);
       if (path === "rpc/record_ai_provider_outcome" && options.healthFails) return response({}, 503);
-      if (path === "rpc/retrieve_knowledge") return options.knowledgeUnavailable
+      if (path === "rpc/retrieve_verified_official_claims") return options.knowledgeUnavailable
         ? response({ error: "private knowledge diagnostic" }, 503)
-        : response({ results: options.knowledgeResults ?? [] });
+        : response({ results: options.knowledgeResults ?? evidenceWithConflicts(), evidence_state: Array.isArray(options.knowledgeResults) && options.knowledgeResults.some((r) => r.has_conflicts) ? "conflicting" : "verified" });
       if (path === "rpc/consume_ai_daily_quota") {
         if (options.quotaError) return response({ error: "database error" }, 500);
         if (options.quotaMalformed) return response({ allowed: true });
         if (options.quotaExceeded) return response({ allowed: false, error: "daily_limit_reached", limit: 50, count: 50 });
-        return response({ allowed: true, request_id: "reserved-req-id", limit: 50, count: 1 });
+        return response({ allowed: true, request_id: "a2000000-0000-4000-8000-000000000001", limit: 50, count: 1 });
       }
       if (path === "ai_requests?select=id") return response([{ id: "request-one" }]);
       if (path.startsWith("ai_requests?id=")) return options.persistFails ? response({}, 500) : response(null);
@@ -114,10 +114,10 @@ Deno.test("12 recovered eligible model is tried and records success", async () =
   equal(x.calls.find(c => c.path.endsWith("record_ai_model_outcome"))?.body.p_success, true);
 });
 Deno.test("13 attempts are bounded even with a large catalogue", async () => {
-  const x = await exercise({ chain: Array.from({ length: 50 }, (_, i) => runtime(String(i), String(i))), status: Array(50).fill(429) }); equal(x.providerCalls, 5);
+  const x = await exercise({ chain: Array.from({ length: 50 }, (_, i) => runtime(String(i), String(i))), status: Array(50).fill(429) }); equal(x.providerCalls, 3);
 });
 Deno.test("14 persistence failure after successful inference never invokes another model", async () => {
-  const x = await exercise({ persistFails: true }); equal(x.providerCalls, 1); equal(x.status, 200); equal(x.body.reply, "Accepted response");
+  const x = await exercise({ persistFails: true }); equal(x.providerCalls, 1); equal(x.status, 200); equal(x.body.reply, "Synthetic verified claim [1]");
   equal(x.calls.filter(c => c.body?.status === "succeeded").length, 1);
 });
 Deno.test("15 telemetry contains only sanitized metadata and no secrets or upstream text", async () => {
@@ -147,9 +147,9 @@ Deno.test("ordinary users cannot discover providers or use Admin AI", async () =
 Deno.test("17 atomic quota reservation reuses request_id and avoids duplicate insert", async () => {
   const x = await exercise();
   equal(x.status, 200);
-  equal(x.body.request_id, "reserved-req-id");
+  equal(x.body.request_id, "a2000000-0000-4000-8000-000000000001");
   equal(x.calls.filter(c => c.path.includes("ai_requests?select=id")).length, 0);
-  equal(x.calls.filter(c => c.path.includes("ai_requests?id=eq.reserved-req-id")).length >= 1, true);
+  equal(x.calls.filter(c => c.path.includes("ai_requests?id=eq.a2000000-0000-4000-8000-000000000001")).length >= 1, true);
 });
 Deno.test("18 quota limit reached returns 429 and never invokes providers", async () => {
   const x = await exercise({ quotaExceeded: true });
@@ -174,22 +174,22 @@ Deno.test("20 malformed quota response fails closed with 500", async () => {
 
 function evidenceWithConflicts(open_conflicts: unknown[] = []) {
   return [{
-    title: "Reviewed source", review_status: "approved", summary: "Reviewed facts",
-    claims: [{
-      claim_text: "Current reviewed claim", review_status: "approved", is_current: true,
-      citations: [{ source: { title: "Official source", canonical_url: "https://example.gov/policy", source_authority: "government" } }],
-    }],
-    open_conflicts,
+    claim_id: "a2000000-0000-4000-8000-000000000002", snapshot_id: "a2000000-0000-4000-8000-000000000003",
+    citation_id: "a2000000-0000-4000-8000-000000000004", claim_text: "Synthetic verified claim", excerpt: "Synthetic verified excerpt",
+    locator: "synthetic-paragraph", url: "https://example.gov/policy", authority: "Synthetic authority",
+    verification_state: "verified", verified_at: new Date(Date.now()-86400000).toISOString(), fresh_until: new Date(Date.now()+86400000).toISOString(),
+    has_conflicts: open_conflicts.length > 0,
   }];
 }
 
 Deno.test("grounded response: conflicts force uncertainty despite approved citations", async () => {
   const x = await exercise({ knowledgeResults: evidenceWithConflicts([{ statement_a: "A", statement_b: "B" }]) });
   equal(x.status, 200);
-  equal(x.body.has_approved_evidence, true);
-  equal(x.body.sources.length, 1);
+  equal(x.body.has_approved_evidence, false);
+  equal(x.body.sources.length, 0);
   equal(x.body.uncertain, true);
-  equal(x.calls.find(c => c.path.endsWith("/chat/completions"))?.body.messages.some((m: {content:string})=>m.content.includes("[OPEN CONFLICT]")), true);
+  equal(x.providerCalls, 0);
+  equal(x.body.evidence_state, "conflicting");
 });
 
 Deno.test("grounded response: approved current cited result retains certainty and locale", async () => {
@@ -218,7 +218,7 @@ Deno.test("provider boundary: empty inference fails over instead of returning bl
   equal(x.calls.find(c=>c.path.endsWith('record_ai_model_outcome'))?.body.p_error_code,'provider_malformed_response');
 });
 Deno.test("provider boundary: health telemetry failure never repeats completed inference", async () => {
-  const x=await exercise({healthFails:true});equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply,"Accepted response");
+  const x=await exercise({healthFails:true});equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply,"Synthetic verified claim [1]");
 });
 Deno.test("provider boundary: refusals are terminal and uncertainty is explicit", async () => {
   const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:null,refusal:"Synthetic provider refusal"}}]}]});

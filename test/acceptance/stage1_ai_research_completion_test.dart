@@ -89,13 +89,13 @@ void main() {
       // Behavioral fail-closed cases run in knowledge_grounding_test.ts.
       expect(
         grounding,
-        contains('if (item.review_status !== "approved") continue;'),
+        contains('rpc/retrieve_verified_official_claims'),
       );
       expect(
         grounding,
-        contains('if (claim.review_status !== "approved") continue;'),
+        contains('item.verification_state !== "verified"'),
       );
-      expect(grounding, contains('if (claim.is_current !== true) continue;'));
+      expect(grounding, contains('fresh <= Date.now()'));
     });
 
     test('research fetch is bounded and redirect-safe', () {

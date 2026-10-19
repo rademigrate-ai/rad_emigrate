@@ -9,9 +9,9 @@ export const dbHeaders = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE
 export const cors = corsHeaders;
 
 export async function db(path: string, init: RequestInit = {}) {
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...init, headers: { ...dbHeaders, ...(init.headers ?? {}) } });
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...init, signal: AbortSignal.timeout(10000), headers: { ...dbHeaders, ...(init.headers ?? {}) } });
   const text = await response.text();
-  if (!response.ok) throw new Error(`database_${response.status}`);
+  if (!response.ok) throw Object.assign(new Error(`database_${response.status}`), { status: response.status });
   return text ? JSON.parse(text) : null;
 }
 export const safeJson = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
