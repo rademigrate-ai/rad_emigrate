@@ -8,6 +8,10 @@ import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/admin/presentation/pages/admin_consultations_page.dart';
+import '../../features/admin/presentation/pages/admin_cms_articles_page.dart';
+import '../../features/admin/presentation/pages/admin_cms_canonical_editor_page.dart';
+import '../../features/admin/presentation/pages/admin_source_monitor_page.dart';
+import '../../features/admin/presentation/pages/admin_source_diff_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -113,6 +117,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),
           ),
+          GoRoute(
+            path: '/profile/cases',
+            builder: (_, _) => const ApplicationsPage(),
+          ),
+          GoRoute(
+            path: '/profile/cases/:applicationId',
+            builder: (_, state) => ApplicationsPage(
+              initialApplicationId: state.pathParameters['applicationId'],
+            ),
+          ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
           GoRoute(
             path: '/documents/draft',
@@ -163,6 +177,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/ai-research',
             builder: (_, _) => const AdminAiWorkspacePage(),
+          ),
+          GoRoute(
+            path: '/admin/cms',
+            builder: (_, _) => const AdminCmsArticlesPage(),
+          ),
+          GoRoute(
+            path: '/admin/cms/canonical/:id',
+            builder: (_, state) => AdminCmsCanonicalEditorPage(
+              articleId: state.pathParameters['id'] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: '/admin/sources',
+            builder: (_, _) => const AdminSourceMonitorPage(),
+          ),
+          GoRoute(
+            path: '/admin/sources/:sourceId/review',
+            builder: (_, state) => AdminSourceDiffPage(
+              sourceId: state.pathParameters['sourceId'] ?? '',
+            ),
           ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],

@@ -25,7 +25,9 @@ import '../providers/application_controller.dart';
 import '../providers/case_tracker_controller.dart';
 
 class ApplicationsPage extends ConsumerStatefulWidget {
-  const ApplicationsPage({super.key});
+  final String? initialApplicationId;
+
+  const ApplicationsPage({super.key, this.initialApplicationId});
 
   @override
   ConsumerState<ApplicationsPage> createState() => _ApplicationsPageState();
@@ -581,6 +583,16 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     final l10n = AppLocalizations.of(context);
     final isFa = Localizations.localeOf(context).languageCode == 'fa';
     final state = ref.watch(applicationControllerProvider);
+
+    if (_selected == null && widget.initialApplicationId != null) {
+      final list = state.valueOrNull ?? [];
+      for (final a in list) {
+        if (a.id == widget.initialApplicationId) {
+          _selected = a;
+          break;
+        }
+      }
+    }
 
     if (_selected != null) {
       final app = _selected!;

@@ -80,7 +80,7 @@ void main() {
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Explore'), findsOneWidget);
-    expect(find.text('Cases'), findsOneWidget);
+    expect(find.text('Feed'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
     await tester.tap(find.byType(RadAiBirdNavIcon));
@@ -99,6 +99,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 350));
 
     expect(find.text('Docs'), findsOneWidget);
+    expect(find.text('Cases'), findsOneWidget);
     expect(find.text('AI Assistant'), findsOneWidget);
     expect(
       find.descendant(

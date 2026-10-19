@@ -19,6 +19,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../providers/ai_assistant_activity_provider.dart';
 import '../providers/ai_prompt_draft_provider.dart';
+import '../widgets/ai_citation_card.dart';
 
 class _ChatMessage {
   _ChatMessage({
@@ -587,16 +588,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                                     ),
                                   if (m.sources != null &&
                                       m.sources!.isNotEmpty) ...[
-                                    const SizedBox(height: 8),
-                                    ...m.sources!.map(
-                                      (s) => Text(
-                                        '${l10n.sourceLabel}: ${s.title}'
-                                        '${s.authority != null ? ' (${s.authority})' : ''}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+                                    const SizedBox(height: 10),
+                                    for (var i = 0; i < m.sources!.length; i++)
+                                      AiCitationCard(
+                                        index: i + 1,
+                                        source: m.sources![i],
                                       ),
-                                    ),
                                   ],
                                 ],
                               ),

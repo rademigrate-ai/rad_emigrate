@@ -475,7 +475,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         title: l10n.applications,
                         subtitle: l10n.viewDetails,
                         icon: Icons.assignment_outlined,
-                        onTap: () => context.go('/applications'),
+                        onTap: () => context.push('/profile/cases'),
                       ),
                       _ProfileActionRow(
                         title: l10n.documents,
