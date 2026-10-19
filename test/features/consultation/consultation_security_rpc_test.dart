@@ -61,5 +61,36 @@ void main() {
         );
       }
     });
+    test('Repair migration defines all 3 consultation RPCs with search_path safety and grants', () {
+      final file = File(
+        'supabase/migrations/20261019180000_repair_admin_consultation_rpcs.sql',
+      );
+      expect(file.existsSync(), isTrue);
+      final content = file.readAsStringSync();
+      expect(content, contains('function public.list_admin_consultations()'));
+      expect(content, contains('function public.update_admin_consultation'));
+      expect(content, contains('function public.submit_consultation_request'));
+      expect(content, contains("set search_path = ''"));
+      expect(content, contains('consultation_requests_user_created_idx'));
+      expect(content, contains('consultation_rate_limited'));
+      expect(
+        content,
+        contains(
+          'grant execute on function public.list_admin_consultations() to authenticated;',
+        ),
+      );
+      expect(
+        content,
+        contains(
+          'grant execute on function public.update_admin_consultation(uuid,text,text) to authenticated;',
+        ),
+      );
+      expect(
+        content,
+        contains(
+          'grant execute on function public.submit_consultation_request(text,text,uuid) to authenticated;',
+        ),
+      );
+    });
   });
 }
