@@ -2,7 +2,7 @@
 
 **Branch:** `integration/grok-final-unified-rc`  
 **Worktree:** `C:\Users\Mehrshad\Desktop\RAD - Emigrate\rad_grok_final_unified_rc`  
-**Final HEAD:** `a9969c1`  
+**Final HEAD:** `aebb64e` (+ web build evidence below; identity fix `a9969c1`)  
 **Claude baseline HEAD:** `d53eb91` (unchanged until Grok fix)  
 **Official acceptance:** **3/47 VERIFIED_PASS** (not increased)
 
@@ -62,7 +62,7 @@ Resolved by Claude via Deno **2.5.4** (not 2.1.4). Exit 0 typecheck + 116 typed 
 | Full flutter test (Claude, pre-fix SHA) | +726 PASS @ d53eb91 |
 | Analyze/format (Claude) | PASS @ d53eb91 |
 | Edge Deno 2.5.4 typechecked | 116 PASS @ d53eb91 |
-| Web release build | **in progress / see commit notes** |
+| Web release build | **PASS exit 0** — `√ Built build\web` (~137s); wasm dry-run warnings only (secure_storage) |
 | Android debug APK | **NOT_VERIFIED** this session |
 | Disposable migration clean replay | **BLOCKED_EXTERNAL** (local stack auth config) |
 | Production DB | **NEVER touched** |
