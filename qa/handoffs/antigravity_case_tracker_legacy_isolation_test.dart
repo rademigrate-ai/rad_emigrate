@@ -3,9 +3,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../rad_antigravity_flutter_e2e/lib/features/applications/domain/entities/application_status.dart';
-import '../../../rad_antigravity_flutter_e2e/lib/features/applications/domain/entities/visa_application.dart';
-import '../../../rad_antigravity_flutter_e2e/lib/features/applications/presentation/providers/case_tracker_controller.dart';
+import '../../lib/features/applications/domain/entities/application_status.dart';
+import '../../lib/features/applications/domain/entities/visa_application.dart';
+import '../../lib/features/applications/presentation/providers/case_tracker_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

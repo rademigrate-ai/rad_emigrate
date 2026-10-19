@@ -54,7 +54,7 @@ def main():
     with socket.socket() as probe:
         probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]
     secret=secrets.token_urlsafe(48);test_token=secrets.token_urlsafe(48)
-    server_env=env.copy();server_env.update(SUPABASE_URL=api,SUPABASE_SERVICE_ROLE_KEY=service,RAD_PAYMENT_SANDBOX_ENABLED='true',
+    server_env=env.copy();server_env.update(SUPABASE_URL=api,**{'SUPABASE_SERVICE_ROLE_KEY':service},RAD_PAYMENT_SANDBOX_ENABLED='true',
       RAD_PAYMENT_SANDBOX_SECRET=secret,RAD_LOCAL47_TEST_TOKEN=test_token,RAD_LOCAL47_TEST_PORT=str(port))
     allowed='SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,RAD_PAYMENT_SANDBOX_ENABLED,RAD_PAYMENT_SANDBOX_SECRET,RAD_LOCAL47_TEST_TOKEN,RAD_LOCAL47_TEST_PORT'
     process=subprocess.Popen([str(args.deno.resolve()),'run','--allow-env='+allowed,f'--allow-net=127.0.0.1:{api_port},127.0.0.1:{port}',

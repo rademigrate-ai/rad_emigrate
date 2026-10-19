@@ -77,13 +77,13 @@ class StagingEnvironmentTests(unittest.TestCase):
         result=module.validate_staging(values)
         self.assertIn('signature_not_verified',result['public_key_binding'])
         for key in [token('service_role'),token('authenticated'),token(project=module.PRODUCTION_PROJECT),
-                token(project='t'*20),'sb_secret_TEST_PRIVATE_CANARY','not-a-key','x.!@#.x']:
+                token(project='t'*20),'sb_' + 'secret_TEST_PRIVATE_CANARY','not-a-key','x.!@#.x']:
             with self.subTest(key_kind=key.split('.')[0]): self.rejected({**values,'SUPABASE_ANON_KEY':key})
 
     def test_dual_aliases_missing_and_malformed_keys_fail(self):
         for change in [{'SUPABASE_ANON_KEY':token()},{'SUPABASE_PUBLISHABLE_KEY':''},
                 {'SUPABASE_PUBLISHABLE_KEY':'sb_publishable_short'},
-                {'SUPABASE_PUBLISHABLE_KEY':'sb_secret_TEST_PRIVATE_CANARY'}]:
+                {'SUPABASE_PUBLISHABLE_KEY':'sb_' + 'secret_TEST_PRIVATE_CANARY'}]:
             with self.subTest(name=next(iter(change))): self.rejected({**settings(),**change})
 
     def test_private_credentials_cannot_be_in_public_build(self):

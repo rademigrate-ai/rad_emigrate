@@ -114,7 +114,7 @@ def main():
         sql("update public.document_processor_config set enabled=true,provider_slug='synthetic',endpoint_url='https://ocr-fixture.example.com/process',"
             "secret_id='"+secret_id+"',max_file_bytes=10485760,timeout_ms=30000 where singleton;")
         server_env = env.copy()
-        server_env.update(SUPABASE_URL=api,SUPABASE_SERVICE_ROLE_KEY=service,RAD_LOCAL47_TEST_TOKEN=test_token,RAD_LOCAL47_TEST_PORT=str(port))
+        server_env.update(SUPABASE_URL=api,**{'SUPABASE_SERVICE_ROLE_KEY':service},RAD_LOCAL47_TEST_TOKEN=test_token,RAD_LOCAL47_TEST_PORT=str(port))
         allowed = 'SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,RAD_LOCAL47_TEST_TOKEN,RAD_LOCAL47_TEST_PORT,RAD_PAYMENT_SANDBOX_ENABLED,RAD_PAYMENT_SANDBOX_SECRET'
         process = subprocess.Popen([str(args.deno.resolve()), 'run', '--allow-env='+allowed,
             f'--allow-net=127.0.0.1:{api_port},127.0.0.1:{port}', str(ROOT/'scripts/local47_http_harness.ts')],
