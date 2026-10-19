@@ -108,10 +108,7 @@ void main() {
         'document-intelligence',
         'research-sync',
       ]) {
-        final entrypoint = functionName == 'document-intelligence'
-            ? 'index.ts'
-            : 'handler.ts';
-        final source = read('supabase/functions/$functionName/$entrypoint');
+        final source = read('supabase/functions/$functionName/handler.ts');
         final sharedSource = functionName == 'ai-orchestrator'
             ? read('supabase/functions/ai-orchestrator/handler_providers.ts')
             : source;

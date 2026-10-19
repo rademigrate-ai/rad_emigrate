@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-18T15:00:00.000Z",
+  "label": "RAD Emigrate evidence foundation v1 — editorial review required",
+  "records": [
+    {
+      "id": "ev-ca-study-docs-20261018",
+      "topicKey": "study_permit.required_documents",
+      "statement": "IRCC lists letter of acceptance, provincial/territorial attestation letter (or CAQ for Quebec), proof of identity, and proof of funds among documents commonly required for a study permit application. Applicability varies by situation.",
+      "programId": "ca-study-permit",
+      "jurisdiction": "CA",
+      "excerpt": "Get the right documents — letter of acceptance; provincial or territorial attestation letter; proof of identity; proof of funds.",
+      "publicationDate": null,
+      "registryVersion": 1,
+      "reviewStatus": "pendingReview",
+      "humanReviewNotes": "Descriptive citation only. Do not convert into automated eligibility rules without counsel review.",
+      "source": {
+        "id": "src-ircc-study-docs",
+        "title": "Study permit: Get the right documents",
+        "canonicalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents.html",
+        "authority": "government",
+        "retrievedAt": "2026-10-18T14:00:00.000Z",
+        "publisher": "Immigration, Refugees and Citizenship Canada",
+        "jurisdiction": "CA",
+        "programIds": ["ca-study-permit"],
+        "versionLabel": "retrieved-2026-10-18",
+        "contentHash": "ircc-study-docs-20261018"
+      }
+    },
+    {
+      "id": "ev-ca-study-apply-online-20261018",
+      "topicKey": "study_permit.apply_online",
+      "statement": "IRCC states applicants must apply online for a study permit and, as of March 25, 2025, use the IRCC secure account for new study permits and extensions.",
+      "programId": "ca-study-permit",
+      "jurisdiction": "CA",
+      "excerpt": "As of March 25, 2025, you must use the IRCC secure account to apply for a new study permit or study permit extension.",
+      "publicationDate": "2026-08-11",
+      "registryVersion": 1,
+      "reviewStatus": "pendingReview",
+      "humanReviewNotes": "Operational process fact from IRCC page details date 2026-08-11 on source page at retrieval.",
+      "source": {
+        "id": "src-ircc-study-online",
+        "title": "Apply online for a study permit",
+        "canonicalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/portal-application-process-study.html",
+        "authority": "government",
+        "retrievedAt": "2026-10-18T14:05:00.000Z",
+        "publisher": "Immigration, Refugees and Citizenship Canada",
+        "jurisdiction": "CA",
+        "programIds": ["ca-study-permit"],
+        "versionLabel": "retrieved-2026-10-18",
+        "contentHash": "ircc-study-online-20261018"
+      }
+    },
+    {
+      "id": "ev-ca-ee-who-can-apply-20261018",
+      "topicKey": "express_entry.programs_overview",
+      "statement": "IRCC Express Entry covers multiple economic programs including Canadian Experience Class, Federal Skilled Worker Program, and Federal Skilled Trades Program, each with distinct language, work experience, and job-offer rules. Exact thresholds must be taken from the current IRCC pages and are not embedded as product eligibility rules here.",
+      "programId": "ca-express-entry",
+      "jurisdiction": "CA",
+      "excerpt": "Who can apply — program-specific language skills, work experience, and job offer requirements differ by program under Express Entry.",
+      "publicationDate": null,
+      "registryVersion": 1,
+      "reviewStatus": "pendingReview",
+      "humanReviewNotes": "Overview only. CLB/TEER thresholds change and must not be hard-coded without approved curated rule package.",
+      "source": {
+        "id": "src-ircc-ee-who",
+        "title": "Express Entry: Who can apply",
+        "canonicalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/who-can-apply.html",
+        "authority": "government",
+        "retrievedAt": "2026-10-18T14:10:00.000Z",
+        "publisher": "Immigration, Refugees and Citizenship Canada",
+        "jurisdiction": "CA",
+        "programIds": ["ca-express-entry"],
+        "versionLabel": "retrieved-2026-10-18",
+        "contentHash": "ircc-ee-who-20261018"
+      }
+    },
+    {
+      "id": "ev-ca-ee-profile-20261018",
+      "topicKey": "express_entry.profile_and_crs",
+      "statement": "IRCC ranks Express Entry profiles using the Comprehensive Ranking System (CRS). Language test results must be less than two years old. Proof-of-funds tables are updated periodically by IRCC.",
+      "programId": "ca-express-entry",
+      "jurisdiction": "CA",
+      "excerpt": "CRS ranks profiles; language tests less than two years old; proof of funds updated based on low income cut-off totals.",
+      "publicationDate": null,
+      "registryVersion": 1,
+      "reviewStatus": "pendingReview",
+      "humanReviewNotes": "Do not store CRS point tables in product rules without separate legal/editorial approval of current numbers.",
+      "source": {
+        "id": "src-ircc-ee-profile",
+        "title": "Express Entry: Create your profile and enter the pool",
+        "canonicalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/create-profile.html",
+        "authority": "government",
+        "retrievedAt": "2026-10-18T14:15:00.000Z",
+        "publisher": "Immigration, Refugees and Citizenship Canada",
+        "jurisdiction": "CA",
+        "programIds": ["ca-express-entry"],
+        "versionLabel": "retrieved-2026-10-18",
+        "contentHash": "ircc-ee-profile-20261018"
+      }
+    }
+  ]
+}

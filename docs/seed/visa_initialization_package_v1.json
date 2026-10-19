@@ -1,0 +1,145 @@
+{
+  "packageId": "visa-init-v1",
+  "generatedAt": "2026-10-18T15:00:00.000Z",
+  "status": "requires_editorial_review",
+  "disclaimer": "Not production data. Not eligibility advice. No automatic publish. Import only after human editorial approval.",
+  "buckets": {
+    "verified_ready_for_editorial_review": [
+      {
+        "destinationCode": "CA",
+        "destinationName": "Canada",
+        "programSlug": "ca-study-permit",
+        "programTitle": "Study permit",
+        "summary": "Temporary resident pathway for international students at designated learning institutions, subject to IRCC requirements including acceptance letter, identity, funds, and in most cases a provincial/territorial attestation letter.",
+        "requirements": [
+          {
+            "text": "Letter of acceptance from a designated learning institution (when required).",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          },
+          {
+            "text": "Provincial or territorial attestation letter (PAL/TAL), or CAQ for Quebec, in most cases.",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          },
+          {
+            "text": "Proof of identity (passport or travel document).",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          },
+          {
+            "text": "Proof of funds for tuition and living expenses as required by IRCC for the situation.",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Confirm whether a study permit is required",
+            "description": "Use IRCC guidance to determine if a study permit is needed for the intended program length and situation.",
+            "displayOrder": 1,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          },
+          {
+            "title": "Gather required documents",
+            "description": "Collect acceptance letter, attestation letter/CAQ when applicable, identity documents, and proof of funds per current IRCC document list.",
+            "displayOrder": 2,
+            "evidenceRecordId": "ev-ca-study-docs-20261018"
+          },
+          {
+            "title": "Apply online via IRCC secure account",
+            "description": "Submit the study permit application online using the IRCC secure account process in force at the time of application.",
+            "displayOrder": 3,
+            "evidenceRecordId": "ev-ca-study-apply-online-20261018"
+          }
+        ],
+        "sources": [
+          "src-ircc-study-docs",
+          "src-ircc-study-online"
+        ],
+        "reviewStatus": "pendingReview",
+        "processingTimeText": null,
+        "feesText": null,
+        "notes": "Processing times and fees intentionally omitted — they change frequently and must be linked live to IRCC tools, not frozen in seed data."
+      },
+      {
+        "destinationCode": "CA",
+        "destinationName": "Canada",
+        "programSlug": "ca-express-entry",
+        "programTitle": "Express Entry (economic immigration gateway)",
+        "summary": "IRCC electronic system that manages applications for certain economic permanent residence programs. Candidates create a profile and may receive an invitation to apply based on ranking and program eligibility. This is not a single visa subclass.",
+        "requirements": [
+          {
+            "text": "Meet the minimum requirements of at least one Express Entry program (e.g. CEC, FSW, FST) as published by IRCC at application time.",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-ee-who-can-apply-20261018"
+          },
+          {
+            "text": "Provide language test results that are less than two years old when required by IRCC.",
+            "isMandatory": true,
+            "evidenceRecordId": "ev-ca-ee-profile-20261018"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Review program-specific eligibility on IRCC",
+            "description": "Confirm which Express Entry program(s) may apply; requirements differ by program.",
+            "displayOrder": 1,
+            "evidenceRecordId": "ev-ca-ee-who-can-apply-20261018"
+          },
+          {
+            "title": "Create Express Entry profile",
+            "description": "Create a profile in the IRCC system and enter the pool if eligible.",
+            "displayOrder": 2,
+            "evidenceRecordId": "ev-ca-ee-profile-20261018"
+          }
+        ],
+        "sources": [
+          "src-ircc-ee-who",
+          "src-ircc-ee-profile"
+        ],
+        "reviewStatus": "pendingReview",
+        "processingTimeText": null,
+        "feesText": null,
+        "notes": "CRS point tables and proof-of-funds amounts are not frozen in this package."
+      }
+    ],
+    "requires_professional_review": [
+      {
+        "topic": "Numeric CLB / TEER / CRS thresholds",
+        "reason": "Thresholds are program-specific and change; hard-coding as product rules requires legal/editorial sign-off."
+      },
+      {
+        "topic": "Proof of funds amounts",
+        "reason": "IRCC updates settlement fund tables periodically; must not be snapshotted as static eligibility."
+      }
+    ],
+    "missing_evidence": [
+      {
+        "topic": "Non-Canada destinations in seed",
+        "reason": "No verified multi-destination package in v1; expand only with official authority URLs."
+      },
+      {
+        "topic": "University and scholarship award amounts",
+        "reason": "Institutional fees and awards not verified for product seed; catalog remains empty-safe."
+      }
+    ],
+    "conflicting_evidence": [],
+    "expired_or_stale_evidence": []
+  },
+  "import_procedure": {
+    "steps": [
+      "1. Editorial review of docs/seed/evidence_registry_v1.json and this package.",
+      "2. Promote selected EvidenceRecord.reviewStatus to approvedDescriptive (content) or approvedForEligibilityRules (rules only with counsel).",
+      "3. Create CuratedRulePackage with editorialApproved=true only after explicit approval.",
+      "4. Staging import via existing content admin / migration process owned by Codex — not this seed file alone.",
+      "5. Verify RLS and published status in staging before any production write.",
+      "6. Rollback: unpublish programs / revert content_sources rows; registry snapshot version remains audit trail."
+    ],
+    "forbidden": [
+      "Do not run unconstrained SQL against production from this package.",
+      "Do not set editorialApproved without human approval.",
+      "Do not invent fees, processing times, or success rates."
+    ]
+  }
+}

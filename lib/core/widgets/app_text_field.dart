@@ -21,9 +21,11 @@ class AppTextField extends StatefulWidget {
     this.autofillHints,
     this.textDirection,
     this.focusNode,
+    this.onChanged,
   });
 
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
   final String? label;
   final String? hint;
   final IconData? prefixIcon;
@@ -111,6 +113,7 @@ class _AppTextFieldState extends State<AppTextField> {
         minLines: widget.minLines,
         maxLines: widget.maxLines,
         enabled: widget.enabled,
+        onChanged: widget.onChanged,
         onFieldSubmitted: widget.onSubmitted,
         textInputAction: widget.textInputAction,
         autofillHints: widget.autofillHints,

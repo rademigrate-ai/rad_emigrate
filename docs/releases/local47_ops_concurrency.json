@@ -1,0 +1,17 @@
+{
+  "target": "127.0.0.1:55322",
+  "production_mutations": false,
+  "mode": "synthetic_sandbox",
+  "status": "PASS",
+  "outbox_requests": 32,
+  "unique_leases": 12,
+  "ack_requests": 20,
+  "ack_winners": 1,
+  "crm_requests": 20,
+  "crm_winners": 1,
+  "payment_duplicate_requests": 20,
+  "payment_insert_winners": 1,
+  "payment_refund_race_requests": 13,
+  "final_sandbox_status": "refunded",
+  "canonical_entitlements_unchanged": true
+}

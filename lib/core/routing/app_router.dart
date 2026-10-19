@@ -19,13 +19,16 @@ import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/documents/presentation/pages/documents_page.dart';
+import '../../features/documents/presentation/pages/document_draft_page.dart';
 import '../../features/consultation/presentation/pages/consultation_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/global_time/presentation/pages/world_clock_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/profile/presentation/pages/immigration_profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
+import '../../features/visa/presentation/pages/university_scholarship_page.dart';
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -112,6 +115,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
           GoRoute(
+            path: '/documents/draft',
+            builder: (_, _) => const DocumentDraftPage(),
+          ),
+          GoRoute(
             path: '/consultation',
             builder: (context, state) => ConsultationPage(
               initialTopic: state.uri.queryParameters['topic'],
@@ -122,6 +129,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const NotificationsPage(),
           ),
           GoRoute(path: '/profile', builder: (_, _) => const ProfilePage()),
+          GoRoute(
+            path: '/profile/immigration',
+            builder: (_, _) => const ImmigrationProfilePage(),
+          ),
+          GoRoute(
+            path: '/universities',
+            builder: (_, _) => const UniversityScholarshipPage(),
+          ),
           GoRoute(
             path: '/ai-assistant',
             builder: (_, state) => AiAssistantPage(

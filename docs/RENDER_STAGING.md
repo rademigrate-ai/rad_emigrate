@@ -1,66 +1,19 @@
-# Render staging — Supabase Flutter Web
+# Isolated staging web configuration
 
-## How configuration is injected
+The previous guide used production Supabase values under a staging label. Those examples are removed. A staging label alone does not isolate a database. No staging project or host is provisioned by this guide.
 
-Flutter reads **compile-time** defines only (see `lib/core/supabase/supabase_config.dart`):
+Use the blank [.env.staging.example](../.env.staging.example) as a specification for owner-supplied settings. Set `APP_ENV=staging`, `RAD_DEPLOYMENT_KIND=staging`, an explicit non-production `RAD_STAGING_PROJECT_REF`, the canonical HTTPS Supabase API URL for that same project, an owner-selected HTTPS staging site origin, and exactly one publishable/legacy anon key. Production project `inshddthftkhcdosoqcn` and the known production web host are denied by the validator.
 
-| Dart define | Source | Purpose |
-|-------------|--------|--------|
-| `SUPABASE_URL` | `String.fromEnvironment('SUPABASE_URL')` | Project API URL |
-| `SUPABASE_PUBLISHABLE_KEY` | `String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY')` with fallback to `SUPABASE_ANON_KEY` | Browser publishable / legacy anon key |
+Validate configuration without network access:
 
-If either value is empty, the app sets `supabase_not_configured` and login fails intentionally.
-
-**Never** pass `service_role`, Vault secrets, or AI provider keys into the web build.
-
-## Exact Render settings
-
-| Setting | Value |
-|---------|--------|
-| **Service type** | Static Site |
-| **Build Command** | `bash scripts/build_web_render.sh` |
-| **Publish Directory** | `build/web` |
-| **Rewrite rule** | Source `/*` → Destination `/index.html` (Rewrite) |
-
-### Environment variables (Build)
-
-| Name | Maps to | Type | Notes |
-|------|---------|------|--------|
-| `SUPABASE_URL` | Supabase Project URL | Normal | e.g. `https://inshddthftkhcdosoqcn.supabase.co` |
-| `SUPABASE_PUBLISHABLE_KEY` | Publishable key **or** legacy anon key | Normal | Public by design; RLS is the security boundary |
-| `APP_ENV` | Optional `APP_ENV` define | Normal | Use `staging` |
-
-Optional legacy alias: `SUPABASE_ANON_KEY` (used only if `SUPABASE_PUBLISHABLE_KEY` is unset).
-
-### Values for project `inshddthftkhcdosoqcn`
-
-- **SUPABASE_URL:** `https://inshddthftkhcdosoqcn.supabase.co`
-- **SUPABASE_PUBLISHABLE_KEY:** Dashboard → Project Settings → API → **Publishable** key (preferred) or **anon** **public** key
-
-Do not use the **service_role** key.
-
-## Supabase Auth URLs (Dashboard)
-
-Authentication → URL Configuration:
-
-- **Site URL:** `https://rad-emigrate.onrender.com` (or keep production and add redirect)
-- **Redirect URLs:** include `https://rad-emigrate.onrender.com/**` and `https://rad-emigrate.onrender.com`
-
-## Local parity
-
-```bash
-export SUPABASE_URL=https://inshddthftkhcdosoqcn.supabase.co
-export SUPABASE_PUBLISHABLE_KEY='<publishable-or-anon-public-key>'
-export APP_ENV=staging
-bash scripts/build_web_render.sh
+```text
+python scripts/staging_environment.py --env-file <private-staging-public-settings-file> --scope public-build
 ```
 
-## After deploy checklist
+Do not commit populated settings. Environment parsing treats values as data; it does not execute shell substitution. Backend/provider secrets belong in a separate secret environment, never the public build environment. Legacy JWT role/ref claims are checked without claiming signature verification. Opaque publishable keys require an owner-run staging Auth smoke test to establish their binding; the local guard cannot certify a real key.
 
-1. App loads without `supabase_not_configured`
-2. Email + password login reaches Supabase Auth
-3. Session restore after refresh
-4. `/dashboard` after login
-5. `/admin` for `super_admin` profiles
-6. Direct refresh on `/admin` does not 404 (SPA rewrite)
-7. Logout clears session
+For an owner-authorized Render staging Static Site, the build command is `bash scripts/build_web_render.sh`, publish directory `build/web`, and SPA rewrite `/*` to `/index.html`. Provide the validated settings as build environment variables. The build script runs the guard before Flutter/dependency installation whenever staging intent is declared. Missing, mismatched, production, privileged or ambiguous settings fail before the build. A build does not deploy anything through this script.
+
+Flutter receives only `APP_ENV`, `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`. The backend service key, CLI access token and provider credentials must never become Dart defines. Do not copy production Auth redirects into a staging project. After provisioning approval, the owner must configure only approved staging site/reset/native redirect origins in the isolated project's Auth settings.
+
+Activation remains **BLOCKED_BY_OWNER** until the real staging project, host, public-key binding, redirects, deployment permission and smoke accounts are supplied/approved. No deployment success is asserted. Required post-activation checks include immutable release SHA, signup/login/recovery, refresh/logout, two-account database/Storage isolation, role denial and SPA deep links against actual staging URLs.

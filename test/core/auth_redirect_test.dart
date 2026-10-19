@@ -313,6 +313,47 @@ void main() {
       );
     });
 
+    test('document draft nested route requires identity and profile', () {
+      const route = '/documents/draft';
+      expect(isProtectedPath(route), isTrue);
+      expect(isProtectedPath('/documents/unknown'), isFalse);
+      expect(
+        authRedirect(
+          uri: Uri.parse('/documents/unknown'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(restoredProtectedDestination(route), route);
+      final guest = authRedirect(
+        uri: Uri.parse(route),
+        isRestoring: false,
+        isAuthenticated: false,
+        profileComplete: false,
+      );
+      expect(Uri.parse(guest!).path, '/login');
+      expect(Uri.parse(guest).queryParameters['from'], route);
+      final incomplete = authRedirect(
+        uri: Uri.parse(route),
+        isRestoring: false,
+        isAuthenticated: true,
+        profileComplete: false,
+      );
+      expect(Uri.parse(incomplete!).path, '/profile-completion');
+      expect(Uri.parse(incomplete).queryParameters['from'], route);
+      expect(
+        authRedirect(
+          uri: Uri.parse(route),
+          isRestoring: false,
+          isAuthenticated: true,
+          profileComplete: true,
+        ),
+        isNull,
+      );
+    });
+
     test('known protected routes still enforce authentication', () {
       // Strictly protected routes (require login).
       expect(

@@ -1,0 +1,862 @@
+{
+  "schema_version": 1,
+  "baseline": "2e0d089781ef3de582143421a59817094e57ca78",
+  "implementation_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+  "scope": "disposable_local_and_static_only",
+  "production_mutations": false,
+  "reports": {
+    "clean_canonical_start": {
+      "project": "rad_codex_phase24_20261019",
+      "lineage": "canonical",
+      "production_mutations": false,
+      "started_at": "2026-10-18T21:37:35.286282+00:00",
+      "signup_confirmation_required": true,
+      "migration_sha256": {
+        "20261001191421_initial_rad_core_schema.sql": "a1ddb94ce6bd7132d200a4e04522d407b07249b67f5d4cd9548ccea4d8cb628d",
+        "20261001191653_create_profile_trigger_and_storage_setup_v2.sql": "50ae3f36ba23a43765b1331b31d41a15acc20818e073eaded8594a7fc9d522e9",
+        "20261001194638_security_hardening_handle_new_user.sql": "f434ef0201c10b6916d700a44de3527b8c1dce83976e3643b461900a66c1b309",
+        "20261001194715_add_rad_backend_indexes.sql": "c77beb940272ab0bb0d1906f88d8e0a1e47a70e6941c93d31d90638cfe6377b2",
+        "20261001195750_security_hardening.sql": "2d8e97227ef2c5e05ad57744faf47ee1cc340b16be4ccc625890cca34b055c02",
+        "20261001195754_rls_policies.sql": "89c1f8d65c0bb33bc08a261910bb3732de6368f27b2f420cf575a6caaaf34abe",
+        "20261001195756_storage_policies.sql": "7e9439d7561f431028d8f6b0d030417986a7f7291b9a8e32cb89410284451c46",
+        "20261001200202_ai_sessions_and_document_bootstrap.sql": "16fd94e89e49e87b2e13f3e42310928a89dd056159e4c38ee1b595f55f7d6a24",
+        "20261001214952_project05_launch_hardening.sql": "0567e3c15abde9e00ec3838e591110efb4f72c071ee63d9ff744bcee9885169c",
+        "20261001215315_project05_storage_upload_limits.sql": "4cc13c862f53c64bc0434b6f3102f8f24a8d30cb6a52402a6570633901174ce3",
+        "20261001215758_project05_minimize_table_privileges.sql": "1eec561ac96fb19efde99c0e28c49101fa798fcee87d1ad7036e2edd228f0363",
+        "20261001225237_profile_bootstrap_policy.sql": "7f4949354e0125fc0b053f9dc9c42c5f84692dc85e8d9103085f4f468f1048c2",
+        "20261001225632_storage_validation_policies.sql": "900f09a2790e51d076b83c63a283f868433833773e1d1a6016b850390cea74b9",
+        "20261001225634_ai_message_ownership_policies.sql": "46c1c82ad1f27fbeadef2c30cfb1d0d70f035ff66493eb838bfcd3d6966a2059",
+        "20261001233027_signup_trigger_search_path.sql": "ccc91a27946eb376a96555047c545a112e0a69fc457a9e1ff24826a59d15e3a4",
+        "20261001233048_relationship_policies_and_indexes.sql": "fef578241b9a34a5e1ec05d40cde09251d16c716ae59ea27ba6106c225f4c061",
+        "20261003102347_restrict_documents_bucket_uploads.sql": "2778cac24b61ca2c97fd24468fb0a92e567f272d7e6c135680f911ba1edb0ebd",
+        "20261003210302_project09_visa_catalog.sql": "03adf8374c2943d0e4a54599d6d35353b2b9baf534a740f4d9058f2da064989e",
+        "20261003211635_project10_knowledge_research.sql": "817a4cee3b51edc7b9cb08f3ddddc3a573da4466ca0bf9044ba04144835cbee7",
+        "20261003212339_project10_security_hardening.sql": "3b525ef4a71dabf40f1bf87de8b4c695b271b25782699809e19f635373155776",
+        "20261003213219_project11_ai_orchestration.sql": "6aea905fb8353b24467db116afba035f3ebecdf876bc8ca32ddac9c2074ffc6b",
+        "20261003214031_project12_document_intelligence.sql": "35c8c62f992b1f53f8d5ef8b3189a159f0e0fe87f49be696c6aadcfae2222868",
+        "20261003221324_project13_admin_operations.sql": "0bffdc02b211d47c6797abc85591b417179aaeb03267718edaf7df30428b600f",
+        "20261003222909_project14_feed_notifications.sql": "1483f4586aae53e2ac3f31a004f4db04b5f515cf0991be8ccb385e687467edb6",
+        "20261003223717_project15_observability.sql": "88c44df0ea7491e77a42449f3bd0a36194d25b0a67b513af25e212f2b782b656",
+        "20261003235000_ai_base_url_ssrf_hardening.sql": "f1effcf08e9f312f861d259f63d80236f996d30841124ffed30e288e457a5530",
+        "20261004190000_fix_profile_update_rls_recursion.sql": "68052d7b10861bff36c3a0e211e9b78feb780a16e6071439583eb028835ec941",
+        "20261004203000_client_delivery_ai_scopes.sql": "5cc55e647cfa98102a5d5e4515a1c0e3c32d5409a510f88fb0b1f728c5e30cb7",
+        "20261005102000_stage1_ai_research_completion.sql": "20bf04125a4164f8e2e19203da912e45fe15452952c6036c661ce3687ee77286",
+        "20261005120000_stage2_review_feed_publish.sql": "171df894bc49b849bcc8c478c45c741a8033769825ab6ae0d2c7d2f2d9be1b53",
+        "20261005130000_stage2_visa_structured_steps.sql": "d3f6fd01b0e1976693449d4d6e9b0eeec1cb36892ef4d7df8477d1ad49c72012",
+        "20261005190000_stage3_fk_covering_indexes.sql": "6dc796e8000794252ee23610608804888cb4e02663291e3f4de9574f5144ef54",
+        "20261006132931_stage5_research_review_candidate_backfill.sql": "1354b526683e46c7a177c61d1ec88bfdf20ef3971a38d152b03f86279b18fcf4",
+        "20261006180000_fix_profile_update_with_check_role_escalation.sql": "8971c63a70bc0cdd410cf7a4eee51952acec8a6cb5fec69f6aeed227f7ba71c9",
+        "20261007080000_ai_dynamic_routing_architecture.sql": "dec33255715f550e5a99bacc84cfe398c59fb64d8678b5a193fb12c81220c0d6",
+        "20261007080001_ai_credential_failure_routing.sql": "a12a0dffd60aeef2e3b024ed230434b40084e0fb40e426d38c8d800b3a8c8a78",
+        "20261007080002_research_atomic_review_candidate.sql": "287cb21e959353b833e44f04daf90918fd817bdef34d880cbdd6e9f57a94541d",
+        "20261007180000_stage2_knowledge_completion.sql": "1c29816f2da63053177e945da599341b54dd86fafc2c2ad6718ad3ca29836f2c",
+        "20261007180001_stage2_knowledge_promote.sql": "d82a16534d3d50ff340e627f793c9dfe60daaab59a0fa8ba07f4ac8d645b397a",
+        "20261007180002_stage2_knowledge_retrieve_conflict.sql": "e09b0d9b8eb3468cfa29d3532b52ac6cb74e31eab553172b60dfe9142257e12c",
+        "20261007210000_stage4_user_ai_quota_grounding.sql": "157be5813c4087268b20ff94bca58c4a7cf73e79da3db1819b456692d2be16ed",
+        "20261007212000_stage4_limit_ai_runtime_chain.sql": "9812b55f4cc8b5fe211d84947d870dbec19e70499be3dd00926311f35d92b45a",
+        "20261007220000_stage5_visa_editorial_summaries.sql": "f1dfaa42a40274e04611d698c3bdfda654ceace67e814b62d3eeb388701374cc",
+        "20261007230000_stage6_entitlement_access_decision.sql": "4767c2504eea1847b3cf98c9c6df8e48bf05db32d37af63151f4f6072dedcfc7",
+        "20261008010000_stage7_ops_consultation_app_status.sql": "5549ea0d2984fe960356d7e5d6497aa3e79918a6d9fe2ed73f839b0ad6e1d396",
+        "20261008020000_stage9_security_grant_hardening.sql": "9c634d3e195c38a7426e6e5a1ef23ceea6801bfc2e7c785395d600115df2ab8f",
+        "20261010010000_stage1_p0_security_completion.sql": "76a28a9aa6294f6a8ca8f108394b801a2ee85f85827104246324f69787610bd5",
+        "20261010055013_stage1_atomic_ai_quota_reservation.sql": "51ab2b39fb63655fea7e67e1a7aef69bb1ba15297877bc39168b90b2b1c8b646",
+        "20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql": "b94878391d4fddb9887e74d9a2a1dc809360de46f989a3d599a5471cc7c42fc5",
+        "20261012110945_stage1_security_abuse_storage_alignment.sql": "9de2fdb764aae7068c9355b07cd3593823bd66b5da73448687693fe5cc535119",
+        "20261012230000_ai_models_check_constraints_alignment.sql": "d4563930461176e6481df29cf587c9dca0eb7b4987395c05af2f613758452fbc",
+        "20261017190000_security_ai_entitlement_rpc_privacy.sql": "a70e5567035706ac00721c22dcfeb683225477438bf1451d0e9e9690f9827a33",
+        "20261018125432_local47_crm_notification_outbox.sql": "9bfbb8ec2c2d6a02c57dcb14287d1546dd5e44ffa229f8bbc5d11f476b60c2b6",
+        "20261018142313_local47_payment_sandbox_integrity.sql": "38290929fbbfe3d9c17333608c4f3ae5fd77602dcc22b0befdfd25f12b02c9b5",
+        "20261018143455_local47_notification_privilege_alignment.sql": "98ab1986a4b23dd291bfe8f947cc122d72897e8825aadafd7afbd97988093919",
+        "20261018152513_local47_document_atomic_processing.sql": "b7d2ac496adbe69b4ada2820a159f1f47ed4d5e1a567a95d86ae3a072935795e",
+        "20261018154834_local47_observability_privacy_and_triage.sql": "97f0310844eadf331b3f3980f6e2f42c7fc86c7d699781d311a30e96144204c9",
+        "20261018210000_stage10_covering_fk_indexes_completion.sql": "332d6101d12698367820263d6cfab048f9cd0aebebb2a427656f770d39b4b7c2",
+        "20261018211645_phase24_mock_checkout_and_crm_search.sql": "9b52a2c6288d72a4e134cd05b650e4d6678d1e76140cc8c2cb18a443ee8464ae"
+      },
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "local Supabase startup and migration replay",
+          "exit_code": 0
+        }
+      ],
+      "finished_at": "2026-10-18T21:42:22.008320+00:00",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false
+    },
+    "clean_backend": {
+      "project": "rad_codex_phase24_20261019",
+      "lineage": "canonical",
+      "production_mutations": false,
+      "started_at": "2026-10-18T21:43:00.661611+00:00",
+      "fingerprint": {
+        "rls": "f774d2521876438405d177897df727d3",
+        "bucket": "4082dda1bd1da983bda51a025c66ac93",
+        "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+        "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+        "policies": "5b8620228bf8c9346092eb66f1afa4cb",
+        "triggers": "4e10fd766fe20b3c7c4aafc3f04cfd9c",
+        "functions": "fc57d0f49dfab1be19b4469a05b19cf8",
+        "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+      },
+      "final_catalog_sha256": "4a78a1f2f08a108f3a1648356e39c289092dc9a7c67ec4e6ac49f49b076b17b1",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "clean-schema pinned fingerprint",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/reconciliation/security_regression.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/phase_a_constraint_backfill.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/phase_a_security.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/ai_entitlement_rpc_privacy.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/corrective_routing_research.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/stage2_knowledge_completion.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/stage4_user_ai.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/local47_crm_notifications.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/local47_payment_sandbox.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/phase24_mock_checkout_search.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/local47_definer_acl.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/local47_document_processing.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "supabase/tests/local47_observability.sql",
+          "exit_code": 0
+        },
+        {
+          "check": "read-only staging initialization readiness",
+          "exit_code": 0
+        },
+        {
+          "check": "two-user Auth RLS Storage quotas and human Feed",
+          "exit_code": 0
+        },
+        {
+          "check": "final metadata-only catalog capture",
+          "exit_code": 0
+        }
+      ],
+      "finished_at": "2026-10-18T21:43:44.050162+00:00",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false
+    },
+    "clean_auth_confirmation": {
+      "scope": "owned_local_Auth_Mailpit",
+      "production_mutations": false,
+      "external_email_delivery": false,
+      "frontend_browser_flow_tested": false,
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "captured_at": "2026-10-18T21:43:54.557322+00:00",
+      "checks": [
+        "signup_mailbox_confirmation_required_forgery_and_replay",
+        "signup_profile_trigger_ignores_untrusted_role",
+        "mailbox_recovery_redirect_identity_forgery_and_replay",
+        "password_replacement_session_refresh_and_logout_revocation",
+        "fixture_aged_recovery_denied_and_unapproved_redirect_contained",
+        "passwordless_mailbox_token_identity_forgery_and_replay"
+      ],
+      "status": "PASS",
+      "synthetic_users_removed": 3,
+      "owned_messages_removed": 4,
+      "signup_email_confirmation_tested": true,
+      "expiry_method": "synthetic_user_recovery_sent_at_aged_two_hours"
+    },
+    "clean_payment_notification_http": {
+      "scope": "local_Deno_HTTP_PostgREST_SQL",
+      "production_mutations": false,
+      "external_provider_calls": 0,
+      "captured_at": "2026-10-18T21:44:17.728715+00:00",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "status": "PASS",
+      "payment_retry_requests": 16,
+      "payment_insert_winners": 1,
+      "forged_signature_denied": true,
+      "stale_signature_denied": true,
+      "delayed_event_ignored": true,
+      "terminal_subscription_not_reactivated": true,
+      "notification_sandbox_receipts": 1,
+      "notification_replay_receipts": 0,
+      "canonical_entitlements_unchanged": true,
+      "notification_endpoint_purpose_token_required": true,
+      "notification_endpoint_factory_tested": true,
+      "edge_gateway_tested": false,
+      "mock_checkout_concurrent_creations": 16,
+      "mock_confirmation_concurrent_callbacks": 16,
+      "mock_refund_concurrent_callbacks": 16,
+      "mock_checkout_owner_isolation": true,
+      "mock_creation_confirmation_cancellation_refund": true,
+      "real_auth_login": true
+    },
+    "clean_ops_concurrency": {
+      "target": "127.0.0.1:58322",
+      "production_mutations": false,
+      "mode": "synthetic_sandbox",
+      "status": "PASS",
+      "outbox_requests": 32,
+      "unique_leases": 12,
+      "ack_requests": 20,
+      "ack_winners": 1,
+      "crm_requests": 20,
+      "crm_winners": 1,
+      "payment_duplicate_requests": 20,
+      "payment_insert_winners": 1,
+      "payment_refund_race_requests": 13,
+      "final_sandbox_status": "refunded",
+      "canonical_entitlements_unchanged": true
+    },
+    "clean_document_concurrency": {
+      "scope": "owned_local_document_parallel_sessions",
+      "production_mutations": false,
+      "captured_at": "2026-10-18T21:44:43.914735+00:00",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "status": "PASS",
+      "claim_requests": 32,
+      "claim_winners": 1,
+      "completion_requests": 20,
+      "persistence_winners": 1,
+      "stale_claim_fenced": true,
+      "failure_completion_race_requests": 20,
+      "final_race_state": "failed",
+      "partial_extractions": false,
+      "cross_document_cap_requests": 24,
+      "cross_document_claim_winners": 17,
+      "user_hourly_cap": 20
+    },
+    "clean_document_http": {
+      "scope": "owned_local_Deno_Auth_Storage_PostgREST_SQL",
+      "production_mutations": false,
+      "ocr_adapter": "synthetic_in_memory_fixture",
+      "external_provider_calls": 0,
+      "captured_at": "2026-10-18T21:45:15.940766+00:00",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "status": "PASS",
+      "busy_requests": 12,
+      "provider_fixture_calls": 1,
+      "extraction_count": 1,
+      "fields_initially_unreviewed": true,
+      "cross_owner_denied": true,
+      "raw_field_tampering_denied": true,
+      "human_review_identity_attributed": true,
+      "review_audit_count": 1,
+      "synthetic_users_removed": 2,
+      "original_processor_configuration_restored": true,
+      "synthetic_vault_secret_removed": true,
+      "synthetic_storage_object_removed": true
+    },
+    "clean_observability_concurrency": {
+      "scope": "owned_local_health_alert_parallel_sessions",
+      "production_mutations": false,
+      "external_alerts_sent": 0,
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "captured_at": "2026-10-18T21:45:39.890839+00:00",
+      "status": "PASS",
+      "concurrent_failure_samples": 32,
+      "incident_count": 1,
+      "opening_alert_count": 1,
+      "concurrent_healthy_samples": 20,
+      "recovery_event_count": 1,
+      "recovery_requires_human_resolution": true,
+      "unknown_breaks_consecutive_samples": true,
+      "relapse_reuses_existing_incident": true,
+      "original_alert_policy_restored": true
+    },
+    "clean_combined_checks": {
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "production_mutations": false,
+      "started_at": "2026-10-18T21:42:58.996629+00:00",
+      "checks": [
+        {
+          "name": "backend",
+          "command": [
+            "python",
+            "scripts/verify_local_stack.py",
+            "verify",
+            "--supabase",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_backend.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 45.723,
+          "log_sha256": "2c5c9b2419ce74bc8343d222620ad49adf741d47cc1828c3b6a30e996a4241d7"
+        },
+        {
+          "name": "auth_confirmation",
+          "command": [
+            "python",
+            "scripts/verify_local47_auth_recovery.py",
+            "--supabase",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_auth_confirmation.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 21.295,
+          "log_sha256": "c4673382df682489bb92cc009e0e7d6c4c214b61554643a0bbcc24e98cb43fc9"
+        },
+        {
+          "name": "payment_notification_http",
+          "command": [
+            "python",
+            "scripts/verify_local47_http.py",
+            "--supabase",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--deno",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\2cf4608ff26a9317\\node_modules\\@deno\\win32-x64\\deno.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_payment_notification_http.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 19.847,
+          "log_sha256": "872e66581f951881501f3345c9657360d88752bfc68bf2540201ed0e648ad81e"
+        },
+        {
+          "name": "ops_concurrency",
+          "command": [
+            "python",
+            "scripts/verify_local47_ops_concurrency.py",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_ops_concurrency.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 16.221,
+          "log_sha256": "7c2160b1588f41efd568a330885ced2e11444c7edfab38156440d465cb3c8756"
+        },
+        {
+          "name": "document_concurrency",
+          "command": [
+            "python",
+            "scripts/verify_local47_document_concurrency.py",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_document_concurrency.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 22.303,
+          "log_sha256": "a2cb5ad543c79e0508e57d4e6eb995a1238bae0953a46a60d73380dfe79f898f"
+        },
+        {
+          "name": "document_http",
+          "command": [
+            "python",
+            "scripts/verify_local47_document_http.py",
+            "--supabase",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--deno",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\2cf4608ff26a9317\\node_modules\\@deno\\win32-x64\\deno.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_document_http.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 32.645,
+          "log_sha256": "0d165dc76e81df6face1feff8b9b6497b5c902595dfbdf8e6a00920466f0ce78"
+        },
+        {
+          "name": "observability_concurrency",
+          "command": [
+            "python",
+            "scripts/verify_local47_observability_concurrency.py",
+            "--psql",
+            "C:\\Program Files\\PostgreSQL\\17\\bin\\psql.exe",
+            "--report",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\RAD_PHASE24_20261019\\clean_observability_concurrency.json"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 13.975,
+          "log_sha256": "c9a6e0959c336ef38e6b6284032880b56dd8f52b28f1e0bf9a532c5c35ebdd1a"
+        },
+        {
+          "name": "database_lint",
+          "command": [
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--workdir",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\rad_codex_phase24_20261019",
+            "db",
+            "lint",
+            "--local",
+            "--schema",
+            "public,private",
+            "--level",
+            "error",
+            "--fail-on",
+            "error"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 9.028,
+          "log_sha256": "c9f9cd1865c09c29173bed68d14f664c21cec7035cfd7c95cf69318b282c9e03"
+        },
+        {
+          "name": "migration_dry_run",
+          "command": [
+            "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\c34c3565ecb5471d\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe",
+            "--workdir",
+            "C:\\Users\\Mehrshad\\AppData\\Local\\Temp\\rad_codex_phase24_20261019",
+            "db",
+            "push",
+            "--db-url",
+            "postgresql://postgres:postgres@127.0.0.1:58322/postgres?sslmode=disable",
+            "--dry-run"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 8.695,
+          "log_sha256": "739aafcdb762d4cb3dd145e1ff6567e9bcf67d92bb725ea79c860ba79bf0357c"
+        }
+      ],
+      "status": "PASS",
+      "finished_at": "2026-10-18T21:46:09.236887+00:00"
+    },
+    "clean_static_checks": {
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "captured_at": "2026-10-18T21:40:24.891341+00:00",
+      "status": "PASS",
+      "checks": [
+        {
+          "name": "python",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts/tests"
+          ],
+          "observed_tool_exit_code": 0,
+          "tests": 43,
+          "log_sha256": "729d3e62069951f8ca3bc3abca3ce8a396a8442d2754bbd9a36afe9c2c2aa3ec"
+        },
+        {
+          "name": "edge",
+          "command": [
+            "deno",
+            "test",
+            "--allow-env",
+            "--allow-read",
+            "supabase/functions/tests"
+          ],
+          "observed_tool_exit_code": 0,
+          "tests": 116,
+          "log_sha256": "922ea29ae98ca4d64ea5a30ce8ceb4e732bca0a880845dfc28cb544ff66f0c37"
+        },
+        {
+          "name": "edge_entrypoints",
+          "command": [
+            "deno",
+            "check",
+            "all tracked Edge index.ts"
+          ],
+          "observed_tool_exit_code": 0,
+          "tests": null,
+          "log_sha256": "35c64c5dbd4c36f80e9864b164d683a2eda5fa43824e9de42ba23659d1a5e5a5"
+        }
+      ]
+    },
+    "clean_staging_negative_checks": {
+      "scope": "clean_local_configuration_negative_checks",
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "captured_at": "2026-10-18T21:38:22.083181+00:00",
+      "production_target_shell_build_exit": 2,
+      "production_target_rejected_before_flutter": true,
+      "blank_staging_plan_exit": 2,
+      "cloud_operations_executed": false,
+      "no_staging_credentials_invented": true,
+      "public_key_input": "explicit_noncredential_negative_test_placeholder"
+    },
+    "clean_edge_gateway": {
+      "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+      "source_dirty": false,
+      "scope": "actual_disposable_local_Edge_Runtime_gateway_and_disabled_entrypoint",
+      "production_mutations": false,
+      "external_provider_calls": 0,
+      "started_at": "2026-10-18T21:45:03.746608+00:00",
+      "status": "PASS",
+      "forged_jwt_status": 401,
+      "valid_anon_jwt_disabled_status": 503,
+      "valid_service_jwt_disabled_status": 503,
+      "jwt_verification_disabled": false,
+      "entrypoint_executed": true,
+      "sandbox_activation_tested": false,
+      "hosted_edge_tested": false,
+      "finished_at": "2026-10-18T21:45:57.440265+00:00",
+      "log_sha256": "1bc5f690b9692fa4ce62d8548dc86b0bef45842639426c31939a9db575fe4cd6",
+      "edge_runtime": "supabase-edge-runtime-1.77.1",
+      "compatible_deno": "v2.1.4"
+    }
+  },
+  "secret_scan": {
+    "scope": "immutable_tracked_snapshot_and_single_branch_reachable_history",
+    "scan_revision": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+    "worktree_dirty": false,
+    "source_branch": "feat/codex-phase2-phase4-final-20261019",
+    "scanner_image": "ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:b109bc5f8f76a38196a3e413704fc5b9e3c32360bce4e4b603bd6f45b3721dbb",
+    "captured_at": "2026-10-18T21:43:49.490524+00:00",
+    "network": "none",
+    "source_mounts": "read_only",
+    "custom_config": false,
+    "ignore_file": "empty",
+    "allow_comments_honored": false,
+    "scans": {
+      "snapshot": {
+        "exit_code": 1,
+        "finding_count": 15,
+        "locations": [
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_backend_stack_start.json",
+            "StartLine": 41,
+            "EndLine": 41,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_backend_stack_start.json:generic-api-key:41"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_backend_stack_start.json",
+            "StartLine": 49,
+            "EndLine": 49,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_backend_stack_start.json:generic-api-key:49"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_clean_47835e8.json",
+            "StartLine": 43,
+            "EndLine": 43,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_clean_47835e8.json:generic-api-key:43"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_clean_47835e8.json",
+            "StartLine": 51,
+            "EndLine": 51,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_clean_47835e8.json:generic-api-key:51"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_clean_cceebae.json",
+            "StartLine": 48,
+            "EndLine": 48,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_clean_cceebae.json:generic-api-key:48"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/docs/releases/local47_clean_cceebae.json",
+            "StartLine": 56,
+            "EndLine": 56,
+            "Commit": "",
+            "Fingerprint": "/scan/docs/releases/local47_clean_cceebae.json:generic-api-key:56"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "",
+            "Fingerprint": "/scan/graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "/scan/lib/core/services/ai/ai_guest_identity.dart",
+            "StartLine": 10,
+            "EndLine": 10,
+            "Commit": "",
+            "Fingerprint": "/scan/lib/core/services/ai/ai_guest_identity.dart:generic-api-key:10"
+          }
+        ],
+        "locations_sha256": "5823bdb415b7feb4f557db95ab77acb66a300e443d6c9fcb14623187c6117f7b"
+      },
+      "history": {
+        "exit_code": 1,
+        "finding_count": 15,
+        "locations": [
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_clean_47835e8.json",
+            "StartLine": 43,
+            "EndLine": 43,
+            "Commit": "5d56f951f55b4d2f90f2203789972038d3f2e4e0",
+            "Fingerprint": "5d56f951f55b4d2f90f2203789972038d3f2e4e0:docs/releases/local47_clean_47835e8.json:generic-api-key:43"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_clean_47835e8.json",
+            "StartLine": 51,
+            "EndLine": 51,
+            "Commit": "5d56f951f55b4d2f90f2203789972038d3f2e4e0",
+            "Fingerprint": "5d56f951f55b4d2f90f2203789972038d3f2e4e0:docs/releases/local47_clean_47835e8.json:generic-api-key:51"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_clean_cceebae.json",
+            "StartLine": 48,
+            "EndLine": 48,
+            "Commit": "699cd37653ca2a65bd8044a5accd7008fc39b8c6",
+            "Fingerprint": "699cd37653ca2a65bd8044a5accd7008fc39b8c6:docs/releases/local47_clean_cceebae.json:generic-api-key:48"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_clean_cceebae.json",
+            "StartLine": 56,
+            "EndLine": 56,
+            "Commit": "699cd37653ca2a65bd8044a5accd7008fc39b8c6",
+            "Fingerprint": "699cd37653ca2a65bd8044a5accd7008fc39b8c6:docs/releases/local47_clean_cceebae.json:generic-api-key:56"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_backend_stack_start.json",
+            "StartLine": 41,
+            "EndLine": 41,
+            "Commit": "5aecec88f30a3741cb98f5a45f85a15043bef425",
+            "Fingerprint": "5aecec88f30a3741cb98f5a45f85a15043bef425:docs/releases/local47_backend_stack_start.json:generic-api-key:41"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "docs/releases/local47_backend_stack_start.json",
+            "StartLine": 49,
+            "EndLine": 49,
+            "Commit": "5aecec88f30a3741cb98f5a45f85a15043bef425",
+            "Fingerprint": "5aecec88f30a3741cb98f5a45f85a15043bef425:docs/releases/local47_backend_stack_start.json:generic-api-key:49"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "lib/core/services/ai/ai_guest_identity.dart",
+            "StartLine": 10,
+            "EndLine": 10,
+            "Commit": "7f1703db837588be4f9a611b71f6c3bf37401935",
+            "Fingerprint": "7f1703db837588be4f9a611b71f6c3bf37401935:lib/core/services/ai/ai_guest_identity.dart:generic-api-key:10"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          },
+          {
+            "RuleID": "generic-api-key",
+            "File": "graphify-out/cache/stat-index.json",
+            "StartLine": 1,
+            "EndLine": 1,
+            "Commit": "1fb335c181e46411cff6386b3344e523e5b8fb27",
+            "Fingerprint": "1fb335c181e46411cff6386b3344e523e5b8fb27:graphify-out/cache/stat-index.json:generic-api-key:1"
+          }
+        ],
+        "locations_sha256": "d88452621f01e5e84f650d53e4dfaaff4e5ff43b8b3d1c4704b327ecdd85818a"
+      }
+    },
+    "scanner_version": "v8.30.1",
+    "status": "FINDINGS_REQUIRE_REVIEW"
+  },
+  "secret_triage": {
+    "source_head": "1d5f5a9454aaef88a8a0142203b878bb31abd563",
+    "source_dirty": false,
+    "status": "REVIEWED_NO_CREDENTIAL_VALUES_IDENTIFIED",
+    "scanner_snapshot_exit": 1,
+    "scanner_history_exit": 1,
+    "snapshot_findings": 15,
+    "history_findings": 15,
+    "snapshot_review_categories": {
+      "verified_migration_content_sha256": 6,
+      "shared_preferences_namespace": 1,
+      "generated_index_sha256": 8
+    },
+    "historical_finding_lines_equal_snapshot": true,
+    "all_history_findings_precede_requested_RC": true,
+    "exact_matched_values_compared_in_memory": true,
+    "scoped_private_triage_used_unredacted_values": true,
+    "raw_value_report_deleted": true,
+    "no_scanner_suppression_added": true,
+    "guest_domain_source_modified": false,
+    "scope_limit": "tracked snapshot and this branch reachable history; ignored envfiles, deployed artifacts and external secret stores are not covered",
+    "reviewed_at": "2026-10-18T21:53:09.343213+00:00"
+  },
+  "compiled_at": "2026-10-18T21:54:23.895665+00:00",
+  "result": "LOCAL_BACKEND_CHECKS_PASS_SECRET_FINDINGS_REVIEWED_NO_CREDENTIAL_VALUES_IDENTIFIED",
+  "acceptance_limit": "No global gate upgrade, hosted staging, real merchant/transport, deployment, merge or owner acceptance is claimed.",
+  "observed_runtime_privilege_inventory": {
+    "security_definers": 67,
+    "public_execute_grants": 0,
+    "source": "direct metadata query plus complete local47_definer_acl.sql assertions"
+  },
+  "preserved_nonpassing_attempts": [
+    {
+      "scope": "initial working-tree confirmed signup",
+      "result": "HTTP 504 context deadline exceeded; working-tree retry and clean final run passed",
+      "log_outside_checkout": "rad_phase24_auth.log"
+    },
+    {
+      "scope": "initial working-tree cross-owner mock read",
+      "result": "P0002 mapped to HTTP 500; unpublished migration changed to PT404; SQL and actual HTTP 404 passed",
+      "log_outside_checkout": "rad_phase24_http.log"
+    },
+    {
+      "scope": "first standalone loopback lint invocation",
+      "result": "explicit local URL default TLS rejected by disposable server; final --local lint exited 0; hosted staging still requires TLS",
+      "log_outside_checkout": "standalone_database_lint.log"
+    },
+    {
+      "scope": "first private finding comparison",
+      "result": "redaction=100 prevented exact value comparison; scoped private comparison used unredacted input without printing values and deleted its raw JSON",
+      "log_outside_checkout": "rad_phase24_triage.log"
+    }
+  ]
+}

@@ -41,6 +41,8 @@ app.*.map.json
 .env
 .env.*
 !.env.example
+!.env.staging.example
+!.env.staging.backend.example
 dart_defines.json
 supabase/.temp/
 
@@ -48,3 +50,7 @@ supabase/.temp/
 android/key.properties
 *.jks
 *.keystore
+
+# Generated analysis cache (gitleaks noise)
+graphify-out/
+

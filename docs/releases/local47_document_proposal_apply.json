@@ -1,0 +1,16 @@
+{
+  "project": "rad_codex_local47",
+  "lineage": "canonical",
+  "production_mutations": false,
+  "started_at": "2026-10-18T15:28:45.837107+00:00",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "apply local-only SQL proposal",
+      "exit_code": 0
+    }
+  ],
+  "finished_at": "2026-10-18T15:28:46.620320+00:00",
+  "source_head": "bb572b4da8f8edd3573b603330d245513ca206f1",
+  "source_dirty": true
+}

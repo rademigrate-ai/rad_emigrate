@@ -1,4 +1,5 @@
 import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/widgets/rad_loading.dart';
 
 import 'dart:async';
@@ -193,20 +194,17 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       localeControl: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: [
-          IconButton(
-            tooltip: l10n.backToSignIn,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => AppBackButton.goBack(
-              context,
-              fallback: Uri(
-                path: '/login',
-                queryParameters: {
-                  'from': ?GoRouterState.of(context)
-                      .uri
-                      .queryParameters['from'],
-                },
-              ).toString(),
-            ),
+          AppBackButton(
+            fallback: Uri(
+              path: '/login',
+              queryParameters: {
+                'from': ?GoRouter.maybeOf(context)
+                    ?.routeInformationProvider
+                    .value
+                    .uri
+                    .queryParameters['from'],
+              },
+            ).toString(),
           ),
           TextButton.icon(
             icon: const Icon(Icons.language_outlined),
@@ -257,6 +255,8 @@ class _OtpPageState extends ConsumerState<OtpPage> {
               children: [
                 TextField(
                   controller: _otpCtrl,
+                  autofocus: true,
+                  textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
                   textDirection: TextDirection.ltr,
                   maxLength: 6,
@@ -276,25 +276,11 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                 ),
                 if (_error case final error?) ...[
                   const SizedBox(height: 12),
-                  Semantics(
-                    liveRegion: true,
-                    child: Text(
-                      error,
-                      style: TextStyle(color: theme.colorScheme.error),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  InlineAlert(message: error),
                 ],
                 if (_notice case final notice?) ...[
                   const SizedBox(height: 12),
-                  Semantics(
-                    liveRegion: true,
-                    child: Text(
-                      notice,
-                      style: TextStyle(color: theme.colorScheme.primary),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  InlineAlert(message: notice, error: false),
                 ],
                 const SizedBox(height: 20),
                 AppButton(

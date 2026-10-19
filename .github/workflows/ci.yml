@@ -147,6 +147,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate 47-gate delivery evidence ledger (no invented completion)
+        run: python3 -m unittest discover -s scripts/tests -p test_master_47_delivery_ledger.py -v
       - name: Scan tracked files for audit keywords (paths only)
         run: |
           git grep -I -i -l -E 'TODO|FIXME|demo|fake|mock|password|service_role|secret|SUPABASE_SERVICE' HEAD -- . ':(exclude).github/workflows/ci.yml' || true
@@ -193,6 +195,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Regression-test read-only live migration history stop gate
         run: python3 -m unittest discover -s scripts/tests -p test_audit_migration_ledger_readonly.py -v
+      - name: Verify recorded Production migration SQL fingerprint audit stays NO-GO
+        run: python3 -m unittest discover -s scripts/tests -p test_live_migration_sql_fingerprints.py -v
       - uses: supabase/setup-cli@v1
         with:
           version: 2.119.0

@@ -1,0 +1,19 @@
+{
+  "scope": "owned_local_document_parallel_sessions",
+  "production_mutations": false,
+  "captured_at": "2026-10-18T15:38:26.488967+00:00",
+  "source_head": "bb572b4da8f8edd3573b603330d245513ca206f1",
+  "source_dirty": true,
+  "status": "PASS",
+  "claim_requests": 32,
+  "claim_winners": 1,
+  "completion_requests": 20,
+  "persistence_winners": 1,
+  "stale_claim_fenced": true,
+  "failure_completion_race_requests": 20,
+  "final_race_state": "failed",
+  "partial_extractions": false,
+  "cross_document_cap_requests": 24,
+  "cross_document_claim_winners": 17,
+  "user_hourly_cap": 20
+}

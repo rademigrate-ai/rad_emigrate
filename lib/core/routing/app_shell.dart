@@ -212,8 +212,12 @@ class _AppShellState extends ConsumerState<AppShell> {
                             setState(() => _railExtended = !_railExtended),
                         icon: Icon(
                           _railExtended
-                              ? Icons.keyboard_double_arrow_left
-                              : Icons.keyboard_double_arrow_right,
+                              ? (Directionality.of(context) == TextDirection.rtl
+                                    ? Icons.keyboard_double_arrow_right
+                                    : Icons.keyboard_double_arrow_left)
+                              : (Directionality.of(context) == TextDirection.rtl
+                                    ? Icons.keyboard_double_arrow_left
+                                    : Icons.keyboard_double_arrow_right),
                         ),
                       ),
                     ],

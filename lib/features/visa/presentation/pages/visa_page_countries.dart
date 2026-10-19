@@ -19,6 +19,28 @@ class _CountriesStage extends StatefulWidget {
 
 class _CountriesStageState extends State<_CountriesStage> {
   String? _category;
+  late final TextEditingController _searchCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchCtrl = TextEditingController(text: widget.query);
+  }
+
+  @override
+  void didUpdateWidget(covariant _CountriesStage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.query != _searchCtrl.text) {
+      _searchCtrl.text = widget.query;
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
   IconData _categoryIcon(VisaCategory category) {
     final key = '${category.slug} ${category.name}'.toLowerCase();
     if (RegExp('study|education|تحصیل').hasMatch(key)) {
@@ -63,11 +85,21 @@ class _CountriesStageState extends State<_CountriesStage> {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
             TextFormField(
-              initialValue: widget.query,
+              controller: _searchCtrl,
               onChanged: widget.onQuery,
               decoration: InputDecoration(
                 hintText: l10n.searchProgrammes,
                 prefixIcon: const Icon(Icons.search, size: 20),
+                suffixIcon: _searchCtrl.text.isNotEmpty
+                    ? IconButton(
+                        tooltip: l10n.allItems,
+                        icon: const Icon(Icons.clear, size: 18),
+                        onPressed: () {
+                          _searchCtrl.clear();
+                          widget.onQuery('');
+                        },
+                      )
+                    : null,
                 isDense: true,
               ),
             ),
@@ -111,8 +143,15 @@ class _CountriesStageState extends State<_CountriesStage> {
             ),
             if (countries.isEmpty)
               EmptyState(
-                title: l10n.catalogueUnavailable,
-                subtitle: l10n.catalogueDisclaimer,
+                icon: Icons.search_off_outlined,
+                title: l10n.emptyState,
+                subtitle: l10n.tryChangingFilters,
+                actionLabel: l10n.allItems,
+                onAction: () {
+                  setState(() => _category = null);
+                  _searchCtrl.clear();
+                  widget.onQuery('');
+                },
               ),
             LayoutBuilder(
               builder: (context, constraints) {
