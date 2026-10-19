@@ -114,11 +114,16 @@ final caseTrackerControllerProvider = StateNotifierProvider.autoDispose
     ) {
       final prefs = ref.watch(sharedPreferencesProvider);
       final session = ref.watch(authControllerProvider).valueOrNull;
+      // Storage isolation: only an authenticated session may select a user
+      // scoped checklist key. Never trust a stale unauthenticated userId or
+      // fall back to the application owner after logout (cross-session leak).
+      final sessionUser = session?.userId?.trim();
       final userId =
-          (session?.isAuthenticated == true ? session?.userId : null) ??
-          (session?.userId?.isNotEmpty == true ? session!.userId : null) ??
-          (app.userId?.isNotEmpty == true ? app.userId : null) ??
-          'guest';
+          (session?.isAuthenticated == true &&
+              sessionUser != null &&
+              sessionUser.isNotEmpty)
+          ? sessionUser
+          : 'guest';
       final appRepo = ref.watch(applicationRepositoryProvider);
       return CaseTrackerController(
         initialApp: app,
