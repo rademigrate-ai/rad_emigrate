@@ -1,5 +1,8 @@
-﻿/** Service surface regression: Edge modules and contracts required for Antigravity/Codex integration. */
-import { assertEquals, assertStringIncludes } from "https://deno.land/std@0.224.0/assert/mod.ts";
+/** Service surface regression: Edge modules and contracts required for Antigravity/Codex integration. */
+import {
+  assertEquals,
+  assertStringIncludes,
+} from "https://deno.land/std@0.224.0/assert/mod.ts";
 
 const root = new URL("../", import.meta.url);
 
@@ -8,15 +11,17 @@ async function read(rel: string) {
 }
 
 Deno.test("service inventory: core Edge functions exist", async () => {
-  for (const path of [
-    "ai-orchestrator/handler.ts",
-    "ai-orchestrator/knowledge_grounding.ts",
-    "currency-refresh/providers.ts",
-    "research-sync/handler.ts",
-    "notification-dispatch/handler.ts",
-    "official-source-worker/handler.ts",
-    "visa-content-ingest/handler.ts",
-  ]) {
+  for (
+    const path of [
+      "ai-orchestrator/handler.ts",
+      "ai-orchestrator/knowledge_grounding.ts",
+      "currency-refresh/providers.ts",
+      "research-sync/handler.ts",
+      "notification-dispatch/handler.ts",
+      "official-source-worker/handler.ts",
+      "visa-content-ingest/handler.ts",
+    ]
+  ) {
     const text = await read(path);
     assertEquals(text.length > 100, true, path);
   }
