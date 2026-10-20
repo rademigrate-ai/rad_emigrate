@@ -18,7 +18,10 @@ final appointmentRepositoryProvider = Provider<AppointmentRepository>((ref) {
 final appointmentListProvider =
     FutureProvider.autoDispose.family<AppointmentListResult, String?>((ref, userId) async {
   if (userId == null || userId.isEmpty) {
-    return const AppointmentListResult(items: [], capability: AppointmentCapability.unknown);
+    return const AppointmentListResult(
+      appointments: [],
+      capability: AppointmentCapability.unknown,
+    );
   }
   return ref.watch(appointmentRepositoryProvider).listMyAppointments();
 });
