@@ -97,6 +97,11 @@ class BookingLabels {
   String get notConfirmedNote => fa
       ? 'ثبت درخواست به معنی تأیید قطعی نیست.'
       : 'Submitting a request does not confirm a booking.';
+  String get clearSlotTooltip =>
+      fa ? 'حذف زمان انتخابی' : 'Clear selected time';
+  String get deviceTimeNote => fa
+      ? 'زمان‌ها به وقت دستگاه شما ثبت می‌شوند؛ زمان نهایی را کارشناس تأیید می‌کند.'
+      : 'Times are recorded in your device timezone; the advisor confirms the final slot.';
 }
 
 /// Maps a booking status enum to its localized label.

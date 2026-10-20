@@ -118,15 +118,17 @@ class BookingPage extends ConsumerWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Row(
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 4,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
                                         children: [
-                                          Expanded(
-                                            child: Text(
-                                              service.title,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
-                                            ),
+                                          Text(
+                                            service.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall,
                                           ),
                                           StatusBadge(
                                             label:
@@ -215,17 +217,19 @@ class BookingPage extends ConsumerWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 4,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
                                       children: [
-                                        Expanded(
-                                          child: Text(
-                                            record.serviceTitle.isEmpty
-                                                ? labels.title
-                                                : record.serviceTitle,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall,
-                                          ),
+                                        Text(
+                                          record.serviceTitle.isEmpty
+                                              ? labels.title
+                                              : record.serviceTitle,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
                                         ),
                                         StatusBadge(
                                           label: bookingStatusLabel(

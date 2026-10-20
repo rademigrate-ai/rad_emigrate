@@ -52,25 +52,37 @@ class _AppButtonState extends State<AppButton> {
             )
           : Row(
               key: const ValueKey('label'),
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: widget.expanded
+                  ? MainAxisSize.max
+                  : MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (widget.icon != null) ...[
                   Icon(widget.icon, size: 18),
                   const SizedBox(width: 8),
                 ],
-                // Localized labels (e.g. FA) can be much longer than EN ones.
-                // Flexible keeps the label inside the button bounds instead of
-                // overflowing the Row when the locale changes.
-                Flexible(
-                  child: Text(
-                    widget.label,
-                    maxLines: 2,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                // Expanded requires a max-sized Row (expanded buttons only).
+                // Non-expanded buttons keep an unconstrained Text with ellipsis.
+                if (widget.expanded)
+                  Expanded(
+                    child: Text(
+                      widget.label,
+                      maxLines: 2,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else
+                  Flexible(
+                    child: Text(
+                      widget.label,
+                      maxLines: 2,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
               ],
             ),
     );
