@@ -1,0 +1,41 @@
+{
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "legacy AI unauthenticated request denied",
+      "status": "PASS",
+      "http_status": 401
+    },
+    {
+      "check": "v1 AI requires real Auth user",
+      "status": "PASS",
+      "http_status": 401
+    },
+    {
+      "check": "v1 real Auth to reservation to no-evidence response",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "check": "research rejects missing worker/admin authorization",
+      "status": "PASS",
+      "http_status": 403
+    }
+  ],
+  "network_allowlist": [
+    "127.0.0.1:62321",
+    "127.0.0.1:64451"
+  ],
+  "providers_called": false,
+  "production_mutations": false,
+  "scope": "Actual Deno handlers + actual disposable Auth/PostgREST; no Supabase gateway/runtime emulation, Flutter UI, or live providers",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "run",
+    "--cached-only",
+    "--allow-env=SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY",
+    "--allow-net=127.0.0.1:62321,127.0.0.1:64451",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\edge_loopback_bootstrap.ts"
+  ]
+}

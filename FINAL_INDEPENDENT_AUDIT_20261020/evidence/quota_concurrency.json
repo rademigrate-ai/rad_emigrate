@@ -1,0 +1,25 @@
+{
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "captured_at": "2026-10-20T18:21:09.670985+00:00",
+  "endpoint": "127.0.0.1:62322",
+  "fixture": "Disposable random synthetic Auth users; server-side service-role calls; no providers",
+  "production_mutations": false,
+  "results": [
+    {
+      "concurrent_mixed_legacy_v1": 10,
+      "admitted": 2,
+      "persisted_rows": 2,
+      "requested_role": "super_admin",
+      "actual_profile_role": "user",
+      "status": "PASS"
+    },
+    {
+      "concurrent_mixed_legacy_v1": 10,
+      "admitted": 2,
+      "persisted_rows": 2,
+      "requested_role": "super_admin",
+      "actual_profile_role": "user",
+      "status": "PASS"
+    }
+  ]
+}

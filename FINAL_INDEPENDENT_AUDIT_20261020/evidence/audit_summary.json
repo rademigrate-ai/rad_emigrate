@@ -1,0 +1,28 @@
+{
+  "source_candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "generated_at": "2026-10-20T18:38:49.774619+00:00",
+  "ci_status": "FAIL",
+  "clean_sql": {
+    "FAIL": 5,
+    "PASS": 9
+  },
+  "upgrade_sql": {
+    "FAIL": 8,
+    "PASS": 6
+  },
+  "gate": {
+    "integration_review": "GO",
+    "staging": "NO-GO",
+    "production": "NO-GO"
+  },
+  "docs": [
+    "01_BRANCH_OWNERSHIP.md",
+    "02_SECURITY.md",
+    "03_MIGRATIONS.md",
+    "04_FEATURES_CONTRACTS.md",
+    "05_TESTS.md",
+    "06_RELEASE_GATES.md",
+    "07_OWNER_HANDOFF.md",
+    "README.md"
+  ]
+}

@@ -1,0 +1,927 @@
+{
+  "operation": "compare",
+  "project": "rad_audit_upgrade",
+  "port": 63322,
+  "source_head": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "production_mutations": false,
+  "at": "2026-10-20T18:19:49.000178+00:00",
+  "platform_storage_extras": {
+    "table_grants": [
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "DELETE",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "INSERT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "privilege_type": "UPDATE",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "DELETE",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "INSERT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "REFERENCES",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "SELECT",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "TRIGGER",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "TRUNCATE",
+        "is_grantable": "NO"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "privilege_type": "UPDATE",
+        "is_grantable": "NO"
+      }
+    ],
+    "column_grants": [
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "bucket_name",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "catalog_id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "created_at",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "metadata",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "name",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_namespaces",
+        "column_name": "updated_at",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "anon",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "authenticated",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "bucket_name",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "catalog_id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "created_at",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "location",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "name",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "namespace_id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "remote_table_id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_id",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "shard_key",
+        "privilege_type": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "INSERT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "REFERENCES"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "SELECT"
+      },
+      {
+        "grantee": "service_role",
+        "schema": "storage",
+        "table_name": "iceberg_tables",
+        "column_name": "updated_at",
+        "privilege_type": "UPDATE"
+      }
+    ],
+    "triggers": [
+      {
+        "schema": "storage",
+        "table_name": "buckets",
+        "name": "enforce_versioning_status_transition",
+        "enabled": "O",
+        "definition": "CREATE TRIGGER enforce_versioning_status_transition BEFORE UPDATE OF versioning_status ON storage.buckets FOR EACH ROW EXECUTE FUNCTION storage.enforce_versioning_status_transition()"
+      }
+    ]
+  },
+  "dimensions_compared": [
+    "tables",
+    "columns",
+    "constraints",
+    "indexes",
+    "policies",
+    "table_grants",
+    "column_grants",
+    "functions",
+    "triggers",
+    "storage"
+  ],
+  "different_dimensions": [],
+  "deliberate_environment_differences": [
+    "extension patch versions",
+    "inactive no-op cron commands",
+    "no Vault secret values",
+    "platform auth/storage schema owned by local Supabase",
+    "no business/user data"
+  ],
+  "zero_historical_pending": true,
+  "status": "PASS"
+}

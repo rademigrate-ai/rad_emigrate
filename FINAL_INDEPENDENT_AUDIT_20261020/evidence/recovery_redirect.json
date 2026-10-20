@@ -1,0 +1,14 @@
+{
+  "name": "recovery_redirect",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "command": [
+    "node",
+    "scripts/check_password_recovery_redirect.cjs"
+  ],
+  "started_at": "2026-10-20T18:02:57.826015+00:00",
+  "duration_seconds": 0.4,
+  "exit_code": 0,
+  "error": null,
+  "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\recovery_redirect.log",
+  "log_sha256": "c2d0f3967f3b5fdcb8dc3eca2ecfa35bf96c66e849501e40dd3506cc71b14164"
+}

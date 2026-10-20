@@ -1,0 +1,11 @@
+{
+  "name": "web_build",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "command": "flutter build web --release --no-pub --dart-define=SUPABASE_URL=https://example.supabase.co --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder",
+  "started_at": "2026-10-20T18:21:02.176636+00:00",
+  "duration_seconds": 470.95,
+  "exit_code": 0,
+  "error": null,
+  "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\web_build.log",
+  "log_sha256": "4c3c0637b742ac5dec9d7fce68d874418a84c68853e9c2bcd21f83bc6ffe25d1"
+}

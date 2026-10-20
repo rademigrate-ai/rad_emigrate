@@ -1,0 +1,418 @@
+{
+  "ledger": [
+    {
+      "name": "initial_rad_core_schema",
+      "version": "20261001191421"
+    },
+    {
+      "name": "create_profile_trigger_and_storage_setup_v2",
+      "version": "20261001191653"
+    },
+    {
+      "name": "security_hardening_handle_new_user",
+      "version": "20261001194638"
+    },
+    {
+      "name": "add_rad_backend_indexes",
+      "version": "20261001194715"
+    },
+    {
+      "name": "security_hardening",
+      "version": "20261001195750"
+    },
+    {
+      "name": "rls_policies",
+      "version": "20261001195754"
+    },
+    {
+      "name": "storage_policies",
+      "version": "20261001195756"
+    },
+    {
+      "name": "ai_sessions_and_document_bootstrap",
+      "version": "20261001200202"
+    },
+    {
+      "name": "project05_launch_hardening",
+      "version": "20261001214952"
+    },
+    {
+      "name": "project05_storage_upload_limits",
+      "version": "20261001215315"
+    },
+    {
+      "name": "project05_minimize_table_privileges",
+      "version": "20261001215758"
+    },
+    {
+      "name": "profile_bootstrap_policy",
+      "version": "20261001225237"
+    },
+    {
+      "name": "storage_validation_policies",
+      "version": "20261001225632"
+    },
+    {
+      "name": "ai_message_ownership_policies",
+      "version": "20261001225634"
+    },
+    {
+      "name": "signup_trigger_search_path",
+      "version": "20261001233027"
+    },
+    {
+      "name": "relationship_policies_and_indexes",
+      "version": "20261001233048"
+    },
+    {
+      "name": "restrict_documents_bucket_uploads",
+      "version": "20261003102347"
+    },
+    {
+      "name": "project09_visa_catalog",
+      "version": "20261003210302"
+    },
+    {
+      "name": "project10_knowledge_research",
+      "version": "20261003211635"
+    },
+    {
+      "name": "project10_security_hardening",
+      "version": "20261003212339"
+    },
+    {
+      "name": "project11_ai_orchestration",
+      "version": "20261003213219"
+    },
+    {
+      "name": "project12_document_intelligence",
+      "version": "20261003214031"
+    },
+    {
+      "name": "project13_admin_operations",
+      "version": "20261003221324"
+    },
+    {
+      "name": "project14_feed_notifications",
+      "version": "20261003222909"
+    },
+    {
+      "name": "project15_observability",
+      "version": "20261003223717"
+    },
+    {
+      "name": "ai_base_url_ssrf_hardening",
+      "version": "20261003235000"
+    },
+    {
+      "name": "fix_profile_update_rls_recursion",
+      "version": "20261004190000"
+    },
+    {
+      "name": "client_delivery_ai_scopes",
+      "version": "20261005123027"
+    },
+    {
+      "name": "stage1_ai_research_completion",
+      "version": "20261005123202"
+    },
+    {
+      "name": "stage2_review_feed_publish",
+      "version": "20261005123255"
+    },
+    {
+      "name": "stage3_fk_covering_indexes",
+      "version": "20261005180215"
+    },
+    {
+      "name": "stage2_visa_structured_steps",
+      "version": "20261006144235"
+    },
+    {
+      "name": "stage5_research_review_candidate_backfill",
+      "version": "20261006144246"
+    },
+    {
+      "name": "fix_profile_update_with_check_role_escalation",
+      "version": "20261006161823"
+    },
+    {
+      "name": "ai_dynamic_routing_architecture",
+      "version": "20261006221616"
+    },
+    {
+      "name": "ai_credential_failure_routing",
+      "version": "20261007075108"
+    },
+    {
+      "name": "research_atomic_review_candidate",
+      "version": "20261007075110"
+    },
+    {
+      "name": "ai_discovery_auto_enable_chat",
+      "version": "20261007142614"
+    },
+    {
+      "name": "stage2_knowledge_completion",
+      "version": "20261007171212"
+    },
+    {
+      "name": "stage2_promote_knowledge_fn",
+      "version": "20261007171310"
+    },
+    {
+      "name": "stage2_retrieve_and_conflict_fn",
+      "version": "20261007171341"
+    },
+    {
+      "name": "stage4_user_ai_quota_grounding",
+      "version": "20261007183840"
+    },
+    {
+      "name": "stage4_guest_quota_advisory_lock",
+      "version": "20261007185216"
+    },
+    {
+      "name": "stage4_limit_ai_runtime_chain",
+      "version": "20261007192522"
+    },
+    {
+      "name": "stage6_entitlement_access_decision",
+      "version": "20261007202907"
+    },
+    {
+      "name": "stage7_ops_consultation_app_status",
+      "version": "20261007205734"
+    },
+    {
+      "name": "stage9_security_grant_hardening",
+      "version": "20261007212140"
+    },
+    {
+      "name": "20261010010000_stage1_p0_security_completion",
+      "version": "20261019130911"
+    },
+    {
+      "name": "20261017190000_security_ai_entitlement_rpc_privacy",
+      "version": "20261019131205"
+    },
+    {
+      "name": "20261010055013_stage1_atomic_ai_quota_reservation",
+      "version": "20261019131224"
+    },
+    {
+      "name": "20261010070000_stage1_ssrf_ipv4_mapped_ipv6",
+      "version": "20261019131243"
+    },
+    {
+      "name": "20261012110945_stage1_security_abuse_storage_alignment",
+      "version": "20261019131312"
+    },
+    {
+      "name": "20261012230000_ai_models_check_constraints_alignment",
+      "version": "20261019131319"
+    },
+    {
+      "name": "repair_admin_consultation_rpcs",
+      "version": "20261019171732"
+    }
+  ],
+  "tables": 57,
+  "captured_at": "2026-10-20T18:01:41.820285+00:00",
+  "new_objects": {
+    "booking_slots": null,
+    "visa_articles": null,
+    "interview_slots": null,
+    "rad_api_contracts": null,
+    "rad_visa_articles": null
+  },
+  "rls_disabled": [],
+  "definer_summary": {
+    "count": 48,
+    "public_execute": 4,
+    "without_fixed_search_path": 0
+  },
+  "database_version": "PostgreSQL 17.11 on aarch64-unknown-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "unsafe_table_grants": [
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "TRUNCATE"
+    }
+  ]
+}

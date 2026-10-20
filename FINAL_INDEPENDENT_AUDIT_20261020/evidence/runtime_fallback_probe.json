@@ -1,0 +1,15 @@
+{
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "command": "flutter test --no-pub --reporter expanded ../_final_independent_evidence_20261020/runtime_fallback_probe_test.dart",
+  "exit_code": 1,
+  "passed": 0,
+  "failed": 3,
+  "network": "none; Supabase client intentionally uninitialized",
+  "findings": [
+    "FX returns a synthetic fresh provider quote instead of unavailable",
+    "Canonical article fallback reports FactualStatus.verified",
+    "Search fallback returns fixture hits with FactualStatus.verified"
+  ],
+  "status": "FAIL",
+  "note": "Additional independent adversarial probe; separate from the original full-suite 834 pass / 1 fail count."
+}

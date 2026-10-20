@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "application_migration_files_changed": false,
+  "restored_own_generated_files_only": [],
+  "checks": [
+    "Exact candidate SHA",
+    "Only generated EOL noise restored in owned checkout",
+    "Local build exits and actual full-suite failure",
+    "132 scoped Deno passes",
+    "3 additional fallback regression failures",
+    "28 real Auth HTTP checks",
+    "72 clean / 12 additive replay files",
+    "Fresh hosted metadata parity across 11 dimensions",
+    "7 CI jobs / 4 failures retained",
+    "Gitleaks automated findings separate from manual review",
+    "Every migration replay digest matches original Git source after LF normalization",
+    "Local artifact digests",
+    "8 complete audit documents"
+  ]
+}

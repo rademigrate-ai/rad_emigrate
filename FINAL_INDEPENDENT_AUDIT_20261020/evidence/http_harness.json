@@ -1,0 +1,5 @@
+{
+  "source": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_core_security_final\\scripts\\verify_rad_http.py",
+  "source_sha256": "c2c1a6a4098408d86a93cb8137260f92a5f62ad3eaa47a2c5b333c9712593ace",
+  "transformation": "Assert dedicated rad_audit_ project prefix; ROOT points to immutable audit candidate. No behavior assertions changed."
+}

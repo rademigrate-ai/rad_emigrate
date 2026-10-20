@@ -1,0 +1,11 @@
+{
+  "name": "flutter_analyze",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "command": "flutter analyze --no-pub",
+  "started_at": "2026-10-20T18:03:29.744226+00:00",
+  "duration_seconds": 533.43,
+  "exit_code": 0,
+  "error": null,
+  "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\flutter_analyze.log",
+  "log_sha256": "e598be6764b9401ae296e94951e5111eee84d5555877e0d1c4da115694dae5a3"
+}

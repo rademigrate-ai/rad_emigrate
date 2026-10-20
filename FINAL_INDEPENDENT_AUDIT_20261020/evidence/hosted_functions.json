@@ -1,0 +1,100 @@
+[
+  {
+    "schema": "private",
+    "proname": "enforce_claim_citation_integrity",
+    "args": "",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": true,
+    "auth_exec": true,
+    "service_exec": true,
+    "definition_md5": "549dfec76c8692de52837044ea519ee7",
+    "audited_definition": null
+  },
+  {
+    "schema": "private",
+    "proname": "guard_application_status",
+    "args": "",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": true,
+    "auth_exec": true,
+    "service_exec": true,
+    "definition_md5": "585d8000901f6caded1efd6679d65c63",
+    "audited_definition": null
+  },
+  {
+    "schema": "private",
+    "proname": "guard_consultation_fields",
+    "args": "",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": true,
+    "auth_exec": true,
+    "service_exec": true,
+    "definition_md5": "8ce9dddffd6ad4d6527261f752dbbb3a",
+    "audited_definition": null
+  },
+  {
+    "schema": "private",
+    "proname": "knowledge_items_search_vector_update",
+    "args": "",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": true,
+    "auth_exec": true,
+    "service_exec": true,
+    "definition_md5": "dc1881271930b1d9798fd8d881c5f8d3",
+    "audited_definition": null
+  },
+  {
+    "schema": "public",
+    "proname": "consume_ai_daily_quota",
+    "args": "p_user_id uuid, p_role text",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": false,
+    "auth_exec": false,
+    "service_exec": true,
+    "definition_md5": "34d1c27404b105016700c26fb61d977a",
+    "audited_definition": "CREATE OR REPLACE FUNCTION public.consume_ai_daily_quota(p_user_id uuid, p_role text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_role text;\n  v_limit integer;\n  v_token_limit integer;\n  v_used integer;\n  v_tokens integer;\n  v_request_id uuid;\n  v_day timestamptz := date_trunc('day', now() at time zone 'utc') at time zone 'utc';\nbegin\n  if p_user_id is null then\n    raise exception 'user_required' using errcode = '22023';\n  end if;\n  select coalesce(p.role, 'user') into v_role from public.profiles p where p.id = p_user_id;\n  v_role := coalesce(v_role, 'user');\n  select l.daily_requests, l.daily_output_tokens into v_limit, v_token_limit\n  from public.ai_usage_limits l where l.role = v_role limit 1;\n  if v_limit is null then v_limit := 50; v_token_limit := 100000; end if;\n  perform pg_catalog.pg_advisory_xact_lock(\n    pg_catalog.hashtextextended(p_user_id::text || ':' || v_day::text, 0)\n  );\n  select count(*)::integer, coalesce(sum(r.output_tokens), 0)::integer\n  into v_used, v_tokens from public.ai_requests r\n  where r.user_id = p_user_id and r.created_at >= v_day;\n  if v_used >= v_limit or v_tokens >= v_token_limit then\n    return jsonb_build_object('allowed', false, 'count', v_used, 'limit', v_limit,\n      'tokens_used', v_tokens, 'token_limit', v_token_limit, 'error', 'daily_limit_reached');\n  end if;\n  insert into public.ai_requests(user_id, capability, status, routing_reason)\n  values (p_user_id, 'chat', 'running', 'atomic_quota_reservation')\n  returning id into v_request_id;\n  return jsonb_build_object('allowed', true, 'count', v_used + 1, 'limit', v_limit,\n    'tokens_used', v_tokens, 'token_limit', v_token_limit, 'request_id', v_request_id);\nend\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "proname": "create_research_review_candidate",
+    "args": "p_job_id uuid, p_finding_id uuid, p_title text, p_summary text, p_language_code text",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": false,
+    "auth_exec": false,
+    "service_exec": true,
+    "definition_md5": "29637ae9462ccad4152bbde2405e8317",
+    "audited_definition": "CREATE OR REPLACE FUNCTION public.create_research_review_candidate(p_job_id uuid, p_finding_id uuid, p_title text, p_summary text, p_language_code text DEFAULT 'en'::text)\n RETURNS uuid\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_id uuid;\nbegin\n  if p_finding_id is not null then\n    -- Serialize candidate creation for the same finding without deleting or\n    -- rewriting any existing review work.\n    perform pg_catalog.pg_advisory_xact_lock(\n      pg_catalog.hashtextextended(p_finding_id::text, 0)\n    );\n\n    select id\n      into v_id\n      from public.content_drafts\n      where research_finding_id = p_finding_id\n      order by created_at\n      limit 1;\n\n    if v_id is not null then\n      return v_id;\n    end if;\n  end if;\n\n  insert into public.content_drafts (\n    research_job_id,\n    research_finding_id,\n    language_code,\n    title,\n    body,\n    status\n  ) values (\n    p_job_id,\n    p_finding_id,\n    case when p_language_code = 'fa' then 'fa' else 'en' end,\n    left(coalesce(nullif(btrim(p_title), ''), 'Research finding'), 300),\n    coalesce(p_summary, ''),\n    'review'\n  )\n  returning id into v_id;\n\n  return v_id;\nend\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "proname": "submit_consultation_request",
+    "args": "p_topic text, p_message text, p_related_application_id uuid",
+    "definer": true,
+    "settings": [
+      "search_path=\"\""
+    ],
+    "anon_exec": false,
+    "auth_exec": true,
+    "service_exec": false,
+    "definition_md5": "060d29f7b2cd8de9c280f19cebc04e56",
+    "audited_definition": "CREATE OR REPLACE FUNCTION public.submit_consultation_request(p_topic text, p_message text, p_related_application_id uuid DEFAULT NULL::uuid)\n RETURNS uuid\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  v_user_id uuid := auth.uid();\n  v_topic text := nullif(btrim(p_topic), '');\n  v_message text := nullif(btrim(p_message), '');\n  v_request_id uuid;\n  v_hour_count integer;\n  v_day_count integer;\nbegin\n  if v_user_id is null then raise exception 'authentication_required' using errcode = '42501'; end if;\n  if v_topic is null or char_length(v_topic) not between 3 and 200 then raise exception 'invalid_consultation_topic' using errcode = '22023'; end if;\n  if v_message is null or char_length(v_message) not between 10 and 5000 then raise exception 'invalid_consultation_message' using errcode = '22023'; end if;\n  if p_related_application_id is not null and not exists (\n    select 1 from public.applications a where a.id = p_related_application_id and a.user_id = v_user_id\n  ) then raise exception 'related_application_forbidden' using errcode = '42501'; end if;\n  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('consultation:' || v_user_id::text, 0));\n  select count(*) filter (where c.created_at >= now() - interval '1 hour')::integer,\n         count(*) filter (where c.created_at >= now() - interval '1 day')::integer\n  into v_hour_count, v_day_count from public.consultation_requests c\n  where c.user_id = v_user_id and c.created_at >= now() - interval '1 day';\n  if v_hour_count >= 3 or v_day_count >= 10 then raise exception 'consultation_rate_limited' using errcode = 'P0001'; end if;\n  insert into public.consultation_requests (user_id, topic, message, related_application_id, status)\n  values (v_user_id, v_topic, v_message, p_related_application_id, 'submitted')\n  returning id into v_request_id;\n  return v_request_id;\nend\n$function$\n"
+  }
+]

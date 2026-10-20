@@ -1,0 +1,41 @@
+[
+  {
+    "job_id": "118797557879",
+    "log_sha256": "8344fe62cf9e4758f2f99914971ab5ddfc2dd1b260d27adf5c9f1d9a1e25df94",
+    "failure_lines": [
+      "2026-10-20T18:09:25.1902563Z   Actual: FlutterError:<A RenderFlex overflowed by 345 pixels on the right.>",
+      "2026-10-20T18:09:36.9974293Z ##[error]834 tests passed, 1 failed."
+    ]
+  },
+  {
+    "job_id": "118797557906",
+    "log_sha256": "629c01d91fad24b57cbc7521112bc81ae2e9a36562ecb1e1fd0d94126be40345",
+    "failure_lines": [
+      "2026-10-20T18:08:07.4265909Z psql:supabase/reconciliation/security_regression.sql:130: ERROR:  Publish RPC lost human approval or mutation guard"
+    ]
+  },
+  {
+    "job_id": "118797558004",
+    "log_sha256": "644d73b6561bed8cfead1c7618891fbcb0bea8f6ea82bd87638fb86697d1310b",
+    "failure_lines": [
+      "2026-10-20T18:08:04.9453172Z Canonical clean-schema fingerprint differs from the reconstructed RAD schema."
+    ]
+  },
+  {
+    "job_id": "118797558085",
+    "log_sha256": "7be5ef1005fb764b505ce13b9ad64027e0454c582c6f00369eabfe280ec38577",
+    "failure_lines": [
+      "2026-10-20T18:06:31.8307619Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/ai-orchestrator/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8314557Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/ai-orchestrator/knowledge_grounding.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8322119Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/research-sync/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8331361Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/notification-dispatch/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8340569Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/research-sync/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8349728Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/ai-orchestrator/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8361243Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/ai-orchestrator/knowledge_grounding.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8373436Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/research-sync/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8385320Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/currency-refresh/providers.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8396890Z \u001b[0m\u001b[1m\u001b[31merror\u001b[0m: NotCapable: Requires read access to \"/home/runner/work/rad_emigrate/rad_emigrate/supabase/functions/ai-orchestrator/handler.ts\", run again with the --allow-read flag",
+      "2026-10-20T18:06:31.8419819Z \u001b[0m\u001b[31mFAILED\u001b[0m | 122 passed | 10 failed \u001b[0m\u001b[38;5;245m(727ms)\u001b[0m"
+    ]
+  }
+]

@@ -1,0 +1,1060 @@
+{
+  "captured_at": "2026-10-20T18:02:39.079375+00:00",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "worktrees": [
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_emigrate",
+      "HEAD": "839c749759989c922fdaa840e1a5f1e36f166b00",
+      "branch": "refs/heads/feature/g002-c002-implementation-20261019",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feature/g002-c002-implementation-20261019",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "839c749759989c922fdaa840e1a5f1e36f166b00\n2026-10-20T01:57:47+03:30\nfeat(edge): verified-official grounding, currency workers, CMS ingest, security tests",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_47_delivery_evidence_20261018",
+      "HEAD": "5cf1130a61c80405e952e9fd653d93de701821d0",
+      "branch": "refs/heads/audit/47-gate-verified-delivery-ledger-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/audit/47-gate-verified-delivery-ledger-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "5cf1130a61c80405e952e9fd653d93de701821d0\n2026-10-18T11:22:48+03:30\ndocs(delivery): record candidate TXT draft export as E8-04 progress",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_ai_grounding_20261018",
+      "HEAD": "66c5820242a3b330b9a1dbdbc1ca5a630f028fe7",
+      "branch": "refs/heads/fix/ai-approved-grounding-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/fix/ai-approved-grounding-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "66c5820242a3b330b9a1dbdbc1ca5a630f028fe7\n2026-10-18T16:06:08+03:30\ntest(ai): align backend source audit with explicit approval guards",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_antigravity_a003",
+      "HEAD": "e80f10680a872fba5cd363f2e943b1742127b0a2",
+      "branch": "refs/heads/feat/antigravity-a003-flutter-implementation",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/antigravity-a003-flutter-implementation",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "e80f10680a872fba5cd363f2e943b1742127b0a2\n2026-10-20T14:13:29+03:30\nfeat(integration): reconcile frontend adapters with rad_v1 backend contract schemas",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_antigravity_flutter_e2e",
+      "HEAD": "843ea7c2b715380a17e566eaf0bccdb7bb31029f",
+      "branch": "refs/heads/feat/antigravity-flutter-e2e-completion",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/antigravity-flutter-e2e-completion",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "73\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "843ea7c2b715380a17e566eaf0bccdb7bb31029f\n2026-10-19T01:02:36+03:30\nstyle: format admin consultations page and recommendation engine",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_app_edge_56_preview",
+      "HEAD": "3dbff88b43b9a665f61c85ead0c8b6f1ad4c7cfc",
+      "branch": "refs/heads/security/stage1-reconciliation-20261017",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/security/stage1-reconciliation-20261017",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "3dbff88b43b9a665f61c85ead0c8b6f1ad4c7cfc\n2026-10-18T00:11:22+03:30\nmerge: reuse merged strict RPC capability guard in Stage 1 Edge branch",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_auth_redirect_47_20261018",
+      "HEAD": "2739567cc0c228c0b190da177266de9df811be5a",
+      "branch": "refs/heads/audit/auth-redirect-47-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/main",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t116",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2739567cc0c228c0b190da177266de9df811be5a\n2026-10-17T21:43:49Z\ntest(security): enforce human-only Feed publication and negative API writes",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_backend_sql_fingerprint_20261018",
+      "HEAD": "5dd67c9c6c06ad140603663c3d5e6f053be874e2",
+      "branch": "refs/heads/audit/e1-02-sql-fingerprints-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake\n?? sql_comparison_local.json",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/audit/e1-02-sql-fingerprints-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "5dd67c9c6c06ad140603663c3d5e6f053be874e2\n2026-10-18T00:52:43+03:30\nstyle(audit): remove trailing whitespace from recorded SQL report",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_c002_c003_local",
+      "HEAD": "95e1fdaac74d36ca1c91f2d9d897ff7686dc3ffb",
+      "branch": "refs/heads/feat/rad-c002-c003-local-20261020",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake\n?? supabase/migrations/20261019204307_rad_security_contract_foundation.sql\n?? supabase/migrations/20261019231028_rad_visa_cms_official_evidence.sql",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'feat/rad-c002-c003-local-20261020'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "95e1fdaac74d36ca1c91f2d9d897ff7686dc3ffb\n2026-10-19T17:56:30+03:30\nfeat(supabase): additive repair migration for consultation RPCs and regression test",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_client_compat_preview",
+      "HEAD": "72a08e093d2957ca6e046f2239634184503220e2",
+      "branch": "refs/heads/feat/consultation-rpc-compat-only",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/consultation-rpc-compat-only",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "72a08e093d2957ca6e046f2239634184503220e2\n2026-10-18T00:07:06+03:30\nfix(security): never infer missing RPC from coded authorization errors",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_codex_master_47_20261018",
+      "HEAD": "3c9108291ba1305b1e7715470cee16ed8bc069ae",
+      "branch": "refs/heads/feat/codex-master-47-execution-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/codex-master-47-execution-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "9\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "3c9108291ba1305b1e7715470cee16ed8bc069ae\n2026-10-19T00:12:18+03:30\ntest(security): preserve offline scanner and unclassified finding locations",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_codex_phase2_phase4_20261019",
+      "HEAD": "c7108931b00220491f43a30be9962999bd939d33",
+      "branch": "refs/heads/feat/codex-phase2-phase4-final-20261019",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'feat/codex-phase2-phase4-final-20261019'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "c7108931b00220491f43a30be9962999bd939d33\n2026-10-19T01:25:57+03:30\ndocs(backend): hand off verified Phase 2 and Phase 4 local evidence",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_combined_delivery_preview_20261018",
+      "HEAD": "e4117d9d92e0d660dee2c74dc08720c5576198bc",
+      "branch": "refs/heads/integration/47-client-preview-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/integration/47-client-preview-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "e4117d9d92e0d660dee2c74dc08720c5576198bc\n2026-10-18T11:27:43+03:30\nMerge remote-tracking branch 'origin/audit/47-gate-verified-delivery-ledger-20261018' into integration/47-client-preview-20261018",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_copilot_quality_release",
+      "HEAD": "8383155de13bcd5533172abd0c608f3c846e0770",
+      "branch": "refs/heads/qa/copilot-independent-quality-release",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'qa/copilot-independent-quality-release'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "8383155de13bcd5533172abd0c608f3c846e0770\n2026-10-18T21:03:21+03:30\ntest(qa): document release evidence and reproduce case checklist isolation leak",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_core_security_final",
+      "HEAD": "a24f4921926667877c10095e073f87f585b1bde5",
+      "branch": "refs/heads/feat/rad-core-security-final",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/rad-core-security-final",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "a24f4921926667877c10095e073f87f585b1bde5\n2026-10-20T21:17:41+03:30\ndocs(backend): record successful 7/7 CI run 39468111818 evidence",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_document_generator_preview_20261018",
+      "HEAD": "7d213d8599f5a1a0b0c6ecc964314c1c5670a09a",
+      "branch": "refs/heads/feat/document-cv-sop-draft-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/document-cv-sop-draft-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "7d213d8599f5a1a0b0c6ecc964314c1c5670a09a\n2026-10-18T11:21:35+03:30\nfeat(documents): enable explicit UTF-8 TXT draft export",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_feed_human_guard_preview_20261018",
+      "HEAD": "681b2cac9c03650e09b7018d64afe4131d7cce86",
+      "branch": "refs/heads/test/backend-feed-human-guard-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/test/backend-feed-human-guard-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "681b2cac9c03650e09b7018d64afe4131d7cce86\n2026-10-18T01:10:09+03:30\ntest(feed): prove approval-only and idempotent human publication",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_47_integration",
+      "HEAD": "2e0d089781ef3de582143421a59817094e57ca78",
+      "branch": "refs/heads/integration/local-final-47",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'integration/local-final-47'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2e0d089781ef3de582143421a59817094e57ca78\n2026-10-18T21:03:21+03:30\ntest(qa): document release evidence and reproduce case checklist isolation leak",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit",
+      "HEAD": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+      "branch": "refs/heads/audit/final-independent-20261020",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'audit/final-independent-20261020'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "1fe44f63d179263c5e719578bf7ebad0e17868d1\n2026-10-20T21:06:05+03:30\nfeat(rc): recover Freebuff interviews/booking, future-aligned time seed, Grok backend tests",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_freebuff_features",
+      "HEAD": "2e0d089781ef3de582143421a59817094e57ca78",
+      "branch": "refs/heads/feat/rad-new-features-ui",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake\n?? lib/features/booking/\n?? lib/features/interviews/\n?? test/features/booking/\n?? test/features/interviews/",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'feat/rad-new-features-ui'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2e0d089781ef3de582143421a59817094e57ca78\n2026-10-18T21:03:21+03:30\ntest(qa): document release evidence and reproduce case checklist isolation leak",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_feature_completion",
+      "HEAD": "b97c8f03a7618046e54f98a25685bc6f0ce85560",
+      "branch": "refs/heads/feat/grok-independent-feature-completion",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'feat/grok-independent-feature-completion'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "b97c8f03a7618046e54f98a25685bc6f0ce85560\n2026-10-19T00:58:35+03:30\ndocs: P0-P2 final domain completion handoff (+49 targeted tests PASS)",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_final_recovery",
+      "HEAD": "a2d4d95578245d049a6c3b0a874bc0feff4e37a3",
+      "branch": "refs/heads/feat/rad-grok-final-recovery",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake\n?? supabase/migrations/20261020123523_rad_explicit_service_profile_bootstrap.sql",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'feat/rad-grok-final-recovery'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "a2d4d95578245d049a6c3b0a874bc0feff4e37a3\n2026-10-20T15:36:35+03:30\nstyle: deno fmt service_surface_contract_test",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_final_unified_rc",
+      "HEAD": "02cff0602e07e5fdea11765539f5c16a529f339a",
+      "branch": "refs/heads/integration/grok-final-unified-rc",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: no upstream configured for branch 'integration/grok-final-unified-rc'"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "02cff0602e07e5fdea11765539f5c16a529f339a\n2026-10-19T13:34:48+03:30\ndocs: record web release build PASS on unified RC",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_services",
+      "HEAD": "c57b56d0c5f51547f29beea0ca6148598c3b8128",
+      "branch": "refs/heads/feat/rad-backend-services-final",
+      "status": {
+        "exit_code": 0,
+        "output": "",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/rad-backend-services-final",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "c57b56d0c5f51547f29beea0ca6148598c3b8128\n2026-10-20T15:36:35+03:30\nstyle: deno fmt service_surface_contract_test",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_validation_20261018",
+      "HEAD": "5982a42f01ec2238181bb2861fc797d32fa6efae",
+      "detached": true,
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 128,
+        "output": "",
+        "error": "fatal: HEAD does not point to a branch"
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "5982a42f01ec2238181bb2861fc797d32fa6efae\n2026-10-18T18:23:24+03:30\ndocs: Grok progress — E8-01 and E8-02 domain modules complete",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_integrate68_readonly_20261018",
+      "HEAD": "2739567cc0c228c0b190da177266de9df811be5a",
+      "branch": "refs/heads/audit/antigravity-pr68-integration-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M  lib/core/routing/app_shell.dart\nM  lib/core/widgets/directional_icons.dart\nM  lib/features/auth/presentation/pages/forgot_password_page.dart\nM  lib/features/auth/presentation/pages/otp_page.dart\nM  lib/features/auth/presentation/pages/reset_password_page.dart\nM  lib/features/consultation/presentation/pages/consultation_page.dart\nM  lib/features/feed/presentation/pages/feed_page.dart\nM  lib/features/visa/presentation/pages/visa_page_countries.dart\nM  lib/features/visa/presentation/pages/visa_page_country_detail.dart\nM  lib/features/visa/presentation/pages/visa_page_program.dart\n M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\nA  test/features/auth/auth_forms_resilience_test.dart\nA  test/features/consultation/consultation_form_flow_test.dart\nA  test/features/feed/feed_flow_resilience_test.dart\nA  test/features/visa/visa_navigation_presentation_test.dart\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/main",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t116",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2739567cc0c228c0b190da177266de9df811be5a\n2026-10-17T21:43:49Z\ntest(security): enforce human-only Feed publication and negative API writes",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_integration_a003_unified",
+      "HEAD": "b485c0cb513875b3833a2aa29ea89a1509102138",
+      "branch": "refs/heads/integration/antigravity-grok-a003-unified",
+      "status": {
+        "exit_code": 0,
+        "output": "M lib/core/routing/auth_redirect.dart\n M test/core/app_shell_5item_test.dart",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/integration/antigravity-grok-a003-unified",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "b485c0cb513875b3833a2aa29ea89a1509102138\n2026-10-20T16:06:56+03:30\nfix(quality): resolve all static analyzer warnings and deprecations",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_ledger_guard_preview",
+      "HEAD": "954290766e24663ac87c257681613ad1b6093391",
+      "branch": "refs/heads/audit/migration-ledger-readonly-guard-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/audit/migration-ledger-readonly-guard-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "954290766e24663ac87c257681613ad1b6093391\n2026-10-18T00:18:03+03:30\nMerge remote-tracking branch 'origin/main' into audit/migration-ledger-readonly-guard-20261018",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_master_integrated_687069_20261018",
+      "HEAD": "3977712f2e0ac591f9f71dafa67c10950f678ec1",
+      "branch": "refs/heads/integration/47-ux-delivery-cv-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/integration/47-ux-delivery-cv-20261018",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "3977712f2e0ac591f9f71dafa67c10950f678ec1\n2026-10-18T13:02:43+03:30\nMerge remote-tracking branch 'origin/feat/document-cv-sop-draft-20261018' into integration/47-ux-delivery-cv-20261018",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_phasea_48_preview",
+      "HEAD": "b955200d5d106534063ba45856f90c0cff99bd57",
+      "branch": "refs/heads/phase-a/security-migrations-20261015",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/phase-a/security-migrations-20261015",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "b955200d5d106534063ba45856f90c0cff99bd57\n2026-10-18T00:32:20+03:30\ntest(security): assert owner-scoped entitlement RPCs in clean-schema probe",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_pr49_time_review_20261018",
+      "HEAD": "2739567cc0c228c0b190da177266de9df811be5a",
+      "branch": "refs/heads/audit/pr49-timerace-review-20261018",
+      "status": {
+        "exit_code": 0,
+        "output": "UU lib/features/global_time/domain/timezone_engine.dart\n M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/main",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t116",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2739567cc0c228c0b190da177266de9df811be5a\n2026-10-17T21:43:49Z\ntest(security): enforce human-only Feed publication and negative API writes",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_stage1_preview",
+      "HEAD": "2ad00372a13d37504343b4741d67f1a20d5bea7e",
+      "branch": "refs/heads/audit/stage1-security-compat-20261017",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M scripts/tests/test_phase_a_security.py\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/audit/stage1-security-compat-20261017",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "2ad00372a13d37504343b4741d67f1a20d5bea7e\n2026-10-17T23:12:38+03:30\ntest(security): compare owner-guard source case-insensitively",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    },
+    {
+      "worktree": "C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_unified_rc",
+      "HEAD": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+      "branch": "refs/heads/feat/rad-unified-release-candidate",
+      "status": {
+        "exit_code": 0,
+        "output": "M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake",
+        "error": ""
+      },
+      "tracking": {
+        "exit_code": 0,
+        "output": "origin/feat/rad-unified-release-candidate",
+        "error": ""
+      },
+      "ahead_behind": {
+        "exit_code": 0,
+        "output": "0\t0",
+        "error": ""
+      },
+      "last_commit": {
+        "exit_code": 0,
+        "output": "1fe44f63d179263c5e719578bf7ebad0e17868d1\n2026-10-20T21:06:05+03:30\nfeat(rc): recover Freebuff interviews/booking, future-aligned time seed, Grok backend tests",
+        "error": ""
+      },
+      "owner_basis": "Name/branch attribution only; no live agent ownership channel verified"
+    }
+  ],
+  "branches": [
+    {
+      "branch": "feat/rad-core-security-final",
+      "local": {
+        "exit_code": 0,
+        "output": "a24f4921926667877c10095e073f87f585b1bde5",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "a24f4921926667877c10095e073f87f585b1bde5",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": true,
+        "24b3f6b": true,
+        "a24f492": true,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 79
+    },
+    {
+      "branch": "feat/rad-backend-services-final",
+      "local": {
+        "exit_code": 0,
+        "output": "c57b56d0c5f51547f29beea0ca6148598c3b8128",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "c57b56d0c5f51547f29beea0ca6148598c3b8128",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": true,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 72
+    },
+    {
+      "branch": "feat/rad-unified-release-candidate",
+      "local": {
+        "exit_code": 0,
+        "output": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": true,
+        "b485c0c": true,
+        "e80f106": true,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 72
+    },
+    {
+      "branch": "integration/antigravity-grok-a003-unified",
+      "local": {
+        "exit_code": 0,
+        "output": "b485c0cb513875b3833a2aa29ea89a1509102138",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "b485c0cb513875b3833a2aa29ea89a1509102138",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": true,
+        "e80f106": true,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 72
+    },
+    {
+      "branch": "feat/rad-new-features-ui",
+      "local": {
+        "exit_code": 0,
+        "output": "2e0d089781ef3de582143421a59817094e57ca78",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 128,
+        "output": "refs/remotes/origin/feat/rad-new-features-ui",
+        "error": "fatal: ambiguous argument 'refs/remotes/origin/feat/rad-new-features-ui': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'"
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": true,
+        "a9969c1": false,
+        "c710893": false,
+        "843ea7c": false,
+        "b97c8f0": false
+      },
+      "migration_count": 58
+    },
+    {
+      "branch": "feat/antigravity-a003-flutter-implementation",
+      "local": {
+        "exit_code": 0,
+        "output": "e80f10680a872fba5cd363f2e943b1742127b0a2",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "e80f10680a872fba5cd363f2e943b1742127b0a2",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": true,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 61
+    },
+    {
+      "branch": "integration/grok-final-unified-rc",
+      "local": {
+        "exit_code": 0,
+        "output": "02cff0602e07e5fdea11765539f5c16a529f339a",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 128,
+        "output": "refs/remotes/origin/integration/grok-final-unified-rc",
+        "error": "fatal: ambiguous argument 'refs/remotes/origin/integration/grok-final-unified-rc': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'"
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": true,
+        "a9969c1": true,
+        "c710893": true,
+        "843ea7c": true,
+        "b97c8f0": true
+      },
+      "migration_count": 59
+    },
+    {
+      "branch": "feat/antigravity-flutter-e2e-completion",
+      "local": {
+        "exit_code": 0,
+        "output": "843ea7c2b715380a17e566eaf0bccdb7bb31029f",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 0,
+        "output": "f616078a56eb8159030911d38b66b1e961504dba",
+        "error": ""
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": true,
+        "a9969c1": false,
+        "c710893": false,
+        "843ea7c": true,
+        "b97c8f0": false
+      },
+      "migration_count": 58
+    },
+    {
+      "branch": "feat/grok-independent-feature-completion",
+      "local": {
+        "exit_code": 0,
+        "output": "b97c8f03a7618046e54f98a25685bc6f0ce85560",
+        "error": ""
+      },
+      "remote": {
+        "exit_code": 128,
+        "output": "refs/remotes/origin/feat/grok-independent-feature-completion",
+        "error": "fatal: ambiguous argument 'refs/remotes/origin/feat/grok-independent-feature-completion': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'"
+      },
+      "ancestry": {
+        "9736540": false,
+        "24b3f6b": false,
+        "a24f492": false,
+        "c57b56d": false,
+        "b485c0c": false,
+        "e80f106": false,
+        "2e0d089": false,
+        "a9969c1": false,
+        "c710893": false,
+        "843ea7c": false,
+        "b97c8f0": true
+      },
+      "migration_count": 58
+    }
+  ],
+  "mutations": "None to inspected worktrees; git fetch updates remote refs only"
+}

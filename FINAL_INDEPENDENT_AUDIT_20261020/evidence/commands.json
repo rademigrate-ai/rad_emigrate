@@ -1,0 +1,221 @@
+[
+  {
+    "name": "android_debug",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter build apk --debug --no-pub --target-platform android-arm64 --dart-define=SUPABASE_URL=https://example.supabase.co --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder",
+    "started_at": "2026-10-20T18:28:53.388892+00:00",
+    "duration_seconds": 342.08,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\android_debug.log",
+    "log_sha256": "e07c8898f1d7e3099d4f4f590c0cae08b1992339ae22f96a4adcb57a2877aed0"
+  },
+  {
+    "name": "dart_format",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "dart format --output=none --set-exit-if-changed lib test",
+    "started_at": "2026-10-20T18:03:06.428430+00:00",
+    "duration_seconds": 23.21,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\dart_format.log",
+    "log_sha256": "1c083aff1484d6b32357232d1893fbc5e1e458c39a02c081b4df15637c696a0e"
+  },
+  {
+    "name": "deno_lint",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": [
+      "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+      "lint",
+      "supabase/functions"
+    ],
+    "started_at": "2026-10-20T18:02:30.003216+00:00",
+    "duration_seconds": 0.61,
+    "exit_code": 1,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\deno_lint.log",
+    "log_sha256": "493c3d10206f6b35bc85291c5cbb9889e7982706f60b8dd978c3058d68233bf6"
+  },
+  {
+    "name": "deno_test",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": [
+      "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+      "test",
+      "--allow-env",
+      "supabase/functions/tests"
+    ],
+    "started_at": "2026-10-20T18:02:30.950425+00:00",
+    "duration_seconds": 20.23,
+    "exit_code": 1,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\deno_test.log",
+    "log_sha256": "1a2cfd57065e4a2454001505f06caa509390226b1d9fafb6002ac043972d70ef"
+  },
+  {
+    "name": "deno_version",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": [
+      "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+      "--version"
+    ],
+    "started_at": "2026-10-20T18:02:26.571864+00:00",
+    "duration_seconds": 3.21,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\deno_version.log",
+    "log_sha256": "d81f6da9c7c832fa44c5020c2031fd219d68ba57a5a26fa2bff5e29321886d43"
+  },
+  {
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "legacy AI unauthenticated request denied",
+        "status": "PASS",
+        "http_status": 401
+      },
+      {
+        "check": "v1 AI requires real Auth user",
+        "status": "PASS",
+        "http_status": 401
+      },
+      {
+        "check": "v1 real Auth to reservation to no-evidence response",
+        "status": "PASS",
+        "http_status": 200
+      },
+      {
+        "check": "research rejects missing worker/admin authorization",
+        "status": "PASS",
+        "http_status": 403
+      }
+    ],
+    "network_allowlist": [
+      "127.0.0.1:62321",
+      "127.0.0.1:64451"
+    ],
+    "providers_called": false,
+    "production_mutations": false,
+    "scope": "Actual Deno handlers + actual disposable Auth/PostgREST; no Supabase gateway/runtime emulation, Flutter UI, or live providers",
+    "command": [
+      "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+      "run",
+      "--cached-only",
+      "--allow-env=SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY",
+      "--allow-net=127.0.0.1:62321,127.0.0.1:64451",
+      "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\edge_loopback_bootstrap.ts"
+    ]
+  },
+  {
+    "name": "flutter_analyze",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter analyze --no-pub",
+    "started_at": "2026-10-20T18:03:29.744226+00:00",
+    "duration_seconds": 533.43,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\flutter_analyze.log",
+    "log_sha256": "e598be6764b9401ae296e94951e5111eee84d5555877e0d1c4da115694dae5a3"
+  },
+  {
+    "name": "flutter_pub_get",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter pub get",
+    "started_at": "2026-10-20T18:02:26.578122+00:00",
+    "duration_seconds": 39.64,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\flutter_pub_get.log",
+    "log_sha256": "c26d0184eb47873c199fe4d1cd0eaf2f8681204c1cad2f654d488cf0d164dd24"
+  },
+  {
+    "name": "flutter_test",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter test --no-pub --reporter expanded",
+    "started_at": "2026-10-20T18:12:23.737072+00:00",
+    "duration_seconds": 518.2,
+    "exit_code": 1,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\flutter_test.log",
+    "log_sha256": "bf3fc080122a4e0c4f63132fad6f8fdaffd6a12a0bb57325d6ca646fc0641d3b"
+  },
+  {
+    "name": "python_tests",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": [
+      "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-v"
+    ],
+    "started_at": "2026-10-20T18:02:51.470538+00:00",
+    "duration_seconds": 6.22,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\python_tests.log",
+    "log_sha256": "870b31de80499aea0480559ab6f3e41edd50074b5c00a57ddcdbc0ba90f06aa7"
+  },
+  {
+    "name": "recovery_redirect",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": [
+      "node",
+      "scripts/check_password_recovery_redirect.cjs"
+    ],
+    "started_at": "2026-10-20T18:02:57.826015+00:00",
+    "duration_seconds": 0.4,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\recovery_redirect.log",
+    "log_sha256": "c2d0f3967f3b5fdcb8dc3eca2ecfa35bf96c66e849501e40dd3506cc71b14164"
+  },
+  {
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter test --no-pub --reporter expanded ../_final_independent_evidence_20261020/runtime_fallback_probe_test.dart",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 3,
+    "network": "none; Supabase client intentionally uninitialized",
+    "findings": [
+      "FX returns a synthetic fresh provider quote instead of unavailable",
+      "Canonical article fallback reports FactualStatus.verified",
+      "Search fallback returns fixture hits with FactualStatus.verified"
+    ],
+    "status": "FAIL",
+    "note": "Additional independent adversarial probe; separate from the original full-suite 834 pass / 1 fail count."
+  },
+  {
+    "name": "web_build",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "flutter build web --release --no-pub --dart-define=SUPABASE_URL=https://example.supabase.co --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder",
+    "started_at": "2026-10-20T18:21:02.176636+00:00",
+    "duration_seconds": 470.95,
+    "exit_code": 0,
+    "error": null,
+    "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\web_build.log",
+    "log_sha256": "4c3c0637b742ac5dec9d7fce68d874418a84c68853e9c2bcd21f83bc6ffe25d1"
+  },
+  {
+    "name": "deno_read_scope",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "deno test --allow-env --allow-read=supabase/functions supabase/functions/tests",
+    "exit_code": 0,
+    "test_count": 132,
+    "basis": "Native process exit=0 and terminal 132 passed / 0 failed; raw log retained outside repository"
+  },
+  {
+    "name": "secret_scan",
+    "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+    "command": "python scripts/verify_local47_secret_scan.py --report ../_final_independent_evidence_20261020/secret_scan.json",
+    "exit_code": 0,
+    "scanner_exit_codes": [
+      1,
+      1
+    ],
+    "basis": "Wrapper completed; both scanner phases returned findings, never reported as zero findings"
+  }
+]

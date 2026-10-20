@@ -1,0 +1,14 @@
+{
+  "name": "deno_version",
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "--version"
+  ],
+  "started_at": "2026-10-20T18:02:26.571864+00:00",
+  "duration_seconds": 3.21,
+  "exit_code": 0,
+  "error": null,
+  "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\deno_version.log",
+  "log_sha256": "d81f6da9c7c832fa44c5020c2031fd219d68ba57a5a26fa2bff5e29321886d43"
+}

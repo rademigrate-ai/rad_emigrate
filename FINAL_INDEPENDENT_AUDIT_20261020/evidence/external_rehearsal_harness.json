@@ -1,0 +1,5 @@
+{
+  "path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_core_security_final\\scripts\\rad_local_rehearsal.py",
+  "sha256": "a5a8e423551c4b1071c5bee600064e44371f04f5071f1de65e4e43bc3d01fb72",
+  "reason": "Candidate helper is hardcoded to a pre-existing runtime owned by a different checkout; do not modify that stack. Reuse configurable loopback + ownership + Docker-port guarded runner without altering candidate SQL."
+}

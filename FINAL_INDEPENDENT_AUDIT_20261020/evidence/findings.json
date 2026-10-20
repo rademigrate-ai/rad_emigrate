@@ -1,0 +1,122 @@
+[
+  {
+    "id": "F01",
+    "severity": "High",
+    "finding": "Candidate omits the seven Codex follow-up migrations and contract/security regressions",
+    "evidence": "Ancestry + file inventory; `9736540` and `24b3f6b` are absent",
+    "owner": "Codex backend / Antigravity integration",
+    "acceptance": "Integrate reviewed existing changes in an owner-controlled candidate; rerun every mandatory gate"
+  },
+  {
+    "id": "F02",
+    "severity": "High",
+    "finding": "Legacy approved-draft publication lost the human mutation marker and retains service EXECUTE",
+    "evidence": "`supabase/migrations/20261019211000_security_quota_owner_and_publish_approved.sql:92`; both SQL security suites and CI reconstruction fail",
+    "owner": "Existing Codex correction in `20261020111217_rad_restore_legacy_publish_privileges.sql`",
+    "acceptance": "Real human admin publishes approved draft with localization; service/ordinary/anonymous cannot; no auto-publish"
+  },
+  {
+    "id": "F03",
+    "severity": "High",
+    "finding": "Captured source snapshots can be changed after capture",
+    "evidence": "`snapshot_immutability_probe.sql` raises AUDIT_MUTABLE_SOURCE_SNAPSHOT_ACCEPTED; transaction rolled back",
+    "owner": "Existing Codex integrity migration",
+    "acceptance": "Snapshot UPDATE/DELETE denied; fresh hash, proof, exact excerpt and scoped authority validation all pass adversarial tests"
+  },
+  {
+    "id": "F04",
+    "severity": "High",
+    "finding": "Currency RPC failures become fabricated fresh, provider-attributed local rates",
+    "evidence": "`lib/features/visa/data/fx_repository.dart:49`; production provider is selected by `fx_rate_controller.dart:9`",
+    "owner": "Antigravity frontend",
+    "acceptance": "Remove ordinary-runtime numeric fallback; malformed/unavailable remains unavailable; no fake freshness, provider, date or pair; decimal contract"
+  },
+  {
+    "id": "F05",
+    "severity": "High",
+    "finding": "Cost, pathway and university modules use hard-coded claims without field-level provenance",
+    "evidence": "`lib/features/cost_calculator/data/cost_calculator_repository.dart:24`; `pathway_comparison/data/pathway_comparison_repository.dart`; `university_comparison/data/university_comparison_repository.dart`",
+    "owner": "Antigravity / content owner",
+    "acceptance": "Approved source snapshots, scope, effective/fresh dates and per-field evidence, or explicit unavailable; never invent prices/availability"
+  },
+  {
+    "id": "F06",
+    "severity": "Medium",
+    "finding": "Interview page overflows a 390px viewport by 345 pixels",
+    "evidence": "`test/features/interviews/interviews_flow_test.dart:408`; independent local and CI full-suite failure",
+    "owner": "Freebuff UI / Antigravity integration",
+    "acceptance": "Fix owner-controlled layout, including long timezone labels; same test plus fa/en narrow/large-text variants pass"
+  },
+  {
+    "id": "F07",
+    "severity": "Medium",
+    "finding": "Consultation booking discards actual returned UUID and returns a timestamp-generated ID",
+    "evidence": "`lib/features/booking/data/booking_repository.dart:179`; preferred start/timezone are returned locally but not in submitted RPC parameters",
+    "owner": "Antigravity frontend / Codex contract review",
+    "acceptance": "Use actual UUID response; label consultation intake honestly; preserve only server-accepted fields; no inferred appointment confirmation"
+  },
+  {
+    "id": "F08",
+    "severity": "High",
+    "finding": "Flutter AI client uses the legacy request path, not the implemented v1 copilot contract",
+    "evidence": "`lib/core/services/ai/supabase_ai_service.dart:51`; absent x-rad-contract-version / request_key / authorized_data_scopes in outgoing request",
+    "owner": "Antigravity frontend + Grok Edge integration",
+    "acceptance": "Approve one request/response fixture; send version, idempotency key, explicit private scopes; integration tests exercise actual UI \u2192 v1 reservation/grounding/settlement"
+  },
+  {
+    "id": "F09",
+    "severity": "Medium",
+    "finding": "Legacy SQL acceptance and runtime ACL allowlist no longer agree with new APIs",
+    "evidence": "Clean SQL: notification_preferences direct access and anonymous get_fx_quote API fail; not proof of unsafe public quote access",
+    "owner": "Codex existing corrected regression files / integration",
+    "acceptance": "Retain intended public getter allowlist; migrate preferences tests to CAS RPC; never weaken private function restrictions"
+  },
+  {
+    "id": "F10",
+    "severity": "Medium",
+    "finding": "CI omits filesystem read permission for ten source-inspection Deno tests; lint has 37 findings",
+    "evidence": "`.github/workflows/ci.yml:56`; 122 pass/10 fail with CI flags, 132/0 with scoped read permission; Deno 2.9.7 lint exit 1",
+    "owner": "Grok tests / Gemini CI",
+    "acceptance": "Scope permissions or remove redundant source assertions in owner review; use pinned toolchain; lint actual agreed scope"
+  },
+  {
+    "id": "F11",
+    "severity": "Review required",
+    "finding": "Booking/appointment caches and AI prompt draft are not keyed to authenticated identity",
+    "evidence": "`lib/features/booking/presentation/providers/booking_controller.dart:21`; appointmentListProvider; ai_prompt_draft_provider global preference keys",
+    "owner": "Antigravity frontend privacy",
+    "acceptance": "Add account-A \u2192 logout \u2192 account-B regressions and clear/rekey private state. Source inspection confirms missing identity dependency; disclosure not dynamically reproduced here"
+  },
+  {
+    "id": "F12",
+    "severity": "High",
+    "finding": "Hosted ledger, active repository lineage and required additive components are not a deployable manifest",
+    "evidence": "54 hosted versions versus 72 candidate files; hosted-only 27, repo-only 45 by exact version; not 45 unexecuted changes",
+    "owner": "Codex reconciliation / project owner",
+    "acceptance": "Approve per-version effects mapping and additive-only manifest; include absent CRM/payment/OCR/operations prerequisites or explicitly exclude disabled capabilities"
+  },
+  {
+    "id": "F13",
+    "severity": "Medium",
+    "finding": "Hosted grants remain broader than the client API needs; four private trigger definers have PUBLIC execute",
+    "evidence": "Fresh hosted catalog: 36 TRUNCATE/TRIGGER/REFERENCES grant rows across six tables, 48 definers, all fixed search paths",
+    "owner": "Database security owner",
+    "acceptance": "Review/revoke unnecessary grants through reconciled additive work. These are grant findings, not demonstrated REST TRUNCATE or callable trigger exploits"
+  },
+  {
+    "id": "F14",
+    "severity": "Blocked prerequisite",
+    "finding": "Protected official-source operation and provider/notification readiness are not established",
+    "evidence": "Official worker defaults disabled; no approved roots/pinned egress or real content corpus supplied; hosted only three legacy Edge functions",
+    "owner": "Project owner / Grok operational integration",
+    "acceptance": "Keep capabilities disabled; approve root/egress, real corpus and provider/transport initialization; review legacy hostname-only fetch DNS risks"
+  },
+  {
+    "id": "F15",
+    "severity": "High",
+    "finding": "Ordinary Visa article/search fallback fabricates verified content and relative fact-check dates",
+    "evidence": "`lib/features/visa/data/canonical_pathway_repository.dart:61`; `lib/features/visa/data/visa_search_repository.dart:70`; runtime fallback probe",
+    "owner": "Antigravity frontend",
+    "acceptance": "Move fixtures behind explicit test-only injection; unavailable/denied/malformed backend must not become published/verified content; never synthesize fact-checked dates or search timing"
+  }
+]

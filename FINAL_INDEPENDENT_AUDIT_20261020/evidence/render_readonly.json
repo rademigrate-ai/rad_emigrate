@@ -1,0 +1,60 @@
+{
+  "workspace_id": "tea-daufcetg1s2s73cnkvo0",
+  "read_only": true,
+  "services": [
+    {
+      "id": "srv-db0p4e9srm7s738jam10",
+      "name": "rad_emigrate",
+      "branch": "main",
+      "repo": "https://github.com/rademigrate-ai/rad_emigrate",
+      "type": "static_site",
+      "autoDeploy": "no",
+      "autoDeployTrigger": "off",
+      "buildCommand": "bash scripts/build_web_render.sh",
+      "publishPath": "build/web",
+      "url": "https://rad-emigrate.onrender.com"
+    }
+  ],
+  "deploys": [
+    {
+      "id": "dep-dbb54ms9v7es73a86eu0",
+      "status": "live",
+      "trigger": "manual",
+      "commit_sha": "95e1fdaac74d36ca1c91f2d9d897ff7686dc3ffb",
+      "created_at": "2026-10-19T17:24:43.515714Z",
+      "finished_at": "2026-10-19T17:26:29.573187Z"
+    },
+    {
+      "id": "dep-db9pfoijnfac73d5l5a0",
+      "status": "deactivated",
+      "trigger": "manual",
+      "commit_sha": "449cd3b6cb0a0b53e852015ad4a3648bd817ad65",
+      "created_at": "2026-10-17T15:44:34.269522Z",
+      "finished_at": "2026-10-17T15:46:14.521144Z"
+    },
+    {
+      "id": "dep-db9mcfbbc2fs73cegh40",
+      "status": "deactivated",
+      "trigger": "manual",
+      "commit_sha": "3b76c3bcff80d075bfb5000b139384fa7f1edca8",
+      "created_at": "2026-10-17T12:12:45.63556Z",
+      "finished_at": "2026-10-17T12:14:22.711655Z"
+    },
+    {
+      "id": "dep-db9bopvbtjjs73b4kdlg",
+      "status": "deactivated",
+      "trigger": "manual",
+      "commit_sha": "5257ca5b95fc7caa9612da29a9b207420778e01b",
+      "created_at": "2026-10-17T00:08:07.485119Z",
+      "finished_at": "2026-10-17T00:09:48.53471Z"
+    },
+    {
+      "id": "dep-db9bmlijnfac73bmod90",
+      "status": "canceled",
+      "trigger": "manual",
+      "commit_sha": "81f6564cb732775b4b251941e51da48aba582f22",
+      "created_at": "2026-10-17T00:03:34.257631Z",
+      "finished_at": "2026-10-17T00:04:09.685225Z"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "operation": "start",
+  "project": "rad_audit_canonical",
+  "port": 62322,
+  "source_head": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "production_mutations": false,
+  "at": "2026-10-20T18:04:24.099077+00:00",
+  "status": "PASS"
+}

@@ -1,0 +1,152 @@
+{
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "runtime": {
+    "project": "rad_audit_upgrade",
+    "port": 63322,
+    "owner_checkout": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit"
+  },
+  "results": [
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\reconciliation\\security_regression.sql",
+      "source_sha256": "079f4febf2df0f225e06d1fc480fde9b15a081a4cb9267bd6f71a68f12cad904",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.16,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_security_regression.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/reconciliation/security_regression.sql:130: ERROR:  Publish RPC lost human approval or mutation guard"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\phase_a_constraint_backfill.sql",
+      "source_sha256": "6d3b76947ee9ad8ec46a5c2091705fa10637cbc16ad9d6c55640c96bd440d5fc",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 0.36,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_phase_a_constraint_backfill.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\phase_a_security.sql",
+      "source_sha256": "961d92436babf2839a2f5b836c8319c3174faec39da45da947a3327643b211e4",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.22,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_phase_a_security.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/phase_a_security.sql:71: ERROR:  Human publication RPC grants are unsafe"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\stage2_knowledge_completion.sql",
+      "source_sha256": "b0e975f0e1b62b65341c1c43079f7dff59d5fdda39dd58aea80775d3a2d7584e",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 1.24,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_stage2_knowledge_completion.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\stage4_user_ai.sql",
+      "source_sha256": "2dbcdd6abe4b92a9d94ebdd78f65cd3fc4d3565e72c3043d516e1ae9509bbdee",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 0.47,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_stage4_user_ai.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\local47_crm_notifications.sql",
+      "source_sha256": "410c6b5a537666ae94523c7fd20c604eb7a1a6813e9a8348e4fcf68a754a1a02",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.52,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_local47_crm_notifications.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/local47_crm_notifications.sql:25: ERROR:  relation \"public.consultation_request_events\" does not exist"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\local47_payment_sandbox.sql",
+      "source_sha256": "1bd96c2b3f746956c24ace6a0bd66247d361715f94dcce791ece1ed01c4e344c",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.57,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_local47_payment_sandbox.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/local47_payment_sandbox.sql:25: ERROR:  function public.apply_sandbox_payment_event(jsonb, text) does not exist"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\local47_definer_acl.sql",
+      "source_sha256": "fb6f9b3ba28fe59eca2b585a1a7beed6a546e599a4844973e80ada72a4023cc2",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.31,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_local47_definer_acl.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/local47_definer_acl.sql:19: ERROR:  anonymous definer API: get_feed_item(jsonb)"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\local47_document_processing.sql",
+      "source_sha256": "f0a2f7f68f728c7b4e1a6b681d902e746da910314df1eab862105ddc9f004281",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.36,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_local47_document_processing.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/local47_document_processing.sql:26: ERROR:  assertion failed"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\local47_observability.sql",
+      "source_sha256": "8a1c9e2a43b0b9105931cc6110fd07eaf48551424541e1cb9c253fd72ca0c7b6",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.24,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_local47_observability.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit/supabase/tests/local47_observability.sql:21: ERROR:  assertion failed"
+      ]
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\rad_content_security.sql",
+      "source_sha256": "f5761a7a3cae7414d57b64168a125a8301ac7959849cb00cb805f64feebd5821",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 0.5,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_rad_content_security.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\rad_feed_currency_security.sql",
+      "source_sha256": "8e0749c89c8d9b36b5df68b4471ee2d335ecdab3bb2f5afa4ae565c4ca3f633d",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 0.99,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_rad_feed_currency_security.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_final_independent_audit\\supabase\\tests\\rad_merge_provenance.sql",
+      "source_sha256": "841013156fc03188c69e3c282deff1f733cbc734e09ea51bebb7941c308b5ec8",
+      "exit_code": 0,
+      "status": "PASS",
+      "seconds": 0.89,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_rad_merge_provenance.log",
+      "error_lines": []
+    },
+    {
+      "file": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_core_security_final\\supabase\\tests\\rad_quota_security.sql",
+      "source_sha256": "0dd5b1d353e7b3f6b97ca27f15533c6d44c812e9d4ae40c352693480aacf8daf",
+      "exit_code": 3,
+      "status": "FAIL",
+      "seconds": 0.21,
+      "log": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_final_independent_evidence_20261020\\upgrade_rad_quota_security.log",
+      "error_lines": [
+        "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_core_security_final/supabase/tests/rad_quota_security.sql:18: ERROR:  null value in column \"body_hash\" of relation \"rad_ai_invocations\" violates not-null constraint"
+      ]
+    }
+  ]
+}

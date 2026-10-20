@@ -1,0 +1,10 @@
+{
+  "candidate_sha": "1fe44f63d179263c5e719578bf7ebad0e17868d1",
+  "exit_code": 3,
+  "status": "FAIL",
+  "source_sha256": "2d07d4b030a1d647d4379053f6c97ed772b40b6a0ac2ee90d0e47d1f395bca36",
+  "error_lines": [
+    "psql:C:/Users/Mehrshad/Desktop/RAD - Emigrate/_final_independent_evidence_20261020/snapshot_immutability_probe.sql:13: ERROR:  AUDIT_MUTABLE_SOURCE_SNAPSHOT_ACCEPTED"
+  ],
+  "meaning": "Privileged ingestion boundary must preserve referenced snapshot bytes; this is not an anonymous table-write exploit."
+}
