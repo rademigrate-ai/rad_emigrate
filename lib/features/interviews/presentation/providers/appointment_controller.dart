@@ -13,13 +13,23 @@ final appointmentRepositoryProvider = Provider<AppointmentRepository>((ref) {
   );
 });
 
-/// Current user's Backend-managed appointment rows.
-/// autoDispose + client watch: session change drops cache (A→logout→B).
+/// Current user's Backend-managed appointment rows, keyed by auth uid so
+/// A → logout → B never reuses the previous identity cache.
 final appointmentListProvider =
+    FutureProvider.autoDispose.family<AppointmentListResult, String?>((ref, userId) async {
+  if (userId == null || userId.isEmpty) {
+    return const AppointmentListResult(items: [], capability: AppointmentCapability.unknown);
+  }
+  return ref.watch(appointmentRepositoryProvider).listMyAppointments();
+});
+
+/// Convenience provider that binds to the live session uid.
+final currentAppointmentListProvider =
     FutureProvider.autoDispose<AppointmentListResult>((ref) async {
-      ref.watch(supabaseClientServiceProvider);
-      return ref.watch(appointmentRepositoryProvider).listMyAppointments();
-    });
+  final client = ref.watch(supabaseClientServiceProvider);
+  final uid = client.isInitialized ? client.client.auth.currentUser?.id : null;
+  return ref.watch(appointmentListProvider(uid).future);
+});
 
 enum AppointmentActionPhase { idle, running, success, failure }
 
