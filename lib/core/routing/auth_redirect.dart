@@ -21,6 +21,11 @@ const Set<String> _publicInAppRoutes = {
   '/universities',
   '/ai-assistant',
   '/consultation',
+  '/booking',
+  '/interview-scheduling',
+  '/calculator/cost',
+  '/compare/pathways',
+  '/compare/universities',
 };
 
 /// Personal or administrative routes that strictly require authentication.

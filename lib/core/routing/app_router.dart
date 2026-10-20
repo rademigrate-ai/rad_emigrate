@@ -33,6 +33,11 @@ import '../../features/profile/presentation/pages/immigration_profile_page.dart'
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
 import '../../features/visa/presentation/pages/university_scholarship_page.dart';
+import '../../features/booking/presentation/pages/booking_page.dart';
+import '../../features/interview_scheduling/presentation/pages/interview_scheduling_page.dart';
+import '../../features/cost_calculator/presentation/pages/cost_calculator_page.dart';
+import '../../features/pathway_comparison/presentation/pages/pathway_comparison_page.dart';
+import '../../features/university_comparison/presentation/pages/university_comparison_page.dart';
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -137,6 +142,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => ConsultationPage(
               initialTopic: state.uri.queryParameters['topic'],
             ),
+          ),
+          GoRoute(path: '/booking', builder: (_, _) => const BookingPage()),
+          GoRoute(
+            path: '/interview-scheduling',
+            builder: (_, _) => const InterviewSchedulingPage(),
+          ),
+          GoRoute(
+            path: '/calculator/cost',
+            builder: (_, _) => const CostCalculatorPage(),
+          ),
+          GoRoute(
+            path: '/compare/pathways',
+            builder: (_, _) => const PathwayComparisonPage(),
+          ),
+          GoRoute(
+            path: '/compare/universities',
+            builder: (_, _) => const UniversityComparisonPage(),
           ),
           GoRoute(
             path: '/notifications',

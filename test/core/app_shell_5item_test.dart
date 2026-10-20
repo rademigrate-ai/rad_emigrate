@@ -21,6 +21,11 @@ void main() {
       expect(isProtectedPath('/feed'), isFalse);
       expect(isProtectedPath('/profile'), isFalse);
       expect(isProtectedPath('/ai-assistant'), isFalse);
+      expect(isProtectedPath('/booking'), isFalse);
+      expect(isProtectedPath('/interview-scheduling'), isFalse);
+      expect(isProtectedPath('/calculator/cost'), isFalse);
+      expect(isProtectedPath('/compare/pathways'), isFalse);
+      expect(isProtectedPath('/compare/universities'), isFalse);
     });
   });
 }
