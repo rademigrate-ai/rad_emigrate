@@ -27,9 +27,11 @@ enum SearchArticleType {
     switch (val?.toLowerCase()) {
       case 'canonical_pathway':
       case 'canonical':
+      case 'main':
         return SearchArticleType.canonicalPathway;
       case 'independent_topic':
       case 'independent':
+      case 'related':
       default:
         return SearchArticleType.independentTopic;
     }
@@ -124,11 +126,15 @@ class SearchHit {
 
     final cCode = (json['country_code'] ?? json['countryCode'] ?? '')
         .toString();
-    final aSlug = (json['slug'] ?? '').toString();
-    final type = SearchArticleType.fromString(
-      (json['article_type'] ?? json['articleType'])?.toString(),
-    );
-    final anchor = json['target_section_anchor'] ?? json['targetSectionAnchor'];
+    final aSlug = (json['slug'] ?? json['pathway_slug'] ?? '').toString();
+    final rawType =
+        (json['article_kind'] ?? json['article_type'] ?? json['articleType'])
+            ?.toString();
+    final type = SearchArticleType.fromString(rawType);
+    final anchor =
+        json['target_section_anchor'] ??
+        json['targetSectionAnchor'] ??
+        json['section_anchor'];
 
     // Construct deep link route
     String route;
@@ -142,7 +148,7 @@ class SearchHit {
     }
 
     return SearchHit(
-      id: (json['id'] ?? '').toString(),
+      id: (json['id'] ?? json['article_id'] ?? '').toString(),
       title: (json['title'] ?? '').toString(),
       slug: aSlug,
       countryCode: cCode,
@@ -152,9 +158,15 @@ class SearchHit {
       snippet: (json['snippet'] ?? '').toString(),
       matchRanges: ranges,
       targetSectionAnchor: anchor?.toString(),
-      relevanceScore: (json['relevance_score'] as num?)?.toDouble() ?? 1.0,
+      relevanceScore:
+          double.tryParse(json['relevance_score']?.toString() ?? '') ??
+          double.tryParse(json['score']?.toString() ?? '') ??
+          1.0,
       factualStatus: FactualStatus.fromString(
-        (json['factual_status'] ?? json['factualStatus'])?.toString(),
+        (json['factual_status'] ??
+                json['factualStatus'] ??
+                json['verification_state'])
+            ?.toString(),
       ),
       articleType: type,
       deepLinkRoute: route,
@@ -186,15 +198,31 @@ class SmartSearchResult {
     Map<String, dynamic> json, {
     String query = '',
   }) {
-    final rawHits = json['hits'] as List? ?? [];
+    // Backend wire response envelopes data in json['data']['items']
+    final dataMap = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+    final rawHits =
+        dataMap['items'] as List? ??
+        dataMap['hits'] as List? ??
+        json['hits'] as List? ??
+        [];
     return SmartSearchResult(
-      query: json['query']?.toString() ?? query,
-      totalCount: (json['total_count'] as num?)?.toInt() ?? rawHits.length,
+      query:
+          dataMap['query_normalized']?.toString() ??
+          json['query']?.toString() ??
+          query,
+      totalCount:
+          (dataMap['total_count'] as num?)?.toInt() ??
+          (json['total_count'] as num?)?.toInt() ??
+          rawHits.length,
       hits: rawHits
           .whereType<Map<String, dynamic>>()
           .map((h) => SearchHit.fromJson(h))
           .toList(),
-      correctedQuery: json['corrected_query']?.toString(),
+      correctedQuery:
+          dataMap['corrected_query']?.toString() ??
+          json['corrected_query']?.toString(),
       tookMs: (json['took_ms'] as num?)?.toInt() ?? 0,
     );
   }

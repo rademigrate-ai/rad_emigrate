@@ -13,6 +13,7 @@ enum ArticleEditorialStatus {
   static ArticleEditorialStatus fromString(String? val) {
     switch (val?.toLowerCase()) {
       case 'in_review':
+      case 'review':
         return ArticleEditorialStatus.inReview;
       case 'approved':
         return ArticleEditorialStatus.approved;
@@ -20,6 +21,7 @@ enum ArticleEditorialStatus {
         return ArticleEditorialStatus.published;
       case 'archived':
         return ArticleEditorialStatus.archived;
+      case 'rejected':
       case 'draft':
       default:
         return ArticleEditorialStatus.draft;
@@ -105,13 +107,33 @@ class PathwaySection {
   });
 
   factory PathwaySection.fromJson(Map<String, dynamic> json) {
+    String body = (json['body_markdown'] ?? json['bodyMarkdown'] ?? '')
+        .toString();
+    if (body.isEmpty && json['blocks'] is List) {
+      body = (json['blocks'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map((b) {
+            final t = b['text']?.toString() ?? '';
+            if (t.isNotEmpty) return t;
+            final items = b['items'] as List?;
+            if (items != null && items.isNotEmpty) {
+              return items.map((i) => '• $i').join('\n');
+            }
+            return '';
+          })
+          .where((s) => s.isNotEmpty)
+          .join('\n\n');
+    }
+
     return PathwaySection(
       id: (json['id'] ?? '').toString(),
       anchor: (json['anchor'] ?? '').toString(),
-      title: (json['title'] ?? '').toString(),
-      bodyMarkdown: (json['body_markdown'] ?? json['bodyMarkdown'] ?? '')
-          .toString(),
-      displayOrder: (json['display_order'] as num?)?.toInt() ?? 0,
+      title: (json['title'] ?? json['heading'] ?? '').toString(),
+      bodyMarkdown: body,
+      displayOrder:
+          (json['display_order'] as num?)?.toInt() ??
+          (json['order'] as num?)?.toInt() ??
+          0,
     );
   }
 }
@@ -310,75 +332,89 @@ class CanonicalPathwayArticle {
   });
 
   factory CanonicalPathwayArticle.fromJson(Map<String, dynamic> json) {
+    final payload = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+
     final rawSources =
-        json['official_sources'] as List? ??
-        json['officialSources'] as List? ??
+        payload['official_sources'] as List? ??
+        payload['officialSources'] as List? ??
         [];
     final sources = rawSources
         .whereType<Map<String, dynamic>>()
         .map((s) => OfficialSourceAttribution.fromJson(s))
         .toList();
 
-    final rawSections = json['sections'] as List? ?? [];
+    final rawSections = payload['sections'] as List? ?? [];
     final sections = rawSections
         .whereType<Map<String, dynamic>>()
         .map((s) => PathwaySection.fromJson(s))
         .toList();
 
-    final rawCosts = json['costs'] as List? ?? [];
+    final rawCosts = payload['costs'] as List? ?? [];
     final costs = rawCosts
         .whereType<Map<String, dynamic>>()
         .map((c) => PathwayFinancialCostItem.fromJson(c))
         .toList();
 
-    final rawSteps = json['steps'] as List? ?? [];
+    final rawSteps = payload['steps'] as List? ?? [];
     final steps = rawSteps
         .whereType<Map<String, dynamic>>()
         .map((st) => PathwayProcessStep.fromJson(st))
         .toList();
 
     final rawDocs =
-        (json['required_documents'] as List? ??
-                json['requiredDocuments'] as List? ??
+        (payload['required_documents'] as List? ??
+                payload['requiredDocuments'] as List? ??
                 [])
             .map((d) => d.toString())
             .toList();
 
     final rawFaq =
-        (json['faq_items'] as List? ?? json['faqItems'] as List? ?? [])
+        (payload['faq_items'] as List? ?? payload['faqItems'] as List? ?? [])
             .map((f) => Map<String, String>.from(f as Map))
             .toList();
 
     final rawRelated =
-        json['related_articles'] as List? ??
-        json['relatedArticles'] as List? ??
+        payload['related_articles'] as List? ??
+        payload['relatedArticles'] as List? ??
         [];
     final related = rawRelated
         .whereType<Map<String, dynamic>>()
         .map((r) => IndependentArticleSummary.fromJson(r))
         .toList();
 
-    final eligRaw = json['eligibility'] as Map<String, dynamic>?;
+    final eligRaw = payload['eligibility'] as Map<String, dynamic>?;
 
     return CanonicalPathwayArticle(
-      id: (json['id'] ?? '').toString(),
-      slug: (json['slug'] ?? '').toString(),
-      countryCode: (json['country_code'] ?? json['countryCode'] ?? '')
+      id: (payload['id'] ?? '').toString(),
+      slug: (payload['slug'] ?? payload['pathway_slug'] ?? '').toString(),
+      countryCode: (payload['country_code'] ?? payload['countryCode'] ?? '')
           .toString(),
-      countryName: (json['country_name'] ?? json['countryName'] ?? '')
+      countryName: (payload['country_name'] ?? payload['countryName'] ?? '')
           .toString(),
-      countryFlag: (json['country_flag'] ?? json['countryFlag'] ?? '🌍')
+      countryFlag: (payload['country_flag'] ?? payload['countryFlag'] ?? '🌍')
           .toString(),
-      pathwayTitle: (json['pathway_title'] ?? json['pathwayTitle'] ?? '')
-          .toString(),
-      category: (json['category'] ?? '').toString(),
+      pathwayTitle:
+          (payload['pathway_title'] ??
+                  payload['pathwayTitle'] ??
+                  payload['title'] ??
+                  '')
+              .toString(),
+      category: (payload['category'] ?? '').toString(),
       factualStatus: FactualStatus.fromString(
-        (json['factual_status'] ?? json['factualStatus'])?.toString(),
+        (payload['factual_status'] ??
+                payload['factualStatus'] ??
+                payload['verification_state'])
+            ?.toString(),
       ),
       editorialStatus: ArticleEditorialStatus.fromString(
-        (json['editorial_status'] ?? json['editorialStatus'])?.toString(),
+        (payload['editorial_status'] ??
+                payload['editorialStatus'] ??
+                payload['editorial_state'])
+            ?.toString(),
       ),
-      summary: (json['summary'] ?? '').toString(),
+      summary: (payload['summary'] ?? '').toString(),
       officialSources: sources,
       sections: sections,
       eligibility: eligRaw != null
@@ -390,7 +426,11 @@ class CanonicalPathwayArticle {
       faqItems: rawFaq,
       relatedArticles: related,
       lastFactCheckedAt:
-          DateTime.tryParse(json['last_fact_checked_at']?.toString() ?? '') ??
+          DateTime.tryParse(
+            payload['last_fact_checked_at']?.toString() ??
+                payload['updated_at']?.toString() ??
+                '',
+          ) ??
           DateTime.now(),
     );
   }
@@ -432,9 +472,13 @@ class IndependentArticle {
   });
 
   factory IndependentArticle.fromJson(Map<String, dynamic> json) {
+    final payload = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+
     final rawSources =
-        json['official_sources'] as List? ??
-        json['officialSources'] as List? ??
+        payload['official_sources'] as List? ??
+        payload['officialSources'] as List? ??
         [];
     final sources = rawSources
         .whereType<Map<String, dynamic>>()
@@ -442,31 +486,38 @@ class IndependentArticle {
         .toList();
 
     return IndependentArticle(
-      id: (json['id'] ?? '').toString(),
-      slug: (json['slug'] ?? '').toString(),
-      countryCode: (json['country_code'] ?? json['countryCode'] ?? '')
+      id: (payload['id'] ?? '').toString(),
+      slug: (payload['slug'] ?? payload['pathway_slug'] ?? '').toString(),
+      countryCode: (payload['country_code'] ?? payload['countryCode'] ?? '')
           .toString(),
-      countryName: (json['country_name'] ?? json['countryName'] ?? '')
+      countryName: (payload['country_name'] ?? payload['countryName'] ?? '')
           .toString(),
-      title: (json['title'] ?? '').toString(),
-      summary: (json['summary'] ?? '').toString(),
-      bodyMarkdown: (json['body_markdown'] ?? json['bodyMarkdown'] ?? '')
+      title: (payload['title'] ?? '').toString(),
+      summary: (payload['summary'] ?? '').toString(),
+      bodyMarkdown: (payload['body_markdown'] ?? payload['bodyMarkdown'] ?? '')
           .toString(),
-      category: (json['category'] ?? '').toString(),
+      category: (payload['category'] ?? '').toString(),
       factualStatus: FactualStatus.fromString(
-        (json['factual_status'] ?? json['factualStatus'])?.toString(),
+        (payload['factual_status'] ??
+                payload['factualStatus'] ??
+                payload['verification_state'])
+            ?.toString(),
       ),
       editorialStatus: ArticleEditorialStatus.fromString(
-        (json['editorial_status'] ?? json['editorialStatus'])?.toString(),
+        (payload['editorial_status'] ??
+                payload['editorialStatus'] ??
+                payload['editorial_state'])
+            ?.toString(),
       ),
-      readingTimeMinutes: (json['reading_time_minutes'] as num?)?.toInt() ?? 5,
+      readingTimeMinutes:
+          (payload['reading_time_minutes'] as num?)?.toInt() ?? 5,
       publishedAt:
-          DateTime.tryParse(json['published_at']?.toString() ?? '') ??
+          DateTime.tryParse(payload['published_at']?.toString() ?? '') ??
           DateTime.now(),
       officialSources: sources,
       canonicalPathwaySlug:
-          json['canonical_pathway_slug']?.toString() ??
-          json['canonicalPathwaySlug']?.toString(),
+          payload['canonical_pathway_slug']?.toString() ??
+          payload['canonicalPathwaySlug']?.toString(),
     );
   }
 }

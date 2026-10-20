@@ -86,15 +86,20 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
   }) async {
     if (_service.isInitialized) {
       try {
+        final decisionWire = decision == SourceProposalReviewStatus.approved
+            ? 'accept'
+            : 'reject';
         await _service.client
             .rpc(
               'review_research_proposal',
               params: {
                 'p_request': {
                   'proposal_id': proposalId,
-                  'decision': decision.name,
-                  'factual_status': factualStatus.name,
-                  'reviewer_notes': reviewerNotes,
+                  'expected_revision': 1,
+                  'decision': decisionWire,
+                  'note': reviewerNotes ?? '',
+                  'request_key':
+                      '00000000-0000-4000-8000-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0')}',
                 },
               },
             )
@@ -113,15 +118,37 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
       try {
         await _service.client
             .rpc(
-              'save_canonical_article',
+              'save_visa_article_draft',
               params: {
                 'p_request': {
-                  'id': article.id,
-                  'country_code': article.countryCode,
-                  'pathway_slug': article.slug,
-                  'factual_status': article.factualStatus.name,
-                  'editorial_status': article.editorialStatus.name,
+                  'article_id': article.id,
+                  'locale': 'fa',
+                  'expected_revision': 1,
+                  'title': article.pathwayTitle,
                   'summary': article.summary,
+                  'sections': article.sections
+                      .map(
+                        (s) => {
+                          'id': s.id,
+                          'anchor': s.anchor,
+                          'heading': s.title,
+                          'order': s.displayOrder,
+                          'blocks': [
+                            {
+                              'id': s.id,
+                              'type': 'paragraph',
+                              'text': s.bodyMarkdown,
+                              'items': <String>[],
+                            },
+                          ],
+                          'evidence': <Map<String, dynamic>>[],
+                        },
+                      )
+                      .toList(),
+                  'related_article_ids': <String>[],
+                  'merge_manifest_id': null,
+                  'request_key':
+                      '00000000-0000-4000-8000-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0')}',
                 },
               },
             )

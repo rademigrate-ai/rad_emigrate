@@ -23,7 +23,12 @@ class SupabaseFxRepository implements FxRepository {
             .rpc(
               'get_fx_quote',
               params: {
-                'p_request': {'base': base, 'quote': quote},
+                'p_request': {
+                  'base': base.toUpperCase(),
+                  'quote': quote.toUpperCase(),
+                  'rate_basis': 'provider_reference',
+                  'allow_stale': true,
+                },
               },
             )
             .timeout(const Duration(seconds: 4));
@@ -31,7 +36,10 @@ class SupabaseFxRepository implements FxRepository {
         if (response != null) {
           final data = response is String ? jsonDecode(response) : response;
           if (data is Map<String, dynamic>) {
-            return FxRateQuote.fromJson(data);
+            final payload = data['data'] is Map<String, dynamic>
+                ? data['data'] as Map<String, dynamic>
+                : data;
+            return FxRateQuote.fromJson(payload);
           }
         }
       } catch (_) {

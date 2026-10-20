@@ -36,9 +36,12 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
               'get_visa_article',
               params: {
                 'p_request': {
-                  'country_code': countryCode,
-                  'slug': pathwaySlug,
-                  'article_type': 'canonical_pathway',
+                  'selector': {
+                    'country_code': countryCode.toUpperCase(),
+                    'pathway_slug': pathwaySlug,
+                    'kind': 'main',
+                  },
+                  'locale': 'fa',
                 },
               },
             )
@@ -70,9 +73,12 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
               'get_visa_article',
               params: {
                 'p_request': {
-                  'country_code': countryCode,
-                  'slug': articleSlug,
-                  'article_type': 'independent_topic',
+                  'selector': {
+                    'country_code': countryCode.toUpperCase(),
+                    'pathway_slug': articleSlug,
+                    'kind': 'related',
+                  },
+                  'locale': 'fa',
                 },
               },
             )

@@ -38,8 +38,19 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
               params: {
                 'p_request': {
                   'query': trimmed,
-                  'country_filter': countryFilter,
-                  'category_filter': categoryFilter,
+                  'locale': 'fa',
+                  'country_codes':
+                      countryFilter != null && countryFilter.isNotEmpty
+                      ? [countryFilter.toUpperCase()]
+                      : <String>[],
+                  'pathway_slugs':
+                      categoryFilter != null && categoryFilter.isNotEmpty
+                      ? [categoryFilter]
+                      : <String>[],
+                  'article_kind': null,
+                  'allow_locale_fallback': true,
+                  'cursor': null,
+                  'limit': 20,
                 },
               },
             )
