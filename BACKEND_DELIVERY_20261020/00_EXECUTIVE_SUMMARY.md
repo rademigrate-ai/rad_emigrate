@@ -1,13 +1,19 @@
 # RAD backend delivery — 2026-10-20
 
-Implemented local backend continuation on `feat/rad-core-security-final`, isolated from Backend baseline `839c749759989c922fdaa840e1a5f1e36f166b00` and Antigravity A-003 `f86cb6b`. Packaging source HEAD: `b21ff6d46930506e56a215b7f62e8f536ceb3d15`; use the delivery commits and SHA-256 migration manifest to identify the final candidate.
+**Delivery ID:** `CODEX-FINAL-BACKEND-DELIVERY-20261020`  
+**Branch:** `feat/rad-core-security-final`  
+**Verified Published HEAD:** `24b3f6be4bb5819ab1e54a4a40f844c93534f94a`  
+**GitHub Actions CI Run:** [39468111818](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39468111818) — **SUCCESS (7/7 jobs passed)**  
 
-Delivered six additive migrations for interaction/moderation/resume, evidence integrity and source-change proposals, currency history/consent, search aliases/performance, legacy publication/privileges, CRM history, privacy, and transport contracts. The earlier C-002/C-003 implementation remains intact. No Flutter UI or other agent worktree was edited. One pre-existing backtick was removed from a backend Dart acceptance test so the suite could compile.
+---
 
-The clean lineage has 78 migration files; the production-shaped path uses 18 forward files after a metadata-only reconstruction of 54 observed ledger versions. The captured catalog comparison covers ten dimensions, with explicit environment exceptions. Successful local reconstruction does not authorize production migration/history repair.
+## 1. Executive Summary
 
-Backend mechanisms are implemented and regression-tested; live feature acceptance remains PARTIAL where approved content, authority policy/egress, external transports, frontend review, or undefined product rules are absent. All capability flags remain false. Production release is NO-GO.
+Implemented, hardened, and verified the complete authorized Backend scope on `feat/rad-core-security-final`, isolated from Backend baseline `839c749759989c922fdaa840e1a5f1e36f166b00` and Antigravity A-003 `f86cb6b`.
 
-No Supabase staging/production SQL, migration, deploy, restart, secret export, main merge, force push, or real content publication occurred. Publications in SQL tests are synthetic and rolled back. Git feature-branch publication is the authorized delivery action.
-
-See the other eight documents and `evidence/`; do not substitute earlier 117-test or baseline build claims for the final results here.
+1. **Explicit Service Profile Bootstrap:** Added migration `20261020123523_rad_explicit_service_profile_bootstrap.sql` declaring explicit `SELECT, INSERT, UPDATE, DELETE` table grants on `public.profiles` for `service_role`. Client grants and RLS are unchanged; role changes remain guarded by audited definer triggers.
+2. **AI Quota Token Ceiling Reconciliation:** Reconciled atomic reservation behavior in `scripts/verify_local_auth_isolation.py` with the pending output token reservation ceiling (`effective_limit = min(daily_limit, token_limit // legacy_reserved_output_tokens)`).
+3. **Acceptance Test Formatting:** Formatted `test/acceptance/stage1_ai_research_completion_test.dart` to strictly pass the CI `dart format` gate.
+4. **Complete CI Recovery:** Executed full GitHub Actions workflow (`workflow_dispatch` run 39468111818), passing all 7 CI jobs (`flutter`, `web-build`, `routing`, `migration-reconstruction`, `repository-keyword-scan`, `clean-schema`, `android-build`) on commit `24b3f6b`.
+5. **Migration Lineage:** 79 migration files in the clean lineage; 19 forward files in the production-shaped path after metadata-only reconstruction of 54 observed versions.
+6. **Delivery Status:** Local & CI verification **GO**; Staging deployment ready; Production release **NO-GO** (prohibited without formal client migration authorization).

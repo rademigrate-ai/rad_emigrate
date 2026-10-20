@@ -19,7 +19,7 @@ Results refer to local synthetic environments, not production. Files under evide
 | Production migration/deploy | NOT RUN — prohibited |
 | Automated secret scan | FAIL ? 30 snapshot / 36 history candidates; every candidate was verified noncredential data, with values omitted |
 | Secret-scan source/provenance review | PASS ? migration-file digests matched source; cache metadata, preferences identifier and synthetic UUIDs verified; no scanner policy or ignore changes |
-| GitHub CI | See evidence/ci_status.json for the tested SHA and final run/check status; absence means NOT RUN |
+| GitHub CI | **PASS — 7/7 jobs successful on run [39468111818](https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39468111818)** |
 
 | Environment | SQL suite | Status |
 |---|---|---|
