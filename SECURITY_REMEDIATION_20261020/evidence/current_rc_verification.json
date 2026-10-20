@@ -1,0 +1,47 @@
+{
+  "candidate_sha": "b01f6255c9f10baff1ff12c1df07b1d995fad8a8",
+  "code_fix_sha": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "fix_integrated": false,
+  "backend_supabase_and_harness_diff_from_base": "",
+  "clean_migrations": 79,
+  "additive_files": 19,
+  "clean_tests": {
+    "PASS": 18
+  },
+  "additive_tests": {
+    "PASS": 15,
+    "NOT RUN": 3
+  },
+  "missing_fix_red": {
+    "canonical": 48,
+    "upgrade": 48
+  },
+  "deno_passed": 137,
+  "python_passed": 43,
+  "http_checks_passed": 28,
+  "auth_storage": "PASS",
+  "mobile_regression_passed": 1,
+  "catalog_tests_passed": 7,
+  "truthfulness_probes": {
+    "unavailable_paths_passed": 3,
+    "malformed_fx_decoder_failed": 1
+  },
+  "ai_contract_observation_tests": {
+    "passed": 3,
+    "meaning": "Confirms unsupported frontend version and non-UUID key; not AI acceptance"
+  },
+  "ci": {
+    "run_id": 39486415013,
+    "pass": 4,
+    "fail": 3
+  },
+  "secret_scan": {
+    "automated": "FINDINGS_REQUIRE_REVIEW",
+    "snapshot_findings": 30,
+    "history_findings": 36,
+    "review": "PASS"
+  },
+  "final_integrated_reaudit": "PENDING next SHA after fix and Grok corrections",
+  "captured_at": "2026-10-20T19:58:55.265926+00:00",
+  "hosted_mutations": false
+}

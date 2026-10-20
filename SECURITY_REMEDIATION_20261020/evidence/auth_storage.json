@@ -1,0 +1,6 @@
+{
+  "command": "python scripts/verify_local_auth_isolation.py (cwd owned canonical runtime)",
+  "exit_code": 0,
+  "seconds": 8.13,
+  "log_sha256": "92480fb4c2b023181356a8c4168a33ac9b487629f69202bb1fc843aec44d5c1a"
+}

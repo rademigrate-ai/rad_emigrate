@@ -1,0 +1,10 @@
+{
+  "operation": "test",
+  "project": "rad_core_remed_upgrade",
+  "port": 63522,
+  "source_head": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "production_mutations": false,
+  "at": "2026-10-20T19:31:17.465612+00:00",
+  "status": "FAIL",
+  "error": "command failed, exit=3; inspect external failure.log"
+}

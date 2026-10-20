@@ -1,0 +1,9 @@
+{
+  "operation": "stop",
+  "project": "rad_core_remed_upgrade",
+  "port": 63522,
+  "source_head": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "production_mutations": false,
+  "at": "2026-10-20T19:46:53.415956+00:00",
+  "status": "PASS"
+}

@@ -1,0 +1,11 @@
+{
+  "operation": "apply",
+  "project": "rad_core_remed_upgrade",
+  "port": 63522,
+  "source_head": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "production_mutations": false,
+  "at": "2026-10-20T19:31:18.471282+00:00",
+  "sql": "supabase\\migrations\\20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+  "sql_sha256": "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3",
+  "status": "PASS"
+}

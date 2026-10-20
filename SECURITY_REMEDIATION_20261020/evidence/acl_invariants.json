@@ -1,0 +1,27 @@
+{
+  "candidate_sha": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "states": {
+    "canonical": {
+      "before_client_nonrow": 48,
+      "after_client_nonrow": 0,
+      "unchanged": {
+        "dml": true,
+        "rls": true,
+        "policies": true,
+        "routines": true,
+        "service_nonrow": true
+      }
+    },
+    "upgrade": {
+      "before_client_nonrow": 48,
+      "after_client_nonrow": 0,
+      "unchanged": {
+        "dml": true,
+        "rls": true,
+        "policies": true,
+        "routines": true,
+        "service_nonrow": true
+      }
+    }
+  }
+}

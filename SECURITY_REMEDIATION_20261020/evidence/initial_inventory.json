@@ -1,0 +1,720 @@
+{
+  "candidate_sha": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "captured_at": "2026-10-20T19:20:43.064296+00:00",
+  "old_audit_commit": "5c4ff1f16c270e3da8bb3118dcce13f3425c4ffb",
+  "old_evidence_read": [
+    {
+      "file": "android_debug.json",
+      "sha256": "b6189d7149987e098177f29c478bea3b15862bb90aae85b95f55c3e0975eaf92",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "artifact_app-debug_apk.json",
+      "sha256": "e242619565b9f3d110bdb425604a5e67e37bf0b120e90765ea367830ce94af5e",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "artifact_index_html.json",
+      "sha256": "d94f9393b5e1a92c9f5027063bc797a3fbea8e5a230f586e8d1ba23abcbee590",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "artifact_main_dart_js.json",
+      "sha256": "f32b26c7e9dfa6e49a48f4ee3ded94b6e31b82f3f1c88d6d04adb85a17f10c5e",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "audit_summary.json",
+      "sha256": "0f79fd72d2b3161fd50416447c30f5ccdd418beaa69b47bc932cdb4ccc05d0bf",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "audit_validation.json",
+      "sha256": "ea981e78eccca0c44963eb9430f0521d8c00d4f8273bb3de9d59e783a5340c6e",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "canonical_canonical_report.json",
+      "sha256": "803f1ade45311a21d9d9cff9741538d2e065b6a442f8b7135056530ad2dc4570",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "canonical_http_acceptance.json",
+      "sha256": "cc991f33b4f352deffd25cb8f1956da2badd004692c788732050cec5a6d31716",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "canonical_sql.json",
+      "sha256": "02468ab60458ccea2f16049e84b997df05e6f998020c5949c2c08bb16893bdac",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "canonical_start_report.json",
+      "sha256": "dc7e08c4e8408ba1a886e53ee32e6043d8f7803639c392af639e6ee29acd0c1b",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "canonical_stop_report.json",
+      "sha256": "4e10eb4c91133c136b39f7c3f0eb11f3474c7a7e70e65a9f17cf4b5f42d49df8",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "ci_failure_excerpts.json",
+      "sha256": "235ed85fcd379ec701a587fc75075f3c65ce1e28a7f94beb245553c601878f3d",
+      "kind": "list",
+      "status": null
+    },
+    {
+      "file": "ci_status.json",
+      "sha256": "eee683b84261e5d058d7f58d4447ba38800a6c81f9e8c2ac52acd24881e809b2",
+      "kind": "dict",
+      "status": "FAIL"
+    },
+    {
+      "file": "commands.json",
+      "sha256": "76dc60438315b2164a7ce9989cd7635216c3c4f8bf7763558b1031cb96493fd6",
+      "kind": "list",
+      "status": null
+    },
+    {
+      "file": "dart_format.json",
+      "sha256": "64099c8954d83c30b7dd2521945c509cdd86dbe00eb587d437fc973c666116ca",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "deno_lint.json",
+      "sha256": "9aeedc687880bcee8e6ac7ae556fc74aa402fa2a992a32cb257ae20eb6b5880d",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "deno_test.json",
+      "sha256": "a6a5fdcb1dd516183fff4c2d9c6b92fbb9f451e956d4df886fc0c412f6c9cb76",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "deno_version.json",
+      "sha256": "686e6a7410a3a61aa56fbcf99804a343a31cb0e329c494c129142412f7aaa46f",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "edge_http.json",
+      "sha256": "5e2ae00127d040845fadab280fcc45f8e90b3c366fb9ddeac3ff64a11a37ffcc",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "external_evidence_manifest.json",
+      "sha256": "83145dffde26e0ed9af0743b945c962e3be2838afbf375889b738ebf142f4e3b",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "external_rehearsal_harness.json",
+      "sha256": "0ac5b54a15b2564e329172876a33bde0913d19347820f0b3760229368e7afbf5",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "findings.json",
+      "sha256": "7432c71877372764a64bd564eff792f786b13b754afb1d7e5a0a3dd2c70b775a",
+      "kind": "list",
+      "status": null
+    },
+    {
+      "file": "flutter_analyze.json",
+      "sha256": "997f3f94802d86839a4fd62665b3582e3b275efc27fabcb3f4d4e3ae11edb671",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "flutter_pub_get.json",
+      "sha256": "62e26cdee9cb006238813179defd6ee0b03a9575a1307017025f3a30bb3b5a9a",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "flutter_test.json",
+      "sha256": "11b4a9483bdc761c3df6c16c86175bd695ccdd89c54ef8607e9bab79d68799e7",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "hosted_edge_metadata.json",
+      "sha256": "c3fe65b990791fc0132bcd030abfb899e4d73ff55588d96cf2cdef47a9d54f09",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "hosted_functions.json",
+      "sha256": "247c5064e87f8a0a4dba1c38d903f67a4fffe263f585f93957ad7143411c6ada",
+      "kind": "list",
+      "status": null
+    },
+    {
+      "file": "hosted_snapshot.json",
+      "sha256": "dcb9cb5df73e6c068e50cda827728da0115a0da7377768abbc509d2d2f4c545e",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "hosted_statement_hashes.json",
+      "sha256": "054be1fb25af61d90b59bb08a1539390b035ba8d74e71f1f1b1800bb3cf9d0a2",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "http_harness.json",
+      "sha256": "25dbdb4edcd7971c689cb6f216f5480a9a68eb248c57ffe2369ce2fca05d4ed3",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "inventory.json",
+      "sha256": "753dc2d577e5995b1543de61cea04dd418049d04c67bbc1c484cab9328648544",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "migration_reconciliation.json",
+      "sha256": "1546d617dba868729df1d761c72ae0c8de75f61908813b565a19c74c2cacfe7c",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "python_tests.json",
+      "sha256": "e6396eefb82afced8f74d8c0fde5bd2a22c54486ea036367569e3ffe8b4c4379",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "quota_concurrency.json",
+      "sha256": "daa6cd25d14ce7f0542d9922b4832398658cbac0514b5e8b942395fad7640a0c",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "recovery_redirect.json",
+      "sha256": "03c2a2b928af30b56cc55a056fdf2592d4619d646ea37b9ccc4248af507fae02",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "render_readonly.json",
+      "sha256": "48954025a3d4245849e1ec8c0b8a7b74caebac279a83b5f70f5fea43d2bda85e",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "runtime_fallback_probe.json",
+      "sha256": "d2e56d4d775b86b0180a711667c34cf9a8cd6200ce28e583e29958aa7c574a19",
+      "kind": "dict",
+      "status": "FAIL"
+    },
+    {
+      "file": "secret_scan.json",
+      "sha256": "2bf1793a227adc9e970c77518f9c311b2477598af716bcb9b9d13b6f728cbc6e",
+      "kind": "dict",
+      "status": "FINDINGS_REQUIRE_REVIEW"
+    },
+    {
+      "file": "secret_scan_review.json",
+      "sha256": "de622ac7f05a79a37ee4a20938c450fadcc445085818ee4873cfbf686ff60fc2",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "snapshot_immutability_probe.json",
+      "sha256": "9b5e43e55bb757d46e30ed90f1899184b9f8bd71aaf748d908668a9a3c94b3a9",
+      "kind": "dict",
+      "status": "FAIL"
+    },
+    {
+      "file": "statement_comparison.json",
+      "sha256": "4135d907df39a59912a476a0b1b2c049acadece6a567398e8dda6c302ebb86c0",
+      "kind": "dict",
+      "status": "NO_GO"
+    },
+    {
+      "file": "upgrade_compare_report.json",
+      "sha256": "6c5c6411142439684f19709686b704d72354b9eb6626adb157e64c6365082a45",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "upgrade_reconstruct_report.json",
+      "sha256": "88d2a55c5909e62d7cae42a58009a85b5d9780bf3f61fc85441d29591231a93e",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "upgrade_sql.json",
+      "sha256": "1468090d7552e0c86ea992bee3db9cc1745a6d4957c1610dacf22725a13a1354",
+      "kind": "dict",
+      "status": null
+    },
+    {
+      "file": "upgrade_start_report.json",
+      "sha256": "3b0af70f0217d4d5ce31098f582b9db67b091a10adde6414031557ab6e71b7e1",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "upgrade_stop_report.json",
+      "sha256": "7373923cfa9040bd5666ab86a1866dd2a701e36fcde6bcfa78c88de067c66cdc",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "upgrade_upgrade_report.json",
+      "sha256": "f32346c5937f4970fca80ffb963187ebb2c4e1763aae370bc2745664e870c89b",
+      "kind": "dict",
+      "status": "PASS"
+    },
+    {
+      "file": "web_build.json",
+      "sha256": "ffc27797b7a7e57e170b51d72622c695d1b95b50cebbfdc8e65fdb03b2611ac1",
+      "kind": "dict",
+      "status": null
+    }
+  ],
+  "old_raw_evidence_checked": [
+    {
+      "file": "android_debug.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "android_debug.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_local47_crm_notifications.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_local47_definer_acl.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_local47_document_processing.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_local47_observability.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_local47_payment_sandbox.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_phase_a_constraint_backfill.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_phase_a_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_rad_content_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_rad_feed_currency_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_rad_merge_provenance.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_rad_quota_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_security_regression.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_sql.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_stage2_knowledge_completion.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "canonical_stage4_user_ai.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "catalog_comparison.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "catalog_drift_default_grants.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "ci_status.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "dart_format.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "dart_format.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_lint.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_lint.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_read_scope.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_test.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_test.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_version.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "deno_version.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "edge_http.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "edge_http_runtime.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "edge_loopback_bootstrap.ts",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "external_rehearsal_harness.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_analyze.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_analyze.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_pub_get.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_pub_get.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_test.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "flutter_test.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_catalog_metadata.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_edge_metadata.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_functions.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_readonly_queries.sql",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_snapshot.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "hosted_statement_hashes.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "http_harness.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "inventory.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "migration_reconciliation.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "python_tests.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "python_tests.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "quota_concurrency.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "recovery_redirect.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "recovery_redirect.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "render_readonly.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "runtime_fallback_probe.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "runtime_fallback_probe.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "runtime_fallback_probe_test.dart",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "secret_scan.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "secret_scan_review.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "snapshot_immutability_probe.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "snapshot_immutability_probe.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "snapshot_immutability_probe.sql",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "statement_comparison.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_local47_crm_notifications.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_local47_definer_acl.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_local47_document_processing.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_local47_observability.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_local47_payment_sandbox.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_phase_a_constraint_backfill.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_phase_a_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_rad_content_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_rad_feed_currency_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_rad_merge_provenance.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_rad_quota_security.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_security_regression.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_sql.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_stage2_knowledge_completion.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "upgrade_stage4_user_ai.log",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "web_build.json",
+      "present": true,
+      "digest_matches_record": true
+    },
+    {
+      "file": "web_build.log",
+      "present": true,
+      "digest_matches_record": true
+    }
+  ],
+  "inventory": {
+    "diff": {
+      "exit_code": 0,
+      "output": "A\tBACKEND_DELIVERY_20261020/00_EXECUTIVE_SUMMARY.md\nA\tBACKEND_DELIVERY_20261020/01_FEATURE_COMPLETION_MATRIX.md\nA\tBACKEND_DELIVERY_20261020/02_DATABASE_MIGRATION_REPORT.md\nA\tBACKEND_DELIVERY_20261020/03_SECURITY_RLS_RESULTS.md\nA\tBACKEND_DELIVERY_20261020/04_API_CONTRACTS.md\nA\tBACKEND_DELIVERY_20261020/05_TEST_RESULTS.md\nA\tBACKEND_DELIVERY_20261020/06_INTEGRATION_INSTRUCTIONS.md\nA\tBACKEND_DELIVERY_20261020/07_REMAINING_BLOCKERS.md\nA\tBACKEND_DELIVERY_20261020/08_RELEASE_GO_NO_GO.md\nA\tBACKEND_DELIVERY_20261020/evidence/build_artifacts.json\nA\tBACKEND_DELIVERY_20261020/evidence/builds.json\nA\tBACKEND_DELIVERY_20261020/evidence/ci_initial_2883ac8.json\nA\tBACKEND_DELIVERY_20261020/evidence/ci_status.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_contract_append.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_regression.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_regression_final.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_replay.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_targeted_correction.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_targeted_local47_payment_sandbox.json\nA\tBACKEND_DELIVERY_20261020/evidence/clean_targeted_rad_official_evidence.json\nA\tBACKEND_DELIVERY_20261020/evidence/http_security.json\nA\tBACKEND_DELIVERY_20261020/evidence/migration_manifest.json\nA\tBACKEND_DELIVERY_20261020/evidence/production_shape_contract_append.json\nA\tBACKEND_DELIVERY_20261020/evidence/production_shape_parity.json\nA\tBACKEND_DELIVERY_20261020/evidence/production_shape_reconstruction.json\nA\tBACKEND_DELIVERY_20261020/evidence/production_shape_research_base_append.json\nA\tBACKEND_DELIVERY_20261020/evidence/production_shape_upgrade.json\nA\tBACKEND_DELIVERY_20261020/evidence/search_performance.json\nA\tBACKEND_DELIVERY_20261020/evidence/secret_scan.json\nA\tBACKEND_DELIVERY_20261020/evidence/secret_scan_review.json\nA\tBACKEND_DELIVERY_20261020/evidence/sql_api_signatures.json\nA\tBACKEND_DELIVERY_20261020/evidence/tool_results.json\nA\tBACKEND_DELIVERY_20261020/evidence/upgrade_regression.json\nA\tBACKEND_DELIVERY_20261020/evidence/upgrade_regression_final.json\nA\tBACKEND_DELIVERY_20261020/evidence/upgrade_targeted_rad_official_evidence.json\nM\tlib/features/interviews/presentation/pages/interviews_page.dart\nA\tscripts/package_backend_delivery.py\nA\tscripts/rad_backend_regression.py\nM\tscripts/rad_local_rehearsal.py\nA\tscripts/rad_wire_acceptance.py\nM\tscripts/verify_clean_schema.sh\nM\tscripts/verify_local_auth_isolation.py\nM\tscripts/verify_migration_reconstruction.sh\nM\tscripts/verify_rad_http.py\nA\tsupabase/contracts/fixtures/rad_v1_synthetic.json\nM\tsupabase/contracts/rad_v1.json\nA\tsupabase/contracts/research_worker_base.json\nA\tsupabase/functions/tests/rad_wire_contract_test.ts\nA\tsupabase/migrations/20261020103648_rad_backend_integrity_completion.sql\nA\tsupabase/migrations/20261020105854_rad_search_aliases_currency_history.sql\nA\tsupabase/migrations/20261020111217_rad_restore_legacy_publish_privileges.sql\nA\tsupabase/migrations/20261020112300_rad_crm_search_integration_hardening.sql\nA\tsupabase/migrations/20261020114612_rad_transport_contract_registry_alignment.sql\nA\tsupabase/migrations/20261020115539_rad_leased_research_base_contract.sql\nA\tsupabase/migrations/20261020123523_rad_explicit_service_profile_bootstrap.sql\nM\tsupabase/reconciliation/security_regression.sql\nM\tsupabase/tests/local47_crm_notifications.sql\nM\tsupabase/tests/local47_definer_acl.sql\nM\tsupabase/tests/local47_payment_sandbox.sql\nM\tsupabase/tests/rad_content_security.sql\nM\tsupabase/tests/rad_feed_currency_security.sql\nA\tsupabase/tests/rad_interactions.sql\nA\tsupabase/tests/rad_official_evidence.sql\nA\tsupabase/tests/rad_privacy_security.sql\nA\tsupabase/tests/rad_quota_security.sql\nA\tsupabase/tests/rad_search_performance.sql\nM\ttest/features/interviews/interviews_flow_test.dart\n"
+    },
+    "core_delta": {
+      "exit_code": 0,
+      "output": "A\tsupabase/functions/tests/e2e_service_lifecycle_test.ts\nA\tsupabase/functions/tests/service_surface_contract_test.ts\n"
+    },
+    "owners": {
+      "exit_code": 0,
+      "output": "worktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_emigrate\nHEAD 839c749759989c922fdaa840e1a5f1e36f166b00\nbranch refs/heads/feature/g002-c002-implementation-20261019\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_47_delivery_evidence_20261018\nHEAD 5cf1130a61c80405e952e9fd653d93de701821d0\nbranch refs/heads/audit/47-gate-verified-delivery-ledger-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_ai_grounding_20261018\nHEAD 66c5820242a3b330b9a1dbdbc1ca5a630f028fe7\nbranch refs/heads/fix/ai-approved-grounding-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_antigravity_a003\nHEAD e80f10680a872fba5cd363f2e943b1742127b0a2\nbranch refs/heads/feat/antigravity-a003-flutter-implementation\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_antigravity_flutter_e2e\nHEAD 843ea7c2b715380a17e566eaf0bccdb7bb31029f\nbranch refs/heads/feat/antigravity-flutter-e2e-completion\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_app_edge_56_preview\nHEAD 3dbff88b43b9a665f61c85ead0c8b6f1ad4c7cfc\nbranch refs/heads/security/stage1-reconciliation-20261017\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_auth_redirect_47_20261018\nHEAD 2739567cc0c228c0b190da177266de9df811be5a\nbranch refs/heads/audit/auth-redirect-47-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_backend_sql_fingerprint_20261018\nHEAD 5dd67c9c6c06ad140603663c3d5e6f053be874e2\nbranch refs/heads/audit/e1-02-sql-fingerprints-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_c002_c003_local\nHEAD 95e1fdaac74d36ca1c91f2d9d897ff7686dc3ffb\nbranch refs/heads/feat/rad-c002-c003-local-20261020\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_client_compat_preview\nHEAD 72a08e093d2957ca6e046f2239634184503220e2\nbranch refs/heads/feat/consultation-rpc-compat-only\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_codex_master_47_20261018\nHEAD 3c9108291ba1305b1e7715470cee16ed8bc069ae\nbranch refs/heads/feat/codex-master-47-execution-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_codex_phase2_phase4_20261019\nHEAD c7108931b00220491f43a30be9962999bd939d33\nbranch refs/heads/feat/codex-phase2-phase4-final-20261019\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_combined_delivery_preview_20261018\nHEAD e4117d9d92e0d660dee2c74dc08720c5576198bc\nbranch refs/heads/integration/47-client-preview-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_copilot_quality_release\nHEAD 8383155de13bcd5533172abd0c608f3c846e0770\nbranch refs/heads/qa/copilot-independent-quality-release\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_core_security_final\nHEAD a24f4921926667877c10095e073f87f585b1bde5\nbranch refs/heads/feat/rad-core-security-final\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_document_generator_preview_20261018\nHEAD 7d213d8599f5a1a0b0c6ecc964314c1c5670a09a\nbranch refs/heads/feat/document-cv-sop-draft-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_feed_human_guard_preview_20261018\nHEAD 681b2cac9c03650e09b7018d64afe4131d7cce86\nbranch refs/heads/test/backend-feed-human-guard-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_47_integration\nHEAD 2e0d089781ef3de582143421a59817094e57ca78\nbranch refs/heads/integration/local-final-47\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_independent_audit\nHEAD 5c4ff1f16c270e3da8bb3118dcce13f3425c4ffb\nbranch refs/heads/audit/final-independent-20261020\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_security_remediation\nHEAD 2d86f55f9f802067cbc9cc97be121ab38f7bef9b\nbranch refs/heads/fix/rad-final-security-remediation-20261020\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_final_unified_rc\nHEAD 2d86f55f9f802067cbc9cc97be121ab38f7bef9b\nbranch refs/heads/feat/rad-final-unified-release-candidate\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_freebuff_features\nHEAD 2e0d089781ef3de582143421a59817094e57ca78\nbranch refs/heads/feat/rad-new-features-ui\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_feature_completion\nHEAD b97c8f03a7618046e54f98a25685bc6f0ce85560\nbranch refs/heads/feat/grok-independent-feature-completion\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_final_recovery\nHEAD a2d4d95578245d049a6c3b0a874bc0feff4e37a3\nbranch refs/heads/feat/rad-grok-final-recovery\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_final_unified_rc\nHEAD 02cff0602e07e5fdea11765539f5c16a529f339a\nbranch refs/heads/integration/grok-final-unified-rc\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_services\nHEAD c57b56d0c5f51547f29beea0ca6148598c3b8128\nbranch refs/heads/feat/rad-backend-services-final\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_grok_validation_20261018\nHEAD 5982a42f01ec2238181bb2861fc797d32fa6efae\ndetached\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_integrate68_readonly_20261018\nHEAD 2739567cc0c228c0b190da177266de9df811be5a\nbranch refs/heads/audit/antigravity-pr68-integration-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_integration_a003_unified\nHEAD b485c0cb513875b3833a2aa29ea89a1509102138\nbranch refs/heads/integration/antigravity-grok-a003-unified\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_ledger_guard_preview\nHEAD 954290766e24663ac87c257681613ad1b6093391\nbranch refs/heads/audit/migration-ledger-readonly-guard-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_master_integrated_687069_20261018\nHEAD 3977712f2e0ac591f9f71dafa67c10950f678ec1\nbranch refs/heads/integration/47-ux-delivery-cv-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_phasea_48_preview\nHEAD b955200d5d106534063ba45856f90c0cff99bd57\nbranch refs/heads/phase-a/security-migrations-20261015\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_pr49_time_review_20261018\nHEAD 2739567cc0c228c0b190da177266de9df811be5a\nbranch refs/heads/audit/pr49-timerace-review-20261018\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_stage1_preview\nHEAD 2ad00372a13d37504343b4741d67f1a20d5bea7e\nbranch refs/heads/audit/stage1-security-compat-20261017\n\nworktree C:/Users/Mehrshad/Desktop/RAD - Emigrate/rad_unified_rc\nHEAD 1fe44f63d179263c5e719578bf7ebad0e17868d1\nbranch refs/heads/feat/rad-unified-release-candidate\n\n"
+    },
+    "grok_status": {
+      "exit_code": 0,
+      "output": " M .github/workflows/ci.yml\n M lib/core/routing/app_router.dart\n M lib/core/services/ai/supabase_ai_service.dart\n M lib/features/booking/data/booking_repository.dart\n M lib/features/booking/presentation/providers/booking_controller.dart\n M lib/features/cost_calculator/data/cost_calculator_repository.dart\n M lib/features/interviews/presentation/pages/interviews_page.dart\n M lib/features/interviews/presentation/providers/appointment_controller.dart\n M lib/features/visa/data/canonical_pathway_repository.dart\n M lib/features/visa/data/fx_repository.dart\n M lib/features/visa/data/visa_search_repository.dart\n M linux/flutter/generated_plugin_registrant.cc\n M linux/flutter/generated_plugin_registrant.h\n M linux/flutter/generated_plugins.cmake\n M macos/Flutter/GeneratedPluginRegistrant.swift\n M test/features/interviews/interviews_flow_test.dart\n M windows/flutter/generated_plugin_registrant.cc\n M windows/flutter/generated_plugin_registrant.h\n M windows/flutter/generated_plugins.cmake\n?? _fix_ai_ci.py\n?? _fix_book.py\n?? _fix_cache.py\n?? _fix_canonical.py\n?? _fix_cost.py\n?? _fix_fx.py\n?? _fix_interview.py\n?? _fix_route.py\n?? _fix_search.py\n?? _fix_test.py\n"
+    },
+    "grok_log": {
+      "exit_code": 0,
+      "output": "2d86f55 fix(interviews): mobile viewport tolerance + chip label wrap; final RC after Codex/Antigravity merge\n23a725b merge(backend): integrate Antigravity crash recovery + Codex security final (a24f492)\na24f492 docs(backend): record successful 7/7 CI run 39468111818 evidence\n24b3f6b fix(backend): explicit service profile bootstrap, quota token ceiling reconciliation and test formatting\n"
+    }
+  },
+  "scope": "Read-only existing worktrees; new owned remediation checkout only"
+}

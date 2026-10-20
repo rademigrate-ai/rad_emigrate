@@ -1,0 +1,20 @@
+[
+  {
+    "runtime": "canonical",
+    "status": "PASS",
+    "exit_code": 0,
+    "sql_sha256": "feff58b6aa0f04457beef5b104720686d5b227ac0edc8e31323887ff891cb4ca",
+    "log_sha256": "2139a70ea4d54a0b692c338e2221d4c9e5f290005d2b76b6fabb6af1f33645f8",
+    "seconds": 1.05,
+    "rollback_only": true
+  },
+  {
+    "runtime": "upgrade",
+    "status": "PASS",
+    "exit_code": 0,
+    "sql_sha256": "feff58b6aa0f04457beef5b104720686d5b227ac0edc8e31323887ff891cb4ca",
+    "log_sha256": "2e4721f600a6a7167e92c682b1fe5d5765dcc8885de6671ccc48c29be32df308",
+    "seconds": 0.82,
+    "rollback_only": true
+  }
+]

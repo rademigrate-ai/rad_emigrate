@@ -1,0 +1,12 @@
+{
+  "candidate_sha": "b01f6255c9f10baff1ff12c1df07b1d995fad8a8",
+  "command": [
+    "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "scripts/rad_backend_regression.py",
+    "--runtime",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_local_security_b01_upgrade"
+  ],
+  "exit_code": 0,
+  "seconds": 21.56,
+  "log_sha256": "babe8258a0952eb540fa3d811380fbd99a90106b5e8a34bc741b90604821af9b"
+}

@@ -1,0 +1,22 @@
+{
+  "candidate_sha": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "run_id": 39484515979,
+  "status": "FAIL",
+  "successful_jobs": 6,
+  "failed_jobs": 1,
+  "routing_deno": {
+    "passed": 127,
+    "failed": 10,
+    "cause": "NotCapable: Requires read access; committed workflow omits scoped --allow-read",
+    "local_corrected_command_passed": 137
+  },
+  "flutter": {
+    "analysis": "No issues found",
+    "tests_passed": 835
+  },
+  "builds": {
+    "web": "PASS",
+    "android_debug_apk": "PASS"
+  },
+  "source": "Downloaded exact-run per-job logs; digests in external_evidence_manifest.json"
+}

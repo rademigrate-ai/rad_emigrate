@@ -1,0 +1,13 @@
+{
+  "candidate_sha": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "test",
+    "--allow-env",
+    "--allow-read=supabase/functions",
+    "supabase/functions/tests"
+  ],
+  "exit_code": 0,
+  "seconds": 28.43,
+  "log_sha256": "98d606477a17e56ee2bc86648298e30b171f2326e262e8e93b5ee1f72255db17"
+}

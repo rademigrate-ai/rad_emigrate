@@ -1,0 +1,7 @@
+{
+  "candidate_sha": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "command": "flutter test --no-pub --reporter expanded ../_final_independent_evidence_20261020/runtime_fallback_probe_test.dart",
+  "exit_code": 1,
+  "seconds": 79.1,
+  "log_sha256": "53d429ef0d0a2a299611e49533eb068d288204ba44b1c2fed3090bb8756ee9e3"
+}

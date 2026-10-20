@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-10-20T19:58:55.265926+00:00",
+  "initial_base_rc": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "latest_reviewed_rc": "b01f6255c9f10baff1ff12c1df07b1d995fad8a8",
+  "code_commit": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "branch": "fix/rad-final-security-remediation-20261020",
+  "code_fix_ci": "FAIL6/7; Deno permission",
+  "current_rc_ci": "FAIL4/7; Flutter/web/Android compilation",
+  "fix_integrated_in_current_rc": false,
+  "current_rc_review": "COMPLETE WITH BLOCKERS",
+  "reaudit_after_corrections": "PENDING next immutable Grok SHA",
+  "gates": {
+    "integration_review": "GO",
+    "staging": "NO-GO",
+    "production": "NO-GO"
+  },
+  "hosted_mutations": false
+}

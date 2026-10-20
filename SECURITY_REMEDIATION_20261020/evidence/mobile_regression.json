@@ -1,0 +1,7 @@
+{
+  "candidate_sha": "2d86f55f9f802067cbc9cc97be121ab38f7bef9b",
+  "command": "flutter test --no-pub --reporter expanded test/features/interviews/interviews_flow_test.dart --plain-name \"interviews page fits a mobile viewport\"",
+  "exit_code": 0,
+  "seconds": 38.9,
+  "log_sha256": "97486f45180d83bcea6bd9e11bdd175fb0d6163d6cd016229a320156e13786e9"
+}

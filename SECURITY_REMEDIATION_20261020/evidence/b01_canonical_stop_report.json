@@ -1,0 +1,9 @@
+{
+  "operation": "stop",
+  "project": "rad_core_b01_canonical",
+  "port": 62522,
+  "source_head": "b01f6255c9f10baff1ff12c1df07b1d995fad8a8",
+  "production_mutations": false,
+  "at": "2026-10-20T19:55:03.722108+00:00",
+  "status": "PASS"
+}

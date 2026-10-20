@@ -1,0 +1,8 @@
+{
+  "scope": "Local metadata reconstruction supplement only, not a hosted migration",
+  "reason": "information_schema.table_privileges omits PostgreSQL 17 MAINTAIN; prior ten-dimension comparison did not cover it",
+  "captured_rows": 69,
+  "sql_sha256": "6b2fbabe68da0a5ec2fb95a621b1f67eddd7df4440579b1a19c469a5ac02c977",
+  "production_mutations": false,
+  "status": "PASS"
+}

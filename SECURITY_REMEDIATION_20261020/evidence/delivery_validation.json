@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "manifest_files_checked": 93,
+  "broken_local_links": [],
+  "all_json_valid": true,
+  "capture_python_syntax_valid": true,
+  "code_delta_exactly_four_expected_files": true,
+  "generated_noise_normalized": [],
+  "source_code_commit": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "latest_reviewed_rc": "b01f6255c9f10baff1ff12c1df07b1d995fad8a8",
+  "hosted_mutations": false
+}

@@ -1,0 +1,28 @@
+{
+  "exit_code": 0,
+  "scope": "owned loopback canonical 62522 only; sslmode=disable on loopback",
+  "initial_attempt": "NOT PASS: local server does not offer SSL; retried with explicit loopback SSL setting",
+  "result": {
+    "results": [
+      {
+        "name": "extension_in_public",
+        "title": "Extension in Public",
+        "level": "WARN",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Detects extensions installed in the `public` schema.",
+        "detail": "Extension `pg_net` is installed in the public schema. Move it to another schema.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0014_extension_in_public",
+        "metadata": {
+          "name": "pg_net",
+          "type": "extension",
+          "schema": "public"
+        },
+        "cacheKey": "extension_in_public_pg_net"
+      }
+    ],
+    "message": "db advisors"
+  }
+}

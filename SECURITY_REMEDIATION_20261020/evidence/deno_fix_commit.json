@@ -1,0 +1,9 @@
+{
+  "candidate_sha": "847dd42bbb270755676104a63814dd6e2aab07dd",
+  "command": "deno test --allow-env --allow-read=supabase/functions supabase/functions/tests",
+  "tool_version": "2.9.7",
+  "status": "PASS",
+  "passed": 137,
+  "failed": 0,
+  "log_sha256": "ee639236e83c9b8dc489b6e38a45f6983e88f7682681cbff4c2463b24d90e70d"
+}
