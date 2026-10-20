@@ -388,5 +388,10 @@
     "file": "20261020115539_rad_leased_research_base_contract.sql",
     "sha256": "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129",
     "git_lf_sha256": "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129"
+  },
+  {
+    "file": "20261020123523_rad_explicit_service_profile_bootstrap.sql",
+    "sha256": "569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4",
+    "git_lf_sha256": "569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4"
   }
 ]

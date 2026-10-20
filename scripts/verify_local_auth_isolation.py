@@ -438,7 +438,10 @@ def main() -> None:
         "GET",
         f"/rest/v1/consultation_requests?select=id&id=eq.{consultation_id}",
     )
-    require(status == 200 and json_body(body) == [], "anonymous consultation read")
+    require(
+        (status == 200 and json_body(body) == []) or status in (401, 403),
+        "anonymous consultation read blocked by RLS or table privileges",
+    )
     expect_denied(
         "GET",
         f"/rest/v1/consultation_requests?select=id,admin_note&id=eq.{consultation_id}",
@@ -658,11 +661,17 @@ def main() -> None:
     )
     usage_limits = rows(
         "GET",
-        "/rest/v1/ai_usage_limits?select=daily_requests&role=eq.user",
+        "/rest/v1/ai_usage_limits?select=daily_requests,daily_output_tokens&role=eq.user",
         SERVICE_ROLE_KEY,
     )
     require(len(usage_limits) == 1, "user AI usage limit fixture")
     daily_limit = int(usage_limits[0]["daily_requests"])
+    # The legacy bridge reserves its bounded three-attempt output budget before
+    # inference. Concurrent admissions must satisfy both configured ceilings.
+    legacy_reserved_output_tokens = 3 * 2048
+    token_limit = int(usage_limits[0]["daily_output_tokens"])
+    effective_limit = min(daily_limit, token_limit // legacy_reserved_output_tokens)
+    require(effective_limit > 0, "non-vacuous count/token quota fixture")
     concurrency_calls = daily_limit + 16
 
     def reserve_quota(_: int) -> object:
@@ -688,9 +697,9 @@ def main() -> None:
         if isinstance(result, dict) and result.get("allowed") is False
     ]
     reservation_ids = [str(result.get("request_id")) for result in allowed_results]
-    require(len(allowed_results) == daily_limit, "atomic quota accepted exact limit")
+    require(len(allowed_results) == effective_limit, "atomic quota accepted exact count/token limit")
     require(
-        len(denied_results) == concurrency_calls - daily_limit,
+        len(denied_results) == concurrency_calls - effective_limit,
         "atomic quota rejected excess concurrent calls",
     )
     require(
@@ -704,7 +713,7 @@ def main() -> None:
         SERVICE_ROLE_KEY,
     )
     require(
-        len(reserved_requests) == daily_limit
+        len(reserved_requests) == effective_limit
         and all(
             row.get("status") == "running"
             and row.get("routing_reason") == "atomic_quota_reservation"
@@ -883,9 +892,9 @@ def main() -> None:
     print(
         "Local Supabase E2E passed: two authenticated users, password login/logout, "
         "profile/application/document/OCR/consultation/entitlement RLS, Storage "
-        f"ownership, atomic authenticated AI quota reservation ({daily_limit} "
-        f"accepted/{concurrency_calls - daily_limit} rejected with "
-        f"{daily_limit} unique persisted reservations), and explicit human Feed "
+        f"ownership, atomic authenticated AI quota reservation ({effective_limit} "
+        f"accepted/{concurrency_calls - effective_limit} rejected with "
+        f"{effective_limit} unique persisted reservations), and explicit human Feed "
         "publication."
     )
 
