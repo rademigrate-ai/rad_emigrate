@@ -154,7 +154,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/interview-scheduling',
-            builder: (_, _) => const InterviewSchedulingPage(),
+            builder: (_, _) => const InterviewsPage(),
           ),
           GoRoute(
             path: '/interviews',

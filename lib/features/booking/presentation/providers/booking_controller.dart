@@ -17,8 +17,11 @@ final bookingCatalogProvider =
       return ref.watch(bookingRepositoryProvider).listServices(locale: locale);
     });
 
-/// Locale-keyed booking history. Errors are surfaced for explicit UI states.
-final bookingHistoryProvider = FutureProvider<List<BookingRecord>>((ref) async {
+/// Auth-scoped booking history (autoDispose so logout drops cache).
+final bookingHistoryProvider = FutureProvider.autoDispose<List<BookingRecord>>((
+  ref,
+) async {
+  ref.watch(supabaseClientServiceProvider);
   return ref.watch(bookingRepositoryProvider).listMyBookings();
 });
 

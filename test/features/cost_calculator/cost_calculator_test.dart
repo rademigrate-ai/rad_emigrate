@@ -7,7 +7,7 @@ import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 void main() {
   group('Cost Calculator Domain Tests', () {
-    test('calculates correct totals for Germany Chancenkarte', () async {
+    test('returns empty items when official catalog unavailable', () async {
       const repo = StaticCostCalculatorRepository();
       final result = await repo.calculatePathwayCosts(
         countryCode: 'DE',
@@ -15,15 +15,13 @@ void main() {
         applicantsCount: 2,
         locale: 'fa',
       );
-
       expect(result.countryCode, 'DE');
-      expect(result.baseCurrency, 'EUR');
-      // Government fee: 75 * 2 = 150
-      expect(result.totalMandatoryAmount, 150.0);
-      expect(result.settlementFundsAmount, 12324.0);
+      expect(result.items, isEmpty);
+      expect(result.totalMandatoryAmount, 0.0);
+      expect(result.disclaimer.isNotEmpty, isTrue);
     });
 
-    test('calculates correct totals for Canada Express Entry', () async {
+    test('does not invent Canadian fees offline', () async {
       const repo = StaticCostCalculatorRepository();
       final result = await repo.calculatePathwayCosts(
         countryCode: 'CA',
@@ -31,44 +29,28 @@ void main() {
         applicantsCount: 1,
         locale: 'en',
       );
-
       expect(result.countryCode, 'CA');
-      expect(result.baseCurrency, 'CAD');
-      // 950 + 575 + 85 = 1610
-      expect(result.totalMandatoryAmount, 1610.0);
-      expect(result.settlementFundsAmount, 14690.0);
+      expect(result.items, isEmpty);
+      expect(result.totalMandatoryAmount, 0.0);
     });
   });
 
   group('CostCalculatorPage Widget Tests', () {
-    testWidgets(
-      'renders cost breakdown and updates on applicant count change',
-      (tester) async {
-        await tester.pumpWidget(
-          const ProviderScope(
-            child: MaterialApp(
-              locale: Locale('fa'),
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              home: CostCalculatorPage(),
-            ),
+    testWidgets('renders page without fabricated fee amounts', (tester) async {
+      await tester.pumpWidget(
+        const ProviderScope(
+          child: MaterialApp(
+            locale: Locale('en'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: CostCalculatorPage(),
           ),
-        );
-
-        await tester.pumpAndSettle();
-
-        expect(find.text('محاسبه‌گر هزینه‌های مهاجرت'), findsOneWidget);
-        expect(find.text('کارت شانس (Chancenkarte)'), findsOneWidget);
-        expect(find.text('تعرفه صدور روادید کارت شانس'), findsOneWidget);
-        expect(find.text('75 EUR'), findsNWidgets(2));
-
-        // Increase applicant count to 2
-        await tester.tap(find.byIcon(Icons.add_circle_outline));
-        await tester.pumpAndSettle();
-
-        expect(find.text('2'), findsOneWidget);
-        expect(find.text('150 EUR'), findsNWidgets(2));
-      },
-    );
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(CostCalculatorPage), findsOneWidget);
+      expect(find.text('75 EUR'), findsNothing);
+      expect(find.text('150 EUR'), findsNothing);
+    });
   });
 }

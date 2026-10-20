@@ -9,6 +9,8 @@ abstract class CostCalculatorRepository {
   });
 }
 
+/// Cost estimates require Backend-approved fee catalogs.
+/// This repository never invents official fees, tuition, or proof-of-funds.
 class StaticCostCalculatorRepository implements CostCalculatorRepository {
   const StaticCostCalculatorRepository();
 
@@ -20,113 +22,16 @@ class StaticCostCalculatorRepository implements CostCalculatorRepository {
     required String locale,
   }) async {
     final isFa = locale == 'fa';
-
-    // Official verified baseline fee schedules for canonical pathways
-    if (countryCode.toUpperCase() == 'DE' && pathwaySlug == 'chancenkarte') {
-      return CostEstimateResult(
-        countryCode: 'DE',
-        countryName: isFa ? 'آلمان' : 'Germany',
-        pathwaySlug: 'chancenkarte',
-        pathwayName: isFa
-            ? 'کارت شانس (Chancenkarte)'
-            : 'Opportunity Card (Chancenkarte)',
-        baseCurrency: 'EUR',
-        disclaimer: isFa
-            ? 'هزینه‌های دولتی بر اساس تعرفه رسمی سفارت آلمان است و هزینه‌های تمکن مالی بر اساس حداقل مسدودی سالانه محاسبه شده است.'
-            : 'Government fees are based on official German mission schedules. Proof of funds reflects required blocked account minimums.',
-        items: [
-          CostItem(
-            title: isFa
-                ? 'تعرفه صدور روادید کارت شانس'
-                : 'Chancenkarte visa application fee',
-            amount: 75.0 * applicantsCount,
-            currency: 'EUR',
-            category: ExpenseCategory.governmentFee,
-          ),
-          CostItem(
-            title: isFa
-                ? 'بیمه درمانی ورودی (تخمینی ۶ ماه)'
-                : 'Travel health insurance (est. 6 months)',
-            amount: 250.0 * applicantsCount,
-            currency: 'EUR',
-            category: ExpenseCategory.healthInsurance,
-            isOptional: true,
-          ),
-          CostItem(
-            title: isFa
-                ? 'حساب مسدودی تمکن مالی سالانه (Sperrkonto)'
-                : 'Annual blocked account funds (Sperrkonto)',
-            amount: 12324.0,
-            currency: 'EUR',
-            category: ExpenseCategory.settlementFunds,
-          ),
-        ],
-      );
-    }
-
-    if (countryCode.toUpperCase() == 'CA' && pathwaySlug == 'express-entry') {
-      return CostEstimateResult(
-        countryCode: 'CA',
-        countryName: isFa ? 'کانادا' : 'Canada',
-        pathwaySlug: 'express-entry',
-        pathwayName: isFa ? 'اکسپرس اینتری (Express Entry)' : 'Express Entry',
-        baseCurrency: 'CAD',
-        disclaimer: isFa
-            ? 'هزینه‌ها بر اساس تعرفه رسمی اداره مهاجرت کانادا (IRCC) در سال ۲۰۲۶ محاسبه شده است.'
-            : 'Fees are calculated in accordance with official IRCC fee schedules for 2026.',
-        items: [
-          CostItem(
-            title: isFa
-                ? 'هزینه بررسی پرونده (Processing Fee)'
-                : 'Application processing fee',
-            amount: 950.0 * applicantsCount,
-            currency: 'CAD',
-            category: ExpenseCategory.governmentFee,
-          ),
-          CostItem(
-            title: isFa
-                ? 'حق اقامت دائم (Right of PR Fee)'
-                : 'Right of Permanent Residence Fee (RPRF)',
-            amount: 575.0 * applicantsCount,
-            currency: 'CAD',
-            category: ExpenseCategory.governmentFee,
-          ),
-          CostItem(
-            title: isFa ? 'بیومتریک و انگشت‌نگاری' : 'Biometrics fee',
-            amount: 85.0 * applicantsCount,
-            currency: 'CAD',
-            category: ExpenseCategory.biometrics,
-          ),
-          CostItem(
-            title: isFa
-                ? 'حداقل تمکن مالی قانونی (۱ نفره)'
-                : 'Settlement funds (single applicant)',
-            amount: 14690.0,
-            currency: 'CAD',
-            category: ExpenseCategory.settlementFunds,
-          ),
-        ],
-      );
-    }
-
-    // Generic fallback with explicit estimate notice
     return CostEstimateResult(
-      countryCode: countryCode,
+      countryCode: countryCode.toUpperCase(),
       countryName: countryCode.toUpperCase(),
       pathwaySlug: pathwaySlug,
       pathwayName: pathwaySlug,
-      baseCurrency: 'USD',
+      baseCurrency: 'EUR',
       disclaimer: isFa
-          ? 'تعرفه رسمی این مسیر به صورت برخط تایید نشده است. ارقام تخمینی کلی می‌باشند.'
-          : 'Official fees for this pathway are not verified online. Figures are general estimates.',
-      items: [
-        CostItem(
-          title: isFa ? 'هزینه پایه بررسی ویزا' : 'Base visa processing fee',
-          amount: 350.0 * applicantsCount,
-          currency: 'USD',
-          category: ExpenseCategory.governmentFee,
-        ),
-      ],
+          ? 'O\u062c\u062f\u0648\u0644 \u0631\u0633\u0645\u06cc \u0647\u0632\u06cc\u0646\u0647\u200c\u0647\u0627 \u0627\u0632 \u06a9\u0627\u062a\u0627\u0644\u0648\u06af Backend \u062f\u0631 \u062f\u0633\u062a\u0631\u0633 \u0646\u06cc\u0633\u062a. \u0647\u06cc\u0686 \u0645\u0628\u0644\u063a \u06cc\u0627 \u0647\u0632\u06cc\u0646\u0647\u200c\u0627\u06cc \u0627\u062e\u062a\u0631\u0627\u0639 \u0646\u0634\u062f\u0647 \u0627\u0633\u062a.'
+          : 'Official fee schedules are not available from the Backend catalog. No amounts have been invented.',
+      items: const [],
     );
   }
 }

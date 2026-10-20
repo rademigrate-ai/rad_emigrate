@@ -13,12 +13,13 @@ final appointmentRepositoryProvider = Provider<AppointmentRepository>((ref) {
   );
 });
 
-/// The current user's Backend-managed appointment rows.
-final appointmentListProvider = FutureProvider<AppointmentListResult>((
-  ref,
-) async {
-  return ref.watch(appointmentRepositoryProvider).listMyAppointments();
-});
+/// Current user's Backend-managed appointment rows.
+/// autoDispose + client watch: session change drops cache (A→logout→B).
+final appointmentListProvider =
+    FutureProvider.autoDispose<AppointmentListResult>((ref) async {
+      ref.watch(supabaseClientServiceProvider);
+      return ref.watch(appointmentRepositoryProvider).listMyAppointments();
+    });
 
 enum AppointmentActionPhase { idle, running, success, failure }
 

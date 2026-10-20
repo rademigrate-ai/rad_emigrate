@@ -53,7 +53,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.5.4
-      - run: deno test --allow-env supabase/functions/tests
+      - run: deno test --allow-env --allow-read=. supabase/functions/tests
 
   flutter:
     runs-on: ubuntu-latest

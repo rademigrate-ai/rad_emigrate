@@ -47,14 +47,29 @@ class SupabaseAiService implements AiService {
             : null);
 
     try {
+      // RAD AI v1 text-only contract: version + idempotency + explicit scopes.
+      final requestKey =
+          request.metadata['request_key']?.toString() ??
+          'ai-${DateTime.now().toUtc().microsecondsSinceEpoch}';
+      final authorizedScopes = request.metadata['authorized_data_scopes'];
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
+        headers: {
+          'x-rad-contract-version': 'v1',
+          'x-rad-request-key': requestKey,
+          'x-rad-modality': 'text',
+        },
         body: {
           'action': 'chat',
+          'contract_version': 'v1',
+          'request_key': requestKey,
+          'modality': 'text',
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
           if (guestKey != null && guestKey.isNotEmpty) 'guest_key': guestKey,
           if (locale != null && locale.isNotEmpty) 'locale': locale,
+          if (authorizedScopes is List && authorizedScopes.isNotEmpty)
+            'authorized_data_scopes': authorizedScopes,
           'messages': [
             ...request.history.map(
               (message) => {

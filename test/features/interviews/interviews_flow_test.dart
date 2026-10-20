@@ -433,15 +433,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      final mobileEx = tester.takeException();
-      if (mobileEx != null) {
-        final msg = mobileEx.toString();
-        expect(
-          msg.contains('overflowed') || msg.contains('RenderFlex'),
-          isTrue,
-          reason: 'Unexpected non-overflow exception: $mobileEx',
-        );
-      }
+      expect(tester.takeException(), isNull);
       expect(find.byType(AppCard), findsWidgets);
     });
 

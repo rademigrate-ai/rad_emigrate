@@ -7,50 +7,32 @@ import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 void main() {
   group('University Comparison Domain Tests', () {
-    test('filters universities by country code', () async {
+    test('returns empty when institutional catalog unavailable', () async {
       const repo = StaticUniversityComparisonRepository();
       final all = await repo.getUniversities(locale: 'fa');
       final germany = await repo.getUniversities(
         countryFilter: 'DE',
         locale: 'fa',
       );
-
-      expect(all.length, 3);
-      expect(germany.length, 1);
-      expect(germany.first.countryCode, 'DE');
-      expect(germany.first.id, 'tum');
+      expect(all, isEmpty);
+      expect(germany, isEmpty);
     });
   });
 
   group('UniversityComparisonPage Widget Tests', () {
-    testWidgets('renders university comparison cards and filters properly', (
-      tester,
-    ) async {
+    testWidgets('renders without fabricated university claims', (tester) async {
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(
-            locale: Locale('fa'),
+            locale: Locale('en'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: UniversityComparisonPage(),
           ),
         ),
       );
-
       await tester.pumpAndSettle();
-
-      expect(find.text('مقایسه دانشگاه‌ها و بورسیه‌ها'), findsOneWidget);
-      expect(find.text('دانشگاه فنی مونیخ (TUM)'), findsOneWidget);
-      expect(find.text('دانشگاه تورنتو (U of T)'), findsOneWidget);
-      expect(find.text('دانشگاه ملبورن'), findsOneWidget);
-
-      // Filter by Germany
-      await tester.tap(find.text('آلمان'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('دانشگاه فنی مونیخ (TUM)'), findsOneWidget);
-      expect(find.text('دانشگاه تورنتو (U of T)'), findsNothing);
-      expect(find.text('دانشگاه ملبورن'), findsNothing);
+      expect(find.byType(UniversityComparisonPage), findsOneWidget);
     });
   });
 }

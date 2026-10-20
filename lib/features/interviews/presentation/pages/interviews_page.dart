@@ -409,36 +409,39 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                           style: theme.textTheme.labelLarge,
                         ),
                         const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            ChoiceChip(
-                              label: Text(
+                            RadioListTile<AppointmentKind>(
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                              title: Text(
                                 labels.kindRadSession,
-                                maxLines: 2,
                                 softWrap: true,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              selected: _kind == AppointmentKind.radSession,
-                              onSelected: (_) => setState(() {
-                                _kind = AppointmentKind.radSession;
-                                _slotErrorKey = null;
-                              }),
+                              value: AppointmentKind.radSession,
+                              groupValue: _kind,
+                              onChanged: (v) {
+                                if (v == null) return;
+                                setState(() {
+                                  _kind = v;
+                                  _slotErrorKey = null;
+                                });
+                              },
                             ),
-                            ChoiceChip(
-                              label: Text(
-                                labels.kindExternal,
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              selected:
-                                  _kind == AppointmentKind.externalGovernment,
-                              onSelected: (_) => setState(() {
-                                _kind = AppointmentKind.externalGovernment;
-                                _slotErrorKey = null;
-                              }),
+                            RadioListTile<AppointmentKind>(
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                              title: Text(labels.kindExternal, softWrap: true),
+                              value: AppointmentKind.externalGovernment,
+                              groupValue: _kind,
+                              onChanged: (v) {
+                                if (v == null) return;
+                                setState(() {
+                                  _kind = v;
+                                  _slotErrorKey = null;
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -497,6 +500,7 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                         ),
                         const SizedBox(height: 12),
                         DropdownButtonFormField<String?>(
+                          isExpanded: true,
                           initialValue: _zoneId,
                           decoration: InputDecoration(
                             labelText: labels.zoneLabel,
@@ -512,6 +516,9 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                                 value: city.timezone,
                                 child: Text(
                                   '${city.nameEn} (${city.timezone})',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  softWrap: false,
                                 ),
                               ),
                           ],

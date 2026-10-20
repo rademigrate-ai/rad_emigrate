@@ -7,39 +7,27 @@ import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 void main() {
   group('Pathway Comparison Domain Tests', () {
-    test('returns comparison items for Germany and Canada', () async {
+    test('returns empty when official pathway catalog unavailable', () async {
       const repo = StaticPathwayComparisonRepository();
       final items = await repo.getComparisonItems(locale: 'fa');
-
-      expect(items.length, 3);
-      expect(items.any((e) => e.countryCode == 'DE'), isTrue);
-      expect(items.any((e) => e.countryCode == 'CA'), isTrue);
-      expect(items.any((e) => e.countryCode == 'AU'), isTrue);
+      expect(items, isEmpty);
     });
   });
 
   group('PathwayComparisonPage Widget Tests', () {
-    testWidgets('renders pathway comparison cards properly in Persian', (
-      tester,
-    ) async {
+    testWidgets('renders without fabricated pathway claims', (tester) async {
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(
-            locale: Locale('fa'),
+            locale: Locale('en'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: PathwayComparisonPage(),
           ),
         ),
       );
-
       await tester.pumpAndSettle();
-
-      expect(find.text('مقایسه مسیرهای مهاجرتی'), findsOneWidget);
-      expect(find.text('آلمان'), findsOneWidget);
-      expect(find.text('کانادا'), findsOneWidget);
-      expect(find.text('استرالیا'), findsOneWidget);
-      expect(find.text('اقامت دائم مستقیم'), findsNWidgets(2)); // CA and AU
+      expect(find.byType(PathwayComparisonPage), findsOneWidget);
     });
   });
 }

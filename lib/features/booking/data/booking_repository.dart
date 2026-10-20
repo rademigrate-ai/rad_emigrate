@@ -163,11 +163,48 @@ class SupabaseBookingRepository implements BookingRepository {
                 ? 'درخواست مشاوره RAD'
                 : 'RAD consultation request');
       try {
-        await client.rpc(
+        final rpcResult = await client.rpc(
           'submit_consultation_request',
           params: {'p_topic': topic, 'p_message': request.message},
         );
+        // Prefer server-issued id when present; never invent a durable UUID.
+        String? serverId;
+        if (rpcResult is Map) {
+          serverId =
+              rpcResult['id']?.toString() ??
+              rpcResult['request_id']?.toString();
+        } else if (rpcResult is List && rpcResult.isNotEmpty) {
+          final first = rpcResult.first;
+          if (first is Map) {
+            serverId =
+                first['id']?.toString() ?? first['request_id']?.toString();
+          } else if (first is String && first.isNotEmpty) {
+            serverId = first;
+          }
+        } else if (rpcResult is String && rpcResult.isNotEmpty) {
+          serverId = rpcResult;
+        }
+        if (serverId == null || serverId.isEmpty) {
+          // Consultation accepted without a typed return shape — use
+          // opaque client receipt, not a fabricated UUID claim.
+          serverId =
+              'consultation-receipt-${DateTime.now().toUtc().millisecondsSinceEpoch}';
+        }
+        return BookingRecord(
+          id: serverId,
+          serviceId: service.id,
+          serviceTitle: service.title,
+          message: request.message,
+          status: BookingStatus.submitted,
+          createdAt: DateTime.now().toUtc(),
+          preferredStartUtc: request.preferredStartUtc,
+          timeZoneId: request.timeZoneId,
+        );
       } catch (error) {
+        if (error is BookingException ||
+            error is BookingBackendUnavailableException) {
+          rethrow;
+        }
         if (isRpcMissingException(error)) {
           throw const BookingBackendUnavailableException(
             'submit_consultation_request',
@@ -175,16 +212,6 @@ class SupabaseBookingRepository implements BookingRepository {
         }
         throw BookingException('submit_consultation_request', error);
       }
-      return BookingRecord(
-        id: 'consultation-${DateTime.now().toUtc().millisecondsSinceEpoch}',
-        serviceId: service.id,
-        serviceTitle: service.title,
-        message: request.message,
-        status: BookingStatus.submitted,
-        createdAt: DateTime.now().toUtc(),
-        preferredStartUtc: request.preferredStartUtc,
-        timeZoneId: request.timeZoneId,
-      );
     }
 
     // Staff-scheduled bookings require a Backend that does not exist yet.
