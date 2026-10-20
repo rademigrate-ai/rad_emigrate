@@ -13,7 +13,21 @@ do $$ declare f record; begin
       assert not has_function_privilege('anon',f.oid,'EXECUTE') and not has_function_privilege('authenticated',f.oid,'EXECUTE'),
         format('client execute on internal helper: %s',f.oid::regprocedure);
     end if;
-    if f.nspname='public' then assert not has_function_privilege('anon',f.oid,'EXECUTE'),format('anonymous definer API: %s',f.oid::regprocedure); end if;
+    -- C-002 adds an explicit, published-only read API. Keep the default deny
+    -- and enumerate signatures; no mutation or service function is permitted.
+    if f.nspname='public' then assert not has_function_privilege('anon',f.oid,'EXECUTE') or f.oid=any(array[
+      'public.get_backend_contract_status(jsonb)'::regprocedure,
+      'public.get_visa_article(jsonb)'::regprocedure,
+      'public.list_related_visa_articles(jsonb)'::regprocedure,
+      'public.get_fx_quote(jsonb)'::regprocedure,
+      'public.convert_currency(jsonb)'::regprocedure,
+      'public.get_fx_history(jsonb)'::regprocedure,
+      'public.search_visa_articles(jsonb)'::regprocedure,
+      'public.get_feed_item(jsonb)'::regprocedure,
+      'public.list_feed(jsonb)'::regprocedure,
+      'public.resolve_legacy_feed_slug(text,text)'::regprocedure,
+      'public.list_feed_comments(jsonb)'::regprocedure
+    ]),format('unreviewed anonymous definer API: %s',f.oid::regprocedure); end if;
     assert f.proowner not in ('anon'::regrole,'authenticated'::regrole);
   end loop;
 end $$;

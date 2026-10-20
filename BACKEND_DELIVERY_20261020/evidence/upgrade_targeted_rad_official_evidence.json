@@ -1,0 +1,11 @@
+{
+  "operation": "test",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:58:06.357967+00:00",
+  "sql": "supabase\\tests\\rad_official_evidence.sql",
+  "sql_sha256": "864061fa23d54922db048be181a4f1ac1b51e66953db67fa221da660f3175663",
+  "status": "PASS"
+}

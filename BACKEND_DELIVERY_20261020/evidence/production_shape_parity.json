@@ -1,0 +1,30 @@
+{
+  "operation": "compare",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:31:50.685916+00:00",
+  "dimensions_compared": [
+    "tables",
+    "columns",
+    "constraints",
+    "indexes",
+    "policies",
+    "table_grants",
+    "column_grants",
+    "functions",
+    "triggers",
+    "storage"
+  ],
+  "different_dimensions": [],
+  "deliberate_environment_differences": [
+    "extension patch versions",
+    "inactive no-op cron commands",
+    "no Vault secret values",
+    "platform auth/storage schema owned by local Supabase",
+    "no business/user data"
+  ],
+  "zero_historical_pending": true,
+  "status": "PASS"
+}

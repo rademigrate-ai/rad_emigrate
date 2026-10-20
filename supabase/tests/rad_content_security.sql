@@ -47,6 +47,15 @@ begin
  if result->'data'->>'editorial_state'<>'published' or result->'data'->>'verification_state'<>'unverified' then raise exception 'publication state mismatch'; end if;
  result:=public.search_visa_articles('{"query":"alphabravo","locale":"en","country_codes":["ZZ"],"pathway_slugs":[],"article_kind":null,"allow_locale_fallback":false,"cursor":null,"limit":20}');
  if jsonb_array_length(result->'data'->'items')<>1 then raise exception 'full body search failed'; end if;
+ perform public.save_visa_search_alias(jsonb_build_object('locale','en','alias','synthetic approved alias','canonical','alphabravo','enabled',true,'expected_revision',0,'request_key',gen_random_uuid()));
+ result:=public.search_visa_articles('{"query":"synthetic approved alias","locale":"en","country_codes":["ZZ"],"pathway_slugs":[],"article_kind":null,"allow_locale_fallback":false,"cursor":null,"limit":20}');
+ if result->'data'->'items'->0->>'match_kind'<>'synonym' then raise exception 'approved alias search';end if;
+ result:=public.search_visa_articles('{"query":"alphabrvo","locale":"en","country_codes":["ZZ"],"pathway_slugs":[],"article_kind":null,"allow_locale_fallback":false,"cursor":null,"limit":20}');
+ if jsonb_array_length(result->'data'->'items')<>1 then raise exception 'typo fallback';end if;
+ result:=public.search_visa_articles('{"query":"alphabravo","locale":"fa","country_codes":["ZZ"],"pathway_slugs":[],"article_kind":null,"allow_locale_fallback":false,"cursor":null,"limit":20}');
+ if jsonb_array_length(result->'data'->'items')<>0 then raise exception 'locale filter';end if;
+ result:=public.search_visa_articles('{"query":"ZZ test","locale":"en","country_codes":["ZZ"],"pathway_slugs":["test"],"article_kind":"related","allow_locale_fallback":false,"cursor":null,"limit":20}');
+ if jsonb_array_length(result->'data'->'items')<>1 then raise exception 'country/pathway metadata search';end if;
 end $$;
 
 reset role;
@@ -54,5 +63,18 @@ do $$ begin
  if (select count(*) from public.visa_article_revision_events where state='published')<>1 then raise exception 'duplicate publish event'; end if;
  if has_column_privilege('authenticated','public.profiles','role','INSERT') then raise exception 'role INSERT grant retained'; end if;
  if exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and not c.relrowsecurity) then raise exception 'RLS disabled table'; end if;
+end $$;
+
+reset role;
+select set_config('request.jwt.claims','{"role":"authenticated","sub":"a0000000-0000-4000-8000-000000000002"}',true);
+do $$ declare r jsonb;request jsonb;begin
+ request:='{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en","section_id":"d0000000-0000-4000-8000-000000000001","saved":true,"expected_revision":0,"request_key":"c0000000-0000-4000-8000-000000000088"}';
+ r:=public.save_visa_reading_state(request);
+ if r->'data'->>'revision'<>'1' then raise exception 'reading revision';end if;
+ r:=public.get_visa_reading_state('{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en"}');
+ if r->'data'->>'saved'<>'true' or r->'data'->>'section_id'<>'d0000000-0000-4000-8000-000000000001' then raise exception 'resume pointer';end if;
+ perform set_config('request.jwt.claims','{"role":"authenticated","sub":"a0000000-0000-4000-8000-000000000003"}',true);
+ r:=public.get_visa_reading_state('{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en"}');
+ if r->'data'->>'saved'<>'false' or r->'data'->>'revision'<>'0' then raise exception 'cross-user reading leak';end if;
 end $$;
 rollback;

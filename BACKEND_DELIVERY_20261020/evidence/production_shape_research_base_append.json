@@ -1,0 +1,11 @@
+{
+  "operation": "apply",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:56:56.345587+00:00",
+  "sql": "supabase\\migrations\\20261020115539_rad_leased_research_base_contract.sql",
+  "sql_sha256": "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129",
+  "status": "PASS"
+}

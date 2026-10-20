@@ -1,0 +1,782 @@
+[
+  {
+    "name": "approve_visa_article_revision",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "approve_visa_source_inventory",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "assign_admin_consultation",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_consultation_id uuid, p_assignee_id uuid, p_expected_revision integer",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "claim_official_research_job",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "consume_ai_daily_quota",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_user_id uuid, p_role text",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "convert_currency",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "create_currency_alert",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "create_feed_comment",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "create_visa_article",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "delete_currency_alert",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "delete_feed_comment",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "discover_official_authorities",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "enqueue_research_refresh",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "expire_rad_ai_reservations",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "integer",
+    "arguments": "",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "finish_official_research_job",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "arguments": "p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text DEFAULT NULL::text",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "get_backend_contract_status",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_feed_item",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_fx_history",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_fx_quote",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_notification_preferences",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_official_research_job",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_job_id uuid, p_lease_token uuid",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "get_rad_job_status",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_research_article_base",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "get_research_proposal",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_visa_article",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_visa_merge_manifest",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "get_visa_reading_state",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "ingest_visa_snapshots",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "list_admin_consultations",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "SETOF consultation_requests",
+    "arguments": "",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_currency_alerts",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_feed",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_feed_comments",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_notifications",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_official_authorities",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_related_visa_articles",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_research_proposals",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "list_visa_article_revisions",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "mark_all_notifications_read",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "mark_feed_read",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "mark_notification_read",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "moderate_feed_comment",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "publish_feed_revision",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "publish_visa_article_revision",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "record_fx_observation",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "arguments": "p_observation jsonb",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "record_official_source_change",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "reject_visa_article_revision",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "reserve_rad_ai_request",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_user_id uuid, p_request_key uuid, p_body_hash text, p_reserved_output_tokens integer, p_session_id uuid DEFAULT NULL::uuid",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "retrieve_verified_official_claims",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_query text, p_locale text, p_country_code text DEFAULT NULL::text, p_topic text DEFAULT NULL::text",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "review_feed_draft",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "review_research_proposal",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "rollback_visa_article",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "save_feed_draft",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "save_notification_preferences",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "save_visa_article_draft",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "save_visa_reading_state",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "save_visa_search_alias",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "search_visa_articles",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": true,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "set_feed_saved",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "settle_rad_ai_request",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "arguments": "p_request_id uuid, p_http_status integer, p_response jsonb, p_output_tokens integer",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  },
+  {
+    "name": "submit_consultation_request",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "arguments": "p_topic text, p_message text, p_related_application_id uuid DEFAULT NULL::uuid",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "submit_visa_article_review",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "transition_admin_consultation",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_consultation_id uuid, p_status text, p_expected_revision integer, p_admin_note text DEFAULT NULL::text",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "update_admin_consultation",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "arguments": "p_consultation_id uuid, p_status text, p_admin_note text DEFAULT NULL::text",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "update_currency_alert",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_request jsonb",
+    "anon_execute": false,
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true
+  },
+  {
+    "name": "verify_official_claim",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "jsonb",
+    "arguments": "p_claim_id uuid",
+    "anon_execute": false,
+    "service_execute": true,
+    "security_definer": true,
+    "authenticated_execute": false
+  }
+]

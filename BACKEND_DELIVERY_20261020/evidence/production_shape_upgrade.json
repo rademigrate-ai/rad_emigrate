@@ -1,0 +1,77 @@
+{
+  "operation": "upgrade",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:33:19.454421+00:00",
+  "applied_manifest": [
+    {
+      "file": "20261019204906_rad_security_contract_foundation.sql",
+      "sha256": "e804131bff73bf462b44dc22c2a8bfad7a286f771f5e095dc076ae3354faa384"
+    },
+    {
+      "file": "20261019205040_rad_visa_cms_official_evidence.sql",
+      "sha256": "a6f37b7cea2deffe2c2d32086f6d3c5ec23e428cff9e6a24ad2a2d89f289d9fe"
+    },
+    {
+      "file": "20261019205454_rad_currency_cache_alerts.sql",
+      "sha256": "c9bd5845613f14b62fb77886de65cb4159a63eb363ff969ade42fc5cef4505f1"
+    },
+    {
+      "file": "20261019205459_rad_feed_notifications_search.sql",
+      "sha256": "6008db3e4bf4ca44b55bc1f5b77a80adb5fadce4f6cd52d2bff7716ff65dc261"
+    },
+    {
+      "file": "20261019205502_rad_copilot_scoped_reservations.sql",
+      "sha256": "e3aa6007137551086a327cb09b183502471a678a6ebb00f17124c322b8eb2d2c"
+    },
+    {
+      "file": "20261019210000_g002_content_architecture_scaffolding.sql",
+      "sha256": "3569bd48d5710afd8edac0e99886d545dde4edf88d4a39cc2d1d96a206061d3f"
+    },
+    {
+      "file": "20261019210423_rad_content_workflows.sql",
+      "sha256": "ee9d66a758c2cc13ed029a8b4add8ea27b361627a48796955363a397a4748335"
+    },
+    {
+      "file": "20261019211000_security_quota_owner_and_publish_approved.sql",
+      "sha256": "ac786582876d3163a4310b485466752300b8ccfe0a900ef13e99300084b57c86"
+    },
+    {
+      "file": "20261019211908_rad_feed_delivery_contracts.sql",
+      "sha256": "9d60a1e46bd2927f39f47f5ddf5b769ef95ab1bc0585c9040757fddc51740601"
+    },
+    {
+      "file": "20261019212615_rad_source_jobs_merge_enforcement.sql",
+      "sha256": "6a45d929f8f446eac9d02a0900b33a33fbe89ee1f456be6c7817ad44e05fe3f5"
+    },
+    {
+      "file": "20261019213129_rad_contract_finalization.sql",
+      "sha256": "3e57e1d21b72e5c781654c8aad252c8a386f789c92c4e67aaf2f76a31c1133c8"
+    },
+    {
+      "file": "20261019214411_rad_legacy_quota_budget_compatibility.sql",
+      "sha256": "033dda87c1b2eac871e6ae08824a5114ce3a0c74918c2e533798fe1476c001ae"
+    },
+    {
+      "file": "20261020103648_rad_backend_integrity_completion.sql",
+      "sha256": "6d420bb1137217184a20f34e56b08872a746e428c6139bef1d3294db10ed6a69"
+    },
+    {
+      "file": "20261020105854_rad_search_aliases_currency_history.sql",
+      "sha256": "ba2f8a9afa96b38c17750c35f552bdb1ce07c2022859bdfdfb7691928bccc5c9"
+    },
+    {
+      "file": "20261020111217_rad_restore_legacy_publish_privileges.sql",
+      "sha256": "acd2d113fd47c9cd353f00b14e41d46e79e7c07e2e185117cef2b37bc0fdfbc8"
+    },
+    {
+      "file": "20261020112300_rad_crm_search_integration_hardening.sql",
+      "sha256": "2c2234751a73178fc5ab6a1955258caec9a5f65f7387f8269c1e2c2371b2ebe7"
+    }
+  ],
+  "current_migration": "20261020112300_rad_crm_search_integration_hardening.sql",
+  "historical_sql_executed": false,
+  "status": "PASS"
+}

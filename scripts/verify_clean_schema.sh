@@ -98,7 +98,9 @@ SQL
 # set_updated_at trigger routine. Bodies and the other seven dimensions are
 # unchanged; restoring only those two flags reproduces the prior e05d93... hash.
 # Keep all eight dimensions pinned; runtime ACL tests enforce the new policy.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"5b8620228bf8c9346092eb66f1afa4cb","triggers":"4e10fd766fe20b3c7c4aafc3f04cfd9c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# C-002 adds rad_profile_insert_role_guard; measured final core trigger hash.
+# Other seven dimensions remain unchanged.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"5b8620228bf8c9346092eb66f1afa4cb","triggers":"e3516edc62a43f4e68499e3cb55a7143","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2
@@ -110,7 +112,7 @@ fi
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regression.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
-for regression in stage2_knowledge_completion stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability; do
+for regression in stage2_knowledge_completion stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability rad_content_security rad_feed_currency_security rad_interactions rad_merge_provenance rad_official_evidence rad_privacy_security rad_quota_security rad_search_performance; do
   psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "supabase/tests/${regression}.sql"
 done
 python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py

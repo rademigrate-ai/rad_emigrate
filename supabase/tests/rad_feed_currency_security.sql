@@ -16,6 +16,10 @@ do $$ declare p jsonb;r jsonb;a jsonb; begin
  begin perform public.save_notification_preferences(p||'{"request_key":"c1000000-0000-4000-8000-000000000002"}');raise exception 'stale prefs accepted';exception when sqlstate 'PT409' then null; end;
  r:=public.convert_currency('{"base":"USD","quote":"EUR","amount":"5.01","input_unit":"currency","output_unit":"currency","decimal_places":2,"allow_stale":false}');
  if (r->'data'->>'output_amount')::numeric<>2.50 then raise exception 'half even failed: %',r; end if;
+ r:=public.get_fx_history(jsonb_build_object('base','USD','quote','EUR','date_from',(current_date-2)::text,'date_to',current_date::text,'cursor',null,'limit',20));
+ if r->'data'->>'provider'<>'frankfurter' or jsonb_array_length(r->'data'->'missing_dates')<>2 then raise exception 'history provenance/gaps';end if;
+ r:=public.convert_currency('{"base":"IRR","quote":"IRR","amount":"123","input_unit":"toman","output_unit":"currency","decimal_places":0,"allow_stale":false}');
+ if r->'data'->>'output_amount'<>'1230' or r->'data'->'observation'<>'null'::jsonb or r->'data'->>'conversion_kind'<>'identity' then raise exception 'toman identity provenance';end if;
  a:=public.create_currency_alert('{"base":"USD","quote":"EUR","direction":"above","threshold":"0.6","cooldown_seconds":3600,"request_key":"c1000000-0000-4000-8000-000000000003"}');
  if a->'data'->>'rate_basis'<>'provider_reference' then raise exception 'alert basis'; end if;
  begin perform public.record_fx_observation('{}');raise exception 'client rate write admitted';exception when insufficient_privilege then null; end;

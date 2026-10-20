@@ -1,0 +1,11 @@
+{
+  "operation": "test",
+  "project": "rad_core_canonical",
+  "port": 61322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:51:07.780545+00:00",
+  "sql": "supabase\\tests\\local47_payment_sandbox.sql",
+  "sql_sha256": "a8470c276ad571022b37962a266108e84cc90a1bfe8a1c8b8a51aa5f72074f6e",
+  "status": "PASS"
+}

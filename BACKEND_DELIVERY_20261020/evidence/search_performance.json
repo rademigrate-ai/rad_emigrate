@@ -1,0 +1,8 @@
+{
+  "fixture": "10000 synthetic sections; 20 warm broad-query samples; local shared host",
+  "p95_ms": {
+    "clean": 364.529,
+    "upgrade": 217.232
+  },
+  "production_capacity_validated": false
+}

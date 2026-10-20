@@ -1,0 +1,14 @@
+[
+  {
+    "path": "build/web/index.html",
+    "bytes": 6014,
+    "sha256": "aac65328b3e1f36114f31f68647d3829f8535ceba8371d09edd9d21331bb3503",
+    "configuration": "non-production dummy Supabase endpoint/key"
+  },
+  {
+    "path": "build/app/outputs/flutter-apk/app-debug.apk",
+    "bytes": 188668033,
+    "sha256": "f503d0e9a7a1197704c7cb5359668830bc79314c5971856210c428e8e2c147c2",
+    "configuration": "non-production dummy Supabase endpoint/key"
+  }
+]
