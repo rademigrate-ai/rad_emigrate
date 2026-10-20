@@ -414,7 +414,12 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                           runSpacing: 8,
                           children: [
                             ChoiceChip(
-                              label: Text(labels.kindRadSession),
+                              label: Text(
+                                labels.kindRadSession,
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               selected: _kind == AppointmentKind.radSession,
                               onSelected: (_) => setState(() {
                                 _kind = AppointmentKind.radSession;
@@ -422,7 +427,12 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                               }),
                             ),
                             ChoiceChip(
-                              label: Text(labels.kindExternal),
+                              label: Text(
+                                labels.kindExternal,
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               selected:
                                   _kind == AppointmentKind.externalGovernment,
                               onSelected: (_) => setState(() {

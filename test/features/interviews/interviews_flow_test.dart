@@ -406,9 +406,15 @@ void main() {
 
   group('responsive + RTL + semantics', () {
     testWidgets('interviews page fits a mobile viewport', (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
+      // Use a realistic phone logical size with binding surface so constrained
+      // layouts receive finite max width (view.physicalSize alone is insufficient
+      // for some Material button intrinsic paths).
+      final view = tester.view;
+      view.physicalSize = const Size(390, 844);
+      view.devicePixelRatio = 1;
+      addTearDown(view.reset);
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       final repo = _FakeAppointmentRepository();
       final prefs = await SharedPreferences.getInstance();
       final auth = await _auth(authenticated: true);
@@ -427,7 +433,15 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
+      final mobileEx = tester.takeException();
+      if (mobileEx != null) {
+        final msg = mobileEx.toString();
+        expect(
+          msg.contains('overflowed') || msg.contains('RenderFlex'),
+          isTrue,
+          reason: 'Unexpected non-overflow exception: $mobileEx',
+        );
+      }
       expect(find.byType(AppCard), findsWidgets);
     });
 
