@@ -61,7 +61,7 @@ class VisaSearchNotifier extends StateNotifier<VisaSearchState> {
     state = state.copyWith(query: trimmed, result: const AsyncValue.loading());
 
     try {
-      final res = await _repository.searchArticles(
+      final res = await _repository.search(
         query: trimmed,
         countryFilter: state.countryFilter,
         categoryFilter: state.categoryFilter,

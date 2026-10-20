@@ -185,10 +185,9 @@ class SupabaseBookingRepository implements BookingRepository {
           serverId = rpcResult;
         }
         if (serverId == null || serverId.isEmpty) {
-          // Consultation accepted without a typed return shape — use
-          // opaque client receipt, not a fabricated UUID claim.
-          serverId =
-              'consultation-receipt-${DateTime.now().toUtc().millisecondsSinceEpoch}';
+          // Do not fabricate a durable receipt ID. Surface failure so UI can
+          // show an explicit error instead of a false booking confirmation.
+          throw const BookingException('consultation_missing_server_id');
         }
         return BookingRecord(
           id: serverId,
@@ -233,8 +232,12 @@ class SupabaseBookingRepository implements BookingRepository {
           )
           .timeout(const Duration(seconds: 15));
       final row = Map<String, dynamic>.from((rows as List).first as Map);
+      final id = row['id'] as String?;
+      if (id == null || id.isEmpty) {
+        throw const BookingException('booking_missing_server_id');
+      }
       return BookingRecord(
-        id: row['id'] as String? ?? '',
+        id: id,
         serviceId: service.id,
         serviceTitle: service.title,
         message: request.message,
@@ -246,6 +249,7 @@ class SupabaseBookingRepository implements BookingRepository {
         timeZoneId: request.timeZoneId,
       );
     } catch (error) {
+      if (error is BookingException) rethrow;
       if (isRpcMissingException(error)) {
         throw const BookingBackendUnavailableException(_bookingRpc);
       }

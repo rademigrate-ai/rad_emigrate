@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import '../../../l10n/app_localizations.dart';
@@ -14,6 +15,16 @@ class SupabaseAiService implements AiService {
   const SupabaseAiService(this._supabase);
 
   final SupabaseClientService _supabase;
+
+  /// RFC-4122 style UUID v4 for AI request keys (no extra dependency).
+  static String _newRequestKey() {
+    final r = Random.secure();
+    final bytes = List<int>.generate(16, (_) => r.nextInt(256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    final h = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    return '${h.substring(0, 8)}-${h.substring(8, 12)}-${h.substring(12, 16)}-${h.substring(16, 20)}-${h.substring(20)}';
+  }
 
   @override
   bool get isAvailable => _supabase.isInitialized;
@@ -43,33 +54,40 @@ class SupabaseAiService implements AiService {
     final locale =
         request.locale ??
         (request.metadata['locale'] is String
-            ? request.metadata['locale']
+            ? request.metadata['locale'] as String
             : null);
 
     try {
-      // RAD AI v1 text-only contract: version + idempotency + explicit scopes.
-      final requestKey =
-          request.metadata['request_key']?.toString() ??
-          'ai-${DateTime.now().toUtc().microsecondsSinceEpoch}';
-      final authorizedScopes = request.metadata['authorized_data_scopes'];
+      // RAD AI contract version 1: numeric header, UUID request_key, closed body.
+      final metaKey = request.metadata['request_key']?.toString();
+      final requestKey = (metaKey != null &&
+              RegExp(
+                r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+                caseSensitive: false,
+              ).hasMatch(metaKey))
+          ? metaKey
+          : _newRequestKey();
+
+      final rawScopes = request.metadata['authorized_data_scopes'];
+      final List<dynamic> authorizedScopes =
+          rawScopes is List ? List<dynamic>.from(rawScopes) : const <dynamic>[];
+
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
         headers: {
-          'x-rad-contract-version': 'v1',
+          'x-rad-contract-version': '1',
           'x-rad-request-key': requestKey,
           'x-rad-modality': 'text',
         },
         body: {
           'action': 'chat',
-          'contract_version': 'v1',
           'request_key': requestKey,
-          'modality': 'text',
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
-          if (guestKey != null && guestKey.isNotEmpty) 'guest_key': guestKey,
-          if (locale != null && locale.isNotEmpty) 'locale': locale,
-          if (authorizedScopes is List && authorizedScopes.isNotEmpty)
-            'authorized_data_scopes': authorizedScopes,
+          'guest_key': guestKey,
+          'locale': locale,
+          'authorized_data_scopes': authorizedScopes,
+          'context': request.metadata['context'] ?? <String, dynamic>{},
           'messages': [
             ...request.history.map(
               (message) => {

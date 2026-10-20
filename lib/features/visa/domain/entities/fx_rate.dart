@@ -43,36 +43,60 @@ class FxRateQuote {
 
   bool get isStale => freshnessState == FreshnessState.stale;
 
-  factory FxRateQuote.fromJson(Map<String, dynamic> json) => FxRateQuote(
-    id:
-        json['id'] as String? ??
-        'quote-${DateTime.now().millisecondsSinceEpoch}',
-    provider: json['provider'] == 'fawazahmed0'
+  /// Parse only complete Backend payloads. Missing required fields throw —
+  /// never invent rates, providers, currencies, or freshness timestamps.
+  factory FxRateQuote.fromJson(Map<String, dynamic> json) {
+    final id = json['id']?.toString();
+    final base =
+        (json['base'] ?? json['base_currency'])?.toString().toUpperCase();
+    final quote =
+        (json['quote'] ?? json['quote_currency'])?.toString().toUpperCase();
+    final rateRaw = json['rate'] ?? json['reference_rate_irr'];
+    final rate = rateRaw is num
+        ? rateRaw.toDouble()
+        : double.tryParse(rateRaw?.toString() ?? '');
+    final obsRaw = json['observation_date']?.toString();
+    final fetchedRaw =
+        json['fetched_at']?.toString() ?? json['timestamp']?.toString();
+
+    if (id == null ||
+        id.isEmpty ||
+        base == null ||
+        base.isEmpty ||
+        quote == null ||
+        quote.isEmpty ||
+        rate == null ||
+        rate <= 0 ||
+        obsRaw == null ||
+        obsRaw.isEmpty ||
+        fetchedRaw == null ||
+        fetchedRaw.isEmpty) {
+      throw FormatException('fx_quote_malformed_or_incomplete');
+    }
+
+    final observationDate = DateTime.parse(obsRaw);
+    final fetchedAt = DateTime.parse(fetchedRaw);
+    final provider = json['provider'] == 'fawazahmed0'
         ? FxProvider.fawazahmed0
-        : FxProvider.frankfurter,
-    baseCurrency:
-        json['base'] as String? ?? json['base_currency'] as String? ?? 'EUR',
-    quoteCurrency:
-        json['quote'] as String? ?? json['quote_currency'] as String? ?? 'IRR',
-    referenceRate:
-        double.tryParse(json['rate']?.toString() ?? '0') ??
-        (json['reference_rate_irr'] as num?)?.toDouble() ??
-        0.0,
-    rateBasis: RateBasis.providerReference,
-    observationDate: json['observation_date'] != null
-        ? DateTime.parse(json['observation_date'] as String)
-        : DateTime.now(),
-    fetchedAt: json['fetched_at'] != null
-        ? DateTime.parse(json['fetched_at'] as String)
-        : (json['timestamp'] != null
-              ? DateTime.parse(json['timestamp'] as String)
-              : DateTime.now()),
-    freshnessState: FreshnessState.values.firstWhere(
+        : FxProvider.frankfurter;
+    final freshness = FreshnessState.values.firstWhere(
       (e) => e.name == json['freshness_state'],
-      orElse: () => FreshnessState.fresh,
-    ),
-    sourceUrl: json['source_url'] as String? ?? '',
-  );
+      orElse: () => FreshnessState.unknown,
+    );
+
+    return FxRateQuote(
+      id: id,
+      provider: provider,
+      baseCurrency: base,
+      quoteCurrency: quote,
+      referenceRate: rate,
+      rateBasis: RateBasis.providerReference,
+      observationDate: observationDate,
+      fetchedAt: fetchedAt,
+      freshnessState: freshness,
+      sourceUrl: json['source_url'] as String? ?? '',
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,
