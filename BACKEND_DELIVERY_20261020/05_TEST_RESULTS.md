@@ -1,6 +1,6 @@
 # Test results
 
-Results refer to local synthetic environments, not production. Files under evidence/ retain counts, SQL hashes and replay manifests. Source HEAD at packaging: `839c749759989c922fdaa840e1a5f1e36f166b00`; final delivery commit identities belong in the Git handoff. Final source manifest comparison is required when consuming this report.
+Results refer to local synthetic environments, not production. Files under evidence/ retain counts, SQL hashes and replay manifests. Source HEAD at packaging: `9736540f567e9b5b88597a13d57b2e69025e0e40`; final delivery commit identities belong in the Git handoff. Final source manifest comparison is required when consuming this report.
 
 | Check | Status / result |
 |---|---|

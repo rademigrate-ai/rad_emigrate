@@ -1,0 +1,14 @@
+{
+  "operation": "probe",
+  "branch": "feat/rad-core-security-final",
+  "sha": "9736540f567e9b5b88597a13d57b2e69025e0e40",
+  "status": "PASS",
+  "production_mutations": false,
+  "workflow": {
+    "id": 373837268,
+    "name": "CI",
+    "path": ".github/workflows/ci.yml",
+    "state": "active",
+    "html_url": "https://github.com/rademigrate-ai/rad_emigrate/blob/main/.github/workflows/ci.yml"
+  }
+}

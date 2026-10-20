@@ -36,7 +36,8 @@ def main():
     branch = subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip()
     migrations = sorted((ROOT / 'supabase/migrations').glob('*.sql'))
     forward = [p for p in migrations if p.name >= '20261019204906_']
-    manifest = [{'file': p.name, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in migrations]
+    manifest = [{'file': p.name, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
+                 'git_lf_sha256':hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest()} for p in migrations]
     (evidence / 'migration_manifest.json').write_text(json.dumps(manifest, indent=2)+'\n', encoding='utf-8')
     sources = {
         'production_shape_reconstruction': RUNTIME/'reconstruct_report.json',
@@ -178,7 +179,7 @@ New corrections preserve historical files. Runtime tests caught a later legacy p
 |---|---|
 {migration_table}
 
-Canonical and upgrade reports, including the final contract-only append, are retained under `evidence/`. Final remote migration authorization, fresh drift reconciliation, preimage/dependency checks, lock assessment, backup/recovery rehearsal and frontend contract acceptance remain release gates. Never replay or repair the production historical ledger to match the repository count.
+Canonical and upgrade reports include the verified 76-file clean prefix and two appended files, and the verified 16-file production-shaped upgrade followed by its two explicit additive appends. The consolidated manifest covers all files. Raw sha256 values describe Windows rehearsal bytes; git_lf_sha256 values describe Git-published LF bytes. CRLF-to-LF equivalence was checked; no historical migration contents were edited. These conventions matter when verifying the manifest on Linux. Final remote migration authorization, fresh drift reconciliation, preimage/dependency checks, lock assessment, backup/recovery rehearsal and frontend contract acceptance remain release gates. Never replay or repair the production historical ledger to match the repository count.
 """)
     write('03_SECURITY_RLS_RESULTS.md',"""
 # Security and RLS results
