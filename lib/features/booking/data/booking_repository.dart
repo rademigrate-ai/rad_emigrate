@@ -293,8 +293,9 @@ class SupabaseBookingRepository implements BookingRepository {
           })
           .toList(growable: false);
     } catch (error) {
-      if (_isPermissionError(error))
+      if (_isPermissionError(error)) {
         throw const BookingException('consultation_history');
+      }
       rethrow;
     }
   }

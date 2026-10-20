@@ -8,10 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/supabase/supabase_providers.dart';
-import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/constrained_content.dart';
 import '../../../../core/widgets/empty_state.dart';
@@ -47,7 +44,7 @@ class BookingPage extends ConsumerWidget {
     final catalog = ref.watch(bookingCatalogProvider(l10n));
     final history = isAuthed
         ? ref.watch(bookingHistoryProvider)
-        : const AsyncValue<List<BookingRecord>>.data(const []);
+        : const AsyncValue<List<BookingRecord>>.data([]);
 
     return Scaffold(
       appBar: AppBar(

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/features/university_comparison/data/university_comparison_repository.dart';
-import 'package:rad_emigrate/features/university_comparison/domain/entities/university_comparison.dart';
 import 'package:rad_emigrate/features/university_comparison/presentation/pages/university_comparison_page.dart';
-import 'package:rad_emigrate/features/university_comparison/presentation/providers/university_comparison_controller.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 void main() {

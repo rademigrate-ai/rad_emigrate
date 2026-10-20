@@ -7,7 +7,6 @@ import '../../../../core/widgets/constrained_content.dart';
 import '../../../../core/widgets/loading_state.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/status_badge.dart';
-import '../../domain/entities/pathway_comparison.dart';
 import '../providers/pathway_comparison_controller.dart';
 
 class PathwayComparisonPage extends ConsumerWidget {
@@ -141,8 +140,8 @@ class PathwayComparisonPage extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .surfaceVariant
-                                    .withOpacity(0.5),
+                                    .surfaceContainerHighest
+                                    .withValues(alpha: 0.5),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(

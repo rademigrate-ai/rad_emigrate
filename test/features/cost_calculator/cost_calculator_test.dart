@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/features/cost_calculator/data/cost_calculator_repository.dart';
-import 'package:rad_emigrate/features/cost_calculator/domain/entities/cost_estimate.dart';
 import 'package:rad_emigrate/features/cost_calculator/presentation/pages/cost_calculator_page.dart';
-import 'package:rad_emigrate/features/cost_calculator/presentation/providers/cost_calculator_controller.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 void main() {
