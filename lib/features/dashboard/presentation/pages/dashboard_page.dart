@@ -146,7 +146,7 @@ class DashboardPage extends ConsumerWidget {
                 ReferenceSection(
                   title: l10n.recentActivity,
                   action: l10n.allCases,
-                  onAction: () => context.go('/applications'),
+                  onAction: () => context.push('/profile/cases'),
                 ),
                 if (!isAuthed)
                   _ActivityRow(
@@ -161,7 +161,7 @@ class DashboardPage extends ConsumerWidget {
                     icon: Icons.assignment_outlined,
                     title: app.title,
                     subtitle: app.programName,
-                    onTap: () => context.go('/applications'),
+                    onTap: () => context.push('/profile/cases'),
                   ),
                 if (missing > 0)
                   _ActivityRow(
@@ -184,7 +184,7 @@ class DashboardPage extends ConsumerWidget {
                     icon: Icons.assignment_outlined,
                     title: l10n.noApplications,
                     subtitle: l10n.noApplicationsSubtitle,
-                    onTap: () => context.go('/applications'),
+                    onTap: () => context.push('/profile/cases'),
                   ),
                 const SizedBox(height: 12),
                 LayoutBuilder(

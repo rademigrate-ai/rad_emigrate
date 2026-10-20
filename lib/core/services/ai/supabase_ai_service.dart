@@ -71,27 +71,54 @@ class SupabaseAiService implements AiService {
         throw const FormatException('invalid_ai_response');
       }
       final map = data.cast<String, dynamic>();
-      if (map['reply'] is String && (map['reply'] as String).isNotEmpty) {
-        final sources = (map['sources'] as List? ?? const [])
+      final payload = map['data'] is Map
+          ? (map['data'] as Map).cast<String, dynamic>()
+          : map;
+      final reply = payload['reply'] as String?;
+      if (reply != null && reply.isNotEmpty) {
+        final rawSources =
+            payload['citations'] as List? ??
+            payload['sources'] as List? ??
+            const [];
+        final sources = rawSources
             .whereType<Map>()
             .map((source) {
               final row = source.cast<String, dynamic>();
+              final title =
+                  row['title']?.toString() ?? row['url']?.toString() ?? '';
+              final url = row['url']?.toString();
+              final authority = row['authority']?.toString();
               return AiSource(
-                title: row['title']?.toString() ?? row['url']?.toString() ?? '',
-                url: row['url']?.toString(),
-                authority: row['authority']?.toString(),
+                title: title.isNotEmpty ? title : (url ?? 'مرجع رسمی'),
+                url: url,
+                authority: authority,
               );
             })
             .where((source) => source.title.isNotEmpty)
             .toList(growable: false);
+
+        final evidenceState = payload['evidence_state']?.toString();
+        final isUncertain =
+            payload['uncertain'] == true ||
+            evidenceState == 'unavailable' ||
+            evidenceState == 'insufficient' ||
+            evidenceState == 'conflicting';
+
         return AiResponse(
-          text: map['reply'] as String,
+          text: reply,
           sources: sources,
-          uncertain: map['uncertain'] == true,
-          conversationId: request.conversationId,
+          uncertain: isUncertain,
+          conversationId:
+              payload['session_id']?.toString() ?? request.conversationId,
         );
       }
-      final code = (map['code'] ?? map['error'] ?? 'ai_failed').toString();
+      final code =
+          (payload['code'] ??
+                  payload['error'] ??
+                  map['code'] ??
+                  map['error'] ??
+                  'ai_failed')
+              .toString();
       return AiResponse(
         text: _messageForCode(code, locale),
         uncertain: true,
@@ -120,17 +147,24 @@ class SupabaseAiService implements AiService {
     switch (code) {
       case 'provider_unauthorized':
       case 'provider_auth_failed':
+      case 'unauthorized':
         return l10n.aiCredentialRejected;
       case 'no_eligible_model':
       case 'provider_not_configured':
         return l10n.aiNoEligibleModel;
       case 'daily_limit_reached':
-        return l10n.aiQuotaExhausted;
+      case 'quota_exhausted':
       case 'anonymous_quota_exceeded':
       case 'authentication_required':
         return l10n.aiQuotaExhausted;
       case 'provider_rate_limited':
+      case 'rate_limit_exceeded':
         return l10n.aiRateLimited;
+      case 'insufficient_evidence':
+      case 'empty_evidence':
+      case 'stale_evidence':
+      case 'unavailable_evidence':
+        return 'شواهد رسمی و مستندات کافی برای این درخواست در پایگاه داده یافت نشد.';
       default:
         return l10n.aiRequestFailed;
     }

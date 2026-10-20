@@ -98,14 +98,14 @@ class _AppShellState extends ConsumerState<AppShell> {
         ),
     ];
 
-    // Mobile primary: Home | Visa | AI bird | Cases | Profile
-    final primary = [items[0], items[1], items[2], items[7]];
+    // Mobile primary: Home | Visa | AI bird | Feed | Profile
+    final primary = [items[0], items[1], items[4], items[7]];
     final overflow = items
         .where(
           (item) =>
               item.path != '/dashboard' &&
               item.path != '/visa' &&
-              item.path != '/applications' &&
+              item.path != '/feed' &&
               item.path != '/profile' &&
               item.path != '/ai-assistant',
         )
@@ -115,8 +115,9 @@ class _AppShellState extends ConsumerState<AppShell> {
       items[0],
       items[1],
       items[6],
-      items[2],
+      items[4],
       items[7],
+      items[2],
       _NavItem(
         label: l10n.more,
         path: '/more',
@@ -141,7 +142,7 @@ class _AppShellState extends ConsumerState<AppShell> {
     ];
     final selected = railItems.any((item) => location.startsWith(item.path))
         ? _selectedIndex(location, railItems)
-        : 5;
+        : 6;
     final wide = MediaQuery.sizeOf(context).width >= AppBreakpoints.desktop;
     final aiSelected = location.startsWith('/ai-assistant');
 
@@ -151,11 +152,15 @@ class _AppShellState extends ConsumerState<AppShell> {
       '/consultation': '/dashboard',
       '/documents': '/profile',
       '/notifications': '/profile',
+      '/applications': '/profile',
+      '/profile/cases': '/profile',
       '/admin': '/profile',
       '/admin/ai-config': '/admin',
       '/admin/operations': '/admin',
       '/admin/consultations': '/admin',
       '/admin/ai-research': '/admin',
+      '/admin/cms': '/admin',
+      '/admin/sources': '/admin',
     };
     final shell = Scaffold(
       // Keep route content above the navigation surface. Extending behind the

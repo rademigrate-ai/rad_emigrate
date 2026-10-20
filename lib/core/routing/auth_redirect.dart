@@ -13,6 +13,7 @@ const Set<String> _authRoutes = {
 const Set<String> _publicInAppRoutes = {
   '/dashboard',
   '/visa',
+  '/visa/search',
   '/feed',
   '/world-clock',
   '/profile',
@@ -25,6 +26,7 @@ const Set<String> _publicInAppRoutes = {
 /// Personal or administrative routes that strictly require authentication.
 const Set<String> _protectedRoutes = {
   '/applications',
+  '/profile/cases',
   '/documents',
   '/documents/draft',
   '/notifications',
@@ -34,14 +36,17 @@ const Set<String> _protectedRoutes = {
   '/admin/operations',
   '/admin/ai-research',
   '/admin/consultations',
+  '/admin/cms',
+  '/admin/sources',
 };
 
 /// True if the given path requires authentication.
 bool isProtectedPath(String location) {
   if (_protectedRoutes.contains(location)) return true;
-  // Nested Admin paths require authentication. Other unknown paths should
-  // reach the NotFound page rather than being captured by a broad prefix.
+  // Nested Admin paths require authentication.
   if (location.startsWith('/admin/')) return true;
+  if (location.startsWith('/profile/cases/')) return true;
+  if (location.startsWith('/applications/')) return true;
   return false;
 }
 
@@ -53,6 +58,8 @@ bool _isKnownLocation(String location) =>
     location == '/splash' ||
     _authRoutes.contains(location) ||
     _publicInAppRoutes.contains(location) ||
+    location.startsWith('/visa/') ||
+    location.startsWith('/feed/') ||
     isProtectedPath(location);
 
 /// True when an OTP page visit carries a pending verification flow.
