@@ -1,6 +1,6 @@
 # Test results
 
-Results refer to local synthetic environments, not production. Files under evidence/ retain counts, SQL hashes and replay manifests. Source HEAD at packaging: `9736540f567e9b5b88597a13d57b2e69025e0e40`; final delivery commit identities belong in the Git handoff. Final source manifest comparison is required when consuming this report.
+Results refer to local synthetic environments, not production. Files under evidence/ retain counts, SQL hashes and replay manifests. Source HEAD at packaging: `b21ff6d46930506e56a215b7f62e8f536ceb3d15`; final delivery commit identities belong in the Git handoff. Final source manifest comparison is required when consuming this report.
 
 | Check | Status / result |
 |---|---|
@@ -17,7 +17,9 @@ Results refer to local synthetic environments, not production. Files under evide
 | Approved bilingual gold corpus | BLOCKED — no reviewed real corpus supplied |
 | Live official-source/FX/model/external delivery acceptance | NOT RUN |
 | Production migration/deploy | NOT RUN — prohibited |
-| GitHub CI / secret scan | See final evidence/ci_status.json and evidence/secret_scan.json when present; absence means NOT RUN |
+| Automated secret scan | FAIL ? 30 snapshot / 36 history candidates; every candidate was verified noncredential data, with values omitted |
+| Secret-scan source/provenance review | PASS ? migration-file digests matched source; cache metadata, preferences identifier and synthetic UUIDs verified; no scanner policy or ignore changes |
+| GitHub CI | See evidence/ci_status.json for the tested SHA and final run/check status; absence means NOT RUN |
 
 | Environment | SQL suite | Status |
 |---|---|---|

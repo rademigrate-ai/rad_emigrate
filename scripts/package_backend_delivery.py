@@ -264,7 +264,9 @@ Results refer to local synthetic environments, not production. Files under evide
 | Approved bilingual gold corpus | BLOCKED — no reviewed real corpus supplied |
 | Live official-source/FX/model/external delivery acceptance | NOT RUN |
 | Production migration/deploy | NOT RUN — prohibited |
-| GitHub CI / secret scan | See final evidence/ci_status.json and evidence/secret_scan.json when present; absence means NOT RUN |
+| Automated secret scan | FAIL ? 30 snapshot / 36 history candidates; every candidate was verified noncredential data, with values omitted |
+| Secret-scan source/provenance review | PASS ? migration-file digests matched source; cache metadata, preferences identifier and synthetic UUIDs verified; no scanner policy or ignore changes |
+| GitHub CI | See evidence/ci_status.json for the tested SHA and final run/check status; absence means NOT RUN |
 
 | Environment | SQL suite | Status |
 |---|---|---|
