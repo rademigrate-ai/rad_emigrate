@@ -1,0 +1,11 @@
+{
+  "operation": "apply",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:47:05.116208+00:00",
+  "sql": "supabase\\migrations\\20261020114612_rad_transport_contract_registry_alignment.sql",
+  "sql_sha256": "c403adf1c1dfc44e49968d6d71e0013068494e6751ea3c4786b86bf4626d007f",
+  "status": "PASS"
+}

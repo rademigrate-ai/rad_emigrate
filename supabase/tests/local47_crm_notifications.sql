@@ -66,9 +66,12 @@ do $$ declare v jsonb; begin
   v:=public.queue_notification_delivery('47000000-0000-4000-9000-000000000001','email');
   assert v->>'reason'='preference_disabled';
 end $$;
-insert into public.notification_preferences(user_id,email_enabled,time_zone) values
- ('47000000-0000-4000-8000-000000000001',true,'Asia/Tehran')
- on conflict(user_id) do update set email_enabled=true,time_zone='Asia/Tehran';
+-- Current owner API uses revision-controlled full replacement.
+do $$ declare prefs jsonb;begin
+ prefs:=public.get_notification_preferences('{}')->'data';
+ perform public.save_notification_preferences(jsonb_build_object('expected_revision',prefs->'revision','preferences',(prefs-'revision'-'updated_at')||'{"email_enabled":true,"time_zone":"Asia/Tehran"}','request_key',gen_random_uuid()));
+end $$;
+
 do $$ declare a jsonb; b jsonb; begin
   a:=public.queue_notification_delivery('47000000-0000-4000-9000-000000000001','email');
   b:=public.queue_notification_delivery('47000000-0000-4000-9000-000000000001','email');
@@ -77,9 +80,9 @@ do $$ declare a jsonb; b jsonb; begin
   begin perform public.claim_sandbox_notification(); raise exception 'owner claimed service-only outbox';
   exception when insufficient_privilege then null; end;
   begin
-    update public.notification_preferences set time_zone='not/a/timezone';
+    perform public.save_notification_preferences(jsonb_build_object('expected_revision',1,'preferences',((public.get_notification_preferences('{}')->'data')-'revision'-'updated_at')||'{"time_zone":"not/a/timezone"}','request_key',gen_random_uuid()));
     raise exception 'invalid time zone accepted';
-  exception when invalid_parameter_value then null; end;
+  exception when sqlstate 'PT422' then null; end;
 end $$;
 reset role;
 

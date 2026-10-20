@@ -72,6 +72,10 @@ def reconstruct(c: dict, history: list[dict]) -> str:
         if f['acl'] is not None:
             sql.append(f"REVOKE ALL ON FUNCTION {target} FROM PUBLIC, anon, authenticated, service_role;")
             sql += acl_grants(f["acl"], target, "FUNCTION ")
+        else:
+            # An earlier owned rehearsal may have hardened global defaults.
+            # Reconstruct the captured effective default explicitly.
+            sql.append(f"GRANT EXECUTE ON FUNCTION {target} TO PUBLIC;")
     for a in c["columns"]:
         if a["default_expression"] and not a["identity"] and not a["generated"]:
             sql.append(f"ALTER TABLE {q(a['schema'])}.{q(a['table_name'])} ALTER COLUMN {q(a['column_name'])} SET DEFAULT {a['default_expression']};")
@@ -134,17 +138,24 @@ def reconstruct(c: dict, history: list[dict]) -> str:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("operation", choices=["start", "reconstruct", "compare", "apply", "test", "stop"])
+    p.add_argument("operation", choices=["start", "reconstruct", "compare", "canonical", "extend-canonical", "reset-canonical", "reset-upgrade", "upgrade", "apply", "test", "stop"])
+    p.add_argument("--project", default=PROJECT)
+    p.add_argument("--port", type=int, default=PORT)
     p.add_argument("--evidence", type=Path, required=True)
     p.add_argument("--runtime", type=Path, required=True)
     p.add_argument("--supabase", type=Path, required=True)
     p.add_argument("--psql", type=Path, default=Path(r"C:\Program Files\PostgreSQL\17\bin\psql.exe"))
     p.add_argument("--sql", type=Path)
+    p.add_argument("--function", action="append", default=[], help="Local iteration: replace only this function from --sql")
+    p.add_argument("--contracts-only", action="store_true", help="Local iteration: apply the generated contract registry delta only")
     args = p.parse_args()
+    global_project, global_port = args.project, args.port
+    assert re.fullmatch(r"rad_[a-z0-9_]+", global_project), "local project name required"
+    assert 58000 <= global_port <= 64000, "dedicated high local port required"
     runtime = args.runtime.resolve()
     assert runtime != ROOT and ROOT not in runtime.parents, "runtime must be external"
     marker = runtime / "RAD_DISPOSABLE_LOCAL_ONLY.json"
-    identity = {"project": PROJECT, "port": PORT, "owner_checkout": str(ROOT)}
+    identity = {"project": global_project, "port": global_port, "owner_checkout": str(ROOT)}
     if marker.exists():
         assert json.loads(marker.read_text()) == identity, "wrong runtime owner"
     else:
@@ -154,7 +165,7 @@ def main() -> None:
     env = os.environ.copy()
     env["PGPASSWORD"] = "postgres"  # synthetic public local default only
     cli = [str(args.supabase), "--workdir", str(runtime), "--agent", "no"]
-    db = [str(args.psql), "-X", "-v", "ON_ERROR_STOP=1", "-h", "127.0.0.1", "-p", str(PORT), "-U", "postgres", "-d", "postgres"]
+    db = [str(args.psql), "-X", "-v", "ON_ERROR_STOP=1", "-h", "127.0.0.1", "-p", str(global_port), "-U", "postgres", "-d", "postgres"]
 
     def run(command: list[str], input: str | None = None) -> str:
         result = subprocess.run(command, input=input, cwd=runtime, env=env, capture_output=True,
@@ -163,33 +174,38 @@ def main() -> None:
             # SQL and CLI logs may contain local keys. Keep raw logs external.
             (runtime / "failure.log").write_text(result.stdout + result.stderr, encoding="utf-8")
             raise RuntimeError(f"command failed, exit={result.returncode}; inspect external failure.log")
+        if args.operation=='test' and args.sql and command[0]==str(args.psql):
+            (runtime/(args.sql.stem+'.log')).write_text(result.stdout+result.stderr,encoding='utf-8')
         return result.stdout
 
     catalog = json.loads((args.evidence / "prod_catalog.json").read_text(encoding="utf-8"))
     history = json.loads((args.evidence / "production_recorded_migration_sql.json").read_text(encoding="utf-8"))
-    report: dict = {"operation": args.operation, "project": PROJECT, "port": PORT,
+    report: dict = {"operation": args.operation, "project": global_project, "port": global_port,
                     "source_head": run(["git", "-C", str(ROOT), "rev-parse", "HEAD"]).strip(),
                     "production_mutations": False, "at": datetime.now(timezone.utc).isoformat()}
     try:
+        if args.operation not in ('start','stop'):
+            ports=json.loads(run(['docker','inspect','--format','{{json .NetworkSettings.Ports}}','supabase_db_'+global_project]))
+            assert any(int(binding['HostPort'])==global_port for binding in ports.get('5432/tcp',[])), 'database port is not the owned container'
         if args.operation == "start":
             sb = runtime / "supabase"
             sb.mkdir(exist_ok=True)
             (sb / "migrations").mkdir(exist_ok=True)
-            (sb / "config.toml").write_text(f'''project_id = "{PROJECT}"
+            (sb / "config.toml").write_text(f'''project_id = "{global_project}"
 [api]
-port = {PORT-1}
+port = {global_port-1}
 [db]
-port = {PORT}
-shadow_port = {PORT-2}
+port = {global_port}
+shadow_port = {global_port-2}
 major_version = 17
 [studio]
-port = {PORT+1}
+port = {global_port+1}
 [inbucket]
-port = {PORT+2}
-smtp_port = {PORT+3}
-pop3_port = {PORT+4}
+port = {global_port+2}
+smtp_port = {global_port+3}
+pop3_port = {global_port+4}
 [auth]
-site_url = "http://127.0.0.1:{PORT-1}"
+site_url = "http://127.0.0.1:{global_port-1}"
 ''', encoding="utf-8")
             run([*cli, "start", "--exclude", "studio,postgres-meta,realtime,imgproxy,edge-runtime,logflare,vector,supavisor"])
         elif args.operation == "reconstruct":
@@ -256,12 +272,69 @@ site_url = "http://127.0.0.1:{PORT-1}"
             report["deliberate_environment_differences"] = ["extension patch versions", "inactive no-op cron commands", "no Vault secret values", "platform auth/storage schema owned by local Supabase", "no business/user data"]
             if differences:
                 raise AssertionError("catalog parity failed: " + ",".join(differences))
-            result = run([*cli, "db", "push", "--db-url", f"postgresql://postgres:postgres@127.0.0.1:{PORT}/postgres", "--dry-run"])
+            result = run([*cli, "db", "push", "--db-url", f"postgresql://postgres:postgres@127.0.0.1:{global_port}/postgres", "--dry-run"])
             report["zero_historical_pending"] = "up to date" in result.lower()
+        elif args.operation in ('reset-canonical','reset-upgrade'):
+            assert global_project.endswith('_'+args.operation.split('-')[1]), 'only the specifically owned rehearsal can reset'
+            assert run([*db,'-Atc',"select count(*) from auth.users where email not like 'rad-synthetic-%@example.invalid'"]).strip()=='0', 'refusing to discard non-synthetic Auth users'
+            # This project was allocated by this runner. Preserve platform-owned
+            # auth/storage objects; remove only its failed application rehearsal.
+            run(db,"DROP SCHEMA IF EXISTS private CASCADE;DROP SCHEMA public CASCADE;DROP SCHEMA IF EXISTS supabase_migrations CASCADE;DELETE FROM auth.users;CREATE SCHEMA public;GRANT USAGE ON SCHEMA public TO postgres,anon,authenticated,service_role;GRANT ALL ON SCHEMA public TO postgres;")
+        elif args.operation in ("canonical", "extend-canonical", "upgrade"):
+            if args.operation == "canonical":
+                assert run([*db, "-Atc", "select count(*) from information_schema.tables where table_schema='public'"]).strip() == "0", "requires empty owned DB"
+                files = sorted((ROOT / "supabase/migrations").glob("*.sql"))
+            elif args.operation == 'upgrade':
+                parity = json.loads((runtime / "compare_report.json").read_text())
+                assert parity['status'] == 'PASS' and parity['zero_historical_pending'], "reconciled baseline required"
+                assert parity['source_head'] == report['source_head'], "baseline evidence belongs to another HEAD"
+                files = sorted(f for f in (ROOT / "supabase/migrations").glob("*.sql") if f.name >= "20261019204906_")
+            else:
+                candidates=[json.loads(p.read_text()) for p in [runtime/'canonical_report.json',runtime/'extend-canonical_report.json'] if p.exists()]
+                previous=max((p for p in candidates if p.get('status')=='PASS'),key=lambda p:len(p['applied_manifest']))
+                assert previous['status']=='PASS'
+                for entry in previous['applied_manifest']:
+                    assert hashlib.sha256((ROOT/'supabase/migrations'/entry['file']).read_bytes()).hexdigest()==entry['sha256'], 'previous replay bytes changed'
+                files=sorted(f for f in (ROOT/'supabase/migrations').glob('*.sql') if f.name>previous['applied_manifest'][-1]['file'])
+            manifest = previous['applied_manifest'] if args.operation=='extend-canonical' else []
+            run(db,"CREATE SCHEMA IF NOT EXISTS supabase_migrations;CREATE TABLE IF NOT EXISTS supabase_migrations.schema_migrations(version text primary key,statements text[],name text);")
+            if args.operation=='extend-canonical':
+                for entry in manifest:
+                    version,name=Path(entry['file']).stem.split('_',1)
+                    run(db,f"INSERT INTO supabase_migrations.schema_migrations(version,name) VALUES({lit(version)},{lit(name)}) ON CONFLICT(version) DO NOTHING;")
+            report['applied_manifest'] = manifest
+            for path in files:
+                report['current_migration']=path.name
+                # Some retained historical files open BEGIN without a final
+                # COMMIT; the CLI supplies the transaction boundary. Match it.
+                version,name=path.stem.split('_',1)
+                run(db, 'BEGIN;\n'+path.read_text(encoding="utf-8")+'\nCOMMIT;'+
+                    f"INSERT INTO supabase_migrations.schema_migrations(version,name) VALUES({lit(version)},{lit(name)});"+
+                    "DO $disable_cron$ BEGIN IF to_regclass('cron.job') IS NOT NULL THEN PERFORM cron.alter_job(jobid,active:=false) FROM cron.job;END IF;END $disable_cron$;")
+                manifest.append({'file': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+            report['historical_sql_executed'] = args.operation in ('canonical','extend-canonical')
         elif args.operation in ("apply", "test"):
             assert args.sql and args.sql.resolve().is_relative_to(ROOT), "SQL must belong to this checkout"
-            run(db, args.sql.read_text(encoding="utf-8"))
-            report["sql"] = str(args.sql.relative_to(ROOT))
+            sql = args.sql.read_text(encoding="utf-8")
+            if args.contracts_only:
+                assert args.operation == 'apply' and not args.function
+                sql='BEGIN;\n'+sql.split('-- BEGIN GENERATED CONTRACT DELTA\n')[1]
+                report['contracts_only']=True
+            if args.function:
+                assert args.operation == 'apply'
+                selected=[]
+                for name in args.function:
+                    assert re.fullmatch(r'(public|private)\.[a-z_]+',name)
+                    match=re.search(r'create(?: or replace)? function '+re.escape(name)+r'\(.*?\$\$;',sql,re.I|re.S)
+                    assert match, name
+                    selected.append(re.sub(r'^create(?: or replace)? function','create or replace function',match[0],flags=re.I))
+                sql='BEGIN;\n'+'\n'.join(selected)+"\nNOTIFY pgrst,'reload schema';COMMIT;"
+                report['functions_only']=args.function
+            if args.operation=='test' and not args.function and not args.contracts_only:
+                run([*db,'-f',str(args.sql.resolve())])
+            else:
+                run(db, sql)
+            report["sql"] = str(args.sql.resolve().relative_to(ROOT))
             report["sql_sha256"] = hashlib.sha256(args.sql.read_bytes()).hexdigest()
         elif args.operation == "stop":
             run([*cli, "stop", "--no-backup"])
@@ -272,7 +345,7 @@ site_url = "http://127.0.0.1:{PORT-1}"
         raise
     finally:
         (runtime / (args.operation + "_report.json")).write_text(json.dumps(report, indent=2), encoding="utf-8")
-        print(json.dumps({k:v for k,v in report.items() if k!='platform_storage_extras'}, indent=2), flush=True)
+        print(json.dumps({k:v for k,v in report.items() if k not in ('platform_storage_extras','applied_manifest')}, indent=2), flush=True)
 
 
 if __name__ == "__main__":

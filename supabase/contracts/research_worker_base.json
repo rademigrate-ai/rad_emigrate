@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Leased research article base — internal service RPC",
+  "endpoint": "/rest/v1/rpc/get_research_article_base",
+  "authentication": "service_role JWT; unexpired running research_refresh job lease; matching authority country scope",
+  "notes": "Draft data is for the authorized backend worker only. Map hashes by section_id and preserve explicit order fields. Reuse server before_hash strings; do not reproduce PostgreSQL JSON canonicalization. This endpoint never approves or publishes.",
+  "request": {
+    "type": "object",
+    "properties": {
+      "p_job_id": { "$ref": "rad_v1.json#/$defs/UUID" },
+      "p_lease_token": { "$ref": "rad_v1.json#/$defs/UUID" },
+      "p_article_id": { "$ref": "rad_v1.json#/$defs/UUID" },
+      "p_locale": { "$ref": "rad_v1.json#/$defs/Locale" }
+    },
+    "required": ["p_job_id", "p_lease_token", "p_article_id", "p_locale"],
+    "additionalProperties": false
+  },
+  "response": {
+    "type": "object",
+    "properties": {
+      "article_id": { "$ref": "rad_v1.json#/$defs/UUID" },
+      "locale": { "$ref": "rad_v1.json#/$defs/Locale" },
+      "revision_id": { "$ref": "rad_v1.json#/$defs/UUID" },
+      "revision": { "type": "integer", "minimum": 1 },
+      "sections": {
+        "type": "array",
+        "maxItems": 100,
+        "items": { "$ref": "rad_v1.json#/$defs/ArticleSectionInput" }
+      },
+      "section_hashes": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "properties": {
+            "section_id": { "$ref": "rad_v1.json#/$defs/UUID" },
+            "before_hash": { "$ref": "rad_v1.json#/$defs/SHA256" }
+          },
+          "required": ["section_id", "before_hash"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": ["article_id", "locale", "revision_id", "revision", "sections", "section_hashes"],
+    "additionalProperties": false
+  },
+  "errors": {
+    "$ref": "rad_v1.json#/$defs/PostgrestError",
+    "description": "PT403 service/scope denied; PT409 lease invalid; PT404 article/locale head absent; PT422 invalid locale."
+  }
+}

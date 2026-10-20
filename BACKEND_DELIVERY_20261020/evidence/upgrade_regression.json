@@ -1,0 +1,107 @@
+[
+  {
+    "test": "supabase/reconciliation/security_regression.sql",
+    "status": "PASS",
+    "seconds": 0.275,
+    "sha256": "092fcdc6dac8f956773f81f9b7a1c7a50911de95ec6fabdc64e4e3b505f7b78a"
+  },
+  {
+    "test": "supabase/tests/phase_a_constraint_backfill.sql",
+    "status": "PASS",
+    "seconds": 0.344,
+    "sha256": "6d3b76947ee9ad8ec46a5c2091705fa10637cbc16ad9d6c55640c96bd440d5fc"
+  },
+  {
+    "test": "supabase/tests/phase_a_security.sql",
+    "status": "PASS",
+    "seconds": 0.56,
+    "sha256": "961d92436babf2839a2f5b836c8319c3174faec39da45da947a3327643b211e4"
+  },
+  {
+    "test": "supabase/tests/stage2_knowledge_completion.sql",
+    "status": "PASS",
+    "seconds": 0.408,
+    "sha256": "b0e975f0e1b62b65341c1c43079f7dff59d5fdda39dd58aea80775d3a2d7584e"
+  },
+  {
+    "test": "supabase/tests/stage4_user_ai.sql",
+    "status": "PASS",
+    "seconds": 0.309,
+    "sha256": "2dbcdd6abe4b92a9d94ebdd78f65cd3fc4d3565e72c3043d516e1ae9509bbdee"
+  },
+  {
+    "test": "supabase/tests/local47_crm_notifications.sql",
+    "status": "PASS",
+    "seconds": 1.111,
+    "sha256": "d9e0c8c05253ba1b60db34ecbf4038caedaa1e44f9a4bd3339ba1e504a366f86"
+  },
+  {
+    "test": "supabase/tests/local47_payment_sandbox.sql",
+    "status": "NOT RUN",
+    "reason": "Optional component absent from captured baseline; no historical replay authorized for that feature"
+  },
+  {
+    "test": "supabase/tests/local47_definer_acl.sql",
+    "status": "PASS",
+    "seconds": 0.302,
+    "sha256": "45522546258ce2b13a4109ef6afbe22a7daa4a03da066300b96a9cf273e32881"
+  },
+  {
+    "test": "supabase/tests/local47_document_processing.sql",
+    "status": "NOT RUN",
+    "reason": "Optional component absent from captured baseline; no historical replay authorized for that feature"
+  },
+  {
+    "test": "supabase/tests/local47_observability.sql",
+    "status": "NOT RUN",
+    "reason": "Optional component absent from captured baseline; no historical replay authorized for that feature"
+  },
+  {
+    "test": "supabase/tests/rad_content_security.sql",
+    "status": "PASS",
+    "seconds": 1.045,
+    "sha256": "932578934a58b0b3fd6ed0b7f631bb0d77f79ec39ddac5ccd5aac0a4444a6fd3"
+  },
+  {
+    "test": "supabase/tests/rad_feed_currency_security.sql",
+    "status": "PASS",
+    "seconds": 0.911,
+    "sha256": "cd0d973e2cc10580bda4d5ad017891c8125c4c84b1b62a0a26b5f15faef74182"
+  },
+  {
+    "test": "supabase/tests/rad_interactions.sql",
+    "status": "PASS",
+    "seconds": 0.863,
+    "sha256": "7cc66e470f249f91b63e03654baeeef14e8ba7666c72e14d4800625988db49fa"
+  },
+  {
+    "test": "supabase/tests/rad_merge_provenance.sql",
+    "status": "PASS",
+    "seconds": 0.401,
+    "sha256": "841013156fc03188c69e3c282deff1f733cbc734e09ea51bebb7941c308b5ec8"
+  },
+  {
+    "test": "supabase/tests/rad_official_evidence.sql",
+    "status": "PASS",
+    "seconds": 1.216,
+    "sha256": "f1bed5c9e3dc0caa4723e9a0b5939f1e526f8323811e012a906968cd55ff9dec"
+  },
+  {
+    "test": "supabase/tests/rad_privacy_security.sql",
+    "status": "PASS",
+    "seconds": 0.236,
+    "sha256": "5288c47caa4611ecbb80481f263869c3735e9d6148c52c7758a40442cc27c7fa"
+  },
+  {
+    "test": "supabase/tests/rad_quota_security.sql",
+    "status": "PASS",
+    "seconds": 0.178,
+    "sha256": "0dd5b1d353e7b3f6b97ca27f15533c6d44c812e9d4ae40c352693480aacf8daf"
+  },
+  {
+    "test": "supabase/tests/rad_search_performance.sql",
+    "status": "PASS",
+    "seconds": 42.771,
+    "sha256": "966a58b7f69434a10a3968fbda2b11cfee3ce88a670ac805225e22c0ef986d90"
+  }
+]

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "RAD contract v1 review candidate",
-  "status": "PROPOSED_NOT_APPROVED",
+  "status": "Backend integration candidate; disabled capabilities; owner acceptance pending",
   "$defs": {
     "UUID": {
       "type": "string",
@@ -48,7 +48,7 @@
       "type": "string",
       "minLength": 3,
       "maxLength": 3,
-      "pattern": "^[A-Z]{3}$"
+      "pattern": "^(?!IRT$)[A-Z]{3}$"
     },
     "EditorialState": {
       "type": "string",
@@ -1610,7 +1610,8 @@
           "enum": [
             "exact",
             "full_text",
-            "typo"
+            "typo",
+            "synonym"
           ]
         },
         "score": {
@@ -2138,11 +2139,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/RelatedArticleSummary"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RelatedArticleSummary"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -2526,11 +2536,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/RevisionSummary"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RevisionSummary"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -2667,11 +2686,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Authority"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Authority"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -2788,11 +2816,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/ResearchProposal"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ResearchProposal"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -2927,16 +2964,40 @@
     "official_source_worker_response": {
       "type": "object",
       "properties": {
-        "data": {
-          "$ref": "#/$defs/JobResult"
+        "job_id": {
+          "$ref": "#/$defs/UUID"
         },
-        "meta": {
-          "$ref": "#/$defs/Meta"
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed"
+          ]
+        },
+        "candidates": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "verified": {
+          "const": 0
+        },
+        "safe_error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
-        "data",
-        "meta"
+        "job_id",
+        "status",
+        "candidates",
+        "verified",
+        "safe_error_code"
       ],
       "additionalProperties": false
     },
@@ -3089,11 +3150,42 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/FxObservation"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FxObservation"
+              },
+              "maxItems": 50
+            },
+            "provider": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "frankfurter",
+                    "fawazahmed0"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "missing_dates": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Date"
+              },
+              "maxItems": 367
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items",
+            "provider",
+            "missing_dates"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -3284,11 +3376,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/CurrencyAlert"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CurrencyAlert"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -3307,37 +3408,91 @@
     "currency_refresh_request": {
       "type": "object",
       "properties": {
-        "pair_ids": {
+        "pairs": {
           "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
           "items": {
-            "$ref": "#/$defs/UUID"
-          },
-          "maxItems": 50,
-          "minItems": 1
-        },
-        "request_key": {
-          "$ref": "#/$defs/UUID"
+            "type": "object",
+            "properties": {
+              "base": {
+                "$ref": "#/$defs/CurrencyCode"
+              },
+              "quote": {
+                "$ref": "#/$defs/CurrencyCode"
+              }
+            },
+            "required": [
+              "base",
+              "quote"
+            ],
+            "additionalProperties": false
+          }
         }
       },
       "required": [
-        "pair_ids",
-        "request_key"
+        "pairs"
       ],
       "additionalProperties": false
     },
     "currency_refresh_response": {
       "type": "object",
       "properties": {
-        "data": {
-          "$ref": "#/$defs/JobResult"
-        },
-        "meta": {
-          "$ref": "#/$defs/Meta"
+        "results": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "base": {
+                    "$ref": "#/$defs/CurrencyCode"
+                  },
+                  "quote": {
+                    "$ref": "#/$defs/CurrencyCode"
+                  },
+                  "observation_id": {
+                    "$ref": "#/$defs/UUID"
+                  },
+                  "status": {
+                    "const": "cached"
+                  }
+                },
+                "required": [
+                  "base",
+                  "quote",
+                  "observation_id",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "base": {
+                    "$ref": "#/$defs/CurrencyCode"
+                  },
+                  "quote": {
+                    "$ref": "#/$defs/CurrencyCode"
+                  },
+                  "status": {
+                    "const": "unavailable"
+                  }
+                },
+                "required": [
+                  "base",
+                  "quote",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
         }
       },
       "required": [
-        "data",
-        "meta"
+        "results"
       ],
       "additionalProperties": false
     },
@@ -3399,11 +3554,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/FeedItem"
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FeedItem"
+              },
+              "maxItems": 50
+            }
           },
-          "maxItems": 50
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -4027,24 +4191,48 @@
           "maximum": 20
         }
       },
-      "required": [
-        "limit"
-      ],
+      "required": [],
       "additionalProperties": false
     },
     "notification_dispatch_response": {
       "type": "object",
       "properties": {
-        "data": {
-          "$ref": "#/$defs/JobResult"
+        "mode": {
+          "const": "sandbox"
         },
-        "meta": {
-          "$ref": "#/$defs/Meta"
+        "claimed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "sandbox_receipts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "retry_scheduled": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "stale": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
         }
       },
       "required": [
-        "data",
-        "meta"
+        "mode",
+        "claimed",
+        "sandbox_receipts",
+        "retry_scheduled",
+        "failed",
+        "stale"
       ],
       "additionalProperties": false
     },
@@ -4541,7 +4729,20 @@
       "type": "object",
       "properties": {
         "data": {
-          "$ref": "#/$defs/JobResult"
+          "type": "object",
+          "properties": {
+            "draft": {
+              "$ref": "#/$defs/ArticleRevisionResult"
+            },
+            "manifest_id": {
+              "$ref": "#/$defs/UUID"
+            }
+          },
+          "required": [
+            "draft",
+            "manifest_id"
+          ],
+          "additionalProperties": false
         },
         "meta": {
           "$ref": "#/$defs/Meta"
@@ -4757,6 +4958,579 @@
         "request_key"
       ],
       "additionalProperties": false
+    },
+    "FeedComment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "feed_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "body": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "state": {
+          "enum": [
+            "pending",
+            "visible",
+            "hidden",
+            "deleted"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "is_owner": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      },
+      "required": [
+        "id",
+        "feed_id",
+        "parent_id",
+        "body",
+        "state",
+        "revision",
+        "is_owner",
+        "created_at"
+      ],
+      "additionalProperties": false
+    },
+    "VisaReadingState": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "section_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "saved": {
+          "type": "boolean"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      },
+      "required": [
+        "article_id",
+        "locale",
+        "section_id",
+        "saved",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "create_feed_comment_request": {
+      "type": "object",
+      "properties": {
+        "feed_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "feed_id",
+        "parent_id",
+        "body",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "create_feed_comment_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/FeedComment"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "delete_feed_comment_request": {
+      "type": "object",
+      "properties": {
+        "comment_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "comment_id",
+        "expected_revision",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "delete_feed_comment_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/FeedComment"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "moderate_feed_comment_request": {
+      "type": "object",
+      "properties": {
+        "comment_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "state": {
+          "enum": [
+            "visible",
+            "hidden"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "comment_id",
+        "expected_revision",
+        "state",
+        "note",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "moderate_feed_comment_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/FeedComment"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "list_feed_comments_request": {
+      "type": "object",
+      "properties": {
+        "feed_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "required": [
+        "feed_id",
+        "cursor",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "list_feed_comments_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FeedComment"
+              },
+              "maxItems": 50
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        }
+      },
+      "required": [
+        "data",
+        "meta",
+        "page"
+      ],
+      "additionalProperties": false
+    },
+    "get_visa_reading_state_request": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        }
+      },
+      "required": [
+        "article_id",
+        "locale"
+      ],
+      "additionalProperties": false
+    },
+    "get_visa_reading_state_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/VisaReadingState"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "save_visa_reading_state_request": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "section_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "saved": {
+          "type": "boolean"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "article_id",
+        "locale",
+        "section_id",
+        "saved",
+        "expected_revision",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "save_visa_reading_state_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/VisaReadingState"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "PostgrestError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details",
+        "hint"
+      ],
+      "additionalProperties": false
+    },
+    "approve_visa_source_inventory_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "inventory_revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "inventory_hash": {
+              "$ref": "#/$defs/SHA256"
+            },
+            "source_snapshot_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/UUID"
+              },
+              "minItems": 2,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "inventory_revision",
+            "inventory_hash",
+            "source_snapshot_ids"
+          ],
+          "additionalProperties": false
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "save_visa_search_alias_request": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "canonical": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "locale",
+        "alias",
+        "canonical",
+        "enabled",
+        "expected_revision",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "save_visa_search_alias_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "locale": {
+              "$ref": "#/$defs/Locale"
+            },
+            "alias": {
+              "type": "string"
+            },
+            "canonical": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "locale",
+            "alias",
+            "canonical",
+            "revision",
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
+    },
+    "WorkerError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "EdgeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "request_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "additionalProperties": false
     }
   },
   "endpoints": [
@@ -4788,7 +5562,7 @@
       "access": "public",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4819,7 +5593,7 @@
       "access": "creator_or_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4850,7 +5624,7 @@
       "access": "public",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4881,7 +5655,7 @@
       "access": "public",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4912,7 +5686,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4943,7 +5717,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -4974,7 +5748,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5005,7 +5779,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5036,7 +5810,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5067,7 +5841,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5098,7 +5872,7 @@
       "access": "admin",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5129,7 +5903,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5160,7 +5934,7 @@
       "access": "admin",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5191,7 +5965,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5222,7 +5996,7 @@
       "access": "admin",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5253,7 +6027,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5284,7 +6058,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5306,7 +6080,7 @@
       "access": "worker",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/EdgeError"
       }
     },
     {
@@ -5337,7 +6111,7 @@
       "access": "public",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5368,7 +6142,7 @@
       "access": "public",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5399,7 +6173,7 @@
       "access": "public",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5430,7 +6204,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5461,7 +6235,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5492,7 +6266,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5523,7 +6297,7 @@
       "access": "owner",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5545,7 +6319,7 @@
       "access": "worker",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/EdgeError"
       }
     },
     {
@@ -5576,7 +6350,7 @@
       "access": "public_or_owner",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5607,7 +6381,7 @@
       "access": "public_or_owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5638,7 +6412,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5669,7 +6443,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5700,7 +6474,7 @@
       "access": "human_admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5731,7 +6505,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5762,7 +6536,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5793,7 +6567,7 @@
       "access": "owner",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5824,7 +6598,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5855,7 +6629,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5886,7 +6660,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5917,7 +6691,7 @@
       "access": "owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5939,7 +6713,7 @@
       "access": "worker",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/EdgeError"
       }
     },
     {
@@ -5970,7 +6744,7 @@
       "access": "public",
       "paged": true,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -5992,7 +6766,7 @@
       "access": "public_or_owner",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/EdgeError"
       }
     },
     {
@@ -6023,7 +6797,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -6054,7 +6828,7 @@
       "access": "admin",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/PostgrestError"
       }
     },
     {
@@ -6076,11 +6850,266 @@
       "access": "worker",
       "paged": false,
       "errors": {
-        "$ref": "#/$defs/Error"
+        "$ref": "#/$defs/EdgeError"
+      }
+    },
+    {
+      "feature": 9,
+      "name": "create_feed_comment",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/create_feed_comment",
+      "signature": "public.create_feed_comment(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/create_feed_comment_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/create_feed_comment_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/create_feed_comment_response"
+      },
+      "access": "authenticated",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 9,
+      "name": "delete_feed_comment",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/delete_feed_comment",
+      "signature": "public.delete_feed_comment(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/delete_feed_comment_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/delete_feed_comment_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/delete_feed_comment_response"
+      },
+      "access": "authenticated",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 9,
+      "name": "moderate_feed_comment",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/moderate_feed_comment",
+      "signature": "public.moderate_feed_comment(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/moderate_feed_comment_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/moderate_feed_comment_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/moderate_feed_comment_response"
+      },
+      "access": "human_admin",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 9,
+      "name": "list_feed_comments",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/list_feed_comments",
+      "signature": "public.list_feed_comments(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/list_feed_comments_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/list_feed_comments_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/list_feed_comments_response"
+      },
+      "access": "public",
+      "paged": true,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 1,
+      "name": "get_visa_reading_state",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/get_visa_reading_state",
+      "signature": "public.get_visa_reading_state(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/get_visa_reading_state_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/get_visa_reading_state_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/get_visa_reading_state_response"
+      },
+      "access": "authenticated",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 1,
+      "name": "save_visa_reading_state",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/save_visa_reading_state",
+      "signature": "public.save_visa_reading_state(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/save_visa_reading_state_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/save_visa_reading_state_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/save_visa_reading_state_response"
+      },
+      "access": "authenticated",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 1,
+      "name": "approve_visa_source_inventory",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/approve_visa_source_inventory",
+      "signature": "public.approve_visa_source_inventory(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/approve_visa_source_inventory_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/approve_visa_source_inventory_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/approve_visa_source_inventory_response"
+      },
+      "access": "human_admin",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 10,
+      "name": "save_visa_search_alias",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/save_visa_search_alias",
+      "signature": "public.save_visa_search_alias(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/save_visa_search_alias_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/save_visa_search_alias_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/save_visa_search_alias_response"
+      },
+      "access": "human_admin",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
       }
     }
   ],
   "error_schema": {
-    "$ref": "#/$defs/Error"
+    "anyOf": [
+      {
+        "$ref": "#/$defs/PostgrestError"
+      },
+      {
+        "$ref": "#/$defs/EdgeError"
+      }
+    ]
   }
 }

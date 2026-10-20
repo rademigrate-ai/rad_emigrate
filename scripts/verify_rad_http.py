@@ -23,11 +23,13 @@ def main() -> None:
     parser.add_argument('--supabase', type=Path, required=True)
     args = parser.parse_args()
     identity = json.loads((args.runtime/'RAD_DISPOSABLE_LOCAL_ONLY.json').read_text())
-    assert identity == {'project': 'rad_c002_c003_rehearsal', 'port': 59322, 'owner_checkout': str(ROOT)}
+    assert identity['owner_checkout'] == str(ROOT) and identity['project'].startswith('rad_core_')
+    assert 58000 <= identity['port'] <= 64000
+    port = identity['port']
     status = subprocess.run([str(args.supabase),'--workdir',str(args.runtime),'status','--output','json'],capture_output=True,text=True,check=True)
     settings = {k.lower():v for k,v in json.loads(status.stdout).items()}
     base = settings.get('api_url')
-    assert base == 'http://127.0.0.1:59321', 'refusing any other endpoint'
+    assert base == f'http://127.0.0.1:{port-1}', 'refusing any other endpoint'
     anon,service = settings['anon_key'],settings['service_role_key']
     report = {'checks': [], 'production_mutations': False, 'endpoint': base}
 
@@ -50,15 +52,23 @@ def main() -> None:
             return error.code,data
 
     def sql(value: str) -> str:
-        result = subprocess.run([r'C:\Program Files\PostgreSQL\17\bin\psql.exe','-XAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','59322','-U','postgres','-d','postgres'],
+        result = subprocess.run([r'C:\Program Files\PostgreSQL\17\bin\psql.exe','-XAt','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p',str(port),'-U','postgres','-d','postgres'],
             input=value,text=True,capture_output=True,env={**os.environ,'PGPASSWORD':'postgres'},check=True)
         return result.stdout.strip()
 
     users=[]
     try:
         for _ in range(2):
-            status,payload=call('/auth/v1/signup','POST',{'email':f'rad-synthetic-{uuid.uuid4().hex}@example.invalid','password':uuid.uuid4().hex+'aA9!'})
-            check('synthetic Auth signup',status==200 and bool(payload.get('access_token')))
+            credentials={'email':f'rad-synthetic-{uuid.uuid4().hex}@example.invalid','password':uuid.uuid4().hex+'aA9!'}
+            status,payload=call('/auth/v1/signup','POST',credentials)
+            if status==429:
+                report['signup']='BLOCKED: disposable Auth signup rate limit; used local admin fixture plus real password sign-in'
+                status,_=call('/auth/v1/admin/users','POST',{**credentials,'email_confirm':True},service)
+                check('local synthetic confirmed Auth fixture',status in (200,201))
+                status,payload=call('/auth/v1/token?grant_type=password','POST',credentials)
+                check('real Auth password sign-in',status==200 and bool(payload.get('access_token')))
+            else:
+                check('synthetic Auth signup HTTP '+str(status),status==200 and bool(payload.get('access_token')))
             users.append((payload['user']['id'],payload['access_token']))
         (a,ta),(b,tb)=users
         status,rows=call('/rest/v1/profiles?select=id,role',token=ta)
@@ -80,6 +90,16 @@ def main() -> None:
         check('quota service boundary denies ordinary JWT',status in (401,403,404))
         status,session=call('/rest/v1/ai_sessions','POST',{'user_id':b,'scope':'user'},tb,{'Prefer':'return=representation'})
         check('owner B session fixture',status==201 and bool(session))
+        status,_=call('/rest/v1/ai_session_messages','POST',{'session_id':session[0]['id'],'user_id':a,'role':'user','content':'SYNTHETIC forbidden history'},ta)
+        check('cross-user AI history INSERT denied',status==403)
+        status,consultation=call('/rest/v1/rpc/submit_consultation_request','POST',{'p_topic':'SYNTHETIC consultation','p_message':'SYNTHETIC intake only, no appointment or payment.','p_related_application_id':None},ta)
+        check('confirmed consultation intake succeeds',status==200 and isinstance(consultation,str))
+        status,other_consultations=call('/rest/v1/consultation_requests?select=id,topic,message&id=eq.'+consultation,token=tb)
+        check('cross-user consultation read hidden',status==200 and other_consultations==[])
+        status,changed=call('/rest/v1/consultation_requests?id=eq.'+consultation,'PATCH',{'status':'completed'},tb,{'Prefer':'return=representation'})
+        check('cross-user consultation status mutation denied',status in (401,403) or (status==200 and changed==[]))
+        status,own_consultation=call('/rest/v1/consultation_requests?select=id,status&id=eq.'+consultation,token=ta)
+        check('consultation remains submitted after cross-user PATCH',status==200 and own_consultation[0]['status']=='submitted')
         status,_=call('/rest/v1/rpc/reserve_rad_ai_request','POST',{'p_user_id':a,'p_request_key':str(uuid.uuid4()),'p_body_hash':'a'*64,'p_reserved_output_tokens':4096,'p_session_id':session[0]['id']},service)
         check('service broker verifies session ownership',status==403)
         sql("INSERT INTO public.ai_usage_limits(role,daily_requests,daily_output_tokens) VALUES('user',2,100000) ON CONFLICT(role) DO UPDATE SET daily_requests=2,daily_output_tokens=100000;")
@@ -102,8 +122,22 @@ def main() -> None:
         status,again=call('/rest/v1/rpc/settle_rad_ai_request','POST',{'p_request_id':reservation['request_id'],'p_http_status':200,'p_response':{'synthetic':False},'p_output_tokens':4},service)
         check('terminal settlement fenced',status==200 and again is False)
         check('exactly two ai_requests rows',sql(f"SELECT count(*) FROM public.ai_requests WHERE user_id='{a}';")=='2')
+        # Legacy and v1 share the same actor/day lock and token reservations.
+        mixed_barrier=threading.Barrier(10)
+        def mixed(i):
+            mixed_barrier.wait(timeout=30)
+            if i%2:
+                return call('/rest/v1/rpc/consume_ai_daily_quota','POST',{'p_user_id':b,'p_role':'super_admin'},service)
+            return call('/rest/v1/rpc/reserve_rad_ai_request','POST',{'p_user_id':b,'p_request_key':str(uuid.uuid4()),'p_body_hash':'d'*64,'p_reserved_output_tokens':4096,'p_session_id':None},service)
+        with ThreadPoolExecutor(max_workers=10) as pool: mixed_results=list(pool.map(mixed,range(10)))
+        check('mixed legacy/v1 admit exactly two',sum(s==200 and r.get('allowed') is True for s,r in mixed_results)==2)
+        check('mixed legacy/v1 persist exactly two rows',sql(f"SELECT count(*) FROM public.ai_requests WHERE user_id='{b}';")=='2')
+        check('mixed outstanding token budget is bounded',int(sql(f"SELECT coalesce(sum(reserved_output_tokens),0) FROM private.rad_ai_invocations WHERE actor='{b}' AND state='running';")) in (8192,10240,12288))
         report['admitted_unique_reservations']=len(admitted)
         report['status']='PASS'
+    except Exception:
+        report['status']='FAIL'
+        raise
     finally:
         # Leave fixtures confined to this disposable marked environment. Retain
         # accounting rows for independent review; stop destroys the owned stack.
