@@ -69,7 +69,40 @@ class SupabaseAiService implements AiService {
           ? metaKey.toLowerCase()
           : _newRequestKey();
 
-      final authorizedScopes = request.authorizedDataScopes;
+      final uuidRegex = RegExp(
+        r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+        caseSensitive: false,
+      );
+      String? cleanUuid(String? val) {
+        if (val == null) return null;
+        final trimmed = val.trim().toLowerCase();
+        return uuidRegex.hasMatch(trimmed) ? trimmed : null;
+      }
+
+      final cleanLocale =
+          (locale != null && locale.toLowerCase().startsWith('fa'))
+          ? 'fa'
+          : 'en';
+      final cleanGuestKey =
+          (guestKey != null &&
+              guestKey.trim().length >= 16 &&
+              guestKey.trim().length <= 128)
+          ? guestKey.trim()
+          : null;
+      final cleanScopes = request.authorizedDataScopes
+          .where(
+            (scope) =>
+                scope == 'profile' ||
+                scope == 'cases' ||
+                scope == 'notifications',
+          )
+          .toSet()
+          .toList(growable: false);
+      final cleanContext = {
+        'article_id': cleanUuid(request.context['article_id']),
+        'section_id': cleanUuid(request.context['section_id']),
+        'case_id': cleanUuid(request.context['case_id']),
+      };
 
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
@@ -83,14 +116,10 @@ class SupabaseAiService implements AiService {
           'request_key': requestKey,
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
-          'guest_key': guestKey,
-          'locale': locale ?? 'en',
-          'authorized_data_scopes': authorizedScopes,
-          'context': {
-            'article_id': request.context['article_id'],
-            'section_id': request.context['section_id'],
-            'case_id': request.context['case_id'],
-          },
+          'guest_key': cleanGuestKey,
+          'locale': cleanLocale,
+          'authorized_data_scopes': cleanScopes,
+          'context': cleanContext,
           'messages': [
             ...request.history.map(
               (message) => {
@@ -169,6 +198,14 @@ class SupabaseAiService implements AiService {
       } else if (e.reasonPhrase != null && e.reasonPhrase!.isNotEmpty) {
         code = e.reasonPhrase!;
       }
+      return AiResponse(
+        text: _messageForCode(code, locale),
+        uncertain: true,
+        errorCode: code,
+        conversationId: request.conversationId,
+      );
+    } catch (e) {
+      final code = e is FormatException ? 'invalid_ai_response' : 'ai_failed';
       return AiResponse(
         text: _messageForCode(code, locale),
         uncertain: true,
