@@ -53,7 +53,10 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref
             .read(visaSearchControllerProvider.notifier)
-            .search(widget.initialQuery!);
+            .search(
+              widget.initialQuery!,
+              locale: Localizations.localeOf(context).languageCode,
+            );
       });
     }
   }
@@ -68,13 +71,17 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
   void _onQueryChanged(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-      ref.read(visaSearchControllerProvider.notifier).search(query);
+      ref
+          .read(visaSearchControllerProvider.notifier)
+          .search(query, locale: Localizations.localeOf(context).languageCode);
     });
   }
 
   void _onQuerySubmitted(String query) {
     _debounceTimer?.cancel();
-    ref.read(visaSearchControllerProvider.notifier).search(query);
+    ref
+        .read(visaSearchControllerProvider.notifier)
+        .search(query, locale: Localizations.localeOf(context).languageCode);
   }
 
   void _onTagTapped(String tag) {

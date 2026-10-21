@@ -1,0 +1,251 @@
+{
+  "result": {
+    "lints": [
+      {
+        "name": "extension_in_public",
+        "title": "Extension in Public",
+        "level": "WARN",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Detects extensions installed in the \\`public\\` schema.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0014_extension_in_public",
+        "count": 1,
+        "findings": [
+          {
+            "detail": "Extension \\`pg_net\\` is installed in the public schema. Move it to another schema.",
+            "metadata": {
+              "name": "pg_net",
+              "type": "extension",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          }
+        ]
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "title": "Signed-In Users Can Execute SECURITY DEFINER Function",
+        "level": "WARN",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Detects `SECURITY DEFINER` functions that are callable by signed-in users. Revoke `EXECUTE`, switch the function to `SECURITY INVOKER`, or move it out of your exposed API schema if signed-in users should not call it.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable",
+        "count": 17,
+        "findings": [
+          {
+            "detail": "Function `public.configure_ai_provider(p_slug text, p_display_name text, p_adapter text, p_base_url text, p_api_key text, p_enabled boolean, p_priority integer)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/configure_ai_provider`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "configure_ai_provider",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_slug text, p_display_name text, p_adapter text, p_base_url text, p_api_key text, p_enabled boolean, p_priority integer",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.get_ai_access_decision(p_user_id uuid, p_guest_key_hash text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_ai_access_decision`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "get_ai_access_decision",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_user_id uuid, p_guest_key_hash text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.get_ai_daily_quota_status(p_user_id uuid, p_role text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_ai_daily_quota_status`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "get_ai_daily_quota_status",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_user_id uuid, p_role text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.list_admin_consultations()` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/list_admin_consultations`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "list_admin_consultations",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.promote_knowledge_from_evidence(p_slug text, p_language_code text, p_title text, p_summary text, p_claim_text text, p_snapshot_id uuid, p_excerpt text, p_topic text, p_jurisdiction text, p_destination_code text, p_program_slug text, p_confidence text, p_approve boolean)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/promote_knowledge_from_evidence`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "promote_knowledge_from_evidence",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_slug text, p_language_code text, p_title text, p_summary text, p_claim_text text, p_snapshot_id uuid, p_excerpt text, p_topic text, p_jurisdiction text, p_destination_code text, p_program_slug text, p_confidence text, p_approve boolean",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.publish_content_draft(p_draft_id uuid, p_category text, p_slug text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/publish_content_draft`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "publish_content_draft",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_draft_id uuid, p_category text, p_slug text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.register_knowledge_conflict(p_jurisdiction text, p_statement_a text, p_statement_b text, p_citation_a_id uuid, p_citation_b_id uuid, p_proposed_interpretation text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/register_knowledge_conflict`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "register_knowledge_conflict",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_jurisdiction text, p_statement_a text, p_statement_b text, p_citation_a_id uuid, p_citation_b_id uuid, p_proposed_interpretation text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.retrieve_knowledge(p_query text, p_locale text, p_destination_code text, p_program_slug text, p_limit integer)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/retrieve_knowledge`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "retrieve_knowledge",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_query text, p_locale text, p_destination_code text, p_program_slug text, p_limit integer",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.set_ai_model_configuration(p_model_id uuid, p_enabled boolean, p_runtime_scope text, p_priority integer, p_max_output_tokens integer)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/set_ai_model_configuration`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "set_ai_model_configuration",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_model_id uuid, p_enabled boolean, p_runtime_scope text, p_priority integer, p_max_output_tokens integer",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.set_content_draft_status(p_draft_id uuid, p_status text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/set_content_draft_status`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "set_content_draft_status",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_draft_id uuid, p_status text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.set_research_finding_status(p_finding_id uuid, p_status text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/set_research_finding_status`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "set_research_finding_status",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_finding_id uuid, p_status text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.set_research_source_configuration(p_source_id uuid, p_display_name text, p_enabled boolean, p_runtime_scope text, p_trust_class text, p_country_code text, p_topic text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/set_research_source_configuration`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "set_research_source_configuration",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_source_id uuid, p_display_name text, p_enabled boolean, p_runtime_scope text, p_trust_class text, p_country_code text, p_topic text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.set_user_role(p_user_id uuid, p_role text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/set_user_role`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "set_user_role",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_user_id uuid, p_role text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.submit_consultation_request(p_topic text, p_message text, p_related_application_id uuid)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/submit_consultation_request`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "submit_consultation_request",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_topic text, p_message text, p_related_application_id uuid",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.update_admin_consultation(p_consultation_id uuid, p_status text, p_admin_note text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/update_admin_consultation`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "update_admin_consultation",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_consultation_id uuid, p_status text, p_admin_note text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.update_content_draft(p_draft_id uuid, p_title text, p_body text, p_language_code text, p_category text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/update_content_draft`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "update_content_draft",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_draft_id uuid, p_title text, p_body text, p_language_code text, p_category text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          },
+          {
+            "detail": "Function `public.upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/upsert_research_source`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+            "metadata": {
+              "name": "upsert_research_source",
+              "schema": "public",
+              "language": "plpgsql",
+              "arguments": "p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text",
+              "security_definer": true
+            },
+            "observed_at": "2026-10-21T21:07:38.530Z"
+          }
+        ]
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "title": "Leaked Password Protection Disabled",
+        "level": "WARN",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Leaked password protection is currently disabled.",
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+        "count": 1,
+        "findings": [
+          {
+            "detail": "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security.",
+            "metadata": {
+              "type": "auth",
+              "entity": "Auth"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

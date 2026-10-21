@@ -80,7 +80,7 @@ void main() {
       expect(hit1.factualStatus, FactualStatus.verified);
       expect(
         hit1.deepLinkRoute,
-        '/visa/articles/c8f42045-812e-4b68-b715-46f903a49f53?section=b2222222-3333-4444-5555-666666666666#financial-requirements',
+        '/visa/articles/c8f42045-812e-4b68-b715-46f903a49f53?locale=fa&requested_locale=fa&section=b2222222-3333-4444-5555-666666666666#financial-requirements',
       );
       expect(hit1.matchRanges.length, 1);
       expect(hit1.matchRanges.first.start, 24);
@@ -91,7 +91,7 @@ void main() {
       expect(hit2.articleType, SearchArticleType.independentTopic);
       expect(
         hit2.deepLinkRoute,
-        '/visa/articles/d9999999-812e-4b68-b715-46f903a49f54',
+        '/visa/articles/d9999999-812e-4b68-b715-46f903a49f54?locale=fa&requested_locale=fa',
       );
     });
 

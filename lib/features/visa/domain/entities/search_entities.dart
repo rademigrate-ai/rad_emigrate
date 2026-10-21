@@ -99,6 +99,8 @@ class SearchHit {
   final FactualStatus factualStatus;
   final SearchArticleType articleType;
   final String deepLinkRoute;
+  final String requestedLocale;
+  final String resolvedLocale;
 
   const SearchHit({
     required this.id,
@@ -114,9 +116,19 @@ class SearchHit {
     required this.factualStatus,
     required this.articleType,
     required this.deepLinkRoute,
+    this.requestedLocale = 'fa',
+    this.resolvedLocale = 'fa',
   });
 
-  factory SearchHit.fromJson(Map<String, dynamic> json) {
+  factory SearchHit.fromJson(
+    Map<String, dynamic> json, {
+    String requestedLocale = 'fa',
+  }) {
+    final resolvedLocale = json['match_locale'] == 'en'
+        ? 'en'
+        : json['match_locale'] == 'fa'
+        ? 'fa'
+        : requestedLocale;
     final rawRanges =
         json['match_ranges'] as List? ?? json['matchRanges'] as List? ?? [];
     final ranges = rawRanges
@@ -151,9 +163,12 @@ class SearchHit {
     if (target is Map && target['kind'] == 'visa_article') {
       route = Uri(
         path: '/visa/articles/${target['id']}',
-        queryParameters: target['section_id'] == null
-            ? null
-            : {'section': target['section_id'].toString()},
+        queryParameters: {
+          'locale': resolvedLocale,
+          'requested_locale': requestedLocale,
+          if (target['section_id'] != null)
+            'section': target['section_id'].toString(),
+        },
         fragment: anchor == null || anchor.toString().isEmpty
             ? null
             : anchor.toString(),
@@ -183,6 +198,8 @@ class SearchHit {
       ),
       articleType: type,
       deepLinkRoute: route,
+      requestedLocale: requestedLocale,
+      resolvedLocale: resolvedLocale,
     );
   }
 }
@@ -210,6 +227,7 @@ class SmartSearchResult {
   factory SmartSearchResult.fromJson(
     Map<String, dynamic> json, {
     String query = '',
+    String requestedLocale = 'fa',
   }) {
     // Backend wire response envelopes data in json['data']['items']
     final dataMap = json['data'] is Map<String, dynamic>
@@ -231,7 +249,7 @@ class SmartSearchResult {
           rawHits.length,
       hits: rawHits
           .whereType<Map<String, dynamic>>()
-          .map((h) => SearchHit.fromJson(h))
+          .map((h) => SearchHit.fromJson(h, requestedLocale: requestedLocale))
           .toList(),
       correctedQuery:
           dataMap['corrected_query']?.toString() ??

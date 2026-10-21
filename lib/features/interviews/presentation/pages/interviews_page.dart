@@ -342,7 +342,9 @@ class _InterviewsPageState extends ConsumerState<_InterviewsPageForIdentity> {
       _slotTouched = false;
       _slotErrorKey = null;
     });
-    ref.invalidate(currentAppointmentListProvider);
+    ref.invalidate(
+      appointmentListProvider(ref.read(authenticatedUserIdProvider)),
+    );
   }
 
   StatusTone _tone(AppointmentStatus status) => switch (status) {
@@ -643,8 +645,11 @@ class _InterviewsPageState extends ConsumerState<_InterviewsPageForIdentity> {
                   label: labels.retry,
                   icon: Icons.refresh,
                   variant: AppButtonVariant.secondary,
-                  onPressed: () =>
-                      ref.invalidate(currentAppointmentListProvider),
+                  onPressed: () => ref.invalidate(
+                    appointmentListProvider(
+                      ref.read(authenticatedUserIdProvider),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -798,7 +803,11 @@ class _InterviewsPageState extends ConsumerState<_InterviewsPageForIdentity> {
           ianaZoneId: appointment.ianaZoneId,
           notes: appointment.notes,
         );
-    if (mounted) ref.invalidate(currentAppointmentListProvider);
+    if (mounted) {
+      ref.invalidate(
+        appointmentListProvider(ref.read(authenticatedUserIdProvider)),
+      );
+    }
   }
 
   Future<void> _confirmCancel(
@@ -826,7 +835,11 @@ class _InterviewsPageState extends ConsumerState<_InterviewsPageForIdentity> {
     await ref
         .read(appointmentControllerProvider.notifier)
         .cancel(appointmentId: appointment.id, reason: 'user_request');
-    if (mounted) ref.invalidate(currentAppointmentListProvider);
+    if (mounted) {
+      ref.invalidate(
+        appointmentListProvider(ref.read(authenticatedUserIdProvider)),
+      );
+    }
   }
 }
 

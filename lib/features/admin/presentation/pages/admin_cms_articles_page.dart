@@ -119,7 +119,7 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
                   const SizedBox(width: 10),
                   const Expanded(
                     child: Text(
-                      'پایش خودکار تغییرات در سایت‌های دولتی و سفارتخانه‌ها فعال است.',
+                      'پیشنهادهای پایش منابع را بررسی کنید؛ هیچ تغییری خودکار منتشر نمی‌شود.',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -187,6 +187,11 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
                     return true;
                   }).toList();
 
+                  if (filtered.isEmpty) {
+                    return const Center(
+                      child: Text('مقاله‌ای برای نمایش وجود ندارد.'),
+                    );
+                  }
                   return ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: filtered.length,
@@ -199,9 +204,9 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
 
                       return InkWell(
                         onTap: () {
-                          if (isCanonical) {
-                            context.go('/admin/cms/canonical/${item.id}');
-                          }
+                          context.go(
+                            '/admin/cms/canonical/${item.id}?locale=${item.locale}',
+                          );
                         },
                         borderRadius: BorderRadius.circular(AppRadii.md),
                         child: Container(
@@ -237,7 +242,7 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      item.title,
+                                      '${item.title} (${item.locale})',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,

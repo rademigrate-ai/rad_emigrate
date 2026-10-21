@@ -133,7 +133,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('CAD 150'), findsWidgets);
-    expect(find.textContaining('extracted from'), findsWidgets);
+    expect(find.textContaining('Parsed from catalog text'), findsWidgets);
     expect(find.textContaining('Government of Canada'), findsOneWidget);
     expect(find.textContaining('Not published'), findsNothing);
   });
@@ -151,7 +151,10 @@ void main() {
     await tester.tap(find.text('🇨🇦 Canada · Study permit').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('No official figure has been published.'), findsOneWidget);
+    expect(
+      find.text('No parseable figure is available in the catalog.'),
+      findsOneWidget,
+    );
     // Currency chips legitimately show symbols; a rendered *amount* would
     // contain a digit right after the symbol (e.g. "$150").
     expect(find.textContaining('\$1'), findsNothing);
@@ -177,7 +180,7 @@ void main() {
     // No invented figure: the line shows a dash and the total stays unavailable.
     expect(find.text('—'), findsOneWidget);
     expect(
-      find.text('No verified figure is available to total.'),
+      find.text('No parseable figure is available to subtotal.'),
       findsOneWidget,
     );
   });
@@ -193,10 +196,7 @@ void main() {
       ),
       authenticated: false,
     );
-    expect(
-      find.textContaining('Sign in to view the verified catalog'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Sign in to view the catalog'), findsOneWidget);
   });
 
   testWidgets('shows error state for authenticated catalog failure', (

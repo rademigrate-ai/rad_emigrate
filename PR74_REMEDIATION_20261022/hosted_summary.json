@@ -1,0 +1,992 @@
+{
+  "ocr": [
+    {
+      "enabled": false,
+      "has_secret": false
+    }
+  ],
+  "ledger": [
+    {
+      "name": "initial_rad_core_schema",
+      "sql_md5": "b451f1d98173ace6ea9d7d5ae81f7a20",
+      "version": "20261001191421"
+    },
+    {
+      "name": "create_profile_trigger_and_storage_setup_v2",
+      "sql_md5": "5f45a36ffdaaa44555bea781894bbb6d",
+      "version": "20261001191653"
+    },
+    {
+      "name": "security_hardening_handle_new_user",
+      "sql_md5": "b03873c096d9df2637104cd6b68caf0b",
+      "version": "20261001194638"
+    },
+    {
+      "name": "add_rad_backend_indexes",
+      "sql_md5": "ee98e5f91b84a1bc582e33ce23d7d377",
+      "version": "20261001194715"
+    },
+    {
+      "name": "security_hardening",
+      "sql_md5": "df5a0b5cb372efe6fa91a6dd3bc0f872",
+      "version": "20261001195750"
+    },
+    {
+      "name": "rls_policies",
+      "sql_md5": "c37153a7353fad40fc13a174fc973513",
+      "version": "20261001195754"
+    },
+    {
+      "name": "storage_policies",
+      "sql_md5": "d4e07909cba3b2744e1e4cebe934dd04",
+      "version": "20261001195756"
+    },
+    {
+      "name": "ai_sessions_and_document_bootstrap",
+      "sql_md5": "61237207dc79e43af2d477740b35f05b",
+      "version": "20261001200202"
+    },
+    {
+      "name": "project05_launch_hardening",
+      "sql_md5": "5544b9910d32aa0765be410f78a4bb84",
+      "version": "20261001214952"
+    },
+    {
+      "name": "project05_storage_upload_limits",
+      "sql_md5": "65f2ff5848c24cde17fc2db2da0ec661",
+      "version": "20261001215315"
+    },
+    {
+      "name": "project05_minimize_table_privileges",
+      "sql_md5": "3f43926f6074bf884a39a1a996ecda3f",
+      "version": "20261001215758"
+    },
+    {
+      "name": "profile_bootstrap_policy",
+      "sql_md5": "d308244ae8f6044bd8ce540ac13b1a4e",
+      "version": "20261001225237"
+    },
+    {
+      "name": "storage_validation_policies",
+      "sql_md5": "0a8824b9584a0c5a9f3d3298ab617c9e",
+      "version": "20261001225632"
+    },
+    {
+      "name": "ai_message_ownership_policies",
+      "sql_md5": "1abd368610c14d9a1dfab11027514d8f",
+      "version": "20261001225634"
+    },
+    {
+      "name": "signup_trigger_search_path",
+      "sql_md5": "c12a045bdefabaeec88da5b433c1ef4c",
+      "version": "20261001233027"
+    },
+    {
+      "name": "relationship_policies_and_indexes",
+      "sql_md5": "6135b50333cb1c943b3816ff83c9a39e",
+      "version": "20261001233048"
+    },
+    {
+      "name": "restrict_documents_bucket_uploads",
+      "sql_md5": "e7d0b2c18c2e9c19f494381a2db74d90",
+      "version": "20261003102347"
+    },
+    {
+      "name": "project09_visa_catalog",
+      "sql_md5": "e2999fd9afca8e55cbb63cc09d652b1a",
+      "version": "20261003210302"
+    },
+    {
+      "name": "project10_knowledge_research",
+      "sql_md5": "38407629798f286f0792091338538a7a",
+      "version": "20261003211635"
+    },
+    {
+      "name": "project10_security_hardening",
+      "sql_md5": "511b4550eee42b3d23336d838c8a179b",
+      "version": "20261003212339"
+    },
+    {
+      "name": "project11_ai_orchestration",
+      "sql_md5": "eec8936d3f5d30c906ff6e7486b09163",
+      "version": "20261003213219"
+    },
+    {
+      "name": "project12_document_intelligence",
+      "sql_md5": "96d9270ba3c7f80a77863feeeda502ee",
+      "version": "20261003214031"
+    },
+    {
+      "name": "project13_admin_operations",
+      "sql_md5": "1c95bbd497e7d705e0849996b7e6e91c",
+      "version": "20261003221324"
+    },
+    {
+      "name": "project14_feed_notifications",
+      "sql_md5": "8fde01ee8bbaad1771d89f65c4cf86ad",
+      "version": "20261003222909"
+    },
+    {
+      "name": "project15_observability",
+      "sql_md5": "60ffd33fc91259c016c661d3503e1b09",
+      "version": "20261003223717"
+    },
+    {
+      "name": "ai_base_url_ssrf_hardening",
+      "sql_md5": "8d6621dc3f4ea86f0d50252c5c4005ec",
+      "version": "20261003235000"
+    },
+    {
+      "name": "fix_profile_update_rls_recursion",
+      "sql_md5": "4d8b95968ff7f5e2b1cd93b6b947e484",
+      "version": "20261004190000"
+    },
+    {
+      "name": "client_delivery_ai_scopes",
+      "sql_md5": "cfcd52e853de070531590ca961b0ee41",
+      "version": "20261005123027"
+    },
+    {
+      "name": "stage1_ai_research_completion",
+      "sql_md5": "02f86468382edb74d1460b281df2bcc2",
+      "version": "20261005123202"
+    },
+    {
+      "name": "stage2_review_feed_publish",
+      "sql_md5": "c44f573859546fe7c7b5d749b3c47975",
+      "version": "20261005123255"
+    },
+    {
+      "name": "stage3_fk_covering_indexes",
+      "sql_md5": "0ed38e1d9ff21ccc9dc658abfc566233",
+      "version": "20261005180215"
+    },
+    {
+      "name": "stage2_visa_structured_steps",
+      "sql_md5": "16e4ce3fb008855e9f6d7777761b4564",
+      "version": "20261006144235"
+    },
+    {
+      "name": "stage5_research_review_candidate_backfill",
+      "sql_md5": "9779369dd52f42fc3602a676e720b8ae",
+      "version": "20261006144246"
+    },
+    {
+      "name": "fix_profile_update_with_check_role_escalation",
+      "sql_md5": "bbbe7e64b6c5a14046702159997602bd",
+      "version": "20261006161823"
+    },
+    {
+      "name": "ai_dynamic_routing_architecture",
+      "sql_md5": "c669cb2762cc36e9fc9edc45fb5328f1",
+      "version": "20261006221616"
+    },
+    {
+      "name": "ai_credential_failure_routing",
+      "sql_md5": "b44d3074c9abb0b0781f2aed1babfdd0",
+      "version": "20261007075108"
+    },
+    {
+      "name": "research_atomic_review_candidate",
+      "sql_md5": "e2abb293ba6061a69bc307dba1ddbbb3",
+      "version": "20261007075110"
+    },
+    {
+      "name": "ai_discovery_auto_enable_chat",
+      "sql_md5": "d707fa4b560a4222886686f22a7edaa5",
+      "version": "20261007142614"
+    },
+    {
+      "name": "stage2_knowledge_completion",
+      "sql_md5": "4d3c21111fc47fbe2b220f56ed3b9332",
+      "version": "20261007171212"
+    },
+    {
+      "name": "stage2_promote_knowledge_fn",
+      "sql_md5": "003921eb4855bf5186ed9e8e541cdc50",
+      "version": "20261007171310"
+    },
+    {
+      "name": "stage2_retrieve_and_conflict_fn",
+      "sql_md5": "3d5a70c90c7e8b6236a2a459363004a6",
+      "version": "20261007171341"
+    },
+    {
+      "name": "stage4_user_ai_quota_grounding",
+      "sql_md5": "e40d881f38351202a8b3d5f20de7dfa9",
+      "version": "20261007183840"
+    },
+    {
+      "name": "stage4_guest_quota_advisory_lock",
+      "sql_md5": "0fb30e2309485642a388de0ffcbd82ee",
+      "version": "20261007185216"
+    },
+    {
+      "name": "stage4_limit_ai_runtime_chain",
+      "sql_md5": "b0236f0cdbd4c046dc998c2f9e41d458",
+      "version": "20261007192522"
+    },
+    {
+      "name": "stage6_entitlement_access_decision",
+      "sql_md5": "6d02d56f4ced077bada5658082b63084",
+      "version": "20261007202907"
+    },
+    {
+      "name": "stage7_ops_consultation_app_status",
+      "sql_md5": "5d820e95bef3b19767b1a6e321cfe2b0",
+      "version": "20261007205734"
+    },
+    {
+      "name": "stage9_security_grant_hardening",
+      "sql_md5": "bebef13da2d6ebda44a9ec145be6c988",
+      "version": "20261007212140"
+    },
+    {
+      "name": "20261010010000_stage1_p0_security_completion",
+      "sql_md5": "36e7cf7192e42a54ecc1408bc5fe1c34",
+      "version": "20261019130911"
+    },
+    {
+      "name": "20261017190000_security_ai_entitlement_rpc_privacy",
+      "sql_md5": "9a6e060eeba6c30cafc4c3fe94d3e1bf",
+      "version": "20261019131205"
+    },
+    {
+      "name": "20261010055013_stage1_atomic_ai_quota_reservation",
+      "sql_md5": "f48777a0713a3bd883f84845e2114d71",
+      "version": "20261019131224"
+    },
+    {
+      "name": "20261010070000_stage1_ssrf_ipv4_mapped_ipv6",
+      "sql_md5": "6a250e93873d8e4cf6dc4b7de0ed3229",
+      "version": "20261019131243"
+    },
+    {
+      "name": "20261012110945_stage1_security_abuse_storage_alignment",
+      "sql_md5": "afba4376c5db3161340ea25154a41de9",
+      "version": "20261019131312"
+    },
+    {
+      "name": "20261012230000_ai_models_check_constraints_alignment",
+      "sql_md5": "26cfa07973b02f7005c848542742a47c",
+      "version": "20261019131319"
+    },
+    {
+      "name": "repair_admin_consultation_rpcs",
+      "sql_md5": "7a5d5758ac142ec0f77652c4c3ac81ce",
+      "version": "20261019171732"
+    }
+  ],
+  "nonrow": [
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "TRUNCATE"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "REFERENCES"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "TRIGGER"
+    },
+    {
+      "role": "anon",
+      "table": "consultation_requests",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "table": "admin_case_notes",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "table": "admin_tasks",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "table": "application_status_history",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "table": "admin_saved_views",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "anon",
+      "table": "ai_entitlements",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "consultation_requests",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_case_notes",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_tasks",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "application_status_history",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "admin_saved_views",
+      "privilege": "MAINTAIN"
+    },
+    {
+      "role": "authenticated",
+      "table": "ai_entitlements",
+      "privilege": "MAINTAIN"
+    }
+  ],
+  "pg_net": "public",
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "interfaces": [
+    "submit_consultation_request"
+  ],
+  "captured_at": "2026-10-21T21:07:37.352155+00:00",
+  "rls_disabled": 0,
+  "missing_schema": {
+    "public.visa_articles": false,
+    "public.incident_events": false,
+    "public.visa_article_revisions": false,
+    "private.document_processing_leases": false
+  },
+  "profile_insert": true,
+  "orphan_profiles": 0,
+  "profile_policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "(( SELECT auth.uid() AS uid) = id)",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles select own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles insert own",
+      "schemaname": "public",
+      "with_check": "(( SELECT auth.uid() AS uid) = id)"
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(( SELECT auth.uid() AS uid) = id)",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles update own",
+      "schemaname": "public",
+      "with_check": "(( SELECT auth.uid() AS uid) = id)"
+    }
+  ],
+  "profile_triggers": [
+    "CREATE TRIGGER trg_prevent_profile_role_escalation BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION private.prevent_profile_role_escalation()"
+  ],
+  "column_references": 100,
+  "function_security": [
+    {
+      "anon": false,
+      "args": "",
+      "name": "handle_new_user",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "c7da60ff29b7e9c46ab0cb480f6c27f1"
+    },
+    {
+      "anon": false,
+      "args": "p_user_id uuid, p_role text",
+      "name": "set_user_role",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "636e21590faf7a03985c02d0cbb8e933"
+    },
+    {
+      "anon": false,
+      "args": "p_component_slug text, p_status text, p_latency_ms integer, p_safe_code text",
+      "name": "record_component_health",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "9f31e78413046abe7ff36bef9c46c8cd"
+    },
+    {
+      "anon": false,
+      "args": "",
+      "name": "get_document_processor_runtime",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "a6f5ff77de5e65228107c3e44c7a2b4c"
+    },
+    {
+      "anon": false,
+      "args": "p_capability text",
+      "name": "get_ai_runtime_chain",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "ef15f3ca4f2053cfdc1933031d432b55"
+    },
+    {
+      "anon": false,
+      "args": "p_model_id uuid, p_enabled boolean, p_runtime_scope text, p_priority integer, p_max_output_tokens integer",
+      "name": "set_ai_model_configuration",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "a8b7d3272ff70d48488c83406e7e7860"
+    },
+    {
+      "anon": false,
+      "args": "p_source_id uuid, p_display_name text, p_enabled boolean, p_runtime_scope text, p_trust_class text, p_country_code text, p_topic text",
+      "name": "set_research_source_configuration",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "16dacdc949153908ac6ee6ede3750538"
+    },
+    {
+      "anon": false,
+      "args": "p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text",
+      "name": "upsert_research_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "7fb328d6c0c6369d12af915574f4c588"
+    },
+    {
+      "anon": false,
+      "args": "p_provider_id uuid",
+      "name": "get_ai_provider_runtime",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "6cb9d8159fc54e90f63be638711609b3"
+    },
+    {
+      "anon": false,
+      "args": "p_draft_id uuid, p_status text",
+      "name": "set_content_draft_status",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "95809a53a8040ac60ae0fab9ec3e693c"
+    },
+    {
+      "anon": false,
+      "args": "p_capability text, p_scope text",
+      "name": "get_ai_runtime_chain",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "317f7024e4939a08ab9a1351f04c2b56"
+    },
+    {
+      "anon": false,
+      "args": "p_draft_id uuid, p_title text, p_body text, p_language_code text, p_category text",
+      "name": "update_content_draft",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "825293866debe903d444f3187446668f"
+    },
+    {
+      "anon": false,
+      "args": "p_finding_id uuid, p_status text",
+      "name": "set_research_finding_status",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "d0ccae9648c05dbb7f06935f87a495ee"
+    },
+    {
+      "anon": false,
+      "args": "p_model_id uuid, p_success boolean, p_latency_ms integer, p_error_code text",
+      "name": "record_ai_model_outcome",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "db9ef287d13f4718b7f6c0877c717cda"
+    },
+    {
+      "anon": false,
+      "args": "p_job_id uuid, p_finding_id uuid, p_title text, p_summary text, p_language_code text",
+      "name": "create_research_review_candidate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "29637ae9462ccad4152bbde2405e8317"
+    },
+    {
+      "anon": false,
+      "args": "p_capability text, p_scope text, p_require_tools boolean, p_require_structured boolean, p_min_context integer",
+      "name": "get_ai_runtime_chain",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "e6bb07fe1c309d3df6775f9667ac0bcc"
+    },
+    {
+      "anon": false,
+      "args": "p_capability text, p_scope text, p_require_tools boolean, p_require_structured boolean, p_min_context integer",
+      "name": "get_ai_runtime_chain_versioned",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "e6e49967745f0898bc2bf4be2aa8e8b1"
+    },
+    {
+      "anon": false,
+      "args": "p_provider_id uuid",
+      "name": "get_ai_provider_runtime_versioned",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "16db47e87f5d76fd9a4bcb0c33dad652"
+    },
+    {
+      "anon": false,
+      "args": "p_provider_id uuid, p_credential_version bigint, p_error_code text, p_revalidated boolean",
+      "name": "record_ai_provider_outcome",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "38a1a3668f0de291e7d45c5d52968536"
+    },
+    {
+      "anon": false,
+      "args": "p_job_id uuid, p_document_id uuid, p_content_hash text, p_normalized_text text, p_http_status integer, p_metadata jsonb",
+      "name": "ingest_research_snapshot",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "c9e721b4241d359b52e4fb7cc4371805"
+    },
+    {
+      "anon": false,
+      "args": "p_provider_id uuid, p_credential_version bigint, p_models jsonb",
+      "name": "ingest_ai_model_catalogue",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "ed0715b2bb5b579b0e31355bd8db8828"
+    },
+    {
+      "anon": false,
+      "args": "p_slug text, p_language_code text, p_title text, p_summary text, p_claim_text text, p_snapshot_id uuid, p_excerpt text, p_topic text, p_jurisdiction text, p_destination_code text, p_program_slug text, p_confidence text, p_approve boolean",
+      "name": "promote_knowledge_from_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "8393423794cdaac146a623144b2c9d35"
+    },
+    {
+      "anon": false,
+      "args": "p_consultation_id uuid, p_status text, p_admin_note text",
+      "name": "update_admin_consultation",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "ff71f67b20944b0504b6081576d59411"
+    },
+    {
+      "anon": false,
+      "args": "p_jurisdiction text, p_statement_a text, p_statement_b text, p_citation_a_id uuid, p_citation_b_id uuid, p_proposed_interpretation text",
+      "name": "register_knowledge_conflict",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "ab5b7baff5b1fb17d0952d121f51c00e"
+    },
+    {
+      "anon": false,
+      "args": "p_topic text, p_message text, p_related_application_id uuid",
+      "name": "submit_consultation_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": false,
+      "authenticated": true,
+      "definition_md5": "060d29f7b2cd8de9c280f19cebc04e56"
+    },
+    {
+      "anon": false,
+      "args": "p_query text, p_locale text, p_destination_code text, p_program_slug text, p_limit integer",
+      "name": "retrieve_knowledge",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "1626b5695a770e8baed5123a8b4f917b"
+    },
+    {
+      "anon": false,
+      "args": "p_user_id uuid, p_role text",
+      "name": "consume_ai_daily_quota",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "34d1c27404b105016700c26fb61d977a"
+    },
+    {
+      "anon": false,
+      "args": "p_user_id uuid, p_type text, p_title text, p_body text, p_action_path text, p_source_id uuid",
+      "name": "create_user_notification",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "9ae2708a5e0c7313b6b78c3c1b4fd2c0"
+    },
+    {
+      "anon": false,
+      "args": "p_guest_key_hash text, p_limit integer",
+      "name": "consume_ai_guest_quota",
+      "config": [
+        "search_path=public"
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": false,
+      "definition_md5": "0e3870886ceaaff993bfbc38b28a8b8e"
+    },
+    {
+      "anon": false,
+      "args": "p_slug text, p_display_name text, p_adapter text, p_base_url text, p_api_key text, p_enabled boolean, p_priority integer",
+      "name": "configure_ai_provider",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "efe61164f96f6a2aac1bf63e20340497"
+    },
+    {
+      "anon": false,
+      "args": "p_user_id uuid, p_role text",
+      "name": "get_ai_daily_quota_status",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "9c4eddc6bb865754f6f3a4e9df36d396"
+    },
+    {
+      "anon": false,
+      "args": "p_draft_id uuid, p_category text, p_slug text",
+      "name": "publish_content_draft",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": false,
+      "authenticated": true,
+      "definition_md5": "779ce10b24bf3c16e55e0027407b1f5e"
+    },
+    {
+      "anon": false,
+      "args": "p_user_id uuid, p_guest_key_hash text",
+      "name": "get_ai_access_decision",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "f0819fab2ec5ab00ab4d2f3acbc7a6c1"
+    },
+    {
+      "anon": false,
+      "args": "",
+      "name": "list_admin_consultations",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "service": true,
+      "authenticated": true,
+      "definition_md5": "6763538b3acadd1bfcb85a3b36db6278"
+    }
+  ],
+  "profile_role_insert": true,
+  "hosted_definer_fingerprints_matching_protected_catalog": 34,
+  "hosted_definer_fingerprints_compared": 34
+}

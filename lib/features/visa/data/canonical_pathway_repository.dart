@@ -9,11 +9,13 @@ import '../domain/entities/canonical_pathway_entities.dart';
 abstract class CanonicalPathwayRepository {
   Future<CanonicalPathwayArticle?> getCanonicalPathway({
     required String countryCode,
+    String locale = 'fa',
     required String pathwaySlug,
   });
 
   Future<IndependentArticle?> getIndependentArticle({
     required String countryCode,
+    String locale = 'fa',
     required String articleSlug,
   });
 }
@@ -25,14 +27,17 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
   const SupabaseCanonicalPathwayRepository(this._service);
 
   /// Published main and related articles share the canonical UUID selector.
-  Future<CanonicalPathwayArticle?> getArticleById(String articleId) async {
+  Future<CanonicalPathwayArticle?> getArticleById(
+    String articleId, {
+    String locale = 'fa',
+  }) async {
     if (!_service.isInitialized) return null;
     final response = await _service.client.rpc(
       'get_visa_article',
       params: {
         'p_request': {
           'selector': {'article_id': articleId},
-          'locale': 'fa',
+          'locale': locale,
         },
       },
     );
@@ -45,6 +50,7 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
   @override
   Future<CanonicalPathwayArticle?> getCanonicalPathway({
     required String countryCode,
+    String locale = 'fa',
     required String pathwaySlug,
   }) async {
     if (!_service.isInitialized) return null;
@@ -59,7 +65,7 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
                   'pathway_slug': pathwaySlug,
                   'kind': 'main',
                 },
-                'locale': 'fa',
+                'locale': locale,
               },
             },
           )
@@ -85,6 +91,7 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
   @override
   Future<IndependentArticle?> getIndependentArticle({
     required String countryCode,
+    String locale = 'fa',
     required String articleSlug,
   }) async {
     if (!_service.isInitialized) return null;
@@ -99,7 +106,7 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
                   'pathway_slug': articleSlug,
                   'kind': 'related',
                 },
-                'locale': 'fa',
+                'locale': locale,
               },
             },
           )
@@ -128,9 +135,15 @@ final canonicalPathwayRepositoryProvider = Provider<CanonicalPathwayRepository>(
   },
 );
 
+typedef PublishedArticleKey = ({
+  String articleId,
+  String requestedLocale,
+  String resolvedLocale,
+});
+
 final publishedVisaArticleProvider = FutureProvider.autoDispose
-    .family<CanonicalPathwayArticle?, String>((ref, articleId) {
+    .family<CanonicalPathwayArticle?, PublishedArticleKey>((ref, key) {
       return SupabaseCanonicalPathwayRepository(
         ref.watch(supabaseClientServiceProvider),
-      ).getArticleById(articleId);
+      ).getArticleById(key.articleId, locale: key.resolvedLocale);
     });

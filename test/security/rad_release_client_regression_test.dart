@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import '../support/rad_contract_fixtures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -265,12 +267,15 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            publishedVisaArticleProvider(article['data']['id'] as String)
-                .overrideWith(
-                  (ref) async => CanonicalPathwayArticle.fromJson(
-                    Map<String, dynamic>.from(article as Map),
-                  ),
-                ),
+            publishedVisaArticleProvider((
+              articleId: article['data']['id'] as String,
+              requestedLocale: 'fa',
+              resolvedLocale: 'fa',
+            )).overrideWith(
+              (ref) async => CanonicalPathwayArticle.fromJson(
+                Map<String, dynamic>.from(article as Map),
+              ),
+            ),
           ],
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -279,6 +284,8 @@ void main() {
               countrySlug: '',
               pathwaySlug: '',
               articleId: article['data']['id'] as String,
+              requestedLocale: 'fa',
+              resolvedLocale: 'fa',
               initialSectionAnchor: section['id'] as String,
             ),
           ),
@@ -302,15 +309,7 @@ void main() {
         final body = jsonDecode(request.body) as Map<String, dynamic>;
         bodies.add(body);
         expect(request.headers['x-rad-request-key'], body['request_key']);
-        return jsonResponse({
-          'data': {
-            'reply': 'SYNTHETIC no immigration claim',
-            'session_id': null,
-            'uncertain': true,
-            'evidence_state': 'unavailable',
-            'citations': [],
-          },
-        });
+        return jsonResponse(validAiEnvelope());
       });
       final ai = SupabaseAiService(service);
       for (var i = 0; i < 20; i++) {
@@ -367,14 +366,7 @@ void main() {
     final service = await _serviceWith((request) {
       if (request.url.path.endsWith('ai-orchestrator')) {
         bodies.add((jsonDecode(request.body) as Map).cast<String, dynamic>());
-        return jsonResponse({
-          'data': {
-            'reply': 'Safe reply',
-            'evidence_state': 'insufficient',
-            'uncertain': true,
-            'citations': [],
-          },
-        });
+        return jsonResponse(validAiEnvelope());
       }
       return jsonResponse({});
     });
@@ -810,4 +802,60 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  test('UID-family refresh refetches held booking and appointment subscriptions after success and error', () async {
+    final auth = AuthController(_AuthRepo())
+      ..applySession(const UserSession(userId: ownerA, authenticated: true));
+    final bookings = _Bookings();
+    final appointments = _Appointments();
+    final container = ProviderContainer(
+      overrides: [
+        authControllerProvider.overrideWith((ref) => auth),
+        bookingRepositoryProvider.overrideWithValue(bookings),
+        appointmentRepositoryProvider.overrideWithValue(appointments),
+      ],
+    );
+    addTearDown(container.dispose);
+    final bs = container.listen(currentBookingHistoryProvider, (_, _) {});
+    final aps = container.listen(currentAppointmentListProvider, (_, _) {});
+    addTearDown(bs.close);
+    addTearDown(aps.close);
+    await container.pump();
+    expect(bookings.pending, hasLength(1));
+    expect(appointments.pending, hasLength(1));
+    bookings.pending[0].completeError(StateError('synthetic failed fetch'));
+    appointments.pending[0].completeError(StateError('synthetic failed fetch'));
+    await container.pump();
+    expect(container.read(currentBookingHistoryProvider).hasError, isTrue);
+    expect(container.read(currentAppointmentListProvider).hasError, isTrue);
+    container.invalidate(bookingHistoryProvider(ownerA));
+    container.invalidate(appointmentListProvider(ownerA));
+    await container.pump();
+    expect(bookings.pending, hasLength(2));
+    expect(appointments.pending, hasLength(2));
+    bookings.pending[1].complete([]);
+    appointments.pending[1].complete(
+      const AppointmentListResult(
+        appointments: [],
+        capability: AppointmentCapability.available,
+      ),
+    );
+    await container.pump();
+    expect(container.read(currentBookingHistoryProvider).hasValue, isTrue);
+    // Submit/reschedule/cancel use the same invalidation while their list is mounted.
+    for (var i = 0; i < 3; i++) {
+      container.invalidate(bookingHistoryProvider(ownerA));
+      container.invalidate(appointmentListProvider(ownerA));
+      await container.pump();
+      expect(bookings.pending, hasLength(i + 3));
+      expect(appointments.pending, hasLength(i + 3));
+      bookings.pending.last.complete([]);
+      appointments.pending.last.complete(
+        const AppointmentListResult(
+          appointments: [],
+          capability: AppointmentCapability.available,
+        ),
+      );
+      await container.pump();
+    }
+  });
 }

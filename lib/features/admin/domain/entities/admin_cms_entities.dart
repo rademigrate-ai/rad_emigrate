@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 import '../../../visa/domain/entities/canonical_pathway_entities.dart';
@@ -7,6 +9,7 @@ import '../../../visa/domain/entities/search_entities.dart';
 class AdminCmsArticleListItem {
   final String id;
   final String slug;
+  final String locale;
   final String countryCode;
   final String countryName;
   final String title;
@@ -19,6 +22,7 @@ class AdminCmsArticleListItem {
   const AdminCmsArticleListItem({
     required this.id,
     required this.slug,
+    this.locale = 'fa',
     required this.countryCode,
     required this.countryName,
     required this.title,
@@ -33,23 +37,20 @@ class AdminCmsArticleListItem {
     return AdminCmsArticleListItem(
       id: (json['id'] ?? '').toString(),
       slug: (json['slug'] ?? '').toString(),
+      locale: json['locale'] as String,
       countryCode: (json['country_code'] ?? json['countryCode'] ?? '')
           .toString(),
       countryName: (json['country_name'] ?? json['countryName'] ?? '')
           .toString(),
       title: (json['title'] ?? '').toString(),
-      articleType: SearchArticleType.fromString(
-        (json['article_type'] ?? json['articleType'])?.toString(),
-      ),
+      articleType: SearchArticleType.fromString((json['kind'])?.toString()),
       factualStatus: FactualStatus.fromString(
-        (json['factual_status'] ?? json['factualStatus'])?.toString(),
+        (json['verification_state'])?.toString(),
       ),
       editorialStatus: ArticleEditorialStatus.fromString(
-        (json['editorial_status'] ?? json['editorialStatus'])?.toString(),
+        (json['editorial_state'])?.toString(),
       ),
-      lastUpdated:
-          DateTime.tryParse(json['last_updated']?.toString() ?? '') ??
-          DateTime.now(),
+      lastUpdated: DateTime.parse(json['updated_at'] as String),
       authorityDomain:
           (json['authority_domain'] ?? json['authorityDomain'] ?? '')
               .toString(),
@@ -79,7 +80,7 @@ enum SourceProposalReviewStatus {
       case SourceProposalReviewStatus.pending:
         return 'در انتظار بررسی';
       case SourceProposalReviewStatus.approved:
-        return 'تأیید و ادغام شد';
+        return 'تأیید پیش‌نویس؛ منتشر نشده';
       case SourceProposalReviewStatus.rejected:
         return 'رد شد';
     }
@@ -89,6 +90,7 @@ enum SourceProposalReviewStatus {
 @immutable
 class AdminSourceChangeProposal {
   final String id;
+  final int revision;
   final String authorityName;
   final String authorityDomain;
   final String evidenceUrl;
@@ -104,6 +106,7 @@ class AdminSourceChangeProposal {
 
   const AdminSourceChangeProposal({
     required this.id,
+    this.revision = 1,
     required this.authorityName,
     required this.authorityDomain,
     required this.evidenceUrl,
@@ -119,35 +122,35 @@ class AdminSourceChangeProposal {
   });
 
   factory AdminSourceChangeProposal.fromJson(Map<String, dynamic> json) {
+    final evidence = json['evidence'] as List;
+    final source = evidence.isEmpty ? null : evidence.first as Map;
+    final evidenceUrl = source?['url'] as String? ?? '';
     return AdminSourceChangeProposal(
-      id: (json['id'] ?? '').toString(),
-      authorityName: (json['authority_name'] ?? json['authorityName'] ?? '')
-          .toString(),
-      authorityDomain:
-          (json['authority_domain'] ?? json['authorityDomain'] ?? '')
-              .toString(),
-      evidenceUrl: (json['evidence_url'] ?? json['evidenceUrl'] ?? '')
-          .toString(),
+      id: json['id'] as String,
+      revision: json['revision'] as int,
+      authorityName:
+          source?['publisher'] as String? ?? json['authority_id'] as String,
+      authorityDomain: Uri.tryParse(evidenceUrl)?.host ?? '',
+      evidenceUrl: evidenceUrl,
       countryCode: (json['country_code'] ?? json['countryCode'] ?? '')
           .toString(),
       pathwaySlug: (json['pathway_slug'] ?? json['pathwaySlug'] ?? '')
           .toString(),
-      detectedAt:
-          DateTime.tryParse(json['detected_at']?.toString() ?? '') ??
-          DateTime.now(),
+      detectedAt: DateTime.parse(json['created_at'] as String),
       factualStatus: FactualStatus.fromString(
-        (json['factual_status'] ?? json['factualStatus'])?.toString(),
+        (json['verification_state'])?.toString(),
       ),
       reviewStatus: SourceProposalReviewStatus.fromString(
-        (json['review_status'] ?? json['reviewStatus'])?.toString(),
+        (json['editorial_state'] == 'approved'
+            ? 'approved'
+            : json['editorial_state'] == 'rejected'
+            ? 'rejected'
+            : 'pending'),
       ),
-      previousText: (json['previous_text'] ?? json['previousText'] ?? '')
-          .toString(),
-      proposedText: (json['proposed_text'] ?? json['proposedText'] ?? '')
-          .toString(),
+      previousText: 'نسخه مبنا: ${json['base_revision']}',
+      proposedText: const JsonEncoder.withIndent('  ').convert(json['changes']),
       summaryOfChanges:
-          (json['summary_of_changes'] ?? json['summaryOfChanges'] ?? '')
-              .toString(),
+          '${(json['changes'] as List).length} تغییر در بخش‌های مقاله',
       reviewerNotes:
           json['reviewer_notes']?.toString() ??
           json['reviewerNotes']?.toString(),

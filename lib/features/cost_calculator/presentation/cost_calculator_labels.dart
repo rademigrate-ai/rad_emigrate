@@ -11,8 +11,8 @@ class CostCalculatorLabels {
   String get title => fa ? 'هزینه‌های مهاجرت' : 'Immigration costs';
 
   String get intro => fa
-      ? 'هزینه‌های انتشار‌شدهٔ رسمی برای هر مقصد و مسیر را بررسی کنید. اعداد تنها از منابع رسمی و قابل استناد استخراج می‌شوند.'
-      : 'Review officially published costs for each destination and pathway. Figures are only drawn from authoritative, cited sources.';
+      ? 'مبالغ از متن کاتالوگ استخراج می‌شوند؛ تأیید رسمی در سطح هر مبلغ موجود نیست. این محاسبه شامل همه هزینه‌های مهاجرت نیست.'
+      : 'Figures are parsed from catalog text without field-level official verification. Unlisted immigration costs are excluded.';
 
   String get selectPathway => fa ? 'انتخاب مسیر' : 'Select a pathway';
 
@@ -22,7 +22,8 @@ class CostCalculatorLabels {
 
   String get breakdownTitle => fa ? 'جزئیات هزینه‌ها' : 'Cost breakdown';
 
-  String get totalLabel => fa ? 'جمع کل (منتشرشده)' : 'Published total';
+  String get totalLabel =>
+      fa ? 'جمع مبالغ قابل استخراج (ناقص)' : 'Parsed fee subtotal (incomplete)';
 
   String get currencyLabel => fa ? 'ارز نمایشی' : 'Display currency';
 
@@ -36,13 +37,13 @@ class CostCalculatorLabels {
   String get processingTime =>
       fa ? 'مدت بررسی منتشرشده' : 'Published processing time';
 
-  String get sourceLabel => fa ? 'منبع رسمی' : 'Authoritative source';
+  String get sourceLabel => fa ? 'منبع کاتالوگ' : 'Catalog source';
 
   String get retrievedAt => fa ? 'تاریخ دریافت' : 'Retrieved';
 
   String get notPublished => fa
-      ? 'مبلغ رسمی منتشر نشده است.'
-      : 'No official figure has been published.';
+      ? 'مبلغ قابل استخراج در کاتالوگ موجود نیست.'
+      : 'No parseable figure is available in the catalog.';
 
   String get notPublishedField => fa ? 'منتشر نشده' : 'Not published';
 
@@ -51,12 +52,12 @@ class CostCalculatorLabels {
       : 'The source published prose, not an exact figure; the original wording is shown below.';
 
   String get figureFromSource => fa
-      ? 'این عدد از متن منتشرشدهٔ منبع استخراج شده است.'
-      : 'This figure was extracted from the source’s published text.';
+      ? 'این عدد از متن کاتالوگ استخراج شده؛ تأیید رسمی مبلغ احراز نشده است.'
+      : 'Parsed from catalog text; official verification of this amount is unavailable.';
 
   String get noVerifiedFigure => fa
-      ? 'هیچ رقم تأییدشده‌ای برای جمع‌بندی در دسترس نیست.'
-      : 'No verified figure is available to total.';
+      ? 'هیچ رقم قابل استخراجی برای جمع‌بندی در دسترس نیست.'
+      : 'No parseable figure is available to subtotal.';
 
   String get mixedCurrencies => fa
       ? 'اقلام با ارزهای متفاوت منتشر شده‌اند و نرخ تبدیل معتبری وجود ندارد.'
@@ -66,9 +67,8 @@ class CostCalculatorLabels {
       ? 'دریافت اطلاعات هزینه‌ها با خطا مواجه شد.'
       : 'Loading cost data failed.';
 
-  String get signInPrompt => fa
-      ? 'برای مشاهدهٔ کاتالوگ تأییدشده وارد شوید.'
-      : 'Sign in to view the verified catalog.';
+  String get signInPrompt =>
+      fa ? 'برای مشاهدهٔ کاتالوگ وارد شوید.' : 'Sign in to view the catalog.';
 
   String get emptyCatalog => fa
       ? 'هیچ مسیر منتشرشده‌ای برای محاسبهٔ هزینه یافت نشد.'

@@ -19,6 +19,8 @@ do $$ begin
   perform public.create_visa_article('{"article_id":"b0000000-0000-4000-8000-000000000001","kind":"related","country_code":"ZZ","pathway_slug":"test","slug":"test","request_key":"c0000000-0000-4000-8000-000000000001"}');
   raise exception 'SECURITY FAILURE: forged metadata admin admitted';
  exception when sqlstate 'PT403' then null; end;
+ begin perform public.list_cms_articles('{"locale":"en","cursor":null,"limit":50}'); raise exception 'CMS admin guard bypass'; exception when sqlstate 'PT403' then null; end;
+ begin perform public.get_cms_article_draft('{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en"}'); raise exception 'CMS draft leaked'; exception when sqlstate 'PT403' then null; end;
  begin
   perform * from public.visa_article_revisions;
   raise exception 'SECURITY FAILURE: direct draft access';
@@ -36,6 +38,13 @@ begin
  request:='{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en","expected_revision":0,"title":"Synthetic source-neutral article","summary":"Test content, no immigration rules.","sections":[{"id":"d0000000-0000-4000-8000-000000000001","anchor":"overview","heading":"Synthetic overview","order":0,"blocks":[{"id":"e0000000-0000-4000-8000-000000000001","type":"paragraph","text":"This synthetic paragraph contains a searchable full body marker alphabravo.","items":[]}],"evidence_refs":[]}],"related_article_ids":[],"merge_manifest_id":null,"request_key":"c0000000-0000-4000-8000-000000000002"}';
  draft:=public.save_visa_article_draft(request)->'data';
  if draft->>'verification_state'<>'unverified' then raise exception 'draft acquired factual trust'; end if;
+ result:=public.get_cms_article_draft('{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"en"}');
+ if result->'meta'->>'contract_version'<>'1' then raise exception 'CMS head contract';end if;
+ if result->'data'->'content'->>'article_id'<>draft->>'article_id' or result->'data'->'content'->>'expected_revision'<>'1' or result->'data'->'content'->'sections'<>request->'sections' then raise exception 'CMS head loss/identity';end if;
+ result:=public.list_cms_articles('{"locale":"en","cursor":null,"limit":50}');
+ if result->'meta'->>'contract_version'<>'1' or jsonb_array_length(result->'data'->'items')<>1 then raise exception 'CMS list contract';end if;
+ begin perform public.get_cms_article_draft('{"article_id":"b0000000-0000-4000-8000-000000000001","locale":"fa"}');raise exception 'CMS silently changed locale';exception when sqlstate 'PT404' then null;end;
+
  begin perform public.save_visa_article_draft(request||'{"expected_revision":99,"request_key":"c0000000-0000-4000-8000-000000000099"}');raise exception 'stale revision admitted';exception when sqlstate 'PT409' then null;end;
  begin perform public.get_visa_article('{"selector":{"article_id":"b0000000-0000-4000-8000-000000000001"},"locale":"en"}');raise exception 'draft leaked';exception when sqlstate 'PT404' then null;end;
  request:=jsonb_build_object('article_id',draft->'article_id','revision_id',draft->'revision_id','expected_revision',draft->'revision','content_hash',draft->'content_hash','note','','request_key','c0000000-0000-4000-8000-000000000003');
@@ -62,6 +71,8 @@ reset role;
 do $$ begin
  if (select count(*) from public.visa_article_revision_events where state='published')<>1 then raise exception 'duplicate publish event'; end if;
  if has_column_privilege('authenticated','public.profiles','role','INSERT') then raise exception 'role INSERT grant retained'; end if;
+ if has_function_privilege('anon','public.list_cms_articles(jsonb)','EXECUTE') or has_function_privilege('service_role','public.list_cms_articles(jsonb)','EXECUTE') or has_function_privilege('anon','public.get_cms_article_draft(jsonb)','EXECUTE') or has_function_privilege('service_role','public.get_cms_article_draft(jsonb)','EXECUTE') then raise exception 'CMS read RPC grant bypass';end if;
+
  if exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and not c.relrowsecurity) then raise exception 'RLS disabled table'; end if;
 end $$;
 

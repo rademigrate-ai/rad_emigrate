@@ -225,6 +225,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin/cms/canonical/:id',
             builder: (_, state) => AdminCmsCanonicalEditorPage(
               articleId: state.pathParameters['id'] ?? '',
+              locale: state.uri.queryParameters['locale'] == 'en' ? 'en' : 'fa',
             ),
           ),
           GoRoute(

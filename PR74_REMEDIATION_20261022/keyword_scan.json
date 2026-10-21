@@ -1,0 +1,6 @@
+{
+  "scope": "All staged tracked files, including new files; same high-risk patterns as CI",
+  "exit_code": 1,
+  "credential_pattern_matches": 0,
+  "diff_check_exit_code": 0
+}

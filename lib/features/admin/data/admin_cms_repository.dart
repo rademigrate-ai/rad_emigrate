@@ -1,266 +1,282 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../core/supabase/rad_contract.dart';
 import '../../../core/supabase/supabase_client.dart';
 import '../../../core/supabase/supabase_providers.dart';
-import '../../visa/domain/entities/canonical_pathway_entities.dart';
-import '../../visa/domain/entities/search_entities.dart';
+import '../../auth/presentation/providers/auth_controller.dart';
 import '../domain/entities/admin_cms_entities.dart';
+
+class CmsException implements Exception {
+  const CmsException(this.code);
+  final String code;
+  @override
+  String toString() => switch (code) {
+    'unauthorized' => 'دسترسی مدیریت لازم است. دوباره وارد شوید.',
+    'conflict' =>
+      'نسخه مقاله تغییر کرده است؛ قبل از تلاش مجدد نسخه جدید را بررسی کنید.',
+    'unavailable' => 'سرویس مدیریت محتوا در دسترس نیست.',
+    'malformed' => 'پاسخ سرویس معتبر نیست؛ عملیات تأیید نشد.',
+    _ => 'ارتباط با سرویس ناموفق بود. تغییرات شما حفظ شده است.',
+  };
+}
+
+/// Lossless draft input, separate from the public display projection.
+class CmsArticleDraft {
+  CmsArticleDraft._(this._content, this.revisionId);
+  final Map<String, dynamic> _content;
+  final String revisionId;
+  String get id => _content['article_id'] as String;
+  String get locale => _content['locale'] as String;
+  int get revision => _content['expected_revision'] as int;
+  String get title => _content['title'] as String;
+  String get summary => _content['summary'] as String;
+  Map<String, dynamic> request({
+    required String title,
+    required String summary,
+    required String requestKey,
+  }) => (jsonDecode(jsonEncode(_content)) as Map).cast<String, dynamic>()
+    ..['title'] = title
+    ..['summary'] = summary
+    ..['request_key'] = requestKey;
+}
 
 abstract class AdminCmsRepository {
   Future<List<AdminCmsArticleListItem>> listCmsArticles();
+  Future<CmsArticleDraft> getArticleDraft(
+    String articleId, {
+    String locale = 'fa',
+  });
   Future<List<AdminSourceChangeProposal>> listProposals();
   Future<AdminSourceChangeProposal?> getProposalDetail(String proposalId);
   Future<bool> reviewProposal({
     required String proposalId,
+    required int expectedRevision,
     required SourceProposalReviewStatus decision,
-    required FactualStatus factualStatus,
     String? reviewerNotes,
   });
-  Future<bool> saveCanonicalArticle(CanonicalPathwayArticle article);
+  Future<bool> saveCanonicalArticle(
+    CmsArticleDraft article, {
+    required String title,
+    required String summary,
+    required String requestKey,
+  });
 }
 
 class SupabaseAdminCmsRepository implements AdminCmsRepository {
+  SupabaseAdminCmsRepository(
+    this._service, {
+    this.timeout = const Duration(seconds: 15),
+  }) : _owner = _service.isInitialized
+           ? _service.client.auth.currentUser?.id
+           : null;
+  final Duration timeout;
   final SupabaseClientService _service;
+  final String? _owner;
 
-  const SupabaseAdminCmsRepository(this._service);
+  void _assertSession() {
+    if (!_service.isInitialized) throw const CmsException('unavailable');
+    if (_owner == null || _service.client.auth.currentUser?.id != _owner) {
+      throw const CmsException('unauthorized');
+    }
+  }
+
+  Future<Map<String, dynamic>> _rpc(
+    String name,
+    Map<String, dynamic> request,
+    String responseSchema,
+  ) async {
+    _assertSession();
+    try {
+      requireRadContract('${name}_request', request);
+      final response = await _service.client
+          .rpc(name, params: {'p_request': request})
+          .timeout(timeout);
+      _assertSession();
+      requireRadContract(responseSchema, response);
+      final result = (response as Map).cast<String, dynamic>();
+      final meta = result['meta'] as Map;
+      if (request.containsKey('locale') &&
+          (meta['resolved_locale'] != request['locale'] ||
+              meta['requested_locale'] != request['locale'])) {
+        throw const FormatException('invalid_locale');
+      }
+      if (result['page'] is Map) {
+        final page = result['page'] as Map;
+        if (page['has_more'] != (page['next_cursor'] != null) ||
+            page['next_cursor'] != null &&
+                page['next_cursor'] == request['cursor']) {
+          throw const FormatException('invalid_page');
+        }
+      }
+      return result;
+    } on CmsException {
+      rethrow;
+    } on FormatException {
+      throw const CmsException('malformed');
+    } on PostgrestException catch (e) {
+      throw CmsException(switch (e.code) {
+        '42501' || 'PT401' || 'PT403' || '401' || '403' => 'unauthorized',
+        'PT409' || '409' => 'conflict',
+        'PGRST202' || '42883' => 'unavailable',
+        _ => 'network',
+      });
+    } catch (_) {
+      throw const CmsException('network');
+    }
+  }
 
   @override
   Future<List<AdminCmsArticleListItem>> listCmsArticles() async {
-    if (_service.isInitialized) {
-      try {
-        final response = await _service.client
-            .rpc('list_cms_articles')
-            .timeout(const Duration(seconds: 4));
-
-        if (response is List) {
-          return response
-              .whereType<Map<String, dynamic>>()
-              .map((e) => AdminCmsArticleListItem.fromJson(e))
-              .toList();
-        }
-      } catch (_) {
-        // Fallback
-      }
+    final articles = <AdminCmsArticleListItem>[];
+    for (final locale in ['fa', 'en']) {
+      String? cursor;
+      do {
+        final response = await _rpc('list_cms_articles', {
+          'locale': locale,
+          'cursor': cursor,
+          'limit': 50,
+        }, 'list_cms_articles_response');
+        articles.addAll(
+          ((response['data'] as Map)['items'] as List).map(
+            (e) => AdminCmsArticleListItem.fromJson(
+              Map<String, dynamic>.from(e as Map),
+            ),
+          ),
+        );
+        cursor = (response['page'] as Map)['next_cursor'] as String?;
+      } while (cursor != null);
     }
-    return _inMemoryArticles();
+    return articles;
+  }
+
+  @override
+  Future<CmsArticleDraft> getArticleDraft(
+    String articleId, {
+    String locale = 'fa',
+  }) async {
+    final response = await _rpc('get_cms_article_draft', {
+      'article_id': articleId,
+      'locale': locale,
+    }, 'get_cms_article_draft_response');
+    final data = response['data'] as Map;
+    final content = Map<String, dynamic>.from(data['content'] as Map);
+    if (content['article_id'] != articleId ||
+        content['locale'] != locale ||
+        content['expected_revision'] != data['revision'] ||
+        (response['meta'] as Map)['resolved_locale'] != locale) {
+      throw const CmsException('malformed');
+    }
+    return CmsArticleDraft._(content, data['revision_id'] as String);
   }
 
   @override
   Future<List<AdminSourceChangeProposal>> listProposals() async {
-    if (_service.isInitialized) {
-      try {
-        final response = await _service.client
-            .rpc('list_research_proposals')
-            .timeout(const Duration(seconds: 4));
-
-        if (response is List) {
-          return response
-              .whereType<Map<String, dynamic>>()
-              .map((e) => AdminSourceChangeProposal.fromJson(e))
-              .toList();
-        }
-      } catch (_) {
-        // Fallback
-      }
-    }
-    return _inMemoryProposals();
+    final proposals = <AdminSourceChangeProposal>[];
+    String? cursor;
+    do {
+      final response = await _rpc('list_research_proposals', {
+        'editorial_state': null,
+        'verification_state': null,
+        'article_id': null,
+        'cursor': cursor,
+        'limit': 50,
+      }, 'list_research_proposals_response');
+      proposals.addAll(
+        ((response['data'] as Map)['items'] as List).map(
+          (e) => AdminSourceChangeProposal.fromJson(
+            Map<String, dynamic>.from(e as Map),
+          ),
+        ),
+      );
+      cursor = (response['page'] as Map)['next_cursor'] as String?;
+    } while (cursor != null);
+    return proposals;
   }
 
   @override
   Future<AdminSourceChangeProposal?> getProposalDetail(
     String proposalId,
   ) async {
-    final list = await listProposals();
-    for (final p in list) {
-      if (p.id == proposalId) return p;
-    }
-    return null;
+    final response = await _rpc('get_research_proposal', {
+      'proposal_id': proposalId,
+    }, 'get_research_proposal_response');
+    final proposal = AdminSourceChangeProposal.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (proposal.id != proposalId) throw const CmsException('malformed');
+    return proposal;
   }
 
   @override
   Future<bool> reviewProposal({
     required String proposalId,
+    required int expectedRevision,
     required SourceProposalReviewStatus decision,
-    required FactualStatus factualStatus,
     String? reviewerNotes,
   }) async {
-    if (_service.isInitialized) {
-      try {
-        final decisionWire = decision == SourceProposalReviewStatus.approved
-            ? 'accept'
-            : 'reject';
-        await _service.client
-            .rpc(
-              'review_research_proposal',
-              params: {
-                'p_request': {
-                  'proposal_id': proposalId,
-                  'expected_revision': 1,
-                  'decision': decisionWire,
-                  'note': reviewerNotes ?? '',
-                  'request_key':
-                      '00000000-0000-4000-8000-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0')}',
-                },
-              },
-            )
-            .timeout(const Duration(seconds: 4));
-        return true;
-      } catch (_) {
-        // Fallback simulation
-      }
+    if (decision == SourceProposalReviewStatus.pending) {
+      throw const CmsException('malformed');
+    }
+    final response = await _rpc('review_research_proposal', {
+      'proposal_id': proposalId,
+      'expected_revision': expectedRevision,
+      'decision': decision == SourceProposalReviewStatus.approved
+          ? 'accept'
+          : 'reject',
+      'note': reviewerNotes ?? '',
+      'request_key': newRadRequestKey(),
+    }, 'review_research_proposal_response');
+    final data = response['data'] as Map;
+    final proposal = data['proposal'] as Map;
+    final accepted = decision == SourceProposalReviewStatus.approved;
+    final draft = data['draft_revision'];
+    if (proposal['id'] != proposalId ||
+        proposal['revision'] != expectedRevision + 1 ||
+        proposal['editorial_state'] != (accepted ? 'approved' : 'rejected') ||
+        (accepted
+            ? draft is! Map ||
+                  draft['article_id'] != proposal['target_article_id'] ||
+                  draft['editorial_state'] != 'draft'
+            : draft != null)) {
+      throw const CmsException('malformed');
     }
     return true;
   }
 
   @override
-  Future<bool> saveCanonicalArticle(CanonicalPathwayArticle article) async {
-    if (_service.isInitialized) {
-      try {
-        await _service.client
-            .rpc(
-              'save_visa_article_draft',
-              params: {
-                'p_request': {
-                  'article_id': article.id,
-                  'locale': 'fa',
-                  'expected_revision': 1,
-                  'title': article.pathwayTitle,
-                  'summary': article.summary,
-                  'sections': article.sections
-                      .map(
-                        (s) => {
-                          'id': s.id,
-                          'anchor': s.anchor,
-                          'heading': s.title,
-                          'order': s.displayOrder,
-                          'blocks': [
-                            {
-                              'id': s.id,
-                              'type': 'paragraph',
-                              'text': s.bodyMarkdown,
-                              'items': <String>[],
-                            },
-                          ],
-                          'evidence': <Map<String, dynamic>>[],
-                        },
-                      )
-                      .toList(),
-                  'related_article_ids': <String>[],
-                  'merge_manifest_id': null,
-                  'request_key':
-                      '00000000-0000-4000-8000-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0')}',
-                },
-              },
-            )
-            .timeout(const Duration(seconds: 4));
-        return true;
-      } catch (_) {
-        // Fallback simulation
-      }
+  Future<bool> saveCanonicalArticle(
+    CmsArticleDraft article, {
+    required String title,
+    required String summary,
+    required String requestKey,
+  }) async {
+    final request = article.request(
+      title: title,
+      summary: summary,
+      requestKey: requestKey,
+    );
+    requireRadContract('save_visa_article_draft_request', request);
+    final response = await _rpc(
+      'save_visa_article_draft',
+      request,
+      'save_visa_article_draft_response',
+    );
+    final data = response['data'] as Map;
+    if (data['article_id'] != article.id ||
+        data['revision'] != article.revision + 1 ||
+        data['editorial_state'] != 'draft' ||
+        (response['meta'] as Map)['resolved_locale'] != article.locale) {
+      throw const CmsException('malformed');
     }
     return true;
-  }
-
-  static List<AdminCmsArticleListItem> _inMemoryArticles() {
-    return [
-      AdminCmsArticleListItem(
-        id: 'de-chancenkarte-001',
-        slug: 'chancenkarte',
-        countryCode: 'de',
-        countryName: 'آلمان',
-        title: 'کارت فرصت جویی آلمان (Chancenkarte)',
-        articleType: SearchArticleType.canonicalPathway,
-        factualStatus: FactualStatus.verified,
-        editorialStatus: ArticleEditorialStatus.published,
-        lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
-        authorityDomain: 'make-it-in-germany.com',
-      ),
-      AdminCmsArticleListItem(
-        id: 'de-blue-card-001',
-        slug: 'blue-card',
-        countryCode: 'de',
-        countryName: 'آلمان',
-        title: 'بلو کارت آلمان (EU Blue Card)',
-        articleType: SearchArticleType.canonicalPathway,
-        factualStatus: FactualStatus.verified,
-        editorialStatus: ArticleEditorialStatus.published,
-        lastUpdated: DateTime.now().subtract(const Duration(days: 4)),
-        authorityDomain: 'make-it-in-germany.com',
-      ),
-      AdminCmsArticleListItem(
-        id: 'de-sperrkonto-001',
-        slug: 'sperrkonto-guide',
-        countryCode: 'de',
-        countryName: 'آلمان',
-        title: 'راهنمای گواهی تمکن مالی و حساب مسدود (Sperrkonto)',
-        articleType: SearchArticleType.independentTopic,
-        factualStatus: FactualStatus.verified,
-        editorialStatus: ArticleEditorialStatus.published,
-        lastUpdated: DateTime.now().subtract(const Duration(days: 6)),
-        authorityDomain: 'auswaertiges-amt.de',
-      ),
-      AdminCmsArticleListItem(
-        id: 'ca-express-entry-001',
-        slug: 'express-entry',
-        countryCode: 'ca',
-        countryName: 'کانادا',
-        title: 'اکسپرس اینتری کانادا (Express Entry)',
-        articleType: SearchArticleType.canonicalPathway,
-        factualStatus: FactualStatus.verified,
-        editorialStatus: ArticleEditorialStatus.published,
-        lastUpdated: DateTime.now().subtract(const Duration(days: 1)),
-        authorityDomain: 'canada.ca',
-      ),
-      AdminCmsArticleListItem(
-        id: 'it-study-dsu-001',
-        slug: 'study-dsu',
-        countryCode: 'it',
-        countryName: 'ایتالیا',
-        title: 'ویزای تحصیلی ایتالیا و بورسیه استانی (DSU)',
-        articleType: SearchArticleType.canonicalPathway,
-        factualStatus: FactualStatus.verified,
-        editorialStatus: ArticleEditorialStatus.published,
-        lastUpdated: DateTime.now().subtract(const Duration(days: 8)),
-        authorityDomain: 'universitaly.it',
-      ),
-    ];
-  }
-
-  static List<AdminSourceChangeProposal> _inMemoryProposals() {
-    return [
-      AdminSourceChangeProposal(
-        id: 'prop-de-001',
-        authorityName: 'Make it in Germany (دولت فدرال آلمان)',
-        authorityDomain: 'make-it-in-germany.com',
-        evidenceUrl: 'https://www.make-it-in-germany.com/en/visa-residence/types/chancenkarte',
-        countryCode: 'de',
-        pathwaySlug: 'chancenkarte',
-        detectedAt: DateTime.now().subtract(const Duration(hours: 4)),
-        factualStatus: FactualStatus.verified,
-        reviewStatus: SourceProposalReviewStatus.pending,
-        previousText: 'حداقل مبلغ تمکن مالی حساب مسدود برای متقاضیان کارت فرصت ۹۹۲ یورو در ماه می‌باشد.',
-        proposedText: 'حداقل مبلغ تمکن مالی حساب مسدود برای متقاضیان کارت فرصت از ماه آینده به ۱,۰۲۷ یورو در ماه افزایش یافت.',
-        summaryOfChanges: 'افزایش حداقل تمکن مالی ماهانه حساب مسدود از ۹۹۲ یورو به ۱,۰۲۷ یورو',
-      ),
-      AdminSourceChangeProposal(
-        id: 'prop-ca-002',
-        authorityName: 'IRCC Canada',
-        authorityDomain: 'canada.ca',
-        evidenceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html',
-        countryCode: 'ca',
-        pathwaySlug: 'express-entry',
-        detectedAt: DateTime.now().subtract(const Duration(days: 1)),
-        factualStatus: FactualStatus.verified,
-        reviewStatus: SourceProposalReviewStatus.pending,
-        previousText: 'هزینه بررسی پرونده اکسپرس اینتری ۸۵۰ دلار کانادا است.',
-        proposedText: 'هزینه بررسی پرونده اکسپرس اینتری و حق اقامت دائم به ۹۵۰ دلار کانادا به‌روزرسانی شد.',
-        summaryOfChanges: 'تغییر کارمزد رسمی دولتی در پرتال IRCC',
-      ),
-    ];
   }
 }
 
 final adminCmsRepositoryProvider = Provider<AdminCmsRepository>((ref) {
-  final supabase = ref.watch(supabaseClientServiceProvider);
-  return SupabaseAdminCmsRepository(supabase);
+  ref.watch(authenticatedUserIdProvider);
+  return SupabaseAdminCmsRepository(ref.watch(supabaseClientServiceProvider));
 });

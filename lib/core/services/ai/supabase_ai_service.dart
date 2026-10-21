@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../supabase/supabase_client.dart';
+import '../../supabase/rad_contract.dart';
 import 'ai_guest_identity.dart';
 import 'ai_request.dart';
 import 'ai_response.dart';
@@ -115,7 +116,7 @@ class SupabaseAiService implements AiService {
           'action': 'chat',
           'request_key': requestKey,
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
-          'session_id': request.conversationId,
+          'session_id': cleanUuid(request.conversationId),
           'guest_key': cleanGuestKey,
           'locale': cleanLocale,
           'authorized_data_scopes': cleanScopes,
@@ -132,19 +133,12 @@ class SupabaseAiService implements AiService {
         },
       );
       final data = response.data;
-      if (data is! Map) {
-        throw const FormatException('invalid_ai_response');
-      }
-      final map = data.cast<String, dynamic>();
-      final payload = map['data'] is Map
-          ? (map['data'] as Map).cast<String, dynamic>()
-          : map;
+      requireRadContract('ai_orchestrator_response', data);
+      final map = (data as Map).cast<String, dynamic>();
+      final payload = (map['data'] as Map).cast<String, dynamic>();
       final reply = payload['reply'] as String?;
       if (reply != null && reply.isNotEmpty) {
-        final rawSources =
-            payload['citations'] as List? ??
-            payload['sources'] as List? ??
-            const [];
+        final rawSources = payload['citations'] as List;
         final sources = rawSources
             .whereType<Map>()
             .map((source) {
@@ -167,7 +161,9 @@ class SupabaseAiService implements AiService {
             payload['uncertain'] == true ||
             evidenceState == 'unavailable' ||
             evidenceState == 'insufficient' ||
-            evidenceState == 'conflicting';
+            evidenceState != 'sufficient' ||
+            payload['refused'] == true ||
+            payload['truncated'] == true;
 
         return AiResponse(
           text: reply,

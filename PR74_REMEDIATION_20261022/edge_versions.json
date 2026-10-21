@@ -1,0 +1,43 @@
+{
+  "functions": [
+    {
+      "id": "62924891-42c0-41e1-b4eb-29bbd33ff368",
+      "slug": "research-sync",
+      "name": "research-sync",
+      "status": "ACTIVE",
+      "version": 4,
+      "created_at": 1791062205303,
+      "updated_at": 1791359475798,
+      "verify_jwt": false,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_inshddthftkhcdosoqcn_62924891-42c0-41e1-b4eb-29bbd33ff368_2/source/research-sync/index.ts",
+      "ezbr_sha256": "88d4953458ecc7c9f010270dc234d8ea1a2352ffc6728f9251fcb5d806bce476"
+    },
+    {
+      "id": "183e0b7d-2832-4802-8fab-50e79c2612d4",
+      "slug": "ai-orchestrator",
+      "name": "ai-orchestrator",
+      "status": "ACTIVE",
+      "version": 11,
+      "created_at": 1791063148988,
+      "updated_at": 1791405721461,
+      "verify_jwt": true,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/index.ts",
+      "ezbr_sha256": "5362558646da14d5f50c9a381b1299964363b4bad67023eb07ab626f619ee007"
+    },
+    {
+      "id": "26310c05-9542-412b-9ee9-255032136d85",
+      "slug": "document-intelligence",
+      "name": "document-intelligence",
+      "status": "ACTIVE",
+      "version": 3,
+      "created_at": 1791063640181,
+      "updated_at": 1791063640181,
+      "verify_jwt": true,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_inshddthftkhcdosoqcn_26310c05-9542-412b-9ee9-255032136d85_1/source/index.ts",
+      "ezbr_sha256": "ebc7450c0bb96a36021dd5fb2e267d810caf39c6dd1dbfc1f3acd830b28ad064"
+    }
+  ]
+}

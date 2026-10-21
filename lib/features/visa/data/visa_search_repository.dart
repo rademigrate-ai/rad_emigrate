@@ -9,6 +9,7 @@ import '../domain/entities/search_entities.dart';
 abstract class VisaSearchRepository {
   Future<SmartSearchResult> search({
     required String query,
+    String locale = 'fa',
     String? countryFilter,
     String? categoryFilter,
   });
@@ -23,6 +24,7 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
   @override
   Future<SmartSearchResult> search({
     required String query,
+    String locale = 'fa',
     String? countryFilter,
     String? categoryFilter,
   }) async {
@@ -40,7 +42,7 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
             params: {
               'p_request': {
                 'query': trimmed,
-                'locale': 'fa',
+                'locale': locale,
                 'country_codes':
                     countryFilter != null && countryFilter.isNotEmpty
                     ? [countryFilter.toUpperCase()]
@@ -63,12 +65,17 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
       }
       final data = response is String ? jsonDecode(response) : response;
       if (data is Map<String, dynamic>) {
-        return SmartSearchResult.fromJson(data, query: trimmed);
+        return SmartSearchResult.fromJson(
+          data,
+          query: trimmed,
+          requestedLocale: locale,
+        );
       }
       if (data is Map) {
         return SmartSearchResult.fromJson(
           Map<String, dynamic>.from(data),
           query: trimmed,
+          requestedLocale: locale,
         );
       }
       return SmartSearchResult.empty(trimmed);

@@ -1,0 +1,13 @@
+{
+  "candidate_sha": "e1d6bc0a290a6898b913ad9cf32059c16c4373ac",
+  "worktree_dirty": true,
+  "at": "2026-10-21T21:21:08.632278+00:00",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "lint",
+    "supabase/functions"
+  ],
+  "exit_code": 0,
+  "seconds": 0.98,
+  "log_sha256": "6c094494c1ea77ecb8276a25e626821d225544426543bb21e3c659e24d5f38a2"
+}

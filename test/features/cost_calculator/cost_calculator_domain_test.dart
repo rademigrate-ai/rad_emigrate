@@ -77,23 +77,20 @@ void main() {
   });
 
   group('buildBreakdown', () {
-    test(
-      'produces a verifiable figure line and a total for a published fee',
-      () {
-        final breakdown = buildBreakdown(
-          _pathway(feesText: 'CAD 150', processingTime: '8 weeks'),
-        );
-        expect(breakdown.hasAnyPublishedFigure, isTrue);
-        expect(breakdown.total.isAvailable, isTrue);
-        expect(breakdown.total.amountMinor, 15000);
-        expect(breakdown.total.currency, 'CAD');
+    test('produces a parsed figure line and a total for a published fee', () {
+      final breakdown = buildBreakdown(
+        _pathway(feesText: 'CAD 150', processingTime: '8 weeks'),
+      );
+      expect(breakdown.hasAnyPublishedFigure, isTrue);
+      expect(breakdown.total.isAvailable, isTrue);
+      expect(breakdown.total.amountMinor, 15000);
+      expect(breakdown.total.currency, 'CAD');
 
-        final figure = breakdown.lines.firstWhere(
-          (l) => l.basis == CostBasis.publishedFigure,
-        );
-        expect(figure.rawText, 'CAD 150');
-      },
-    );
+      final figure = breakdown.lines.firstWhere(
+        (l) => l.basis == CostBasis.publishedFigure,
+      );
+      expect(figure.rawText, 'CAD 150');
+    });
 
     test('renders explicit not-published state when no fee is published', () {
       final breakdown = buildBreakdown(_pathway());
@@ -185,7 +182,7 @@ void main() {
       expect(pathways.first.countryName, 'Canada');
       expect(pathways.first.categoryName, 'Study');
       expect(pathways.first.feesText, 'CAD 150');
-      expect(pathways.first.hasVerifiedFees, isTrue);
+      expect(pathways.first.hasPublishedFees, isTrue);
     });
 
     test('skips programs whose country or category is missing', () {

@@ -17,6 +17,8 @@ GoRoute visaRoute() => GoRoute(
         countrySlug: '',
         pathwaySlug: '',
         articleId: state.pathParameters['articleId'],
+        resolvedLocale: state.uri.queryParameters['locale'],
+        requestedLocale: state.uri.queryParameters['requested_locale'],
         initialSectionAnchor: state.uri.fragment.isNotEmpty
             ? state.uri.fragment
             : state.uri.queryParameters['section'],

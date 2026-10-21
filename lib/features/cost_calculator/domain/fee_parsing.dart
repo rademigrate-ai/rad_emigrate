@@ -5,7 +5,7 @@
 // a currency marker and refuses anything ambiguous (ranges, "from"/"about",
 // per-unit prices). When it cannot be sure, it returns
 // [CostBasis.publishedTextOnly] and preserves the raw text so the UI shows the
-// authoritative wording instead of a fabricated number.
+// original wording instead of a fabricated number.
 
 import 'entities/immigration_cost.dart';
 
@@ -16,79 +16,46 @@ class ParsedAmount {
   final String currency;
 }
 
-final RegExp _digits = RegExp(r'\d');
-
-/// Currency symbols/prefixes mapped to ISO codes.
-const Map<String, String> _currencyMarkers = {
-  r'US\$': 'USD',
-  r'CA\$': 'CAD',
-  r'A\$': 'AUD',
-  r'€': 'EUR',
-  r'£': 'GBP',
-  r'₺': 'TRY',
-  r'$': 'USD',
-};
-
-const Map<String, String> _isoMarkers = {
-  'USD': 'USD',
-  'EUR': 'EUR',
-  'GBP': 'GBP',
-  'CAD': 'CAD',
-  'AUD': 'AUD',
-  'TRY': 'TRY',
-  'AED': 'AED',
-};
-
-/// Returns a single explicit figure, or null when the text does not state one
-/// unambiguously.
+/// Parses only a complete single amount/currency expression. Legacy prose is
+/// displayed verbatim, never searched for a convenient first number.
 ParsedAmount? parsePublishedAmount(String raw) {
+  const codes = {'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'TRY', 'AED'};
+  const symbols = {
+    r'US$': 'USD',
+    r'CA$': 'CAD',
+    r'A$': 'AUD',
+    '€': 'EUR',
+    '£': 'GBP',
+    '₺': 'TRY',
+    r'$': 'USD',
+  };
   final text = raw.trim();
-  if (text.isEmpty || !_digits.hasMatch(text)) return null;
-
-  // Ambiguous phrasing: a range or qualifier means no single verifiable total.
-  final lower = text.toLowerCase();
-  if (lower.contains('from') ||
-      lower.contains('about') ||
-      lower.contains('approx') ||
-      lower.contains('starting') ||
-      lower.contains('per ') ||
-      text.contains('–') ||
-      text.contains('—') ||
-      // A hyphen or slash between two figures is a range. Up to four
-      // non-digit characters may sit on each side of the separator (currency
-      // symbols, spaces): "$100-$200", "$100 - $200", "100/200". Digits must
-      // flank it so a single figure like "150" is never mistaken for a range.
-      RegExp(r'\d\D{0,4}[-/]\D{0,4}\d').hasMatch(text)) {
-    return null;
+  final token = RegExp(
+    r'^(?:(USD|EUR|GBP|CAD|AUD|TRY|AED)\s*)?(US\$|CA\$|A\$|\$|€|£|₺)?\s*((?:0|[1-9][0-9]*|[1-9][0-9]{0,2}(?:,[0-9]{3})+)(?:\.[0-9]{1,2})?)\s*(USD|EUR|GBP|CAD|AUD|TRY|AED|€|£|₺)?$',
+  ).firstMatch(text);
+  if (token == null) return null;
+  final iso = token[1];
+  final symbol = token[2];
+  final suffix = token[4];
+  final currencies = <String>{};
+  if (iso != null) currencies.add(iso);
+  if (suffix != null) {
+    currencies.add(codes.contains(suffix) ? suffix : symbols[suffix]!);
   }
-
-  // Locate a currency marker first (symbol or ISO code).
-  String? currency;
-  for (final entry in _currencyMarkers.entries) {
-    if (text.contains(entry.key)) {
-      currency = entry.value;
-      break;
-    }
+  // An unqualified $ is disambiguated by an explicit ISO code, e.g. CAD $150.
+  if (symbol != null &&
+      !(symbol == r'$' &&
+          currencies.any((c) => {'USD', 'CAD', 'AUD'}.contains(c)))) {
+    currencies.add(symbols[symbol]!);
   }
-  if (currency == null) {
-    for (final entry in _isoMarkers.entries) {
-      if (RegExp('\\b${entry.key}\\b').hasMatch(text)) {
-        currency = entry.value;
-        break;
-      }
-    }
-  }
-  if (currency == null) return null;
-
-  // Extract the first number, tolerating thousands separators and decimals.
-  final numberMatch = RegExp(r'\d[\d, ]*(?:\.\d+)?').firstMatch(text);
-  if (numberMatch == null) return null;
-  final cleaned = numberMatch.group(0)!.replaceAll(RegExp(r'[,\s]'), '');
-  final asDouble = double.tryParse(cleaned);
-  if (asDouble == null) return null;
-  // Guard against junk like "2026" being read as a fee year.
-  if (asDouble > 1000000) return null;
-  return ParsedAmount((asDouble * 100).round(), currency);
+  if (currencies.length != 1) return null;
+  final parts = token[3]!.replaceAll(',', '').split('.');
+  final whole = int.tryParse(parts[0]);
+  if (whole == null || whole > 1000000) return null;
+  final minor =
+      whole * 100 +
+      (parts.length == 2 ? int.parse(parts[1].padRight(2, '0')) : 0);
+  return ParsedAmount(minor, currencies.single);
 }
 
 /// Builds the full breakdown for one pathway from its published fields.

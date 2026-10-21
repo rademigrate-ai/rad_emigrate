@@ -5531,6 +5531,245 @@
         "error"
       ],
       "additionalProperties": false
+    },
+    "CmsDraftContent": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArticleSectionInput"
+          },
+          "maxItems": 100
+        },
+        "related_article_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UUID"
+          },
+          "maxItems": 100
+        },
+        "merge_manifest_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "article_id",
+        "locale",
+        "expected_revision",
+        "title",
+        "summary",
+        "sections",
+        "related_article_ids",
+        "merge_manifest_id"
+      ],
+      "additionalProperties": false
+    },
+    "CmsArticleListItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "country_code": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "main",
+            "related"
+          ]
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "title": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "editorial_state": {
+          "$ref": "#/$defs/EditorialState"
+        },
+        "verification_state": {
+          "$ref": "#/$defs/ClaimVerificationState"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "country_code",
+        "kind",
+        "locale",
+        "title",
+        "revision",
+        "editorial_state",
+        "verification_state",
+        "updated_at"
+      ],
+      "additionalProperties": false
+    },
+    "list_cms_articles_request": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "required": [
+        "locale",
+        "cursor",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "list_cms_articles_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CmsArticleListItem"
+              },
+              "maxItems": 50
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        }
+      },
+      "required": [
+        "data",
+        "meta",
+        "page"
+      ],
+      "additionalProperties": false
+    },
+    "get_cms_article_draft_request": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "$ref": "#/$defs/Locale"
+        }
+      },
+      "required": [
+        "article_id",
+        "locale"
+      ],
+      "additionalProperties": false
+    },
+    "get_cms_article_draft_response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "revision_id": {
+              "$ref": "#/$defs/UUID"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "editorial_state": {
+              "$ref": "#/$defs/EditorialState"
+            },
+            "verification_state": {
+              "$ref": "#/$defs/ClaimVerificationState"
+            },
+            "updated_at": {
+              "$ref": "#/$defs/Timestamp"
+            },
+            "content": {
+              "$ref": "#/$defs/CmsDraftContent"
+            }
+          },
+          "required": [
+            "revision_id",
+            "revision",
+            "editorial_state",
+            "verification_state",
+            "updated_at",
+            "content"
+          ],
+          "additionalProperties": false
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      },
+      "required": [
+        "data",
+        "meta"
+      ],
+      "additionalProperties": false
     }
   },
   "endpoints": [
@@ -7096,6 +7335,68 @@
         "$ref": "#/$defs/save_visa_search_alias_response"
       },
       "access": "human_admin",
+      "paged": false,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 1,
+      "name": "list_cms_articles",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/list_cms_articles",
+      "signature": "public.list_cms_articles(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/list_cms_articles_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/list_cms_articles_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/list_cms_articles_response"
+      },
+      "access": "admin",
+      "paged": true,
+      "errors": {
+        "$ref": "#/$defs/PostgrestError"
+      }
+    },
+    {
+      "feature": 1,
+      "name": "get_cms_article_draft",
+      "method": "POST",
+      "transport": "RPC",
+      "path": "/rest/v1/rpc/get_cms_article_draft",
+      "signature": "public.get_cms_article_draft(p_request jsonb) returns jsonb",
+      "request": {
+        "$ref": "#/$defs/get_cms_article_draft_request"
+      },
+      "wire_request": {
+        "type": "object",
+        "properties": {
+          "p_request": {
+            "$ref": "#/$defs/get_cms_article_draft_request"
+          }
+        },
+        "required": [
+          "p_request"
+        ],
+        "additionalProperties": false
+      },
+      "response": {
+        "$ref": "#/$defs/get_cms_article_draft_response"
+      },
+      "access": "admin",
       "paged": false,
       "errors": {
         "$ref": "#/$defs/PostgrestError"

@@ -39,6 +39,8 @@ class VisaSearchState {
 
 class VisaSearchNotifier extends StateNotifier<VisaSearchState> {
   final VisaSearchRepository _repository;
+  String _locale = 'fa';
+  int _generation = 0;
 
   VisaSearchNotifier(this._repository)
     : super(
@@ -48,7 +50,9 @@ class VisaSearchNotifier extends StateNotifier<VisaSearchState> {
         ),
       );
 
-  Future<void> search(String query) async {
+  Future<void> search(String query, {String? locale}) async {
+    _locale = locale ?? _locale;
+    final generation = ++_generation;
     final trimmed = query.trim();
     if (trimmed.isEmpty) {
       state = state.copyWith(
@@ -63,11 +67,14 @@ class VisaSearchNotifier extends StateNotifier<VisaSearchState> {
     try {
       final res = await _repository.search(
         query: trimmed,
+        locale: _locale,
         countryFilter: state.countryFilter,
         categoryFilter: state.categoryFilter,
       );
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(result: AsyncValue.data(res));
     } catch (e, st) {
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(result: AsyncValue.error(e, st));
     }
   }

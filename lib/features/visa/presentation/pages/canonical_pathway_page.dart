@@ -18,6 +18,8 @@ class CanonicalPathwayPage extends ConsumerStatefulWidget {
   final String pathwaySlug;
   final String? initialSectionAnchor;
   final String? articleId;
+  final String? resolvedLocale;
+  final String? requestedLocale;
 
   const CanonicalPathwayPage({
     super.key,
@@ -25,6 +27,8 @@ class CanonicalPathwayPage extends ConsumerStatefulWidget {
     required this.pathwaySlug,
     this.initialSectionAnchor,
     this.articleId,
+    this.resolvedLocale,
+    this.requestedLocale,
   });
 
   @override
@@ -190,9 +194,20 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
   Widget build(BuildContext context) {
     final pathwayAsync = ref.watch(
       widget.articleId != null
-          ? publishedVisaArticleProvider(widget.articleId!)
+          ? publishedVisaArticleProvider((
+              articleId: widget.articleId!,
+              requestedLocale:
+                  widget.requestedLocale ??
+                  Localizations.localeOf(context).languageCode,
+              resolvedLocale:
+                  widget.resolvedLocale ??
+                  Localizations.localeOf(context).languageCode,
+            ))
           : canonicalPathwayProvider((
               countryCode: widget.countrySlug,
+              locale:
+                  widget.resolvedLocale ??
+                  Localizations.localeOf(context).languageCode,
               pathwaySlug: widget.pathwaySlug,
             )),
     );

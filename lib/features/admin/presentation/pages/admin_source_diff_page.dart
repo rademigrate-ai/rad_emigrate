@@ -6,8 +6,8 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
-import '../../../visa/domain/entities/search_entities.dart';
 import '../../data/admin_cms_repository.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 
 class AdminSourceDiffPage extends ConsumerStatefulWidget {
@@ -22,13 +22,31 @@ class AdminSourceDiffPage extends ConsumerStatefulWidget {
 
 class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
   late final TextEditingController _notesController;
-  FactualStatus _selectedFactualStatus = FactualStatus.verified;
   bool _isSubmitting = false;
+  int _generation = 0;
+  late Future<AdminSourceChangeProposal?> _proposal;
+  late AdminCmsRepository _repository;
+  AdminSourceChangeProposal? _displayedProposal;
 
   @override
   void initState() {
     super.initState();
     _notesController = TextEditingController();
+    _repository = ref.read(adminCmsRepositoryProvider);
+    _proposal = _repository.getProposalDetail(widget.sourceId);
+  }
+
+  @override
+  void didUpdateWidget(covariant AdminSourceDiffPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.sourceId != widget.sourceId) {
+      _generation++;
+      _notesController.clear();
+      _displayedProposal = null;
+      _isSubmitting = false;
+      _repository = ref.read(adminCmsRepositoryProvider);
+      _proposal = _repository.getProposalDetail(widget.sourceId);
+    }
   }
 
   @override
@@ -38,38 +56,53 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
   }
 
   Future<void> _submitDecision(SourceProposalReviewStatus decision) async {
+    final generation = _generation;
     setState(() => _isSubmitting = true);
-    final repo = ref.read(adminCmsRepositoryProvider);
-    final ok = await repo.reviewProposal(
-      proposalId: widget.sourceId,
-      decision: decision,
-      factualStatus: _selectedFactualStatus,
-      reviewerNotes: _notesController.text.trim().isEmpty
-          ? null
-          : _notesController.text.trim(),
-    );
-
-    if (mounted) {
-      setState(() => _isSubmitting = false);
-      if (ok) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              decision == SourceProposalReviewStatus.approved
-                  ? 'تغییرات با موفقیت تأیید و در مقاله تجمیعی ادغام شد.'
-                  : 'پیشنهاد با موفقیت رد شد.',
-            ),
+    final repo = _repository;
+    try {
+      final proposal = _displayedProposal;
+      if (proposal == null) throw const CmsException('unavailable');
+      final ok = await repo.reviewProposal(
+        proposalId: widget.sourceId,
+        expectedRevision: proposal.revision,
+        decision: decision,
+        reviewerNotes: _notesController.text.trim(),
+      );
+      if (!mounted || generation != _generation) return;
+      if (!ok) throw const CmsException('malformed');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            decision == SourceProposalReviewStatus.approved
+                ? 'پیشنهاد تأیید و پیش‌نویس ساخته شد؛ منتشر نشده است.'
+                : 'پیشنهاد رد شد.',
           ),
-        );
-        context.go('/admin/sources');
+        ),
+      );
+      context.go('/admin/sources');
+    } catch (e) {
+      if (mounted && generation == _generation) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
       }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final repo = ref.watch(adminCmsRepositoryProvider);
-
+    ref.listen(authenticatedUserIdProvider, (previous, next) {
+      if (previous == next) return;
+      setState(() {
+        _generation++;
+        _isSubmitting = false;
+        _notesController.clear();
+        _displayedProposal = null;
+        _repository = ref.read(adminCmsRepositoryProvider);
+        _proposal = _repository.getProposalDetail(widget.sourceId);
+      });
+    });
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -80,12 +113,16 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
         elevation: 0,
       ),
       body: FutureBuilder<AdminSourceChangeProposal?>(
-        future: repo.getProposalDetail(widget.sourceId),
+        future: _proposal,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: RadPending());
           }
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
           final proposal = snapshot.data;
+          _displayedProposal = proposal;
           if (proposal == null) {
             return const Center(child: Text('پیشنهاد مورد نظر یافت نشد.'));
           }
@@ -257,7 +294,7 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'تعیین وضعیت حقیقت رسمی (Factual Status)',
+                      'بررسی انسانی پیشنهاد',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -265,26 +302,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    DropdownButtonFormField<FactualStatus>(
-                      initialValue: _selectedFactualStatus,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                      ),
-                      items: FactualStatus.values.map((s) {
-                        return DropdownMenuItem(
-                          value: s,
-                          child: Text(s.toDisplayPersian()),
-                        );
-                      }).toList(),
-                      onChanged: (v) {
-                        if (v != null) {
-                          setState(() => _selectedFactualStatus = v);
-                        }
-                      },
+                    const Text(
+                      'این بررسی، وضعیت رسمی شواهد یا انتشار مقاله را تغییر نمی‌دهد.',
                     ),
                     const SizedBox(height: 14),
                     TextField(
@@ -333,7 +352,7 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                           : () => _submitDecision(
                               SourceProposalReviewStatus.approved,
                             ),
-                      child: const Text('تأیید و اعمال در مقاله تجمیعی'),
+                      child: const Text('تأیید و ایجاد پیش‌نویس'),
                     ),
                   ),
                 ],

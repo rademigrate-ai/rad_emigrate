@@ -1,6 +1,6 @@
 // Cost calculator providers.
 //
-// Pathways are derived from the verified visa catalog (the same source the
+// Pathways are derived from the published visa catalog (the same source the
 // visa pages use). No cost data is fetched from a bespoke endpoint and none is
 // invented. When the catalog cannot load, the controller reports an explicit
 // failure so the UI shows an honest unavailable state.
@@ -13,7 +13,7 @@ import '../../domain/entities/immigration_cost.dart';
 import '../../domain/fee_parsing.dart';
 
 /// A pathway is only selectable when the catalog published fee text for it.
-/// Otherwise it is still listed but flagged as having no verified figure.
+/// Otherwise it is still listed but flagged as having no parseable figure.
 List<CostPathway> pathwaysFromCatalog(VisaCatalog catalog) {
   final result = <CostPathway>[];
   for (final program in catalog.programs) {

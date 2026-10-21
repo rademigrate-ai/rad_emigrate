@@ -209,7 +209,9 @@ class _BookingServicePageState
         _slotTouched = false;
         _slotErrorKey = null;
       });
-      ref.invalidate(currentBookingHistoryProvider);
+      ref.invalidate(
+        bookingHistoryProvider(ref.read(authenticatedUserIdProvider)),
+      );
     }
   }
 

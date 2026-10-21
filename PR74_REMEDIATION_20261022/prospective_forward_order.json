@@ -1,0 +1,155 @@
+{
+  "authorization": "NO_GO; disposable ordering evidence only, not a deployment script",
+  "captured_baseline_versions": 54,
+  "ordered_additions": 21,
+  "disposable_resulting_versions": 75,
+  "files": [
+    {
+      "version": "20261019204906",
+      "name": "rad_security_contract_foundation",
+      "file": "supabase/migrations/20261019204906_rad_security_contract_foundation.sql",
+      "sha256": "e804131bff73bf462b44dc22c2a8bfad7a286f771f5e095dc076ae3354faa384",
+      "sha256_lf": "3f6fb779b2b39202f1ad9a254a1cdb952903f3a1cfb9670d642434459f4667dd"
+    },
+    {
+      "version": "20261019205040",
+      "name": "rad_visa_cms_official_evidence",
+      "file": "supabase/migrations/20261019205040_rad_visa_cms_official_evidence.sql",
+      "sha256": "a6f37b7cea2deffe2c2d32086f6d3c5ec23e428cff9e6a24ad2a2d89f289d9fe",
+      "sha256_lf": "86f063682a53ae7de40ff9547cfb50790f8c4051ed3e20e68eb38f5d9ca2557d"
+    },
+    {
+      "version": "20261019205454",
+      "name": "rad_currency_cache_alerts",
+      "file": "supabase/migrations/20261019205454_rad_currency_cache_alerts.sql",
+      "sha256": "c9bd5845613f14b62fb77886de65cb4159a63eb363ff969ade42fc5cef4505f1",
+      "sha256_lf": "f5dd28555fd2a391b3b45b1c87a96531753f6d9c0375b4b6329c82df48450884"
+    },
+    {
+      "version": "20261019205459",
+      "name": "rad_feed_notifications_search",
+      "file": "supabase/migrations/20261019205459_rad_feed_notifications_search.sql",
+      "sha256": "6008db3e4bf4ca44b55bc1f5b77a80adb5fadce4f6cd52d2bff7716ff65dc261",
+      "sha256_lf": "4eecd6634e3501ac10eebf8d17d50116999353ec848b1af025061377e1e0c42e"
+    },
+    {
+      "version": "20261019205502",
+      "name": "rad_copilot_scoped_reservations",
+      "file": "supabase/migrations/20261019205502_rad_copilot_scoped_reservations.sql",
+      "sha256": "e3aa6007137551086a327cb09b183502471a678a6ebb00f17124c322b8eb2d2c",
+      "sha256_lf": "9dc47563d265e7783702ec7330fef2290a4482862cf9b03e83d60f7d240d748b"
+    },
+    {
+      "version": "20261019210000",
+      "name": "g002_content_architecture_scaffolding",
+      "file": "supabase/migrations/20261019210000_g002_content_architecture_scaffolding.sql",
+      "sha256": "3569bd48d5710afd8edac0e99886d545dde4edf88d4a39cc2d1d96a206061d3f",
+      "sha256_lf": "f5fc08f64fd22efa914cc46c58ceb692ca347cae5a9a09702929e0d0095f8994"
+    },
+    {
+      "version": "20261019210423",
+      "name": "rad_content_workflows",
+      "file": "supabase/migrations/20261019210423_rad_content_workflows.sql",
+      "sha256": "ee9d66a758c2cc13ed029a8b4add8ea27b361627a48796955363a397a4748335",
+      "sha256_lf": "807875ea31b7098d1f520a70fdc4d914fb132aaad6b514ab9ae194324e305e3d"
+    },
+    {
+      "version": "20261019211000",
+      "name": "security_quota_owner_and_publish_approved",
+      "file": "supabase/migrations/20261019211000_security_quota_owner_and_publish_approved.sql",
+      "sha256": "ac786582876d3163a4310b485466752300b8ccfe0a900ef13e99300084b57c86",
+      "sha256_lf": "672148a8a51ad33eff61ea1f4b68f09317c69166ab4c7f88490958f6211b16fa"
+    },
+    {
+      "version": "20261019211908",
+      "name": "rad_feed_delivery_contracts",
+      "file": "supabase/migrations/20261019211908_rad_feed_delivery_contracts.sql",
+      "sha256": "9d60a1e46bd2927f39f47f5ddf5b769ef95ab1bc0585c9040757fddc51740601",
+      "sha256_lf": "55f2560b4e46c342c306782c1246c6fb310814d1e384c070c40e72cc478babcc"
+    },
+    {
+      "version": "20261019212615",
+      "name": "rad_source_jobs_merge_enforcement",
+      "file": "supabase/migrations/20261019212615_rad_source_jobs_merge_enforcement.sql",
+      "sha256": "6a45d929f8f446eac9d02a0900b33a33fbe89ee1f456be6c7817ad44e05fe3f5",
+      "sha256_lf": "d417e2b35b4a05190fd22d8da22c2179be44370fb9a0a246e864394fad88b160"
+    },
+    {
+      "version": "20261019213129",
+      "name": "rad_contract_finalization",
+      "file": "supabase/migrations/20261019213129_rad_contract_finalization.sql",
+      "sha256": "3e57e1d21b72e5c781654c8aad252c8a386f789c92c4e67aaf2f76a31c1133c8",
+      "sha256_lf": "e21c565f2f377f2f3b2201b33031b2fa7a7f140b65f8b449e4e2eb85a83cc5fb"
+    },
+    {
+      "version": "20261019214411",
+      "name": "rad_legacy_quota_budget_compatibility",
+      "file": "supabase/migrations/20261019214411_rad_legacy_quota_budget_compatibility.sql",
+      "sha256": "033dda87c1b2eac871e6ae08824a5114ce3a0c74918c2e533798fe1476c001ae",
+      "sha256_lf": "7d65098001f2dbecc52ad74ff46f262d69efb9638e217346e16c20225a0834ad"
+    },
+    {
+      "version": "20261020103648",
+      "name": "rad_backend_integrity_completion",
+      "file": "supabase/migrations/20261020103648_rad_backend_integrity_completion.sql",
+      "sha256": "6d420bb1137217184a20f34e56b08872a746e428c6139bef1d3294db10ed6a69",
+      "sha256_lf": "ac86171d4aa63e27c113efa811035be00c383be855b80a3e539bfdfd5767fd47"
+    },
+    {
+      "version": "20261020105854",
+      "name": "rad_search_aliases_currency_history",
+      "file": "supabase/migrations/20261020105854_rad_search_aliases_currency_history.sql",
+      "sha256": "ba2f8a9afa96b38c17750c35f552bdb1ce07c2022859bdfdfb7691928bccc5c9",
+      "sha256_lf": "1f6440f176a1333da2bebc3b5ae1ecdc84af4e378040552467edfa0c0046b985"
+    },
+    {
+      "version": "20261020111217",
+      "name": "rad_restore_legacy_publish_privileges",
+      "file": "supabase/migrations/20261020111217_rad_restore_legacy_publish_privileges.sql",
+      "sha256": "acd2d113fd47c9cd353f00b14e41d46e79e7c07e2e185117cef2b37bc0fdfbc8",
+      "sha256_lf": "8cd83db51feb86bbe40b2ea5e325a93ddaf642b534f056eda0fa39139870d981"
+    },
+    {
+      "version": "20261020112300",
+      "name": "rad_crm_search_integration_hardening",
+      "file": "supabase/migrations/20261020112300_rad_crm_search_integration_hardening.sql",
+      "sha256": "2c2234751a73178fc5ab6a1955258caec9a5f65f7387f8269c1e2c2371b2ebe7",
+      "sha256_lf": "de82f8350f330cdb3bb5dc5a2978353824ed8bab7637b2c6f89ce36455b7f0b6"
+    },
+    {
+      "version": "20261020114612",
+      "name": "rad_transport_contract_registry_alignment",
+      "file": "supabase/migrations/20261020114612_rad_transport_contract_registry_alignment.sql",
+      "sha256": "c403adf1c1dfc44e49968d6d71e0013068494e6751ea3c4786b86bf4626d007f",
+      "sha256_lf": "8ae61793f441ade43a7bfc9fb37f22ff1817a2fd6014c9c8d0a1e152cd1b81f4"
+    },
+    {
+      "version": "20261020115539",
+      "name": "rad_leased_research_base_contract",
+      "file": "supabase/migrations/20261020115539_rad_leased_research_base_contract.sql",
+      "sha256": "f7e7b4f3301021268cfe9a199104a6032c7c8785191c8be4dccdcedbcd362833",
+      "sha256_lf": "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129"
+    },
+    {
+      "version": "20261020123523",
+      "name": "rad_explicit_service_profile_bootstrap",
+      "file": "supabase/migrations/20261020123523_rad_explicit_service_profile_bootstrap.sql",
+      "sha256": "0488ac32c7bdbce83715f706372e74edbcafdf07b374d06498ffc2704241f437",
+      "sha256_lf": "569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4"
+    },
+    {
+      "version": "20261020192732",
+      "name": "rad_revoke_client_nonrow_table_privileges",
+      "file": "supabase/migrations/20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+      "sha256": "986dc15eb42129a6fa20ec0b1dc34322e296dcb4450ab2447c1d63e4be7f7ea3",
+      "sha256_lf": "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3"
+    },
+    {
+      "version": "20261021210337",
+      "name": "rad_cms_admin_draft_reads",
+      "file": "supabase/migrations/20261021210337_rad_cms_admin_draft_reads.sql",
+      "sha256": "61d30d0483c80f86111ccb835ed29845a97913a3bec78dd42da14c67206567d0",
+      "sha256_lf": "63bb109c7b7d1ae57a4fdcf2c8394828601644004d94fe032705a33d3cc2b021"
+    }
+  ]
+}

@@ -79,6 +79,7 @@ class IndependentArticlePage extends ConsumerWidget {
     final articleAsync = ref.watch(
       independentArticleProvider((
         countryCode: countrySlug,
+        locale: Localizations.localeOf(context).languageCode,
         articleSlug: articleSlug,
       )),
     );

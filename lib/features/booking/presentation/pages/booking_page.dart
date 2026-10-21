@@ -196,8 +196,11 @@ class BookingPage extends ConsumerWidget {
                     loading: () => const LoadingState.section(),
                     error: (_, _) => _CapabilityNote(
                       message: labels.historyFailed,
-                      onRetry: () =>
-                          ref.invalidate(currentBookingHistoryProvider),
+                      onRetry: () => ref.invalidate(
+                        bookingHistoryProvider(
+                          ref.read(authenticatedUserIdProvider),
+                        ),
+                      ),
                     ),
                     data: (records) {
                       if (records.isEmpty) {

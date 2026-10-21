@@ -1,0 +1,130 @@
+[
+  {
+    "audit_item": "01",
+    "severity": "P1",
+    "status": "FIXED",
+    "file": "supabase/functions/_shared/cors.ts",
+    "line": 4,
+    "regression": "supabase/functions/tests/cors_preflight_test.ts"
+  },
+  {
+    "audit_item": "02",
+    "severity": "P1",
+    "status": "FIXED",
+    "file": "lib/features/admin/data/admin_cms_repository.dart",
+    "line": 133,
+    "regression": "test/admin/admin_cms_test.dart"
+  },
+  {
+    "audit_item": "03",
+    "severity": "P1",
+    "status": "FIXED",
+    "file": "lib/features/admin/data/admin_cms_repository.dart",
+    "line": 251,
+    "regression": "test/admin/admin_cms_test.dart"
+  },
+  {
+    "audit_item": "04",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/features/admin/presentation/pages/admin_cms_canonical_editor_page.dart",
+    "line": 58,
+    "regression": "test/admin/admin_cms_test.dart"
+  },
+  {
+    "audit_item": "05",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/features/cost_calculator/domain/fee_parsing.dart",
+    "line": 21,
+    "regression": "test/security/pr74_remediation_test.dart"
+  },
+  {
+    "audit_item": "06",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/features/booking/presentation/pages/booking_service_page.dart",
+    "line": 212,
+    "regression": "test/security/rad_release_client_regression_test.dart"
+  },
+  {
+    "audit_item": "07",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/core/services/ai/supabase_ai_service.dart",
+    "line": 136,
+    "regression": "test/security/pr74_remediation_test.dart"
+  },
+  {
+    "audit_item": "08",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/core/routing/auth_redirect.dart",
+    "line": 167,
+    "regression": "test/security/pr74_remediation_test.dart"
+  },
+  {
+    "audit_item": "09",
+    "severity": "P2",
+    "status": "FIXED",
+    "file": "lib/features/visa/domain/entities/search_entities.dart",
+    "line": 167,
+    "regression": "test/security/pr74_remediation_test.dart"
+  },
+  {
+    "audit_item": "10",
+    "severity": "P1",
+    "status": "BLOCKED",
+    "file": "supabase/migrations/20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+    "line": 4,
+    "regression": "supabase/tests/rad_client_table_privileges.sql"
+  },
+  {
+    "audit_item": "11",
+    "severity": "P1",
+    "status": "BLOCKED",
+    "file": "supabase/migrations/20261019204906_rad_security_contract_foundation.sql",
+    "line": 22,
+    "regression": "supabase/tests/rad_content_security.sql"
+  },
+  {
+    "audit_item": "12",
+    "severity": "P1",
+    "status": "BLOCKED",
+    "file": "supabase/functions/ai-orchestrator/handler.ts",
+    "line": 10,
+    "regression": "supabase/functions/tests/ai_orchestrator_test.ts"
+  },
+  {
+    "audit_item": "13",
+    "severity": "P1",
+    "status": "BLOCKED",
+    "file": "PR74_REMEDIATION_20261022/migration_reconciliation.json",
+    "line": 3,
+    "regression": "PR74_REMEDIATION_20261022/VERSION_EFFECT_MAPPING.md"
+  },
+  {
+    "audit_item": "14",
+    "severity": "P2",
+    "status": "BLOCKED",
+    "file": "PR74_REMEDIATION_20261022/advisors.json",
+    "line": 229,
+    "regression": ""
+  },
+  {
+    "audit_item": "15",
+    "severity": "P3",
+    "status": "FIXED",
+    "file": "lib/features/interview_scheduling/data/interview_repository.dart",
+    "line": 71,
+    "regression": "test/security/pr74_remediation_test.dart"
+  },
+  {
+    "audit_item": "16",
+    "severity": "P3",
+    "status": "BLOCKED",
+    "file": "PR74_REMEDIATION_20261022/advisors.json",
+    "line": 5,
+    "regression": ""
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "exact_build_inputs_match_current_worktree": true,
+  "files_compared": 370,
+  "source_snapshot_manifest_sha256": "dbfbf87c41ef26d3eabe94a0b660be542437558b8c5636b57309ae78bcee728b",
+  "builds": {
+    "web": {
+      "command": "flutter build web --no-pub --dart-define=SUPABASE_URL=https://example.supabase.co --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder",
+      "exit_code": 0,
+      "source_snapshot": "source_manifest.json",
+      "elapsed_seconds": 359.91,
+      "log_sha256": "84dc904681fe9f6db96b8e2414f28019cb6bd5b687f6143517158b9cd22cd9c8"
+    },
+    "android": {
+      "command": "flutter build apk --debug --no-pub --target-platform android-arm64",
+      "exit_code": 0,
+      "source_snapshot": "source_manifest.json",
+      "elapsed_seconds": 366.0,
+      "log_sha256": "03ab9ec1f40def1a9e320460bb7e413cb2c9544c2575253f02a937f310ee528d"
+    }
+  },
+  "artifacts": {
+    "web_javascript": {
+      "path": "D:\\RAD_PR74_remediation_20261022\\source\\build\\web\\main.dart.js",
+      "bytes": 5064722,
+      "sha256": "d03452971a1dfe856cf47dd05ed20f617a95d7bc4dd08507e60121f6a7fd7452"
+    },
+    "android_debug": {
+      "path": "D:\\RAD_PR74_remediation_20261022\\source\\build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "bytes": 115752588,
+      "sha256": "7418d2458e0d1583e74c5026244b1f94eb5d83cb077b75a880f302cb370a7919"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 // Immigration cost calculator domain.
 //
 // Every amount shown here derives from published, source-attributed catalog
-// text (VisaProgram.fees). Nothing is invented: when a verified figure is not
-// available the line item is [CostLine.unverified] and the UI must render an
+// text (VisaProgram.fees). Nothing is invented: when a parseable figure is not
+// available the line item is [CostBasis.notPublished] and the UI must render an
 // explicit "not published" state rather than a number.
 
 /// A single selectable destination + pathway.
@@ -40,7 +40,7 @@ class CostPathway {
   final String sourceUrl;
   final DateTime sourceRetrievedAt;
 
-  bool get hasVerifiedFees => feesText.trim().isNotEmpty;
+  bool get hasPublishedFees => feesText.trim().isNotEmpty;
 }
 
 /// How a cost line was derived — surfaced so the user can judge trust.
@@ -77,11 +77,10 @@ class CostLine {
   /// The verbatim published text backing this line.
   final String? rawText;
 
-  bool get isVerifiable => basis == CostBasis.publishedFigure;
+  bool get isParsedFigure => basis == CostBasis.publishedFigure;
 }
 
-/// A computed total. Only present when every line resolved to a figure in a
-/// single consistent currency; otherwise [isAvailable] is false.
+/// Subtotal of parsed fee figures only; excludes unknown/unlisted costs.
 class CostTotal {
   const CostTotal.available({required this.amountMinor, required this.currency})
     : isAvailable = true,
@@ -110,5 +109,5 @@ class CostBreakdown {
   final List<CostLine> lines;
   final CostTotal total;
 
-  bool get hasAnyPublishedFigure => lines.any((l) => l.isVerifiable);
+  bool get hasAnyPublishedFigure => lines.any((l) => l.isParsedFigure);
 }

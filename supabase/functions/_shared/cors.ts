@@ -3,8 +3,9 @@
 // authorization, do not use credentialed cookies, and serve the public web app.
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-rad-contract-version",
+    "authorization, x-client-info, apikey, content-type, x-rad-contract-version, x-rad-request-key, x-rad-modality",
 };
 
 export const researchCorsHeaders = {
