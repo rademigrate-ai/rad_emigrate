@@ -4,10 +4,10 @@ At line:2 char:1
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: (error[no-explic... is not allowed:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
- 
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler_providers.ts:71:36
-   | 
+   |
 71 |   const rows: Array<Record<string, any>> = [];
    |                                    ^^^
    = hint: Use a specific type other than `any`
@@ -16,9 +16,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler_p
 
 
 error[no-explicit-any]: `any` type is not allowed
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler_providers.ts:75:17
-   | 
+   |
 75 |     const data: any = await readProviderJson(response, 5_000_000);
    |                 ^^^
    = hint: Use a specific type other than `any`
@@ -27,9 +27,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler_p
 
 
 error[no-explicit-any]: `any` type is not allowed
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler.ts:138:16
-    | 
+    |
 138 |     let quota: any;
     |                ^^^
     = hint: Use a specific type other than `any`
@@ -38,9 +38,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\handler.t
 
 
 error[no-control-regex]: Unexpected control character(s) in regular expression: \x0.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\provider_response.ts:122:6
-    | 
+    |
 122 |     !/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(reply) &&
     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     = hint: Disable the rule if the control character (\x... or \u00..) was intentional, otherwise rework your RegExp
@@ -49,9 +49,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\ai-orchestrator\provider_
 
 
 error[no-control-regex]: Unexpected control character(s) in regular expression: \x0.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\document-intelligence\handler.ts:179:9
-    | 
+    |
 179 |         /[\\%\x00-\x1f\x7f]/.test(path) || segments.some((s) =>
     |         ^^^^^^^^^^^^^^^^^^^^
     = hint: Disable the rule if the control character (\x... or \u00..) was intentional, otherwise rework your RegExp
@@ -60,9 +60,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\document-intelligence\han
 
 
 error[no-unversioned-import]: Missing version in specifier
- --> C:\Users\Mehrshad\Desktop\RAD - 
+ --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\document-intelligence\index.ts:1:8
-  | 
+  |
 1 | import "jsr:@supabase/functions-js/edge-runtime.d.ts";
   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   = hint: Add a version requirement after the package name
@@ -71,9 +71,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\document-intelligence\ind
 
 
 error[prefer-const]: `candidates` is never reassigned
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\official-source-worker\handler.ts:60:9
-   | 
+   |
 60 |         candidates: { name: string; host: string }[] = [];
    |         ^^^^^^^^^^
    = hint: Use `const` instead
@@ -82,9 +82,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\official-source-worker\ha
 
 
 error[no-unversioned-import]: Missing version in specifier
- --> C:\Users\Mehrshad\Desktop\RAD - 
+ --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\payment-sandbox\index.ts:1:8
-  | 
+  |
 1 | import "jsr:@supabase/functions-js/edge-runtime.d.ts";
   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   = hint: Add a version requirement after the package name
@@ -93,9 +93,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\payment-sandbox\index.ts:
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_handler_test.ts:38:15
-   | 
+   |
 38 |     database: async (path, init) => {
    |               ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -104,9 +104,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_handler_test.ts:138:15
-    | 
+    |
 138 |     database: async (path) => {
     |               ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -115,9 +115,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_handler_test.ts:149:24
-    | 
+    |
 149 |     const database of [async () => null, async () => {
     |                        ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -126,9 +126,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_handler_test.ts:149:42
-    | 
+    |
 149 |     const database of [async () => null, async () => {
     |                                          ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -137,9 +137,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:26:5
-   | 
+   |
 26 |     async () => [],
    |     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -148,9 +148,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:27:5
-   | 
+   |
 27 |     async () => {
    |     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -159,9 +159,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:46:53
-   | 
+   |
 46 |   const result = await dispatchSandboxNotifications(async (path, init) => {
    |                                                     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -170,9 +170,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:59:6
-   | 
+   |
 59 |   }, async (value) => {
    |      ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -181,9 +181,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:79:53
-   | 
+   |
 79 |   const result = await dispatchSandboxNotifications(async (path, init) => {
    |                                                     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -192,9 +192,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:83:6
-   | 
+   |
 83 |   }, async () => {
    |      ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -203,9 +203,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:96:5
-   | 
+   |
 96 |     async (path) => path.includes("claim_") ? [claim()] : false,
    |     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -214,9 +214,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:106:5
-    | 
+    |
 106 |     async (path) =>
     |     ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -225,9 +225,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:108:5
-    | 
+    |
 108 |     async () => {
     |     ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -236,9 +236,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:131:42
-    | 
+    |
 131 |       await dispatchSandboxNotifications(async () => value, async () => {
     |                                          ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -247,9 +247,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:131:61
-    | 
+    |
 131 |       await dispatchSandboxNotifications(async () => value, async () => {
     |                                                             ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -258,9 +258,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:147:42
-    | 
+    |
 147 |       await dispatchSandboxNotifications(async (path) => {
     |                                          ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -269,9 +269,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:151:10
-    | 
+    |
 151 |       }, async () => {
     |          ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -280,9 +280,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:166:5
-    | 
+    |
 166 |     async (path) => path.includes("claim_") ? [claim()] : true,
     |     ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -291,9 +291,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:167:5
-    | 
+    |
 167 |     async () => {
     |     ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -302,9 +302,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispatch_test.ts:178:9
-    | 
+    |
 178 |         async () => [],
     |         ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -313,9 +313,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\notification_dispat
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\knowledge_grounding_test.ts:24:5
-   | 
+   |
 24 |     async (path) => {
    |     ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -324,9 +324,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\knowledge_grounding
 
 
 error[no-explicit-any]: `any` type is not allowed
- --> C:\Users\Mehrshad\Desktop\RAD - 
+ --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\research_sync_test.ts:7:39
-  | 
+  |
 7 |  const saved: Array<{path:string;body:any}> = [];
   |                                       ^^^
   = hint: Use a specific type other than `any`
@@ -335,9 +335,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\research_sync_test.
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\research_sync_test.ts:10:19
-   | 
+   |
 10 |  globalThis.fetch=async(input,init)=>{
    |                   ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -346,9 +346,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\research_sync_test.
 
 
 error[no-explicit-any]: `any` type is not allowed
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\provider_response_test.ts:229:17
-    | 
+    |
 229 |       let body: any;
     |                 ^^^
     = hint: Use a specific type other than `any`
@@ -357,9 +357,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\provider_response_t
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-   --> C:\Users\Mehrshad\Desktop\RAD - 
+   --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\provider_response_test.ts:230:26
-    | 
+    |
 230 |       globalThis.fetch = async (_url, init) => {
     |                          ^^^^^
     = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -368,9 +368,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\provider_response_t
 
 
 error[no-explicit-any]: `any` type is not allowed
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\document_intelligence_test.ts:39:65
-   | 
+   |
 39 |   const calls: Array<{ path: string; init?: RequestInit; body?: any }> = [];
    |                                                                 ^^^
    = hint: Use a specific type other than `any`
@@ -379,9 +379,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\document_intelligen
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\document_intelligence_test.ts:40:33
-   | 
+   |
 40 |   const fetcher: typeof fetch = async (input, init) => {
    |                                 ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
@@ -390,9 +390,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\document_intelligen
 
 
 error[no-explicit-any]: `any` type is not allowed
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\ai_orchestrator_test.ts:27:44
-   | 
+   |
 27 |   const calls: Array<{ path: string; body: any; headers: Record<string, string> }> = [];
    |                                            ^^^
    = hint: Use a specific type other than `any`
@@ -401,9 +401,9 @@ Emigrate\rad_security_c611_20261021\supabase\functions\tests\ai_orchestrator_tes
 
 
 error[require-await]: Async arrow function has no 'await' expression or 'await using' declaration.
-  --> C:\Users\Mehrshad\Desktop\RAD - 
+  --> C:\Users\Mehrshad\Desktop\RAD -
 Emigrate\rad_security_c611_20261021\supabase\functions\tests\ai_orchestrator_test.ts:29:22
-   | 
+   |
 29 |   globalThis.fetch = async (input, init) => {
    |                      ^^^^^
    = hint: Remove 'async' keyword from the function or use 'await' expression or 'await using' declaration inside.
