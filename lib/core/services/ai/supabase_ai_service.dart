@@ -60,7 +60,8 @@ class SupabaseAiService implements AiService {
     try {
       // RAD AI contract version 1: numeric header, UUID request_key, closed body.
       final metaKey = request.metadata['request_key']?.toString();
-      final requestKey = (metaKey != null &&
+      final requestKey =
+          (metaKey != null &&
               RegExp(
                 r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
                 caseSensitive: false,
@@ -69,8 +70,10 @@ class SupabaseAiService implements AiService {
           : _newRequestKey();
 
       final rawScopes = request.metadata['authorized_data_scopes'];
-      final List<dynamic> authorizedScopes =
-          rawScopes is List ? List<dynamic>.from(rawScopes) : const <dynamic>[];
+      // Fail closed: only accept a real List; never treat a String as scopes.
+      final List<dynamic> authorizedScopes = rawScopes is List
+          ? List<dynamic>.from(rawScopes as List)
+          : const <dynamic>[];
 
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',

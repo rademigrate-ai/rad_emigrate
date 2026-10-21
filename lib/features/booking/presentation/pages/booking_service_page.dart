@@ -196,7 +196,7 @@ class _BookingServicePageState extends ConsumerState<BookingServicePage> {
         _slotTouched = false;
         _slotErrorKey = null;
       });
-      ref.invalidate(bookingHistoryProvider);
+      ref.invalidate(currentBookingHistoryProvider);
     }
   }
 

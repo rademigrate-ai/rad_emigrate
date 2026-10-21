@@ -47,10 +47,12 @@ class FxRateQuote {
   /// never invent rates, providers, currencies, or freshness timestamps.
   factory FxRateQuote.fromJson(Map<String, dynamic> json) {
     final id = json['id']?.toString();
-    final base =
-        (json['base'] ?? json['base_currency'])?.toString().toUpperCase();
-    final quote =
-        (json['quote'] ?? json['quote_currency'])?.toString().toUpperCase();
+    final base = (json['base'] ?? json['base_currency'])
+        ?.toString()
+        .toUpperCase();
+    final quote = (json['quote'] ?? json['quote_currency'])
+        ?.toString()
+        .toUpperCase();
     final rateRaw = json['rate'] ?? json['reference_rate_irr'];
     final rate = rateRaw is num
         ? rateRaw.toDouble()

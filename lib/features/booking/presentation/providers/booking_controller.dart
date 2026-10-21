@@ -19,19 +19,21 @@ final bookingCatalogProvider =
 
 /// Auth-scoped booking history. Keyed by user id so logout / account switch
 /// drops the previous identity's rows (A → logout → B isolation).
-final bookingHistoryProvider =
-    FutureProvider.autoDispose.family<List<BookingRecord>, String?>((ref, userId) async {
-  if (userId == null || userId.isEmpty) return const [];
-  return ref.watch(bookingRepositoryProvider).listMyBookings();
-});
+final bookingHistoryProvider = FutureProvider.autoDispose
+    .family<List<BookingRecord>, String?>((ref, userId) async {
+      if (userId == null || userId.isEmpty) return const [];
+      return ref.watch(bookingRepositoryProvider).listMyBookings();
+    });
 
 /// Convenience: resolves current auth uid and watches identity-bound history.
 final currentBookingHistoryProvider =
     FutureProvider.autoDispose<List<BookingRecord>>((ref) async {
-  final client = ref.watch(supabaseClientServiceProvider);
-  final uid = client.isInitialized ? client.client.auth.currentUser?.id : null;
-  return ref.watch(bookingHistoryProvider(uid).future);
-});
+      final client = ref.watch(supabaseClientServiceProvider);
+      final uid = client.isInitialized
+          ? client.client.auth.currentUser?.id
+          : null;
+      return ref.watch(bookingHistoryProvider(uid).future);
+    });
 
 enum BookingSubmitPhase { idle, submitting, success, failure }
 

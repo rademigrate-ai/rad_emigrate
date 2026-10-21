@@ -43,7 +43,7 @@ class BookingPage extends ConsumerWidget {
     final isAuthed = session?.isAuthenticated ?? false;
     final catalog = ref.watch(bookingCatalogProvider(l10n));
     final history = isAuthed
-        ? ref.watch(bookingHistoryProvider)
+        ? ref.watch(currentBookingHistoryProvider)
         : const AsyncValue<List<BookingRecord>>.data([]);
 
     return Scaffold(
@@ -196,7 +196,8 @@ class BookingPage extends ConsumerWidget {
                     loading: () => const LoadingState.section(),
                     error: (_, _) => _CapabilityNote(
                       message: labels.historyFailed,
-                      onRetry: () => ref.invalidate(bookingHistoryProvider),
+                      onRetry: () =>
+                          ref.invalidate(currentBookingHistoryProvider),
                     ),
                     data: (records) {
                       if (records.isEmpty) {

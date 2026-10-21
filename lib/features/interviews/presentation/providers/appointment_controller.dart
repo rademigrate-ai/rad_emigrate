@@ -15,24 +15,26 @@ final appointmentRepositoryProvider = Provider<AppointmentRepository>((ref) {
 
 /// Current user's Backend-managed appointment rows, keyed by auth uid so
 /// A → logout → B never reuses the previous identity cache.
-final appointmentListProvider =
-    FutureProvider.autoDispose.family<AppointmentListResult, String?>((ref, userId) async {
-  if (userId == null || userId.isEmpty) {
-    return const AppointmentListResult(
-      appointments: [],
-      capability: AppointmentCapability.unknown,
-    );
-  }
-  return ref.watch(appointmentRepositoryProvider).listMyAppointments();
-});
+final appointmentListProvider = FutureProvider.autoDispose
+    .family<AppointmentListResult, String?>((ref, userId) async {
+      if (userId == null || userId.isEmpty) {
+        return const AppointmentListResult(
+          appointments: [],
+          capability: AppointmentCapability.unknown,
+        );
+      }
+      return ref.watch(appointmentRepositoryProvider).listMyAppointments();
+    });
 
 /// Convenience provider that binds to the live session uid.
 final currentAppointmentListProvider =
     FutureProvider.autoDispose<AppointmentListResult>((ref) async {
-  final client = ref.watch(supabaseClientServiceProvider);
-  final uid = client.isInitialized ? client.client.auth.currentUser?.id : null;
-  return ref.watch(appointmentListProvider(uid).future);
-});
+      final client = ref.watch(supabaseClientServiceProvider);
+      final uid = client.isInitialized
+          ? client.client.auth.currentUser?.id
+          : null;
+      return ref.watch(appointmentListProvider(uid).future);
+    });
 
 enum AppointmentActionPhase { idle, running, success, failure }
 
