@@ -83,7 +83,6 @@ class SupabaseAiService implements AiService {
           (locale != null && locale.toLowerCase().startsWith('fa'))
           ? 'fa'
           : 'en';
-      final cleanSessionId = cleanUuid(request.conversationId);
       final cleanGuestKey =
           (guestKey != null &&
               guestKey.trim().length >= 16 &&
