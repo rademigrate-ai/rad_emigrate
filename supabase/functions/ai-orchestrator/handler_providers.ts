@@ -71,6 +71,14 @@ function providerRow(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
+function providerNumber(value: unknown): number {
+  if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
+  if (typeof value !== "string" || !/^\d+(?:\.\d+)?(?:e[+-]?\d+)?$/i.test(value)) return NaN;
+  const number = Number(value);
+  if (number === 0 && /[1-9]/.test(value.split(/e/i)[0])) return NaN;
+  return Number.isFinite(number) ? number : NaN;
+}
+
 export async function discover(runtime: ProviderRuntime): Promise<DiscoveredModel[]> {
   const url = runtime.adapter === "gemini"
     ? `${runtime.base_url}/v1beta/models`
@@ -104,13 +112,13 @@ export async function discover(runtime: ProviderRuntime): Promise<DiscoveredMode
     const modelName = item.id ?? item.name;
     const slug = typeof modelName === "string" ? modelName.replace(/^models\//, "").trim() : "";
     if (!slug || slug.length > 300 || !/^[a-zA-Z0-9_./:@+-]+$/.test(slug)) continue;
-    const context = Number(item.context_length ?? item.inputTokenLimit);
-    const parameters = Array.isArray(item.supported_parameters) ? item.supported_parameters : null;
+    const context = providerNumber(item.context_length ?? item.inputTokenLimit);
+    const parameters = Array.isArray(item.supported_parameters) && item.supported_parameters.every(value => typeof value === "string") ? item.supported_parameters : null;
     const pricing = item.pricing !== null && typeof item.pricing === "object" && !Array.isArray(item.pricing)
       ? item.pricing as Record<string, unknown> : {};
     const price = new URL(runtime.base_url).hostname === "openrouter.ai" && pricing.prompt != null
-      ? Number(pricing.prompt) * 1000000 : NaN;
-    const methods = Array.isArray(item.supportedGenerationMethods) ? item.supportedGenerationMethods : null;
+      ? providerNumber(pricing.prompt) * 1000000 : NaN;
+    const methods = Array.isArray(item.supportedGenerationMethods) && item.supportedGenerationMethods.every(value => typeof value === "string") ? item.supportedGenerationMethods : null;
     const capability = methods?.includes("embedContent") && !methods.includes("generateContent") ? "embedding" : "chat";
     catalogue.set(slug, {
       slug, capability,

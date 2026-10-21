@@ -5,7 +5,7 @@ const { parseProviderResponse } = await import("../ai-orchestrator/provider_resp
 function assert(value: unknown): asserts value {
   if (!value) throw new Error("Boundary regression failed");
 }
-async function catalogue(adapter: string, pages: unknown[]) {
+async function catalogue(adapter: string, pages: unknown[], baseUrl = "https://provider.example.com") {
   const original = globalThis.fetch;
   const urls: string[] = [];
   globalThis.fetch = (input) => {
@@ -15,7 +15,7 @@ async function catalogue(adapter: string, pages: unknown[]) {
   try {
     const models = await discover({
       adapter, provider_id: "synthetic", provider_slug: "synthetic",
-      base_url: "https://provider.example.com", api_key: "synthetic-provider-canary",
+      base_url: baseUrl, api_key: "synthetic-provider-canary",
       request_timeout_seconds: 5, credential_version: 1,
     });
     return { models, urls };
@@ -63,4 +63,22 @@ Deno.test("provider text: control-character rejection preserves tabs, lines and 
     assert(accepted===[9,10,13].includes(code));
   }
   assert(parseProviderResponse("openai_compatible",{choices:[{message:{content:"\u0631\u0627\u062f"}}]}).text==="\u0631\u0627\u062f");
+});
+
+Deno.test("catalogue: malformed pricing and capacity cannot become free or discovered defaults", async () => {
+  for (const bad of [null, false, true, "", " ", [], [0], {}, "NaN", "Infinity", "-1", "1e-999"]) {
+    const x = await catalogue("openai_compatible", [{data:[{
+      id:"synthetic",context_length:bad,pricing:{prompt:bad},supported_parameters:[{}],
+    }]}], "https://openrouter.ai/api/v1");
+    const model=x.models[0];
+    assert(model.context_window===null && model.cost_input_per_million===null);
+    assert(model.cost_source==="unknown" && model.capability_source==="unknown");
+  }
+  for (const price of [0,"0","0.000001"]) {
+    const x=await catalogue("openai_compatible",[{data:[{
+      id:"synthetic",context_length:4096,pricing:{prompt:price},supported_parameters:["tools"],
+    }]}],"https://openrouter.ai/api/v1");
+    assert(x.models[0].cost_input_per_million===Number(price)*1000000);
+    assert(x.models[0].cost_source==="discovered" && x.models[0].context_window===4096);
+  }
 });
