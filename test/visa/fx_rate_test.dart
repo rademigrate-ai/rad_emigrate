@@ -51,15 +51,13 @@ void main() {
       expect(conversion.formatRial(), '513500000 ریال');
     });
 
-    test('SupabaseFxRepository returns valid providerReference double when offline', () async {
+    test('SupabaseFxRepository reports unavailable instead of inventing an offline quote', () async {
       final repo = SupabaseFxRepository(SupabaseClientService.instance);
-      final quote = await repo.getQuote(base: 'EUR', quote: 'IRR');
-
-      expect(quote.baseCurrency, 'EUR');
-      expect(quote.quoteCurrency, 'IRR');
-      expect(quote.referenceRate, greaterThan(0));
-      expect(quote.rateBasis, RateBasis.providerReference);
-      expect(quote.freshnessState, FreshnessState.fresh);
+      expect(SupabaseClientService.instance.isInitialized, isFalse);
+      await expectLater(
+        repo.getQuote(base: 'EUR', quote: 'IRR'),
+        throwsA(isA<FxQuoteUnavailableException>()),
+      );
     });
   });
 }

@@ -31,6 +31,7 @@ import 'package:rad_emigrate/features/interviews/domain/entities/interview_appoi
 import 'package:rad_emigrate/features/interviews/presentation/providers/appointment_controller.dart';
 import 'package:rad_emigrate/features/visa/data/canonical_pathway_repository.dart';
 import 'package:rad_emigrate/features/visa/data/visa_search_repository.dart';
+import 'package:rad_emigrate/features/visa/data/fx_repository.dart';
 import 'package:rad_emigrate/features/visa/domain/entities/canonical_pathway_entities.dart';
 import 'package:rad_emigrate/features/visa/domain/entities/fx_rate.dart';
 import 'package:rad_emigrate/features/visa/domain/entities/search_entities.dart';
@@ -411,6 +412,38 @@ void main() {
         throwsA(isA<BookingException>()),
       );
     }
+  });
+
+  test('FX RPC cannot substitute a different currency pair', () async {
+    final service = await _serviceWith(
+      (request) => jsonResponse({
+        'data': {
+          'id': receipt,
+          'provider': 'frankfurter',
+          'base': 'USD',
+          'quote': 'EUR',
+          'rate': '0.123456789123456789',
+          'observation_date': '2026-10-20',
+          'fetched_at': '2026-10-20T10:00:00Z',
+          'freshness_state': 'stale',
+          'rate_basis': 'provider_reference',
+          'source_url': 'https://api.frankfurter.dev/v1/latest',
+        },
+      }),
+    );
+    final repo = SupabaseFxRepository(service);
+    await expectLater(
+      repo.getQuote(base: 'EUR', quote: 'IRR'),
+      throwsA(
+        isA<FxQuoteUnavailableException>().having(
+          (e) => e.message,
+          'message',
+          'fx_quote_pair_mismatch',
+        ),
+      ),
+    );
+    final quote = await repo.getQuote(base: 'USD', quote: 'EUR');
+    expect(quote.toJson()['rate'], '0.123456789123456789');
   });
 
   test('FX rejects missing/unknown provenance and nonfinite rates', () {

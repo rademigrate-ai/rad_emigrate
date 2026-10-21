@@ -69,7 +69,7 @@ void main() {
     );
 
     test(
-      'CanonicalPathwayRepository returns comprehensive Chancenkarte fixture',
+      'CanonicalPathwayRepository leaves main content unavailable offline',
       () async {
         final repo = SupabaseCanonicalPathwayRepository(
           SupabaseClientService.instance,
@@ -79,17 +79,13 @@ void main() {
           pathwaySlug: 'chancenkarte',
         );
 
-        expect(article, isNotNull);
-        expect(article!.countryCode, 'de');
-        expect(article.slug, 'chancenkarte');
-        expect(article.costs.isNotEmpty, isTrue);
-        expect(article.sections.isNotEmpty, isTrue);
-        expect(article.officialSources.isNotEmpty, isTrue);
+        expect(SupabaseClientService.instance.isInitialized, isFalse);
+        expect(article, isNull);
       },
     );
 
     test(
-      'CanonicalPathwayRepository returns independent article fixture',
+      'CanonicalPathwayRepository leaves related content unavailable offline',
       () async {
         final repo = SupabaseCanonicalPathwayRepository(
           SupabaseClientService.instance,
@@ -99,10 +95,8 @@ void main() {
           articleSlug: 'sperrkonto-guide',
         );
 
-        expect(article, isNotNull);
-        expect(article!.slug, 'sperrkonto-guide');
-        expect(article.canonicalPathwaySlug, 'chancenkarte');
-        expect(article.bodyMarkdown.contains('Sperrkonto'), isTrue);
+        expect(SupabaseClientService.instance.isInitialized, isFalse);
+        expect(article, isNull);
       },
     );
   });

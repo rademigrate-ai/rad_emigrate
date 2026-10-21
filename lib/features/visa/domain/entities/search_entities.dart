@@ -154,7 +154,9 @@ class SearchHit {
         queryParameters: target['section_id'] == null
             ? null
             : {'section': target['section_id'].toString()},
-        fragment: anchor?.toString(),
+        fragment: anchor == null || anchor.toString().isEmpty
+            ? null
+            : anchor.toString(),
       ).toString();
     }
 

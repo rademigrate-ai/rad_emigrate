@@ -55,7 +55,12 @@ class SupabaseFxRepository implements FxRepository {
           ? Map<String, dynamic>.from(map['data'] as Map)
           : map;
       // Never invent rates: parse only Backend-provided payload.
-      return FxRateQuote.fromJson(payload);
+      final observation = FxRateQuote.fromJson(payload);
+      if (observation.baseCurrency != base.toUpperCase() ||
+          observation.quoteCurrency != quote.toUpperCase()) {
+        throw const FxQuoteUnavailableException('fx_quote_pair_mismatch');
+      }
+      return observation;
     } on FxQuoteUnavailableException {
       rethrow;
     } catch (e) {

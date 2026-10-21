@@ -1,3 +1,4 @@
+// Synthetic parser fixtures only; no rates or immigration claims here are operational evidence.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/services/ai/ai_response.dart';
 import 'package:rad_emigrate/features/visa/domain/entities/canonical_pathway_entities.dart';
@@ -79,7 +80,7 @@ void main() {
       expect(hit1.factualStatus, FactualStatus.verified);
       expect(
         hit1.deepLinkRoute,
-        '/visa/DE/chancenkarte#financial-requirements',
+        '/visa/articles/c8f42045-812e-4b68-b715-46f903a49f53?section=b2222222-3333-4444-5555-666666666666#financial-requirements',
       );
       expect(hit1.matchRanges.length, 1);
       expect(hit1.matchRanges.first.start, 24);
@@ -88,7 +89,10 @@ void main() {
       final hit2 = result.hits[1];
       expect(hit2.id, 'd9999999-812e-4b68-b715-46f903a49f54');
       expect(hit2.articleType, SearchArticleType.independentTopic);
-      expect(hit2.deepLinkRoute, '/visa/DE/articles/sperrkonto-guide');
+      expect(
+        hit2.deepLinkRoute,
+        '/visa/articles/d9999999-812e-4b68-b715-46f903a49f54',
+      );
     });
 
     test('CanonicalPathwayArticle parses wire data with structured blocks', () {
@@ -198,8 +202,8 @@ void main() {
       () {
         final wireJson = {
           'data': {
-            'id': 'fx-eur-irr-001',
-            'provider': 'frankfurter',
+            'id': 'e3333333-3333-4333-8333-333333333333',
+            'provider': 'fawazahmed0',
             'base': 'EUR',
             'quote': 'IRR',
             'rate': '485200.00',
@@ -207,14 +211,13 @@ void main() {
             'observation_date': '2026-10-19',
             'fetched_at': '2026-10-19T14:30:00Z',
             'freshness_state': 'fresh',
-            'source_url':
-                'https://api.frankfurter.dev/v1/latest?from=EUR&to=IRR',
+            'source_url': 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json',
           },
           'meta': {'request_id': 'fx-req-1'},
         };
 
         final quote = FxRateQuote.fromJson(wireJson['data']!);
-        expect(quote.provider, FxProvider.frankfurter);
+        expect(quote.provider, FxProvider.fawazahmed0);
         expect(quote.baseCurrency, 'EUR');
         expect(quote.quoteCurrency, 'IRR');
         expect(quote.referenceRate, 485200.0);
