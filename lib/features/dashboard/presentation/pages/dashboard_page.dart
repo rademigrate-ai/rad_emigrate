@@ -38,10 +38,28 @@ class DashboardPage extends ConsumerWidget {
         '/consultation',
       ),
       (
-        Icons.schedule_outlined,
+        Icons.event_available_outlined,
         const Color(0xFF345CFF),
-        l10n.worldTimeTitle,
-        '/world-clock',
+        'Booking',
+        '/booking',
+      ),
+      (
+        Icons.calendar_month_outlined,
+        const Color(0xFF6C4DFF),
+        'Interviews',
+        '/interviews',
+      ),
+      (
+        Icons.calculate_outlined,
+        const Color(0xFF00A986),
+        'Cost calculator',
+        '/calculator/cost',
+      ),
+      (
+        Icons.compare_arrows_outlined,
+        const Color(0xFFD91F2B),
+        'Compare',
+        '/compare/pathways',
       ),
       (
         Icons.description_outlined,
@@ -49,7 +67,6 @@ class DashboardPage extends ConsumerWidget {
         l10n.documents,
         '/documents',
       ),
-      (Icons.article_outlined, const Color(0xFFD91F2B), l10n.feed, '/feed'),
     ];
     return Scaffold(
       appBar: AppBar(
