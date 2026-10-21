@@ -11,68 +11,8 @@ import '../../domain/pathway_assessment.dart';
 import '../../domain/recommendation_engine.dart';
 import '../../domain/repositories/immigration_profile_repository.dart';
 
-/// Default curated pathway rules from authoritative government sources.
-final curatedPathwayRules = <PathwayEligibilityRule>[
-  PathwayEligibilityRule(
-    id: 'rule-ca-express-entry',
-    programId: 'express-entry',
-    jurisdiction: 'CA',
-    requiredFields: const {
-      ImmigrationProfileField.fullName,
-      ImmigrationProfileField.email,
-      ImmigrationProfileField.phone,
-      ImmigrationProfileField.nationality,
-      ImmigrationProfileField.education,
-      ImmigrationProfileField.workExperience,
-      ImmigrationProfileField.languages,
-    },
-    evidence: PathwayRuleEvidence(
-      jurisdiction: 'CA',
-      title: 'IRCC Express Entry Criteria',
-      sourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html',
-      retrievedAt: DateTime.utc(2026, 1, 15),
-      publisher: 'Government of Canada',
-    ),
-  ),
-  PathwayEligibilityRule(
-    id: 'rule-de-chancenkarte',
-    programId: 'de-chancenkarte',
-    jurisdiction: 'DE',
-    requiredFields: const {
-      ImmigrationProfileField.fullName,
-      ImmigrationProfileField.nationality,
-      ImmigrationProfileField.education,
-      ImmigrationProfileField.languages,
-    },
-    evidence: PathwayRuleEvidence(
-      jurisdiction: 'DE',
-      title: 'Make it in Germany - Opportunity Card',
-      sourceUrl: 'https://www.make-it-in-germany.com/en/visa-residence/types/job-search-opportunity-card',
-      retrievedAt: DateTime.utc(2026, 2, 1),
-      publisher: 'Federal Ministry for Economic Affairs and Climate Action',
-    ),
-  ),
-  PathwayEligibilityRule(
-    id: 'rule-ca-startup',
-    programId: 'ca-startup',
-    jurisdiction: 'CA',
-    requiredFields: const {
-      ImmigrationProfileField.fullName,
-      ImmigrationProfileField.nationality,
-      ImmigrationProfileField.workExperience,
-    },
-    requiresProfessionalReview: true,
-    evidence: PathwayRuleEvidence(
-      jurisdiction: 'CA',
-      title: 'Start-up Visa Program - IRCC',
-      sourceUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/start-visa.html',
-      retrievedAt: DateTime.utc(2026, 1, 10),
-      publisher: 'Government of Canada',
-      notes:
-          'Designated angel investor or venture capital commitment required.',
-    ),
-  ),
-];
+/// No default eligibility claims without an approved evidence-backed package.
+const curatedPathwayRules = <PathwayEligibilityRule>[];
 
 final immigrationProfileRepositoryProvider =
     Provider<ImmigrationProfileRepository>((ref) {
@@ -87,11 +27,10 @@ final immigrationProfileRepositoryProvider =
 final defaultCuratedRulePackage = CuratedRulePackage(
   packageId: 'ca-de-curated-v1',
   rules: curatedPathwayRules,
-  editorialApproved: true,
-  approvedAt: DateTime.utc(2026, 10, 18),
-  approverLabel: 'IRCC & MakeItInGermany Authoritative Editorial Review',
-  notes:
-      'Validated against Canada.ca and Make-it-in-Germany official criteria.',
+  editorialApproved: false,
+  approvedAt: null,
+  approverLabel: null,
+  notes: 'No approved rule and evidence package is configured.',
 );
 
 final curatedRulePackageProvider = Provider<CuratedRulePackage>(
@@ -167,33 +106,54 @@ final immigrationProfileControllerProvider =
       ImmigrationProfileState
     >((ref) {
       final repo = ref.watch(immigrationProfileRepositoryProvider);
-      final session = ref.watch(authControllerProvider).valueOrNull;
-      final userId = session?.userId ?? 'guest';
-      return ImmigrationProfileController(repo, userId);
+      final approvedRules = ref.watch(approvedPathwayRulesProvider);
+      final userId = ref.watch(authenticatedUserIdProvider) ?? 'guest';
+      return ImmigrationProfileController(
+        repo,
+        userId,
+        approvedRules: () => approvedRules,
+        isCurrent: () =>
+            (ref.read(authenticatedUserIdProvider) ?? 'guest') == userId,
+      );
     });
 
 class ImmigrationProfileController
     extends StateNotifier<ImmigrationProfileState> {
-  ImmigrationProfileController(this._repository, this._userId)
-    : super(
-        ImmigrationProfileState(
-          profile: const ImmigrationProfile(),
-          validation: ImmigrationProfileValidator.validate(
-            const ImmigrationProfile(),
-          ),
-          isLoading: true,
-        ),
-      ) {
+  ImmigrationProfileController(
+    this._repository,
+    this._userId, {
+    bool Function()? isCurrent,
+    List<PathwayEligibilityRule> Function()? approvedRules,
+  }) : _isCurrent = isCurrent ?? (() => true),
+       _approvedRules =
+           approvedRules ??
+           (() => const CuratedRulesGate().loadApproved(
+             defaultCuratedRulePackage,
+           )),
+       super(
+         ImmigrationProfileState(
+           profile: const ImmigrationProfile(),
+           validation: ImmigrationProfileValidator.validate(
+             const ImmigrationProfile(),
+           ),
+           isLoading: true,
+         ),
+       ) {
     load();
   }
 
   final ImmigrationProfileRepository _repository;
   final String _userId;
+  final List<PathwayEligibilityRule> Function() _approvedRules;
+  final bool Function() _isCurrent;
+  bool get _active => mounted && _isCurrent();
 
   Future<void> load() async {
+    if (!_active) return;
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final existing = await _repository.getImmigrationProfile(_userId);
+      if (!_active) return;
       final profile = existing ?? const ImmigrationProfile();
       final validation = _repository.validate(profile);
       state = state.copyWith(
@@ -202,6 +162,7 @@ class ImmigrationProfileController
         isLoading: false,
       );
     } catch (e) {
+      if (!_active) return;
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
@@ -211,6 +172,7 @@ class ImmigrationProfileController
     String? value, {
     List<String>? languageList,
   }) {
+    if (!_active) return;
     final nextProfile = state.profile.provide(
       field,
       value: value,
@@ -225,6 +187,7 @@ class ImmigrationProfileController
   }
 
   void toggleUnknown(ImmigrationProfileField field, bool isUnknown) {
+    if (!_active) return;
     final nextProfile = isUnknown
         ? state.profile.markUnknown(field)
         : state.profile.provide(field, value: null);
@@ -237,13 +200,14 @@ class ImmigrationProfileController
   }
 
   Future<bool> saveDraft() async {
-    if (state.isSaving) return false;
+    if (!_active || state.isSaving) return false;
     state = state.copyWith(isSaving: true, clearError: true);
     try {
       final saved = await _repository.saveImmigrationProfile(
         _userId,
         state.profile,
       );
+      if (!_active) return false;
       state = state.copyWith(
         profile: saved,
         validation: _repository.validate(saved),
@@ -252,6 +216,7 @@ class ImmigrationProfileController
       );
       return true;
     } catch (e) {
+      if (!_active) return false;
       state = state.copyWith(isSaving: false, errorMessage: e.toString());
       return false;
     }
@@ -261,7 +226,8 @@ class ImmigrationProfileController
     String programId, {
     List<PathwayEligibilityRule>? customRules,
   }) {
-    final rules = customRules ?? curatedPathwayRules;
+    if (!_active) return;
+    final rules = customRules ?? _approvedRules();
     final assessment = _repository.assessPathway(
       profile: state.profile,
       programId: programId,
@@ -271,11 +237,14 @@ class ImmigrationProfileController
   }
 
   void clearAssessment() {
+    if (!_active) return;
     state = state.copyWith(clearAssessment: true);
   }
 
   Future<void> clearDraft() async {
+    if (!_active) return;
     await _repository.clearLocalDraft(_userId);
+    if (!_active) return;
     state = state.copyWith(
       profile: const ImmigrationProfile(),
       validation: _repository.validate(const ImmigrationProfile()),

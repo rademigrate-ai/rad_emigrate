@@ -39,7 +39,7 @@ class BookingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = Localizations.localeOf(context).languageCode;
     final labels = BookingLabels(l10n);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session?.isAuthenticated ?? false;
     final catalog = ref.watch(bookingCatalogProvider(l10n));
     final history = isAuthed

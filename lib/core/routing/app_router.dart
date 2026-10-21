@@ -46,6 +46,7 @@ import 'auth_redirect.dart';
 class AuthRefreshNotifier extends ChangeNotifier {
   AuthRefreshNotifier(Ref ref) {
     ref.listen(authControllerProvider, (_, _) => notifyListeners());
+    ref.listen(authenticatedUserIdProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -62,11 +63,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: ref.watch(authRefreshNotifierProvider),
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
+      final identity = ref.read(authenticatedUserIdProvider);
       final bootstrap = ref.read(appBootstrapProvider);
       return authRedirect(
         uri: state.uri,
         isRestoring: bootstrap.isLoading,
-        isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false,
+        isAuthenticated:
+            identity != null &&
+            identity.isNotEmpty &&
+            (auth.valueOrNull?.isAuthenticated ?? false) &&
+            identity == auth.valueOrNull?.userId,
         profileComplete: auth.valueOrNull?.profileComplete ?? false,
       );
     },

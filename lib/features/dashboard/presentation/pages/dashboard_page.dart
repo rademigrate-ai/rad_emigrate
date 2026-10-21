@@ -19,7 +19,7 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session != null && session.isAuthenticated;
     final name = isAuthed
         ? (session.fullName ?? l10n.travelerFallback)

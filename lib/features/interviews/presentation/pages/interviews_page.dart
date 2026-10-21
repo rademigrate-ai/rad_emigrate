@@ -307,7 +307,7 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
       return;
     }
 
-    final session = ref.read(authControllerProvider).valueOrNull;
+    final session = ref.read(verifiedUserSessionProvider);
     if (!(session?.isAuthenticated ?? false)) {
       GoRouter.maybeOf(context)?.go('/login?from=%2Finterviews');
       return;
@@ -349,7 +349,7 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
     final locale = Localizations.localeOf(context).languageCode;
     final labels = InterviewLabels(locale);
     final theme = Theme.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session?.isAuthenticated ?? false;
     final list = ref.watch(currentAppointmentListProvider);
     final action = ref.watch(appointmentControllerProvider);

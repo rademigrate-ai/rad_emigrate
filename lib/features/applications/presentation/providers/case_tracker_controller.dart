@@ -113,17 +113,7 @@ final caseTrackerControllerProvider = StateNotifierProvider.autoDispose
       app,
     ) {
       final prefs = ref.watch(sharedPreferencesProvider);
-      final session = ref.watch(authControllerProvider).valueOrNull;
-      // Storage isolation: only an authenticated session may select a user
-      // scoped checklist key. Never trust a stale unauthenticated userId or
-      // fall back to the application owner after logout (cross-session leak).
-      final sessionUser = session?.userId?.trim();
-      final userId =
-          (session?.isAuthenticated == true &&
-              sessionUser != null &&
-              sessionUser.isNotEmpty)
-          ? sessionUser
-          : 'guest';
+      final userId = ref.watch(authenticatedUserIdProvider) ?? 'guest';
       final appRepo = ref.watch(applicationRepositoryProvider);
       return CaseTrackerController(
         initialApp: app,
@@ -271,7 +261,7 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
     ChecklistItemStatus next, {
     DateTime? nowUtc,
   }) async {
-    if (state.isTransitioning) return false;
+    if (!mounted || state.isTransitioning) return false;
     state = state.copyWith(isTransitioning: true, clearError: true);
     try {
       final updatedCase = _service.transitionChecklistItem(
@@ -282,12 +272,16 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
         nowUtc: nowUtc ?? state.now,
       );
       await _persistChecklist(updatedCase.checklist);
+      if (!mounted) return false;
+      if (!mounted) return false;
       state = state.copyWith(case_: updatedCase, isTransitioning: false);
       return true;
     } on CaseLifecycleException catch (e) {
+      if (!mounted) return false;
       state = state.copyWith(errorMessage: e.message, isTransitioning: false);
       return false;
     } catch (e) {
+      if (!mounted) return false;
       state = state.copyWith(
         errorMessage: e.toString(),
         isTransitioning: false,
@@ -300,7 +294,7 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
     ApplicationStatus next, {
     DateTime? nowUtc,
   }) async {
-    if (state.isTransitioning) return false;
+    if (!mounted || state.isTransitioning) return false;
     state = state.copyWith(isTransitioning: true, clearError: true);
     try {
       final updatedCase = _service.transitionApplicationStatus(
@@ -310,15 +304,19 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
         nowUtc: nowUtc ?? state.now,
       );
       await _persistChecklist(updatedCase.checklist);
+      if (!mounted) return false;
       if (_appRepository != null) {
         await _appRepository.updateApplication(updatedCase.application);
       }
+      if (!mounted) return false;
       state = state.copyWith(case_: updatedCase, isTransitioning: false);
       return true;
     } on CaseLifecycleException catch (e) {
+      if (!mounted) return false;
       state = state.copyWith(errorMessage: e.message, isTransitioning: false);
       return false;
     } catch (e) {
+      if (!mounted) return false;
       state = state.copyWith(
         errorMessage: e.toString(),
         isTransitioning: false,

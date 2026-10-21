@@ -1,3 +1,5 @@
+import '../../../auth/presentation/providers/auth_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,16 +19,25 @@ import '../../domain/pathway_assessment.dart';
 import '../../domain/recommendation_engine.dart';
 import '../providers/immigration_profile_controller.dart';
 
-class ImmigrationProfilePage extends ConsumerStatefulWidget {
+class ImmigrationProfilePage extends ConsumerWidget {
   const ImmigrationProfilePage({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(authenticatedUserIdProvider);
+    return _ImmigrationProfilePageForIdentity(key: ValueKey(identity));
+  }
+}
+
+class _ImmigrationProfilePageForIdentity extends ConsumerStatefulWidget {
+  const _ImmigrationProfilePageForIdentity({super.key});
 
   @override
-  ConsumerState<ImmigrationProfilePage> createState() =>
+  ConsumerState<_ImmigrationProfilePageForIdentity> createState() =>
       _ImmigrationProfilePageState();
 }
 
 class _ImmigrationProfilePageState
-    extends ConsumerState<ImmigrationProfilePage> {
+    extends ConsumerState<_ImmigrationProfilePageForIdentity> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _emailCtrl;
   late final TextEditingController _phoneCtrl;

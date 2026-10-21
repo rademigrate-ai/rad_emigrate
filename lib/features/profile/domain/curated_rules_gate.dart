@@ -21,7 +21,7 @@ class CuratedRulePackage {
 
   /// Must be true before rules are exposed to recommendation/pathway engines.
   final bool editorialApproved;
-  final DateTime approvedAt;
+  final DateTime? approvedAt;
   final String? approverLabel;
   final List<String> evidenceRecordIds;
   final String? notes;
@@ -29,7 +29,7 @@ class CuratedRulePackage {
   Map<String, dynamic> toJson() => {
     'packageId': packageId,
     'editorialApproved': editorialApproved,
-    'approvedAt': approvedAt.toIso8601String(),
+    'approvedAt': approvedAt?.toIso8601String(),
     'approverLabel': approverLabel,
     'evidenceRecordIds': evidenceRecordIds,
     'notes': notes,
@@ -43,7 +43,9 @@ class CuratedRulesGate {
 
   /// Returns rules only when [package.editorialApproved] is true.
   List<PathwayEligibilityRule> loadApproved(CuratedRulePackage package) {
-    if (!package.editorialApproved) return const [];
+    if (!package.editorialApproved || package.approvedAt == null) {
+      return const [];
+    }
     return List<PathwayEligibilityRule>.unmodifiable(package.rules);
   }
 
@@ -53,7 +55,9 @@ class CuratedRulesGate {
     required CuratedRulePackage package,
     required EvidenceRegistrySnapshot registry,
   }) {
-    if (!package.editorialApproved) return const [];
+    if (!package.editorialApproved || package.approvedAt == null) {
+      return const [];
+    }
     if (package.evidenceRecordIds.isEmpty) {
       // Explicit package approval without linked evidence is still allowed
       // only when editorialApproved — but fail-closed on empty rules.

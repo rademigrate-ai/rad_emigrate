@@ -24,28 +24,34 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final preferences = await SharedPreferences.getInstance();
       final cache = DocumentLocalDataSource(preferences);
-      await cache.writeAll([testDoc]);
+      await cache.writeAll([testDoc], userId: 'user-one');
 
-      final stored = preferences.getString('rad_documents');
+      final stored = preferences.getString(
+        DocumentLocalDataSource.keyFor('user-one'),
+      );
       expect(stored, isNotNull);
       expect(stored, isNot(contains('SHOULD_NEVER_BE_CACHED')));
-      final restored = await cache.readAll();
+      final restored = await cache.readAll(userId: 'user-one');
       expect(restored.single.storagePath, testDoc.storagePath);
       expect(restored.single.fileUrl, isNull);
     },
   );
 
-  test('reading legacy cached signed URLs sanitizes persistent data', () async {
+  test('reading scoped cached signed URLs sanitizes persistent data', () async {
     SharedPreferences.setMockInitialValues({
-      'rad_documents': jsonEncode([testDoc.toJson()]),
+      DocumentLocalDataSource.keyFor('user-one'): jsonEncode([
+        testDoc.toJson(),
+      ]),
     });
     final preferences = await SharedPreferences.getInstance();
     final cache = DocumentLocalDataSource(preferences);
-    final restored = await cache.readAll();
+    final restored = await cache.readAll(userId: 'user-one');
     expect(restored, hasLength(1));
     expect(restored.single.fileUrl, isNull);
     expect(restored.single.storagePath, testDoc.storagePath);
-    final stored = preferences.getString('rad_documents');
+    final stored = preferences.getString(
+      DocumentLocalDataSource.keyFor('user-one'),
+    );
     expect(stored, isNot(contains('SHOULD_NEVER_BE_CACHED')));
   });
 }

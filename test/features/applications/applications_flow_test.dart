@@ -21,7 +21,7 @@ class _FakeAppRepo implements ApplicationRepository {
 
   @override
   Future<List<VisaApplication>> listApplications({String? userId}) async =>
-      apps;
+      apps.map((app) => app.copyWith(userId: userId)).toList();
 
   @override
   Future<VisaApplication?> getApplication(String id) async {

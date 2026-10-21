@@ -165,7 +165,7 @@ class _BookingServicePageState extends ConsumerState<BookingServicePage> {
       return;
     }
 
-    final session = ref.read(authControllerProvider).valueOrNull;
+    final session = ref.read(verifiedUserSessionProvider);
     if (!(session?.isAuthenticated ?? false)) {
       final id = Uri.encodeComponent(service.id);
       // Graceful when no router is mounted (mirrors AppBackButton pattern).
@@ -204,7 +204,7 @@ class _BookingServicePageState extends ConsumerState<BookingServicePage> {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
     final labels = BookingLabels(locale);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session?.isAuthenticated ?? false;
     final catalog = ref.watch(bookingCatalogProvider(locale));
     final submitState = ref.watch(bookingSubmitControllerProvider);

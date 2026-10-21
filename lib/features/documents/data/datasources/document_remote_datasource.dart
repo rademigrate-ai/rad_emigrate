@@ -14,6 +14,11 @@ class DocumentRemoteDataSource {
   final Object _backend;
   final SupabaseStorageService? _storage;
 
+  String? get currentUserId =>
+      _backend is SupabaseClientService && (_backend).isInitialized
+      ? (_backend).client.auth.currentUser?.id
+      : null;
+
   Future<List<Document>> list({String? userId}) async {
     if (_backend is ApiClient) {
       final response = await (_backend).get<List<dynamic>>(

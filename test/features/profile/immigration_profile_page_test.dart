@@ -75,6 +75,7 @@ void main() {
     required SharedPreferences prefs,
     required _FakeImmigrationProfileRepo repo,
     Locale locale = const Locale('en'),
+    bool syntheticApprovedRule = false,
   }) {
     final auth = AuthController(_MockAuthRepo())
       ..applySession(
@@ -86,7 +87,31 @@ void main() {
         ),
       );
 
-    final controller = ImmigrationProfileController(repo, 'test-user-001');
+    final controller = ImmigrationProfileController(
+      repo,
+      'test-user-001',
+      approvedRules: () => syntheticApprovedRule
+          ? [
+              PathwayEligibilityRule(
+                id: 'synthetic-rule',
+                programId: 'express-entry',
+                jurisdiction: 'ZZ',
+                requiredFields: const {
+                  ImmigrationProfileField.fullName,
+                  ImmigrationProfileField.education,
+                  ImmigrationProfileField.languages,
+                },
+                evidence: PathwayRuleEvidence(
+                  jurisdiction: 'ZZ',
+                  title: 'SYNTHETIC eligibility rule',
+                  sourceUrl: 'https://example.gov/synthetic',
+                  retrievedAt: DateTime.utc(2026, 10, 21),
+                  publisher: 'SYNTHETIC TEST ONLY',
+                ),
+              ),
+            ]
+          : [],
+    );
 
     return ProviderScope(
       overrides: [
@@ -223,10 +248,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Must show Insufficient Information because education/languages etc are missing
-        expect(find.text('Insufficient Information to Assess'), findsOneWidget);
+        expect(find.text('Insufficient Verified Evidence'), findsOneWidget);
         expect(
           find.textContaining('IRCC Express Entry Criteria'),
-          findsOneWidget,
+          findsNothing,
         );
       },
     );
@@ -251,7 +276,13 @@ void main() {
           ),
         );
 
-        await tester.pumpWidget(buildTestWidget(prefs: prefs, repo: repo));
+        await tester.pumpWidget(
+          buildTestWidget(
+            prefs: prefs,
+            repo: repo,
+            syntheticApprovedRule: true,
+          ),
+        );
         await tester.pumpAndSettle();
 
         final assessBtn = find.text('Assess Eligibility');
@@ -264,7 +295,7 @@ void main() {
           findsOneWidget,
         );
         expect(
-          find.textContaining('IRCC Express Entry Criteria'),
+          find.textContaining('SYNTHETIC eligibility rule'),
           findsOneWidget,
         );
       },

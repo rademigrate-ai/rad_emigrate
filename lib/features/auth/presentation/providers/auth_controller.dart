@@ -49,6 +49,13 @@ final authenticatedUserIdProvider = Provider<String?>((ref) {
   );
 });
 
+/// Never project a previous account's display metadata into the SDK session.
+final verifiedUserSessionProvider = Provider<UserSession?>((ref) {
+  final identity = ref.watch(authenticatedUserIdProvider);
+  final session = ref.watch(authControllerProvider).valueOrNull;
+  return identity != null && session?.userId == identity ? session : null;
+});
+
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
   AuthController(this._repository)
     : super(const AsyncValue.data(UserSession()));

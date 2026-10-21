@@ -106,7 +106,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   }
 
   Future<void> _loadMine() async {
-    final session = ref.read(authControllerProvider).valueOrNull;
+    final session = ref.read(verifiedUserSessionProvider);
     if (session?.authenticated != true || session?.userId == null) {
       if (mounted) setState(() => _historyLoading = false);
       return;
@@ -166,7 +166,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
     }
 
     final submitUserId = ref.read(authenticatedUserIdProvider);
-    final session = ref.read(authControllerProvider).valueOrNull;
+    final session = ref.read(verifiedUserSessionProvider);
     if (session?.authenticated != true) {
       await ref.read(consultationDraftProvider.notifier).prepareSignIn();
       if (mounted && ref.read(authenticatedUserIdProvider) == submitUserId) {
@@ -236,7 +236,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session?.authenticated == true;
 
     return Scaffold(

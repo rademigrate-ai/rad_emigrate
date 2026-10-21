@@ -17,7 +17,8 @@ class ProfileLocalDataSource {
     if (raw == null || raw.isEmpty) return null;
     try {
       final map = jsonDecode(raw) as Map<String, dynamic>;
-      return UserProfile.fromJson(map);
+      final profile = UserProfile.fromJson(map);
+      return profile.id == userId ? profile : null;
     } catch (_) {
       return null;
     }

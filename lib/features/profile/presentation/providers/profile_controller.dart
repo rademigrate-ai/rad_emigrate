@@ -30,20 +30,37 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 
 final profileControllerProvider =
     StateNotifierProvider<ProfileController, AsyncValue<UserProfile?>>((ref) {
-      final session = ref.watch(authControllerProvider).valueOrNull;
-      return ProfileController(ref.watch(profileRepositoryProvider), session);
+      final identity = ref.watch(authenticatedUserIdProvider);
+      final mirror = ref.watch(authControllerProvider).valueOrNull;
+      final session = identity == null
+          ? null
+          : mirror?.userId == identity
+          ? mirror
+          : UserSession(userId: identity, authenticated: true);
+      return ProfileController(
+        ref.watch(profileRepositoryProvider),
+        session,
+        isCurrent: () => ref.read(authenticatedUserIdProvider) == identity,
+      );
     });
 
 class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
-  ProfileController(this._repository, this._session)
-    : super(const AsyncValue.loading()) {
+  ProfileController(
+    this._repository,
+    this._session, {
+    bool Function()? isCurrent,
+  }) : _isCurrent = isCurrent ?? (() => true),
+       super(const AsyncValue.loading()) {
     load();
   }
 
   final ProfileRepository _repository;
   final UserSession? _session;
+  final bool Function() _isCurrent;
+  bool get _active => mounted && _isCurrent();
 
   Future<void> load() async {
+    if (!_active) return;
     final userId = _session?.userId;
     state = const AsyncValue.loading();
     if (userId == null || userId.isEmpty) {
@@ -52,6 +69,9 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
     }
     try {
       var profile = await _repository.getProfile(userId);
+      if (profile != null && profile.id != userId) {
+        throw StateError("Profile owner mismatch");
+      }
       final session = _session;
       if (profile == null && session != null) {
         final fullName = session.fullName;
@@ -67,19 +87,29 @@ class ProfileController extends StateNotifier<AsyncValue<UserProfile?>> {
           phone: session.phone,
         );
       }
+      if (!_active) return;
       state = AsyncValue.data(profile);
     } catch (e, st) {
+      if (!_active) return;
       state = AsyncValue.error(e, st);
     }
   }
 
   Future<void> save(UserProfile profile) async {
+    if (!_active || profile.id != _session?.userId) {
+      throw StateError("Private session changed");
+    }
     final previous = state;
     state = const AsyncValue<UserProfile?>.loading().copyWithPrevious(previous);
     try {
       final saved = await _repository.updateProfile(profile);
+      if (!_active) throw StateError("Private session changed");
+      if (saved.id != _session?.userId) {
+        throw StateError("Profile owner mismatch");
+      }
       state = AsyncValue.data(saved);
     } catch (e, st) {
+      if (!_active) throw StateError("Private session changed");
       state = AsyncValue<UserProfile?>.error(e, st).copyWithPrevious(previous);
       rethrow;
     }

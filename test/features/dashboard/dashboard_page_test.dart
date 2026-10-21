@@ -28,7 +28,7 @@ class _FakeAppRepo implements ApplicationRepository {
 
   @override
   Future<List<VisaApplication>> listApplications({String? userId}) async =>
-      apps;
+      apps.map((app) => app.copyWith(userId: userId)).toList();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -39,7 +39,8 @@ class _FakeDocRepo implements DocumentRepository {
   final List<Document> docs;
 
   @override
-  Future<List<Document>> listDocuments({String? userId}) async => docs;
+  Future<List<Document>> listDocuments({String? userId}) async =>
+      docs.map((doc) => doc.copyWith(userId: userId)).toList();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
