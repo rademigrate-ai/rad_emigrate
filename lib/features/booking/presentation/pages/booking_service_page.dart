@@ -209,7 +209,7 @@ class _BookingServicePageState
         _slotTouched = false;
         _slotErrorKey = null;
       });
-      ref.invalidate(bookingHistoryProvider);
+      ref.invalidate(currentBookingHistoryProvider);
     }
   }
 
