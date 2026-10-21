@@ -120,11 +120,13 @@ void main() {
         );
         expect(find.text('Explore visa pathways'), findsOneWidget);
 
-        // Quick actions
+        // Quick actions — Freebuff feature discovery on dashboard
         expect(find.text('Consultation'), findsWidgets);
-        expect(find.text('World Time'), findsWidgets);
+        expect(find.text('Booking'), findsOneWidget);
+        expect(find.text('Interviews'), findsOneWidget);
+        expect(find.text('Cost calculator'), findsOneWidget);
+        expect(find.text('Compare'), findsOneWidget);
         expect(find.text('Documents'), findsOneWidget);
-        expect(find.text('Feed'), findsOneWidget);
 
         // Sign in row for guest
         expect(find.text('Sign in'), findsOneWidget);
