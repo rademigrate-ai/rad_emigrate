@@ -1,0 +1,70 @@
+{
+  "operation": "status",
+  "branch": "fix/rad-release-assurance-20261021",
+  "sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "status": "PASS",
+  "production_mutations": false,
+  "runs": [
+    {
+      "id": 39630227807,
+      "name": "CI",
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807",
+      "created_at": "2026-10-21T15:56:26Z"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 119326202201,
+      "name": "clean-schema",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202201"
+    },
+    {
+      "id": 119326202289,
+      "name": "repository-keyword-scan",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202289"
+    },
+    {
+      "id": 119326202312,
+      "name": "flutter",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202312"
+    },
+    {
+      "id": 119326202328,
+      "name": "migration-reconstruction",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202328"
+    },
+    {
+      "id": 119326202384,
+      "name": "android-build",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202384"
+    },
+    {
+      "id": 119326202482,
+      "name": "routing",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326202482"
+    },
+    {
+      "id": 119326262325,
+      "name": "web-build",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/39630227807/job/119326262325"
+    }
+  ]
+}

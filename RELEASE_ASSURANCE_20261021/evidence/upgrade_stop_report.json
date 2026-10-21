@@ -1,0 +1,9 @@
+{
+  "operation": "stop",
+  "project": "rad_core_assurance_upgrade",
+  "port": 61622,
+  "source_head": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "production_mutations": false,
+  "at": "2026-10-21T15:58:31.048678+00:00",
+  "status": "PASS"
+}

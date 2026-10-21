@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "owned disposable clean",
+  "port": 61622,
+  "production_mutations": false,
+  "files": [
+    {
+      "file": "preflight_readonly.sql",
+      "exit_code": 0,
+      "sha256": "15b46cf3c1ac5608d7ec3e691e553a263cf39388e1a01456d884a6fade93d1df"
+    },
+    {
+      "file": "postflight_readonly.sql",
+      "exit_code": 0,
+      "sha256": "d91a1f45a7f24cc6d27ebacf0fe1d292182c0ba86f0d4fec594752fb57a0aa1c"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "747ab96daa38e303d10121e17c4d711fbb16fabe",
+  "at": "2026-10-21T17:04:27.303391+00:00",
+  "command": "flutter build web --no-pub --dart-define=SUPABASE_URL=https://example.supabase.co --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder",
+  "exit_code": 0,
+  "seconds": 265.1,
+  "log_sha256": "5bbfc18b22f29d9b5340193dcb5a2730d7957ed464b08a4ad413d6a19fdb3c7c"
+}

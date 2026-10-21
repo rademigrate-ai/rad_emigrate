@@ -1,0 +1,107 @@
+{
+  "source_values_exported": false,
+  "files_metadata_and_review_only": true,
+  "functions": [
+    {
+      "slug": "research-sync",
+      "version": 4,
+      "verify_jwt": false,
+      "ezbr_sha256": "88d4953458ecc7c9f010270dc234d8ea1a2352ffc6728f9251fcb5d806bce476",
+      "files": [
+        {
+          "name": "research-sync/index.ts",
+          "bytes": 140
+        },
+        {
+          "name": "research-sync/handler.ts",
+          "bytes": 9134
+        },
+        {
+          "name": "_shared/cors.ts",
+          "bytes": 559
+        }
+      ],
+      "source_retained": false,
+      "observed_at": "2026-10-21T16:40:14.787Z",
+      "review": {
+        "worker_token_or_admin_required": true,
+        "direct_external_fetch_without_protected_adapter": true,
+        "evidence_lines": [
+          27,
+          45,
+          91,
+          98,
+          101,
+          113
+        ],
+        "local_fix": "e6708ef: default requires protected transport before job claim",
+        "hosted_changed": false
+      }
+    },
+    {
+      "slug": "ai-orchestrator",
+      "version": 11,
+      "verify_jwt": true,
+      "ezbr_sha256": "5362558646da14d5f50c9a381b1299964363b4bad67023eb07ab626f619ee007",
+      "files": [
+        {
+          "name": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/index.ts",
+          "bytes": 140
+        },
+        {
+          "name": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/handler.ts",
+          "bytes": 12136
+        },
+        {
+          "name": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/knowledge_grounding.ts",
+          "bytes": 5296
+        },
+        {
+          "name": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/handler_providers.ts",
+          "bytes": 10688
+        },
+        {
+          "name": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/_shared/cors.ts",
+          "bytes": 559
+        }
+      ],
+      "source_retained": false,
+      "observed_at": "2026-10-21T16:40:14.813Z",
+      "review": {
+        "copilot_module_present": false,
+        "version_1_dispatch_present": false,
+        "evidence_lines": [
+          11,
+          99,
+          113
+        ],
+        "hosted_changed": false
+      }
+    },
+    {
+      "slug": "document-intelligence",
+      "version": 3,
+      "verify_jwt": true,
+      "ezbr_sha256": "ebc7450c0bb96a36021dd5fb2e267d810caf39c6dd1dbfc1f3acd830b28ad064",
+      "files": [
+        {
+          "name": "index.ts",
+          "bytes": 5364
+        }
+      ],
+      "source_retained": false,
+      "observed_at": "2026-10-21T16:40:14.814Z",
+      "review": {
+        "document_owner_predicate_present": true,
+        "legacy_service_storage_fetch_uses_file_path": true,
+        "evidence_lines": [
+          21,
+          35,
+          62,
+          64
+        ],
+        "hosted_changed": false
+      }
+    }
+  ]
+}

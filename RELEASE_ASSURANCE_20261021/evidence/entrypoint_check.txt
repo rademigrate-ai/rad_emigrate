@@ -1,0 +1,8 @@
+Check supabase/functions/ai-orchestrator/index.ts
+Check supabase/functions/currency-refresh/index.ts
+Check supabase/functions/document-intelligence/index.ts
+Check supabase/functions/notification-dispatch/index.ts
+Check supabase/functions/official-source-worker/index.ts
+Check supabase/functions/payment-sandbox/index.ts
+Check supabase/functions/research-sync/index.ts
+Check supabase/functions/visa-content-ingest/index.ts

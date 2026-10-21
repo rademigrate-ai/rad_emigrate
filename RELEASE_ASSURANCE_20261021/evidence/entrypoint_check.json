@@ -1,0 +1,19 @@
+{
+  "candidate_sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "check",
+    "supabase\\functions\\ai-orchestrator\\index.ts",
+    "supabase\\functions\\currency-refresh\\index.ts",
+    "supabase\\functions\\document-intelligence\\index.ts",
+    "supabase\\functions\\notification-dispatch\\index.ts",
+    "supabase\\functions\\official-source-worker\\index.ts",
+    "supabase\\functions\\payment-sandbox\\index.ts",
+    "supabase\\functions\\research-sync\\index.ts",
+    "supabase\\functions\\visa-content-ingest\\index.ts"
+  ],
+  "exit_code": 0,
+  "at": "2026-10-21T16:00:23.962727+00:00",
+  "entrypoints": 8,
+  "log_sha256": "05fc369c299e2b33a1e0bd0880ad8773f120479b38e6f1afd1cc9a253c258e9b"
+}

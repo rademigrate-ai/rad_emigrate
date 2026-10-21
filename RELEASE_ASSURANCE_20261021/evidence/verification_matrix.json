@@ -1,0 +1,37 @@
+{
+  "verified_code_sha": "747ab96daa38e303d10121e17c4d711fbb16fabe",
+  "flutter": {
+    "passed": 866,
+    "failed": 0,
+    "new_privacy_tests": 18,
+    "focused_booking_interview_passed": 32
+  },
+  "format": "PASS",
+  "analysis": "No issues found",
+  "deno": {
+    "passed": 145,
+    "failed": 0,
+    "lint_findings": 0,
+    "entrypoints_typechecked": 8
+  },
+  "python": {
+    "passed": 43
+  },
+  "web": "JavaScript build PASS; CI defines are placeholders, not a deployed app",
+  "android": "arm64 debug APK PASS; no signed release artifact claimed",
+  "clean_sql": {
+    "passed": 19,
+    "migrations": 80
+  },
+  "production_shaped_sql": {
+    "passed": 16,
+    "not_run": 3,
+    "baseline_versions": 54,
+    "forward_files": 20
+  },
+  "http_checks": 28,
+  "auth_storage": "two real local Auth users, login/logout, cross-user object/signed URL denial, 18 quota requests: 2 accepted / 16 denied; synthetic human Feed publication",
+  "acl": "zero prohibited client non-row table capabilities and zero column REFERENCES in both disposable shapes",
+  "provider_roundtrip": "NOT RUN",
+  "signed_android_release": "NOT RUN"
+}

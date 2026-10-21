@@ -1,0 +1,12 @@
+{
+  "candidate_sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "at": "2026-10-21T15:56:38.404506+00:00",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "lint",
+    "supabase/functions"
+  ],
+  "exit_code": 0,
+  "seconds": 0.09,
+  "log_sha256": "613fe3cbf5df8fdd4efa5404be84f61cb146a0bceb0d6f519dc57d727758f662"
+}
