@@ -1,304 +1,353 @@
+// Immigration cost calculator page.
+//
+// Truthful by construction: every figure is derived from published,
+// source-attributed catalog text. Missing, prose-only, or mixed-currency data
+// renders explicit explanatory states instead of an invented number.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/constrained_content.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../../core/widgets/error_state.dart';
+import '../../../../core/widgets/inline_alert.dart';
 import '../../../../core/widgets/loading_state.dart';
+import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/status_badge.dart';
-import '../../domain/entities/cost_estimate.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
+import '../../domain/currencies.dart';
+import '../../domain/entities/immigration_cost.dart';
+import '../cost_calculator_labels.dart';
 import '../providers/cost_calculator_controller.dart';
 
-class CostCalculatorPage extends ConsumerStatefulWidget {
-  const CostCalculatorPage({
-    super.key,
-    this.initialCountryCode = 'DE',
-    this.initialPathwaySlug = 'chancenkarte',
-  });
+/// Cost calculator entry page.
+class CostCalculatorPage extends ConsumerWidget {
+  const CostCalculatorPage({super.key});
 
-  final String initialCountryCode;
-  final String initialPathwaySlug;
+  String _currencySymbol(String? code) =>
+      costCurrencyByCode(code)?.symbol ?? (code ?? '');
 
-  @override
-  ConsumerState<CostCalculatorPage> createState() => _CostCalculatorPageState();
-}
-
-class _CostCalculatorPageState extends ConsumerState<CostCalculatorPage> {
-  late String _countryCode;
-  late String _pathwaySlug;
-  int _applicantsCount = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _countryCode = widget.initialCountryCode;
-    _pathwaySlug = widget.initialPathwaySlug;
+  String _amount(int? minor, String? code) {
+    if (minor == null) return '—';
+    final symbol = _currencySymbol(code);
+    final value = minor / 100;
+    final formatted = value.toStringAsFixed(
+      value == value.roundToDouble() ? 0 : 2,
+    );
+    return symbol.isEmpty ? formatted : '$symbol$formatted';
   }
 
   @override
-  Widget build(BuildContext context) {
-    final isFa = Localizations.localeOf(context).languageCode == 'fa';
-    final locale = isFa ? 'fa' : 'en';
-
-    final query = CostCalculatorQuery(
-      countryCode: _countryCode,
-      pathwaySlug: _pathwaySlug,
-      applicantsCount: _applicantsCount,
-      locale: locale,
-    );
-
-    final estimateAsync = ref.watch(costEstimateProvider(query));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final labels = CostCalculatorLabels(locale);
+    final theme = Theme.of(context);
+    final auth = ref.watch(authControllerProvider).valueOrNull;
+    final isAuthed = auth?.isAuthenticated ?? false;
+    final pathways = ref.watch(costPathwaysProvider(locale));
+    final selectedId = ref.watch(selectedPathwayIdProvider);
+    final displayCurrency = ref.watch(displayCurrencyProvider);
 
     return Scaffold(
       appBar: AppBar(
-        leading: const AppBackButton(fallback: '/visa'),
-        title: Text(
-          isFa ? 'محاسبه‌گر هزینه‌های مهاجرت' : 'Immigration Cost Calculator',
-        ),
+        leading: const AppBackButton(fallback: '/dashboard'),
+        title: Text(labels.title),
       ),
       body: PremiumCanvas(
+        accent: theme.colorScheme.secondary,
         child: ConstrainedContent(
-          maxWidth: 860,
+          maxWidth: 820,
           alignment: Alignment.topCenter,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Text(
-                isFa
-                    ? 'برآورد شفاف هزینه‌های دولتی، بیومتریک و حداقل تمکن مالی قانونی بر اساس آخرین تعرفه‌های رسمی.'
-                    : 'Transparent estimate of official government fees, biometrics, and statutory proof of funds.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 16),
-              AppCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      isFa
-                          ? 'انتخاب کشور و مسیر مهاجرتی'
-                          : 'Select Country & Pathway',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        ChoiceChip(
-                          label: Text(
-                            isFa
-                                ? 'آلمان — کارت شانس'
-                                : 'Germany — Chancenkarte',
-                          ),
-                          selected: _countryCode == 'DE',
-                          onSelected: (selected) {
-                            if (selected) {
-                              setState(() {
-                                _countryCode = 'DE';
-                                _pathwaySlug = 'chancenkarte';
-                              });
-                            }
-                          },
-                        ),
-                        ChoiceChip(
-                          label: Text(
-                            isFa
-                                ? 'کانادا — اکسپرس اینتری'
-                                : 'Canada — Express Entry',
-                          ),
-                          selected: _countryCode == 'CA',
-                          onSelected: (selected) {
-                            if (selected) {
-                              setState(() {
-                                _countryCode = 'CA';
-                                _pathwaySlug = 'express-entry';
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Text(
-                          isFa ? 'تعداد متقاضیان:' : 'Number of Applicants:',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(Icons.remove_circle_outline),
-                          onPressed: _applicantsCount > 1
-                              ? () => setState(() => _applicantsCount--)
-                              : null,
-                          tooltip: isFa ? 'کاهش' : 'Decrease',
-                        ),
-                        Text(
-                          '$_applicantsCount',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add_circle_outline),
-                          onPressed: _applicantsCount < 10
-                              ? () => setState(() => _applicantsCount++)
-                              : null,
-                          tooltip: isFa ? 'افزایش' : 'Increase',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              estimateAsync.when(
-                loading: () => const LoadingState.section(),
-                error: (err, _) => Center(
+          child: MotionReveal(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
+              children: [
+                Semantics(
+                  header: true,
                   child: Text(
-                    isFa
-                        ? 'خطا در بارگذاری برآورد هزینه‌ها'
-                        : 'Error loading cost estimate',
+                    labels.intro,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      height: 1.45,
+                    ),
                   ),
                 ),
-                data: (estimate) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      AppCard(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  estimate.pathwayName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium,
-                                ),
-                                const Spacer(),
-                                StatusBadge(
-                                  label: estimate.baseCurrency,
-                                  tone: StatusTone.info,
-                                ),
-                              ],
-                            ),
-                            const Divider(height: 24),
-                            ...estimate.items.map((item) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item.title,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
-                                          ),
-                                          Text(
-                                            item.category.label(isFa),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelSmall
-                                                ?.copyWith(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurfaceVariant,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      '${item.amount.toStringAsFixed(0)} ${item.currency}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                            const Divider(height: 24),
-                            Row(
-                              children: [
-                                Text(
-                                  isFa
-                                      ? 'مجموع هزینه‌های پرداختی ویزا:'
-                                      : 'Total Direct Fees:',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '${estimate.totalMandatoryAmount.toStringAsFixed(0)} ${estimate.baseCurrency}',
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            if (estimate.settlementFundsAmount > 0) ...[
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Text(
-                                    isFa
-                                        ? 'حداقل تمکن مالی قانونی (در حساب متقاضی):'
-                                        : 'Proof of Funds Required:',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall,
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '${estimate.settlementFundsAmount.toStringAsFixed(0)} ${estimate.baseCurrency}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ],
+                const SizedBox(height: 20),
+                pathways.when(
+                  loading: () => const LoadingState.section(),
+                  error: (_, _) => isAuthed
+                      ? ErrorState(
+                          message: labels.genericError,
+                          onRetry: () =>
+                              ref.invalidate(costPathwaysProvider(locale)),
+                        )
+                      : AppCard(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: const Icon(Icons.lock_outline),
+                            title: Text(labels.signInPrompt),
+                          ),
                         ),
+                  data: (list) {
+                    if (list.isEmpty) {
+                      return EmptyState(
+                        title: labels.emptyCatalog,
+                        icon: Icons.calculate_outlined,
+                      );
+                    }
+                    return _buildBody(
+                      context,
+                      ref,
+                      labels,
+                      theme,
+                      locale,
+                      list,
+                      selectedId,
+                      displayCurrency,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    CostCalculatorLabels labels,
+    ThemeData theme,
+    String locale,
+    List<CostPathway> list,
+    String? selectedId,
+    String displayCurrency,
+  ) {
+    final breakdown = breakdownFor(list, selectedId);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(labels.selectPathway, style: theme.textTheme.titleMedium),
+        const SizedBox(height: 10),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DropdownButtonFormField<String?>(
+                isExpanded: true,
+                initialValue: selectedId,
+                decoration: InputDecoration(
+                  labelText: labels.selectPathway,
+                  prefixIcon: const Icon(Icons.public_outlined),
+                ),
+                items: [
+                  const DropdownMenuItem<String?>(
+                    value: null,
+                    child: Text('—'),
+                  ),
+                  for (final pathway in list)
+                    DropdownMenuItem<String?>(
+                      value: pathway.id,
+                      child: Text(
+                        '${pathway.flagEmoji} ${pathway.countryName} · '
+                        '${pathway.categoryName}',
                       ),
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          estimate.disclaimer,
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                    ),
+                ],
+                onChanged: (value) =>
+                    ref.read(selectedPathwayIdProvider.notifier).state = value,
+              ),
+              const SizedBox(height: 14),
+              Text(labels.currencyLabel, style: theme.textTheme.labelLarge),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final currency in kCostCurrencies)
+                    ChoiceChip(
+                      label: Text('${currency.code} ${currency.symbol}'),
+                      selected: displayCurrency == currency.code,
+                      onSelected: (_) =>
+                          ref.read(displayCurrencyProvider.notifier).state =
+                              currency.code,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                labels.currencyNoConvertNote,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
         ),
+        if (breakdown == null) ...[
+          const SizedBox(height: 16),
+          InlineAlert(message: labels.pathwayHint, error: false),
+        ] else ...[
+          const SizedBox(height: 16),
+          ..._breakdownCards(labels, theme, locale, breakdown, displayCurrency),
+        ],
+      ],
+    );
+  }
+
+  List<Widget> _breakdownCards(
+    CostCalculatorLabels labels,
+    ThemeData theme,
+    String locale,
+    CostBreakdown breakdown,
+    String displayCurrency,
+  ) {
+    final dateFormat = DateFormat.yMMMd(locale);
+    final pathway = breakdown.pathway;
+    final mismatch =
+        breakdown.total.isAvailable &&
+        breakdown.total.currency != displayCurrency;
+
+    return [
+      AppCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Semantics(
+              header: true,
+              child: Text(
+                '${pathway.flagEmoji} ${pathway.countryName} · '
+                '${pathway.categoryName}',
+                style: theme.textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(pathway.title, style: theme.textTheme.bodyMedium),
+            const Divider(height: 22),
+            Text(labels.breakdownTitle, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 10),
+            for (final line in breakdown.lines) ...[
+              _lineRow(labels, theme, line),
+              const SizedBox(height: 10),
+            ],
+            const Divider(height: 22),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    labels.totalLabel,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  child: StatusBadge(
+                    label: breakdown.total.isAvailable
+                        ? _amount(
+                            breakdown.total.amountMinor,
+                            breakdown.total.currency,
+                          )
+                        : labels.noVerifiedFigure,
+                    tone: breakdown.total.isAvailable
+                        ? StatusTone.success
+                        : StatusTone.warning,
+                  ),
+                ),
+              ],
+            ),
+            if (mismatch) ...[
+              const SizedBox(height: 8),
+              InlineAlert(message: labels.mixedCurrencies, error: false),
+            ],
+            const SizedBox(height: 14),
+            Text(
+              '${labels.sourceLabel}: ${pathway.sourcePublisher} — '
+              '${pathway.sourceTitle}',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${labels.retrievedAt}: ${dateFormat.format(pathway.sourceRetrievedAt)}',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
       ),
+    ];
+  }
+
+  Widget _lineRow(CostCalculatorLabels labels, ThemeData theme, CostLine line) {
+    final value = switch (line.basis) {
+      CostBasis.publishedFigure => _amount(line.amountMinor, line.currency),
+      // Prose is published; only the exact figure is absent. The note below
+      // carries the authoritative wording, so "Not published" would be false.
+      CostBasis.publishedTextOnly => '—',
+      CostBasis.notPublished => labels.notPublished,
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(line.label, style: theme.textTheme.bodyMedium),
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: Text(
+                value,
+                style: theme.textTheme.bodyMedium,
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
+        if (line.basis == CostBasis.publishedFigure &&
+            line.rawText != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            line.rawText!,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            labels.figureFromSource,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ] else if (line.basis == CostBasis.publishedTextOnly &&
+            line.rawText != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            line.rawText!,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            labels.textOnlyNote,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
