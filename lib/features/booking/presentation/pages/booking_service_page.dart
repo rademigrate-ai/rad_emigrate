@@ -27,16 +27,29 @@ import '../booking_labels.dart';
 import '../providers/booking_controller.dart';
 
 /// Detail view for one service offering with its booking request form.
-class BookingServicePage extends ConsumerStatefulWidget {
+class BookingServicePage extends ConsumerWidget {
   const BookingServicePage({super.key, required this.serviceId});
-
   final String serviceId;
-
   @override
-  ConsumerState<BookingServicePage> createState() => _BookingServicePageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(authenticatedUserIdProvider);
+    return _BookingServicePageForIdentity(
+      key: ValueKey(identity),
+      serviceId: serviceId,
+    );
+  }
 }
 
-class _BookingServicePageState extends ConsumerState<BookingServicePage> {
+class _BookingServicePageForIdentity extends ConsumerStatefulWidget {
+  const _BookingServicePageForIdentity({super.key, required this.serviceId});
+  final String serviceId;
+  @override
+  ConsumerState<_BookingServicePageForIdentity> createState() =>
+      _BookingServicePageState();
+}
+
+class _BookingServicePageState
+    extends ConsumerState<_BookingServicePageForIdentity> {
   final _formKey = GlobalKey<FormState>();
   final _messageCtrl = TextEditingController();
 

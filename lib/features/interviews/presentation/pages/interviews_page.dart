@@ -31,14 +31,25 @@ import '../interview_labels.dart';
 import '../providers/appointment_controller.dart';
 
 /// Interview scheduling page: overview + request form.
-class InterviewsPage extends ConsumerStatefulWidget {
+class InterviewsPage extends ConsumerWidget {
   const InterviewsPage({super.key});
 
   @override
-  ConsumerState<InterviewsPage> createState() => _InterviewsPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(authenticatedUserIdProvider);
+    return _InterviewsPageForIdentity(key: ValueKey(identity));
+  }
 }
 
-class _InterviewsPageState extends ConsumerState<InterviewsPage> {
+class _InterviewsPageForIdentity extends ConsumerStatefulWidget {
+  const _InterviewsPageForIdentity({super.key});
+
+  @override
+  ConsumerState<_InterviewsPageForIdentity> createState() =>
+      _InterviewsPageState();
+}
+
+class _InterviewsPageState extends ConsumerState<_InterviewsPageForIdentity> {
   final _formKey = GlobalKey<FormState>();
   final _titleCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();

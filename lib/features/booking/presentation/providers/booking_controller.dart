@@ -67,11 +67,16 @@ class BookingSubmitState {
 /// Submit controller kept separate from list providers so history can be
 /// refreshed after a successful request.
 class BookingSubmitController extends StateNotifier<BookingSubmitState> {
-  BookingSubmitController(this._repository) : super(const BookingSubmitState());
+  BookingSubmitController(this._repository, {bool Function()? isCurrent})
+    : _isCurrent = isCurrent ?? (() => true),
+      super(const BookingSubmitState());
 
   final BookingRepository _repository;
+  final bool Function() _isCurrent;
+  bool get _active => mounted && _isCurrent();
 
   void reset() {
+    if (!_active) return;
     state = const BookingSubmitState();
   }
 
@@ -80,6 +85,7 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
     required BookingRequest request,
     required String locale,
   }) async {
+    if (!_active) return null;
     state = const BookingSubmitState(phase: BookingSubmitPhase.submitting);
     try {
       final record = await _repository.submitBooking(
@@ -87,12 +93,14 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
         request: request,
         locale: locale,
       );
+      if (!_active) return null;
       state = BookingSubmitState(
         phase: BookingSubmitPhase.success,
         record: record,
       );
       return record;
     } on BookingBackendUnavailableException {
+      if (!_active) return null;
       state = const BookingSubmitState(
         phase: BookingSubmitPhase.failure,
         errorKey: 'bookingBackendUnavailable',
@@ -100,6 +108,7 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
       );
       return null;
     } catch (_) {
+      if (!_active) return null;
       state = const BookingSubmitState(
         phase: BookingSubmitPhase.failure,
         errorKey: 'bookingGenericError',
@@ -111,5 +120,15 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
 
 final bookingSubmitControllerProvider =
     StateNotifierProvider<BookingSubmitController, BookingSubmitState>((ref) {
-      return BookingSubmitController(ref.watch(bookingRepositoryProvider));
+      final identity = ref.watch(authenticatedUserIdProvider);
+      final service = ref.watch(supabaseClientServiceProvider);
+      return BookingSubmitController(
+        ref.watch(bookingRepositoryProvider),
+        isCurrent: () =>
+            identity != null &&
+            identity.isNotEmpty &&
+            ref.read(authenticatedUserIdProvider) == identity &&
+            (!service.isInitialized ||
+                service.client.auth.currentUser?.id == identity),
+      );
     });

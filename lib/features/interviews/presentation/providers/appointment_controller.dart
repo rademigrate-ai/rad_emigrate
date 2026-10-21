@@ -69,12 +69,16 @@ class AppointmentActionState {
 
 /// Submit / reschedule / cancel controller.
 class AppointmentController extends StateNotifier<AppointmentActionState> {
-  AppointmentController(this._repository)
-    : super(const AppointmentActionState());
+  AppointmentController(this._repository, {bool Function()? isCurrent})
+    : _isCurrent = isCurrent ?? (() => true),
+      super(const AppointmentActionState());
 
   final AppointmentRepository _repository;
+  final bool Function() _isCurrent;
+  bool get _active => mounted && _isCurrent();
 
   void reset() {
+    if (!_active) return;
     state = const AppointmentActionState();
   }
 
@@ -85,6 +89,7 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String? ianaZoneId,
     required String notes,
   }) async {
+    if (!_active) return null;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       final appointment = await _repository.submitRadSession(
@@ -94,12 +99,14 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
         ianaZoneId: ianaZoneId,
         notes: notes,
       );
+      if (!_active) return null;
       state = AppointmentActionState(
         phase: AppointmentActionPhase.success,
         appointment: appointment,
       );
       return appointment;
     } on AppointmentBackendUnavailableException {
+      if (!_active) return null;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentBackendUnavailable',
@@ -107,6 +114,7 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
       );
       return null;
     } catch (_) {
+      if (!_active) return null;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentGenericError',
@@ -123,6 +131,7 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String? ianaZoneId,
     required String notes,
   }) async {
+    if (!_active) return false;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       await _repository.reschedule(
@@ -132,11 +141,13 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
         ianaZoneId: ianaZoneId,
         notes: notes,
       );
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.success,
       );
       return true;
     } on AppointmentBackendUnavailableException {
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentRescheduleUnavailable',
@@ -144,6 +155,7 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
       );
       return false;
     } catch (_) {
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentGenericError',
@@ -156,14 +168,17 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String appointmentId,
     required String reason,
   }) async {
+    if (!_active) return false;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       await _repository.cancel(appointmentId: appointmentId, reason: reason);
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.success,
       );
       return true;
     } on AppointmentBackendUnavailableException {
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentCancelUnavailable',
@@ -171,6 +186,7 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
       );
       return false;
     } catch (_) {
+      if (!_active) return false;
       state = const AppointmentActionState(
         phase: AppointmentActionPhase.failure,
         errorKey: 'appointmentGenericError',
@@ -182,5 +198,15 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
 
 final appointmentControllerProvider =
     StateNotifierProvider<AppointmentController, AppointmentActionState>((ref) {
-      return AppointmentController(ref.watch(appointmentRepositoryProvider));
+      final identity = ref.watch(authenticatedUserIdProvider);
+      final service = ref.watch(supabaseClientServiceProvider);
+      return AppointmentController(
+        ref.watch(appointmentRepositoryProvider),
+        isCurrent: () =>
+            identity != null &&
+            identity.isNotEmpty &&
+            ref.read(authenticatedUserIdProvider) == identity &&
+            (!service.isInitialized ||
+                service.client.auth.currentUser?.id == identity),
+      );
     });
