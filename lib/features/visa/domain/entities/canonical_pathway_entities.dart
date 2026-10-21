@@ -50,7 +50,7 @@ class OfficialSourceAttribution {
   final String authorityName;
   final String authorityDomain;
   final String originalEvidenceUrl;
-  final DateTime lastFactCheckedAt;
+  final DateTime? lastFactCheckedAt;
   final FactualStatus factualStatus;
 
   const OfficialSourceAttribution({
@@ -71,9 +71,9 @@ class OfficialSourceAttribution {
       originalEvidenceUrl:
           (json['original_evidence_url'] ?? json['originalEvidenceUrl'] ?? '')
               .toString(),
-      lastFactCheckedAt:
-          DateTime.tryParse(json['last_fact_checked_at']?.toString() ?? '') ??
-          DateTime.now(),
+      lastFactCheckedAt: DateTime.tryParse(
+        json['last_fact_checked_at']?.toString() ?? '',
+      ),
       factualStatus: FactualStatus.fromString(
         (json['factual_status'] ?? json['factualStatus'])?.toString(),
       ),
@@ -84,7 +84,7 @@ class OfficialSourceAttribution {
     'authority_name': authorityName,
     'authority_domain': authorityDomain,
     'original_evidence_url': originalEvidenceUrl,
-    'last_fact_checked_at': lastFactCheckedAt.toIso8601String(),
+    'last_fact_checked_at': lastFactCheckedAt?.toIso8601String(),
     'factual_status': factualStatus.name,
   };
 }
@@ -307,7 +307,7 @@ class CanonicalPathwayArticle {
   final List<String> requiredDocuments;
   final List<Map<String, String>> faqItems;
   final List<IndependentArticleSummary> relatedArticles;
-  final DateTime lastFactCheckedAt;
+  final DateTime? lastFactCheckedAt;
 
   const CanonicalPathwayArticle({
     required this.id,
@@ -425,13 +425,9 @@ class CanonicalPathwayArticle {
       requiredDocuments: rawDocs,
       faqItems: rawFaq,
       relatedArticles: related,
-      lastFactCheckedAt:
-          DateTime.tryParse(
-            payload['last_fact_checked_at']?.toString() ??
-                payload['updated_at']?.toString() ??
-                '',
-          ) ??
-          DateTime.now(),
+      lastFactCheckedAt: DateTime.tryParse(
+        payload['last_fact_checked_at']?.toString() ?? '',
+      ),
     );
   }
 }

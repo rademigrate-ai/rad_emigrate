@@ -351,7 +351,7 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
     final theme = Theme.of(context);
     final session = ref.watch(authControllerProvider).valueOrNull;
     final isAuthed = session?.isAuthenticated ?? false;
-    final list = ref.watch(appointmentListProvider);
+    final list = ref.watch(currentAppointmentListProvider);
     final action = ref.watch(appointmentControllerProvider);
     final dateFormat = DateFormat.yMMMd(locale).add_Hm();
 
@@ -409,41 +409,38 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                           style: theme.textTheme.labelLarge,
                         ),
                         const SizedBox(height: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            RadioListTile<AppointmentKind>(
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
-                              title: Text(
-                                labels.kindRadSession,
-                                softWrap: true,
+                        RadioGroup<AppointmentKind>(
+                          groupValue: _kind,
+                          onChanged: (value) {
+                            if (value == null) return;
+                            setState(() {
+                              _kind = value;
+                              _slotErrorKey = null;
+                            });
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              RadioListTile<AppointmentKind>(
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                title: Text(
+                                  labels.kindRadSession,
+                                  softWrap: true,
+                                ),
+                                value: AppointmentKind.radSession,
                               ),
-                              value: AppointmentKind.radSession,
-                              groupValue: _kind,
-                              onChanged: (v) {
-                                if (v == null) return;
-                                setState(() {
-                                  _kind = v;
-                                  _slotErrorKey = null;
-                                });
-                              },
-                            ),
-                            RadioListTile<AppointmentKind>(
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
-                              title: Text(labels.kindExternal, softWrap: true),
-                              value: AppointmentKind.externalGovernment,
-                              groupValue: _kind,
-                              onChanged: (v) {
-                                if (v == null) return;
-                                setState(() {
-                                  _kind = v;
-                                  _slotErrorKey = null;
-                                });
-                              },
-                            ),
-                          ],
+                              RadioListTile<AppointmentKind>(
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                title: Text(
+                                  labels.kindExternal,
+                                  softWrap: true,
+                                ),
+                                value: AppointmentKind.externalGovernment,
+                              ),
+                            ],
+                          ),
                         ),
                         if (_kind == AppointmentKind.externalGovernment) ...[
                           const SizedBox(height: 8),

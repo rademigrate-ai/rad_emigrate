@@ -24,6 +24,24 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
 
   const SupabaseCanonicalPathwayRepository(this._service);
 
+  /// Published main and related articles share the canonical UUID selector.
+  Future<CanonicalPathwayArticle?> getArticleById(String articleId) async {
+    if (!_service.isInitialized) return null;
+    final response = await _service.client.rpc(
+      'get_visa_article',
+      params: {
+        'p_request': {
+          'selector': {'article_id': articleId},
+          'locale': 'fa',
+        },
+      },
+    );
+    if (response is! Map) throw const FormatException('article_unavailable');
+    return CanonicalPathwayArticle.fromJson(
+      Map<String, dynamic>.from(response),
+    );
+  }
+
   @override
   Future<CanonicalPathwayArticle?> getCanonicalPathway({
     required String countryCode,
@@ -109,3 +127,10 @@ final canonicalPathwayRepositoryProvider = Provider<CanonicalPathwayRepository>(
     );
   },
 );
+
+final publishedVisaArticleProvider = FutureProvider.autoDispose
+    .family<CanonicalPathwayArticle?, String>((ref, articleId) {
+      return SupabaseCanonicalPathwayRepository(
+        ref.watch(supabaseClientServiceProvider),
+      ).getArticleById(articleId);
+    });

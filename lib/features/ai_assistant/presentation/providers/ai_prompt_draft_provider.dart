@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/storage/identity_draft_store.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 
 class AiPromptDraft {
   const AiPromptDraft({this.prompt = '', this.contextLabel});
@@ -11,9 +13,17 @@ class AiPromptDraft {
 }
 
 class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
-  AiPromptDraftNotifier() : super(const AiPromptDraft()) {
+  AiPromptDraftNotifier({String? userId})
+    : _store = IdentityDraftStore([
+        'rad_ai_pending_prompt',
+        'rad_ai_pending_context',
+      ], userId: userId),
+      super(const AiPromptDraft()) {
     ready = _load();
   }
+
+  final IdentityDraftStore _store;
+  Future<void> prepareSignIn() => _store.signInHandoff();
 
   static const _prefPrompt = 'rad_ai_pending_prompt';
   static const _prefContext = 'rad_ai_pending_context';
@@ -22,10 +32,10 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
 
   Future<void> _load() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      if (_loaded) return;
-      final p = prefs.getString(_prefPrompt) ?? '';
-      final c = prefs.getString(_prefContext);
+      final values = await _store.load();
+      if (!mounted || _loaded) return;
+      final p = values[_prefPrompt] ?? '';
+      final c = values[_prefContext];
       if (!_loaded) {
         state = AiPromptDraft(prompt: p, contextLabel: c);
         _loaded = true;
@@ -37,18 +47,8 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
     _loaded = true;
     state = AiPromptDraft(prompt: prompt, contextLabel: contextLabel);
     try {
-      final prefs = await SharedPreferences.getInstance();
-      if (prompt.trim().isEmpty) {
-        await prefs.remove(_prefPrompt);
-        await prefs.remove(_prefContext);
-      } else {
-        await prefs.setString(_prefPrompt, prompt);
-        if (contextLabel != null && contextLabel.trim().isNotEmpty) {
-          await prefs.setString(_prefContext, contextLabel);
-        } else {
-          await prefs.remove(_prefContext);
-        }
-      }
+      await _store.write(_prefPrompt, prompt);
+      await _store.write(_prefContext, contextLabel);
     } catch (_) {}
   }
 
@@ -56,9 +56,7 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
     _loaded = true;
     state = const AiPromptDraft();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_prefPrompt);
-      await prefs.remove(_prefContext);
+      await _store.clear();
     } catch (_) {}
   }
 
@@ -68,9 +66,7 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
     final p = state.prompt;
     state = const AiPromptDraft();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_prefPrompt);
-      await prefs.remove(_prefContext);
+      await _store.clear();
     } catch (_) {}
     return p.isNotEmpty ? p : null;
   }
@@ -78,5 +74,7 @@ class AiPromptDraftNotifier extends StateNotifier<AiPromptDraft> {
 
 final aiPromptDraftProvider =
     StateNotifierProvider<AiPromptDraftNotifier, AiPromptDraft>((ref) {
-      return AiPromptDraftNotifier();
+      return AiPromptDraftNotifier(
+        userId: ref.watch(authenticatedUserIdProvider),
+      );
     });

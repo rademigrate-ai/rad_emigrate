@@ -60,17 +60,16 @@ class SupabaseAiService implements AiService {
     try {
       // RAD AI contract version 1: numeric header, UUID request_key, closed body.
       final metaKey = request.metadata['request_key']?.toString();
-      final requestKey = (metaKey != null &&
+      final requestKey =
+          (metaKey != null &&
               RegExp(
                 r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
                 caseSensitive: false,
               ).hasMatch(metaKey))
-          ? metaKey
+          ? metaKey.toLowerCase()
           : _newRequestKey();
 
-      final rawScopes = request.metadata['authorized_data_scopes'];
-      final List<dynamic> authorizedScopes =
-          rawScopes is List ? List<dynamic>.from(rawScopes) : const <dynamic>[];
+      final authorizedScopes = request.authorizedDataScopes;
 
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
@@ -85,9 +84,13 @@ class SupabaseAiService implements AiService {
           'scope': request.metadata['scope'] == 'admin' ? 'admin' : 'user',
           'session_id': request.conversationId,
           'guest_key': guestKey,
-          'locale': locale,
+          'locale': locale ?? 'en',
           'authorized_data_scopes': authorizedScopes,
-          'context': request.metadata['context'] ?? <String, dynamic>{},
+          'context': {
+            'article_id': request.context['article_id'],
+            'section_id': request.context['section_id'],
+            'case_id': request.context['case_id'],
+          },
           'messages': [
             ...request.history.map(
               (message) => {

@@ -91,7 +91,7 @@ class _AdminCmsCanonicalEditorPageState
       requiredDocuments: _loadedArticle!.requiredDocuments,
       faqItems: _loadedArticle!.faqItems,
       relatedArticles: _loadedArticle!.relatedArticles,
-      lastFactCheckedAt: DateTime.now(),
+      lastFactCheckedAt: _loadedArticle!.lastFactCheckedAt,
     );
 
     final cmsRepo = ref.read(adminCmsRepositoryProvider);

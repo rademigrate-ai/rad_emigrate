@@ -167,26 +167,11 @@ class SupabaseBookingRepository implements BookingRepository {
           'submit_consultation_request',
           params: {'p_topic': topic, 'p_message': request.message},
         );
-        // Prefer server-issued id when present; never invent a durable UUID.
-        String? serverId;
-        if (rpcResult is Map) {
-          serverId =
-              rpcResult['id']?.toString() ??
-              rpcResult['request_id']?.toString();
-        } else if (rpcResult is List && rpcResult.isNotEmpty) {
-          final first = rpcResult.first;
-          if (first is Map) {
-            serverId =
-                first['id']?.toString() ?? first['request_id']?.toString();
-          } else if (first is String && first.isNotEmpty) {
-            serverId = first;
-          }
-        } else if (rpcResult is String && rpcResult.isNotEmpty) {
-          serverId = rpcResult;
-        }
-        if (serverId == null || serverId.isEmpty) {
-          // Do not fabricate a durable receipt ID. Surface failure so UI can
-          // show an explicit error instead of a false booking confirmation.
+        final serverId = rpcResult is String ? rpcResult : null;
+        if (serverId == null ||
+            !RegExp(
+              r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+            ).hasMatch(serverId)) {
           throw const BookingException('consultation_missing_server_id');
         }
         return BookingRecord(
@@ -196,8 +181,8 @@ class SupabaseBookingRepository implements BookingRepository {
           message: request.message,
           status: BookingStatus.submitted,
           createdAt: DateTime.now().toUtc(),
-          preferredStartUtc: request.preferredStartUtc,
-          timeZoneId: request.timeZoneId,
+          preferredStartUtc: null,
+          timeZoneId: null,
         );
       } catch (error) {
         if (error is BookingException ||

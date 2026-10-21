@@ -40,6 +40,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
   List<Map<String, dynamic>> _mine = const [];
   bool _historyLoading = true;
   bool _historyFailed = false;
+  ProviderSubscription<String?>? _identitySubscription;
 
   @override
   void initState() {
@@ -54,6 +55,25 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
 
     _topic.addListener(_onFieldChanged);
     _message.addListener(_onFieldChanged);
+    _identitySubscription = ref.listenManual(authenticatedUserIdProvider, (
+      previous,
+      next,
+    ) {
+      if (previous == next || previous == null || !mounted) return;
+      _topic.removeListener(_onFieldChanged);
+      _message.removeListener(_onFieldChanged);
+      _topic.clear();
+      _message.clear();
+      _topic.addListener(_onFieldChanged);
+      _message.addListener(_onFieldChanged);
+      setState(() {
+        _mine = const [];
+        _error = null;
+        _success = null;
+        _submitting = false;
+      });
+      _loadMine();
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(consultationDraftProvider.notifier).ready;
@@ -77,6 +97,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
 
   @override
   void dispose() {
+    _identitySubscription?.close();
     _topic.removeListener(_onFieldChanged);
     _message.removeListener(_onFieldChanged);
     _topic.dispose();
@@ -114,14 +135,14 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
           .eq('user_id', uid)
           .order('created_at', ascending: false)
           .limit(20);
-      if (mounted) {
+      if (mounted && ref.read(authenticatedUserIdProvider) == uid) {
         setState(() {
           _mine = List<Map<String, dynamic>>.from(rows as List);
           _historyLoading = false;
         });
       }
     } catch (_) {
-      if (mounted) {
+      if (mounted && ref.read(authenticatedUserIdProvider) == uid) {
         setState(() {
           _historyLoading = false;
           _historyFailed = true;
@@ -144,9 +165,11 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       return;
     }
 
+    final submitUserId = ref.read(authenticatedUserIdProvider);
     final session = ref.read(authControllerProvider).valueOrNull;
     if (session?.authenticated != true) {
-      if (mounted) {
+      await ref.read(consultationDraftProvider.notifier).prepareSignIn();
+      if (mounted && ref.read(authenticatedUserIdProvider) == submitUserId) {
         context.go('/login?from=%2Fconsultation');
       }
       return;
@@ -187,7 +210,7 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
       }
 
       await ref.read(consultationDraftProvider.notifier).clearDraft();
-      if (mounted) {
+      if (mounted && ref.read(authenticatedUserIdProvider) == submitUserId) {
         setState(() {
           _success = l10n.consultationSubmitted;
           _topic.removeListener(_onFieldChanged);
@@ -200,11 +223,13 @@ class _ConsultationPageState extends ConsumerState<ConsultationPage> {
         await _loadMine();
       }
     } catch (e) {
-      if (mounted) {
+      if (mounted && ref.read(authenticatedUserIdProvider) == submitUserId) {
         setState(() => _error = l10n.consultationSubmitFailed);
       }
     } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (mounted && ref.read(authenticatedUserIdProvider) == submitUserId) {
+        setState(() => _submitting = false);
+      }
     }
   }
 

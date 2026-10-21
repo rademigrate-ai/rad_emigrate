@@ -12,6 +12,17 @@ GoRoute visaRoute() => GoRoute(
   builder: (_, _) => const VisaPage(),
   routes: [
     GoRoute(
+      path: 'articles/:articleId',
+      builder: (_, state) => CanonicalPathwayPage(
+        countrySlug: '',
+        pathwaySlug: '',
+        articleId: state.pathParameters['articleId'],
+        initialSectionAnchor: state.uri.fragment.isNotEmpty
+            ? state.uri.fragment
+            : state.uri.queryParameters['section'],
+      ),
+    ),
+    GoRoute(
       path: 'search',
       builder: (_, state) =>
           VisaSearchPage(initialQuery: state.uri.queryParameters['q']),

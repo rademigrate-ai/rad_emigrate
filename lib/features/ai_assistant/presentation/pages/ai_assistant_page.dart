@@ -70,7 +70,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   Timer? _birdTimer;
 
   String? _sessionId;
-  late final Future<void> _historyRestore;
+  late Future<void> _historyRestore;
+  int _identityEpoch = 0;
+  ProviderSubscription<String?>? _identitySubscription;
+
+  bool _sameIdentity(String? id, int epoch) =>
+      mounted &&
+      epoch == _identityEpoch &&
+      ref.read(authenticatedUserIdProvider) == id;
 
   @override
   void initState() {
@@ -92,9 +99,28 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     _controller.addListener(_onPromptChanged);
     _composerFocus.addListener(_onComposerFocusChanged);
     _historyRestore = _restoreHistory();
+    _identitySubscription = ref.listenManual(authenticatedUserIdProvider, (
+      previous,
+      next,
+    ) {
+      if (previous == next || previous == null || !mounted) return;
+      _identityEpoch++;
+      _birdTimer?.cancel();
+      _controller.removeListener(_onPromptChanged);
+      _controller.clear();
+      _controller.addListener(_onPromptChanged);
+      setState(() {
+        _messages.clear();
+        _sessionId = null;
+        _loading = false;
+        _birdState = RadAiBirdState.idle;
+      });
+      _historyRestore = _restoreHistory();
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final epoch = _identityEpoch;
       await ref.read(aiPromptDraftProvider.notifier).ready;
-      if (!mounted) return;
+      if (!mounted || epoch != _identityEpoch) return;
       final draft = ref.read(aiPromptDraftProvider);
       if (_controller.text.isEmpty && draft.hasContent) {
         setState(() {
@@ -138,7 +164,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   }
 
   Future<void> _restoreHistory() async {
-    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    final userId = ref.read(authenticatedUserIdProvider);
     if (userId == null || userId.isEmpty) return;
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
@@ -146,10 +172,18 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         userId,
         scope: widget.adminMode ? 'admin' : 'user',
       );
-      if (sessions.isEmpty || !mounted) return;
+      if (sessions.isEmpty ||
+          !mounted ||
+          ref.read(authenticatedUserIdProvider) != userId) {
+        return;
+      }
       final session = sessions.first;
       final history = await repository.history(session.id);
-      if (!mounted || _messages.isNotEmpty) return;
+      if (!mounted ||
+          ref.read(authenticatedUserIdProvider) != userId ||
+          _messages.isNotEmpty) {
+        return;
+      }
       setState(() {
         _sessionId = session.id;
         _messages
@@ -171,6 +205,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   @override
   void dispose() {
+    _identitySubscription?.close();
     _controller.removeListener(_onPromptChanged);
     _composerFocus.removeListener(_onComposerFocusChanged);
     _composerFocus.dispose();
@@ -185,15 +220,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final text = (preset ?? _controller.text).trim();
     if (text.isEmpty || _loading) return;
 
-    final session = ref.read(authControllerProvider).valueOrNull;
-    final userId = session?.userId;
-    if (session == null ||
-        !session.authenticated ||
-        userId == null ||
-        userId.isEmpty) {
+    final userId = ref.read(authenticatedUserIdProvider);
+    final epoch = _identityEpoch;
+    if (userId == null || userId.isEmpty) {
       await ref
           .read(aiPromptDraftProvider.notifier)
           .savePrompt(text, widget.contextLabel);
+      await ref.read(aiPromptDraftProvider.notifier).prepareSignIn();
       if (mounted) {
         final destination = widget.contextLabel != null
             ? '/ai-assistant?context=${Uri.encodeComponent(widget.contextLabel!)}'
@@ -213,13 +246,16 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       _birdState = RadAiBirdState.thinking;
     });
     await _historyRestore;
-    if (!mounted) return;
+    if (!_sameIdentity(userId, epoch)) return;
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
-      _sessionId ??= (await repository.createSession(
+      var sessionId = _sessionId;
+      sessionId ??= (await repository.createSession(
         userId,
         scope: widget.adminMode ? 'admin' : 'user',
       )).id;
+      if (!_sameIdentity(userId, epoch)) return;
+      _sessionId = sessionId;
       await repository.saveMessage(
         sessionId: _sessionId!,
         userId: userId,
@@ -227,7 +263,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         content: text,
       );
     } catch (_) {
-      if (mounted) {
+      if (mounted && _sameIdentity(userId, epoch)) {
         setState(() {
           _loading = false;
           _birdState = RadAiBirdState.idle;
@@ -238,7 +274,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       return;
     }
 
-    if (!mounted) return;
+    if (!_sameIdentity(userId, epoch)) return;
     setState(() {
       _messages.add(_ChatMessage(isUser: true, text: text));
       _loading = true;
@@ -252,9 +288,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _retry(_ChatMessage failure) async {
     final prompt = failure.retryPrompt;
-    if (_loading || prompt == null || _messages.last != failure) return;
+    if (_loading ||
+        prompt == null ||
+        _messages.isEmpty ||
+        _messages.last != failure) {
+      return;
+    }
     setState(() => _loading = true);
-    final userId = ref.read(authControllerProvider).valueOrNull?.userId;
+    final userId = ref.read(authenticatedUserIdProvider);
     await _complete(prompt, userId, replacing: failure);
   }
 
@@ -263,6 +304,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     String? userId, {
     _ChatMessage? replacing,
   }) async {
+    final epoch = _identityEpoch;
+    if (!_sameIdentity(userId, epoch)) return;
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final turns = _messages.where((m) => m.retryPrompt == null).toList();
@@ -289,6 +332,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               uncertain: true,
               errorCode: 'ai_unavailable',
             );
+      if (!_sameIdentity(userId, epoch)) return;
       if (response.errorCode == null &&
           userId != null &&
           userId.isNotEmpty &&
@@ -303,13 +347,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 content: response.text,
               );
         } catch (_) {
-          if (mounted) {
+          if (mounted && _sameIdentity(userId, epoch)) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(l10n.aiResponseNotSaved)));
           }
         }
       }
-      if (!mounted) return;
+      if (!_sameIdentity(userId, epoch)) return;
       setState(() {
         if (replacing != null) _messages.remove(replacing);
         _messages.add(
@@ -325,7 +369,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       _showResponseState();
       _scrollToEnd();
     } catch (error) {
-      if (!mounted) return;
+      if (!_sameIdentity(userId, epoch)) return;
       final message = error.toString().contains('provider_unauthorized')
           ? l10n.aiCredentialRejected
           : l10n.aiRequestFailed;

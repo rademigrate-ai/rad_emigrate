@@ -18,6 +18,7 @@ class FxRateQuote {
   final String baseCurrency; // e.g. EUR, USD, CAD
   final String quoteCurrency; // e.g. IRR
   final double referenceRate; // Decimal reference rate
+  final String? referenceRateDecimal;
   final RateBasis rateBasis;
   final DateTime observationDate;
   final DateTime fetchedAt;
@@ -30,6 +31,7 @@ class FxRateQuote {
     required this.baseCurrency,
     required this.quoteCurrency,
     required this.referenceRate,
+    this.referenceRateDecimal,
     this.rateBasis = RateBasis.providerReference,
     required this.observationDate,
     required this.fetchedAt,
@@ -47,10 +49,12 @@ class FxRateQuote {
   /// never invent rates, providers, currencies, or freshness timestamps.
   factory FxRateQuote.fromJson(Map<String, dynamic> json) {
     final id = json['id']?.toString();
-    final base =
-        (json['base'] ?? json['base_currency'])?.toString().toUpperCase();
-    final quote =
-        (json['quote'] ?? json['quote_currency'])?.toString().toUpperCase();
+    final base = (json['base'] ?? json['base_currency'])
+        ?.toString()
+        .toUpperCase();
+    final quote = (json['quote'] ?? json['quote_currency'])
+        ?.toString()
+        .toUpperCase();
     final rateRaw = json['rate'] ?? json['reference_rate_irr'];
     final rate = rateRaw is num
         ? rateRaw.toDouble()
@@ -60,12 +64,17 @@ class FxRateQuote {
         json['fetched_at']?.toString() ?? json['timestamp']?.toString();
 
     if (id == null ||
-        id.isEmpty ||
+        !RegExp(
+          r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+        ).hasMatch(id) ||
         base == null ||
-        base.isEmpty ||
+        !RegExp(r'^[A-Z]{3}$').hasMatch(base) ||
         quote == null ||
-        quote.isEmpty ||
+        !RegExp(r'^[A-Z]{3}$').hasMatch(quote) ||
         rate == null ||
+        rateRaw is! String ||
+        !RegExp(r'^(0|[1-9][0-9]*)(\.[0-9]+)?$').hasMatch(rateRaw) ||
+        !rate.isFinite ||
         rate <= 0 ||
         obsRaw == null ||
         obsRaw.isEmpty ||
@@ -74,6 +83,15 @@ class FxRateQuote {
       throw FormatException('fx_quote_malformed_or_incomplete');
     }
 
+    final source = Uri.tryParse(json['source_url']?.toString() ?? '');
+    if (!{'frankfurter', 'fawazahmed0'}.contains(json['provider']) ||
+        !FreshnessState.values.any((v) => v.name == json['freshness_state']) ||
+        json['rate_basis'] != 'provider_reference' ||
+        source?.scheme != 'https' ||
+        source!.host.isEmpty ||
+        source.userInfo.isNotEmpty) {
+      throw const FormatException('fx_quote_invalid_provenance');
+    }
     final observationDate = DateTime.parse(obsRaw);
     final fetchedAt = DateTime.parse(fetchedRaw);
     final provider = json['provider'] == 'fawazahmed0'
@@ -90,6 +108,7 @@ class FxRateQuote {
       baseCurrency: base,
       quoteCurrency: quote,
       referenceRate: rate,
+      referenceRateDecimal: rateRaw,
       rateBasis: RateBasis.providerReference,
       observationDate: observationDate,
       fetchedAt: fetchedAt,
@@ -103,7 +122,7 @@ class FxRateQuote {
     'provider': provider.name,
     'base': baseCurrency,
     'quote': quoteCurrency,
-    'rate': referenceRate.toStringAsFixed(2),
+    'rate': referenceRateDecimal ?? referenceRate.toString(),
     'rate_basis': 'provider_reference',
     'observation_date': observationDate.toIso8601String().split('T').first,
     'fetched_at': fetchedAt.toIso8601String(),

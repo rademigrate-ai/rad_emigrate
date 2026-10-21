@@ -51,13 +51,18 @@ void main() {
       expect(hitIndependent.matchRanges.first.end, 3);
     });
 
-    test('VisaSearchRepository returns empty when backend unavailable', () async {
-      final repo = SupabaseVisaSearchRepository(SupabaseClientService.instance);
-      final result = await repo.search(query: 'مسدود');
+    test(
+      'VisaSearchRepository returns empty when backend unavailable',
+      () async {
+        final repo = SupabaseVisaSearchRepository(
+          SupabaseClientService.instance,
+        );
+        final result = await repo.search(query: 'مسدود');
 
-      // Without initialized Supabase / RPC, repository fails closed to empty.
-      expect(result.hits, isEmpty);
-    });
+        // Without initialized Supabase / RPC, repository fails closed to empty.
+        expect(result.hits, isEmpty);
+      },
+    );
 
     test('VisaSearchRepository handles empty queries gracefully', () async {
       final repo = SupabaseVisaSearchRepository(SupabaseClientService.instance);

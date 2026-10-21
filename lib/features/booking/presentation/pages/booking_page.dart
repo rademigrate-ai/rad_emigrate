@@ -43,7 +43,7 @@ class BookingPage extends ConsumerWidget {
     final isAuthed = session?.isAuthenticated ?? false;
     final catalog = ref.watch(bookingCatalogProvider(l10n));
     final history = isAuthed
-        ? ref.watch(bookingHistoryProvider)
+        ? ref.watch(currentBookingHistoryProvider)
         : const AsyncValue<List<BookingRecord>>.data([]);
 
     return Scaffold(

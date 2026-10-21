@@ -146,6 +146,17 @@ class SearchHit {
     if (anchor != null && anchor.toString().isNotEmpty) {
       route = '$route#$anchor';
     }
+    // Canonical SearchHit has UUID targets, not country/slug routing fields.
+    final target = json['target'];
+    if (target is Map && target['kind'] == 'visa_article') {
+      route = Uri(
+        path: '/visa/articles/${target['id']}',
+        queryParameters: target['section_id'] == null
+            ? null
+            : {'section': target['section_id'].toString()},
+        fragment: anchor?.toString(),
+      ).toString();
+    }
 
     return SearchHit(
       id: (json['id'] ?? json['article_id'] ?? '').toString(),

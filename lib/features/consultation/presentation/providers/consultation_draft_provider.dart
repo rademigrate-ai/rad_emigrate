@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/storage/identity_draft_store.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 
 class ConsultationDraft {
   const ConsultationDraft({this.topic = '', this.message = ''});
@@ -19,9 +21,17 @@ class ConsultationDraft {
 }
 
 class ConsultationDraftNotifier extends StateNotifier<ConsultationDraft> {
-  ConsultationDraftNotifier() : super(const ConsultationDraft()) {
+  ConsultationDraftNotifier({String? userId})
+    : _store = IdentityDraftStore([
+        'rad_consultation_draft_topic',
+        'rad_consultation_draft_message',
+      ], userId: userId),
+      super(const ConsultationDraft()) {
     ready = _loadFromStorage();
   }
+
+  final IdentityDraftStore _store;
+  Future<void> prepareSignIn() => _store.signInHandoff();
 
   static const _prefTopic = 'rad_consultation_draft_topic';
   static const _prefMessage = 'rad_consultation_draft_message';
@@ -30,10 +40,10 @@ class ConsultationDraftNotifier extends StateNotifier<ConsultationDraft> {
 
   Future<void> _loadFromStorage() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      if (_loaded) return;
-      final topic = prefs.getString(_prefTopic) ?? '';
-      final message = prefs.getString(_prefMessage) ?? '';
+      final values = await _store.load();
+      if (!mounted || _loaded) return;
+      final topic = values[_prefTopic] ?? '';
+      final message = values[_prefMessage] ?? '';
       if (!_loaded) {
         state = ConsultationDraft(topic: topic, message: message);
         _loaded = true;
@@ -45,9 +55,8 @@ class ConsultationDraftNotifier extends StateNotifier<ConsultationDraft> {
     _loaded = true;
     state = state.copyWith(topic: topic, message: message);
     try {
-      final prefs = await SharedPreferences.getInstance();
-      if (topic != null) await prefs.setString(_prefTopic, topic);
-      if (message != null) await prefs.setString(_prefMessage, message);
+      if (topic != null) await _store.write(_prefTopic, topic);
+      if (message != null) await _store.write(_prefMessage, message);
     } catch (_) {}
   }
 
@@ -55,14 +64,14 @@ class ConsultationDraftNotifier extends StateNotifier<ConsultationDraft> {
     _loaded = true;
     state = const ConsultationDraft();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_prefTopic);
-      await prefs.remove(_prefMessage);
+      await _store.clear();
     } catch (_) {}
   }
 }
 
 final consultationDraftProvider =
     StateNotifierProvider<ConsultationDraftNotifier, ConsultationDraft>((ref) {
-      return ConsultationDraftNotifier();
+      return ConsultationDraftNotifier(
+        userId: ref.watch(authenticatedUserIdProvider),
+      );
     });

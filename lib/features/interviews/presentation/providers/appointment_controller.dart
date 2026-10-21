@@ -4,6 +4,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/supabase/supabase_providers.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/appointment_repository.dart';
 import '../../domain/entities/interview_appointment.dart';
 
@@ -15,24 +16,38 @@ final appointmentRepositoryProvider = Provider<AppointmentRepository>((ref) {
 
 /// Current user's Backend-managed appointment rows, keyed by auth uid so
 /// A → logout → B never reuses the previous identity cache.
-final appointmentListProvider =
-    FutureProvider.autoDispose.family<AppointmentListResult, String?>((ref, userId) async {
-  if (userId == null || userId.isEmpty) {
-    return const AppointmentListResult(
-      appointments: [],
-      capability: AppointmentCapability.unknown,
-    );
-  }
-  return ref.watch(appointmentRepositoryProvider).listMyAppointments();
-});
+final appointmentListProvider = FutureProvider.autoDispose
+    .family<AppointmentListResult, String?>((ref, userId) async {
+      if (userId == null || userId.isEmpty) {
+        return const AppointmentListResult(
+          appointments: [],
+          capability: AppointmentCapability.unknown,
+        );
+      }
+      const empty = AppointmentListResult(
+        appointments: [],
+        capability: AppointmentCapability.unknown,
+      );
+      if (ref.watch(authenticatedUserIdProvider) != userId) return empty;
+      final service = ref.read(supabaseClientServiceProvider);
+      bool sameSession() =>
+          !service.isInitialized ||
+          service.client.auth.currentUser?.id == userId;
+      if (!sameSession()) return empty;
+      var active = true;
+      ref.onDispose(() => active = false);
+      final rows = await ref
+          .watch(appointmentRepositoryProvider)
+          .listMyAppointments();
+      return active && sameSession() ? rows : empty;
+    });
 
 /// Convenience provider that binds to the live session uid.
 final currentAppointmentListProvider =
-    FutureProvider.autoDispose<AppointmentListResult>((ref) async {
-  final client = ref.watch(supabaseClientServiceProvider);
-  final uid = client.isInitialized ? client.client.auth.currentUser?.id : null;
-  return ref.watch(appointmentListProvider(uid).future);
-});
+    Provider.autoDispose<AsyncValue<AppointmentListResult>>((ref) {
+      final uid = ref.watch(authenticatedUserIdProvider);
+      return ref.watch(appointmentListProvider(uid));
+    });
 
 enum AppointmentActionPhase { idle, running, success, failure }
 

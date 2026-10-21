@@ -9,6 +9,7 @@ import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../domain/entities/canonical_pathway_entities.dart';
 import '../../domain/entities/search_entities.dart';
+import '../../data/canonical_pathway_repository.dart';
 import '../providers/canonical_pathway_controller.dart';
 import '../widgets/currency_converter_modal.dart';
 
@@ -16,12 +17,14 @@ class CanonicalPathwayPage extends ConsumerStatefulWidget {
   final String countrySlug;
   final String pathwaySlug;
   final String? initialSectionAnchor;
+  final String? articleId;
 
   const CanonicalPathwayPage({
     super.key,
     required this.countrySlug,
     required this.pathwaySlug,
     this.initialSectionAnchor,
+    this.articleId,
   });
 
   @override
@@ -33,6 +36,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
   final ScrollController _scrollController = ScrollController();
   final Map<String, GlobalKey> _sectionKeys = {};
   String? _activeAnchor;
+  bool _initialScrollScheduled = false;
 
   @override
   void initState() {
@@ -46,12 +50,25 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
   }
 
   @override
+  void didUpdateWidget(covariant CanonicalPathwayPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.articleId != widget.articleId ||
+        oldWidget.pathwaySlug != widget.pathwaySlug ||
+        oldWidget.initialSectionAnchor != widget.initialSectionAnchor) {
+      _activeAnchor = widget.initialSectionAnchor;
+      _initialScrollScheduled = false;
+      _sectionKeys.clear();
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
   void _scrollToSection(String anchor) {
+    if (!mounted) return;
     setState(() => _activeAnchor = anchor);
     final key = _sectionKeys[anchor];
     if (key != null && key.currentContext != null) {
@@ -172,10 +189,12 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
   @override
   Widget build(BuildContext context) {
     final pathwayAsync = ref.watch(
-      canonicalPathwayProvider((
-        countryCode: widget.countrySlug,
-        pathwaySlug: widget.pathwaySlug,
-      )),
+      widget.articleId != null
+          ? publishedVisaArticleProvider(widget.articleId!)
+          : canonicalPathwayProvider((
+              countryCode: widget.countrySlug,
+              pathwaySlug: widget.pathwaySlug,
+            )),
     );
 
     return Scaffold(
@@ -207,7 +226,9 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
           }
 
           final tocAnchors = [
-            {'anchor': 'overview', 'label': 'معرفی کلی'},
+            {'anchor': 'article-overview', 'label': 'معرفی کلی'},
+            for (final section in article.sections)
+              {'anchor': section.anchor, 'label': section.title},
             if (article.eligibility != null)
               {'anchor': 'eligibility', 'label': 'شرایط و امتیازات'},
             if (article.costs.isNotEmpty)
@@ -222,6 +243,17 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
               {'anchor': 'related', 'label': 'عناوین دیگر'},
           ];
 
+          if (!_initialScrollScheduled && _activeAnchor != null) {
+            _initialScrollScheduled = true;
+            final requested = _activeAnchor!;
+            final sections = article.sections.where(
+              (s) => s.id == requested || s.anchor == requested,
+            );
+            final anchor = sections.isEmpty ? requested : sections.first.anchor;
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => _scrollToSection(anchor),
+            );
+          }
           return Column(
             children: [
               // Sticky TOC Bar
@@ -272,7 +304,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                   children: [
                     // Header Card
                     Container(
-                      key: _getOrCreateKey('overview'),
+                      key: _getOrCreateKey('article-overview'),
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -664,9 +696,8 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                             const SizedBox(height: 14),
                             ...article.relatedArticles.map((rel) {
                               return InkWell(
-                                onTap: () => context.go(
-                                  '/visa/${rel.countryCode}/articles/${rel.slug}',
-                                ),
+                                onTap: () =>
+                                    context.go('/visa/articles/${rel.id}'),
                                 borderRadius: BorderRadius.circular(
                                   AppRadii.md,
                                 ),
