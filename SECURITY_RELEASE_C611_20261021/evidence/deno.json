@@ -1,0 +1,14 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "at": "2026-10-21T14:34:00.977671+00:00",
+  "command": [
+    "C:\\Users\\Mehrshad\\.deno\\bin\\deno.exe",
+    "test",
+    "--allow-env",
+    "--allow-read=.",
+    "supabase/functions/tests"
+  ],
+  "exit_code": 0,
+  "seconds": 24.95,
+  "log_sha256": "620ff57b7166affa784a601f1446a97981acafbb43fc26d95d92a36d3fb18553"
+}

@@ -1,0 +1,10 @@
+{
+  "source_head": "c611f2ac039079c0d3381f5e9cea23185c2f91f6",
+  "command": [
+    "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_security_c611_20261021\\scripts\\verify_local_auth_isolation.py"
+  ],
+  "exit_code": 0,
+  "seconds": 10.33,
+  "log_sha256": "92480fb4c2b023181356a8c4168a33ac9b487629f69202bb1fc843aec44d5c1a"
+}

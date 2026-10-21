@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "at": "2026-10-21T14:33:25.285147+00:00",
+  "command": "flutter pub get",
+  "exit_code": 0,
+  "seconds": 19.54,
+  "log_sha256": "241bcf99c1bddc7b4b002472449fa67ca1c358f753dd2380124ae81991abab4a"
+}

@@ -1,0 +1,13 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "command": [
+    "deno",
+    "lint",
+    "supabase/functions"
+  ],
+  "exit_code": 1,
+  "problems": 37,
+  "checked_files": 38,
+  "unchanged_from_requested_rc": true,
+  "log_sha256": "08bfd0729fd9ab8578e62c8c1ae4c25f608a18d7f632191a47e1a89941bb7566"
+}
