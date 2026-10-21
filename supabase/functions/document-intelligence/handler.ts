@@ -176,6 +176,7 @@ export function createDocumentHandler(options: Options) {
       const segments = path.split("/");
       if (
         document.user_id !== userId || !path.startsWith(`${userId}/`) ||
+        // deno-lint-ignore no-control-regex
         /[\\%\x00-\x1f\x7f]/.test(path) || segments.some((s) =>
           !s || s === "." || s === ".."
         )

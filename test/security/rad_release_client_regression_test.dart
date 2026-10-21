@@ -168,9 +168,9 @@ Future<_Service> _serviceWith(
   return _Service(client);
 }
 
-http.Response jsonResponse(Object? value) => http.Response(
+http.Response jsonResponse(Object? value, [int status = 200]) => http.Response(
   jsonEncode(value),
-  200,
+  status,
   headers: {'content-type': 'application/json'},
 );
 
@@ -359,6 +359,88 @@ void main() {
       expect((bodies.last['context'] as Map)['case_id'], receipt);
       File('build/rad_verified_ai_requests.json')
           .writeAsStringSync(jsonEncode(bodies));
+    },
+  );
+
+  test('AI SDK sanitizes malformed/mismatched requests to maintain contract v1 validity', () async {
+    final bodies = <Map<String, dynamic>>[];
+    final service = await _serviceWith((request) {
+      if (request.url.path.endsWith('ai-orchestrator')) {
+        bodies.add((jsonDecode(request.body) as Map).cast<String, dynamic>());
+        return jsonResponse({
+          'data': {
+            'reply': 'Safe reply',
+            'evidence_state': 'insufficient',
+            'uncertain': true,
+            'citations': [],
+          },
+        });
+      }
+      return jsonResponse({});
+    });
+    final ai = SupabaseAiService(service);
+
+    final resp = await ai.complete(
+      const AiRequest(
+        prompt: 'test malformed parameters',
+        conversationId: null,
+        locale: 'fa_IR',
+        authorizedDataScopes: [
+          'unauthorized_privilege',
+          'profile',
+          'admin_bypass',
+        ],
+        context: {
+          'article_id': 'malformed-article-slug',
+          'section_id': '',
+          'case_id': receipt,
+        },
+        metadata: {'guest_key': 'short'},
+      ),
+    );
+    expect(resp.errorCode, isNull);
+    expect(resp.uncertain, isTrue);
+
+    final sent = bodies.last;
+    expect(sent['session_id'], isNull);
+    expect(sent['locale'], 'fa');
+    expect(sent['guest_key'], isNull);
+    expect(sent['authorized_data_scopes'], ['profile']);
+    expect((sent['context'] as Map)['article_id'], isNull);
+    expect((sent['context'] as Map)['section_id'], isNull);
+    expect((sent['context'] as Map)['case_id'], receipt);
+
+    final registry = jsonDecode(
+      File('supabase/contracts/rad_v1.json').readAsStringSync(),
+    ) as Map;
+    final schema = registry[r'$defs']['ai_orchestrator_request'] as Map;
+    final required = (schema['required'] as List).cast<String>().toSet();
+    final allowed = (schema['properties'] as Map).keys.cast<String>().toSet();
+    expect(sent.keys.toSet().containsAll(required), isTrue);
+    expect(allowed.containsAll(sent.keys), isTrue);
+  });
+
+  test(
+    'AI SDK handles Edge Function error responses safely and fails closed',
+    () async {
+      for (final errCase in [
+        {'status': 422, 'code': 'invalid_request'},
+        {'status': 429, 'code': 'daily_limit_reached'},
+        {'status': 401, 'code': 'authentication_required'},
+        {'status': 503, 'code': 'quota_check_failed'},
+      ]) {
+        final service = await _serviceWith((request) {
+          return jsonResponse({
+            'error': errCase['code'],
+            'code': errCase['code'],
+          }, errCase['status'] as int);
+        });
+        final ai = SupabaseAiService(service);
+        final resp = await ai.complete(const AiRequest(prompt: 'error test'));
+        expect(resp.uncertain, isTrue);
+        expect(resp.errorCode, errCase['code']);
+        expect(resp.text.isNotEmpty, isTrue);
+      }
     },
   );
 

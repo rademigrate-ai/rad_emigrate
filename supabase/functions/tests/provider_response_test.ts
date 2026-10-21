@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await, no-explicit-any
 import {
   parseProviderResponse,
   ProviderError,

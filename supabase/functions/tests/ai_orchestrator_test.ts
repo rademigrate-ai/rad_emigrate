@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any, require-await
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
 const { handler } = await import("../ai-orchestrator/handler.ts");
@@ -26,6 +27,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
   const original = globalThis.fetch;
   const calls: Array<{ path: string; body: any; headers: Record<string, string> }> = [];
   let providerCalls = 0;
+  // deno-lint-ignore require-await
   globalThis.fetch = async (input, init) => {
     const url = String(input);
     const body = init?.body ? JSON.parse(String(init.body)) : null;

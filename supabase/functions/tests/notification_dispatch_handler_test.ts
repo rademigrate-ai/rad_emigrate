@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await
 import {
   createNotificationDispatchHandler,
   safeSandboxTarget,
@@ -35,6 +36,7 @@ async function exercise(
     enabled: true,
     supabaseUrl: "http://127.0.0.1:58321",
     invocationToken: token,
+    // deno-lint-ignore require-await
     database: async (path, init) => {
       calls.push({
         path,
@@ -71,6 +73,7 @@ async function exercise(
 }
 
 Deno.test("dispatch endpoint: disabled/missing token/production target never reaches outbox", async () => {
+  // deno-lint-ignore require-await
   for (
     const options of [{ enabled: false }, { invocationToken: "short" }, {
       supabaseUrl: "https://inshddthftkhcdosoqcn.supabase.co",
@@ -84,6 +87,7 @@ Deno.test("dispatch endpoint: disabled/missing token/production target never rea
   }
 });
 Deno.test("dispatch endpoint: ordinary user JWT cannot replace the dedicated token", async () => {
+  // deno-lint-ignore require-await
   for (const value of ["", "wrong", token + "x", "x".repeat(513)]) {
     const x = await exercise({}, {}, value);
     equal(x.status, 403);
@@ -91,6 +95,7 @@ Deno.test("dispatch endpoint: ordinary user JWT cannot replace the dedicated tok
   }
 });
 Deno.test("dispatch endpoint: safe methods never claim work", async () => {
+  // deno-lint-ignore require-await
   for (const method of ["OPTIONS", "GET"]) {
     const x = await exercise({}, {}, "", method);
     equal(x.calls.length, 0);
@@ -112,6 +117,7 @@ Deno.test("dispatch endpoint: sandbox receipts preserve private lease attributio
   equal(JSON.stringify(x.body).includes(token), false);
 });
 Deno.test("dispatch endpoint: malformed/foreign/oversized requests fail before claims", async () => {
+  // deno-lint-ignore require-await
   for (
     const body of [
       null,
@@ -135,6 +141,7 @@ Deno.test("dispatch endpoint: malformed/foreign/oversized requests fail before c
 Deno.test("dispatch endpoint: a bounded batch limit stops without an extra claim", async () => {
   let calls = 0;
   const x = await exercise({
+    // deno-lint-ignore require-await
     database: async (path) => {
       calls++;
       return path.includes("claim_") ? [claim()] : true;
@@ -145,6 +152,7 @@ Deno.test("dispatch endpoint: a bounded batch limit stops without an extra claim
   equal(calls, 4);
 });
 Deno.test("dispatch endpoint: malformed claims and backend secrets become fixed failures", async () => {
+  // deno-lint-ignore require-await
   for (
     const database of [async () => null, async () => {
       throw new Error("PRIVATE_DATABASE_CANARY");
@@ -172,6 +180,7 @@ Deno.test("dispatch endpoint: deadline aborts backend calls and exposes no diagn
 Deno.test("dispatch endpoint: hosted sandbox requires explicit staging binding", () => {
   const project = "s".repeat(20), url = `https://${project}.supabase.co`;
   equal(safeSandboxTarget(url, "staging", project), true);
+  // deno-lint-ignore require-await
   for (
     const target of [
       url + "?prod=1",

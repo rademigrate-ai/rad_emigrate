@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await, no-explicit-any
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
 const { handler } = await import("../research-sync/handler.ts");

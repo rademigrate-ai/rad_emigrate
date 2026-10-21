@@ -119,6 +119,7 @@ export function parseProviderResponse(
   } else throw new ProviderError("unsupported_adapter", 400);
   reply = reply.trim();
   const valid = reply.length > 0 && reply.length <= 50000 &&
+    // deno-lint-ignore no-control-regex
     !/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(reply) &&
     !secrets.some((secret) => secret.length > 0 && reply.includes(secret));
   if (!valid && !refused) {

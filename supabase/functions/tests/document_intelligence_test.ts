@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any, require-await
 import { createDocumentHandler } from "../document-intelligence/handler.ts";
 
 const user = "10000000-0000-4000-8000-000000000001";
@@ -37,6 +38,7 @@ async function exercise(
   authenticated = true,
 ) {
   const calls: Array<{ path: string; init?: RequestInit; body?: any }> = [];
+  // deno-lint-ignore require-await
   const fetcher: typeof fetch = async (input, init) => {
     const path = String(input);
     const body = typeof init?.body === "string" && path.includes("/rest/v1/")

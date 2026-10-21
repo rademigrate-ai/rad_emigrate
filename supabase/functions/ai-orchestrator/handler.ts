@@ -135,7 +135,7 @@ export async function handler(req: Request): Promise<Response> {
 
   let requestId: string | null = null;
   if (user) {
-    let quota: any;
+    let quota: { allowed?: boolean; request_id?: string; count?: number; limit?: number } | null = null;
     try {
       quota = await db("rpc/consume_ai_daily_quota", {
         method: "POST",

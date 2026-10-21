@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await
 import { loadGrounding } from "../ai-orchestrator/knowledge_grounding.ts";
 
 const equal = (a: unknown, b: unknown) => {
@@ -21,6 +22,7 @@ const evidence = () => ({
 async function ground(results: unknown, state = "verified") {
   const paths: string[] = [];
   const value = await loadGrounding(
+    // deno-lint-ignore require-await
     async (path) => {
       paths.push(path);
       return { results, evidence_state: state };
