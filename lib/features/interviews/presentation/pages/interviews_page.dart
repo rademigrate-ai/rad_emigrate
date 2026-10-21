@@ -420,7 +420,9 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                                 softWrap: true,
                               ),
                               value: AppointmentKind.radSession,
+                              // ignore: deprecated_member_use — RadioGroup migration deferred to UI agent
                               groupValue: _kind,
+                              // ignore: deprecated_member_use
                               onChanged: (v) {
                                 if (v == null) return;
                                 setState(() {
@@ -434,7 +436,9 @@ class _InterviewsPageState extends ConsumerState<InterviewsPage> {
                               dense: true,
                               title: Text(labels.kindExternal, softWrap: true),
                               value: AppointmentKind.externalGovernment,
+                              // ignore: deprecated_member_use — RadioGroup migration deferred to UI agent
                               groupValue: _kind,
+                              // ignore: deprecated_member_use
                               onChanged: (v) {
                                 if (v == null) return;
                                 setState(() {

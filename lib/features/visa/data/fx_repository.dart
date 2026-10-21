@@ -50,7 +50,7 @@ class SupabaseFxRepository implements FxRepository {
       if (data is! Map) {
         throw const FxQuoteUnavailableException('fx_quote_malformed_response');
       }
-      final map = Map<String, dynamic>.from(data as Map);
+      final map = Map<String, dynamic>.from(data);
       final payload = map['data'] is Map
           ? Map<String, dynamic>.from(map['data'] as Map)
           : map;
