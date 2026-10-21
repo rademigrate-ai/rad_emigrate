@@ -33,11 +33,14 @@ function safeUrl(value: string, allowedHost: string) {
   return isSafePublicHttpsUrl(value);
 }
 
-async function fetchSource(start: string, allowedHost: string, timeout: number) {
+/** Runtime integration must provide DNS-pinned public egress. No direct-fetch default. */
+type ProtectedSourceFetch = (url: string, init: RequestInit) => Promise<Response>;
+
+async function fetchSource(sourceFetch: ProtectedSourceFetch, start: string, allowedHost: string, timeout: number) {
   let current = start;
   for (let redirects = 0; redirects <= 3; redirects++) {
     if (!safeUrl(current, allowedHost)) throw new Error("unsafe_source_url");
-    const response = await fetch(current, { redirect: "manual", signal: AbortSignal.timeout(timeout), headers: { "User-Agent": "RAD-Knowledge-Sync/1.0 (+https://radvisa.com)", Accept: "text/html,text/plain;q=0.9" } });
+    const response = await sourceFetch(current, { redirect: "manual", signal: AbortSignal.timeout(timeout), headers: { "User-Agent": "RAD-Knowledge-Sync/1.0 (+https://radvisa.com)", Accept: "text/html,text/plain;q=0.9" } });
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get("location");
       if (!location || redirects === 3) throw new Error("unsafe_source_redirect");
@@ -75,7 +78,8 @@ function safeError(error: unknown) {
     ? message : error instanceof DOMException && error.name === "TimeoutError" ? "source_timeout" : "source_fetch_failed";
 }
 
-export async function handler(req: Request): Promise<Response> {
+export function createResearchHandler(options: { sourceFetch?: ProtectedSourceFetch } = {}) {
+return async function handler(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
   let claimedJob: string | undefined;
@@ -94,6 +98,7 @@ export async function handler(req: Request): Promise<Response> {
       }
     }
     if (!authorized) return json({ error: "forbidden" }, 403);
+    if (!options.sourceFetch) return json({ error: "protected_research_transport_unavailable" }, 503);
     const jobs = await rest("research_jobs?select=*&status=eq.queued&next_attempt_at=lte.now()&order=created_at.asc&limit=1");
     const job = jobs?.[0];
     if (!job) return json({ processed: 0 });
@@ -105,7 +110,7 @@ export async function handler(req: Request): Promise<Response> {
     let failed = 0;
     for (const source of sources ?? []) {
       try {
-        const fetched = await fetchSource(source.base_url, source.allowed_host, worker.request_timeout_ms);
+        const fetched = await fetchSource(options.sourceFetch, source.base_url, source.allowed_host, worker.request_timeout_ms);
         const text = normalize(fetched.text);
         if (!text) throw new Error("source_empty");
         const hash = await digest(text);
@@ -140,5 +145,10 @@ export async function handler(req: Request): Promise<Response> {
     if (claimedJob) await rest(`research_jobs?id=eq.${claimedJob}`, { method: "PATCH", body: JSON.stringify({ status: "failed", error_code: code, safe_error: code, finished_at: new Date().toISOString() }) }).catch(() => undefined);
     return json({ error: code }, 500);
   }
+};
 }
+
+// Hostname validation alone cannot prevent DNS rebinding. Remain unavailable
+// until the owner integrates a reviewed protected egress adapter.
+export const handler = createResearchHandler();
 

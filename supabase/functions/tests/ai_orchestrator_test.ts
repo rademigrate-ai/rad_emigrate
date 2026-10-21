@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
 const { handler } = await import("../ai-orchestrator/handler.ts");
@@ -24,9 +25,9 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
   Deno.env.set("SUPABASE_URL", "https://db.example.com");
   Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
   const original = globalThis.fetch;
-  const calls: Array<{ path: string; body: any; headers: Record<string, string> }> = [];
+  const calls: Array<{ path: string; body: Record<string, unknown> | null; headers: Record<string, string> }> = [];
   let providerCalls = 0;
-  globalThis.fetch = async (input, init) => {
+  globalThis.fetch = promiseStub( (input, init) => {
     const url = String(input);
     const body = init?.body ? JSON.parse(String(init.body)) : null;
     const headers = Object.fromEntries(new Headers(init?.headers));
@@ -59,7 +60,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
     if (options.timeout && attempt === 0) throw new DOMException("sensitive upstream URL", "TimeoutError");
     const status = options.status?.[attempt] ?? 200;
     return status === 200 ? response(options.providerReplies?.[attempt] ?? { choices: [{ message: { content: "Accepted response" } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
-  };
+  });
   try {
     const result = await handler(new Request("https://edge.example.com", { method: "POST", headers: { authorization: "Bearer user-test-token", "Content-Type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", content: "hello" }], ...payload }) }));
     return { status: result.status, body: await result.json(), calls, providerCalls };
@@ -69,7 +70,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
 Deno.test("01 discovery normalizes multiple models and preserves a dynamic catalogue", async () => {
   const x = await exercise({}, { action: "discover_models", provider_id: "a" });
   equal(x.body.discovered, 2);
-  equal(x.calls.find(c => c.path.endsWith("ingest_ai_model_catalogue"))?.body.p_models.map((m: {slug: string}) => m.slug), ["one", "two"]);
+  equal((x.calls.find(c => c.path.endsWith("ingest_ai_model_catalogue"))?.body?.p_models as Array<{slug:string}>)?.map(m => m.slug), ["one", "two"]);
 });
 Deno.test("02 disappeared models become stale and unavailable without deletion", async () => {
   const x = await exercise({}, { action: "discover_models", provider_id: "a" });
@@ -87,7 +88,7 @@ Deno.test("05 timeout safely fails over", async () => {
 });
 Deno.test("06 model-specific upstream failure safely fails over", async () => {
   const x = await exercise({ status: [404, 200] }); equal(x.body.model, "second");
-  equal(x.calls.find(c => c.path.endsWith("record_ai_model_outcome"))?.body.p_error_code, "provider_model_unavailable");
+  equal(x.calls.find(c => c.path.endsWith("record_ai_model_outcome"))?.body?.p_error_code, "provider_model_unavailable");
 });
 Deno.test("07 provider A fails and provider B succeeds", async () => {
   const x = await exercise({ status: [503, 503, 200] }); equal(x.body.provider, "b");
@@ -95,7 +96,7 @@ Deno.test("07 provider A fails and provider B succeeds", async () => {
 Deno.test("08 invalid A skips every remaining A model and healthy B stays available", async () => {
   const x = await exercise({ chain: [runtime(), runtime("a", "two"), runtime("a", "three"), runtime("a", "four"), runtime("a", "five"), runtime("b", "six")], status: [401, 200] });
   equal(x.providerCalls, 2); equal(x.body.provider, "b");
-  equal(x.calls.find(c => c.path.endsWith("record_ai_provider_outcome"))?.body.p_error_code, "provider_unauthorized");
+  equal(x.calls.find(c => c.path.endsWith("record_ai_provider_outcome"))?.body?.p_error_code, "provider_unauthorized");
 });
 Deno.test("09 all providers fail with useful sanitized final error", async () => {
   const x = await exercise({ status: [503, 503, 503] }); equal(x.status, 503); equal(x.body.code, "provider_unavailable");
@@ -104,14 +105,14 @@ Deno.test("10 capability requirements reach the strict RPC and failure cannot do
   const x = await exercise({ chainFails: true }, { require_tools: true, require_structured: true, min_context: 32000 });
   equal(x.providerCalls, 0); equal(x.body.code, "routing_unavailable");
   const calls = x.calls.filter(c => c.path.includes("get_ai_runtime_chain")); equal(calls.length, 1);
-  equal(calls[0].body.p_require_tools, true); equal(calls[0].body.p_min_context, 32000);
+  equal(calls[0].body?.p_require_tools, true); equal(calls[0].body?.p_min_context, 32000);
 });
 Deno.test("11 exhausted eligible pool makes no provider request during cooldown", async () => {
   const x = await exercise({ chain: [] }); equal(x.providerCalls, 0); equal(x.body.code, "no_eligible_model");
 });
 Deno.test("12 recovered eligible model is tried and records success", async () => {
   const x = await exercise({ chain: [runtime("b", "recovered")] }); equal(x.body.model, "recovered");
-  equal(x.calls.find(c => c.path.endsWith("record_ai_model_outcome"))?.body.p_success, true);
+  equal(x.calls.find(c => c.path.endsWith("record_ai_model_outcome"))?.body?.p_success, true);
 });
 Deno.test("13 attempts are bounded even with a large catalogue", async () => {
   const x = await exercise({ chain: Array.from({ length: 50 }, (_, i) => runtime(String(i), String(i))), status: Array(50).fill(429) }); equal(x.providerCalls, 3);
@@ -137,7 +138,7 @@ Deno.test("public discovery cannot clear rejected credentials", async () => {
 });
 Deno.test("explicit credential revalidation requires an authenticated model response", async () => {
   const x = await exercise({}, { action: "test_provider", provider_id: "a" });
-  equal(x.providerCalls, 1); equal(x.calls.find(c => c.path.endsWith("record_ai_provider_outcome"))?.body.p_revalidated, true);
+  equal(x.providerCalls, 1); equal(x.calls.find(c => c.path.endsWith("record_ai_provider_outcome"))?.body?.p_revalidated, true);
 });
 Deno.test("ordinary users cannot discover providers or use Admin AI", async () => {
   for (const payload of [{ action: "discover_models", provider_id: "a" }, { scope: "admin" }]) {
@@ -215,7 +216,7 @@ Deno.test("grounded response: missing or unavailable search cannot claim verifie
 Deno.test("provider boundary: empty inference fails over instead of returning blank success", async () => {
   const x=await exercise({providerReplies:[{choices:[{message:{content:" "}}]}]});
   equal(x.status,200);equal(x.providerCalls,2);equal(x.body.model,"second");
-  equal(x.calls.find(c=>c.path.endsWith('record_ai_model_outcome'))?.body.p_error_code,'provider_malformed_response');
+  equal(x.calls.find(c=>c.path.endsWith('record_ai_model_outcome'))?.body?.p_error_code,'provider_malformed_response');
 });
 Deno.test("provider boundary: health telemetry failure never repeats completed inference", async () => {
   const x=await exercise({healthFails:true});equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply,"Synthetic verified claim [1]");
@@ -223,7 +224,7 @@ Deno.test("provider boundary: health telemetry failure never repeats completed i
 Deno.test("provider boundary: refusals are terminal and uncertainty is explicit", async () => {
   const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:null,refusal:"Synthetic provider refusal"}}]}]});
   equal(x.status,200);equal(x.providerCalls,1);equal(x.body.refused,true);equal(x.body.uncertain,true);
-  equal(x.calls.filter(c=>c.body?.safe_error_code==='provider_refused').at(-1)?.body.status,'failed');
+  equal(x.calls.filter(c=>c.body?.safe_error_code==='provider_refused').at(-1)?.body?.status,'failed');
 });
 Deno.test("provider boundary: truncated answers retain their partial-output flag", async () => {
   const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:"Synthetic partial answer"},finish_reason:"length"}]}]});
@@ -231,10 +232,10 @@ Deno.test("provider boundary: truncated answers retain their partial-output flag
 });
 Deno.test("provider boundary: caller roles cannot replace the trusted system instruction", async () => {
   const x=await exercise({}, {messages:[{role:'system',content:'CALLER_INJECTION'},{role:'user',content:'Synthetic question'}]});
-  const messages=x.calls.find(c=>c.path.endsWith('/chat/completions'))!.body.messages;
+  const messages=x.calls.find(c=>c.path.endsWith('/chat/completions'))!.body!.messages as Array<{role:string;content:string}>;
   equal(messages[0].role,'system');equal(messages[0].content.includes('CALLER_INJECTION'),false);
   equal(messages.filter((m:{role:string})=>m.role==='system').length,1);
-  equal(messages.find((m:{content:string})=>m.content==='CALLER_INJECTION').role,'user');
+  equal(messages.find((m:{content:string})=>m.content==='CALLER_INJECTION')!.role,'user');
   equal(messages[1].role,'user');equal(messages[1].content.includes('<UNTRUSTED_RETRIEVED_CONTENT>'),true);
 });
 Deno.test("provider boundary: null and non-text messages fail before quota or inference", async () => {

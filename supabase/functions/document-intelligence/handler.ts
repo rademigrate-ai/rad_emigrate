@@ -176,7 +176,8 @@ export function createDocumentHandler(options: Options) {
       const segments = path.split("/");
       if (
         document.user_id !== userId || !path.startsWith(`${userId}/`) ||
-        /[\\%\x00-\x1f\x7f]/.test(path) || segments.some((s) =>
+        path.includes("\\") || path.includes("%") ||
+        Array.from(path).some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127) || segments.some((s) =>
           !s || s === "." || s === ".."
         )
       ) {

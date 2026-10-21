@@ -54,6 +54,8 @@ jobs:
         with:
           deno-version: v2.5.4
       - run: deno test --allow-env --allow-read=. supabase/functions/tests
+      - name: Lint Edge Functions without rule suppressions
+        run: deno lint supabase/functions
 
   flutter:
     runs-on: ubuntu-latest

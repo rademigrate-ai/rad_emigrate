@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 import { loadGrounding } from "../ai-orchestrator/knowledge_grounding.ts";
 
 const equal = (a: unknown, b: unknown) => {
@@ -21,10 +22,10 @@ const evidence = () => ({
 async function ground(results: unknown, state = "verified") {
   const paths: string[] = [];
   const value = await loadGrounding(
-    async (path) => {
+    promiseStub( (path) => {
       paths.push(path);
       return { results, evidence_state: state };
-    },
+    }),
     "user",
     "synthetic query",
     "en",

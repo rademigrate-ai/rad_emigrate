@@ -64,19 +64,35 @@ type DiscoveredModel = {
   cost_input_per_million: number | null; cost_source: string;
 };
 
+function providerRow(value: unknown): Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new ProviderError("provider_malformed_response");
+  }
+  return value as Record<string, unknown>;
+}
+
 export async function discover(runtime: ProviderRuntime): Promise<DiscoveredModel[]> {
   const url = runtime.adapter === "gemini"
     ? `${runtime.base_url}/v1beta/models`
     : `${runtime.base_url}${runtime.adapter === "anthropic" ? "/v1/models" : "/models"}`;
-  const rows: Array<Record<string, any>> = [];
+  const rows: Array<Record<string, unknown>> = [];
   let nextUrl = url;
   for (let page = 0; page < 10; page++) {
     const response = await providerFetch(nextUrl, { headers: providerHeaders(runtime) }, Math.min(runtime.request_timeout_seconds, 10));
-    const data: any = await readProviderJson(response, 5_000_000);
+    const data = providerRow(await readProviderJson(response, 5_000_000));
     const current = Array.isArray(data?.data) ? data.data : Array.isArray(data?.models) ? data.models : null;
     if (!current || rows.length + current.length > 5000) throw new ProviderError("provider_malformed_response");
-    rows.push(...current);
-    const token = runtime.adapter === "gemini" ? data.nextPageToken : runtime.adapter === "anthropic" && data.has_more ? data.last_id : null;
+    rows.push(...current.map(providerRow));
+    if (runtime.adapter === "anthropic" && data.has_more !== undefined && typeof data.has_more !== "boolean") {
+      throw new ProviderError("provider_malformed_response");
+    }
+    const token = runtime.adapter === "gemini" ? data.nextPageToken : runtime.adapter === "anthropic" && data.has_more === true ? data.last_id : null;
+    if (token !== undefined && token !== null && (typeof token !== "string" || !token.trim() || token.length > 2048)) {
+      throw new ProviderError("provider_malformed_response");
+    }
+    if (runtime.adapter === "anthropic" && data.has_more === true && !token) {
+      throw new ProviderError("provider_malformed_response");
+    }
     if (!token) break;
     if (page === 9) throw new ProviderError("catalogue_incomplete");
     const next = new URL(url);
@@ -85,12 +101,15 @@ export async function discover(runtime: ProviderRuntime): Promise<DiscoveredMode
   }
   const catalogue = new Map<string, DiscoveredModel>();
   for (const item of rows) {
-    const slug = String(item.id ?? item.name ?? "").replace(/^models\//, "").trim();
+    const modelName = item.id ?? item.name;
+    const slug = typeof modelName === "string" ? modelName.replace(/^models\//, "").trim() : "";
     if (!slug || slug.length > 300 || !/^[a-zA-Z0-9_./:@+-]+$/.test(slug)) continue;
     const context = Number(item.context_length ?? item.inputTokenLimit);
     const parameters = Array.isArray(item.supported_parameters) ? item.supported_parameters : null;
-    const price = new URL(runtime.base_url).hostname === "openrouter.ai" && item.pricing?.prompt != null
-      ? Number(item.pricing.prompt) * 1000000 : NaN;
+    const pricing = item.pricing !== null && typeof item.pricing === "object" && !Array.isArray(item.pricing)
+      ? item.pricing as Record<string, unknown> : {};
+    const price = new URL(runtime.base_url).hostname === "openrouter.ai" && pricing.prompt != null
+      ? Number(pricing.prompt) * 1000000 : NaN;
     const methods = Array.isArray(item.supportedGenerationMethods) ? item.supportedGenerationMethods : null;
     const capability = methods?.includes("embedContent") && !methods.includes("generateContent") ? "embedding" : "chat";
     catalogue.set(slug, {

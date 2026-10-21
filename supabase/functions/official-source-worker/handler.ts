@@ -56,8 +56,8 @@ export function createOfficialSourceHandler(options: Options) {
           profession: string | null;
         };
       };
-      let code: string | null = null,
-        candidates: { name: string; host: string }[] = [];
+      let code: string | null = null;
+      const candidates: { name: string; host: string }[] = [];
       if (job.kind === "authority_discovery" && options.discover) {
         const seen = new Set<string>();
         const found = await options.discover(job.request);

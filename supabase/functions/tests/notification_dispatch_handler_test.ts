@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 import {
   createNotificationDispatchHandler,
   safeSandboxTarget,
@@ -35,7 +36,7 @@ async function exercise(
     enabled: true,
     supabaseUrl: "http://127.0.0.1:58321",
     invocationToken: token,
-    database: async (path, init) => {
+    database: promiseStub( (path, init) => {
       calls.push({
         path,
         body: JSON.parse(String(init?.body ?? "{}")),
@@ -47,7 +48,7 @@ async function exercise(
         return [claim()];
       }
       return true;
-    },
+    }),
     ...changes,
   });
   const response = await handler(
@@ -135,10 +136,10 @@ Deno.test("dispatch endpoint: malformed/foreign/oversized requests fail before c
 Deno.test("dispatch endpoint: a bounded batch limit stops without an extra claim", async () => {
   let calls = 0;
   const x = await exercise({
-    database: async (path) => {
+    database: promiseStub( (path) => {
       calls++;
       return path.includes("claim_") ? [claim()] : true;
-    },
+    }),
   }, { limit: 2 });
   equal(x.status, 200);
   equal(x.body.sandbox_receipts, 2);
@@ -146,9 +147,9 @@ Deno.test("dispatch endpoint: a bounded batch limit stops without an extra claim
 });
 Deno.test("dispatch endpoint: malformed claims and backend secrets become fixed failures", async () => {
   for (
-    const database of [async () => null, async () => {
+    const database of [promiseStub( () => null), promiseStub( () => {
       throw new Error("PRIVATE_DATABASE_CANARY");
-    }]
+    })]
   ) {
     const x = await exercise({ database });
     equal(x.status, 503);

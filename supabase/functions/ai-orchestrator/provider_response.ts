@@ -119,7 +119,10 @@ export function parseProviderResponse(
   } else throw new ProviderError("unsupported_adapter", 400);
   reply = reply.trim();
   const valid = reply.length > 0 && reply.length <= 50000 &&
-    !/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(reply) &&
+    !Array.from(reply).some((char) => {
+      const code = char.charCodeAt(0);
+      return code < 32 && code !== 9 && code !== 10 && code !== 13;
+    }) &&
     !secrets.some((secret) => secret.length > 0 && reply.includes(secret));
   if (!valid && !refused) {
     throw new ProviderError("provider_malformed_response");

@@ -135,12 +135,14 @@ export async function handler(req: Request): Promise<Response> {
 
   let requestId: string | null = null;
   if (user) {
-    let quota: any;
+    let quota: Record<string, unknown> | null;
     try {
-      quota = await db("rpc/consume_ai_daily_quota", {
+      const reservation: unknown = await db("rpc/consume_ai_daily_quota", {
         method: "POST",
         body: JSON.stringify({ p_user_id: user.id, p_role: role }),
       });
+      quota = reservation !== null && typeof reservation === "object" && !Array.isArray(reservation)
+        ? reservation as Record<string, unknown> : null;
     } catch {
       return safeJson(503, {
         error: "ai_temporarily_unavailable",
