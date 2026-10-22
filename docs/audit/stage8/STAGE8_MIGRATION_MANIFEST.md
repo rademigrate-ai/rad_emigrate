@@ -47,7 +47,7 @@ Every migration in this 21-file sequence has been cryptographically fingerprinte
 | **18** | `20261020115539` | `rad_leased_research_base_contract.sql` | `8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129` | Leased research background worker base contract. | `CREATE TABLE IF NOT EXISTS`; dependencies: `02, 10`. |
 | **19** | `20261020123523` | `rad_explicit_service_profile_bootstrap.sql` | `569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4` | Bootstraps explicit service role profile records. | Idempotent `ON CONFLICT DO NOTHING`; dependencies: `01`. |
 | **20** | `20261020192732` | `rad_revoke_client_nonrow_table_privileges.sql` | `5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3` | **CRITICAL SECURITY**: Revokes `TRUNCATE, TRIGGER, REFERENCES` from client roles. | Idempotent DO block; alters default privileges; dependencies: `01-19`. |
-| **21** | `20261021210337` | `rad_cms_admin_draft_reads.sql` | `63bb109c7b7d1ae57a4fdcf2c8394828601644004d94fe032705a33d3cc2b021` | **PR #74 TERMINAL CONTRACT**: Exposes `admin_get_content_draft` with admin ACL. | `CREATE OR REPLACE FUNCTION`; dependencies: `01-20`. |
+| **21** | `20261021210337` | `rad_cms_admin_draft_reads.sql` | `63bb109c7b7d1ae57a4fdcf2c8394828601644004d94fe032705a33d3cc2b021` | **PR #74 TERMINAL CONTRACT**: Exposes `list_cms_articles(jsonb)` and `get_cms_article_draft(jsonb)` with admin checks and restricted EXECUTE grants. | `CREATE FUNCTION`; dependencies: `01-20`. |
 
 ---
 
@@ -88,16 +88,28 @@ WHERE grantee = 'authenticated'
   AND column_name = 'role';
 -- EXPECTED: 0
 
--- 4. Verify admin draft read routine is registered
+-- 4. Verify the two canonical CMS draft-read RPCs are registered
 SELECT count(*) AS draft_routine_count
 FROM information_schema.routines
 WHERE routine_schema = 'public'
-  AND routine_name = 'admin_get_content_draft';
--- EXPECTED: 1
+  AND routine_name IN ('list_cms_articles', 'get_cms_article_draft');
+-- EXPECTED: 2
 ```
 
 ---
 
 ## 5. Manifest Certification
 
-Codex certifies that the 21 forward additions specified above constitute the complete, immutable, and reproducible database migration delta required for PR #74.
+The 21-file table above remains the immutable historical Stage 8B delta used by PR #74. Subsequent live-production drift findings are addressed by separate follow-up migrations below; do not fold them into or rewrite the original Stage 8B checksum set.
+
+
+## 6. Post-Stage8 Production-Drift Follow-ups (2026-10-23)
+
+These migrations are separate from the original 21-file Stage 8B manifest. They address drift discovered by comparing the live Production function body and the clean-schema test baseline.
+
+| Version | File | SHA-256 | Purpose |
+| --- | --- | --- | --- |
+| `20261023010000` | `rad_ai_discovery_fail_closed.sql` | `A6BD360A440BB811C5C8BB51499C94101BF324124421FB95CF5D170544294841` | Restores the canonical rule that discovered AI models are never auto-enabled; Admin configuration remains authoritative. |
+| `20261023010001` | `radmohajer_source_seed_parity.sql` | `C1AFBB8911BA2F7758927C57F9225E58873B1463C793539BE3D667884264DE11` | Idempotently seeds three established RAD Mohajer source metadata rows for clean-install parity; creates no source snapshots or verified immigration claims. |
+
+Both follow-ups passed the local production-shaped SQL rehearsal. They have **not** been applied to hosted Production. Hosted execution remains gated on a verified recovery plan and migration-ledger reconciliation.
