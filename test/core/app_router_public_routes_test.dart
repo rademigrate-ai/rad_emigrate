@@ -11,6 +11,7 @@ import 'package:rad_emigrate/features/auth/presentation/pages/login_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/pages/otp_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/pages/register_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
+import 'package:rad_emigrate/features/visa/presentation/pages/visa_page.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,6 +77,25 @@ void main() {
     await _go(tester, '/register');
 
     expect(find.byType(RegisterPage), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('/explore aliases the Visa explorer (BUG-L01)', (tester) async {
+    await _pumpApp(tester);
+    await _go(tester, '/explore');
+
+    expect(find.byType(VisaPage), findsOneWidget);
+    expect(find.byType(NotFoundPage), findsNothing);
+    expect(find.byType(LoginPage), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('/visa remains the canonical explorer route', (tester) async {
+    await _pumpApp(tester);
+    await _go(tester, '/visa');
+
+    expect(find.byType(VisaPage), findsOneWidget);
+    expect(find.byType(NotFoundPage), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
