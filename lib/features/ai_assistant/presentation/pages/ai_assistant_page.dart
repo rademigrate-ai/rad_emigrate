@@ -302,6 +302,30 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     await _complete(prompt, userId, replacing: failure);
   }
 
+  AiRequest _retryRequest(AiRequest request, String code) {
+    // The v1 terminal errors below are cached by backend settlement; the
+    // legacy provider rejection is also a definitive failure. Recovery is a
+    // user-requested new attempt. Ambiguous transport and
+    // settlement failures retain the old key to recover the existing result.
+    if (!const {
+      'copilot_unavailable',
+      'response_contract_invalid',
+      'provider_unauthorized',
+    }.contains(code)) {
+      return request;
+    }
+    return AiRequest(
+      prompt: request.prompt,
+      kind: request.kind,
+      conversationId: request.conversationId,
+      locale: request.locale,
+      history: request.history,
+      authorizedDataScopes: request.authorizedDataScopes,
+      context: request.context,
+      metadata: {...request.metadata, 'request_key': newRadRequestKey()},
+    );
+  }
+
   Future<void> _complete(
     String text,
     String? userId, {
@@ -317,7 +341,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         .map((m) => AiConversationMessage(isUser: m.isUser, text: m.text))
         .toList(growable: false);
 
-    // Retry is the same logical operation, including locale/history. Keeping
+    // Preserve the original retry input, including locale/history. Keeping
     // the complete input avoids both duplicate quota charges and changed-body
     // conflicts when the UI locale changes after an ambiguous transport error.
     final request =
@@ -372,7 +396,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             text: response.text,
             sources: response.sources,
             retryPrompt: response.errorCode == null ? null : text,
-            retryRequest: response.errorCode == null ? null : request,
+            retryRequest: response.errorCode == null
+                ? null
+                : _retryRequest(request, response.errorCode!),
           ),
         );
         _loading = false;

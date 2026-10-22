@@ -169,6 +169,22 @@ Deno.test("v1 completed replay returns persisted result with no new provider or 
   equal(result.data, first.data);
   equal(result.calls.length, 1);
   equal(result.providerCalls, 0);
+  // A settled terminal failure is replayed too. A UI recovery attempt must
+  // deliberately use a new key; retrying an ambiguous transport must not.
+  const failed = await run({
+    reservation: {
+      allowed: true,
+      request_id: id,
+      replayed: true,
+      state: "failed",
+      http_status: 503,
+      response: { error: "copilot_unavailable" },
+    },
+  });
+  equal(failed.status, 503);
+  equal(failed.data, { error: "copilot_unavailable" });
+  equal(failed.calls.length, 1);
+  equal(failed.providerCalls, 0);
 });
 Deno.test("v1 private case tools require consent and forward the actor JWT with ownership filter", async () => {
   const input = {

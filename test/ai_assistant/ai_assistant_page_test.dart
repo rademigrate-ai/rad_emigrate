@@ -77,6 +77,7 @@ class _Ai implements AiService {
   final requests = <AiRequest>[];
   bool fail = true;
   bool throwTransport = false;
+  String failureCode = 'provider_unauthorized';
   @override
   bool get isAvailable => true;
   @override
@@ -86,9 +87,9 @@ class _Ai implements AiService {
     requests.add(request);
     if (throwTransport) throw StateError('transport failure');
     return fail
-        ? const AiResponse(
+        ? AiResponse(
             text: 'Credential rejected',
-            errorCode: 'provider_unauthorized',
+            errorCode: failureCode,
             uncertain: true,
           )
         : const AiResponse(text: 'Verified answer');
@@ -139,51 +140,62 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets(
-    'provider failure retries without duplicating persisted user question',
-    (tester) async {
-      final ai = _Ai();
-      final sessions = _Sessions();
-      await _pump(tester, ai, sessions);
-      await _send(tester, 'My question');
-      expect(find.text('Credential rejected'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
-      ai.fail = false;
-      await tester.tap(find.text('Retry'));
-      await tester.pumpAndSettle();
-      expect(ai.requests, hasLength(2));
-      expect(ai.requests.last.metadata, ai.requests.first.metadata);
-      expect(ai.requests.last.locale, ai.requests.first.locale);
-      expect(ai.requests.last.conversationId, ai.requests.first.conversationId);
-      expect(
-        ai.requests.last.history.map((m) => (m.isUser, m.text)).toList(),
-        ai.requests.first.history.map((m) => (m.isUser, m.text)).toList(),
-      );
-      expect(
-        ai.requests.first.metadata['request_key'],
-        matches(
-          RegExp(
-            r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+  for (final failureCode in [
+    'provider_unauthorized',
+    'copilot_unavailable',
+    'response_contract_invalid',
+  ]) {
+    testWidgets(
+      'terminal failure $failureCode retries without duplicating persisted user question',
+      (tester) async {
+        final ai = _Ai()..failureCode = failureCode;
+        final sessions = _Sessions();
+        await _pump(tester, ai, sessions);
+        await _send(tester, 'My question');
+        expect(find.text('Credential rejected'), findsOneWidget);
+        expect(find.text('Retry'), findsOneWidget);
+        ai.fail = false;
+        await tester.tap(find.text('Retry'));
+        await tester.pumpAndSettle();
+        expect(ai.requests, hasLength(2));
+        expect(
+          ai.requests.last.metadata['request_key'],
+          isNot(ai.requests.first.metadata['request_key']),
+        );
+        expect(ai.requests.last.locale, ai.requests.first.locale);
+        expect(
+          ai.requests.last.conversationId,
+          ai.requests.first.conversationId,
+        );
+        expect(
+          ai.requests.last.history.map((m) => (m.isUser, m.text)).toList(),
+          ai.requests.first.history.map((m) => (m.isUser, m.text)).toList(),
+        );
+        expect(
+          ai.requests.first.metadata['request_key'],
+          matches(
+            RegExp(
+              r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+            ),
           ),
-        ),
-      );
-      expect(sessions.saved.where((row) => row.role == 'user'), hasLength(1));
-      expect(
-        sessions.saved.where((row) => row.role == 'assistant'),
-        hasLength(1),
-      );
-      expect(find.text('My question'), findsOneWidget);
-      expect(find.text('Credential rejected'), findsNothing);
-      expect(find.text('Verified answer'), findsOneWidget);
-      await _send(tester, 'A separate new question');
-      expect(ai.requests, hasLength(3));
-      expect(
-        ai.requests.last.metadata['request_key'],
-        isNot(ai.requests.first.metadata['request_key']),
-      );
-    },
-  );
-
+        );
+        expect(sessions.saved.where((row) => row.role == 'user'), hasLength(1));
+        expect(
+          sessions.saved.where((row) => row.role == 'assistant'),
+          hasLength(1),
+        );
+        expect(find.text('My question'), findsOneWidget);
+        expect(find.text('Credential rejected'), findsNothing);
+        expect(find.text('Verified answer'), findsOneWidget);
+        await _send(tester, 'A separate new question');
+        expect(ai.requests, hasLength(3));
+        expect(
+          ai.requests.last.metadata['request_key'],
+          isNot(ai.requests.first.metadata['request_key']),
+        );
+      },
+    );
+  }
   testWidgets('restored conversation turns reach subsequent requests', (
     tester,
   ) async {
