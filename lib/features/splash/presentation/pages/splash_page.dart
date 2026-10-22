@@ -35,7 +35,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       // Routing still proceeds to the safe unauthenticated path.
     }
     if (!mounted) return;
-    final session = ref.read(authControllerProvider).valueOrNull;
+    final session = ref.read(verifiedUserSessionProvider);
     final destination = restoredProtectedDestination(widget.destination);
     if (session != null && session.isAuthenticated) {
       context.go(destination);

@@ -1,0 +1,9 @@
+{
+  "operation": "stop",
+  "project": "rad_core_c611_clean",
+  "port": 61522,
+  "source_head": "c611f2ac039079c0d3381f5e9cea23185c2f91f6",
+  "production_mutations": false,
+  "at": "2026-10-21T10:45:50.652383+00:00",
+  "status": "PASS"
+}

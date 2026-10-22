@@ -1,0 +1,33 @@
+{
+  "candidate_sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "at": "2026-10-21T16:02:30.576415+00:00",
+  "status": "PASS",
+  "scope": "synthetic isolated PG17; no production connection; no ports",
+  "image_digests": [
+    "postgres@sha256:a63c1ea3f6a3a5a1621f97d2aba3b30faecfab4224c1b0000cc85ced57bb1939"
+  ],
+  "migration_sha256": "986dc15eb42129a6fa20ec0b1dc34322e296dcb4450ab2447c1d63e4be7f7ea3",
+  "first_and_second_application_identical": true,
+  "after_second": {
+    "rls": true,
+    "rows": 2,
+    "defaults": [
+      {
+        "oid": "16390",
+        "defaclacl": [
+          "postgres=arwdDxtm/postgres",
+          "anon=arwd/postgres",
+          "authenticated=arwd/postgres",
+          "service_role=arwdDxtm/postgres"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "0"
+      }
+    ],
+    "table_acl": "{postgres=arwdDxtm/postgres,anon=arwd/postgres,authenticated=arwd/postgres,service_role=arwdDxtm/postgres}",
+    "service_dml": true,
+    "client_prohibited": 0
+  },
+  "production_mutations": false
+}

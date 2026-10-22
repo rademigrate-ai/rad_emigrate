@@ -19,7 +19,7 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session != null && session.isAuthenticated;
     final name = isAuthed
         ? (session.fullName ?? l10n.travelerFallback)
@@ -38,10 +38,28 @@ class DashboardPage extends ConsumerWidget {
         '/consultation',
       ),
       (
-        Icons.schedule_outlined,
+        Icons.event_available_outlined,
         const Color(0xFF345CFF),
-        l10n.worldTimeTitle,
-        '/world-clock',
+        'Booking',
+        '/booking',
+      ),
+      (
+        Icons.calendar_month_outlined,
+        const Color(0xFF6C4DFF),
+        'Interviews',
+        '/interviews',
+      ),
+      (
+        Icons.calculate_outlined,
+        const Color(0xFF00A986),
+        'Cost calculator',
+        '/calculator/cost',
+      ),
+      (
+        Icons.compare_arrows_outlined,
+        const Color(0xFFD91F2B),
+        'Compare',
+        '/compare/pathways',
       ),
       (
         Icons.description_outlined,
@@ -49,7 +67,6 @@ class DashboardPage extends ConsumerWidget {
         l10n.documents,
         '/documents',
       ),
-      (Icons.article_outlined, const Color(0xFFD91F2B), l10n.feed, '/feed'),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -146,7 +163,7 @@ class DashboardPage extends ConsumerWidget {
                 ReferenceSection(
                   title: l10n.recentActivity,
                   action: l10n.allCases,
-                  onAction: () => context.go('/applications'),
+                  onAction: () => context.push('/profile/cases'),
                 ),
                 if (!isAuthed)
                   _ActivityRow(
@@ -161,7 +178,7 @@ class DashboardPage extends ConsumerWidget {
                     icon: Icons.assignment_outlined,
                     title: app.title,
                     subtitle: app.programName,
-                    onTap: () => context.go('/applications'),
+                    onTap: () => context.push('/profile/cases'),
                   ),
                 if (missing > 0)
                   _ActivityRow(
@@ -184,7 +201,7 @@ class DashboardPage extends ConsumerWidget {
                     icon: Icons.assignment_outlined,
                     title: l10n.noApplications,
                     subtitle: l10n.noApplicationsSubtitle,
-                    onTap: () => context.go('/applications'),
+                    onTap: () => context.push('/profile/cases'),
                   ),
                 const SizedBox(height: 12),
                 LayoutBuilder(

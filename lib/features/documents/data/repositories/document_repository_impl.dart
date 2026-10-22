@@ -17,25 +17,26 @@ class DocumentRepositoryImpl implements DocumentRepository {
   final DocumentLocalDataSource local;
   final bool allowOfflineFallback;
 
-  Future<List<Document>> _ensureLocal() async {
-    return local.readAll();
+  Future<List<Document>> _ensureLocal(String userId) async {
+    return local.readAll(userId: userId);
   }
 
   @override
   Future<List<Document>> listDocuments({String? userId}) async {
+    if (userId == null || userId.isEmpty) return [];
     try {
       final remoteList = await remote.list(userId: userId);
-      await local.writeAll(remoteList);
-      return remoteList;
+      await local.writeAll(remoteList, userId: userId);
+      return remoteList.where((document) => document.userId == userId).toList();
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      return _ensureLocal();
+      return _ensureLocal(userId);
     }
   }
 
   @override
   Future<Document?> getDocument(String id) async {
-    final all = await listDocuments();
+    final all = await listDocuments(userId: remote.currentUserId);
     for (final d in all) {
       if (d.id == id) return d;
     }
@@ -44,20 +45,27 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<Document> upsertDocument(Document document) async {
+    final owner = document.userId;
+    if (owner == null || owner.isEmpty) {
+      throw StateError("Document owner required");
+    }
     try {
       final saved = await remote.upsert(document);
-      final cached = await local.readAll();
+      if (saved.userId != owner) {
+        throw StateError('Document owner mismatch');
+      }
+      final cached = await local.readAll(userId: owner);
       final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
         cached[idx] = saved;
       } else {
         cached.add(saved);
       }
-      await local.writeAll(cached);
+      await local.writeAll(cached, userId: owner);
       return saved;
     } on ApiException {
       if (!allowOfflineFallback) rethrow;
-      final cached = await _ensureLocal();
+      final cached = await _ensureLocal(owner);
       final saved = document.copyWith(updatedAt: DateTime.now());
       final idx = cached.indexWhere((d) => d.id == saved.id);
       if (idx >= 0) {
@@ -65,7 +73,7 @@ class DocumentRepositoryImpl implements DocumentRepository {
       } else {
         cached.add(saved);
       }
-      await local.writeAll(cached);
+      await local.writeAll(cached, userId: owner);
       return saved;
     }
   }
@@ -77,20 +85,27 @@ class DocumentRepositoryImpl implements DocumentRepository {
     required String fileName,
     required String contentType,
   }) async {
+    final owner = document.userId;
+    if (owner == null || owner.isEmpty) {
+      throw StateError("Document owner required");
+    }
     final uploaded = await remote.upload(
       document: document,
       bytes: bytes,
       fileName: fileName,
       contentType: contentType,
     );
-    final cached = await local.readAll();
+    if (uploaded.userId != owner) {
+      throw StateError('Document owner mismatch');
+    }
+    final cached = await local.readAll(userId: owner);
     final index = cached.indexWhere((item) => item.id == uploaded.id);
     if (index >= 0) {
       cached[index] = uploaded;
     } else {
       cached.add(uploaded);
     }
-    await local.writeAll(cached);
+    await local.writeAll(cached, userId: owner);
     return uploaded;
   }
 
@@ -102,9 +117,13 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<void> deleteDocument(Document document) async {
+    final owner = document.userId;
+    if (owner == null || owner.isEmpty) {
+      throw StateError("Document owner required");
+    }
     await remote.delete(document);
-    final cached = await local.readAll();
+    final cached = await local.readAll(userId: owner);
     cached.removeWhere((item) => item.id == document.id);
-    await local.writeAll(cached);
+    await local.writeAll(cached, userId: owner);
   }
 }

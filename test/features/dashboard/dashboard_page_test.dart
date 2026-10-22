@@ -28,7 +28,7 @@ class _FakeAppRepo implements ApplicationRepository {
 
   @override
   Future<List<VisaApplication>> listApplications({String? userId}) async =>
-      apps;
+      apps.map((app) => app.copyWith(userId: userId)).toList();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -39,7 +39,8 @@ class _FakeDocRepo implements DocumentRepository {
   final List<Document> docs;
 
   @override
-  Future<List<Document>> listDocuments({String? userId}) async => docs;
+  Future<List<Document>> listDocuments({String? userId}) async =>
+      docs.map((doc) => doc.copyWith(userId: userId)).toList();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -119,11 +120,13 @@ void main() {
         );
         expect(find.text('Explore visa pathways'), findsOneWidget);
 
-        // Quick actions
+        // Quick actions — Freebuff feature discovery on dashboard
         expect(find.text('Consultation'), findsWidgets);
-        expect(find.text('World Time'), findsWidgets);
+        expect(find.text('Booking'), findsOneWidget);
+        expect(find.text('Interviews'), findsOneWidget);
+        expect(find.text('Cost calculator'), findsOneWidget);
+        expect(find.text('Compare'), findsOneWidget);
         expect(find.text('Documents'), findsOneWidget);
-        expect(find.text('Feed'), findsOneWidget);
 
         // Sign in row for guest
         expect(find.text('Sign in'), findsOneWidget);

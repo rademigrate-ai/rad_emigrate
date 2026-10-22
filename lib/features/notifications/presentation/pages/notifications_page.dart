@@ -13,15 +13,31 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../../data/notification_reader.dart';
 
-class NotificationsPage extends ConsumerStatefulWidget {
+class NotificationsPage extends ConsumerWidget {
   const NotificationsPage({super.key});
-
   @override
-  ConsumerState<NotificationsPage> createState() => _NotificationsPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(authenticatedUserIdProvider);
+    return _NotificationsPageForIdentity(
+      key: ValueKey(identity),
+      identity: identity,
+    );
+  }
 }
 
-class _NotificationsPageState extends ConsumerState<NotificationsPage> {
+class _NotificationsPageForIdentity extends ConsumerStatefulWidget {
+  const _NotificationsPageForIdentity({super.key, required this.identity});
+  final String? identity;
+
+  @override
+  ConsumerState<_NotificationsPageForIdentity> createState() =>
+      _NotificationsPageState();
+}
+
+class _NotificationsPageState
+    extends ConsumerState<_NotificationsPageForIdentity> {
   List<Map<String, dynamic>> _items = const [];
   bool _loading = true;
   String? _error;
@@ -33,23 +49,18 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   }
 
   Future<void> _load() async {
+    if (!mounted || widget.identity == null) return;
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
-      final client = ref.read(supabaseClientServiceProvider).client;
-      final uid = client.auth.currentUser?.id;
-      if (uid == null) throw Exception('auth');
-      final rows = await client
-          .from('notifications')
-          .select('id, type, title, body, action_path, read_at, created_at')
-          .eq('user_id', uid)
-          .order('created_at', ascending: false)
-          .limit(50);
+      final uid = widget.identity;
+      if (uid == null) return;
+      final rows = await ref.read(notificationReaderProvider)(uid);
       if (mounted) {
         setState(() {
-          _items = List<Map<String, dynamic>>.from(rows as List);
+          _items = List<Map<String, dynamic>>.from(rows);
           _loading = false;
         });
       }
@@ -66,13 +77,16 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   Future<bool> _markRead(String id) async {
     try {
       final client = ref.read(supabaseClientServiceProvider).client;
-      final uid = client.auth.currentUser?.id;
+      final uid = widget.identity;
       if (uid == null) return false;
       await client
           .from('notifications')
           .update({'read_at': DateTime.now().toIso8601String()})
           .eq('user_id', uid)
           .eq('id', id);
+      if (!mounted || ref.read(authenticatedUserIdProvider) != uid) {
+        return false;
+      }
       await _load();
       return _error == null;
     } catch (_) {
@@ -83,13 +97,14 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   Future<void> _markAllRead() async {
     try {
       final client = ref.read(supabaseClientServiceProvider).client;
-      final uid = client.auth.currentUser?.id;
+      final uid = widget.identity;
       if (uid == null) return;
       await client
           .from('notifications')
           .update({'read_at': DateTime.now().toIso8601String()})
           .eq('user_id', uid)
           .filter('read_at', 'is', null);
+      if (!mounted || ref.read(authenticatedUserIdProvider) != uid) return;
       await _load();
       if (_error != null && mounted) _showUpdateError();
     } catch (_) {
@@ -108,8 +123,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
-    if (session?.authenticated != true) {
+    if (widget.identity == null) {
       return Scaffold(
         appBar: AppBar(
           leading: const AppBackButton(fallback: '/profile'),

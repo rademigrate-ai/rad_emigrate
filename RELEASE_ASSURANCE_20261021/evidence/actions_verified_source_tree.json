@@ -1,0 +1,17 @@
+{
+  "execution_head": "3b33f51793a0581148fd485a3c6956384b2f4c77",
+  "verified_source_tree": "a5f5958129a035481f18d70abded308abd1c65c8",
+  "native_full_flutter_passed": 866,
+  "focused_booking_interview_passed": 32,
+  "new_tests": 4,
+  "analysis": "No issues found",
+  "format": "0 changed",
+  "existing_Unicode_sequences_preserved": true,
+  "staged_git_blob_sha256": {
+    "lib/features/booking/presentation/pages/booking_service_page.dart": "40a79062f1dfe5820e07862fc54eea218c1df63e307b282cc6dd9519b3a8dbe1",
+    "lib/features/booking/presentation/providers/booking_controller.dart": "8406e993f17c84ac7a85c370409ba27e961ad39750ec6e2e055ca9bc14a097e5",
+    "lib/features/interviews/presentation/pages/interviews_page.dart": "7414152458ff2a67722728e1aa69bd8a074e5ddec1f527366e86b91e255cb5c5",
+    "lib/features/interviews/presentation/providers/appointment_controller.dart": "cc36832a4bfb038b0a2d0c82d76c529baff4a57c637f8eb9a5d4e634d8c9c08d",
+    "test/security/booking_action_isolation_test.dart": "debe69549f9777b94b2d4b907a9fe21f71e09ec954057ea16002dc4d3c6deb92"
+  }
+}

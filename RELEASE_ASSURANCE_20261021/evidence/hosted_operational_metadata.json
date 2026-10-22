@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-21T15:27:28.029004+00:00",
+  "ai_provider_count": 3,
+  "ai_model_count": 721,
+  "search_provider_count": 0,
+  "document_processor": [
+    {
+      "enabled": false,
+      "has_secret": false
+    }
+  ],
+  "cron": [
+    {
+      "jobid": 1,
+      "active": true,
+      "jobname": "rad-daily-research-enqueue",
+      "schedule": "17 3 * * *",
+      "command_md5": "f19e91e1ea09193041474ddcdd804132"
+    },
+    {
+      "jobid": 2,
+      "active": true,
+      "jobname": "rad-daily-research-worker",
+      "schedule": "27 3 * * *",
+      "command_md5": "d70566e2e4697b63ffd1915c590abbff"
+    },
+    {
+      "jobid": 3,
+      "active": true,
+      "jobname": "rad-observability-retention",
+      "schedule": "41 2 * * *",
+      "command_md5": "2cfc11fcac9336805db1de38db1bf87b"
+    }
+  ],
+  "vault_client_access": [
+    {
+      "rolname": "anon",
+      "schema_usage": false,
+      "decrypted_read": false,
+      "encrypted_read": false
+    },
+    {
+      "rolname": "authenticated",
+      "schema_usage": false,
+      "decrypted_read": false,
+      "encrypted_read": false
+    }
+  ],
+  "raw_source_or_secret_values_exported": false
+}

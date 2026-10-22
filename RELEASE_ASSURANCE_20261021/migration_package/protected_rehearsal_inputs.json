@@ -1,0 +1,33 @@
+{
+  "directory": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_audit\\C002_C003_20261019\\evidence",
+  "fresh_live_parity_proven": {
+    "at": "2026-10-21T15:42:52.600149+00:00",
+    "live_captured_at": "2026-10-21T15:27:28.029004+00:00",
+    "project": "inshddthftkhcdosoqcn",
+    "metadata_dimensions_equal_to_recorded_baseline": {
+      "tables": true,
+      "columns": true,
+      "constraints": true,
+      "indexes": true,
+      "policies": true,
+      "table_grants": true,
+      "column_grants": true,
+      "functions": true,
+      "triggers": true,
+      "storage": true
+    },
+    "recorded_statement_hashes_unchanged": true,
+    "ledger_count": 54,
+    "live_nonrow_client_rights": 48,
+    "live_column_references": 100,
+    "maintain_acl_rows": 126,
+    "rls_disabled_public": [],
+    "mutations": false
+  },
+  "files": {
+    "prod_catalog.json": "3882aa4d42c89c8250fc0f62d9ada41046fda64a05044832d85e9bb93fd89518",
+    "production_recorded_migration_sql.json": "1cb3ef39a460f739a3a31498d51e1688e25cc3ce8ac9fc4dfc73e43b2a7b4c0d",
+    "catalog_queries.json": "3af71b4c6e0f0c62a50386c2bddaf073f195ada16ca11465575f3a5cf086cb2f"
+  },
+  "reason": "Raw historical SQL/functions stay in owner-controlled existing local evidence. No Vault values or application/user rows are needed."
+}

@@ -1,0 +1,21 @@
+{
+  "source_head": "e1d6bc0a290a6898b913ad9cf32059c16c4373ac",
+  "command": [
+    "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "scripts/rad_local_rehearsal.py",
+    "start",
+    "--project",
+    "rad_core_pr74_remediation_upgrade",
+    "--port",
+    "61822",
+    "--runtime",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_local_pr74_remediation_upgrade",
+    "--evidence",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_audit\\C002_C003_20261019\\evidence",
+    "--supabase",
+    "C:\\Users\\Mehrshad\\AppData\\Local\\npm-cache\\_npx\\aa8e5c70f9d8d161\\node_modules\\@supabase\\cli-windows-x64\\bin\\supabase.exe"
+  ],
+  "exit_code": 0,
+  "seconds": 3.58,
+  "log_sha256": "4e03a9ca3a3c2a486d0e45b77e068162e386fa386a3ea86fe312553fa1e263c4"
+}

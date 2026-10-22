@@ -1,0 +1,14 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "command": [
+    "deno",
+    "lint",
+    "supabase/functions"
+  ],
+  "exit_code": 1,
+  "problems": 37,
+  "checked_files": 38,
+  "unchanged_from_requested_rc": true,
+  "log_sha256": "c66c15c400965cf9d36f908b9941a912edbe84724d1db366179138c1d76ccfff",
+  "display_copy_normalization": "LF and trailing whitespace stripped; raw external log hash retained in external_log_manifest.json"
+}

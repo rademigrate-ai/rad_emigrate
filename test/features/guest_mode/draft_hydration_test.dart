@@ -10,8 +10,8 @@ void main() {
     'AI draft hydrates from storage and is consumed only explicitly',
     () async {
       SharedPreferences.setMockInitialValues({
-        'rad_ai_pending_prompt': 'Saved visa question',
-        'rad_ai_pending_context': 'Canada',
+        'rad_ai_pending_prompt::guest': 'Saved visa question',
+        'rad_ai_pending_context::guest': 'Canada',
       });
       final draft = AiPromptDraftNotifier();
       await draft.ready;
@@ -20,15 +20,15 @@ void main() {
       expect(await draft.consumePrompt(), 'Saved visa question');
       expect(draft.state.hasContent, false);
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
+      expect(prefs.getString('rad_ai_pending_prompt::guest'), isNull);
       draft.dispose();
     },
   );
 
   test('Consultation draft hydrates without pending submission', () async {
     SharedPreferences.setMockInitialValues({
-      'rad_consultation_draft_topic': 'Study',
-      'rad_consultation_draft_message': 'Please advise',
+      'rad_consultation_draft_topic::guest': 'Study',
+      'rad_consultation_draft_message::guest': 'Please advise',
     });
     final draft = ConsultationDraftNotifier();
     await draft.ready;
@@ -59,22 +59,25 @@ void main() {
       expect(draft.state.contextLabel, 'Canada Startup Visa');
 
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString('rad_ai_pending_prompt'), contains('🇨🇦'));
-      expect(prefs.getString('rad_ai_pending_context'), 'Canada Startup Visa');
+      expect(prefs.getString('rad_ai_pending_prompt::guest'), contains('🇨🇦'));
+      expect(
+        prefs.getString('rad_ai_pending_context::guest'),
+        'Canada Startup Visa',
+      );
 
       // Saving empty prompt removes keys from storage
       await draft.savePrompt('', null);
       expect(draft.state.hasContent, false);
-      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
-      expect(prefs.getString('rad_ai_pending_context'), isNull);
+      expect(prefs.getString('rad_ai_pending_prompt::guest'), isNull);
+      expect(prefs.getString('rad_ai_pending_context::guest'), isNull);
 
       // clearDraft atomically wipes state
       await draft.savePrompt('Temp prompt', 'Context');
       expect(draft.state.hasContent, true);
       await draft.clearDraft();
       expect(draft.state.hasContent, false);
-      expect(prefs.getString('rad_ai_pending_prompt'), isNull);
-      expect(prefs.getString('rad_ai_pending_context'), isNull);
+      expect(prefs.getString('rad_ai_pending_prompt::guest'), isNull);
+      expect(prefs.getString('rad_ai_pending_context::guest'), isNull);
 
       draft.dispose();
     },
@@ -96,18 +99,18 @@ void main() {
 
       final prefs = await SharedPreferences.getInstance();
       expect(
-        prefs.getString('rad_consultation_draft_topic'),
+        prefs.getString('rad_consultation_draft_topic::guest'),
         'مشاوره تحصیلی آلمان ۲۰۲۶',
       );
       expect(
-        prefs.getString('rad_consultation_draft_message'),
+        prefs.getString('rad_consultation_draft_message::guest'),
         contains('🇩🇪'),
       );
 
       await draft.clearDraft();
       expect(draft.state.isEmpty, true);
-      expect(prefs.getString('rad_consultation_draft_topic'), isNull);
-      expect(prefs.getString('rad_consultation_draft_message'), isNull);
+      expect(prefs.getString('rad_consultation_draft_topic::guest'), isNull);
+      expect(prefs.getString('rad_consultation_draft_message::guest'), isNull);
 
       draft.dispose();
     },

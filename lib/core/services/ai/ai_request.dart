@@ -21,6 +21,8 @@ class AiRequest {
     this.locale,
     this.history = const [],
     this.metadata = const {},
+    this.authorizedDataScopes = const [],
+    this.context = const {},
   });
 
   final String prompt;
@@ -31,4 +33,8 @@ class AiRequest {
   /// Prior conversation turns, excluding local failure notices.
   final List<AiConversationMessage> history;
   final Map<String, String> metadata;
+
+  /// Explicit user-authorized tool scopes, separate from display metadata.
+  final List<String> authorizedDataScopes;
+  final Map<String, String?> context;
 }

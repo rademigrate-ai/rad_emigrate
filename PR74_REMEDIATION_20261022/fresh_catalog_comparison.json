@@ -1,0 +1,62 @@
+{
+  "tables": {
+    "actual_rows": 61,
+    "recorded_rows": 61,
+    "equal": true
+  },
+  "columns": {
+    "actual_rows": 526,
+    "recorded_rows": 526,
+    "equal": true
+  },
+  "indexes": {
+    "actual_rows": 186,
+    "recorded_rows": 186,
+    "equal": true
+  },
+  "schemas": {
+    "actual_rows": 5,
+    "recorded_rows": 5,
+    "equal": true
+  },
+  "storage": {
+    "actual_rows": 2,
+    "recorded_rows": 2,
+    "equal": true
+  },
+  "policies": {
+    "actual_rows": 118,
+    "recorded_rows": 118,
+    "equal": true
+  },
+  "triggers": {
+    "actual_rows": 27,
+    "recorded_rows": 27,
+    "equal": true
+  },
+  "extensions": {
+    "actual_rows": 7,
+    "recorded_rows": 7,
+    "equal": true
+  },
+  "constraints": {
+    "actual_rows": 292,
+    "recorded_rows": 292,
+    "equal": true
+  },
+  "table_grants": {
+    "actual_rows": 698,
+    "recorded_rows": 698,
+    "equal": true
+  },
+  "column_grants": {
+    "actual_rows": 445,
+    "recorded_rows": 445,
+    "equal": true
+  },
+  "default_grants": {
+    "actual_rows": 27,
+    "recorded_rows": 27,
+    "equal": true
+  }
+}

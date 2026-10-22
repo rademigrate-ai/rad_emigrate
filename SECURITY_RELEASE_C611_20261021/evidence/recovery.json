@@ -1,0 +1,11 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "at": "2026-10-21T14:34:19.466182+00:00",
+  "command": [
+    "node",
+    "scripts/check_password_recovery_redirect.cjs"
+  ],
+  "exit_code": 0,
+  "seconds": 1.46,
+  "log_sha256": "c2d0f3967f3b5fdcb8dc3eca2ecfa35bf96c66e849501e40dd3506cc71b14164"
+}

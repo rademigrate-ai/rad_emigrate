@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "747ab96daa38e303d10121e17c4d711fbb16fabe",
+  "at": "2026-10-21T17:05:34.422648+00:00",
+  "command": "flutter build apk --debug --no-pub --target-platform android-arm64",
+  "exit_code": 0,
+  "seconds": 67.1,
+  "log_sha256": "b3d6b440eb553387fbd916de84262fcb3961c92d7c0d51d915542384df61c106"
+}

@@ -1,0 +1,6 @@
+{
+  "ai_orchestrator_test.ts": "original non-ASCII fixture sequences preserved",
+  "research_sync_test.ts": "original non-ASCII fixture sequences preserved",
+  "document_intelligence_test.ts": "original non-ASCII fixture sequences preserved",
+  "provider_response_test.ts": "original non-ASCII fixture sequences preserved"
+}

@@ -1,0 +1,22 @@
+{
+  "code_sha": "747ab96daa38e303d10121e17c4d711fbb16fabe",
+  "artifacts": {
+    "build/web/index.html": {
+      "bytes": 6014,
+      "sha256": "aac65328b3e1f36114f31f68647d3829f8535ceba8371d09edd9d21331bb3503",
+      "local_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_release_assurance_20261021\\build\\web\\index.html"
+    },
+    "build/web/main.dart.js": {
+      "bytes": 5035938,
+      "sha256": "a872ed2b015a51263c0d287141372e8e5ad9e408772c38b43b821eb16f847151",
+      "local_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_release_assurance_20261021\\build\\web\\main.dart.js"
+    },
+    "build/app/outputs/flutter-apk/app-debug.apk": {
+      "bytes": 153300340,
+      "sha256": "df667757d25e808013ab4af65c7d1864a5e797cf70a0123afe334e6569ce4215",
+      "local_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\rad_release_assurance_20261021\\build\\app\\outputs\\flutter-apk\\app-debug.apk"
+    }
+  },
+  "signed_release": false,
+  "deployed": false
+}

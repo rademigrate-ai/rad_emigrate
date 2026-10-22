@@ -1,0 +1,16 @@
+{
+  "directory": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021",
+  "files": {
+    "databases.py": "5a5d0f1ca0e7cd4fec76977a501baef765bb7fefdf1543ea05ce174108ccfdcf",
+    "acl_idempotency.py": "90da374298812c97e9e2a553a0e00d5df661b818f2c0cfc610f1e7b4af447d26",
+    "verify_package_sql.py": "6946b722ba180324958b436ed415c495a0e7be0680add4d81e3287b433284536",
+    "inspect_hosted.py": "baff25ac5dbec29ae588fe1aeb50f43902661e31848cff0f83846d1ff4a09b8b",
+    "run_checks.py": "caadc4036e4b73b2d960a3677263053d264fa769adecbaba930e18b1281a2411",
+    "ci.py": "451930e0fd6ba6b9250084b8bf1181ed0d88a613eaeb933d13a0135e153e0093",
+    "review_scan.py": "45bc025087d0b2373a00742527ecc1365e073f4ade77911bd5726ab7f9b79264",
+    "migration_package.py": "a805f5a2c65837152b81b3110b34f58e4157a86a96c29ff2a38a35ec19e0fcdf",
+    "prepare_privacy_commit.py": "0fd82805c2e01fd0c7cdc16e60d0fc9f6b2d89f1fd0817ba3bec5560731d708b",
+    "prepare_actions_commit.py": "595576523c5078da0768f933c47bc0bfc2ce6ecdd520dc67ecc825d0671b0f76"
+  },
+  "scope": "Owned local paths/ports/project markers are enforced by the actual runners. Protected SQL/catalog inputs stay external and pinned. Not a hosted deployment tool."
+}

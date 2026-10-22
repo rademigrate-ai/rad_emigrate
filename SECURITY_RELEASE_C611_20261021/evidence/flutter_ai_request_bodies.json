@@ -1,0 +1,424 @@
+[
+  {
+    "action": "chat",
+    "request_key": "8d66d508-d287-4bd9-88f1-beb84b313d50",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "66a4324f-6ef0-4d75-bef8-6a82f2804d8e",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "0b5d92e5-9c69-4791-95cb-83a5737ba04a",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "32cf5006-202f-4b3d-bfb9-0ba95acf468c",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "8290087a-9c5d-4e54-a3c2-48ab20dcb8c0",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "59e915f5-8a57-4364-ad42-76f2dce0a2a6",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "8872b045-66a8-4457-8816-2b019d038829",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "1185682c-d58a-4531-a086-e93fef969284",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "b9266850-fc33-4346-b461-9b05ddcd3228",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "11335ac3-3327-4e4d-9ac0-fdfc4f6d3306",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "afae431a-5a2a-4fe3-a9ff-592539e1244b",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "6d7aad0c-58f9-42b0-9a71-be20f1d7f1fe",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "32295838-c4ab-40a2-942d-a9e0d73e661f",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "dc3e9b0a-1247-4d1f-947d-601b4d9444fb",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "b3e5a2ff-5c59-4303-b2c4-b2c2602c778f",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "80317ced-6693-4055-abd6-bd2d004e0dd6",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "22b85b77-e519-4775-b25d-0a44fda203ff",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "14003a59-d65f-4cc8-8fb6-7753e2ae04cd",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "6da9248f-1aa5-49b5-85df-e15cc7b6b0e1",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "a4cf19e5-2f25-464b-9b98-0f0c96fdd1c5",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "synthetic request"
+      }
+    ]
+  },
+  {
+    "action": "chat",
+    "request_key": "c1111111-1111-4111-8111-111111111111",
+    "scope": "user",
+    "session_id": null,
+    "guest_key": null,
+    "locale": "en",
+    "authorized_data_scopes": [
+      "profile"
+    ],
+    "context": {
+      "article_id": null,
+      "section_id": null,
+      "case_id": "c1111111-1111-4111-8111-111111111111"
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "scoped"
+      }
+    ]
+  }
+]

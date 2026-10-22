@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 import {
   parseProviderResponse,
   ProviderError,
@@ -226,8 +227,8 @@ Deno.test("provider requests: trusted system instructions use each adapter's nat
   const original = globalThis.fetch;
   try {
     for (const adapter of ["openai_compatible", "anthropic", "gemini"]) {
-      let body: any;
-      globalThis.fetch = async (_url, init) => {
+      let body: Record<string, unknown> = {};
+      globalThis.fetch = promiseStub( (_url, init) => {
         body = JSON.parse(String(init?.body));
         return Response.json(
           adapter === "openai_compatible"
@@ -236,7 +237,7 @@ Deno.test("provider requests: trusted system instructions use each adapter's nat
             ? { content: [{ type: "text", text: "Synthetic" }] }
             : { candidates: [{ content: { parts: [{ text: "Synthetic" }] } }] },
         );
-      };
+      });
       const result = await callProvider({
         provider_id: "synthetic",
         provider_slug: "synthetic",
@@ -255,7 +256,7 @@ Deno.test("provider requests: trusted system instructions use each adapter's nat
       }]);
       equal(result.text, "Synthetic");
       if (adapter === "openai_compatible") {
-        equal(body.messages[0], {
+        equal((body.messages as unknown[])[0], {
           role: "system",
           content: "TRUSTED_INSTRUCTION",
         });

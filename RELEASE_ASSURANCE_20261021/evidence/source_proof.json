@@ -1,0 +1,50 @@
+{
+  "verified_code_sha": "747ab96daa38e303d10121e17c4d711fbb16fabe",
+  "at": "2026-10-21T17:07:46.185466+00:00",
+  "847dd42_files": [
+    {
+      "path": "supabase/migrations/20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+      "byte_identical_to_847dd42": true,
+      "sha256": "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3"
+    },
+    {
+      "path": "supabase/tests/rad_client_table_privileges.sql",
+      "byte_identical_to_847dd42": true,
+      "sha256": "f5fb9a131e7305beacb57f5f131e0fa3d8379e339c8aa30a1e7f3b6e02b9850d"
+    },
+    {
+      "path": "scripts/verify_clean_schema.sh",
+      "byte_identical_to_847dd42": true,
+      "sha256": "6c1ebcfd30089b1be92fdfe14efac731b9d1eef834d782143396ee7ff40e1b33"
+    },
+    {
+      "path": "scripts/verify_migration_reconstruction.sh",
+      "byte_identical_to_847dd42": true,
+      "sha256": "0ea22904a2a3ef992407a61c10b63ea927b7da31c65255b24beb6981f077a77b"
+    }
+  ],
+  "unchanged_since_1b636": [
+    "supabase",
+    "scripts",
+    ".github"
+  ],
+  "sql_http_auth_sources_unchanged_since_e670": true,
+  "tree": "a5f5958129a035481f18d70abded308abd1c65c8",
+  "precommit_source_verification": {
+    "execution_head": "3b33f51793a0581148fd485a3c6956384b2f4c77",
+    "verified_source_tree": "a5f5958129a035481f18d70abded308abd1c65c8",
+    "native_full_flutter_passed": 866,
+    "focused_booking_interview_passed": 32,
+    "new_tests": 4,
+    "analysis": "No issues found",
+    "format": "0 changed",
+    "existing_Unicode_sequences_preserved": true,
+    "staged_git_blob_sha256": {
+      "lib/features/booking/presentation/pages/booking_service_page.dart": "40a79062f1dfe5820e07862fc54eea218c1df63e307b282cc6dd9519b3a8dbe1",
+      "lib/features/booking/presentation/providers/booking_controller.dart": "8406e993f17c84ac7a85c370409ba27e961ad39750ec6e2e055ca9bc14a097e5",
+      "lib/features/interviews/presentation/pages/interviews_page.dart": "7414152458ff2a67722728e1aa69bd8a074e5ddec1f527366e86b91e255cb5c5",
+      "lib/features/interviews/presentation/providers/appointment_controller.dart": "cc36832a4bfb038b0a2d0c82d76c529baff4a57c637f8eb9a5d4e634d8c9c08d",
+      "test/security/booking_action_isolation_test.dart": "debe69549f9777b94b2d4b907a9fe21f71e09ec954057ea16002dc4d3c6deb92"
+    }
+  }
+}

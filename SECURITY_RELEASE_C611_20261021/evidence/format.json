@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "at": "2026-10-21T14:33:38.376624+00:00",
+  "command": "dart format --output=none --set-exit-if-changed lib test",
+  "exit_code": 0,
+  "seconds": 13.09,
+  "log_sha256": "171b6cf57c66ec994fd2f01ed32dd078802b35debdfeaebaa67821b5aa3f1ade"
+}

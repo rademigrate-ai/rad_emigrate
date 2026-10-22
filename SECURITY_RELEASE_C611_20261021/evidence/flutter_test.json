@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "4d2c2158cb07d318d3652e6c4a2ff20dface73a6",
+  "at": "2026-10-21T14:43:35.293282+00:00",
+  "command": "flutter test --no-pub --reporter expanded",
+  "exit_code": 0,
+  "seconds": 327.33,
+  "log_sha256": "a8d31722691e301484ff6da8c3a7d29e8318770828988a6fe4f20eea1e499f84"
+}

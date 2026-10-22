@@ -855,9 +855,9 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Scenario 5: Draft persistence survives logout without being discarded',
-      (tester) async {
+    test(
+      'Scenario 5: private drafts remain owned and are hidden after logout',
+      () async {
         final prefs = await SharedPreferences.getInstance();
         final auth = AuthController(_MockAuthRepository());
 
@@ -893,20 +893,27 @@ void main() {
         // Perform logout
         await auth.logout();
         expect(auth.current.authenticated, false);
+        await container.pump();
 
-        // Drafts remain intact
+        await container.read(consultationDraftProvider.notifier).ready;
+        await container.read(aiPromptDraftProvider.notifier).ready;
+        expect(container.read(consultationDraftProvider).hasContent, false);
+        expect(container.read(aiPromptDraftProvider).hasContent, false);
+        auth.applySession(
+          const UserSession(userId: 'user-to-logout', authenticated: true),
+        );
+        await container.pump();
+        await container.read(consultationDraftProvider.notifier).ready;
+        await container.read(aiPromptDraftProvider.notifier).ready;
         expect(
           container.read(consultationDraftProvider).topic,
           'Preserved Topic',
         );
         expect(
-          container.read(consultationDraftProvider).message,
-          'Preserved Message across logout',
-        );
-        expect(
           container.read(aiPromptDraftProvider).prompt,
           'Preserved AI question across logout',
         );
+        await container.pump();
       },
     );
   });

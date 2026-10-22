@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-21T15:42:52.600149+00:00",
+  "live_captured_at": "2026-10-21T15:27:28.029004+00:00",
+  "project": "inshddthftkhcdosoqcn",
+  "metadata_dimensions_equal_to_recorded_baseline": {
+    "tables": true,
+    "columns": true,
+    "constraints": true,
+    "indexes": true,
+    "policies": true,
+    "table_grants": true,
+    "column_grants": true,
+    "functions": true,
+    "triggers": true,
+    "storage": true
+  },
+  "recorded_statement_hashes_unchanged": true,
+  "ledger_count": 54,
+  "live_nonrow_client_rights": 48,
+  "live_column_references": 100,
+  "maintain_acl_rows": 126,
+  "rls_disabled_public": [],
+  "mutations": false
+}

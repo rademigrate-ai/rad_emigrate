@@ -23,14 +23,23 @@ import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../domain/entities/user_profile.dart';
 import '../providers/profile_controller.dart';
 
-class ProfilePage extends ConsumerStatefulWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
-
   @override
-  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final identity = ref.watch(authenticatedUserIdProvider);
+    return _ProfilePageForIdentity(key: ValueKey(identity));
+  }
 }
 
-class _ProfilePageState extends ConsumerState<ProfilePage> {
+class _ProfilePageForIdentity extends ConsumerStatefulWidget {
+  const _ProfilePageForIdentity({super.key});
+
+  @override
+  ConsumerState<_ProfilePageForIdentity> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends ConsumerState<_ProfilePageForIdentity> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _firstName;
   late final TextEditingController _lastName;
@@ -91,8 +100,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     if (_saving || !_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     final current = ref.read(profileControllerProvider).valueOrNull;
-    final session = ref.read(authControllerProvider).valueOrNull;
-    final userId = current?.id ?? session?.userId;
+    final session = ref.read(verifiedUserSessionProvider);
+    final userId = ref.read(authenticatedUserIdProvider);
     if (userId == null || userId.isEmpty) {
       if (mounted) {
         setState(() => _saving = false);
@@ -118,6 +127,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
     try {
       await ref.read(profileControllerProvider.notifier).save(profile);
+      if (!mounted || ref.read(authenticatedUserIdProvider) != userId) return;
       // Sync display name to auth session only when name actually changed.
       // Never put global auth into loading (that redirected users to login).
       final priorName = (session?.fullName ?? current?.fullName ?? '').trim();
@@ -155,7 +165,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final session = ref.watch(authControllerProvider).valueOrNull;
+    final session = ref.watch(verifiedUserSessionProvider);
     final isGuest = session == null || !session.isAuthenticated;
     final profileState = ref.watch(profileControllerProvider);
     final themePref = ref.watch(themeControllerProvider);
@@ -475,7 +485,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         title: l10n.applications,
                         subtitle: l10n.viewDetails,
                         icon: Icons.assignment_outlined,
-                        onTap: () => context.go('/applications'),
+                        onTap: () => context.push('/profile/cases'),
                       ),
                       _ProfileActionRow(
                         title: l10n.documents,

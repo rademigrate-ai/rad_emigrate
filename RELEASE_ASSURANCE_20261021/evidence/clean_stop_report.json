@@ -1,0 +1,9 @@
+{
+  "operation": "stop",
+  "project": "rad_core_assurance_clean",
+  "port": 61622,
+  "source_head": "e6708ef214fcbf26917292ed74502a56ad05cea6",
+  "production_mutations": false,
+  "at": "2026-10-21T15:52:54.442803+00:00",
+  "status": "PASS"
+}

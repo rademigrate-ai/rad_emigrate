@@ -21,15 +21,16 @@ class ApplicationLocalDataSource {
 
   Future<List<VisaApplication>> readAll({String? userId}) async {
     if (userId != null && userId.isNotEmpty) {
-      return _readKey(_keyFor(userId));
+      return readForUser(userId);
     }
-    // Unscoped read is only for migration diagnostics; prefer userId.
-    return _readKey(_legacyKey);
+    await clearLegacyUnscoped();
+    return [];
   }
 
   Future<List<VisaApplication>> readForUser(String userId) async {
     if (userId.isEmpty) return [];
-    return _readKey(_keyFor(userId));
+    final items = await _readKey(_keyFor(userId));
+    return items.where((item) => item.userId == userId).toList();
   }
 
   Future<void> writeForUser(String userId, List<VisaApplication> items) async {
@@ -37,10 +38,7 @@ class ApplicationLocalDataSource {
       throw ArgumentError.value(userId, 'userId', 'must not be empty');
     }
     // Only persist rows owned by this user (defense in depth).
-    final owned = items
-        .where((e) => e.userId == null || e.userId == userId)
-        .map((e) => e.userId == null ? e.copyWith(userId: userId) : e)
-        .toList();
+    final owned = items.where((e) => e.userId == userId).toList();
     final encoded = jsonEncode(owned.map((e) => e.toJson()).toList());
     await _prefs.setString(_keyFor(userId), encoded);
     // Drop legacy unscoped blob if present.
@@ -51,8 +49,18 @@ class ApplicationLocalDataSource {
 
   /// @Deprecated Prefer [writeForUser]. Writes legacy key only when userId omitted.
   Future<void> writeAll(List<VisaApplication> items) async {
-    final encoded = jsonEncode(items.map((e) => e.toJson()).toList());
-    await _prefs.setString(_legacyKey, encoded);
+    for (final owner
+        in items
+            .map((item) => item.userId)
+            .whereType<String>()
+            .where((id) => id.isNotEmpty)
+            .toSet()) {
+      await writeForUser(
+        owner,
+        items.where((item) => item.userId == owner).toList(),
+      );
+    }
+    await clearLegacyUnscoped();
   }
 
   Future<void> clearForUser(String userId) async {

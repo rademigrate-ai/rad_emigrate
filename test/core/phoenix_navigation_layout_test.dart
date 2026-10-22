@@ -35,7 +35,7 @@ Future<GoRouter> _pump(
             '/dashboard',
             '/visa',
             '/ai-assistant',
-            '/applications',
+            '/feed',
             '/profile',
           ])
             GoRoute(path: path, builder: (_, _) => const SizedBox.expand()),
@@ -117,10 +117,10 @@ void main() {
         final labels = [
           strings.home,
           strings.explore,
-          strings.cases,
+          strings.feed,
           strings.profile,
         ];
-        final paths = ['/dashboard', '/visa', '/applications', '/profile'];
+        final paths = ['/dashboard', '/visa', '/feed', '/profile'];
         final surface = tester.getRect(
           find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
         );

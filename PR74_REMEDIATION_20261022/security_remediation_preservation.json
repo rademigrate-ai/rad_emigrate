@@ -1,0 +1,22 @@
+[
+  {
+    "file": "supabase/migrations/20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+    "unchanged_from_847dd42": true,
+    "sha256_lf": "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3"
+  },
+  {
+    "file": "supabase/tests/rad_client_table_privileges.sql",
+    "unchanged_from_847dd42": true,
+    "sha256_lf": "f5fb9a131e7305beacb57f5f131e0fa3d8379e339c8aa30a1e7f3b6e02b9850d"
+  },
+  {
+    "file": "scripts/verify_clean_schema.sh",
+    "unchanged_from_847dd42": true,
+    "sha256_lf": "6c1ebcfd30089b1be92fdfe14efac731b9d1eef834d782143396ee7ff40e1b33"
+  },
+  {
+    "file": "scripts/verify_migration_reconstruction.sh",
+    "unchanged_from_847dd42": true,
+    "sha256_lf": "0ea22904a2a3ef992407a61c10b63ea927b7da31c65255b24beb6981f077a77b"
+  }
+]

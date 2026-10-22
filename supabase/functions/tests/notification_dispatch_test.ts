@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 import {
   dispatchSandboxNotifications,
   NotificationWorkerError,
@@ -23,10 +24,10 @@ function equal(a: unknown, b: unknown) {
 Deno.test("notifications: empty outbox creates no sandbox receipt or transport call", async () => {
   let sends = 0;
   const result = await dispatchSandboxNotifications(
-    async () => [],
-    async () => {
+    promiseStub( () => []),
+    promiseStub( () => {
       sends++;
-    },
+    }),
   );
   equal(result, {
     mode: "sandbox",
@@ -43,7 +44,7 @@ Deno.test("notifications: accepted sandbox receipt uses its lease without exposi
   let claimed = false;
   let ack: unknown;
   const envelopes: SandboxEnvelope[] = [];
-  const result = await dispatchSandboxNotifications(async (path, init) => {
+  const result = await dispatchSandboxNotifications(promiseStub( (path, init) => {
     if (path.includes("claim_")) {
       if (claimed) return [];
       claimed = true;
@@ -56,9 +57,9 @@ Deno.test("notifications: accepted sandbox receipt uses its lease without exposi
     }
     ack = JSON.parse(String(init.body));
     return true;
-  }, async (value) => {
+  }), promiseStub( (value) => {
     envelopes.push(value);
-  });
+  }));
   equal(result.sandbox_receipts, 1);
   equal(ack, {
     p_delivery_id: id("1"),
@@ -76,13 +77,13 @@ Deno.test("notifications: accepted sandbox receipt uses its lease without exposi
 
 Deno.test("notifications: transport failure schedules a bounded retry without raw diagnostics", async () => {
   let acknowledged: unknown;
-  const result = await dispatchSandboxNotifications(async (path, init) => {
+  const result = await dispatchSandboxNotifications(promiseStub( (path, init) => {
     if (path.includes("claim_")) return [claim()];
     acknowledged = JSON.parse(String(init.body));
     return true;
-  }, async () => {
+  }), promiseStub( () => {
     throw new Error("private provider diagnostic");
-  }, 1);
+  }), 1);
   equal(result.retry_scheduled, 1);
   equal(acknowledged, {
     p_delivery_id: id("1"),
@@ -93,7 +94,7 @@ Deno.test("notifications: transport failure schedules a bounded retry without ra
 
 Deno.test("notifications: stale or revoked lease does not count as delivery", async () => {
   const result = await dispatchSandboxNotifications(
-    async (path) => path.includes("claim_") ? [claim()] : false,
+    promiseStub( (path) => path.includes("claim_") ? [claim()] : false),
     async () => {},
     1,
   );
@@ -103,11 +104,11 @@ Deno.test("notifications: stale or revoked lease does not count as delivery", as
 
 Deno.test("notifications: third failed attempt is terminal rather than a scheduled retry", async () => {
   const result = await dispatchSandboxNotifications(
-    async (path) =>
-      path.includes("claim_") ? [{ ...claim(), attempts: 3 }] : true,
-    async () => {
+    promiseStub( (path) =>
+      path.includes("claim_") ? [{ ...claim(), attempts: 3 }] : true),
+    promiseStub( () => {
       throw new Error("synthetic failure");
-    },
+    }),
     1,
   );
   equal(result.failed, 1);
@@ -128,9 +129,9 @@ Deno.test("notifications: malformed and non-sandbox claims cannot invoke transpo
     let sends = 0;
     let failed = false;
     try {
-      await dispatchSandboxNotifications(async () => value, async () => {
+      await dispatchSandboxNotifications(promiseStub( () => value), promiseStub( () => {
         sends++;
-      });
+      }));
     } catch (error) {
       failed = error instanceof NotificationWorkerError;
     }
@@ -144,13 +145,13 @@ Deno.test("notifications: unavailable or malformed acknowledgement never retries
     let sends = 0;
     let failed = false;
     try {
-      await dispatchSandboxNotifications(async (path) => {
+      await dispatchSandboxNotifications(promiseStub( (path) => {
         if (path.includes("claim_")) return [claim()];
         if (fail) throw new Error("private database diagnostic");
         return null;
-      }, async () => {
+      }), promiseStub( () => {
         sends++;
-      });
+      }));
     } catch (error) {
       failed = error instanceof NotificationWorkerError &&
         error.message === "notification_outbox_unavailable";
@@ -163,10 +164,10 @@ Deno.test("notifications: unavailable or malformed acknowledgement never retries
 Deno.test("notifications: batch cap bounds transport and rejects invalid limits", async () => {
   let sends = 0;
   const result = await dispatchSandboxNotifications(
-    async (path) => path.includes("claim_") ? [claim()] : true,
-    async () => {
+    promiseStub( (path) => path.includes("claim_") ? [claim()] : true),
+    promiseStub( () => {
       sends++;
-    },
+    }),
     3,
   );
   equal(result.claimed, 3);
@@ -175,7 +176,7 @@ Deno.test("notifications: batch cap bounds transport and rejects invalid limits"
     let failed = false;
     try {
       await dispatchSandboxNotifications(
-        async () => [],
+        promiseStub( () => []),
         async () => {},
         maximum,
       );

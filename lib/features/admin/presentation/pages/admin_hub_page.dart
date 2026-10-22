@@ -45,6 +45,20 @@ class AdminHubPage extends StatelessWidget {
         subtitle: l10n.adminResearchSubtitle,
         route: '/admin/ai-research',
       ),
+      _AdminDestination(
+        icon: Icons.article_outlined,
+        index: '05',
+        title: 'مدیریت مقالات ویزا (CMS)',
+        subtitle: 'ویرایش مقالات تجمیعی و عناوین مستقل',
+        route: '/admin/cms',
+      ),
+      _AdminDestination(
+        icon: Icons.track_changes_outlined,
+        index: '06',
+        title: 'پایش منابع رسمی',
+        subtitle: 'بررسی تغییرات خط‌به‌خط و تأیید انطباق',
+        route: '/admin/sources',
+      ),
     ];
     return Scaffold(
       appBar: AppBar(

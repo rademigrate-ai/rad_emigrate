@@ -8,6 +8,10 @@ import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/admin/presentation/pages/admin_consultations_page.dart';
+import '../../features/admin/presentation/pages/admin_cms_articles_page.dart';
+import '../../features/admin/presentation/pages/admin_cms_canonical_editor_page.dart';
+import '../../features/admin/presentation/pages/admin_source_monitor_page.dart';
+import '../../features/admin/presentation/pages/admin_source_diff_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -29,6 +33,12 @@ import '../../features/profile/presentation/pages/immigration_profile_page.dart'
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
 import '../../features/visa/presentation/pages/university_scholarship_page.dart';
+import '../../features/booking/presentation/pages/booking_page.dart';
+import '../../features/interviews/presentation/pages/interviews_page.dart';
+import '../../features/booking/presentation/pages/booking_service_page.dart';
+import '../../features/cost_calculator/presentation/pages/cost_calculator_page.dart';
+import '../../features/pathway_comparison/presentation/pages/pathway_comparison_page.dart';
+import '../../features/university_comparison/presentation/pages/university_comparison_page.dart';
 import '../widgets/not_found_page.dart';
 import 'app_shell.dart';
 import 'auth_redirect.dart';
@@ -36,6 +46,7 @@ import 'auth_redirect.dart';
 class AuthRefreshNotifier extends ChangeNotifier {
   AuthRefreshNotifier(Ref ref) {
     ref.listen(authControllerProvider, (_, _) => notifyListeners());
+    ref.listen(authenticatedUserIdProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -52,11 +63,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: ref.watch(authRefreshNotifierProvider),
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
+      final identity = ref.read(authenticatedUserIdProvider);
       final bootstrap = ref.read(appBootstrapProvider);
       return authRedirect(
         uri: state.uri,
         isRestoring: bootstrap.isLoading,
-        isAuthenticated: auth.valueOrNull?.isAuthenticated ?? false,
+        isAuthenticated:
+            identity != null &&
+            identity.isNotEmpty &&
+            (auth.valueOrNull?.isAuthenticated ?? false) &&
+            identity == auth.valueOrNull?.userId,
         profileComplete: auth.valueOrNull?.profileComplete ?? false,
       );
     },
@@ -113,6 +129,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),
           ),
+          GoRoute(
+            path: '/profile/cases',
+            builder: (_, _) => const ApplicationsPage(),
+          ),
+          GoRoute(
+            path: '/profile/cases/:applicationId',
+            builder: (_, state) => ApplicationsPage(
+              initialApplicationId: state.pathParameters['applicationId'],
+            ),
+          ),
           GoRoute(path: '/documents', builder: (_, _) => const DocumentsPage()),
           GoRoute(
             path: '/documents/draft',
@@ -123,6 +149,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => ConsultationPage(
               initialTopic: state.uri.queryParameters['topic'],
             ),
+          ),
+          GoRoute(path: '/booking', builder: (_, _) => const BookingPage()),
+          GoRoute(
+            path: '/booking/service/:serviceId',
+            builder: (_, state) => BookingServicePage(
+              serviceId: state.pathParameters['serviceId'] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: '/interview-scheduling',
+            builder: (_, _) => const InterviewsPage(),
+          ),
+          GoRoute(
+            path: '/interviews',
+            builder: (_, _) => const InterviewsPage(),
+          ),
+          GoRoute(
+            path: '/calculator/cost',
+            builder: (_, _) => const CostCalculatorPage(),
+          ),
+          GoRoute(
+            path: '/compare/pathways',
+            builder: (_, _) => const PathwayComparisonPage(),
+          ),
+          GoRoute(
+            path: '/compare/universities',
+            builder: (_, _) => const UniversityComparisonPage(),
           ),
           GoRoute(
             path: '/notifications',
@@ -163,6 +216,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/ai-research',
             builder: (_, _) => const AdminAiWorkspacePage(),
+          ),
+          GoRoute(
+            path: '/admin/cms',
+            builder: (_, _) => const AdminCmsArticlesPage(),
+          ),
+          GoRoute(
+            path: '/admin/cms/canonical/:id',
+            builder: (_, state) => AdminCmsCanonicalEditorPage(
+              articleId: state.pathParameters['id'] ?? '',
+              locale: state.uri.queryParameters['locale'] == 'en' ? 'en' : 'fa',
+            ),
+          ),
+          GoRoute(
+            path: '/admin/sources',
+            builder: (_, _) => const AdminSourceMonitorPage(),
+          ),
+          GoRoute(
+            path: '/admin/sources/:sourceId/review',
+            builder: (_, state) => AdminSourceDiffPage(
+              sourceId: state.pathParameters['sourceId'] ?? '',
+            ),
           ),
           GoRoute(path: '/feed', builder: (_, _) => const FeedPage()),
         ],

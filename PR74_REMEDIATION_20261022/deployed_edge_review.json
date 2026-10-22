@@ -1,0 +1,120 @@
+[
+  {
+    "slug": "ai-orchestrator",
+    "version": 11,
+    "bundle_sha256": "5362558646da14d5f50c9a381b1299964363b4bad67023eb07ab626f619ee007",
+    "files": [
+      {
+        "file": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/index.ts",
+        "sha256": "df07604ef3a9493d5842755443fa630c68c3e30305bdc07c5a0b935b235bddde",
+        "security_review_lines": []
+      },
+      {
+        "file": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/handler.ts",
+        "sha256": "2240f411f0c03389ce80271c7959001e15c84d9651ceabcdc480bb72a5b0daf8",
+        "security_review_lines": [
+          {
+            "line": 36,
+            "source": "const gq = await db(\"rpc/consume_ai_guest_quota\", {"
+          },
+          {
+            "line": 75,
+            "source": "} catch (error) {"
+          },
+          {
+            "line": 99,
+            "source": "const quota = await db(\"rpc/consume_ai_daily_quota\", {"
+          },
+          {
+            "line": 220,
+            "source": "} catch (error) {"
+          }
+        ]
+      },
+      {
+        "file": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/knowledge_grounding.ts",
+        "sha256": "802e3038ad4fed7a58cf00b4926ec2c534f99626b63afc1696a35cd72a3d9ecd",
+        "security_review_lines": []
+      },
+      {
+        "file": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/source/handler_providers.ts",
+        "sha256": "b141c7083c1b6f8e60ea713f705d5daf07bc925ee9f95de79f1a0a74b392d07c",
+        "security_review_lines": [
+          {
+            "line": 65,
+            "source": "} catch (error) {"
+          }
+        ]
+      },
+      {
+        "file": "user_fn_inshddthftkhcdosoqcn_183e0b7d-2832-4802-8fab-50e79c2612d4_9/_shared/cors.ts",
+        "sha256": "09169473f51cc52eedf8a5f094f04651cab4644d0e8e843a20a6de482604661f",
+        "security_review_lines": []
+      }
+    ]
+  },
+  {
+    "slug": "document-intelligence",
+    "version": 3,
+    "bundle_sha256": "ebc7450c0bb96a36021dd5fb2e267d810caf39c6dd1dbfc1f3acd830b28ad064",
+    "files": [
+      {
+        "file": "index.ts",
+        "sha256": "44111e0972e3acbd93e3cc1f83608f0de4d1f2967a4597ea20fd129859ed70d1",
+        "security_review_lines": [
+          {
+            "line": 21,
+            "source": "const docs=await db(`documents?select=id,user_id,file_path,name&id=eq.${encodeURIComponent(body.document_id)}&user_id=eq.${encodeURIComponent(user.id)}&limit=1`);"
+          },
+          {
+            "line": 34,
+            "source": "if(!docs[0].file_path) throw new Error(\"document_file_missing\");"
+          },
+          {
+            "line": 35,
+            "source": "const file=await fetch(`${URL}/storage/v1/object/documents/${docs[0].file_path}`,{headers:{apikey:SERVICE,Authorization:`Bearer ${SERVICE}`}});"
+          },
+          {
+            "line": 37,
+            "source": "const bytes=await file.arrayBuffer();"
+          },
+          {
+            "line": 61,
+            "source": "}catch(error){"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "research-sync",
+    "version": 4,
+    "bundle_sha256": "88d4953458ecc7c9f010270dc234d8ea1a2352ffc6728f9251fcb5d806bce476",
+    "files": [
+      {
+        "file": "research-sync/index.ts",
+        "sha256": "df07604ef3a9493d5842755443fa630c68c3e30305bdc07c5a0b935b235bddde",
+        "security_review_lines": []
+      },
+      {
+        "file": "research-sync/handler.ts",
+        "sha256": "08e6c04261c4d887b91416bcc4018100505e3a939a877fba10f7aa58a9d428c9",
+        "security_review_lines": [
+          {
+            "line": 134,
+            "source": "} catch (error) {"
+          },
+          {
+            "line": 143,
+            "source": "} catch (error) {"
+          }
+        ]
+      },
+      {
+        "file": "_shared/cors.ts",
+        "sha256": "09169473f51cc52eedf8a5f094f04651cab4644d0e8e843a20a6de482604661f",
+        "security_review_lines": []
+      }
+    ]
+  }
+]

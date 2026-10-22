@@ -15,6 +15,8 @@ returns jsonb language sql as $$
    'amount_minor',case when p_type='subscription_cancelled' then 0 else 100 end,'currency','TST',
    'occurred_at','2026-10-18T00:00:00Z','period_end','2026-11-18T00:00:00Z')
 $$;
+-- Global defaults now deny PUBLIC; grant this local fixture helper explicitly.
+grant execute on function pg_temp.payment_event(text,integer,text,text) to service_role,authenticated;
 -- Fixture hashes are stable 64-character test digests. The HTTP layer separately
 -- verifies the raw-body HMAC and computes the canonical SHA-256.
 do $$ begin

@@ -1,0 +1,77 @@
+{
+  "captured_at": "2026-10-21T17:07:46.185466+00:00",
+  "no_log_values_exported": true,
+  "files": {
+    "full_actions_flutter.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\full_actions_flutter.log",
+      "sha256": "f89f35bdcfe6b22fdc573da103a4c56d3333b0da77f02b47daa9c42ed1014222",
+      "bytes": 355494
+    },
+    "booking_actions_tests.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\booking_actions_tests.log",
+      "sha256": "fa4202bbe04ab78378129bc82a1a5176dabfe3f0ed0ac3a9f026f9d04e93ee91",
+      "bytes": 13152
+    },
+    "booking_actions_analyze.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\booking_actions_analyze.log",
+      "sha256": "d5215af6457ef366fa3efa8cc91239d8a43e75ba8775585a0870a48004d5982c",
+      "bytes": 202
+    },
+    "final_actions_format.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\final_actions_format.log",
+      "sha256": "d322cc076a2acfb3f127e6b3ae3e12c134b84ab076cb1c687ea82d81146a4c09",
+      "bytes": 102
+    },
+    "deno.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\deno.log",
+      "sha256": "b0216ff5def38f88e1b059553bb33c7ed3639bb542edaec863b48ebcc090e576",
+      "bytes": 13078
+    },
+    "lint.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\lint.log",
+      "sha256": "613fe3cbf5df8fdd4efa5404be84f61cb146a0bceb0d6f519dc57d727758f662",
+      "bytes": 17
+    },
+    "python.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\python.log",
+      "sha256": "3297a9e627e2b2e592a8265ef9762a72088176e45418313971690a9c8d749b3e",
+      "bytes": 7064
+    },
+    "entrypoint_check.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\entrypoint_check.log",
+      "sha256": "05fc369c299e2b33a1e0bd0880ad8773f120479b38e6f1afd1cc9a253c258e9b",
+      "bytes": 422
+    },
+    "web.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\web.log",
+      "sha256": "5bbfc18b22f29d9b5340193dcb5a2730d7957ed464b08a4ad413d6a19fdb3c7c",
+      "bytes": 1293
+    },
+    "android.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\android.log",
+      "sha256": "b3d6b440eb553387fbd916de84262fcb3961c92d7c0d51d915542384df61c106",
+      "bytes": 6038
+    },
+    "auth_storage.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\auth_storage.log",
+      "sha256": "92480fb4c2b023181356a8c4168a33ac9b487629f69202bb1fc843aec44d5c1a",
+      "bytes": 300
+    },
+    "http_security.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\http_security.log",
+      "sha256": "4f6e7ed2fcdcf918bf966340dd9bbd134971da0887dba8a32f612f4b40721cdf",
+      "bytes": 1374
+    },
+    "acl_idempotency.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\acl_idempotency.log",
+      "sha256": "df2edb23572157dd6f7d4130be2e07aea1b7332baef9fdb66fee8b62236b098c",
+      "bytes": 142
+    },
+    "secret_scan_final.log": {
+      "absolute_path": "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_release_assurance_20261021\\secret_scan_final.log",
+      "sha256": "29619accf55d2911e0eb2bccb5cee1aa0b6ba5d4a7a995360ba764841f5b96f4",
+      "bytes": 322
+    }
+  },
+  "limitations": "External logs include earlier failed diagnostic attempts under other filenames. Only explicitly named final passing outputs support the verdict. UTF-16 PowerShell output is decoded only for review; raw byte digests are retained."
+}

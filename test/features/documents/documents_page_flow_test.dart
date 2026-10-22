@@ -20,7 +20,8 @@ class _FakeDocRepo implements DocumentRepository {
   int deleteCalls = 0;
 
   @override
-  Future<List<Document>> listDocuments({String? userId}) async => docs;
+  Future<List<Document>> listDocuments({String? userId}) async =>
+      docs.map((doc) => doc.copyWith(userId: userId)).toList();
 
   @override
   Future<Document?> getDocument(String id) async {

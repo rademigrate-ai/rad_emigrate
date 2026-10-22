@@ -96,11 +96,16 @@ begin
   if not exists (
     select 1
     from pg_proc
-    where oid = 'public.consume_ai_daily_quota(uuid,text)'::regprocedure
+    where oid = 'private.rad_consume_ai_quota_base(uuid,text)'::regprocedure
       and prosecdef
       and position('pg_advisory_xact_lock' in prosrc) > 0
       and position('insert into public.ai_requests' in lower(prosrc)) > 0
-  ) then
+  ) or not exists(select 1 from pg_proc where oid='public.consume_ai_daily_quota(uuid,text)'::regprocedure
+      and position('reserve_rad_ai_request' in lower(prosrc))>0)
+    or not exists(select 1 from pg_proc where oid='public.reserve_rad_ai_request(uuid,uuid,text,integer,uuid)'::regprocedure
+      and position('pg_advisory_xact_lock' in lower(prosrc))>0
+      and position('rad_consume_ai_quota_base' in lower(prosrc))>0)
+    or has_function_privilege('authenticated','private.rad_consume_ai_quota_base(uuid,text)','EXECUTE') then
     raise exception 'Authenticated AI quota reservation is not atomic';
   end if;
   if not exists (select 1 from pg_proc

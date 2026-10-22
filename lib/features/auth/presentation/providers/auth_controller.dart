@@ -31,6 +31,31 @@ final authControllerProvider =
       return AuthController(ref.watch(authRepositoryProvider));
     });
 
+/// Reactive identity used to fence private caches and local drafts.
+final authenticatedUserIdProvider = Provider<String?>((ref) {
+  final service = ref.watch(supabaseClientServiceProvider);
+  if (service.isInitialized) {
+    final identity = ref.watch(supabaseAuthUserIdProvider);
+    if (identity.hasError) return null;
+    return identity.hasValue
+        ? identity.valueOrNull
+        : service.client.auth.currentUser?.id;
+  }
+  return ref.watch(
+    authControllerProvider.select((state) {
+      final session = state.valueOrNull;
+      return session?.authenticated == true ? session?.userId : null;
+    }),
+  );
+});
+
+/// Never project a previous account's display metadata into the SDK session.
+final verifiedUserSessionProvider = Provider<UserSession?>((ref) {
+  final identity = ref.watch(authenticatedUserIdProvider);
+  final session = ref.watch(authControllerProvider).valueOrNull;
+  return identity != null && session?.userId == identity ? session : null;
+});
+
 class AuthController extends StateNotifier<AsyncValue<UserSession>> {
   AuthController(this._repository)
     : super(const AsyncValue.data(UserSession()));

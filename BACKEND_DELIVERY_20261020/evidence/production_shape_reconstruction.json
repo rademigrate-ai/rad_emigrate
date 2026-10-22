@@ -1,0 +1,11 @@
+{
+  "operation": "reconstruct",
+  "project": "rad_core_upgrade",
+  "port": 60322,
+  "source_head": "839c749759989c922fdaa840e1a5f1e36f166b00",
+  "production_mutations": false,
+  "at": "2026-10-20T11:29:04.081434+00:00",
+  "baseline_sha256": "c8506163b6a232730c3d6ae0c51e8eca2c1f749ea4a1828f41cbd3e055ac8aa9",
+  "observed_versions": 54,
+  "status": "PASS"
+}

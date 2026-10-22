@@ -1,0 +1,319 @@
+{
+  "status": "NO_GO",
+  "live_count": 54,
+  "repo_count": 80,
+  "exact_version_and_name": 27,
+  "version_aliases": [
+    {
+      "name": "client_delivery_ai_scopes",
+      "live_version": "20261005123027",
+      "repo_version": "20261004203000"
+    },
+    {
+      "name": "stage1_ai_research_completion",
+      "live_version": "20261005123202",
+      "repo_version": "20261005102000"
+    },
+    {
+      "name": "stage2_review_feed_publish",
+      "live_version": "20261005123255",
+      "repo_version": "20261005120000"
+    },
+    {
+      "name": "stage3_fk_covering_indexes",
+      "live_version": "20261005180215",
+      "repo_version": "20261005190000"
+    },
+    {
+      "name": "stage2_visa_structured_steps",
+      "live_version": "20261006144235",
+      "repo_version": "20261005130000"
+    },
+    {
+      "name": "stage5_research_review_candidate_backfill",
+      "live_version": "20261006144246",
+      "repo_version": "20261006132931"
+    },
+    {
+      "name": "fix_profile_update_with_check_role_escalation",
+      "live_version": "20261006161823",
+      "repo_version": "20261006180000"
+    },
+    {
+      "name": "ai_dynamic_routing_architecture",
+      "live_version": "20261006221616",
+      "repo_version": "20261007080000"
+    },
+    {
+      "name": "ai_credential_failure_routing",
+      "live_version": "20261007075108",
+      "repo_version": "20261007080001"
+    },
+    {
+      "name": "research_atomic_review_candidate",
+      "live_version": "20261007075110",
+      "repo_version": "20261007080002"
+    },
+    {
+      "name": "stage2_knowledge_completion",
+      "live_version": "20261007171212",
+      "repo_version": "20261007180000"
+    },
+    {
+      "name": "stage4_user_ai_quota_grounding",
+      "live_version": "20261007183840",
+      "repo_version": "20261007210000"
+    },
+    {
+      "name": "stage4_limit_ai_runtime_chain",
+      "live_version": "20261007192522",
+      "repo_version": "20261007212000"
+    },
+    {
+      "name": "stage6_entitlement_access_decision",
+      "live_version": "20261007202907",
+      "repo_version": "20261007230000"
+    },
+    {
+      "name": "stage7_ops_consultation_app_status",
+      "live_version": "20261007205734",
+      "repo_version": "20261008010000"
+    },
+    {
+      "name": "stage9_security_grant_hardening",
+      "live_version": "20261007212140",
+      "repo_version": "20261008020000"
+    },
+    {
+      "name": "repair_admin_consultation_rpcs",
+      "live_version": "20261019171732",
+      "repo_version": "20261019180000"
+    }
+  ],
+  "live_only": [
+    {
+      "version": "20261007142614",
+      "name": "ai_discovery_auto_enable_chat"
+    },
+    {
+      "version": "20261007171310",
+      "name": "stage2_promote_knowledge_fn"
+    },
+    {
+      "version": "20261007171341",
+      "name": "stage2_retrieve_and_conflict_fn"
+    },
+    {
+      "version": "20261007185216",
+      "name": "stage4_guest_quota_advisory_lock"
+    },
+    {
+      "version": "20261019130911",
+      "name": "20261010010000_stage1_p0_security_completion"
+    },
+    {
+      "version": "20261019131205",
+      "name": "20261017190000_security_ai_entitlement_rpc_privacy"
+    },
+    {
+      "version": "20261019131224",
+      "name": "20261010055013_stage1_atomic_ai_quota_reservation"
+    },
+    {
+      "version": "20261019131243",
+      "name": "20261010070000_stage1_ssrf_ipv4_mapped_ipv6"
+    },
+    {
+      "version": "20261019131312",
+      "name": "20261012110945_stage1_security_abuse_storage_alignment"
+    },
+    {
+      "version": "20261019131319",
+      "name": "20261012230000_ai_models_check_constraints_alignment"
+    }
+  ],
+  "repo_only": [
+    {
+      "version": "20261007180001",
+      "name": "stage2_knowledge_promote",
+      "file": "20261007180001_stage2_knowledge_promote.sql"
+    },
+    {
+      "version": "20261007180002",
+      "name": "stage2_knowledge_retrieve_conflict",
+      "file": "20261007180002_stage2_knowledge_retrieve_conflict.sql"
+    },
+    {
+      "version": "20261007220000",
+      "name": "stage5_visa_editorial_summaries",
+      "file": "20261007220000_stage5_visa_editorial_summaries.sql"
+    },
+    {
+      "version": "20261010010000",
+      "name": "stage1_p0_security_completion",
+      "file": "20261010010000_stage1_p0_security_completion.sql"
+    },
+    {
+      "version": "20261010055013",
+      "name": "stage1_atomic_ai_quota_reservation",
+      "file": "20261010055013_stage1_atomic_ai_quota_reservation.sql"
+    },
+    {
+      "version": "20261010070000",
+      "name": "stage1_ssrf_ipv4_mapped_ipv6",
+      "file": "20261010070000_stage1_ssrf_ipv4_mapped_ipv6.sql"
+    },
+    {
+      "version": "20261012110945",
+      "name": "stage1_security_abuse_storage_alignment",
+      "file": "20261012110945_stage1_security_abuse_storage_alignment.sql"
+    },
+    {
+      "version": "20261012230000",
+      "name": "ai_models_check_constraints_alignment",
+      "file": "20261012230000_ai_models_check_constraints_alignment.sql"
+    },
+    {
+      "version": "20261017190000",
+      "name": "security_ai_entitlement_rpc_privacy",
+      "file": "20261017190000_security_ai_entitlement_rpc_privacy.sql"
+    },
+    {
+      "version": "20261018125432",
+      "name": "local47_crm_notification_outbox",
+      "file": "20261018125432_local47_crm_notification_outbox.sql"
+    },
+    {
+      "version": "20261018142313",
+      "name": "local47_payment_sandbox_integrity",
+      "file": "20261018142313_local47_payment_sandbox_integrity.sql"
+    },
+    {
+      "version": "20261018143455",
+      "name": "local47_notification_privilege_alignment",
+      "file": "20261018143455_local47_notification_privilege_alignment.sql"
+    },
+    {
+      "version": "20261018152513",
+      "name": "local47_document_atomic_processing",
+      "file": "20261018152513_local47_document_atomic_processing.sql"
+    },
+    {
+      "version": "20261018154834",
+      "name": "local47_observability_privacy_and_triage",
+      "file": "20261018154834_local47_observability_privacy_and_triage.sql"
+    },
+    {
+      "version": "20261018210000",
+      "name": "stage10_covering_fk_indexes_completion",
+      "file": "20261018210000_stage10_covering_fk_indexes_completion.sql"
+    },
+    {
+      "version": "20261018211645",
+      "name": "phase24_mock_checkout_and_crm_search",
+      "file": "20261018211645_phase24_mock_checkout_and_crm_search.sql"
+    },
+    {
+      "version": "20261019204906",
+      "name": "rad_security_contract_foundation",
+      "file": "20261019204906_rad_security_contract_foundation.sql"
+    },
+    {
+      "version": "20261019205040",
+      "name": "rad_visa_cms_official_evidence",
+      "file": "20261019205040_rad_visa_cms_official_evidence.sql"
+    },
+    {
+      "version": "20261019205454",
+      "name": "rad_currency_cache_alerts",
+      "file": "20261019205454_rad_currency_cache_alerts.sql"
+    },
+    {
+      "version": "20261019205459",
+      "name": "rad_feed_notifications_search",
+      "file": "20261019205459_rad_feed_notifications_search.sql"
+    },
+    {
+      "version": "20261019205502",
+      "name": "rad_copilot_scoped_reservations",
+      "file": "20261019205502_rad_copilot_scoped_reservations.sql"
+    },
+    {
+      "version": "20261019210000",
+      "name": "g002_content_architecture_scaffolding",
+      "file": "20261019210000_g002_content_architecture_scaffolding.sql"
+    },
+    {
+      "version": "20261019210423",
+      "name": "rad_content_workflows",
+      "file": "20261019210423_rad_content_workflows.sql"
+    },
+    {
+      "version": "20261019211000",
+      "name": "security_quota_owner_and_publish_approved",
+      "file": "20261019211000_security_quota_owner_and_publish_approved.sql"
+    },
+    {
+      "version": "20261019211908",
+      "name": "rad_feed_delivery_contracts",
+      "file": "20261019211908_rad_feed_delivery_contracts.sql"
+    },
+    {
+      "version": "20261019212615",
+      "name": "rad_source_jobs_merge_enforcement",
+      "file": "20261019212615_rad_source_jobs_merge_enforcement.sql"
+    },
+    {
+      "version": "20261019213129",
+      "name": "rad_contract_finalization",
+      "file": "20261019213129_rad_contract_finalization.sql"
+    },
+    {
+      "version": "20261019214411",
+      "name": "rad_legacy_quota_budget_compatibility",
+      "file": "20261019214411_rad_legacy_quota_budget_compatibility.sql"
+    },
+    {
+      "version": "20261020103648",
+      "name": "rad_backend_integrity_completion",
+      "file": "20261020103648_rad_backend_integrity_completion.sql"
+    },
+    {
+      "version": "20261020105854",
+      "name": "rad_search_aliases_currency_history",
+      "file": "20261020105854_rad_search_aliases_currency_history.sql"
+    },
+    {
+      "version": "20261020111217",
+      "name": "rad_restore_legacy_publish_privileges",
+      "file": "20261020111217_rad_restore_legacy_publish_privileges.sql"
+    },
+    {
+      "version": "20261020112300",
+      "name": "rad_crm_search_integration_hardening",
+      "file": "20261020112300_rad_crm_search_integration_hardening.sql"
+    },
+    {
+      "version": "20261020114612",
+      "name": "rad_transport_contract_registry_alignment",
+      "file": "20261020114612_rad_transport_contract_registry_alignment.sql"
+    },
+    {
+      "version": "20261020115539",
+      "name": "rad_leased_research_base_contract",
+      "file": "20261020115539_rad_leased_research_base_contract.sql"
+    },
+    {
+      "version": "20261020123523",
+      "name": "rad_explicit_service_profile_bootstrap",
+      "file": "20261020123523_rad_explicit_service_profile_bootstrap.sql"
+    },
+    {
+      "version": "20261020192732",
+      "name": "rad_revoke_client_nonrow_table_privileges",
+      "file": "20261020192732_rad_revoke_client_nonrow_table_privileges.sql"
+    }
+  ],
+  "version_collisions": [],
+  "warning": "This cannot establish SQL/catalog equivalence; never infer that db push or migration repair is safe."
+}

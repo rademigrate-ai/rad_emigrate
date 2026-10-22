@@ -37,22 +37,38 @@ final applicationControllerProvider =
       ApplicationController,
       AsyncValue<List<VisaApplication>>
     >((ref) {
-      final userId = ref.watch(authControllerProvider).valueOrNull?.userId;
+      final userId = ref.watch(authenticatedUserIdProvider);
       final repository = ref.watch(applicationRepositoryProvider);
-      return ApplicationController(repository, userId);
+      return ApplicationController(
+        repository,
+        userId,
+        isCurrent: () => ref.read(authenticatedUserIdProvider) == userId,
+      );
     });
 
 class ApplicationController
     extends StateNotifier<AsyncValue<List<VisaApplication>>> {
-  ApplicationController(this._repository, this._userId)
-    : super(const AsyncValue.loading()) {
+  ApplicationController(
+    this._repository,
+    this._userId, {
+    bool Function()? isCurrent,
+  }) : _isCurrent = isCurrent ?? (() => true),
+       super(const AsyncValue.loading()) {
     load();
   }
 
   final ApplicationRepository? _repository;
   final String? _userId;
+  final bool Function() _isCurrent;
+  bool get _active => mounted && _isCurrent();
+  void _requireActive() {
+    if (!_active || _userId == null || _userId.isEmpty) {
+      throw StateError("Private session changed");
+    }
+  }
 
   Future<void> load() async {
+    if (!_active) return;
     final repository = _repository;
     if (repository == null) {
       state = const AsyncValue.loading();
@@ -65,13 +81,18 @@ class ApplicationController
     state = const AsyncValue.loading();
     try {
       final items = await repository.listApplications(userId: _userId);
-      state = AsyncValue.data(items);
+      if (!_active) return;
+      state = AsyncValue.data(
+        items.where((item) => item.userId == _userId).toList(),
+      );
     } catch (e, st) {
+      if (!_active) return;
       state = AsyncValue.error(e, st);
     }
   }
 
   Future<void> updateStatus(String id, ApplicationStatus status) async {
+    _requireActive();
     final repository = _repository;
     if (repository == null) return;
     final current = state.valueOrNull ?? [];
@@ -82,10 +103,11 @@ class ApplicationController
         break;
       }
     }
-    if (app == null) return;
+    if (app == null || app.userId != _userId) return;
     final updated = await repository.updateApplication(
       app.copyWith(status: status),
     );
+    if (!_active) return;
     final next = current.map((a) => a.id == id ? updated : a).toList();
     state = AsyncValue.data(next);
   }
@@ -95,6 +117,7 @@ class ApplicationController
     required String programName,
     required String country,
   }) async {
+    _requireActive();
     final repository = _repository;
     if (repository == null) {
       throw StateError('Application repository is not ready yet.');
@@ -111,6 +134,7 @@ class ApplicationController
         createdAt: DateTime.now(),
       ),
     );
+    _requireActive();
     final current = state.valueOrNull ?? [];
     state = AsyncValue.data([created, ...current]);
     return created;

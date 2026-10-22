@@ -1,13 +1,15 @@
+import { promiseStub } from "./promise_stub.ts";
 Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
-const { handler } = await import("../research-sync/handler.ts");
+const { handler: unconfiguredHandler, createResearchHandler } = await import("../research-sync/handler.ts");
 const json = (value: unknown, status=200) => new Response(JSON.stringify(value), {status});
 function assert(value: unknown) { if (!value) throw new Error("Research assertion failed"); }
-async function run(role="admin", sourceStatus=200, changed: unknown="finding-one") {
- const saved: Array<{path:string;body:any}> = [];
+async function run(role="admin", sourceStatus=200, changed: unknown="finding-one", configured=true) {
+ const handler = configured ? createResearchHandler({ sourceFetch: (url, init) => fetch(url, init) }) : unconfiguredHandler;
+ const saved: Array<{path:string;body:Record<string, unknown> | null}> = [];
  const original=globalThis.fetch;
  let sourceCalls=0;
- globalThis.fetch=async(input,init)=>{
+ globalThis.fetch=promiseStub((input,init)=>{
   const url=String(input); const path=url.split('/rest/v1/')[1] ?? url;
   const body=init?.body ? JSON.parse(String(init.body)) : null; saved.push({path,body});
   if(url.includes('/auth/v1/user'))return json({id:'user-one'});
@@ -20,14 +22,14 @@ async function run(role="admin", sourceStatus=200, changed: unknown="finding-one
   if(path==='rpc/ingest_research_snapshot')return json(changed);
   if(url.startsWith('https://source.example.com')) {sourceCalls++; return new Response('متن منبع برای بررسی انسانی', {status:sourceStatus});}
   return json(null);
- };
+ });
  try { const result=await handler(new Request('https://edge.example.com',{method:'POST',headers:{Authorization:'Bearer user-test-token'}}));return {status:result.status,body:await result.json(),saved,sourceCalls}; }
  finally {globalThis.fetch=original;}
 }
 Deno.test('Research fetch invokes one atomic ingest with exact Unicode evidence and attribution',async()=>{
  const x=await run(); const write=x.saved.find(c=>c.path==='rpc/ingest_research_snapshot');
- assert(x.status===200&&x.body.changed===1);assert(write?.body.p_normalized_text==='متن منبع برای بررسی انسانی');
- assert(write?.body.p_content_hash.length===64);assert(write?.body.p_metadata.trust_class==='external');
+ assert(x.status===200&&x.body.changed===1);assert(write?.body?.p_normalized_text==='متن منبع برای بررسی انسانی');
+ assert(typeof write?.body?.p_content_hash==='string' && write.body.p_content_hash.length===64);assert((write?.body?.p_metadata as Record<string, unknown>).trust_class==='external');
  assert(!x.saved.some(c=>/feed_items|content_drafts|research_findings$|source_snapshots$/.test(c.path)));
 });
 Deno.test('Unchanged evidence reports no new candidate',async()=>{const x=await run('admin',200,null);assert(x.body.changed===0);});
@@ -39,4 +41,15 @@ Deno.test('Source failure is visible and sanitized without a fake finding',async
 Deno.test('Ordinary users cannot start Research or read worker credentials',async()=>{
  const x=await run('user');assert(x.status===403&&x.sourceCalls===0);
  assert(!/test-only-service|test-only-worker/.test(JSON.stringify(x.body)));
+});
+
+Deno.test("Research default: missing protected transport cannot claim or fetch", async () => {
+ const x=await run("admin",200,"finding-one",false);
+ assert(x.status===503 && x.body.error==="protected_research_transport_unavailable");
+ assert(x.sourceCalls===0 && !x.saved.some(c=>c.path.startsWith("research_jobs")||c.path==="rpc/ingest_research_snapshot"));
+});
+Deno.test("Research default: ordinary caller stays forbidden before transport gate", async () => {
+ const x=await run("user",200,"finding-one",false);
+ assert(x.status===403 && x.sourceCalls===0);
+ assert(!x.saved.some(c=>c.path.startsWith("research_jobs")));
 });

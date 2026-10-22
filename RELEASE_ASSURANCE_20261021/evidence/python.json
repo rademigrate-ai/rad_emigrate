@@ -1,0 +1,16 @@
+{
+  "candidate_sha": "1b636e21b645dd053d8937945057e95453b5a9e2",
+  "at": "2026-10-21T15:56:43.656668+00:00",
+  "command": [
+    "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts/tests",
+    "-v"
+  ],
+  "exit_code": 0,
+  "seconds": 5.25,
+  "log_sha256": "3297a9e627e2b2e592a8265ef9762a72088176e45418313971690a9c8d749b3e"
+}

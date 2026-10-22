@@ -1,3 +1,4 @@
+import { promiseStub } from "./promise_stub.ts";
 import { createDocumentHandler } from "../document-intelligence/handler.ts";
 
 const user = "10000000-0000-4000-8000-000000000001";
@@ -36,8 +37,8 @@ async function exercise(
   method = "POST",
   authenticated = true,
 ) {
-  const calls: Array<{ path: string; init?: RequestInit; body?: any }> = [];
-  const fetcher: typeof fetch = async (input, init) => {
+  const calls: Array<{ path: string; init?: RequestInit; body?: Record<string, unknown> }> = [];
+  const fetcher: typeof fetch = promiseStub( (input, init) => {
     const path = String(input);
     const body = typeof init?.body === "string" && path.includes("/rest/v1/")
       ? JSON.parse(init.body)
@@ -130,7 +131,7 @@ async function exercise(
         },
       options.providerStatus ?? 200,
     );
-  };
+  });
   const handler = createDocumentHandler({
     url: "https://db.example.com",
     serviceKey: "synthetic-service-canary",
@@ -165,18 +166,17 @@ Deno.test("OCR: successful synthetic file stays owner-bound and requires human r
   });
   const extraction =
     x.calls.find((c) => c.path.endsWith("rpc/complete_document_processing"))!
-      .body.p_extraction;
+      .body?.p_extraction as {input_sha256:string;extracted_text:string;overall_confidence:number};
   equal(extraction.input_sha256.length, 64);
   equal(
-    x.calls.find((c) => c.path.endsWith("rpc/begin_document_processing"))!.body
-      .p_user_id,
+    x.calls.find((c) => c.path.endsWith("rpc/begin_document_processing"))!.body?.p_user_id,
     user,
   );
   equal(extraction.extracted_text, "متن ساختگی");
   equal(extraction.overall_confidence, 1);
   const fields =
     x.calls.find((c) => c.path.endsWith("rpc/complete_document_processing"))!
-      .body.p_fields;
+      .body?.p_fields as Array<{confidence:number;review_status:string}>;
   equal(fields[0].confidence, 0);
   equal(fields[0].review_status, "unreviewed");
   const provider = x.calls.find((c) =>
@@ -264,7 +264,7 @@ Deno.test("OCR: no configured provider fails honestly without sending a document
   equal(x.status, 503);
   equal(x.body.code, "no_ocr_provider_configured");
   equal(x.calls.some((c) => c.path.includes("/storage/v1/")), false);
-  equal(x.calls.at(-1)!.body.p_error_code, "no_ocr_provider_configured");
+  equal(x.calls.at(-1)!.body?.p_error_code, "no_ocr_provider_configured");
 });
 
 Deno.test("OCR: private, literal-IP and credential-bearing endpoints fail before file retrieval", async () => {
@@ -435,7 +435,7 @@ Deno.test("OCR: atomic completion and failure use only the private claim token",
     ),
     false,
   );
-  equal(x.calls.at(-1)!.body.p_lease_token, "private-lease");
+  equal(x.calls.at(-1)!.body?.p_lease_token, "private-lease");
   equal(JSON.stringify(x.body).includes("private-lease"), false);
 });
 Deno.test("OCR: configured credential echoes cannot enter persisted extraction fields", async () => {
@@ -447,4 +447,13 @@ Deno.test("OCR: configured credential echoes cannot enter persisted extraction f
     x.calls.some((c) => c.path.endsWith("rpc/complete_document_processing")),
     false,
   );
+});
+
+Deno.test("OCR: every C0 control and DEL in an owned path fails before processing", async () => {
+ for(const code of [...Array.from({length:32},(_,i)=>i),127]) {
+  const x=await exercise({path:`${user}/${documentId}/a${String.fromCharCode(code)}b.pdf`});
+  equal(x.status,403);
+  equal(x.body.error,"document_path_forbidden");
+  equal(x.calls.some(c=>c.path.endsWith("rpc/begin_document_processing")),false);
+ }
 });

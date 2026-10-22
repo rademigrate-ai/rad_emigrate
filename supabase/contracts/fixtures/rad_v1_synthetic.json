@@ -1,0 +1,2462 @@
+[
+  {
+    "name": "create_visa_article",
+    "request": {
+      "kind": "related",
+      "slug": "test",
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000001",
+      "country_code": "ZZ",
+      "pathway_slug": "test"
+    },
+    "response": {
+      "data": {
+        "created": true,
+        "article_id": "b0000000-0000-4000-8000-000000000001"
+      },
+      "meta": {
+        "request_id": "a21fd67e-6810-46f0-af01-38954ac6f93e",
+        "server_time": "2026-10-20T11:58:12.836Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "create_visa_article",
+    "request": {
+      "kind": "related",
+      "slug": "test",
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000001",
+      "country_code": "ZZ",
+      "pathway_slug": "test"
+    },
+    "response": {
+      "data": {
+        "created": true,
+        "article_id": "b0000000-0000-4000-8000-000000000001"
+      },
+      "meta": {
+        "request_id": "a21fd67e-6810-46f0-af01-38954ac6f93e",
+        "server_time": "2026-10-20T11:58:12.836Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "save_visa_article_draft",
+    "request": {
+      "title": "Synthetic source-neutral article",
+      "locale": "en",
+      "summary": "Test content, no immigration rules.",
+      "sections": [
+        {
+          "id": "d0000000-0000-4000-8000-000000000001",
+          "order": 0,
+          "anchor": "overview",
+          "blocks": [
+            {
+              "id": "e0000000-0000-4000-8000-000000000001",
+              "text": "This synthetic paragraph contains a searchable full body marker alphabravo.",
+              "type": "paragraph",
+              "items": []
+            }
+          ],
+          "heading": "Synthetic overview",
+          "evidence_refs": []
+        }
+      ],
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000002",
+      "expected_revision": 0,
+      "merge_manifest_id": null,
+      "related_article_ids": []
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:12.676Z",
+        "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+        "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+        "editorial_state": "draft",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "4da0e9d5-e6f1-4717-99b0-1c0e34474218",
+        "server_time": "2026-10-20T11:58:12.889Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "submit_visa_article_review",
+    "request": {
+      "note": "",
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000003",
+      "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+      "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:12.676Z",
+        "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+        "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+        "editorial_state": "review",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "d8bd18b3-d13f-49f8-ae2a-ea8cf92824f2",
+        "server_time": "2026-10-20T11:58:12.910Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "approve_visa_article_revision",
+    "request": {
+      "note": "",
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000004",
+      "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+      "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:12.676Z",
+        "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+        "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+        "editorial_state": "approved",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "f38987de-0754-4fed-9d7e-2d1f2754e966",
+        "server_time": "2026-10-20T11:58:12.916Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "publish_visa_article_revision",
+    "request": {
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000005",
+      "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+      "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd"
+    },
+    "response": {
+      "data": {
+        "target": {
+          "id": "b0000000-0000-4000-8000-000000000001",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "event_id": "c8eb73fc-27db-4566-8a56-cb9db8317a03",
+        "revision": 1,
+        "resource_id": "b0000000-0000-4000-8000-000000000001",
+        "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+        "published_at": "2026-10-20T11:58:12.676Z"
+      },
+      "meta": {
+        "request_id": "aa296232-fde9-4087-baeb-ea2c0895c854",
+        "server_time": "2026-10-20T11:58:12.943Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_visa_article",
+    "request": {
+      "locale": "en",
+      "selector": {
+        "article_id": "b0000000-0000-4000-8000-000000000001"
+      }
+    },
+    "response": {
+      "data": {
+        "id": "b0000000-0000-4000-8000-000000000001",
+        "kind": "related",
+        "slug": "test",
+        "title": "Synthetic source-neutral article",
+        "locale": "en",
+        "target": {
+          "id": "b0000000-0000-4000-8000-000000000001",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "summary": "Test content, no immigration rules.",
+        "revision": 1,
+        "sections": [
+          {
+            "id": "d0000000-0000-4000-8000-000000000001",
+            "order": 0,
+            "anchor": "overview",
+            "blocks": [
+              {
+                "id": "e0000000-0000-4000-8000-000000000001",
+                "text": "This synthetic paragraph contains a searchable full body marker alphabravo.",
+                "type": "paragraph",
+                "items": []
+              }
+            ],
+            "heading": "Synthetic overview",
+            "evidence": []
+          }
+        ],
+        "updated_at": "2026-10-20T11:58:12.676Z",
+        "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+        "content_hash": "1b05c44cc73f885e877e2d22424d63ff16112822af7d4d2180ac6033073aa8bd",
+        "country_code": "ZZ",
+        "pathway_slug": "test",
+        "published_at": "2026-10-20T11:58:12.676Z",
+        "editorial_state": "published",
+        "freshness_state": "unknown",
+        "related_articles": [],
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "e54bbec4-0833-4971-b807-478da805a9ef",
+        "server_time": "2026-10-20T11:58:12.952Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "search_visa_articles",
+    "request": {
+      "limit": 20,
+      "query": "alphabravo",
+      "cursor": null,
+      "locale": "en",
+      "article_kind": null,
+      "country_codes": [
+        "ZZ"
+      ],
+      "pathway_slugs": [],
+      "allow_locale_fallback": false
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "score": "0.20000000",
+            "title": "Synthetic source-neutral article",
+            "target": {
+              "id": "b0000000-0000-4000-8000-000000000001",
+              "kind": "visa_article",
+              "section_id": "d0000000-0000-4000-8000-000000000001"
+            },
+            "snippet": " synthetic paragraph contains a searchable full body marker alphabravo. ",
+            "revision": 1,
+            "article_id": "b0000000-0000-4000-8000-000000000001",
+            "match_kind": "full_text",
+            "section_id": "d0000000-0000-4000-8000-000000000001",
+            "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+            "article_kind": "related",
+            "match_locale": "en",
+            "match_ranges": [
+              {
+                "end": 70,
+                "start": 60
+              }
+            ],
+            "section_anchor": "overview",
+            "freshness_state": "unknown",
+            "verification_state": "unverified"
+          }
+        ],
+        "index_version": "4",
+        "evidence_state": "unknown",
+        "query_normalized": "alphabravo"
+      },
+      "meta": {
+        "request_id": "ef95dad1-b38d-4ce3-861f-1c44bbe5fda7",
+        "server_time": "2026-10-20T11:58:12.987Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "save_visa_search_alias",
+    "request": {
+      "alias": "synthetic approved alias",
+      "locale": "en",
+      "enabled": true,
+      "canonical": "alphabravo",
+      "request_key": "b8415c96-174c-46c4-87b3-5cd0263dfb0c",
+      "expected_revision": 0
+    },
+    "response": {
+      "data": {
+        "alias": "synthetic approved alias",
+        "locale": "en",
+        "enabled": true,
+        "revision": 1,
+        "canonical": "alphabravo"
+      },
+      "meta": {
+        "request_id": "b38dfcf8-781f-475f-99fb-6a1ea072e34a",
+        "server_time": "2026-10-20T11:58:12.995Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "search_visa_articles",
+    "request": {
+      "limit": 20,
+      "query": "synthetic approved alias",
+      "cursor": null,
+      "locale": "en",
+      "article_kind": null,
+      "country_codes": [
+        "ZZ"
+      ],
+      "pathway_slugs": [],
+      "allow_locale_fallback": false
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "score": "0.20000000",
+            "title": "Synthetic source-neutral article",
+            "target": {
+              "id": "b0000000-0000-4000-8000-000000000001",
+              "kind": "visa_article",
+              "section_id": "d0000000-0000-4000-8000-000000000001"
+            },
+            "snippet": " synthetic paragraph contains a searchable full body marker alphabravo. ",
+            "revision": 1,
+            "article_id": "b0000000-0000-4000-8000-000000000001",
+            "match_kind": "synonym",
+            "section_id": "d0000000-0000-4000-8000-000000000001",
+            "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+            "article_kind": "related",
+            "match_locale": "en",
+            "match_ranges": [
+              {
+                "end": 70,
+                "start": 60
+              }
+            ],
+            "section_anchor": "overview",
+            "freshness_state": "unknown",
+            "verification_state": "unverified"
+          }
+        ],
+        "index_version": "5",
+        "evidence_state": "unknown",
+        "query_normalized": "synthetic approved alias"
+      },
+      "meta": {
+        "request_id": "04b8ad02-3b2e-4f53-82f0-4ed4069092a9",
+        "server_time": "2026-10-20T11:58:13.013Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "search_visa_articles",
+    "request": {
+      "limit": 20,
+      "query": "alphabrvo",
+      "cursor": null,
+      "locale": "en",
+      "article_kind": null,
+      "country_codes": [
+        "ZZ"
+      ],
+      "pathway_slugs": [],
+      "allow_locale_fallback": false
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "score": "0.07339450",
+            "title": "Synthetic source-neutral article",
+            "target": {
+              "id": "b0000000-0000-4000-8000-000000000001",
+              "kind": "visa_article",
+              "section_id": "d0000000-0000-4000-8000-000000000001"
+            },
+            "snippet": " synthetic paragraph contains a searchable full body marker alphabravo. ",
+            "revision": 1,
+            "article_id": "b0000000-0000-4000-8000-000000000001",
+            "match_kind": "typo",
+            "section_id": "d0000000-0000-4000-8000-000000000001",
+            "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+            "article_kind": "related",
+            "match_locale": "en",
+            "match_ranges": [
+              {
+                "end": 70,
+                "start": 60
+              }
+            ],
+            "section_anchor": "overview",
+            "freshness_state": "unknown",
+            "verification_state": "unverified"
+          }
+        ],
+        "index_version": "5",
+        "evidence_state": "unknown",
+        "query_normalized": "alphabrvo"
+      },
+      "meta": {
+        "request_id": "dc8c0ba0-dab8-48b1-b2e4-8b7f460a8bca",
+        "server_time": "2026-10-20T11:58:13.034Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "search_visa_articles",
+    "request": {
+      "limit": 20,
+      "query": "alphabravo",
+      "cursor": null,
+      "locale": "fa",
+      "article_kind": null,
+      "country_codes": [
+        "ZZ"
+      ],
+      "pathway_slugs": [],
+      "allow_locale_fallback": false
+    },
+    "response": {
+      "data": {
+        "items": [],
+        "index_version": "5",
+        "evidence_state": "unknown",
+        "query_normalized": "alphabravo"
+      },
+      "meta": {
+        "request_id": "50f94f34-374e-48ae-a665-a7d51a2bc895",
+        "server_time": "2026-10-20T11:58:13.043Z",
+        "fallback_used": false,
+        "resolved_locale": "fa",
+        "contract_version": "1",
+        "requested_locale": "fa"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "search_visa_articles",
+    "request": {
+      "limit": 20,
+      "query": "ZZ test",
+      "cursor": null,
+      "locale": "en",
+      "article_kind": "related",
+      "country_codes": [
+        "ZZ"
+      ],
+      "pathway_slugs": [
+        "test"
+      ],
+      "allow_locale_fallback": false
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "score": "0.40000000",
+            "title": "Synthetic source-neutral article",
+            "target": {
+              "id": "b0000000-0000-4000-8000-000000000001",
+              "kind": "visa_article",
+              "section_id": "d0000000-0000-4000-8000-000000000001"
+            },
+            "snippet": "This synthetic paragraph contains a searchable full body marker alphabravo. ",
+            "revision": 1,
+            "article_id": "b0000000-0000-4000-8000-000000000001",
+            "match_kind": "full_text",
+            "section_id": "d0000000-0000-4000-8000-000000000001",
+            "revision_id": "ef94cea6-e496-4416-99b9-c8d766ae40c9",
+            "article_kind": "related",
+            "match_locale": "en",
+            "match_ranges": [],
+            "section_anchor": "overview",
+            "freshness_state": "unknown",
+            "verification_state": "unverified"
+          }
+        ],
+        "index_version": "5",
+        "evidence_state": "unknown",
+        "query_normalized": "zz test"
+      },
+      "meta": {
+        "request_id": "fa991ead-fe80-406f-aad0-21fa74560ad0",
+        "server_time": "2026-10-20T11:58:13.056Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "save_visa_reading_state",
+    "request": {
+      "saved": true,
+      "locale": "en",
+      "article_id": "b0000000-0000-4000-8000-000000000001",
+      "section_id": "d0000000-0000-4000-8000-000000000001",
+      "request_key": "c0000000-0000-4000-8000-000000000088",
+      "expected_revision": 0
+    },
+    "response": {
+      "data": {
+        "saved": true,
+        "locale": "en",
+        "revision": 1,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "section_id": "d0000000-0000-4000-8000-000000000001"
+      },
+      "meta": {
+        "request_id": "bb8896cd-c129-4472-a350-08f2a364fbd8",
+        "server_time": "2026-10-20T11:58:13.114Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "get_visa_reading_state",
+    "request": {
+      "locale": "en",
+      "article_id": "b0000000-0000-4000-8000-000000000001"
+    },
+    "response": {
+      "data": {
+        "saved": true,
+        "locale": "en",
+        "revision": 1,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "section_id": "d0000000-0000-4000-8000-000000000001"
+      },
+      "meta": {
+        "request_id": "ee9c7e76-8306-4d63-8e4d-c94e39736da7",
+        "server_time": "2026-10-20T11:58:13.117Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "get_visa_reading_state",
+    "request": {
+      "locale": "en",
+      "article_id": "b0000000-0000-4000-8000-000000000001"
+    },
+    "response": {
+      "data": {
+        "saved": false,
+        "locale": "en",
+        "revision": 0,
+        "article_id": "b0000000-0000-4000-8000-000000000001",
+        "section_id": null
+      },
+      "meta": {
+        "request_id": "f2f7a61f-0182-4039-8c24-82462e581027",
+        "server_time": "2026-10-20T11:58:13.120Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "save_notification_preferences",
+    "request": {
+      "preferences": {
+        "locale": "en",
+        "quiet_end": "07:00",
+        "time_zone": "Asia/Tehran",
+        "quiet_start": "23:00",
+        "sms_enabled": false,
+        "feed_updates": true,
+        "push_enabled": false,
+        "email_enabled": false,
+        "currency_alerts": true,
+        "document_updates": true,
+        "application_updates": true,
+        "followed_country_codes": [],
+        "followed_pathway_slugs": []
+      },
+      "request_key": "c1000000-0000-4000-8000-000000000001",
+      "expected_revision": 0
+    },
+    "response": {
+      "data": {
+        "locale": "en",
+        "revision": 1,
+        "quiet_end": "07:00",
+        "time_zone": "Asia/Tehran",
+        "updated_at": "2026-10-20T11:58:13.231Z",
+        "quiet_start": "23:00",
+        "sms_enabled": false,
+        "feed_updates": true,
+        "push_enabled": false,
+        "email_enabled": false,
+        "currency_alerts": true,
+        "document_updates": true,
+        "application_updates": true,
+        "followed_country_codes": [],
+        "followed_pathway_slugs": []
+      },
+      "meta": {
+        "request_id": "81b48b0f-1339-44c8-bce6-ee73844961f9",
+        "server_time": "2026-10-20T11:58:13.509Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "convert_currency",
+    "request": {
+      "base": "USD",
+      "quote": "EUR",
+      "amount": "5.01",
+      "input_unit": "currency",
+      "allow_stale": false,
+      "output_unit": "currency",
+      "decimal_places": 2
+    },
+    "response": {
+      "data": {
+        "base": "USD",
+        "quote": "EUR",
+        "rounding": "HALF_EVEN",
+        "input_unit": "currency",
+        "observation": {
+          "id": "f272aaef-cd8a-4ad4-892f-a9787094cf5f",
+          "base": "USD",
+          "rate": "0.5",
+          "quote": "EUR",
+          "provider": "frankfurter",
+          "fetched_at": "2026-10-20T11:58:13.231Z",
+          "rate_basis": "provider_reference",
+          "source_url": "https://api.frankfurter.dev/v2/rate/usd/eur",
+          "freshness_state": "fresh",
+          "observation_date": "2026-10-20"
+        },
+        "output_unit": "currency",
+        "input_amount": "5.01",
+        "output_amount": "2.5000000000000000",
+        "decimal_places": 2,
+        "conversion_kind": "provider_reference",
+        "unit_policy_version": "irr-classic-toman-display-10-v1",
+        "input_scale_to_currency": "1",
+        "output_scale_to_currency": "1"
+      },
+      "meta": {
+        "request_id": "b3d58f6b-a54e-4511-bf99-a25d68251998",
+        "server_time": "2026-10-20T11:58:13.527Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "get_fx_history",
+    "request": {
+      "base": "USD",
+      "limit": 20,
+      "quote": "EUR",
+      "cursor": null,
+      "date_to": "2026-10-20",
+      "date_from": "2026-10-18"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "f272aaef-cd8a-4ad4-892f-a9787094cf5f",
+            "base": "USD",
+            "rate": "0.5",
+            "quote": "EUR",
+            "provider": "frankfurter",
+            "fetched_at": "2026-10-20T11:58:13.231Z",
+            "rate_basis": "provider_reference",
+            "source_url": "https://api.frankfurter.dev/v2/rate/usd/eur",
+            "freshness_state": "fresh",
+            "observation_date": "2026-10-20"
+          }
+        ],
+        "provider": "frankfurter",
+        "missing_dates": [
+          "2026-10-18",
+          "2026-10-19"
+        ]
+      },
+      "meta": {
+        "request_id": "5b900f6c-e84b-4cbc-9204-b4a369177ea2",
+        "server_time": "2026-10-20T11:58:13.541Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "convert_currency",
+    "request": {
+      "base": "IRR",
+      "quote": "IRR",
+      "amount": "123",
+      "input_unit": "toman",
+      "allow_stale": false,
+      "output_unit": "currency",
+      "decimal_places": 0
+    },
+    "response": {
+      "data": {
+        "base": "IRR",
+        "quote": "IRR",
+        "rounding": "HALF_EVEN",
+        "input_unit": "toman",
+        "observation": null,
+        "output_unit": "currency",
+        "input_amount": "123",
+        "output_amount": "1230",
+        "decimal_places": 0,
+        "conversion_kind": "identity",
+        "unit_policy_version": "irr-classic-toman-display-10-v1",
+        "input_scale_to_currency": "10",
+        "output_scale_to_currency": "1"
+      },
+      "meta": {
+        "request_id": "4e71845b-9b62-49e8-84e4-707199508303",
+        "server_time": "2026-10-20T11:58:13.545Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "create_currency_alert",
+    "request": {
+      "base": "USD",
+      "quote": "EUR",
+      "direction": "above",
+      "threshold": "0.6",
+      "request_key": "c1000000-0000-4000-8000-000000000003",
+      "cooldown_seconds": 3600
+    },
+    "response": {
+      "data": {
+        "id": "f92b48ba-6fb8-4be2-89fb-595f26a53ba7",
+        "base": "USD",
+        "quote": "EUR",
+        "enabled": true,
+        "revision": 1,
+        "direction": "above",
+        "threshold": "0.6",
+        "created_at": "2026-10-20T11:58:13.231Z",
+        "rate_basis": "provider_reference",
+        "cooldown_seconds": 3600,
+        "last_triggered_at": null
+      },
+      "meta": {
+        "request_id": "54d3625b-59e0-4be9-91bb-4ec00c5fd509",
+        "server_time": "2026-10-20T11:58:13.552Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "save_feed_draft",
+    "request": {
+      "body": [
+        {
+          "id": "e1000000-0000-4000-8000-000000000001",
+          "text": "Synthetic full Feed body.",
+          "type": "paragraph",
+          "items": []
+        }
+      ],
+      "title": "Synthetic Feed",
+      "locale": "en",
+      "item_id": null,
+      "summary": "Synthetic review test",
+      "category": "announcement",
+      "article_id": null,
+      "expires_at": null,
+      "request_key": "c1000000-0000-4000-8000-000000000004",
+      "expected_revision": 0
+    },
+    "response": {
+      "data": {
+        "item_id": "1927d6bb-d61a-466e-875a-9734370565eb",
+        "revision": 1,
+        "updated_at": "2026-10-20T11:58:13.231Z",
+        "revision_id": "a5bf2070-fdf5-47f3-89c3-b54930113047",
+        "content_hash": "dfbeab2130d5ece1831ce850a2d570fb2ed4e963a7c6395ca3f1b80edda2a6be",
+        "editorial_state": "draft"
+      },
+      "meta": {
+        "request_id": "c2d8dea5-b5ff-4c0c-8e96-4e927de08f03",
+        "server_time": "2026-10-20T11:58:13.581Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "review_feed_draft",
+    "request": {
+      "note": "",
+      "decision": "approve",
+      "request_key": "c1000000-0000-4000-8000-000000000005",
+      "revision_id": "a5bf2070-fdf5-47f3-89c3-b54930113047",
+      "content_hash": "dfbeab2130d5ece1831ce850a2d570fb2ed4e963a7c6395ca3f1b80edda2a6be",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "item_id": "1927d6bb-d61a-466e-875a-9734370565eb",
+        "revision": 1,
+        "updated_at": "2026-10-20T11:58:13.231Z",
+        "revision_id": "a5bf2070-fdf5-47f3-89c3-b54930113047",
+        "content_hash": "dfbeab2130d5ece1831ce850a2d570fb2ed4e963a7c6395ca3f1b80edda2a6be",
+        "editorial_state": "approved"
+      },
+      "meta": {
+        "request_id": "10bf9c34-621f-4ac2-a48d-e67d9d077e46",
+        "server_time": "2026-10-20T11:58:13.608Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "publish_feed_revision",
+    "request": {
+      "request_key": "c1000000-0000-4000-8000-000000000006",
+      "revision_id": "a5bf2070-fdf5-47f3-89c3-b54930113047",
+      "content_hash": "dfbeab2130d5ece1831ce850a2d570fb2ed4e963a7c6395ca3f1b80edda2a6be"
+    },
+    "response": {
+      "data": {
+        "target": {
+          "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+          "kind": "feed_item",
+          "section_id": null
+        },
+        "event_id": "57156258-121d-4f23-8676-d21dec4ee1ca",
+        "revision": 1,
+        "resource_id": "1927d6bb-d61a-466e-875a-9734370565eb",
+        "revision_id": "a5bf2070-fdf5-47f3-89c3-b54930113047",
+        "published_at": "2026-10-20T11:58:13.231Z"
+      },
+      "meta": {
+        "request_id": "8c39f277-0c88-4471-9834-11f4d084a84d",
+        "server_time": "2026-10-20T11:58:13.640Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_feed_item",
+    "request": {
+      "locale": "en",
+      "item_id": "1927d6bb-d61a-466e-875a-9734370565eb"
+    },
+    "response": {
+      "data": {
+        "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+        "body": [
+          {
+            "id": "e1000000-0000-4000-8000-000000000001",
+            "text": "Synthetic full Feed body.",
+            "type": "paragraph",
+            "items": []
+          }
+        ],
+        "slug": "feed-1927d6bb-d61a-466e-875a-9734370565eb",
+        "saved": false,
+        "title": "Synthetic Feed",
+        "locale": "en",
+        "target": {
+          "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+          "kind": "feed_item",
+          "section_id": null
+        },
+        "read_at": null,
+        "summary": "Synthetic review test",
+        "category": "announcement",
+        "revision": 1,
+        "article_id": null,
+        "expires_at": null,
+        "published_at": "2026-10-20T11:58:13.231Z"
+      },
+      "meta": {
+        "request_id": "17531b73-3fe6-4a09-9e54-15a26a420830",
+        "server_time": "2026-10-20T11:58:13.648Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "list_feed",
+    "request": {
+      "limit": 20,
+      "cursor": null,
+      "locale": "en",
+      "category": null,
+      "saved_only": false
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+            "body": [
+              {
+                "id": "e1000000-0000-4000-8000-000000000001",
+                "text": "Synthetic full Feed body.",
+                "type": "paragraph",
+                "items": []
+              }
+            ],
+            "slug": "feed-1927d6bb-d61a-466e-875a-9734370565eb",
+            "saved": false,
+            "title": "Synthetic Feed",
+            "locale": "en",
+            "target": {
+              "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+              "kind": "feed_item",
+              "section_id": null
+            },
+            "read_at": null,
+            "summary": "Synthetic review test",
+            "category": "announcement",
+            "revision": 1,
+            "article_id": null,
+            "expires_at": null,
+            "published_at": "2026-10-20T11:58:13.231Z"
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "271c09f0-3c0e-4175-9487-8694ff67155a",
+        "server_time": "2026-10-20T11:58:13.665Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "list_notifications",
+    "request": {
+      "type": null,
+      "limit": 20,
+      "cursor": null,
+      "unread_only": true
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "a5c82a3b-8c76-4afc-8493-3484d866f85b",
+            "body": "Synthetic review test",
+            "type": "feed",
+            "title": "Synthetic Feed",
+            "target": {
+              "id": "1927d6bb-d61a-466e-875a-9734370565eb",
+              "kind": "feed_item",
+              "section_id": null
+            },
+            "read_at": null,
+            "event_id": "57156258-121d-4f23-8676-d21dec4ee1ca",
+            "created_at": "2026-10-20T11:58:13.231Z",
+            "delivery_state": "in_app"
+          }
+        ],
+        "unread_count": 1
+      },
+      "meta": {
+        "request_id": "fcabba24-45fc-4779-9c4e-fed62a35f246",
+        "server_time": "2026-10-20T11:58:13.684Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "mark_notification_read",
+    "request": {
+      "request_key": "c1000000-0000-4000-8000-000000000007",
+      "notification_id": "a5c82a3b-8c76-4afc-8493-3484d866f85b"
+    },
+    "response": {
+      "data": {
+        "applied": true,
+        "updated_at": "2026-10-20T11:58:13.231Z"
+      },
+      "meta": {
+        "request_id": "918ba03c-751a-4c1b-aa40-33feefbe7e90",
+        "server_time": "2026-10-20T11:58:13.693Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "list_notifications",
+    "request": {
+      "type": null,
+      "limit": 20,
+      "cursor": null,
+      "unread_only": false
+    },
+    "response": {
+      "data": {
+        "items": [],
+        "unread_count": 0
+      },
+      "meta": {
+        "request_id": "c80757fc-75a7-432b-ac6f-999dcac06aef",
+        "server_time": "2026-10-20T11:58:13.700Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "save_feed_draft",
+    "request": {
+      "body": [
+        {
+          "id": "a1a095d6-4f04-4d44-8463-b5ba32aabed6",
+          "text": "Synthetic interaction body.",
+          "type": "paragraph",
+          "items": []
+        }
+      ],
+      "title": "Synthetic comments fixture",
+      "locale": "en",
+      "item_id": null,
+      "summary": "No immigration advice.",
+      "category": "announcement",
+      "article_id": null,
+      "expires_at": null,
+      "request_key": "df4d250e-0d0e-4c30-9b65-6c5478911daf",
+      "expected_revision": 0
+    },
+    "response": {
+      "data": {
+        "item_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "revision": 1,
+        "updated_at": "2026-10-20T11:58:13.824Z",
+        "revision_id": "1d11c906-6409-46f4-96d5-50e85a848da4",
+        "content_hash": "5825f13b8be4f9d2d2d3979cbeb562d38e6153bf5d71db2d12ee01e43d2f8f54",
+        "editorial_state": "draft"
+      },
+      "meta": {
+        "request_id": "201dbe59-7cff-4609-9b3b-4e4094fdee62",
+        "server_time": "2026-10-20T11:58:13.895Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "review_feed_draft",
+    "request": {
+      "note": "",
+      "decision": "approve",
+      "request_key": "2f4c8c68-f8b4-44d0-94b9-6aff2f0221c8",
+      "revision_id": "1d11c906-6409-46f4-96d5-50e85a848da4",
+      "content_hash": "5825f13b8be4f9d2d2d3979cbeb562d38e6153bf5d71db2d12ee01e43d2f8f54",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "item_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "revision": 1,
+        "updated_at": "2026-10-20T11:58:13.824Z",
+        "revision_id": "1d11c906-6409-46f4-96d5-50e85a848da4",
+        "content_hash": "5825f13b8be4f9d2d2d3979cbeb562d38e6153bf5d71db2d12ee01e43d2f8f54",
+        "editorial_state": "approved"
+      },
+      "meta": {
+        "request_id": "1bf6df3a-7781-409d-96be-842eea872cdc",
+        "server_time": "2026-10-20T11:58:13.902Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "publish_feed_revision",
+    "request": {
+      "request_key": "4847ea85-1670-4225-a0fc-ec1f491678b1",
+      "revision_id": "1d11c906-6409-46f4-96d5-50e85a848da4",
+      "content_hash": "5825f13b8be4f9d2d2d3979cbeb562d38e6153bf5d71db2d12ee01e43d2f8f54"
+    },
+    "response": {
+      "data": {
+        "target": {
+          "id": "e9bca003-962f-4956-8bab-705faaba2c19",
+          "kind": "feed_item",
+          "section_id": null
+        },
+        "event_id": "45475121-e97a-4d6d-8c06-c41039b9e253",
+        "revision": 1,
+        "resource_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "revision_id": "1d11c906-6409-46f4-96d5-50e85a848da4",
+        "published_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "c1205d9a-dce4-4674-9b20-c4193aff9676",
+        "server_time": "2026-10-20T11:58:13.921Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "create_feed_comment",
+    "request": {
+      "body": "Synthetic comment, plain text only.",
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+      "parent_id": null,
+      "request_key": "a8ae3346-a2c4-4a0d-a2d1-8f6a6f26ed72"
+    },
+    "response": {
+      "data": {
+        "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+        "body": "Synthetic comment, plain text only.",
+        "state": "pending",
+        "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "is_owner": true,
+        "revision": 1,
+        "parent_id": null,
+        "created_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "6af7ea4e-a36b-48d0-a996-9e5bd63852f2",
+        "server_time": "2026-10-20T11:58:13.943Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "create_feed_comment",
+    "request": {
+      "body": "Synthetic comment, plain text only.",
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+      "parent_id": null,
+      "request_key": "a8ae3346-a2c4-4a0d-a2d1-8f6a6f26ed72"
+    },
+    "response": {
+      "data": {
+        "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+        "body": "Synthetic comment, plain text only.",
+        "state": "pending",
+        "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "is_owner": true,
+        "revision": 1,
+        "parent_id": null,
+        "created_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "6af7ea4e-a36b-48d0-a996-9e5bd63852f2",
+        "server_time": "2026-10-20T11:58:13.943Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "list_feed_comments",
+    "request": {
+      "limit": 20,
+      "cursor": null,
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19"
+    },
+    "response": {
+      "data": {
+        "items": []
+      },
+      "meta": {
+        "request_id": "c3bd4b2f-6e81-4c89-a6c8-cf7b09d08e6f",
+        "server_time": "2026-10-20T11:58:13.961Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "moderate_feed_comment",
+    "request": {
+      "note": "Synthetic moderator decision",
+      "state": "visible",
+      "comment_id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+      "request_key": "5d94320a-6391-4312-a6fb-dd96f7de1723",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+        "body": "Synthetic comment, plain text only.",
+        "state": "visible",
+        "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "is_owner": false,
+        "revision": 2,
+        "parent_id": null,
+        "created_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "f1e37601-8846-44aa-bd2f-721505cc8788",
+        "server_time": "2026-10-20T11:58:13.979Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "list_feed_comments",
+    "request": {
+      "limit": 1,
+      "cursor": null,
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+            "body": "Synthetic comment, plain text only.",
+            "state": "visible",
+            "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+            "is_owner": false,
+            "revision": 2,
+            "parent_id": null,
+            "created_at": "2026-10-20T11:58:13.824Z"
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "9f6a1e36-dcd8-450f-bd42-6d367703cc5f",
+        "server_time": "2026-10-20T11:58:13.989Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "create_feed_comment",
+    "request": {
+      "body": "Synthetic reply.",
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+      "parent_id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+      "request_key": "a7442963-882b-473e-ae84-265312e8c4f1"
+    },
+    "response": {
+      "data": {
+        "id": "b34e81b1-b658-4507-8f33-a395a1cf0521",
+        "body": "Synthetic reply.",
+        "state": "pending",
+        "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "is_owner": true,
+        "revision": 1,
+        "parent_id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+        "created_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "a7f1365f-427a-48a3-be98-2947afb79831",
+        "server_time": "2026-10-20T11:58:13.996Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "list_feed_comments",
+    "request": {
+      "limit": 1,
+      "cursor": null,
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+            "body": "Synthetic comment, plain text only.",
+            "state": "visible",
+            "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+            "is_owner": false,
+            "revision": 2,
+            "parent_id": null,
+            "created_at": "2026-10-20T11:58:13.824Z"
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "cee85344-db83-48da-9a61-702d5397a54a",
+        "server_time": "2026-10-20T11:58:14.004Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": true,
+        "next_cursor": "d7651dde-cef0-472a-af85-9d5e993d9f04"
+      }
+    }
+  },
+  {
+    "name": "list_feed_comments",
+    "request": {
+      "limit": 1,
+      "cursor": "d7651dde-cef0-472a-af85-9d5e993d9f04",
+      "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "b34e81b1-b658-4507-8f33-a395a1cf0521",
+            "body": "Synthetic reply.",
+            "state": "pending",
+            "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+            "is_owner": true,
+            "revision": 1,
+            "parent_id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+            "created_at": "2026-10-20T11:58:13.824Z"
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "d2627fe2-7577-4686-94fc-56e2c15b1702",
+        "server_time": "2026-10-20T11:58:14.011Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "delete_feed_comment",
+    "request": {
+      "comment_id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+      "request_key": "2f6682e4-0736-461c-9599-1ce46c5e1981",
+      "expected_revision": 2
+    },
+    "response": {
+      "data": {
+        "id": "67426330-e0d7-4dc6-9ea3-d2d9b6bbf9ee",
+        "body": "",
+        "state": "deleted",
+        "feed_id": "e9bca003-962f-4956-8bab-705faaba2c19",
+        "is_owner": true,
+        "revision": 3,
+        "parent_id": null,
+        "created_at": "2026-10-20T11:58:13.824Z"
+      },
+      "meta": {
+        "request_id": "714e1900-0e0e-4fab-8980-a7ce4adb6b13",
+        "server_time": "2026-10-20T11:58:14.018Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "create_visa_article",
+    "request": {
+      "kind": "main",
+      "slug": "synthetic",
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000001",
+      "country_code": "ZZ",
+      "pathway_slug": "synthetic"
+    },
+    "response": {
+      "data": {
+        "created": true,
+        "article_id": "b3000000-0000-4000-8000-000000000001"
+      },
+      "meta": {
+        "request_id": "83bab9a7-8ef8-4fba-acaf-44e8e79217b5",
+        "server_time": "2026-10-20T11:58:14.184Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "approve_visa_source_inventory",
+    "request": {
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000003",
+      "source_snapshot_ids": [
+        "f3000000-0000-4000-8000-000000000001",
+        "f3000000-0000-4000-8000-000000000002"
+      ],
+      "expected_inventory_revision": 0
+    },
+    "response": {
+      "data": {
+        "inventory_hash": "a34258a1f47c4a6c237431771610544a78acf2cc3f927a83ae75ce6c77fb3cd6",
+        "inventory_revision": 1,
+        "source_snapshot_ids": [
+          "f3000000-0000-4000-8000-000000000001",
+          "f3000000-0000-4000-8000-000000000002"
+        ]
+      },
+      "meta": {
+        "request_id": "d3b0486c-ac66-445c-b6a3-984ce236ffe3",
+        "server_time": "2026-10-20T11:58:14.209Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "submit_visa_article_review",
+    "request": {
+      "note": "",
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000006",
+      "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+      "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b3000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+        "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d",
+        "editorial_state": "review",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "da48085e-243d-4b7d-b0e6-6b365cda4344",
+        "server_time": "2026-10-20T11:58:14.279Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "approve_visa_article_revision",
+    "request": {
+      "note": "",
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000007",
+      "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+      "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b3000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+        "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d",
+        "editorial_state": "approved",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "817c425b-776d-4e34-b502-fbfdbea8e94f",
+        "server_time": "2026-10-20T11:58:14.285Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "publish_visa_article_revision",
+    "request": {
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000008",
+      "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+      "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d"
+    },
+    "response": {
+      "data": {
+        "target": {
+          "id": "b3000000-0000-4000-8000-000000000001",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "event_id": "00ab78b3-5c87-42d2-871a-7fd70c18ffc8",
+        "revision": 1,
+        "resource_id": "b3000000-0000-4000-8000-000000000001",
+        "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+        "published_at": "2026-10-20T11:58:14.131Z"
+      },
+      "meta": {
+        "request_id": "0227ad87-6d68-46e9-b3bc-c0c41bd75c70",
+        "server_time": "2026-10-20T11:58:14.302Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_visa_article",
+    "request": {
+      "locale": "en",
+      "selector": {
+        "kind": "main",
+        "country_code": "ZZ",
+        "pathway_slug": "synthetic"
+      }
+    },
+    "response": {
+      "data": {
+        "id": "b3000000-0000-4000-8000-000000000001",
+        "kind": "main",
+        "slug": "synthetic",
+        "title": "synthetic",
+        "locale": "en",
+        "target": {
+          "id": "b3000000-0000-4000-8000-000000000001",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "summary": "",
+        "revision": 1,
+        "sections": [
+          {
+            "id": "e935d3ca-c35f-53b4-a950-2b3fc78355e4",
+            "order": 0,
+            "anchor": "source-d3000000-0000-4000-8000-000000000001",
+            "blocks": [
+              {
+                "id": "5c41e1aa-380c-546a-b605-61cf56f73338",
+                "text": "Synthetic unique alpha material.",
+                "type": "paragraph",
+                "items": []
+              }
+            ],
+            "heading": "Synthetic alpha",
+            "evidence": []
+          },
+          {
+            "id": "7a29f76c-04d0-5643-8044-3f1424aaa182",
+            "order": 1,
+            "anchor": "source-d3000000-0000-4000-8000-000000000002",
+            "blocks": [
+              {
+                "id": "3fc0cbb9-2eb2-5999-a927-2a781732bc93",
+                "text": "Synthetic unique bravo material.",
+                "type": "paragraph",
+                "items": []
+              }
+            ],
+            "heading": "Synthetic bravo",
+            "evidence": []
+          }
+        ],
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "f4b67c34-5c03-46d2-9d17-ff3123bfa43f",
+        "content_hash": "20b63418e77fc994395e41bfe6e9fedaf3c9fffa7f7b8fbdd53dd22e0e43f23d",
+        "country_code": "ZZ",
+        "pathway_slug": "synthetic",
+        "published_at": "2026-10-20T11:58:14.131Z",
+        "editorial_state": "published",
+        "freshness_state": "unknown",
+        "related_articles": [],
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "31bf0174-1092-4eb6-b7a2-1a30fa8fd80a",
+        "server_time": "2026-10-20T11:58:14.312Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "save_visa_article_draft",
+    "request": {
+      "title": "synthetic",
+      "locale": "en",
+      "summary": "",
+      "sections": [
+        {
+          "id": "e935d3ca-c35f-53b4-a950-2b3fc78355e4",
+          "order": 0,
+          "anchor": "source-d3000000-0000-4000-8000-000000000001",
+          "blocks": [],
+          "heading": "Synthetic alpha",
+          "evidence_refs": []
+        },
+        {
+          "id": "7a29f76c-04d0-5643-8044-3f1424aaa182",
+          "order": 1,
+          "anchor": "source-d3000000-0000-4000-8000-000000000002",
+          "blocks": [
+            {
+              "id": "3fc0cbb9-2eb2-5999-a927-2a781732bc93",
+              "text": "Synthetic unique bravo material.",
+              "type": "paragraph",
+              "items": []
+            }
+          ],
+          "heading": "Synthetic bravo",
+          "evidence_refs": []
+        }
+      ],
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000009",
+      "expected_revision": 1,
+      "merge_manifest_id": "cbbcfede-41dd-4862-b83b-f4e6b7a2afad",
+      "related_article_ids": []
+    },
+    "response": {
+      "data": {
+        "revision": 2,
+        "article_id": "b3000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "d8f9175e-e4ff-4bfb-8c27-919c9ddb68cd",
+        "content_hash": "f360aef68635f9d66ec6affe69d48bb4d0859c35bc7139549c1b63bad2fa7fea",
+        "editorial_state": "draft",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "16ceda2b-cf3b-4fca-89c5-0d1a1e6400c1",
+        "server_time": "2026-10-20T11:58:14.324Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "submit_visa_article_review",
+    "request": {
+      "note": "",
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000010",
+      "revision_id": "d8f9175e-e4ff-4bfb-8c27-919c9ddb68cd",
+      "content_hash": "f360aef68635f9d66ec6affe69d48bb4d0859c35bc7139549c1b63bad2fa7fea",
+      "expected_revision": 2
+    },
+    "response": {
+      "data": {
+        "revision": 2,
+        "article_id": "b3000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "d8f9175e-e4ff-4bfb-8c27-919c9ddb68cd",
+        "content_hash": "f360aef68635f9d66ec6affe69d48bb4d0859c35bc7139549c1b63bad2fa7fea",
+        "editorial_state": "review",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "394d08e5-44dd-4e14-b33d-e114ed720354",
+        "server_time": "2026-10-20T11:58:14.329Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "approve_visa_article_revision",
+    "request": {
+      "note": "",
+      "article_id": "b3000000-0000-4000-8000-000000000001",
+      "request_key": "c3000000-0000-4000-8000-000000000011",
+      "revision_id": "d8f9175e-e4ff-4bfb-8c27-919c9ddb68cd",
+      "content_hash": "f360aef68635f9d66ec6affe69d48bb4d0859c35bc7139549c1b63bad2fa7fea",
+      "expected_revision": 2
+    },
+    "response": {
+      "data": {
+        "revision": 2,
+        "article_id": "b3000000-0000-4000-8000-000000000001",
+        "updated_at": "2026-10-20T11:58:14.131Z",
+        "revision_id": "d8f9175e-e4ff-4bfb-8c27-919c9ddb68cd",
+        "content_hash": "f360aef68635f9d66ec6affe69d48bb4d0859c35bc7139549c1b63bad2fa7fea",
+        "editorial_state": "approved",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "b0f67507-762f-4fd6-a7ed-f800dd567d71",
+        "server_time": "2026-10-20T11:58:14.336Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "create_visa_article",
+    "request": {
+      "kind": "related",
+      "slug": "synthetic-official",
+      "article_id": "b5000000-0000-4000-8000-000000000003",
+      "request_key": "c5000000-0000-4000-8000-000000000011",
+      "country_code": "ZZ",
+      "pathway_slug": "synthetic"
+    },
+    "response": {
+      "data": {
+        "created": true,
+        "article_id": "b5000000-0000-4000-8000-000000000003"
+      },
+      "meta": {
+        "request_id": "70bebf52-1bbe-427a-8cea-3c90f2262371",
+        "server_time": "2026-10-20T11:58:14.620Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "save_visa_article_draft",
+    "request": {
+      "title": "SYNTHETIC official article",
+      "locale": "en",
+      "summary": "No immigration advice.",
+      "sections": [
+        {
+          "id": "e5000000-0000-4000-8000-000000000001",
+          "order": 0,
+          "anchor": "test",
+          "blocks": [
+            {
+              "id": "e5000000-0000-4000-8000-000000000002",
+              "text": "SYNTHETIC official marker alpha.",
+              "type": "paragraph",
+              "items": []
+            }
+          ],
+          "heading": "Synthetic marker",
+          "evidence_refs": [
+            {
+              "excerpt": "SYNTHETIC official marker alpha.",
+              "locator": "paragraph 1",
+              "claim_id": "b5000000-0000-4000-8000-000000000002",
+              "snapshot_id": "f5000000-0000-4000-8000-000000000001"
+            }
+          ]
+        }
+      ],
+      "article_id": "b5000000-0000-4000-8000-000000000003",
+      "request_key": "c5000000-0000-4000-8000-000000000012",
+      "expected_revision": 0,
+      "merge_manifest_id": null,
+      "related_article_ids": []
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b5000000-0000-4000-8000-000000000003",
+        "updated_at": "2026-10-20T11:58:14.433Z",
+        "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+        "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+        "editorial_state": "draft",
+        "verification_state": "verified"
+      },
+      "meta": {
+        "request_id": "0e5b0249-937c-4d48-a33b-5d501ebd1b28",
+        "server_time": "2026-10-20T11:58:14.650Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "submit_visa_article_review",
+    "request": {
+      "note": "",
+      "article_id": "b5000000-0000-4000-8000-000000000003",
+      "request_key": "52b62cee-9a52-46d9-8d62-07aebb7adc54",
+      "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+      "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b5000000-0000-4000-8000-000000000003",
+        "updated_at": "2026-10-20T11:58:14.433Z",
+        "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+        "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+        "editorial_state": "review",
+        "verification_state": "verified"
+      },
+      "meta": {
+        "request_id": "d9bd4116-0447-43b5-92fd-df291a22fbc6",
+        "server_time": "2026-10-20T11:58:14.669Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "approve_visa_article_revision",
+    "request": {
+      "note": "",
+      "article_id": "b5000000-0000-4000-8000-000000000003",
+      "request_key": "deed9988-d175-4492-bf2f-a0ab86dc6ec5",
+      "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+      "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "revision": 1,
+        "article_id": "b5000000-0000-4000-8000-000000000003",
+        "updated_at": "2026-10-20T11:58:14.433Z",
+        "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+        "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+        "editorial_state": "approved",
+        "verification_state": "verified"
+      },
+      "meta": {
+        "request_id": "4ea4c4cb-bac1-46a7-a91b-69e35fee2f83",
+        "server_time": "2026-10-20T11:58:14.693Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "publish_visa_article_revision",
+    "request": {
+      "article_id": "b5000000-0000-4000-8000-000000000003",
+      "request_key": "e53a258a-23b6-4289-98be-c76b342238d0",
+      "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+      "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97"
+    },
+    "response": {
+      "data": {
+        "target": {
+          "id": "b5000000-0000-4000-8000-000000000003",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "event_id": "b806316d-94d9-4331-99ed-3ca2718a6531",
+        "revision": 1,
+        "resource_id": "b5000000-0000-4000-8000-000000000003",
+        "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+        "published_at": "2026-10-20T11:58:14.433Z"
+      },
+      "meta": {
+        "request_id": "5e820497-8ccd-4dd6-bfc9-f2b948b10cf4",
+        "server_time": "2026-10-20T11:58:14.711Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_visa_article",
+    "request": {
+      "locale": "en",
+      "selector": {
+        "article_id": "b5000000-0000-4000-8000-000000000003"
+      }
+    },
+    "response": {
+      "data": {
+        "id": "b5000000-0000-4000-8000-000000000003",
+        "kind": "related",
+        "slug": "synthetic-official",
+        "title": "SYNTHETIC official article",
+        "locale": "en",
+        "target": {
+          "id": "b5000000-0000-4000-8000-000000000003",
+          "kind": "visa_article",
+          "section_id": null
+        },
+        "summary": "No immigration advice.",
+        "revision": 1,
+        "sections": [
+          {
+            "id": "e5000000-0000-4000-8000-000000000001",
+            "order": 0,
+            "anchor": "test",
+            "blocks": [
+              {
+                "id": "e5000000-0000-4000-8000-000000000002",
+                "text": "SYNTHETIC official marker alpha.",
+                "type": "paragraph",
+                "items": []
+              }
+            ],
+            "heading": "Synthetic marker",
+            "evidence": [
+              {
+                "url": "https://authority.example.invalid/test/official",
+                "excerpt": "SYNTHETIC official marker alpha.",
+                "locator": "paragraph 1",
+                "claim_id": "b5000000-0000-4000-8000-000000000002",
+                "publisher": "SYNTHETIC test authority",
+                "fetched_at": "2026-10-20T10:58:14.433Z",
+                "section_id": "e5000000-0000-4000-8000-000000000001",
+                "fresh_until": "2026-10-21T11:58:14.433Z",
+                "snapshot_id": "f5000000-0000-4000-8000-000000000001",
+                "verified_at": "2026-10-20T11:58:14.433Z",
+                "authority_id": "a5000000-0000-4000-8000-000000000010",
+                "source_class": "official_primary",
+                "freshness_state": "fresh",
+                "source_document_id": "d5000000-0000-4000-8000-000000000001",
+                "verification_state": "verified"
+              }
+            ]
+          }
+        ],
+        "updated_at": "2026-10-20T11:58:14.433Z",
+        "revision_id": "96510892-f739-41de-a98e-a86857b51aaa",
+        "content_hash": "07d2f78301243999f5656efb98a5644b541def9c2574349a97f4de10ffe68b97",
+        "country_code": "ZZ",
+        "pathway_slug": "synthetic",
+        "published_at": "2026-10-20T11:58:14.433Z",
+        "editorial_state": "published",
+        "freshness_state": "unknown",
+        "related_articles": [],
+        "verification_state": "verified"
+      },
+      "meta": {
+        "request_id": "6ee543c4-22eb-429c-b82e-904669122adc",
+        "server_time": "2026-10-20T11:58:14.770Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_research_proposal",
+    "request": {
+      "proposal_id": "aa2e548a-d24c-4e57-88d2-b6fe5d7c922b"
+    },
+    "response": {
+      "data": {
+        "id": "aa2e548a-d24c-4e57-88d2-b6fe5d7c922b",
+        "changes": [
+          {
+            "claim_ids": [],
+            "operation": "replace",
+            "section_id": "e5000000-0000-4000-8000-000000000001",
+            "before_hash": "bd8ab8d780b39d83b426021f46a4f50797e6a2cf9867e79b99f17ecbaf8a122b",
+            "replacement": {
+              "id": "e5000000-0000-4000-8000-000000000001",
+              "order": 0,
+              "anchor": "test",
+              "blocks": [
+                {
+                  "id": "e5000000-0000-4000-8000-000000000002",
+                  "text": "SYNTHETIC official marker bravo.",
+                  "type": "paragraph",
+                  "items": []
+                }
+              ],
+              "heading": "Synthetic marker",
+              "evidence_refs": [
+                {
+                  "excerpt": "SYNTHETIC official marker bravo.",
+                  "locator": "paragraph 1",
+                  "claim_id": null,
+                  "snapshot_id": "f5000000-0000-4000-8000-000000000002"
+                }
+              ]
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "url": "https://authority.example.invalid/test/official",
+            "excerpt": "SYNTHETIC official marker bravo.",
+            "locator": "paragraph 1",
+            "claim_id": null,
+            "publisher": "SYNTHETIC authority document",
+            "fetched_at": "2026-10-20T11:57:14.433Z",
+            "section_id": "e5000000-0000-4000-8000-000000000001",
+            "fresh_until": null,
+            "snapshot_id": "f5000000-0000-4000-8000-000000000002",
+            "verified_at": null,
+            "authority_id": null,
+            "source_class": "other",
+            "freshness_state": "unknown",
+            "source_document_id": "d5000000-0000-4000-8000-000000000001",
+            "verification_state": "unverified"
+          }
+        ],
+        "revision": 1,
+        "created_at": "2026-10-20T11:58:14.433Z",
+        "reviewed_at": null,
+        "reviewed_by": null,
+        "authority_id": "a5000000-0000-4000-8000-000000000010",
+        "base_revision": 1,
+        "editorial_state": "review",
+        "new_snapshot_id": "f5000000-0000-4000-8000-000000000002",
+        "old_snapshot_id": "f5000000-0000-4000-8000-000000000001",
+        "target_article_id": "b5000000-0000-4000-8000-000000000003",
+        "verification_state": "unverified"
+      },
+      "meta": {
+        "request_id": "4d0c2eba-a9e9-4f61-9868-d276ac61cac4",
+        "server_time": "2026-10-20T11:58:14.890Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "list_official_authorities",
+    "request": {
+      "limit": 20,
+      "state": "verified",
+      "topic": "synthetic",
+      "cursor": null,
+      "country_code": "ZZ"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "a5000000-0000-4000-8000-000000000010",
+            "name": "SYNTHETIC test authority",
+            "expires_at": "2026-10-21T11:58:14.433Z",
+            "verified_at": "2026-10-20T10:58:14.433Z",
+            "country_code": "ZZ",
+            "jurisdiction": "ZZ",
+            "authority_type": "government",
+            "official_domains": [
+              "authority.example.invalid"
+            ],
+            "competence_topics": [
+              "synthetic"
+            ],
+            "verification_state": "verified",
+            "verification_revision": 1
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "fdbb0b22-2d67-4649-815f-0fba27c2f413",
+        "server_time": "2026-10-20T11:58:14.902Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "list_research_proposals",
+    "request": {
+      "limit": 20,
+      "cursor": null,
+      "article_id": null,
+      "editorial_state": "review",
+      "verification_state": "unverified"
+    },
+    "response": {
+      "data": {
+        "items": [
+          {
+            "id": "aa2e548a-d24c-4e57-88d2-b6fe5d7c922b",
+            "changes": [
+              {
+                "claim_ids": [],
+                "operation": "replace",
+                "section_id": "e5000000-0000-4000-8000-000000000001",
+                "before_hash": "bd8ab8d780b39d83b426021f46a4f50797e6a2cf9867e79b99f17ecbaf8a122b",
+                "replacement": {
+                  "id": "e5000000-0000-4000-8000-000000000001",
+                  "order": 0,
+                  "anchor": "test",
+                  "blocks": [
+                    {
+                      "id": "e5000000-0000-4000-8000-000000000002",
+                      "text": "SYNTHETIC official marker bravo.",
+                      "type": "paragraph",
+                      "items": []
+                    }
+                  ],
+                  "heading": "Synthetic marker",
+                  "evidence_refs": [
+                    {
+                      "excerpt": "SYNTHETIC official marker bravo.",
+                      "locator": "paragraph 1",
+                      "claim_id": null,
+                      "snapshot_id": "f5000000-0000-4000-8000-000000000002"
+                    }
+                  ]
+                }
+              }
+            ],
+            "evidence": [
+              {
+                "url": "https://authority.example.invalid/test/official",
+                "excerpt": "SYNTHETIC official marker bravo.",
+                "locator": "paragraph 1",
+                "claim_id": null,
+                "publisher": "SYNTHETIC authority document",
+                "fetched_at": "2026-10-20T11:57:14.433Z",
+                "section_id": "e5000000-0000-4000-8000-000000000001",
+                "fresh_until": null,
+                "snapshot_id": "f5000000-0000-4000-8000-000000000002",
+                "verified_at": null,
+                "authority_id": null,
+                "source_class": "other",
+                "freshness_state": "unknown",
+                "source_document_id": "d5000000-0000-4000-8000-000000000001",
+                "verification_state": "unverified"
+              }
+            ],
+            "revision": 1,
+            "created_at": "2026-10-20T11:58:14.433Z",
+            "reviewed_at": null,
+            "reviewed_by": null,
+            "authority_id": "a5000000-0000-4000-8000-000000000010",
+            "base_revision": 1,
+            "editorial_state": "review",
+            "new_snapshot_id": "f5000000-0000-4000-8000-000000000002",
+            "old_snapshot_id": "f5000000-0000-4000-8000-000000000001",
+            "target_article_id": "b5000000-0000-4000-8000-000000000003",
+            "verification_state": "unverified"
+          }
+        ]
+      },
+      "meta": {
+        "request_id": "8f7bdd5d-f267-4759-bd5b-cb12fe767091",
+        "server_time": "2026-10-20T11:58:14.910Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      },
+      "page": {
+        "has_more": false,
+        "next_cursor": null
+      }
+    }
+  },
+  {
+    "name": "get_rad_job_status",
+    "request": {
+      "job_id": "a5000000-0000-4000-8000-000000000020"
+    },
+    "response": {
+      "data": {
+        "job_id": "a5000000-0000-4000-8000-000000000020",
+        "status": "running",
+        "deduplicated": false
+      },
+      "meta": {
+        "request_id": "37901ab6-ef05-4545-b855-670df9b41725",
+        "server_time": "2026-10-20T11:58:14.920Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  },
+  {
+    "name": "review_research_proposal",
+    "request": {
+      "note": "Synthetic review only",
+      "decision": "accept",
+      "proposal_id": "aa2e548a-d24c-4e57-88d2-b6fe5d7c922b",
+      "request_key": "9f0b3329-a5f4-4fcd-9d9b-1dde7a804095",
+      "expected_revision": 1
+    },
+    "response": {
+      "data": {
+        "proposal": {
+          "id": "aa2e548a-d24c-4e57-88d2-b6fe5d7c922b",
+          "changes": [
+            {
+              "claim_ids": [],
+              "operation": "replace",
+              "section_id": "e5000000-0000-4000-8000-000000000001",
+              "before_hash": "bd8ab8d780b39d83b426021f46a4f50797e6a2cf9867e79b99f17ecbaf8a122b",
+              "replacement": {
+                "id": "e5000000-0000-4000-8000-000000000001",
+                "order": 0,
+                "anchor": "test",
+                "blocks": [
+                  {
+                    "id": "e5000000-0000-4000-8000-000000000002",
+                    "text": "SYNTHETIC official marker bravo.",
+                    "type": "paragraph",
+                    "items": []
+                  }
+                ],
+                "heading": "Synthetic marker",
+                "evidence_refs": [
+                  {
+                    "excerpt": "SYNTHETIC official marker bravo.",
+                    "locator": "paragraph 1",
+                    "claim_id": null,
+                    "snapshot_id": "f5000000-0000-4000-8000-000000000002"
+                  }
+                ]
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "url": "https://authority.example.invalid/test/official",
+              "excerpt": "SYNTHETIC official marker bravo.",
+              "locator": "paragraph 1",
+              "claim_id": null,
+              "publisher": "SYNTHETIC authority document",
+              "fetched_at": "2026-10-20T11:57:14.433Z",
+              "section_id": "e5000000-0000-4000-8000-000000000001",
+              "fresh_until": null,
+              "snapshot_id": "f5000000-0000-4000-8000-000000000002",
+              "verified_at": null,
+              "authority_id": null,
+              "source_class": "other",
+              "freshness_state": "unknown",
+              "source_document_id": "d5000000-0000-4000-8000-000000000001",
+              "verification_state": "unverified"
+            }
+          ],
+          "revision": 2,
+          "created_at": "2026-10-20T11:58:14.433Z",
+          "reviewed_at": "2026-10-20T11:58:14.433Z",
+          "reviewed_by": "a5000000-0000-4000-8000-000000000001",
+          "authority_id": "a5000000-0000-4000-8000-000000000010",
+          "base_revision": 1,
+          "editorial_state": "approved",
+          "new_snapshot_id": "f5000000-0000-4000-8000-000000000002",
+          "old_snapshot_id": "f5000000-0000-4000-8000-000000000001",
+          "target_article_id": "b5000000-0000-4000-8000-000000000003",
+          "verification_state": "unverified"
+        },
+        "draft_revision": {
+          "revision": 2,
+          "article_id": "b5000000-0000-4000-8000-000000000003",
+          "updated_at": "2026-10-20T11:58:14.433Z",
+          "revision_id": "48ad093d-e7f3-42bd-82e1-01a85b705116",
+          "content_hash": "816604d68423f7590d628ca2c1d40936461a1405d6a0ad8a2f18cde298465bee",
+          "editorial_state": "draft",
+          "verification_state": "unverified"
+        }
+      },
+      "meta": {
+        "request_id": "27113895-8364-47d4-956f-fd065856d6ae",
+        "server_time": "2026-10-20T11:58:14.949Z",
+        "fallback_used": false,
+        "resolved_locale": "en",
+        "contract_version": "1",
+        "requested_locale": "en"
+      }
+    }
+  },
+  {
+    "name": "get_backend_contract_status",
+    "request": {},
+    "response": {
+      "data": {
+        "feed": false,
+        "search": false,
+        "content": false,
+        "copilot": false,
+        "currency": false,
+        "research": false,
+        "contract_versions": [
+          "1"
+        ],
+        "minimum_client_contract": "1"
+      },
+      "meta": {
+        "request_id": "9e531a83-3c1a-4d9e-8c92-a98875c45487",
+        "server_time": "2026-10-20T11:58:15.451Z",
+        "fallback_used": false,
+        "resolved_locale": null,
+        "contract_version": "1",
+        "requested_locale": null
+      }
+    }
+  }
+]

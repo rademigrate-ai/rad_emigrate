@@ -1,0 +1,26 @@
+{
+  "baseline_sha": "e1d6bc0a290a6898b913ad9cf32059c16c4373ac",
+  "provenance": "Verified precommit worktree; final immutable-SHA CI is attested separately",
+  "captured_at": "2026-10-21T21:52:12.873619+00:00",
+  "flutter_tests_passed": 978,
+  "checks": [
+    {
+      "command": "dart format --output=none --set-exit-if-changed lib test",
+      "status": "PASS",
+      "log_sha256": "e89f434cfde8fdb521b220530f42c93b738b682f66dd084cb8217badd2ab07e0"
+    },
+    {
+      "command": "flutter analyze --no-pub",
+      "status": "PASS",
+      "log_sha256": "f80bfcfe2a888f706ca717569d5cc56592f60bc51d185f5944df5f51401a5bea"
+    },
+    {
+      "command": "flutter test --no-pub --concurrency=2 --reporter expanded",
+      "status": "PASS",
+      "log_sha256": "2f99e3af8fcdbb904a397c86b380f37e8251547cfdfb6114ef8cdd2c68f12ba5"
+    }
+  ],
+  "deno_tests_passed": 150,
+  "python_tests_passed": 43,
+  "rehearsal_repeat_recovery": "Owned disposable upgrade retained a synthetic ledger; supported owner/port/synthetic-user guarded reset-upgrade, reconstruct, parity, upgrade and regression passed. Original failed run retained externally. No hosted mutations."
+}

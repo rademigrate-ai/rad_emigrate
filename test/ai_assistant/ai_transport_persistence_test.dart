@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../support/rad_contract_fixtures.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // Supabase's HTTP transport is exercised with its own transitive test client.
@@ -57,17 +59,28 @@ void main() {
     Map<String, dynamic>? sent;
     final backend = _backend((request) async {
       sent = jsonDecode(request.body) as Map<String, dynamic>;
-      return _json({
-        'reply': 'Sourced reply',
-        'sources': [
-          {'title': 'Official source', 'url': 'https://example.gov'},
-        ],
-      }, 200);
+      final envelope = validAiEnvelope();
+      (envelope['data'] as Map)['citations'] = [
+        {
+          'id': fixtureId,
+          'claim_id': fixtureId,
+          'snapshot_id': fixtureId,
+          'article_id': null,
+          'revision_id': null,
+          'section_id': null,
+          'url': 'https://example.gov',
+          'title': 'Official source',
+          'excerpt': 'Synthetic evidence only',
+          'verified_at': '2026-10-21T00:00:00Z',
+          'fresh_until': '2026-10-22T00:00:00Z',
+        },
+      ];
+      return _json(envelope, 200);
     });
     final response = await SupabaseAiService(backend).complete(
       const AiRequest(
         prompt: 'Follow up',
-        conversationId: 'session',
+        conversationId: fixtureId,
         metadata: {'scope': 'admin'},
         history: [
           AiConversationMessage(isUser: true, text: 'Earlier question'),
@@ -76,7 +89,7 @@ void main() {
       ),
     );
     expect(sent?['scope'], 'admin');
-    expect(sent?['session_id'], 'session');
+    expect(sent?['session_id'], fixtureId);
     expect(sent?['messages'], [
       {'role': 'user', 'content': 'Earlier question'},
       {'role': 'assistant', 'content': 'Earlier answer'},

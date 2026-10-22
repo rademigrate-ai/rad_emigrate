@@ -13,6 +13,7 @@ const Set<String> _authRoutes = {
 const Set<String> _publicInAppRoutes = {
   '/dashboard',
   '/visa',
+  '/visa/search',
   '/feed',
   '/world-clock',
   '/profile',
@@ -20,11 +21,18 @@ const Set<String> _publicInAppRoutes = {
   '/universities',
   '/ai-assistant',
   '/consultation',
+  '/booking',
+  '/interview-scheduling',
+  '/interviews',
+  '/calculator/cost',
+  '/compare/pathways',
+  '/compare/universities',
 };
 
 /// Personal or administrative routes that strictly require authentication.
 const Set<String> _protectedRoutes = {
   '/applications',
+  '/profile/cases',
   '/documents',
   '/documents/draft',
   '/notifications',
@@ -34,14 +42,17 @@ const Set<String> _protectedRoutes = {
   '/admin/operations',
   '/admin/ai-research',
   '/admin/consultations',
+  '/admin/cms',
+  '/admin/sources',
 };
 
 /// True if the given path requires authentication.
 bool isProtectedPath(String location) {
   if (_protectedRoutes.contains(location)) return true;
-  // Nested Admin paths require authentication. Other unknown paths should
-  // reach the NotFound page rather than being captured by a broad prefix.
+  // Nested Admin paths require authentication.
   if (location.startsWith('/admin/')) return true;
+  if (location.startsWith('/profile/cases/')) return true;
+  if (location.startsWith('/applications/')) return true;
   return false;
 }
 
@@ -53,6 +64,9 @@ bool _isKnownLocation(String location) =>
     location == '/splash' ||
     _authRoutes.contains(location) ||
     _publicInAppRoutes.contains(location) ||
+    _isBookingService(location) ||
+    location.startsWith('/visa/') ||
+    location.startsWith('/feed/') ||
     isProtectedPath(location);
 
 /// True when an OTP page visit carries a pending verification flow.
@@ -151,11 +165,19 @@ String? authRedirect({
 /// Accepts known in-app destinations (public or protected) from a pending flow.
 /// External URLs and unknown paths fall back to the explore home (/dashboard).
 String restoredProtectedDestination(String? value) {
-  final uri = Uri.tryParse(value ?? '');
+  final original = value ?? '';
+  final rawPath = original.split(RegExp(r'[?#]')).first;
+  if (rawPath.split('/').any((segment) => segment == '.' || segment == '..')) {
+    return '/dashboard';
+  }
+  final uri = Uri.tryParse(original);
   if (uri == null ||
       uri.hasScheme ||
       uri.hasAuthority ||
       uri.path.isEmpty ||
+      !uri.path.startsWith('/') ||
+      uri.path.contains(RegExp(r'[\\%\x00-\x20]')) ||
+      uri.path.split('/').any((s) => s == '.' || s == '..') ||
       !_isKnownInAppDestination(uri.path)) {
     return '/dashboard';
   }
@@ -164,7 +186,10 @@ String restoredProtectedDestination(String? value) {
 
 bool _isKnownInAppDestination(String path) {
   if (path == '/splash') return false;
-  if (_publicInAppRoutes.contains(path)) return true;
+  if (_publicInAppRoutes.contains(path) || _isBookingService(path)) return true;
   if (isProtectedPath(path)) return true;
   return false;
 }
+
+bool _isBookingService(String path) =>
+    RegExp(r'^/booking/service/[a-zA-Z0-9_-]+$').hasMatch(path);

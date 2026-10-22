@@ -1,0 +1,12 @@
+{
+  "source_head": "e1d6bc0a290a6898b913ad9cf32059c16c4373ac",
+  "command": [
+    "C:\\Users\\Mehrshad\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "scripts/rad_backend_regression.py",
+    "--runtime",
+    "C:\\Users\\Mehrshad\\Desktop\\RAD - Emigrate\\_local_pr74_remediation_upgrade"
+  ],
+  "exit_code": 0,
+  "seconds": 12.53,
+  "log_sha256": "60015db71cbf7a38fa9662e7f612e36fa2f2c70fd985be00044e71706b87e621"
+}
