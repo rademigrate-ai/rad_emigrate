@@ -65,9 +65,7 @@ class PathwayComparisonPage extends ConsumerWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            isFa
-                                ? 'ماتریس مقایسه‌ای هنوز منتشر نشده است.'
-                                : 'No comparison matrix has been published yet.',
+                            isFa ? 'ماتریس مقایسه‌ای هنوز منتشر نشده است.' : 'No comparison matrix has been published yet.',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),

@@ -128,10 +128,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           visaRoute(),
           // BUG-L01: /explore is a compatibility alias for the Visa explorer.
           // Nav labels use "Explore" while the canonical path remains /visa.
-          GoRoute(
-            path: '/explore',
-            builder: (_, _) => const VisaPage(),
-          ),
+          GoRoute(path: '/explore', builder: (_, _) => const VisaPage()),
           GoRoute(
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),
