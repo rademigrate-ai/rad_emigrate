@@ -3,8 +3,16 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/supabase/supabase_client.dart';
+import '../../../core/supabase/rad_contract.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../domain/entities/search_entities.dart';
+
+class VisaSearchException implements Exception {
+  const VisaSearchException(this.code);
+  final String code;
+  @override
+  String toString() => 'VisaSearchException($code)';
+}
 
 abstract class VisaSearchRepository {
   Future<SmartSearchResult> search({
@@ -33,7 +41,7 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
       return SmartSearchResult.empty(trimmed);
     }
     if (!_service.isInitialized) {
-      return SmartSearchResult.empty(trimmed);
+      throw const VisaSearchException('unavailable');
     }
     try {
       final response = await _service.client
@@ -60,10 +68,8 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
           )
           .timeout(const Duration(seconds: 4));
 
-      if (response == null) {
-        return SmartSearchResult.empty(trimmed);
-      }
       final data = response is String ? jsonDecode(response) : response;
+      requireRadContract('search_visa_articles_response', data);
       if (data is Map<String, dynamic>) {
         return SmartSearchResult.fromJson(
           data,
@@ -78,10 +84,15 @@ class SupabaseVisaSearchRepository implements VisaSearchRepository {
           requestedLocale: locale,
         );
       }
-      return SmartSearchResult.empty(trimmed);
+      throw const VisaSearchException('malformed');
+    } on VisaSearchException {
+      rethrow;
+    } on FormatException {
+      throw const VisaSearchException('malformed');
     } catch (_) {
-      // Unavailable / denied / malformed must not become verified search hits.
-      return SmartSearchResult.empty(trimmed);
+      // The controller already exposes an explicit localized error state.
+      // Unavailable / denied must not masquerade as a successful empty search.
+      throw const VisaSearchException('unavailable');
     }
   }
 }

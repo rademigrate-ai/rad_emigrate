@@ -106,7 +106,7 @@ class SupabaseBookingRepository implements BookingRepository {
         final map = Map<String, dynamic>.from(row as Map);
         backendServices.add(
           ServiceOffering(
-            id: map['id'] as String? ?? '',
+            id: requireServerId(map['id']),
             slug: map['slug'] as String? ?? '',
             title: map['title'] as String? ?? '',
             description: map['description'] as String? ?? '',
@@ -175,13 +175,36 @@ class SupabaseBookingRepository implements BookingRepository {
             ).hasMatch(serverId)) {
           throw const BookingException('consultation_missing_server_id');
         }
+        if (client.auth.currentUser?.id != uid) {
+          throw const BookingException('booking_session_changed');
+        }
+        // The legacy RPC returns only an ID. Read the owner-scoped persisted
+        // receipt; a local clock cannot stand in for the server's created_at.
+        final rows = await client
+            .from('consultation_requests')
+            .select('id, status, created_at')
+            .eq('id', serverId)
+            .eq('user_id', uid)
+            .limit(2)
+            .timeout(const Duration(seconds: 10));
+        if (client.auth.currentUser?.id != uid ||
+            rows.length != 1 ||
+            rows.single['id'] != serverId) {
+          throw const BookingException('consultation_invalid_receipt');
+        }
+        final receipt = rows.single;
+        final status = _consultationStatus(receipt['status'] as String?);
+        if (status == BookingStatus.unknown) {
+          throw const BookingException('consultation_invalid_receipt');
+        }
+        final createdAt = requireServerTimestamp(receipt['created_at']);
         return BookingRecord(
           id: serverId,
           serviceId: service.id,
           serviceTitle: service.title,
           message: request.message,
-          status: BookingStatus.submitted,
-          createdAt: DateTime.now().toUtc(),
+          status: status,
+          createdAt: createdAt,
           preferredStartUtc: null,
           timeZoneId: null,
         );
@@ -261,14 +284,12 @@ class SupabaseBookingRepository implements BookingRepository {
           .map((row) {
             final map = Map<String, dynamic>.from(row as Map);
             return BookingRecord(
-              id: map['id'] as String? ?? '',
+              id: requireServerId(map['id']),
               serviceId: map['service_id'] as String? ?? '',
               serviceTitle: map['service_title'] as String? ?? '',
               message: map['message'] as String? ?? '',
               status: BookingStatusX.fromString(map['status'] as String?),
-              createdAt:
-                  DateTime.tryParse(map['created_at'] as String? ?? '') ??
-                  DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+              createdAt: requireServerTimestamp(map['created_at']),
               updatedAt: map['updated_at'] != null
                   ? DateTime.tryParse(map['updated_at'] as String)
                   : null,
@@ -303,14 +324,12 @@ class SupabaseBookingRepository implements BookingRepository {
           .map((row) {
             final map = Map<String, dynamic>.from(row as Map);
             return BookingRecord(
-              id: map['id'] as String,
+              id: requireServerId(map['id']),
               serviceId: 'built-in-consultation',
               serviceTitle: map['topic'] as String? ?? '',
               message: map['message'] as String? ?? '',
               status: _consultationStatus(map['status'] as String?),
-              createdAt:
-                  DateTime.tryParse(map['created_at'] as String? ?? '') ??
-                  DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+              createdAt: requireServerTimestamp(map['created_at']),
             );
           })
           .toList(growable: false);

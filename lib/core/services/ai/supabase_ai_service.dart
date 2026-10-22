@@ -47,18 +47,25 @@ class SupabaseAiService implements AiService {
     // Guest key when not authenticated (server enforces 5-question limit).
     final session = _supabase.client.auth.currentSession;
     final owner = session?.user.id;
-    bool sameOwner() => _supabase.client.auth.currentSession?.user.id == owner;
+    var sessionInvalidated = false;
+    final authSubscription = _supabase.client.auth.onAuthStateChange.listen((
+      state,
+    ) {
+      if (state.event == AuthChangeEvent.signedOut ||
+          state.event == AuthChangeEvent.signedIn ||
+          state.event == AuthChangeEvent.passwordRecovery ||
+          state.session?.user.id != owner) {
+        sessionInvalidated = true;
+      }
+    }, onError: (Object error, StackTrace stack) => sessionInvalidated = true);
+    bool sameOwner() =>
+        !sessionInvalidated &&
+        _supabase.client.auth.currentSession?.user.id == owner;
     AiResponse changedSession() => AiResponse(
       text: _messageForCode('session_changed', request.locale),
       uncertain: true,
       errorCode: 'session_changed',
     );
-    final isAuthed = session != null && session.user.id.isNotEmpty;
-    String? guestKey = request.metadata['guest_key'];
-    if (!isAuthed && (guestKey == null || guestKey.isEmpty)) {
-      guestKey = await AiGuestIdentity.getOrCreate();
-    }
-
     final locale =
         request.locale ??
         (request.metadata['locale'] is String
@@ -66,6 +73,12 @@ class SupabaseAiService implements AiService {
             : null);
 
     try {
+      final isAuthed = session != null && session.user.id.isNotEmpty;
+      String? guestKey = request.metadata['guest_key'];
+      if (!isAuthed && (guestKey == null || guestKey.isEmpty)) {
+        guestKey = await AiGuestIdentity.getOrCreate();
+      }
+
       // RAD AI contract version 1: numeric header, UUID request_key, closed body.
       final metaKey = request.metadata['request_key']?.toString();
       final requestKey =
@@ -219,6 +232,8 @@ class SupabaseAiService implements AiService {
         errorCode: code,
         conversationId: request.conversationId,
       );
+    } finally {
+      await authSubscription.cancel();
     }
   }
 

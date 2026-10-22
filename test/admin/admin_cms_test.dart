@@ -81,32 +81,49 @@ Map<String, dynamic> proposal({int revision = 4, String state = 'review'}) => {
 
 void main() {
   for (final proposals in [false, true]) {
-    test(
-      'CMS rejects a multi-page cursor cycle, proposals=$proposals',
-      () async {
-        var calls = 0;
-        final service = await mockSupabaseService((r) async {
-          calls++;
-          if (calls > 3) {
-            return rpcJson({'code': 'XX000', 'message': 'cycle watchdog'}, 500);
-          }
-          final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
-          return rpcJson({
-            'data': {'items': []},
-            'meta': contractMeta(locale: request['locale'] as String? ?? 'en'),
-            'page': {'has_more': true, 'next_cursor': calls == 2 ? 'B' : 'A'},
-          });
+    test('CMS rejects a multi-page cursor cycle, proposals=$proposals', () async {
+      var calls = 0;
+      final service = await mockSupabaseService((r) async {
+        calls++;
+        if (calls > 3) {
+          return rpcJson({'code': 'XX000', 'message': 'cycle watchdog'}, 500);
+        }
+        final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
+        return rpcJson({
+          'data': {
+            'items': [
+              proposals
+                  ? {
+                      ...proposal(),
+                      'id':
+                          'c0000000-0000-4000-8000-${calls.toString().padLeft(12, '0')}',
+                    }
+                  : {
+                      'id':
+                          'c0000000-0000-4000-8000-${calls.toString().padLeft(12, '0')}',
+                      'slug': 'synthetic',
+                      'country_code': 'ZZ',
+                      'kind': 'related',
+                      'locale': request['locale'],
+                      'title': 'Synthetic',
+                      'revision': 1,
+                      'editorial_state': 'draft',
+                      'verification_state': 'unverified',
+                      'updated_at': '2026-10-21T00:00:00Z',
+                    },
+            ],
+          },
+          'meta': contractMeta(locale: request['locale'] as String? ?? 'en'),
+          'page': {'has_more': true, 'next_cursor': calls == 2 ? 'B' : 'A'},
         });
-        final repo = SupabaseAdminCmsRepository(service);
-        await expectLater(
-          proposals ? repo.listProposals() : repo.listCmsArticles(),
-          throwsA(
-            isA<CmsException>().having((e) => e.code, 'code', 'malformed'),
-          ),
-        );
-        expect(calls, 3);
-      },
-    );
+      });
+      final repo = SupabaseAdminCmsRepository(service);
+      await expectLater(
+        proposals ? repo.listProposals() : repo.listCmsArticles(),
+        throwsA(isA<CmsException>().having((e) => e.code, 'code', 'malformed')),
+      );
+      expect(calls, 3);
+    });
   }
 
   TestWidgetsFlutterBinding.ensureInitialized();

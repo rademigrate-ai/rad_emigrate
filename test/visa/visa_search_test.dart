@@ -52,15 +52,15 @@ void main() {
     });
 
     test(
-      'VisaSearchRepository returns empty when backend unavailable',
+      'VisaSearchRepository exposes backend unavailability explicitly',
       () async {
         final repo = SupabaseVisaSearchRepository(
           SupabaseClientService.instance,
         );
-        final result = await repo.search(query: 'مسدود');
-
-        // Without initialized Supabase / RPC, repository fails closed to empty.
-        expect(result.hits, isEmpty);
+        await expectLater(
+          repo.search(query: 'مسدود'),
+          throwsA(isA<VisaSearchException>()),
+        );
       },
     );
 

@@ -439,6 +439,17 @@ void main() {
   test('booking accepts scalar server UUID only and never echoes unpersisted slots', () async {
     Object? reply = receipt;
     final service = await _serviceWith((request) {
+      if (request.url.path == '/rest/v1/consultation_requests') {
+        expect(request.url.queryParameters['id'], 'eq.$receipt');
+        expect(request.url.queryParameters['user_id'], 'eq.$ownerA');
+        return jsonResponse([
+          {
+            'id': receipt,
+            'status': 'submitted',
+            'created_at': '2026-01-01T00:00:00Z',
+          },
+        ]);
+      }
       expect(request.url.path, '/rest/v1/rpc/submit_consultation_request');
       expect((jsonDecode(request.body) as Map).keys.toSet(), {
         'p_topic',
@@ -470,6 +481,7 @@ void main() {
           Error.throwWithStackTrace(error, stack);
         });
     expect(value.id, receipt);
+    expect(value.createdAt, DateTime.utc(2026));
     expect(value.status, BookingStatus.submitted);
     expect(value.preferredStartUtc, isNull);
     expect(value.timeZoneId, isNull);

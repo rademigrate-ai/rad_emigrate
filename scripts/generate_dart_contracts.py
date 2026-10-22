@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAMES = [
+    "search_visa_articles_response",
     "ai_orchestrator_response", "save_visa_article_draft_request",
     "save_visa_article_draft_response", "list_research_proposals_response",
     "get_research_proposal_response", "review_research_proposal_response",

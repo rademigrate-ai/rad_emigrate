@@ -56,6 +56,8 @@ jobs:
       - run: deno test --allow-env --allow-read=. supabase/functions/tests
       - name: Lint Edge Functions without rule suppressions
         run: deno lint supabase/functions
+      - name: Run Python security, migration and preflight regressions
+        run: python3 -m unittest discover -s scripts/tests -v
 
   flutter:
     runs-on: ubuntu-latest

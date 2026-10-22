@@ -70,10 +70,14 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
   SupabaseAdminCmsRepository(
     this._service, {
     this.timeout = const Duration(seconds: 15),
+    this.maxPagesPerList = 200,
   }) : _owner = _service.isInitialized
            ? _service.client.auth.currentUser?.id
            : null;
   final Duration timeout;
+  // Bound distinct-cursor responses as well as cycles; never return a partial
+  // list as a complete administrative view when the budget is exhausted.
+  final int maxPagesPerList;
   final SupabaseClientService _service;
   final String? _owner;
 
@@ -106,7 +110,9 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
       }
       if (result['page'] is Map) {
         final page = result['page'] as Map;
-        if (page['has_more'] != (page['next_cursor'] != null) ||
+        final items = (result['data'] as Map)['items'] as List;
+        if (page['has_more'] == true && items.isEmpty ||
+            page['has_more'] != (page['next_cursor'] != null) ||
             page['next_cursor'] != null &&
                 page['next_cursor'] == request['cursor']) {
           throw const FormatException('invalid_page');
@@ -135,15 +141,26 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     for (final locale in ['fa', 'en']) {
       String? cursor;
       final visited = <String?>{};
+      final identities = <String>{};
       do {
-        if (!visited.add(cursor)) throw const CmsException('malformed');
+        if (visited.length >= maxPagesPerList || !visited.add(cursor)) {
+          throw const CmsException('malformed');
+        }
         final response = await _rpc('list_cms_articles', {
           'locale': locale,
           'cursor': cursor,
           'limit': 50,
         }, 'list_cms_articles_response');
+        final items = (response['data'] as Map)['items'] as List;
+        if (items.any(
+          (item) =>
+              (item as Map)['locale'] != locale ||
+              !identities.add(item['id'] as String),
+        )) {
+          throw const CmsException('malformed');
+        }
         articles.addAll(
-          ((response['data'] as Map)['items'] as List).map(
+          items.map(
             (e) => AdminCmsArticleListItem.fromJson(
               Map<String, dynamic>.from(e as Map),
             ),
@@ -180,8 +197,11 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     final proposals = <AdminSourceChangeProposal>[];
     String? cursor;
     final visited = <String?>{};
+    final identities = <String>{};
     do {
-      if (!visited.add(cursor)) throw const CmsException('malformed');
+      if (visited.length >= maxPagesPerList || !visited.add(cursor)) {
+        throw const CmsException('malformed');
+      }
       final response = await _rpc('list_research_proposals', {
         'editorial_state': null,
         'verification_state': null,
@@ -189,8 +209,12 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
         'cursor': cursor,
         'limit': 50,
       }, 'list_research_proposals_response');
+      final items = (response['data'] as Map)['items'] as List;
+      if (items.any((item) => !identities.add((item as Map)['id'] as String))) {
+        throw const CmsException('malformed');
+      }
       proposals.addAll(
-        ((response['data'] as Map)['items'] as List).map(
+        items.map(
           (e) => AdminSourceChangeProposal.fromJson(
             Map<String, dynamic>.from(e as Map),
           ),

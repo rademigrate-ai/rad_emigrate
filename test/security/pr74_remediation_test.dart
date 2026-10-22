@@ -24,6 +24,49 @@ import 'package:rad_emigrate/features/visa/data/canonical_pathway_repository.dar
 import '../support/mock_supabase_service.dart';
 import '../support/rad_contract_fixtures.dart';
 
+Map<String, dynamic> closedSearchResponse({
+  required String articleId,
+  required String sectionId,
+  required String anchor,
+  required String title,
+  required String requestedLocale,
+}) {
+  final fixtures = jsonDecode(
+    File('supabase/contracts/fixtures/rad_v1_synthetic.json')
+        .readAsStringSync(),
+  ) as List;
+  final response = Map<String, dynamic>.from(
+    fixtures.firstWhere((f) => f['name'] == 'search_visa_articles')['response']
+        as Map,
+  );
+  final data = Map<String, dynamic>.from(response['data'] as Map);
+  final item = Map<String, dynamic>.from((data['items'] as List).first as Map)
+    ..addAll({
+      'article_id': articleId,
+      'title': title,
+      'article_kind': 'related',
+      'match_locale': 'en',
+      'target': {
+        'kind': 'visa_article',
+        'id': articleId,
+        'section_id': sectionId,
+      },
+      'section_anchor': anchor,
+    });
+  response['data'] = {
+    ...data,
+    'items': [item],
+  };
+  response['meta'] = {
+    ...(response['meta'] as Map),
+    'requested_locale': requestedLocale,
+    'resolved_locale': 'en',
+    'fallback_used': requestedLocale != 'en',
+  };
+  response['page'] = {'has_more': false, 'next_cursor': null};
+  return response;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test('generated client schemas match approved registry exactly', () {
@@ -199,24 +242,15 @@ void main() {
       final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
       calls.add(request);
       if (r.url.path.endsWith('search_visa_articles')) {
-        return rpcJson({
-          'data': {
-            'items': [
-              {
-                'article_id': fixtureId,
-                'title': 'Synthetic EN',
-                'article_kind': 'related',
-                'match_locale': 'en',
-                'target': {
-                  'kind': 'visa_article',
-                  'id': fixtureId,
-                  'section_id': fixtureId,
-                },
-                'section_anchor': 'synthetic',
-              },
-            ],
-          },
-        });
+        return rpcJson(
+          closedSearchResponse(
+            articleId: fixtureId,
+            sectionId: fixtureId,
+            anchor: 'synthetic',
+            title: 'Synthetic EN',
+            requestedLocale: request['locale'] as String,
+          ),
+        );
       }
       expect(request['locale'], 'en');
       return rpcJson({
@@ -303,24 +337,15 @@ void main() {
         () => mockSupabaseService((r) async {
           final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
           if (r.url.path.endsWith('search_visa_articles')) {
-            return rpcJson({
-              'data': {
-                'items': [
-                  {
-                    'article_id': id,
-                    'title': 'Synthetic English',
-                    'article_kind': 'related',
-                    'match_locale': 'en',
-                    'target': {
-                      'kind': 'visa_article',
-                      'id': id,
-                      'section_id': section['id'],
-                    },
-                    'section_anchor': section['anchor'],
-                  },
-                ],
-              },
-            });
+            return rpcJson(
+              closedSearchResponse(
+                articleId: id,
+                sectionId: section['id'] as String,
+                anchor: section['anchor'] as String,
+                title: 'Synthetic English',
+                requestedLocale: request['locale'] as String,
+              ),
+            );
           }
           fetchedLocales.add(request['locale'] as String);
           return rpcJson(article);
