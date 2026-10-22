@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/dependencies.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
+import '../../../../core/supabase/rad_contract.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -27,12 +28,14 @@ class _ChatMessage {
     required this.text,
     this.sources,
     this.retryPrompt,
+    this.retryRequest,
   });
 
   final bool isUser;
   final String text;
   final List<AiSource>? sources;
   final String? retryPrompt;
+  final AiRequest? retryRequest;
 }
 
 class AiAssistantPage extends ConsumerStatefulWidget {
@@ -314,19 +317,26 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         .map((m) => AiConversationMessage(isUser: m.isUser, text: m.text))
         .toList(growable: false);
 
+    // Retry is the same logical operation, including locale/history. Keeping
+    // the complete input avoids both duplicate quota charges and changed-body
+    // conflicts when the UI locale changes after an ambiguous transport error.
+    final request =
+        replacing?.retryRequest ??
+        AiRequest(
+          prompt: text,
+          kind: AiRequestKind.immigrationQuestion,
+          conversationId: _sessionId,
+          locale: locale,
+          history: history,
+          metadata: {
+            'request_key': newRadRequestKey(),
+            if (widget.adminMode) 'scope': 'admin',
+          },
+        );
     try {
       final ai = ref.read(aiServiceProvider);
       final response = ai.isAvailable
-          ? await ai.complete(
-              AiRequest(
-                prompt: text,
-                kind: AiRequestKind.immigrationQuestion,
-                conversationId: _sessionId,
-                locale: locale,
-                history: history,
-                metadata: {if (widget.adminMode) 'scope': 'admin'},
-              ),
-            )
+          ? await ai.complete(request)
           : AiResponse(
               text: l10n.aiUnavailableResponse(text),
               uncertain: true,
@@ -362,6 +372,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             text: response.text,
             sources: response.sources,
             retryPrompt: response.errorCode == null ? null : text,
+            retryRequest: response.errorCode == null ? null : request,
           ),
         );
         _loading = false;
@@ -376,7 +387,12 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       setState(() {
         if (replacing != null) _messages.remove(replacing);
         _messages.add(
-          _ChatMessage(isUser: false, text: message, retryPrompt: text),
+          _ChatMessage(
+            isUser: false,
+            text: message,
+            retryPrompt: text,
+            retryRequest: request,
+          ),
         );
         _loading = false;
       });

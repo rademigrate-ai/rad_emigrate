@@ -120,6 +120,68 @@ Future<InterviewAppointment?> schedule(AppointmentController c) => c.submit(
   notes: 'PRIVATE_A_NOTES',
 );
 void main() {
+  for (final resetPending in [false, true]) {
+    test(
+      'booking rejects concurrent submit, reset=$resetPending, recovers after failure',
+      () async {
+        final repo = _Bookings()..pending = Completer<BookingRecord>();
+        final controller = BookingSubmitController(repo);
+        addTearDown(controller.dispose);
+        final first = book(controller);
+        if (resetPending) controller.reset();
+        final second = book(controller);
+        final firstCheck = expectLater(first, completion(isNull));
+        final secondCheck = expectLater(second, completion(isNull));
+        final count = repo.calls;
+        repo.pending!.completeError(
+          const BookingException('synthetic failure'),
+        );
+        await Future.wait([firstCheck, secondCheck]);
+        expect(count, 1);
+        expect(controller.state.phase, BookingSubmitPhase.failure);
+        repo.pending = null;
+        expect(await book(controller), isNotNull);
+        expect(repo.calls, 2);
+      },
+    );
+    test(
+      'interview mutations exclude each other, reset=$resetPending, recover after failure',
+      () async {
+        final repo = _Appointments()
+          ..pending = Completer<InterviewAppointment>();
+        final controller = AppointmentController(repo);
+        addTearDown(controller.dispose);
+        final first = schedule(controller);
+        if (resetPending) controller.reset();
+        final second = schedule(controller);
+        final cancel = controller.cancel(
+          appointmentId: 'synthetic',
+          reason: 'synthetic',
+        );
+        final reschedule = controller.reschedule(
+          appointmentId: 'synthetic',
+          startUtc: DateTime.utc(2027),
+          endUtc: null,
+          ianaZoneId: null,
+          notes: 'synthetic',
+        );
+        final firstCheck = expectLater(first, completion(isNull));
+        final secondCheck = expectLater(second, completion(isNull));
+        final count = repo.calls;
+        repo.pending!.completeError(
+          const AppointmentException('synthetic failure'),
+        );
+        await Future.wait([firstCheck, secondCheck]);
+        expect(await cancel, false);
+        expect(await reschedule, false);
+        expect(count, 1);
+        repo.pending = null;
+        expect(await schedule(controller), isNotNull);
+        expect(repo.calls, 2);
+      },
+    );
+  }
+
   test('booking receipts clear on account switch; late and disposed requests return no private result', () async {
     final repo = _Bookings();
     final c = ProviderContainer(

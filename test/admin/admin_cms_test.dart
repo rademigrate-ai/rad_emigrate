@@ -80,6 +80,35 @@ Map<String, dynamic> proposal({int revision = 4, String state = 'review'}) => {
 };
 
 void main() {
+  for (final proposals in [false, true]) {
+    test(
+      'CMS rejects a multi-page cursor cycle, proposals=$proposals',
+      () async {
+        var calls = 0;
+        final service = await mockSupabaseService((r) async {
+          calls++;
+          if (calls > 3) {
+            return rpcJson({'code': 'XX000', 'message': 'cycle watchdog'}, 500);
+          }
+          final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
+          return rpcJson({
+            'data': {'items': []},
+            'meta': contractMeta(locale: request['locale'] as String? ?? 'en'),
+            'page': {'has_more': true, 'next_cursor': calls == 2 ? 'B' : 'A'},
+          });
+        });
+        final repo = SupabaseAdminCmsRepository(service);
+        await expectLater(
+          proposals ? repo.listProposals() : repo.listCmsArticles(),
+          throwsA(
+            isA<CmsException>().having((e) => e.code, 'code', 'malformed'),
+          ),
+        );
+        expect(calls, 3);
+      },
+    );
+  }
+
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
     'uninitialized CMS never supplies fictional content or success',

@@ -46,6 +46,13 @@ class SupabaseAiService implements AiService {
 
     // Guest key when not authenticated (server enforces 5-question limit).
     final session = _supabase.client.auth.currentSession;
+    final owner = session?.user.id;
+    bool sameOwner() => _supabase.client.auth.currentSession?.user.id == owner;
+    AiResponse changedSession() => AiResponse(
+      text: _messageForCode('session_changed', request.locale),
+      uncertain: true,
+      errorCode: 'session_changed',
+    );
     final isAuthed = session != null && session.user.id.isNotEmpty;
     String? guestKey = request.metadata['guest_key'];
     if (!isAuthed && (guestKey == null || guestKey.isEmpty)) {
@@ -105,6 +112,7 @@ class SupabaseAiService implements AiService {
         'case_id': cleanUuid(request.context['case_id']),
       };
 
+      if (!sameOwner()) return changedSession();
       final response = await _supabase.client.functions.invoke(
         'ai-orchestrator',
         headers: {
@@ -132,6 +140,7 @@ class SupabaseAiService implements AiService {
           ],
         },
       );
+      if (!sameOwner()) return changedSession();
       final data = response.data;
       requireRadContract('ai_orchestrator_response', data);
       final map = (data as Map).cast<String, dynamic>();
@@ -187,6 +196,7 @@ class SupabaseAiService implements AiService {
         conversationId: request.conversationId,
       );
     } on FunctionException catch (e) {
+      if (!sameOwner()) return changedSession();
       final details = e.details;
       String code = 'ai_failed';
       if (details is Map) {
@@ -201,6 +211,7 @@ class SupabaseAiService implements AiService {
         conversationId: request.conversationId,
       );
     } catch (e) {
+      if (!sameOwner()) return changedSession();
       final code = e is FormatException ? 'invalid_ai_response' : 'ai_failed';
       return AiResponse(
         text: _messageForCode(code, locale),

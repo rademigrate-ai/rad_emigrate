@@ -76,9 +76,12 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
   final AppointmentRepository _repository;
   final bool Function() _isCurrent;
   bool get _active => mounted && _isCurrent();
+  // Separate from visible state so reset/navigation cannot unlock an in-flight
+  // write. Release only when the original operation has completed.
+  bool _busy = false;
 
   void reset() {
-    if (!_active) return;
+    if (!_active || _busy) return;
     state = const AppointmentActionState();
   }
 
@@ -89,7 +92,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String? ianaZoneId,
     required String notes,
   }) async {
-    if (!_active) return null;
+    if (!_active || _busy) return null;
+    _busy = true;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       final appointment = await _repository.submitRadSession(
@@ -120,6 +124,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
         errorKey: 'appointmentGenericError',
       );
       return null;
+    } finally {
+      _busy = false;
     }
   }
 
@@ -131,7 +137,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String? ianaZoneId,
     required String notes,
   }) async {
-    if (!_active) return false;
+    if (!_active || _busy) return false;
+    _busy = true;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       await _repository.reschedule(
@@ -161,6 +168,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
         errorKey: 'appointmentGenericError',
       );
       return false;
+    } finally {
+      _busy = false;
     }
   }
 
@@ -168,7 +177,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
     required String appointmentId,
     required String reason,
   }) async {
-    if (!_active) return false;
+    if (!_active || _busy) return false;
+    _busy = true;
     state = const AppointmentActionState(phase: AppointmentActionPhase.running);
     try {
       await _repository.cancel(appointmentId: appointmentId, reason: reason);
@@ -192,6 +202,8 @@ class AppointmentController extends StateNotifier<AppointmentActionState> {
         errorKey: 'appointmentGenericError',
       );
       return false;
+    } finally {
+      _busy = false;
     }
   }
 }

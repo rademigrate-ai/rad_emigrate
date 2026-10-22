@@ -41,6 +41,18 @@ export function contractValid(name: string, value: unknown): boolean {
             )).size === v.length);
     }
     if (typeof v === "string") {
+      if (s.format === "date-time" || s.format === "date") {
+        // Date.parse normalizes impossible civil dates (e.g. February 30).
+        // Require the registry's UTC wire form and round-trip the civil date.
+        const form = s.format === "date"
+          ? /^\d{4}-\d{2}-\d{2}$/
+          : /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?Z$/;
+        const parsed = Date.parse(v);
+        if (
+          !form.test(v) || !Number.isFinite(parsed) ||
+          new Date(parsed).toISOString().slice(0, 10) !== v.slice(0, 10)
+        ) return false;
+      }
       return [...v].length >= Number(s.minLength ?? 0) &&
         [...v].length <= Number(s.maxLength ?? 2000000) &&
         (!s.pattern || new RegExp(String(s.pattern), "u").test(v)) &&

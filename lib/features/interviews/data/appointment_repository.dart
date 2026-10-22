@@ -8,6 +8,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/supabase/rpc_compat.dart';
+import '../../../core/supabase/server_receipt.dart';
 import '../../../core/supabase/supabase_client.dart';
 import '../domain/entities/interview_appointment.dart';
 
@@ -140,7 +141,15 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
             },
           )
           .timeout(const Duration(seconds: 15));
-      return _fromRow(Map<String, dynamic>.from((rows as List).first as Map));
+      if (rows is! List || rows.length != 1) {
+        throw const AppointmentException('appointment_invalid_receipt');
+      }
+      final receipt = _fromRow(Map<String, dynamic>.from(rows.single as Map));
+      if (receipt.kind != AppointmentKind.radSession ||
+          receipt.startUtc != startUtc.toUtc()) {
+        throw const AppointmentException('appointment_mismatched_receipt');
+      }
+      return receipt;
     } catch (error) {
       if (isRpcMissingException(error)) {
         throw const AppointmentBackendUnavailableException(_submitRpc);
@@ -210,29 +219,32 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
   }
 
   InterviewAppointment _fromRow(Map<String, dynamic> row) {
+    final id = requireServerId(row['id']);
+    final status = AppointmentStatusX.fromString(row['status'] as String?);
+    if (status == AppointmentStatus.unknown ||
+        !AppointmentKind.values.any((kind) => kind.name == row['kind']) ||
+        row['title'] is! String ||
+        (row['title'] as String).trim().isEmpty) {
+      throw const AppointmentException('appointment_invalid_receipt');
+    }
+    final start = requireServerTimestamp(row['start_utc'] ?? row['startUtc']);
+    final endValue = row['end_utc'] ?? row['endUtc'];
+    final end = endValue == null ? null : requireServerTimestamp(endValue);
+    if (end != null && !end.isAfter(start)) {
+      throw const AppointmentException('appointment_invalid_receipt');
+    }
     return InterviewAppointment(
-      id: row['id'] as String? ?? '',
-      kind: AppointmentKindX.fromString(row['kind'] as String?),
-      title: row['title'] as String? ?? '',
+      id: id,
+      kind: AppointmentKindX.fromString(row['kind'] as String),
+      title: row['title'] as String,
       notes: row['notes'] as String? ?? '',
-      startUtc:
-          DateTime.tryParse(row['start_utc'] as String? ?? '') ??
-          DateTime.tryParse(row['startUtc'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-      endUtc: _parseFirst(row['end_utc'], row['endUtc']),
+      startUtc: start,
+      endUtc: end,
       ianaZoneId: row['time_zone'] as String? ?? row['ianaZoneId'] as String?,
-      status: AppointmentStatusX.fromString(row['status'] as String?),
-      createdAt:
-          DateTime.tryParse(row['created_at'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+      status: status,
+      createdAt: requireServerTimestamp(row['created_at']),
       backendManaged: true,
     );
-  }
-
-  static DateTime? _parseFirst(Object? a, Object? b) {
-    final parsed = DateTime.tryParse(a?.toString() ?? '');
-    if (parsed != null) return parsed;
-    return DateTime.tryParse(b?.toString() ?? '');
   }
 
   static bool _isPermissionError(Object error) {

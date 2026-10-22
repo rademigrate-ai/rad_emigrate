@@ -134,7 +134,9 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     final articles = <AdminCmsArticleListItem>[];
     for (final locale in ['fa', 'en']) {
       String? cursor;
+      final visited = <String?>{};
       do {
+        if (!visited.add(cursor)) throw const CmsException('malformed');
         final response = await _rpc('list_cms_articles', {
           'locale': locale,
           'cursor': cursor,
@@ -177,7 +179,9 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
   Future<List<AdminSourceChangeProposal>> listProposals() async {
     final proposals = <AdminSourceChangeProposal>[];
     String? cursor;
+    final visited = <String?>{};
     do {
+      if (!visited.add(cursor)) throw const CmsException('malformed');
       final response = await _rpc('list_research_proposals', {
         'editorial_state': null,
         'verification_state': null,

@@ -74,9 +74,12 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
   final BookingRepository _repository;
   final bool Function() _isCurrent;
   bool get _active => mounted && _isCurrent();
+  // Separate from visible state so reset/navigation cannot unlock an in-flight
+  // write. Release only when the original operation has completed.
+  bool _busy = false;
 
   void reset() {
-    if (!_active) return;
+    if (!_active || _busy) return;
     state = const BookingSubmitState();
   }
 
@@ -85,7 +88,8 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
     required BookingRequest request,
     required String locale,
   }) async {
-    if (!_active) return null;
+    if (!_active || _busy) return null;
+    _busy = true;
     state = const BookingSubmitState(phase: BookingSubmitPhase.submitting);
     try {
       final record = await _repository.submitBooking(
@@ -114,6 +118,8 @@ class BookingSubmitController extends StateNotifier<BookingSubmitState> {
         errorKey: 'bookingGenericError',
       );
       return null;
+    } finally {
+      _busy = false;
     }
   }
 }

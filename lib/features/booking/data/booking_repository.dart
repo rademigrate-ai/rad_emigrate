@@ -7,6 +7,7 @@
 // unavailable state.
 
 import '../../../core/supabase/rpc_compat.dart';
+import '../../../core/supabase/server_receipt.dart';
 import '../../../core/supabase/supabase_client.dart';
 import '../domain/entities/service_booking.dart';
 
@@ -216,22 +217,27 @@ class SupabaseBookingRepository implements BookingRepository {
             },
           )
           .timeout(const Duration(seconds: 15));
-      final row = Map<String, dynamic>.from((rows as List).first as Map);
-      final id = row['id'] as String?;
-      if (id == null || id.isEmpty) {
-        throw const BookingException('booking_missing_server_id');
+      if (rows is! List || rows.length != 1) {
+        throw const BookingException('booking_invalid_receipt');
       }
+      final row = Map<String, dynamic>.from(rows.single as Map);
+      final id = requireServerId(row['id']);
+      final status = BookingStatusX.fromString(row['status'] as String?);
+      if (row['service_id'] != service.id || status == BookingStatus.unknown) {
+        throw const BookingException('booking_invalid_receipt');
+      }
+      final createdAt = requireServerTimestamp(row['created_at']);
       return BookingRecord(
         id: id,
         serviceId: service.id,
         serviceTitle: service.title,
         message: request.message,
-        status: BookingStatusX.fromString(row['status'] as String?),
-        createdAt:
-            DateTime.tryParse(row['created_at'] as String? ?? '') ??
-            DateTime.now().toUtc(),
-        preferredStartUtc: request.preferredStartUtc,
-        timeZoneId: request.timeZoneId,
+        status: status,
+        createdAt: createdAt,
+        preferredStartUtc: row['preferred_start_utc'] == null
+            ? null
+            : requireServerTimestamp(row['preferred_start_utc']),
+        timeZoneId: row['time_zone'] as String?,
       );
     } catch (error) {
       if (error is BookingException) rethrow;

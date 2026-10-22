@@ -152,6 +152,21 @@ void main() {
       await tester.tap(find.text('Retry'));
       await tester.pumpAndSettle();
       expect(ai.requests, hasLength(2));
+      expect(ai.requests.last.metadata, ai.requests.first.metadata);
+      expect(ai.requests.last.locale, ai.requests.first.locale);
+      expect(ai.requests.last.conversationId, ai.requests.first.conversationId);
+      expect(
+        ai.requests.last.history.map((m) => (m.isUser, m.text)).toList(),
+        ai.requests.first.history.map((m) => (m.isUser, m.text)).toList(),
+      );
+      expect(
+        ai.requests.first.metadata['request_key'],
+        matches(
+          RegExp(
+            r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+          ),
+        ),
+      );
       expect(sessions.saved.where((row) => row.role == 'user'), hasLength(1));
       expect(
         sessions.saved.where((row) => row.role == 'assistant'),
@@ -160,6 +175,12 @@ void main() {
       expect(find.text('My question'), findsOneWidget);
       expect(find.text('Credential rejected'), findsNothing);
       expect(find.text('Verified answer'), findsOneWidget);
+      await _send(tester, 'A separate new question');
+      expect(ai.requests, hasLength(3));
+      expect(
+        ai.requests.last.metadata['request_key'],
+        isNot(ai.requests.first.metadata['request_key']),
+      );
     },
   );
 
@@ -239,12 +260,24 @@ void main() {
     ai
       ..throwTransport = false
       ..fail = false;
-    await tester.tap(find.text('Retry'));
+    tester.binding.platformDispatcher.localeTestValue = const Locale('fa');
+    addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.refresh));
     await tester.pumpAndSettle();
     expect(
       ai.requests.every((request) => request.metadata['scope'] == 'admin'),
       isTrue,
     );
+    expect(ai.requests, hasLength(2));
+    expect(ai.requests.last.metadata, ai.requests.first.metadata);
+    expect(ai.requests.last.locale, ai.requests.first.locale);
+    expect(ai.requests.last.conversationId, ai.requests.first.conversationId);
+    expect(
+      ai.requests.last.history.map((m) => (m.isUser, m.text)).toList(),
+      ai.requests.first.history.map((m) => (m.isUser, m.text)).toList(),
+    );
+    expect(ai.requests.first.metadata['request_key'], isNotNull);
     expect(sessions.scopes.every((scope) => scope == 'admin'), isTrue);
     expect(sessions.saved.where((row) => row.role == 'user'), hasLength(1));
   });
