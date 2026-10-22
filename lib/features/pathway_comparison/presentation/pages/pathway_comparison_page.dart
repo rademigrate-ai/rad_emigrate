@@ -51,6 +51,41 @@ class PathwayComparisonPage extends ConsumerWidget {
                   ),
                 ),
                 data: (items) {
+                  if (items.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 48),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.compare_arrows_outlined,
+                            size: 40,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            isFa ? 'ماتریس مقایسه‌ای هنوز منتشر نشده است.' : 'No comparison matrix has been published yet.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            isFa
+                                ? 'پس از انتشار داده‌های تأییدشده، مسیرها اینجا نمایش داده می‌شوند.'
+                                : 'Published, reviewed pathway data will appear here when available.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                   return Column(
                     children: items.map((item) {
                       return AppCard(
