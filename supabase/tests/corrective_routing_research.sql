@@ -4,7 +4,14 @@ select set_config('request.jwt.claims','{"role":"service_role"}',true);
 do $$
 declare a uuid; b uuid; m uuid; n uuid; secret uuid; doc uuid; job uuid; finding uuid;
  v_count int; v_score int; old_score int; feed_count int; actor uuid := gen_random_uuid();
+ v_catalogue_definition text;
 begin
+ select pg_get_functiondef('public.ingest_ai_model_catalogue(uuid,bigint,jsonb)'::regprocedure)
+   into v_catalogue_definition;
+ if position('enabled = case' in lower(v_catalogue_definition)) > 0
+    or position('(x.capability = ''chat'')' in lower(v_catalogue_definition)) > 0 then
+   raise exception 'AI model discovery must never auto-enable discovered models';
+ end if;
  secret:=vault.create_secret('test-only-routing-credential');
  insert into public.ai_providers(slug,display_name,adapter,base_url,secret_id,enabled,priority)
  values('regression_a','Regression A','openai_compatible','https://a.example.com',secret,true,100) returning id into a;
