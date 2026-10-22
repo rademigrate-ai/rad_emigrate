@@ -33,6 +33,7 @@ import '../../features/profile/presentation/pages/immigration_profile_page.dart'
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/visa/presentation/visa_routes.dart';
 import '../../features/visa/presentation/pages/university_scholarship_page.dart';
+import '../../features/visa/presentation/pages/visa_page.dart';
 import '../../features/booking/presentation/pages/booking_page.dart';
 import '../../features/interviews/presentation/pages/interviews_page.dart';
 import '../../features/booking/presentation/pages/booking_service_page.dart';
@@ -125,6 +126,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
           visaRoute(),
+          // BUG-L01: /explore is a compatibility alias for the Visa explorer.
+          // Nav labels use "Explore" while the canonical path remains /visa.
+          GoRoute(
+            path: '/explore',
+            builder: (_, _) => const VisaPage(),
+          ),
           GoRoute(
             path: '/applications',
             builder: (_, _) => const ApplicationsPage(),
