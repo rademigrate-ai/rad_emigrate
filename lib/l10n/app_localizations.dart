@@ -403,6 +403,7 @@ abstract class AppLocalizations {
   String get aiNoEligibleModel;
   String get aiRateLimited;
   String get aiRequestFailed;
+  String get aiInsufficientEvidence;
   String get aiResponseNotSaved;
   String get addSource;
   String get requiredField;

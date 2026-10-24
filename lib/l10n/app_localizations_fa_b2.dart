@@ -110,6 +110,10 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get aiRateLimited => 'سرویس شلوغ است. کمی بعد تلاش کنید.';
   @override
   String get aiRequestFailed => 'درخواست هوش مصنوعی کامل نشد.';
+
+  @override
+  String get aiInsufficientEvidence =>
+      'شواهد رسمی و تأییدشدهٔ کافی برای پاسخ دقیق وجود ندارد. منبع رسمی یا مشاور راد را بررسی کنید.';
   @override
   String get aiResponseNotSaved => 'این پاسخ ذخیره نشد.';
   @override
