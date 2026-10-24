@@ -136,7 +136,16 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
         articleId: draft.id,
         revisionId: draft.revisionId,
         expectedRevision: draft.revision,
-        contentHash: '0' * 64, // placeholder hash if not calculated
+        // Server-issued revision content hash only - never a client placeholder.
+        contentHash: () {
+          final hash = draft.contentHash.trim();
+          if (hash.isEmpty ||
+              hash == ('0' * 64) ||
+              !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
+            throw const CmsException('malformed');
+          }
+          return hash;
+        }(),
         note: 'ارسال برای بررسی سردبیری از پنل مدیریت',
         requestKey: newRadRequestKey(),
       );
