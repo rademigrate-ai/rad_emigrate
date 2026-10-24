@@ -1,0 +1,40 @@
+RAD MASTER INTEGRATION E2E TEST RESULTS
+Timestamp: 2026-10-24T23:43:49.631Z
+Total: 36 | Passed: 36 | Failed: 0 | Blocked: 0
+
+[PASS ] admin.browser_login                        : url=http://127.0.0.1:8090/dashboard storage_keys=9
+[PASS ] admin.dashboard_access                     : url=http://127.0.0.1:8090/admin
+[PASS ] admin.cms_list_access                      : url=http://127.0.0.1:8090/admin/cms
+[PASS ] admin.cms_editor_access                    : url=http://127.0.0.1:8090/admin/cms/canonical/b1111111-1111-4111-8111-111111111111
+[PASS ] cms.admin_auth_token                       : valid admin token
+[PASS ] cms.retrieve_synthetic_draft               : {"content":{"title":"Draft Rev Update","locale":"fa","summary":"Updated summary for e2e test","sections":[],"article_id":"b1111111-1111-4111-8111-111111111111",
+[PASS ] cms.server_issued_content_hash             : hash=008beec258e50ef550400200f0fb1d4ebf58c66eecedd177e9d7d478143a36ed
+[PASS ] cms.save_draft_revision                    : rev=8 hash=295de9c066bc3b3644150d1d48db7052504d7048d057eb391239e1ba4cbf4fdf
+[PASS ] cms.submit_for_review                      : state=review
+[PASS ] cms.approve_revision                       : state=approved
+[PASS ] cms.publish_revision                       : published_id=316f63bc-47ed-4422-b20e-a1d045a99fd1 event=e34399df-24c0-4d5a-8999-e7a760d6be4a
+[PASS ] cms.public_reader_view                     : url=http://127.0.0.1:8090/visa/ca/study title=RAD International Institute
+[PASS ] cms.revision_conflict_guard                : status=409 body={"code":"PT409","details":null,"hint":null,"message":"revision_conflict"}
+[PASS ] cms.forward_rollback                       : new_rev=9 id=6b48bf7e-c977-4ced-94f8-a7317488ae9d
+[PASS ] isolation.user_a_token                     : uid=1f4c52c9-488d-42f7-b5a9-0bc3bffb506a
+[PASS ] isolation.user_b_token                     : uid=87e77994-5c72-4231-b665-419f34fe6710
+[PASS ] user_a.submit_consultation                 : id=c009e89a-4921-4857-82ac-cbe1f4c87a78
+[PASS ] user_a.read_own_consultation               : count=3
+[PASS ] isolation.cross_account_consultation_leak  : leak=false user_b_items=0
+[PASS ] isolation.direct_id_query_denied           : rows=0
+[PASS ] isolation.admin_cms_role_fence             : status=403 res={"code":"PT403","details":null,"hint":null,"message":"forbidden"}
+[PASS ] visual.mobile.explore.fa                   : 390x844
+[PASS ] visual.mobile.pathway_ca_study.fa          : 390x844
+[PASS ] visual.mobile.dashboard.fa                 : 390x844
+[PASS ] visual.mobile.ai_assistant.fa              : 390x844
+[PASS ] visual.mobile.login.fa                     : 390x844
+[PASS ] visual.tablet.explore.fa                   : 768x1024
+[PASS ] visual.tablet.pathway_ca_study.fa          : 768x1024
+[PASS ] visual.tablet.dashboard.fa                 : 768x1024
+[PASS ] visual.tablet.ai_assistant.fa              : 768x1024
+[PASS ] visual.tablet.login.fa                     : 768x1024
+[PASS ] visual.desktop.explore.fa                  : 1280x900
+[PASS ] visual.desktop.pathway_ca_study.fa         : 1280x900
+[PASS ] visual.desktop.dashboard.fa                : 1280x900
+[PASS ] visual.desktop.ai_assistant.fa             : 1280x900
+[PASS ] visual.desktop.login.fa                    : 1280x900

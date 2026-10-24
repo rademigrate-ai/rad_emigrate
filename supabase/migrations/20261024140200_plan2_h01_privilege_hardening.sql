@@ -17,7 +17,9 @@ begin
   loop
     if to_regclass(format('public.%I', t)) is not null then
       execute format('revoke all on table public.%I from public, anon, authenticated', t);
-      if t = 'application_status_history' then
+      if t in ('admin_case_notes', 'admin_saved_views', 'admin_tasks') then
+        execute format('grant select, insert, update, delete on table public.%I to authenticated', t);
+      elsif t = 'application_status_history' then
         execute format('grant select on table public.%I to authenticated', t);
       end if;
       execute format('grant all on table public.%I to service_role', t);
@@ -59,5 +61,31 @@ begin
   end loop;
 end
 $$;
+
+-- Ensure search index maintenance satisfies PostgreSQL safeupdate requiring WHERE clause.
+CREATE OR REPLACE FUNCTION private.rad_index_article()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
+declare r public.visa_article_revisions;
+begin
+ if tg_op='INSERT' then
+  if new.published_id is null then return new; end if;
+ elsif new.published_id is not distinct from old.published_id then return new;
+ end if;
+ delete from public.visa_article_search_documents where article_id=new.article_id and locale=new.locale;
+ select * into r from public.visa_article_revisions where id=new.published_id;
+ if found then
+  insert into public.visa_article_search_documents
+  select r.article_id,r.id,s.id,r.locale,r.title,s.heading,s.anchor,private.rad_blocks_text(s.blocks),
+   private.rad_search_normalize(r.title||' '||s.heading||' '||private.rad_blocks_text(s.blocks)||' '||private.rad_search_metadata(r.article_id,r.locale)),
+   setweight(to_tsvector('simple',private.rad_search_normalize(r.title)),'A')||setweight(to_tsvector('simple',private.rad_search_normalize(private.rad_search_metadata(r.article_id,r.locale))),'B')||setweight(to_tsvector('simple',private.rad_search_normalize(s.heading)),'B')||setweight(to_tsvector('simple',private.rad_search_normalize(private.rad_blocks_text(s.blocks))),'C')
+  from public.visa_article_sections s where s.revision_id=r.id;
+ end if;
+ update private.rad_search_version set version=version+1 where id = true;
+ return new;
+end $function$;
 
 commit;
