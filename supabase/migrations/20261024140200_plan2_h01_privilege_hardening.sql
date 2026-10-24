@@ -1,5 +1,6 @@
 -- Plan 2 H01: narrow excessive table privileges for sensitive admin/ops tables.
 -- Does not weaken RLS. Preserves service_role. Consultation writes stay via RPC.
+-- Consultation SELECT is column-scoped (Stage1 P0): applicants never see admin_note/assigned_to.
 begin;
 
 do $$
@@ -23,10 +24,13 @@ begin
     end if;
   end loop;
 
+  -- consultation_requests: restore Stage1 P0 column boundary.
+  -- Public columns only for authenticated; internal columns remain service/admin via DEFINER RPCs.
+  -- Direct INSERT already removed in 20261012110945 (submit_consultation_request path).
   if to_regclass('public.consultation_requests') is not null then
     execute 'revoke all on table public.consultation_requests from public, anon';
-    execute 'revoke insert, update, delete, truncate, references, trigger on table public.consultation_requests from authenticated';
-    execute 'grant select on table public.consultation_requests to authenticated';
+    execute 'revoke all on table public.consultation_requests from authenticated';
+    execute 'grant select (id, user_id, topic, message, related_application_id, status, created_at, updated_at) on table public.consultation_requests to authenticated';
     execute 'grant all on table public.consultation_requests to service_role';
   end if;
 end
