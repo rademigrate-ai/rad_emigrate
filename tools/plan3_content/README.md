@@ -4,6 +4,8 @@ Python 3.11+; install `requirements-plan3.txt` in an owned virtual environment.
 This tool captures the three owner-authorized RAD sites, preserves source text,
 builds a deterministic canonical library, and prepares **unapproved drafts**.
 It has no hosted import or publication mode.
+The archive writer pins its compression engine and parameters so checksums do
+not depend on the operating system's Python/zlib implementation.
 
 The checked-in delivery is `artifacts/RAD_PLAN3_VISA_CONTENT_20261024/`.
 Validate it offline:

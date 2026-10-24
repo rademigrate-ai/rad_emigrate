@@ -102,6 +102,10 @@ jobs:
                 read('production_structured_baseline.json'), read('discovery.json'), target,
                 Path('supabase/contracts/rad_v1.json'), schema_gate=read('production_canonical_schema_gate.json'))
           if (original / 'CHECKSUMS.sha256').read_bytes() != (target / 'CHECKSUMS.sha256').read_bytes():
+              def manifest(directory):
+                  return {name: digest for digest, name in (line.split('  ', 1) for line in (directory / 'CHECKSUMS.sha256').read_text().splitlines())}
+              expected, actual = manifest(original), manifest(target)
+              print('Different sealed files:', sorted(name for name in expected if expected[name] != actual.get(name)))
               raise AssertionError('Offline rebuild differs from the sealed delivery')
           print('PASS: complete source library and generated delivery are byte-for-byte reproducible')
           PY

@@ -16,6 +16,14 @@
   "capture_sha256": "ae123df07a9b69af702f2d29b318a0bd73249f03087aca3fc302ecdd013b2a20",
   "client_task_date": "2026-10-24",
   "complete_article_bodies": 1083,
+  "compression": {
+    "filename": "",
+    "format": "gzip",
+    "level": 9,
+    "library_version": "2.2.5",
+    "mtime": 0,
+    "writer": "zlib-ng==1.0.0"
+  },
   "discovered_urls": 1922,
   "exact_duplicate_groups": 85,
   "existing_source_ids_preserved": 6,
@@ -34,10 +42,10 @@
   "near_or_conflict_candidates": 216,
   "pipeline_file_sha256": {
     "tools/plan3_content/__init__.py": "ebe3b32fb93bdacbf7b3572df6feda55ac89e431d5c92eeae4aded6829549470",
-    "tools/plan3_content/build.py": "42dccd7119750ef89605f7583d6cb1210bfa7f117e6dd550dee9ba19a80948cc",
+    "tools/plan3_content/build.py": "cacd13a285d6e6da1f4b65dc262b4e7b3caebeb6760fbd81443f48eb70aa6f8f",
     "tools/plan3_content/cli.py": "cf827c7761210e8db9e2cc88d334c1d830c9de1ae2e0cc6cfba447c892aecad2",
     "tools/plan3_content/crawl.py": "58e07caaac76928d83d7eed3ae84f2684c96e733f1157de4fef72779b263f7f9",
-    "tools/plan3_content/dataset.py": "90c814afd7db097544e05139b946b6906c38c38f0efdaf8b03cd84bd7fdb6d6c",
+    "tools/plan3_content/dataset.py": "67810044cda6e2786d4ce61d32d3ceb1be1bcc475396d082657e6b59d101bae9",
     "tools/plan3_content/importer.py": "bd1a7b582d784b38c0c1d932084594c725ed24133b162cd542ffb6c915609792",
     "tools/plan3_content/parser.py": "0a07bc4443c3f32367334c754d7a9de40ea5a341ad84ccdfac5ce169e7daacb3",
     "tools/plan3_content/quality.py": "fe33901c5c6e13fd8a08d2cf47f0eaf35a1cfa5e923b1f491048f3b60ebaf721",

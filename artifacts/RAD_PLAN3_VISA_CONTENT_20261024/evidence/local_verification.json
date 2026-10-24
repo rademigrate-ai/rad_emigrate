@@ -68,7 +68,7 @@
     "publication_ready": 0,
     "status": "PASS"
   },
-  "observed_at": "2026-10-24T14:59:29.031504+00:00",
+  "observed_at": "2026-10-24T15:18:05.585773+00:00",
   "owned_disposable_cleanup": {
     "other_projects_not_targeted": true,
     "project": "rad_plan3_20261024",
@@ -98,9 +98,9 @@
   },
   "python_regressions": {
     "local_log": "D:\\RAD_PLAN3_20261024\\python_all.log",
-    "log_sha256": "f5623faf0f1718315f8de9eac56c5465664a86a30ab7486b55f0b8edfa324ce0",
+    "log_sha256": "bf63ea7a3fe1a0cc487a44acd893a2abd086450343ab99dc5bcecc42bbc784a7",
     "status": "PASS",
-    "test_count": 103
+    "test_count": 105
   },
   "rehearsed_payload_sha256": "238dcc2561504fc46e50008b5b9078b294c781dfe0c1654c4cae7a5e5a9159b2",
   "rehearsed_source_sha256": "91ccc28ebdc41410434a132728fcb814488136b783ced26f8e741e1a43b3ec50",

@@ -8,3 +8,4 @@ rpds-py==2026.9.1
 ruff==0.17.2
 soupsieve==3.0.4
 typing_extensions==4.16.0
+zlib-ng==1.0.0

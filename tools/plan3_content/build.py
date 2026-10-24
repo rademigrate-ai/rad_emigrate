@@ -10,6 +10,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from .dataset import (
+    COMPRESSION,
     FORMAT_VERSION,
     canonicalize,
     cms_payload,
@@ -540,6 +541,7 @@ def build(
     metrics = {
         "format_version": FORMAT_VERSION,
         "client_task_date": "2026-10-24",
+        "compression": COMPRESSION,
         "discovered_urls": len(sources),
         "fetch_states": dict(Counter(s["fetch_status"] for s in sources)),
         "successfully_retrieved_pages": sum(
@@ -590,7 +592,8 @@ def build(
 
 def seal(output):
     files = sorted(
-        p for p in output.rglob("*") if p.is_file() and p.name != "CHECKSUMS.sha256"
+        (p for p in output.rglob("*") if p.is_file() and p.name != "CHECKSUMS.sha256"),
+        key=lambda path: path.relative_to(output).as_posix(),
     )
     (output / "CHECKSUMS.sha256").write_text(
         "".join(

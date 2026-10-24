@@ -12,12 +12,21 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
+from zlib_ng import gzip_ng, zlib_ng
 
 from .crawl import NAMESPACE, stable_id
 from .parser import digest, extract, normalize_url, search_normalize
 from .taxonomy import classify
 
 FORMAT_VERSION = "rad-plan3-1"
+COMPRESSION = {
+    "format": "gzip",
+    "writer": "zlib-ng==1.0.0",
+    "library_version": zlib_ng.ZLIBNG_VERSION,
+    "level": 9,
+    "mtime": 0,
+    "filename": "",
+}
 
 
 def uid(value: str) -> str:
@@ -33,7 +42,9 @@ def write_jsonl(path: Path, rows):
     path.parent.mkdir(parents=True, exist_ok=True)
     with (
         path.open("wb") as raw,
-        gzip.GzipFile(filename="", fileobj=raw, mode="wb", mtime=0) as f,
+        gzip_ng.GzipFile(
+            filename="", fileobj=raw, mode="wb", mtime=0, compresslevel=9
+        ) as f,
     ):
         for row in rows:
             f.write(

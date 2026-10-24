@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.request import Request
 
+from tools.plan3_content.build import seal
 from tools.plan3_content.crawl import Collector, SafeRedirect, disposition, stable_id
 from tools.plan3_content.dataset import (
     canonicalize,
@@ -533,6 +534,33 @@ class ReferenceTests(unittest.TestCase):
 
 
 class ImportTests(unittest.TestCase):
+    def test_archives_ignore_output_filename_and_decode_with_standard_gzip(self):
+        with tempfile.TemporaryDirectory() as d:
+            first, second = Path(d) / "first.jsonl.gz", Path(d) / "another.jsonl.gz"
+            rows = [
+                {
+                    "fixture": "Synthetic text — متن آزمایشی",
+                    "publication_allowed": False,
+                }
+            ]
+            write_jsonl(first, rows)
+            write_jsonl(second, rows)
+            self.assertEqual(first.read_bytes(), second.read_bytes())
+            self.assertEqual(json.loads(gzip.decompress(first.read_bytes())), rows[0])
+
+    def test_checksum_order_is_portable_instead_of_windows_path_case_order(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "data").mkdir()
+            (root / "data/a.json").write_text("{}")
+            (root / "PLAN3_MANIFEST.json").write_text("{}")
+            seal(root)
+            names = [
+                line.split("  ", 1)[1]
+                for line in (root / "CHECKSUMS.sha256").read_text().splitlines()
+            ]
+            self.assertEqual(names, ["PLAN3_MANIFEST.json", "data/a.json"])
+
     def test_contract_fingerprint_survives_windows_and_linux_checkouts(self):
         with tempfile.TemporaryDirectory() as d:
             p, _ = package(Path(d))
