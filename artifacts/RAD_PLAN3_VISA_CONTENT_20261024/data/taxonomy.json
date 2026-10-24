@@ -1,0 +1,250 @@
+{
+  "classification_is_inference": true,
+  "country_aliases": {
+    "AE": [
+      "امارات",
+      "دبی",
+      "Dubai",
+      "United Arab Emirates"
+    ],
+    "AM": [
+      "ارمنستان",
+      "Armenia"
+    ],
+    "AR": [
+      "آرژانتین",
+      "Argentina"
+    ],
+    "AT": [
+      "اتریش",
+      "Austria"
+    ],
+    "AU": [
+      "استرالیا",
+      "Australia"
+    ],
+    "BE": [
+      "بلژیک",
+      "Belgium"
+    ],
+    "BG": [
+      "بلغارستان",
+      "Bulgaria"
+    ],
+    "BR": [
+      "برزیل",
+      "Brazil"
+    ],
+    "CA": [
+      "کانادا",
+      "Canada"
+    ],
+    "CH": [
+      "سوئیس",
+      "سوییس",
+      "Switzerland"
+    ],
+    "CN": [
+      "چین",
+      "China"
+    ],
+    "CY": [
+      "قبرس",
+      "Cyprus"
+    ],
+    "CZ": [
+      "چک",
+      "Czechia",
+      "Czech Republic"
+    ],
+    "DE": [
+      "آلمان",
+      "Germany"
+    ],
+    "DK": [
+      "دانمارک",
+      "Denmark"
+    ],
+    "EE": [
+      "استونی",
+      "Estonia"
+    ],
+    "ES": [
+      "اسپانیا",
+      "Spain"
+    ],
+    "FI": [
+      "فنلاند",
+      "Finland"
+    ],
+    "FR": [
+      "فرانسه",
+      "France"
+    ],
+    "GB": [
+      "انگلستان",
+      "بریتانیا",
+      "United Kingdom",
+      "UK"
+    ],
+    "GE": [
+      "گرجستان",
+      "Georgia"
+    ],
+    "GR": [
+      "یونان",
+      "Greece"
+    ],
+    "HR": [
+      "کرواسی",
+      "Croatia"
+    ],
+    "HU": [
+      "مجارستان",
+      "Hungary"
+    ],
+    "IE": [
+      "ایرلند",
+      "Ireland"
+    ],
+    "IN": [
+      "هند",
+      "India"
+    ],
+    "IR": [
+      "ایران",
+      "Iran"
+    ],
+    "IS": [
+      "ایسلند",
+      "Iceland"
+    ],
+    "IT": [
+      "ایتالیا",
+      "Italy"
+    ],
+    "JP": [
+      "ژاپن",
+      "Japan"
+    ],
+    "KR": [
+      "کره جنوبی",
+      "South Korea"
+    ],
+    "LT": [
+      "لیتوانی",
+      "Lithuania"
+    ],
+    "LU": [
+      "لوکزامبورگ",
+      "Luxembourg"
+    ],
+    "LV": [
+      "لتونی",
+      "Latvia"
+    ],
+    "MD": [
+      "مولداوی",
+      "Moldova"
+    ],
+    "MT": [
+      "مالت",
+      "Malta"
+    ],
+    "MY": [
+      "مالزی",
+      "Malaysia"
+    ],
+    "NL": [
+      "هلند",
+      "Netherlands"
+    ],
+    "NO": [
+      "نروژ",
+      "Norway"
+    ],
+    "NZ": [
+      "نیوزیلند",
+      "نیوزلند",
+      "New Zealand"
+    ],
+    "OM": [
+      "عمان",
+      "Oman"
+    ],
+    "PH": [
+      "فیلیپین",
+      "Philippines"
+    ],
+    "PL": [
+      "لهستان",
+      "Poland"
+    ],
+    "PT": [
+      "پرتغال",
+      "Portugal"
+    ],
+    "QA": [
+      "قطر",
+      "Qatar"
+    ],
+    "RO": [
+      "رومانی",
+      "Romania"
+    ],
+    "RU": [
+      "روسیه",
+      "Russia"
+    ],
+    "SE": [
+      "سوئد",
+      "Sweden"
+    ],
+    "SG": [
+      "سنگاپور",
+      "Singapore"
+    ],
+    "SK": [
+      "اسلواکی",
+      "Slovakia"
+    ],
+    "TH": [
+      "تایلند",
+      "Thailand"
+    ],
+    "TR": [
+      "ترکیه",
+      "Turkey",
+      "Türkiye"
+    ],
+    "UA": [
+      "اوکراین",
+      "Ukraine"
+    ],
+    "US": [
+      "آمریکا",
+      "امریکا",
+      "ایالات متحده",
+      "United States",
+      "USA"
+    ],
+    "ZA": [
+      "آفریقای جنوبی",
+      "South Africa"
+    ]
+  },
+  "human_review_required": true,
+  "pathways": [
+    "study",
+    "work",
+    "investment",
+    "tourist",
+    "marriage",
+    "medical-study",
+    "medical-work",
+    "credential-recognition",
+    "residence",
+    "general"
+  ],
+  "version": "rad-plan3-taxonomy-1"
+}

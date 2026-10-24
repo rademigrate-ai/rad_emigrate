@@ -1,0 +1,6 @@
+# Plan 3 pipeline fingerprints must survive Windows/Linux checkouts.
+tools/plan3_content/** text eol=lf
+scripts/tests/test_plan3_content.py text eol=lf
+requirements-plan3.txt text eol=lf
+# Preserve the exact bytes sealed by CHECKSUMS.sha256.
+artifacts/RAD_PLAN3_VISA_CONTENT_20261024/** -text

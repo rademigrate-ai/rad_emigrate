@@ -1,0 +1,21 @@
+{
+  "baseline_main": "16810a583ad4544d87f289bd16984c0e758a1515",
+  "historical_10_canonical_count_verified": false,
+  "historical_812_count_verified": false,
+  "historical_project_path_exists": false,
+  "interpretation": "Repository summary reports 742/1275 are historical reported totals; their referenced row archives were not recovered. They do not prove the reported 812 membership.",
+  "missing_artifact_directories": [
+    "artifacts/RAD_GROK_FINAL_CONTENT_DELIVERY/",
+    "artifacts/RAD_VISA_CONTENT_SYSTEM_20261024/",
+    "artifacts/RAD_MASTER_PLAN1_AUDIT_20261024/",
+    "artifacts/RAD_PLAN1_1_PLAN2_FINALIZATION_20261024/"
+  ],
+  "original_812_records_recovered": false,
+  "owner_authorized_reconstruction": true,
+  "repository_report_files": {
+    "docs/RAD_CONTENT_INVENTORY.md": "37f94b6be57f7bc8b2615655ced5bec57f977d7493c25dfb2e1c1af5bbc2bce9",
+    "docs/RAD_CONTENT_INVENTORY_METRICS.json": "1a396f55b05e72700f8bad49114f7f4bdebc44a305c772ecec0389d8ab22c664",
+    "docs/RAD_CONTENT_INVENTORY_SUMMARY.json": "c239575deaf05d7089f5ce8e7e02df0984f03c9612d96d319793714090e47c75"
+  },
+  "scope": "Fresh main, inspected workspace paths, available local Git refs/history and preserved local project records; no claim to have searched every remote machine or private conversation."
+}
