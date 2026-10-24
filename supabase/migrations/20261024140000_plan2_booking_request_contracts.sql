@@ -204,7 +204,7 @@ as $$
 $$;
 
 revoke all on function public.list_service_catalog(text) from public, anon, authenticated;
-grant execute on function public.list_service_catalog(text) to anon, authenticated;
+grant execute on function public.list_service_catalog(text) to authenticated;
 
 revoke all on function public.submit_booking_request(uuid, text, timestamptz, timestamptz, text, text) from public, anon;
 grant execute on function public.submit_booking_request(uuid, text, timestamptz, timestamptz, text, text) to authenticated;
