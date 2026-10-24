@@ -1,0 +1,305 @@
+{
+  "captured_at": "2026-10-24T13:39:50.996295+00:00",
+  "requirements": [
+    {
+      "locale": "fa",
+      "mandatory": true,
+      "order": 10,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "پذیرش از دانشگاه یا مرکز آموزشی مرتبط"
+    },
+    {
+      "locale": "fa",
+      "mandatory": null,
+      "order": 20,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "مدارک تحصیلی و ریزنمرات متناسب با پرونده"
+    },
+    {
+      "locale": "fa",
+      "mandatory": null,
+      "order": 30,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "مدرک زبان یا مسیر جایگزین مورد قبول مؤسسه آموزشی"
+    },
+    {
+      "locale": "fa",
+      "mandatory": null,
+      "order": 40,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "مدارک تمکن مالی متناسب با الزامات جاری"
+    },
+    {
+      "locale": "en",
+      "mandatory": true,
+      "order": 10,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "Admission from the relevant educational institution"
+    },
+    {
+      "locale": "en",
+      "mandatory": null,
+      "order": 20,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "Academic records appropriate to the application"
+    },
+    {
+      "locale": "en",
+      "mandatory": null,
+      "order": 30,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "Language evidence or an accepted alternative pathway"
+    },
+    {
+      "locale": "en",
+      "mandatory": null,
+      "order": 40,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000001",
+      "text": "Financial evidence required under current rules"
+    }
+  ],
+  "sources": [
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000001",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "ویزای تحصیلی",
+      "url": "https://radvisa.com/content/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000002",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "ویزای کاری",
+      "url": "https://radvisa.com/content/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%DB%8C"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000003",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "ویزای سرمایه گذاری",
+      "url": "https://radvisa.com/content/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000004",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "معادل سازی مدارک پزشکی در خارج از کشور",
+      "url": "https://radvisa.com/content/%D9%85%D8%B9%D8%A7%D8%AF%D9%84-%D8%B3%D8%A7%D8%B2%DB%8C-%D9%85%D8%AF%D8%A7%D8%B1%DA%A9-%D9%BE%D8%B2%D8%B4%DA%A9%DB%8C"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000005",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "شرایط تحصیل در کانادا 2025",
+      "url": "https://digivisa.ir/content/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000006",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "کار در آلمان در سال 2025",
+      "url": "https://digivisa.ir/content/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A2%D9%84%D9%85%D8%A7%D9%86"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000007",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "سرمایه گذاری در کانادا 2025",
+      "url": "https://digivisa.ir/content/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7"
+    },
+    {
+      "content_hash": null,
+      "id": "10000000-0000-4000-8000-000000000008",
+      "language": "fa",
+      "published_at": null,
+      "publisher": "RAD International Institute",
+      "retrieved_at": "2026-10-03T19:30:00+00:00",
+      "source_type": "rad_official",
+      "title": "روش های مهاجرت و فهرست کشورها",
+      "url": "https://radmohajer.ir/fa/"
+    }
+  ],
+  "steps": [
+    {
+      "description": "Assemble academic, language, financial and other application documents.",
+      "locale": "en",
+      "order": 30,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "Prepare supporting documents"
+    },
+    {
+      "description": "گردآوری مدارک تحصیلی، زبان، تمکن مالی و سایر اسناد موردنیاز پرونده.",
+      "locale": "fa",
+      "order": 30,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "آماده‌سازی مدارک"
+    },
+    {
+      "description": "Coordinate travel, enrolment and next steps if the permit is approved.",
+      "locale": "en",
+      "order": 50,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "Post-decision follow-up"
+    },
+    {
+      "description": "هماهنگی برای سفر، ثبت‌نام و گام‌های پس از اخذ مجوز در صورت تأیید.",
+      "locale": "fa",
+      "order": 50,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "پیگیری پس از تصمیم"
+    },
+    {
+      "description": "Submit the study permit application and track the case status.",
+      "locale": "en",
+      "order": 40,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "Apply for a study permit"
+    },
+    {
+      "description": "ثبت درخواست Study Permit و پیگیری وضعیت پرونده.",
+      "locale": "fa",
+      "order": 40,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "درخواست مجوز تحصیل"
+    },
+    {
+      "description": "Receive a formal letter of acceptance from a designated learning institution in Canada.",
+      "locale": "en",
+      "order": 20,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "Obtain an offer of admission"
+    },
+    {
+      "description": "دریافت نامه پذیرش رسمی از مؤسسه آموزشی معتبر کانادا.",
+      "locale": "fa",
+      "order": 20,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "دریافت پذیرش تحصیلی"
+    },
+    {
+      "description": "بررسی شرایط متقاضی و انتخاب مسیر تحصیلی مناسب با راهنمایی راد.",
+      "locale": "fa",
+      "order": 10,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "مشاوره و ارزیابی پرونده"
+    },
+    {
+      "description": "Review the applicant profile and select an appropriate study pathway with RAD guidance.",
+      "locale": "en",
+      "order": 10,
+      "program_id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "source_id": "10000000-0000-4000-8000-000000000005",
+      "title": "Consultation and profile review"
+    },
+    {
+      "description": "بررسی سابقه، مدرک و مسیرهای کاری منتشرشده برای آلمان.",
+      "locale": "fa",
+      "order": 10,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "ارزیابی مسیر کاری"
+    },
+    {
+      "description": "آماده‌سازی مدارک شغلی، تحصیلی و ترجمه موردنیاز پرونده.",
+      "locale": "fa",
+      "order": 20,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "تکمیل مدارک حرفه‌ای"
+    },
+    {
+      "description": "هماهنگی پیشنهاد شغلی یا مراحل معادل‌سازی در صورت نیاز مسیر.",
+      "locale": "fa",
+      "order": 30,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "پیگیری پیشنهاد یا معادل‌سازی"
+    },
+    {
+      "description": "ثبت درخواست ویزا و پیگیری مراحل اداری.",
+      "locale": "fa",
+      "order": 40,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "درخواست ویزای کاری"
+    },
+    {
+      "description": "Review experience, credentials and published work pathways for Germany.",
+      "locale": "en",
+      "order": 10,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "Assess the work pathway"
+    },
+    {
+      "description": "Assemble employment, education and certified translations as required.",
+      "locale": "en",
+      "order": 20,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "Prepare professional documents"
+    },
+    {
+      "description": "Coordinate a job offer or recognition steps when the route requires them.",
+      "locale": "en",
+      "order": 30,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "Job offer or recognition steps"
+    },
+    {
+      "description": "Submit the visa application and follow administrative progress.",
+      "locale": "en",
+      "order": 40,
+      "program_id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "source_id": "10000000-0000-4000-8000-000000000006",
+      "title": "Apply for a work visa"
+    }
+  ]
+}
