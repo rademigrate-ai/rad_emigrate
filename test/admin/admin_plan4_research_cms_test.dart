@@ -538,4 +538,148 @@ void main() {
       },
     );
   });
+
+  group('Plan 4 Security, Role Isolation & Concurrency Verification', () {
+    test(
+      'unauthorized or non-admin call throws CmsException(unauthorized)',
+      () async {
+        final service = await mockSupabaseService(
+          (r) async => rpcJson({}, 403),
+        );
+        final repo = SupabaseAdminCmsRepository(service);
+        expect(
+          () => repo.publishArticleRevision(
+            articleId: fixtureId,
+            revisionId: fixtureId,
+            contentHash: dummyHash,
+            requestKey: fixtureId,
+          ),
+          throwsA(
+            isA<CmsException>().having((e) => e.code, 'code', 'unauthorized'),
+          ),
+        );
+      },
+    );
+
+    test(
+      'stale concurrency conflict (PT409) throws CmsException(conflict)',
+      () async {
+        final service = await mockSupabaseService(
+          (r) async =>
+              rpcJson({'code': 'PT409', 'message': 'revision_conflict'}, 409),
+        );
+        final repo = SupabaseAdminCmsRepository(service);
+        expect(
+          () => repo.approveArticleRevision(
+            articleId: fixtureId,
+            revisionId: fixtureId,
+            expectedRevision: 5,
+            contentHash: dummyHash,
+            note: 'Verification passed',
+            requestKey: fixtureId,
+          ),
+          throwsA(
+            isA<CmsException>().having((e) => e.code, 'code', 'conflict'),
+          ),
+        );
+      },
+    );
+
+    test(
+      'malformed contract or schema violation throws CmsException(malformed)',
+      () async {
+        final service = await mockSupabaseService(
+          (r) async => rpcJson({
+            'data': {'corrupted': true},
+            'meta': contractMeta(),
+          }),
+        );
+        final repo = SupabaseAdminCmsRepository(service);
+        expect(
+          () => repo.publishArticleRevision(
+            articleId: fixtureId,
+            revisionId: fixtureId,
+            contentHash: dummyHash,
+            requestKey: fixtureId,
+          ),
+          throwsA(
+            isA<CmsException>().having((e) => e.code, 'code', 'malformed'),
+          ),
+        );
+      },
+    );
+
+    test('rollback with missing target revision throws CmsException', () async {
+      final service = await mockSupabaseService(
+        (r) async => rpcJson({'code': 'PT404', 'message': 'not_found'}, 404),
+      );
+      final repo = SupabaseAdminCmsRepository(service);
+      expect(
+        () => repo.rollbackArticle(
+          articleId: fixtureId,
+          locale: 'en',
+          fromRevisionId: fixtureId,
+          expectedRevision: 8,
+          reason: 'Emergency rollback',
+          requestKey: fixtureId,
+        ),
+        throwsA(isA<CmsException>()),
+      );
+    });
+
+    test('rejection without audit reason fails closed before reaching backend or rejects gracefully', () async {
+      final service = await mockSupabaseService(
+        (r) async => rpcJson({
+          'code': 'PT422',
+          'message': 'rejection_note_required',
+        }, 422),
+      );
+      final repo = SupabaseAdminCmsRepository(service);
+      expect(
+        () => repo.rejectArticleRevision(
+          articleId: fixtureId,
+          revisionId: fixtureId,
+          expectedRevision: 7,
+          contentHash: dummyHash,
+          note: '',
+          requestKey: fixtureId,
+        ),
+        throwsA(isA<CmsException>()),
+      );
+    });
+
+    test(
+      'editorial state machine strictly distinguishes draft from published',
+      () {
+        expect(
+          ArticleEditorialStatus.draft == ArticleEditorialStatus.published,
+          isFalse,
+        );
+        expect(
+          ArticleEditorialStatus.inReview == ArticleEditorialStatus.published,
+          isFalse,
+        );
+        expect(
+          ArticleEditorialStatus.approved == ArticleEditorialStatus.published,
+          isFalse,
+        );
+        expect(
+          ArticleEditorialStatus.published == ArticleEditorialStatus.published,
+          isTrue,
+        );
+        expect(
+          ArticleEditorialStatus.fromString('review'),
+          ArticleEditorialStatus.inReview,
+        );
+        expect(
+          ArticleEditorialStatus.fromString('draft'),
+          ArticleEditorialStatus.draft,
+        );
+        expect(
+          ArticleEditorialStatus.fromString('published'),
+          ArticleEditorialStatus.published,
+        );
+      },
+    );
+  });
 }
