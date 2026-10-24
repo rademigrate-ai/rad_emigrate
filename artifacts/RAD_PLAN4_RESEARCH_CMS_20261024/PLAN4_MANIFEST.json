@@ -1,0 +1,63 @@
+{
+  "plan": "PLAN_4_RESEARCH_CMS_REVIEW_PIPELINE",
+  "version": "1.0.0",
+  "release_date": "2026-10-24T17:45:00Z",
+  "lead_engineer": "Antigravity",
+  "repository": "rademigrate-ai/rad_emigrate",
+  "branch": "feat/plan4-research-cms-20261024",
+  "base_sha": "16810a583ad4544d87f289bd16984c0e758a1515",
+  "production_supabase": "inshddthftkhcdosoqcn",
+  "contract_source": "supabase/contracts/rad_v1.json",
+  "verification_metrics": {
+    "dart_analyzer_issues": 0,
+    "total_tests_passed": 1032,
+    "total_tests_failed": 0,
+    "plan4_tests_passed": 32,
+    "plan4_tests_failed": 0,
+    "flutter_web_build_seconds": 167.5,
+    "web_build_status": "SUCCESS"
+  },
+  "core_deliverables": [
+    "00_EXECUTIVE_SUMMARY.md",
+    "01_RESEARCH_ASSISTANT_ARCHITECTURE.md",
+    "02_CMS_LIFECYCLE_SPECIFICATION.md",
+    "03_SOURCE_DIFF_ENGINE.md",
+    "04_USER_CHANGE_HIGHLIGHT_SYSTEM.md",
+    "05_API_CONTRACT_ALIGNMENT.md",
+    "06_DATA_INTEGRITY_AND_SECURITY.md",
+    "07_AUTHORITY_VERIFICATION_FRAMEWORK.md",
+    "08_ROLLBACK_AND_DISASTER_RECOVERY.md",
+    "09_FLUTTER_UIUX_IMPLEMENTATION.md",
+    "10_TESTING_AND_VERIFICATION_MATRIX.md",
+    "11_PERFORMANCE_AND_SCALE.md",
+    "12_EDGE_FUNCTION_INTEGRATION.md",
+    "13_RISK_AND_MITIGATION_REGISTER.md",
+    "14_RELEASE_CHECKLIST.md",
+    "15_EVIDENCE_INDEX.md",
+    "PLAN4_MANIFEST.json",
+    "CHECKSUMS.sha256"
+  ],
+  "code_files_modified": [
+    "lib/core/supabase/rad_contract_schemas.dart",
+    "lib/features/admin/data/admin_cms_repository.dart",
+    "lib/features/admin/domain/entities/admin_cms_entities.dart",
+    "lib/features/admin/presentation/pages/admin_cms_articles_page.dart",
+    "lib/features/admin/presentation/pages/admin_cms_canonical_editor_page.dart",
+    "lib/features/admin/presentation/pages/admin_source_diff_page.dart",
+    "lib/features/admin/presentation/pages/admin_source_monitor_page.dart",
+    "lib/features/visa/presentation/pages/canonical_pathway_page.dart",
+    "scripts/generate_dart_contracts.py"
+  ],
+  "code_files_added": [
+    "lib/features/visa/presentation/widgets/article_change_highlights_banner.dart",
+    "test/admin/admin_plan4_research_cms_test.dart",
+    "test/visa/article_change_highlights_test.dart"
+  ],
+  "guarantees": {
+    "autonomous_ai_publish_barred": true,
+    "proposal_approval_creates_unapproved_draft": true,
+    "optimistic_revision_concurrency_locking": true,
+    "fail_closed_contract_validation": true,
+    "zero_generic_spinners": true
+  }
+}

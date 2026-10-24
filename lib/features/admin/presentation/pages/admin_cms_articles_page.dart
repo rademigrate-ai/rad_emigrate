@@ -6,8 +6,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
-import '../../../visa/domain/entities/canonical_pathway_entities.dart';
-import '../../../visa/domain/entities/search_entities.dart';
 import '../../data/admin_cms_repository.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 
