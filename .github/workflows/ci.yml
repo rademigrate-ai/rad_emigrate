@@ -18,6 +18,9 @@ on:
       - 'gradle.properties'
       - 'supabase/**'
       - 'scripts/**'
+      - 'tools/plan3_content/**'
+      - 'requirements-plan3.txt'
+      - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
   push:
     branches: [main]
     paths:
@@ -34,6 +37,9 @@ on:
       - 'gradle.properties'
       - 'supabase/**'
       - 'scripts/**'
+      - 'tools/plan3_content/**'
+      - 'requirements-plan3.txt'
+      - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
 
 permissions:
   contents: read
@@ -57,7 +63,58 @@ jobs:
       - name: Lint Edge Functions without rule suppressions
         run: deno lint supabase/functions
       - name: Run Python security, migration and preflight regressions
-        run: python3 -m unittest discover -s scripts/tests -v
+        # Plan 3 tests use the same pinned parser/schema validators as ingestion.
+        run: |
+          python3 -m pip install -r requirements-plan3.txt
+          python3 -m unittest discover -s scripts/tests -v
+
+  plan3-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m pip install -r requirements-plan3.txt
+      - name: Format and lint owned content tools
+        run: |
+          python3 -m ruff format --isolated --check tools/plan3_content scripts/tests/test_plan3_content.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/plan3_content scripts/tests/test_plan3_content.py
+      - name: Verify sealed source library and closed draft contract
+        run: |
+          python3 -m tools.plan3_content.cli checksums --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
+          python3 -m tools.plan3_content.cli validate --package artifacts/RAD_PLAN3_VISA_CONTENT_20261024/10_CMS_DRAFT_IMPORT_PACKAGE.json
+          python3 -m tools.plan3_content.cli library --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
+      - name: Reproduce sealed library offline with identical bytes
+        run: |
+          python3 - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          from tools.plan3_content.build import build
+          from tools.plan3_content.dataset import read_jsonl
+          original = Path('artifacts/RAD_PLAN3_VISA_CONTENT_20261024')
+          data = original / 'data'
+          target = Path(os.environ['RUNNER_TEMP']) / 'plan3-offline-rebuild'
+          target.mkdir()
+          (target / 'data').mkdir()
+          shutil.copy2(data / 'canonical_identity_registry.json', target / 'data/canonical_identity_registry.json')
+          shutil.copytree(original / 'evidence', target / 'evidence')
+          def read(name):
+              return json.loads((data / name).read_text(encoding='utf8'))
+          build(read_jsonl(data / 'capture.jsonl.gz'), read('production_content_baseline.json'),
+                read('production_structured_baseline.json'), read('discovery.json'), target,
+                Path('supabase/contracts/rad_v1.json'), schema_gate=read('production_canonical_schema_gate.json'))
+          if (original / 'CHECKSUMS.sha256').read_bytes() != (target / 'CHECKSUMS.sha256').read_bytes():
+              raise AssertionError('Offline rebuild differs from the sealed delivery')
+          print('PASS: complete source library and generated delivery are byte-for-byte reproducible')
+          PY
+      - name: Rehearse whole-package journal import and exact retry
+        run: >-
+          python3 -m tools.plan3_content.importer sqlite
+          --package artifacts/RAD_PLAN3_VISA_CONTENT_20261024/10_CMS_DRAFT_IMPORT_PACKAGE.json
+          --sqlite-db "$RUNNER_TEMP/plan3-journal.sqlite"
+          --output "$RUNNER_TEMP/plan3-journal-result.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan3-journal-rehearsal
+          path: ${{ runner.temp }}/plan3-journal-result.json
 
   flutter:
     runs-on: ubuntu-latest
@@ -189,6 +246,25 @@ jobs:
         run: python3 scripts/verify_local_auth_isolation.py
       - name: Verify no authenticated cross-user entitlement RPC access
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/ai_entitlement_rpc_privacy.sql
+      - name: Rehearse complete Plan 3 draft package against owned CMS with rollback
+        run: |
+          python3 -m pip install -r requirements-plan3.txt
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          marker = {'project': 'rad_emigrate', 'port': 54322, 'owner_checkout': str(Path.cwd())}
+          (Path(os.environ['RUNNER_TEMP']) / 'plan3-runtime.json').write_text(json.dumps(marker))
+          PY
+          python3 -m tools.plan3_content.importer postgres \
+            --package artifacts/RAD_PLAN3_VISA_CONTENT_20261024/10_CMS_DRAFT_IMPORT_PACKAGE.json \
+            --db-url postgresql://postgres:postgres@127.0.0.1:54322/postgres \
+            --runtime-marker "$RUNNER_TEMP/plan3-runtime.json" --allow-disposable-write \
+            --output "$RUNNER_TEMP/plan3-postgres-result.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan3-postgres-rehearsal
+          path: ${{ runner.temp }}/plan3-postgres-result.json
+          if-no-files-found: error
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true

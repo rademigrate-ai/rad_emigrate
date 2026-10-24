@@ -1,0 +1,11 @@
+# Content quality validation
+
+Canonical draft records: 830. Structurally importable initial drafts: 575. Records with blocking technical/source/catalog issues: 255. Editorially/publication ready: **0**.
+
+Deterministic checks cover scoped URL identity, raw-cache hash, body/selector availability and text coverage, placeholder text, duplicate source blocks, absent headings, source/HTML language disagreement, source dates retained without speculative calendar/timezone conversion, numeric/date mentions needing verification, safe plain-text output, country/pathway association review, compressed-record/index hashes, canonical IDs, closed canonical RPC schema, initial-revision-only import, and source snapshot/excerpt/character-locator mapping. Unsafe executable markup is removed from extraction; original article meaning/text, lists, tables and source references remain in structured records.
+
+Blocking errors and warnings are stored separately per source and per draft; see `04_ARTICLE_BODY_COMPLETENESS.csv` and `17_EDITORIAL_REVIEW_QUEUE.csv`. Thin bodies/unsupported countries/missing language/invalid schema are blocked rather than padded. Warnings preserve table/list v1 adaptations, source repetition, old/ambiguous dates and potential conflicts for review. Source publication/modification strings and sitemap lastmod are evidence of different things; a current retrieval timestamp is never a fresh fact-check date.
+
+Broken internal references can be compared against recorded fetch dispositions. External references are preserved but are not all fetched or certified. A government-looking hostname does not automatically verify a claim, scope of authority or freshness. All immigration requirements, fees, processing times, admissions and promises remain unverified until competent evidence and human review support them. RAD-site content and official government evidence are separate authority classes. JSON/schema validity is technical readiness only.
+
+No automatic editorial approval, publication permission, reviewer identity or approval timestamp is fabricated. Full source bodies and canonical bodies are in `data/*.jsonl.gz`, not reduced to summaries. No English translation is invented. Original source text is preserved; Persian normalization is used for search/dedup keys only.

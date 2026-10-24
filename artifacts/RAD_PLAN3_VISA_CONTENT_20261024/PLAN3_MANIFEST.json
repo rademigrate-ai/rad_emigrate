@@ -1,0 +1,74 @@
+{
+  "article_body_assessments": {
+    "body_unavailable": 742,
+    "complete_substantive_source_container": 1150,
+    "soft_404_not_an_article": 28,
+    "thin_or_metadata_only_body": 2
+  },
+  "body_status_counts": {
+    "complete_source_container": 1180,
+    "empty_body": 6,
+    "no_recognized_article_container": 20,
+    "not_extracted": 716
+  },
+  "canonical_drafts": 830,
+  "capture_file": "data/capture.jsonl.gz",
+  "capture_sha256": "ae123df07a9b69af702f2d29b318a0bd73249f03087aca3fc302ecdd013b2a20",
+  "client_task_date": "2026-10-24",
+  "complete_article_bodies": 1083,
+  "discovered_urls": 1922,
+  "exact_duplicate_groups": 85,
+  "existing_source_ids_preserved": 6,
+  "fetch_states": {
+    "fetch_or_parse_error": 303,
+    "fetched": 1206,
+    "http_error": 7,
+    "legacy_template_demo_route_excluded": 256,
+    "noneditorial_or_stateful_path_excluded": 148,
+    "noneditorial_query_excluded": 2
+  },
+  "format_version": "rad-plan3-1",
+  "historical_10_canonical_count_verified": false,
+  "historical_812_count_verified": false,
+  "human_approved_articles": 0,
+  "near_or_conflict_candidates": 216,
+  "pipeline_file_sha256": {
+    "tools/plan3_content/__init__.py": "ebe3b32fb93bdacbf7b3572df6feda55ac89e431d5c92eeae4aded6829549470",
+    "tools/plan3_content/build.py": "42dccd7119750ef89605f7583d6cb1210bfa7f117e6dd550dee9ba19a80948cc",
+    "tools/plan3_content/cli.py": "cf827c7761210e8db9e2cc88d334c1d830c9de1ae2e0cc6cfba447c892aecad2",
+    "tools/plan3_content/crawl.py": "58e07caaac76928d83d7eed3ae84f2684c96e733f1157de4fef72779b263f7f9",
+    "tools/plan3_content/dataset.py": "90c814afd7db097544e05139b946b6906c38c38f0efdaf8b03cd84bd7fdb6d6c",
+    "tools/plan3_content/importer.py": "bd1a7b582d784b38c0c1d932084594c725ed24133b162cd542ffb6c915609792",
+    "tools/plan3_content/parser.py": "0a07bc4443c3f32367334c754d7a9de40ea5a341ad84ccdfac5ce169e7daacb3",
+    "tools/plan3_content/quality.py": "fe33901c5c6e13fd8a08d2cf47f0eaf35a1cfa5e923b1f491048f3b60ebaf721",
+    "tools/plan3_content/reports.py": "9f91f8611545207da09f0f1e9624cb155692555b20ec27a43273531eac9cc71a",
+    "tools/plan3_content/taxonomy.py": "dcd8680bdbf48c1c478e342968045b30fce6da62b3c7ae05e47448cdc4f64f82"
+  },
+  "production_baseline_counts": {
+    "destinations": 22,
+    "drafts": 22,
+    "knowledge_items": 7,
+    "requirements": 8,
+    "source_documents": 6,
+    "source_snapshots": 15,
+    "steps": 18,
+    "visa_programs": 10
+  },
+  "production_canonical_cms_tables_present": false,
+  "publication_ready_articles": 0,
+  "published_articles_by_this_task": 0,
+  "source_counts_by_domain": {
+    "digivisa.ir": 616,
+    "radmohajer.ir": 855,
+    "radvisa.com": 451
+  },
+  "structurally_valid_draft_payloads": 575,
+  "successfully_retrieved_pages": 1206,
+  "validation": {
+    "articles": 830,
+    "production_import_enabled": false,
+    "publication_ready": 0,
+    "valid_draft_payloads": 575
+  },
+  "verified_claims": 0
+}
