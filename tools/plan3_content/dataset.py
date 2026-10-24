@@ -133,6 +133,8 @@ def source_records(collected, production, cache=None):
                 "inventory_812_membership": "unknown_missing_original_inventory",
             },
         }
+        if fetched.get("fetch_history"):
+            row["fetch_history"] = fetched["fetch_history"]
         soft_404 = search_normalize(title) in {
             "صفحه مورد نظر یافت نشد",
             "صفحه یافت نشد",
@@ -240,6 +242,10 @@ def canonicalize(sources, previous=None):
                     "prior_canonical_collision": len(prior_ids) > 1,
                 }
             )
+    if len({g["canonical_id"] for g in groups}) != len(groups):
+        # A previously deduplicated source has diverged. Choosing which body
+        # keeps the editorial identity is a human reconciliation decision.
+        raise ValueError("canonical_identity_split_requires_review")
     groups.sort(key=lambda g: g["canonical_id"])
     by_source = {s["source_id"]: s for s in sources}
     near = []
@@ -300,6 +306,14 @@ def canonicalize(sources, previous=None):
                         }
                     )
     return groups, near
+
+
+def updated_identities(previous, groups):
+    """Keep identities when a source is temporarily unavailable on refresh."""
+    return {
+        **previous,
+        **{sid: g["canonical_id"] for g in groups for sid in g["source_ids"]},
+    }
 
 
 def split_text(value, limit=11000):
@@ -582,6 +596,8 @@ def validate_package(package_path: Path, registry_path: Path):
     if set(entries) != set(by_id):
         raise ValueError("index_payload_mismatch")
     for aid, a in by_id.items():
+        if any(a.get(k) != v for k, v in entries[aid].items()):
+            raise ValueError("index_metadata_mismatch")
         if (
             a.get("publication_allowed") is not False
             or a.get("approved_at") is not None

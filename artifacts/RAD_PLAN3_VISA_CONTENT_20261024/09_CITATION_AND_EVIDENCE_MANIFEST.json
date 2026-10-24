@@ -122912,6 +122912,26 @@
     },
     {
       "body_reference_links": [],
+      "body_sha256": "04e4cf3084a927cd3222a4b0c8b67867f8059c55214a74d1523d69150a87ca31",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2020-02-24T01:06:33+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "664d1918a0d4b55bef0ef23dd68e788de66fe14cc8f5f4bf04e0197feb45c117",
+      "retrieved_at": "2026-10-24T18:18:12.268444Z",
+      "snapshot_id": "87bafc47-8982-57c5-9caa-23e6ea0599f7",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "4c2f5ff2-34f2-5a0d-aef4-7c6024d16aad",
+      "url": "https://radmohajer.ir/en/%D8%AF%D8%B3%D8%AA%D8%B1%D8%B3%DB%8C-%D8%B3%D8%B1%DB%8C%D8%B9/faq"
+    },
+    {
+      "body_reference_links": [],
       "body_sha256": "e6835cd23c9589e2ccf4581af2ab40940710128e85aa6474bea86acc6983dc5c",
       "date_evidence": [],
       "official_verification_status": "not_verified",
@@ -122942,6 +122962,59 @@
       "source_class": "radmohajer",
       "source_id": "46b7753a-d790-4b0e-83cc-73957c5770e8",
       "url": "https://radmohajer.ir/en/contact-us"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "گذرنامه",
+          "url": "https://radmohajer.ir/fa/component/content/article/170%DA%A9%D9%84%D9%85%D8%A7%D8%AA%DB%8C%20%DA%A9%D9%87%20%D8%A8%D8%B1%D8%A7%DB%8C%20%D8%A7%D9%86%D9%88%D8%A7%D8%B9%20%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%D8%A8%D8%A7%DB%8C%D8%AF%20%D9%85%D8%B9%D8%A7%D9%86%DB%8C%20%D8%A2%D9%86%20%D8%B1%D8%A7%20%D8%A8%D8%AF%D8%A7%D9%86%DB%8C%D8%AF"
+        },
+        {
+          "label": "سفارتخانه",
+          "url": "https://radmohajer.ir/fa/component/content/article/170%DA%A9%D9%84%D9%85%D8%A7%D8%AA%DB%8C%20%DA%A9%D9%87%20%D8%A8%D8%B1%D8%A7%DB%8C%20%D8%A7%D9%86%D9%88%D8%A7%D8%B9%20%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%D8%A8%D8%A7%DB%8C%D8%AF%20%D9%85%D8%B9%D8%A7%D9%86%DB%8C%20%D8%A2%D9%86%20%D8%B1%D8%A7%20%D8%A8%D8%AF%D8%A7%D9%86%DB%8C%D8%AF"
+        },
+        {
+          "label": "كنسولگری‌",
+          "url": "https://radmohajer.ir/fa/component/content/article/170%DA%A9%D9%84%D9%85%D8%A7%D8%AA%DB%8C%20%DA%A9%D9%87%20%D8%A8%D8%B1%D8%A7%DB%8C%20%D8%A7%D9%86%D9%88%D8%A7%D8%B9%20%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%D8%A8%D8%A7%DB%8C%D8%AF%20%D9%85%D8%B9%D8%A7%D9%86%DB%8C%20%D8%A2%D9%86%20%D8%B1%D8%A7%20%D8%A8%D8%AF%D8%A7%D9%86%DB%8C%D8%AF"
+        },
+        {
+          "label": "مهاجرت",
+          "url": "https://radmohajer.ir/fa/component/content/article/171%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "ویزاهای تحصیلی",
+          "url": "https://radmohajer.ir/fa/component/content/article/174%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%20%D9%88%20%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7"
+        },
+        {
+          "label": "کانادا",
+          "url": "https://radmohajer.ir/fa/component/content/article/190-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7"
+        },
+        {
+          "label": "آمریکا",
+          "url": "https://radmohajer.ir/fa/component/content/article/190-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7"
+        },
+        {
+          "label": "موسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "5def0398043ede950391b7907cb527356fc515115878ecd0a99a3b879fb4811e",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-01-22T08:12:25+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "2975937cb8f251b50294a6e7566a5b9e9190b6ffcc8aa11fd8d877649c4b3968",
+      "retrieved_at": "2026-10-24T18:18:14.196885Z",
+      "snapshot_id": "0587c025-b5e4-534b-a5b3-00d2ce1c5180",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "204c1196-39b8-57ed-972c-a9b5a8d82731",
+      "url": "https://radmohajer.ir/en/emg/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D9%88%D8%B1%DB%8C%D8%B3%D8%AA%DB%8C"
     },
     {
       "body_reference_links": [],
@@ -132892,6 +132965,408 @@
       "source_class": "radmohajer",
       "source_id": "05229177-54bc-5a2e-972a-a154152107f4",
       "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "تحصیل در اروپا",
+          "url": "https://radmohajer.ir/fa/component/content/article/166%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7"
+        },
+        {
+          "label": "ویزای تحصیلی اروپا",
+          "url": "https://radmohajer.ir/fa/component/content/article/174%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%20%D9%88%20%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "آیلتس",
+          "url": "https://radmohajer.ir/fa/component/content/article/163%D8%A2%DB%8C%D9%84%D8%B3"
+        },
+        {
+          "label": "تافل",
+          "url": "https://radmohajer.ir/fa/component/content/article/165%D8%AA%D8%A7%D9%81%D9%84"
+        },
+        {
+          "label": "موسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "b22c2c4c24e127d666dff42690c075a3cfa4f57db2c0fc38cfe1603daf426026",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-01-21T14:38:04+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "125e6fb2c2a0b41ae74a4b41ac7f7936aab1ef7c2559a1045ddeb0f6f8e87101",
+      "retrieved_at": "2026-10-24T18:18:16.613490Z",
+      "snapshot_id": "1eaa934e-7482-5a5d-94ad-1219d5077b48",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "5587bc12-09c9-5c3f-91dd-dd84517d97b6",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "مهاجرت",
+          "url": "https://radmohajer.ir/fa/component/content/article/171%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "ویزای شنگن",
+          "url": "https://radmohajer.ir/fa/component/content/article/172%D9%88%DB%8C%D8%B2%D8%A7%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "کشور هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای کار",
+          "url": "https://radmohajer.ir/fa/component/content/article/208%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%DA%A9%D8%A7%D8%B1%DB%8C"
+        },
+        {
+          "label": "آیلتس",
+          "url": "https://radmohajer.ir/fa/component/content/article/163%D8%A2%DB%8C%D9%84%D8%B3"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "آیلتس",
+          "url": "https://radmohajer.ir/fa/component/content/article/163%D8%A2%DB%8C%D9%84%D8%B3"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "رتبه بندی بهترین دانشگاههای جهان",
+          "url": "https://radmohajer.ir/fa/component/content/article/209%D8%B1%D8%AA%D8%A8%D9%87%20%D8%A8%D9%86%D8%AF%DB%8C%20%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87%20%D9%87%D8%A7%DB%8C%20%D8%AC%D9%87%D8%A7%D9%86"
+        },
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای کاری هلند",
+          "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "اخذ اقامت هلند از طریق ازدواج",
+          "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "مؤسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "2160acf7ffb0f04cacbf4b02e62ba44dbbf05230fdab71fb91bf15e861cd30d4",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-09-18T15:06:46+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "270d069ea926a096959d22e55af37de99018393f3ba1f99f1e1b6870f789fa45",
+      "retrieved_at": "2026-10-24T18:22:21.258845Z",
+      "snapshot_id": "73ab7a8f-b113-5a17-ae63-e275d94f530b",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "79c2df04-3e32-563c-bdb8-9bdabd03b4f7",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "اقامت تحصیلی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "مهاجرت",
+          "url": "https://radmohajer.ir/fa/component/content/article/171%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "آلمان",
+          "url": "https://radmohajer.ir/fa/component/content/article/179-%D8%A2%D9%84%D9%85%D8%A7%D9%86"
+        },
+        {
+          "label": "بریتانیا",
+          "url": "https://radmohajer.ir/fa/component/content/article/181-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86"
+        },
+        {
+          "label": "انگلستان",
+          "url": "https://radmohajer.ir/fa/component/content/article/181-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86"
+        },
+        {
+          "label": "آمریکا",
+          "url": "https://radmohajer.ir/fa/component/content/article/187-%D8%A2%D9%85%D8%B1%DB%8C%DA%A9%D8%A7"
+        },
+        {
+          "label": "موسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "1eff806aea5bd4037d53b956c586c8056dc7e7c313d6d967f52cb5eb9e357978",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-02-06T13:28:24+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "8560b00c21295f24242c3e44bcb2559a4b524080044edcffaacd113ff9e3b937",
+      "retrieved_at": "2026-10-24T18:22:22.604005Z",
+      "snapshot_id": "83414a60-4d05-56d0-8d6c-8109321f6da3",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "8b4b4149-1a9e-5d2b-bd52-931eb1f1d873",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "تحصیل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای تحصیلی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تحصیل رایگان در اروپا",
+          "url": "https://radmohajer.ir/fa/component/content/article/166%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7"
+        },
+        {
+          "label": "ویزای تحصیلی اروپا",
+          "url": "https://radmohajer.ir/fa/component/content/article/174%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%20%D9%88%20%D9%88%DB%8C%D8%B2%D8%A7%DB%8C%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7"
+        },
+        {
+          "label": "موسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "9a973a19807abd8f8c9b5e19d0858ff83090f6b49e98ba78c6cd1018903ea785",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-01-28T11:25:08+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "a8904db8126497985c8acd769c0f2438f16b81b77ba30593acaff22f8e214206",
+      "retrieved_at": "2026-10-24T18:22:24.923019Z",
+      "snapshot_id": "7a3a9552-fd7f-5de2-a3ab-1494168452e6",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "a27f9e9d-fa7c-56df-bdee-27341b5ac315",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "مهاجرت",
+          "url": "https://radmohajer.ir/fa/component/content/article/171%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تحصيل در هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "پناهندگي",
+          "url": "https://radmohajer.ir/fa/component/content/article/215%D9%BE%D9%86%D8%A7%D9%87%D9%86%D8%AF%DA%AF%DB%8C%20%D9%88%20%D9%85%D8%B9%D8%A7%DB%8C%D8%A8%20%D8%A2%D9%86"
+        },
+        {
+          "label": "بورسيه تحصيلي هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "موسسه بين المللي راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "30a23f1f237629d7f04af2ce6ef92ee0daefe465d68702d9e2928a4f285ad639",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-03-01T17:25:39+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "b76527b35680171112d5a3be289f429a3f4fec69697db7c4756e55846fb6c4e2",
+      "retrieved_at": "2026-10-24T18:22:26.709735Z",
+      "snapshot_id": "7f571e49-6257-5928-86ad-af4df584203a",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "b2e2413a-10aa-5bba-84b6-774fcd71ffc2",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%BE%D9%86%D8%A7%D9%87%D9%86%D8%AF%DA%AF%D9%8A-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    },
+    {
+      "body_reference_links": [
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تابعیت",
+          "url": "https://radmohajer.ir/fa/component/content/article/164%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای تحصیلی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای ازدواج هلند",
+          "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "آلمان",
+          "url": "https://radmohajer.ir/fa/component/content/article/112%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D8%A2%D9%84%D9%85%D8%A7%D9%86"
+        },
+        {
+          "label": "کشور هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "تابعیت",
+          "url": "https://radmohajer.ir/fa/component/content/article/164%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "ویزا",
+          "url": "https://radmohajer.ir/fa/component/content/article/172%D9%88%DB%8C%D8%B2%D8%A7%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "ویزا",
+          "url": "https://radmohajer.ir/fa/component/content/article/172%D9%88%DB%8C%D8%B2%D8%A7%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/272%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "اسپانیا",
+          "url": "https://radmohajer.ir/fa/component/content/article/254%D9%85%D8%B9%D8%B1%D9%81%DB%8C%20%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7"
+        },
+        {
+          "label": "یونان",
+          "url": "https://radmohajer.ir/fa/component/content/article/197-%DB%8C%D9%88%D9%86%D8%A7%D9%86"
+        },
+        {
+          "label": "تابعیت",
+          "url": "https://radmohajer.ir/fa/component/content/article/164%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA%20%DA%86%DB%8C%D8%B3%D8%AA"
+        },
+        {
+          "label": "ویزای تحصیلی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای تحصیلی",
+          "url": "https://radmohajer.ir/fa/component/content/article/166%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C%20%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C%20%D9%88%20%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86"
+        },
+        {
+          "label": "ویزای تحصیلی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/160%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%20%D8%AF%D8%B1%20%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای توریستی هلند",
+          "url": "https://radmohajer.ir/fa/component/content/article/195-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "ویزای ازدواج هلند",
+          "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+        },
+        {
+          "label": "مؤسسه بین المللی راد",
+          "url": "https://radmohajer.ir/"
+        }
+      ],
+      "body_sha256": "87687225519a9942360c2e8f198fe332ee0cb493fa3f1af086520bb9f2735996",
+      "date_evidence": [
+        {
+          "evidence": "page_markup",
+          "field": "datePublished",
+          "value": "2016-08-29T19:05:14+00:00"
+        }
+      ],
+      "official_verification_status": "not_verified",
+      "publication_allowed": false,
+      "raw_html_sha256": "d5c1275be222feb06cac898157a40d84b5517fb7c2db208acf0b5f37acb7d5d2",
+      "retrieved_at": "2026-10-24T18:22:28.634424Z",
+      "snapshot_id": "f185689d-3b49-5961-8bbd-c07da28ddc3e",
+      "snapshot_state": "proposed_not_hosted",
+      "source_class": "radmohajer",
+      "source_id": "f112987a-c855-5e1a-a225-210ae980cf70",
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
     },
     {
       "body_reference_links": [],

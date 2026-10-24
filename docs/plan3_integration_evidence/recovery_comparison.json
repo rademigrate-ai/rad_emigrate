@@ -1,0 +1,36 @@
+{
+  "all_original_1083_bodies_unchanged": true,
+  "all_original_830_canonical_ids_retained": true,
+  "all_original_830_wire_payloads_unchanged": true,
+  "baseline_sha": "18900fecda36ff0ca23e7b204a4ecae20340879a",
+  "decompressed_credential_scan": {
+    "files": 4,
+    "high_risk_pattern_files": []
+  },
+  "fetch_history_records": 9,
+  "final_counts": {
+    "blocked_drafts": 256,
+    "canonical_drafts": 837,
+    "complete_bodies": 1090,
+    "fetch_failures": 302,
+    "retrieved_html": 1214,
+    "source_records": 1922,
+    "technical_drafts": 581
+  },
+  "hosted_mutations": false,
+  "human_approved_articles": 0,
+  "new_canonical_ids": [
+    "03306261-f8a2-5c5a-8a37-ee30919b389e",
+    "19402c32-29b0-5842-8eb5-abc2f93a1544",
+    "baff309d-2168-5f0c-8862-6701764eaa2c",
+    "bdf4f6bd-9946-5a0b-89e9-f09a9eaef789",
+    "c18191de-0758-5c2d-b2de-8e4583d5ea05",
+    "c7a10080-f559-5d68-b759-856525b25bf3",
+    "cdb457cd-eff7-58d2-ae67-dffe22d550d4"
+  ],
+  "new_complete_bodies": 7,
+  "new_html_hashes_and_bodies_independently_reextracted": 8,
+  "observed_at": "2026-10-24T18:31:13.859442+00:00",
+  "original_575_remain_technically_valid": true,
+  "verified_legal_claims": 0
+}

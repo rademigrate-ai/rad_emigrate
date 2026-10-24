@@ -12,7 +12,7 @@
 * `14`/`15`/`16`: unchanged runtime contracts and Antigravity/Grok handoffs.
 * `17`/`18`: editorial queue and independent content gates.
 * `data/discovery.json`: actual robots/sitemap evidence, declared dates and URLs.
-* `data/production_*`: fresh read-only public content metadata; no private user records or secrets.
+* `data/production_*`: timestamped read-only public content metadata from initial delivery, not a current hosted readiness assertion; no private user records or secrets.
 * `data/sources.jsonl.gz`: original complete/partial bodies, lists/tables, source IDs, provenance, hashes and dates. Large raw HTML remains in external owned cache, never in Git.
 * `data/canonical_articles.jsonl.gz`: complete preferred source bodies with all source identities and version/block hashes. No composite legal text is invented.
 * `data/cms_drafts.jsonl.gz`: exact closed-v1 create/save requests; invalid entries retained with blockers, not imported.

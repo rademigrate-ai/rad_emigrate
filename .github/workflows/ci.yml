@@ -21,6 +21,8 @@ on:
       - 'tools/plan3_content/**'
       - 'requirements-plan3.txt'
       - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
+      - 'PLAN3_INTEGRATION_HANDOFF.md'
+      - 'docs/plan3_integration_evidence/**'
   push:
     branches: [main]
     paths:
@@ -40,6 +42,8 @@ on:
       - 'tools/plan3_content/**'
       - 'requirements-plan3.txt'
       - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
+      - 'PLAN3_INTEGRATION_HANDOFF.md'
+      - 'docs/plan3_integration_evidence/**'
 
 permissions:
   contents: read

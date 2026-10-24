@@ -18,6 +18,7 @@ from .dataset import (
     read_jsonl,
     registry_sha256,
     source_records,
+    updated_identities,
     validate_package,
     write_jsonl,
 )
@@ -80,6 +81,11 @@ def build(
     for s in sources:
         capture.append(
             {
+                **(
+                    {"fetch_history": s["fetch_history"]}
+                    if s.get("fetch_history")
+                    else {}
+                ),
                 "id": s["collector_id"],
                 "url": s["url"],
                 "discovered_via": s["discovered_via"],
@@ -161,7 +167,7 @@ def build(
     write_jsonl(data_dir / "cms_drafts.jsonl.gz", drafts)
     write_json(
         previous_path,
-        {sid: g["canonical_id"] for g in groups for sid in g["source_ids"]},
+        updated_identities(previous, groups),
     )
     write_json(data_dir / "duplicate_relationships.json", relationships)
     write_json(data_dir / "production_content_baseline.json", production)
@@ -183,6 +189,7 @@ def build(
         "publication_allowed": False,
         "production_import_enabled": False,
         "human_approval_required": True,
+        "destination_catalog_country_codes": sorted(countries),
         "approved_by": None,
         "approved_at": None,
         "cms_registry_sha256": registry_sha256(registry_path),
@@ -199,6 +206,8 @@ def build(
         "canonical_file_sha256": digest_bytes(
             (data_dir / "canonical_articles.jsonl.gz").read_bytes()
         ),
+        "identity_registry_file": "data/canonical_identity_registry.json",
+        "identity_registry_sha256": digest_bytes(previous_path.read_bytes()),
         "source_snapshot_ids_are_proposed_until_resolved": True,
         "import_policy": "initial_drafts_only_expected_revision_0_no_approval_no_publication",
         "articles": [

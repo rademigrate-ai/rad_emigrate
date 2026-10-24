@@ -9,6 +9,7 @@ from pathlib import Path
 
 from .dataset import read_jsonl, validate_package
 from .importer import load_import
+from .traceability import verify_graph
 
 
 def verify_checksums(directory):
@@ -39,6 +40,16 @@ def verify_library(directory, registry):
     sources = read_jsonl(directory / "data/sources.jsonl.gz")
     canonical = read_jsonl(directory / "data/canonical_articles.jsonl.gz")
     drafts = read_jsonl(directory / "data/cms_drafts.jsonl.gz")
+    traceability = verify_graph(
+        sources,
+        canonical,
+        drafts,
+        json.loads(
+            (directory / "data/canonical_identity_registry.json").read_text(
+                encoding="utf8"
+            )
+        ),
+    )
     by_source = {s["source_id"]: s for s in sources}
     with (directory / "01_SOURCE_DISCOVERY_INVENTORY.csv").open(
         encoding="utf8", newline=""
@@ -89,6 +100,7 @@ def verify_library(directory, registry):
     return {
         "status": "PASS",
         "counts": counts,
+        "traceability": traceability,
         "publication_ready": 0,
         "hosted_mutations": False,
     }
