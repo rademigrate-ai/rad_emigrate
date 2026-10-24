@@ -1,4 +1,4 @@
-﻿-- Plan 2 additive: booking request infrastructure + catalog (no fabricated services).
+-- Plan 2 additive: booking request infrastructure + catalog (no fabricated services).
 -- Flutter contracts: list_service_catalog, submit_booking_request, list_my_booking_requests.
 -- Prices, slots, and automatic confirmation are intentionally absent.
 begin;

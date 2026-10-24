@@ -1,4 +1,4 @@
-﻿-- Plan 2 additive: interview *request* lifecycle (not embassy appointment booking).
+-- Plan 2 additive: interview *request* lifecycle (not embassy appointment booking).
 -- Does not invent available slots, embassy capacity, or automatic confirmation.
 -- RPCs: submit_interview_request, list_interview_requests,
 --        reschedule_interview_request, cancel_interview_request.
