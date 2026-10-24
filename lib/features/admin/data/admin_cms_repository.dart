@@ -26,9 +26,14 @@ class CmsException implements Exception {
 
 /// Lossless draft input, separate from the public display projection.
 class CmsArticleDraft {
-  CmsArticleDraft._(this._content, this.revisionId);
+  CmsArticleDraft._(this._content, this.revisionId, this.contentHash);
   final Map<String, dynamic> _content;
   final String revisionId;
+
+  /// Server-issued SHA-256 of the current head revision body.
+  /// Never invent or client-hash this value.
+  final String contentHash;
+
   String get id => _content['article_id'] as String;
   String get locale => _content['locale'] as String;
   int get revision => _content['expected_revision'] as int;
@@ -277,13 +282,39 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     }, 'get_cms_article_draft_response');
     final data = response['data'] as Map;
     final content = Map<String, dynamic>.from(data['content'] as Map);
+    final revisionId = data['revision_id'] as String;
+    final revision = data['revision'] as int;
     if (content['article_id'] != articleId ||
         content['locale'] != locale ||
-        content['expected_revision'] != data['revision'] ||
+        content['expected_revision'] != revision ||
         (response['meta'] as Map)['resolved_locale'] != locale) {
       throw const CmsException('malformed');
     }
-    return CmsArticleDraft._(content, data['revision_id'] as String);
+
+    // get_cms_article_draft does not return content_hash; resolve it from the
+    // authoritative revision ledger for the same article/locale/revision_id.
+    final revisions = await listArticleRevisions(
+      articleId: articleId,
+      locale: locale,
+    );
+    RevisionSummary? matched;
+    for (final rev in revisions) {
+      if (rev.revisionId == revisionId &&
+          rev.revision == revision &&
+          rev.locale == locale) {
+        matched = rev;
+        break;
+      }
+    }
+    final hash = matched?.contentHash.trim() ?? '';
+    if (matched == null ||
+        hash.isEmpty ||
+        hash == ('0' * 64) ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
+      throw const CmsException('malformed');
+    }
+
+    return CmsArticleDraft._(content, revisionId, hash);
   }
 
   @override
