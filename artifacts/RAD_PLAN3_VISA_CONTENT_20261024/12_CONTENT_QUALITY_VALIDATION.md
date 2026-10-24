@@ -1,6 +1,6 @@
 # Content quality validation
 
-Canonical draft records: 830. Structurally importable initial drafts: 575. Records with blocking technical/source/catalog issues: 255. Editorially/publication ready: **0**.
+Canonical draft records: 837. Structurally importable initial drafts: 581. Records with blocking technical/source/catalog issues: 256. Editorially/publication ready: **0**.
 
 Deterministic checks cover scoped URL identity, raw-cache hash, body/selector availability and text coverage, placeholder text, duplicate source blocks, absent headings, source/HTML language disagreement, source dates retained without speculative calendar/timezone conversion, numeric/date mentions needing verification, safe plain-text output, country/pathway association review, compressed-record/index hashes, canonical IDs, closed canonical RPC schema, initial-revision-only import, and source snapshot/excerpt/character-locator mapping. Unsafe executable markup is removed from extraction; original article meaning/text, lists, tables and source references remain in structured records.
 

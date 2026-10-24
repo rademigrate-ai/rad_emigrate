@@ -1,6 +1,6 @@
 # Duplicate and conflict review
 
-Exact-body duplicate groups: 85. Near/topic/update candidates: 216; numeric/date-difference candidates: 211.
+Exact-body duplicate groups: 85. Near/topic/update candidates: 222; numeric/date-difference candidates: 216.
 
 Only identical full extracted bodies with the same country association, pathway and language are automatically grouped. Country equality alone is never a merge rule. Persian diacritic/search normalization is not an exact-body equivalence rule. The preferred source order is RadVisa, DigiVisa, Radmohajer, then URL; source IDs, original titles, URLs, body hashes and timestamps remain in source records. No paragraphs from different source bodies are interleaved to manufacture completeness.
 

@@ -5,10 +5,10 @@ Task date: 2026-10-24. Baseline main was independently refreshed to `16810a583ad
 | Stage | Verified count |
 | --- | ---: |
 | Discovered in-scope URLs with dispositions | 1922 |
-| Successfully retrieved HTML pages | 1206 |
-| Complete recognized source article bodies | 1083 |
-| Canonical article drafts | 830 |
-| Structurally valid initial CMS draft payloads | 575 |
+| Successfully retrieved HTML pages | 1214 |
+| Complete recognized source article bodies | 1090 |
+| Canonical article drafts | 837 |
+| Structurally valid initial CMS draft payloads | 581 |
 | Existing production source IDs retained | 6 |
 | Independently verified legal claims | 0 |
 | Human-approved / publication-ready articles | 0 / 0 |
@@ -20,6 +20,6 @@ The reported 812 historical source records, 10 incomplete canonical articles and
 
 Current sitemaps listed 380 RadVisa, 565 DigiVisa and 740 Radmohajer URLs before normalization. Public navigation, pagination, links, current source records and redirects extend that frontier. Robots rules are retained in `data/discovery.json`; fetches use a per-host interval, no form submission, no login/protection bypass and a bounded scoped frontier. Failed/denied/noneditorial/attachment URLs retain a disposition. Original HTML stays in external owned cache; compressed structured source/canonical/draft data is included here.
 
-Fresh production metadata confirms 22 destinations, 10 programs, 8 requirement rows, 18 step rows and 22 drafts in review. Current canonical CMS tables/RPC capabilities are absent from hosted Production; a draft package is not a deployed backend. No historical migration replay or production writes occurred.
+The timestamped read-only production snapshot recorded 22 destinations, 10 programs, 8 requirement rows, 18 step rows and 22 drafts in review, with canonical CMS tables/RPC capabilities absent at that observation. This is not a fresh hosted audit during hardening; a draft package is not a deployed backend. No historical migration replay or production writes occurred.
 
 The engineering deliverable is a reproducible capture/validation/canonicalization/import-rehearsal pipeline and human review queue. Production content completion remains gated on missing-source resolution as appropriate, official verification of time-sensitive facts, reviewer rights/attribution checks, compatible backend, recovery evidence and separate owner authorization. Test evidence is reported separately in `13_PARSER_AND_IMPORT_TEST_RESULTS.md`; final-head CI is linked from the Draft PR, never inferred from another agent's report.

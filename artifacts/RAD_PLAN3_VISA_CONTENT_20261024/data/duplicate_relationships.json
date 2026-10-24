@@ -1,6 +1,99 @@
 [
   {
     "canonical_ids": [
+      "03306261-f8a2-5c5a-8a37-ee30919b389e",
+      "a654ede1-d616-5f9f-a208-e50041482e47"
+    ],
+    "only_left_numeric_tokens": [
+      "200",
+      "500",
+      "8",
+      "8800"
+    ],
+    "only_right_numeric_tokens": [
+      "10",
+      "109",
+      "120",
+      "124",
+      "129",
+      "14",
+      "15",
+      "1575",
+      "16",
+      "1636",
+      "19",
+      "1918",
+      "20",
+      "2021",
+      "2100",
+      "25",
+      "28",
+      "29",
+      "2900",
+      "29520",
+      "35",
+      "40",
+      "400",
+      "420",
+      "50",
+      "6",
+      "6700",
+      "7",
+      "75",
+      "99"
+    ],
+    "relationship": "potential_numeric_or_date_conflict",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 0.875,
+    "token_jaccard": 0.2055,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
+      "6b720023-a999-5138-aafb-f9c7edb76174",
+      "baff309d-2168-5f0c-8862-6701764eaa2c"
+    ],
+    "only_left_numeric_tokens": [
+      "100",
+      "13",
+      "16",
+      "160",
+      "1632",
+      "174",
+      "1976",
+      "2018",
+      "2026",
+      "30",
+      "40",
+      "50",
+      "55",
+      "6.5",
+      "870",
+      "90"
+    ],
+    "only_right_numeric_tokens": [
+      "1",
+      "1000",
+      "1500",
+      "20",
+      "250",
+      "2500",
+      "5/5",
+      "500",
+      "550",
+      "600",
+      "700",
+      "7000",
+      "7500"
+    ],
+    "relationship": "potential_numeric_or_date_conflict",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 1.0,
+    "token_jaccard": 0.2159,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
       "011ebb00-fe47-532d-b874-a30daadfbfe3",
       "3b5f3e52-8be2-5253-9648-110ace6b96e2"
     ],
@@ -4782,6 +4875,80 @@
   },
   {
     "canonical_ids": [
+      "cdb457cd-eff7-58d2-ae67-dffe22d550d4",
+      "f089f4c3-82a9-52a2-8448-0ff505a604fe"
+    ],
+    "only_left_numeric_tokens": [
+      "1000",
+      "1959",
+      "2/1",
+      "250",
+      "600",
+      "700",
+      "7000",
+      "7500",
+      "900"
+    ],
+    "only_right_numeric_tokens": [
+      "1",
+      "1,000",
+      "1,040",
+      "1,060",
+      "1,100",
+      "1,115",
+      "1,160",
+      "1,180",
+      "1,195",
+      "1,210",
+      "1,230",
+      "1,240",
+      "1,250",
+      "1,260",
+      "1,300",
+      "1,380",
+      "1,395",
+      "1,420",
+      "1,430",
+      "1,450",
+      "1,460",
+      "1,475",
+      "1,520",
+      "1,525",
+      "1,550",
+      "1,585",
+      "1,615",
+      "1,650",
+      "1,735",
+      "1,740",
+      "1,810",
+      "1.1",
+      "1.14",
+      "1.7",
+      "1.75",
+      "1.77",
+      "1.8",
+      "1.83",
+      "1.85",
+      "1.9",
+      "1.91",
+      "1.94",
+      "10.5",
+      "10.9",
+      "11.20",
+      "11.65",
+      "112",
+      "116.35",
+      "12",
+      "12.4"
+    ],
+    "relationship": "potential_numeric_or_date_conflict",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 0.9048,
+    "token_jaccard": 0.0901,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
       "1a1ec047-6deb-526d-b817-eea50df2defd",
       "e91d6ffc-f1f8-5ee8-a031-0de44f4e9257"
     ],
@@ -6410,6 +6577,46 @@
   },
   {
     "canonical_ids": [
+      "8618b94e-6b38-52e4-a5ee-af791ee058fb",
+      "c7a10080-f559-5d68-b759-856525b25bf3"
+    ],
+    "only_left_numeric_tokens": [],
+    "only_right_numeric_tokens": [
+      "1",
+      "15",
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "relationship": "same_topic_or_updated_version_candidate",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 1.0,
+    "token_jaccard": 0.1983,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
+      "bc34751e-6449-54a8-8861-7b414c886499",
+      "c7a10080-f559-5d68-b759-856525b25bf3"
+    ],
+    "only_left_numeric_tokens": [
+      "2025"
+    ],
+    "only_right_numeric_tokens": [
+      "15",
+      "3",
+      "4",
+      "6"
+    ],
+    "relationship": "potential_numeric_or_date_conflict",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 1.0,
+    "token_jaccard": 0.209,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
       "8fc58a3a-855c-5c73-bb1c-332e0ce74b38",
       "e31e1b66-5dc1-5f7d-9ed6-1ada50b31f2f"
     ],
@@ -6607,6 +6814,27 @@
     "resolution": "human_review_required_do_not_merge",
     "title_similarity": 1.0,
     "token_jaccard": 0.2288,
+    "verified_contradiction": false
+  },
+  {
+    "canonical_ids": [
+      "bdf4f6bd-9946-5a0b-89e9-f09a9eaef789",
+      "e216d3e3-b6c6-5256-bea5-9ed0c73a4f6a"
+    ],
+    "only_left_numeric_tokens": [
+      "2"
+    ],
+    "only_right_numeric_tokens": [
+      "1",
+      "17",
+      "2025",
+      "5",
+      "50"
+    ],
+    "relationship": "potential_numeric_or_date_conflict",
+    "resolution": "human_review_required_do_not_merge",
+    "title_similarity": 1.0,
+    "token_jaccard": 0.2011,
     "verified_contradiction": false
   },
   {

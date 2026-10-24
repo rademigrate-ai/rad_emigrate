@@ -6,8 +6,11 @@ import json
 import sqlite3
 import tempfile
 import unittest
+from contextlib import closing
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
+from urllib.error import HTTPError, URLError
 from urllib.request import Request
 
 from tools.plan3_content.build import seal
@@ -19,17 +22,21 @@ from tools.plan3_content.dataset import (
     registry_sha256,
     source_records,
     uid,
+    updated_identities,
     validate_package,
     write_jsonl,
 )
 from tools.plan3_content.importer import (
     load_import,
+    local_psql_environment,
     sqlite_import,
     sqlite_rehearsal,
     validate_runtime,
 )
 from tools.plan3_content.parser import digest, extract, normalize_url, search_normalize
 from tools.plan3_content.quality import assess_references, assess_source
+from tools.plan3_content.retry import retry_records
+from tools.plan3_content.traceability import verify_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "supabase/contracts/rad_v1.json"
@@ -88,6 +95,7 @@ def package(directory, sources=None):
         "production_import_enabled": False,
         "approved_by": None,
         "approved_at": None,
+        "destination_catalog_country_codes": ["CA", "DE", "GB"],
         "source_file": "sources.jsonl.gz",
         "source_file_sha256": digest_bytes(
             (directory / "sources.jsonl.gz").read_bytes()
@@ -104,6 +112,300 @@ def package(directory, sources=None):
     path = directory / "package.json"
     path.write_text(json.dumps(p), encoding="utf8")
     return path, articles
+
+
+def rewrite_payload(path, articles):
+    """Simulate a self-consistently rehashed, semantically corrupted delivery."""
+    root = path.parent
+    write_jsonl(root / "drafts.jsonl.gz", articles)
+    value = json.loads(path.read_text())
+    value["payload_file_sha256"] = digest_bytes((root / "drafts.jsonl.gz").read_bytes())
+    for entry, a in zip(value["articles"], articles, strict=True):
+        a["payload_sha256"] = digest(a["wire"])
+        entry["payload_sha256"] = a["payload_sha256"]
+    write_jsonl(root / "drafts.jsonl.gz", articles)
+    value["payload_file_sha256"] = digest_bytes((root / "drafts.jsonl.gz").read_bytes())
+    path.write_text(json.dumps(value))
+
+
+class HardeningTests(unittest.TestCase):
+    def test_recovered_capture_preserves_prior_failure_evidence(self):
+        history = [
+            {
+                "fetch_status": "fetch_or_parse_error",
+                "error": "synthetic transport reset",
+                "retrieved_at": "2026-10-24T10:00:00Z",
+            }
+        ]
+        s = record()
+        recovered = source_records(
+            [
+                {
+                    "id": s["collector_id"],
+                    "url": s["url"],
+                    "fetch_status": "fetched",
+                    "retrieved_at": s["retrieved_at"],
+                    "fetch_history": history,
+                    "extraction": {
+                        "title": s["title"],
+                        "body_text": s["body_text"],
+                        "blocks": s["blocks"],
+                        "body_status": s["body_status"],
+                        "language": s["language"],
+                    },
+                }
+            ],
+            {"sources": []},
+        )[0]
+        self.assertEqual(recovered["fetch_history"], history)
+        self.assertTrue(recovered["complete_article_body"])
+
+    def test_index_metadata_must_match_payload(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, _ = package(Path(d))
+            value = json.loads(p.read_text())
+            value["articles"][0]["primary_source_id"] = uid("unrelated-source")
+            p.write_text(json.dumps(value))
+            with self.assertRaisesRegex(ValueError, "index_metadata_mismatch"):
+                load_import(p, REGISTRY)
+
+
+class TransportRecoveryTests(unittest.TestCase):
+    def failed(self, number=1):
+        url = f"https://radmohajer.ir/fa/synthetic-{number}"
+        return {
+            "id": stable_id(url),
+            "url": url,
+            "fetch_status": "fetch_or_parse_error",
+            "error": "URLError: synthetic connection reset",
+            "retrieved_at": "2026-10-24T10:00:00Z",
+        }
+
+    def collector(self, cache):
+        html = (
+            '<html><h1>Synthetic Canada</h1><article class="item-page"><p>'
+            + BODY
+            + "</p></article></html>"
+        ).encode()
+        return SimpleNamespace(
+            cache=cache,
+            allowed=Mock(return_value=True),
+            request=Mock(
+                return_value=(
+                    html,
+                    {
+                        "status": 200,
+                        "final_url": self.failed()["url"],
+                        "retrieved_at": "2026-10-24T18:00:00Z",
+                        "content_type": "text/html",
+                    },
+                )
+            ),
+        )
+
+    def test_recovery_keeps_original_capture_and_failure_history(self):
+        original = self.failed()
+        with tempfile.TemporaryDirectory() as d:
+            rows, attempts = retry_records([original], self.collector(Path(d)))
+        self.assertEqual(original["fetch_status"], "fetch_or_parse_error")
+        self.assertEqual(rows[0]["fetch_status"], "fetched")
+        self.assertEqual(rows[0]["fetch_history"][0]["error"], original["error"])
+        self.assertEqual(len(attempts), 1)
+
+    def test_denied_not_found_and_parser_errors_are_not_transport_retries(self):
+        rows = [
+            {**self.failed(), "fetch_status": "http_error", "status": 403},
+            {**self.failed(2), "fetch_status": "http_error", "status": 404},
+            {**self.failed(3), "error": "RecursionError: synthetic parser failure"},
+        ]
+        with tempfile.TemporaryDirectory() as d:
+            collector = self.collector(Path(d))
+            self.assertEqual(retry_records(rows, collector), (rows, []))
+            collector.request.assert_not_called()
+
+    def test_access_denial_stops_remaining_attempts(self):
+        with tempfile.TemporaryDirectory() as d:
+            collector = self.collector(Path(d))
+            collector.request.side_effect = HTTPError(
+                self.failed()["url"], 403, "Forbidden", {}, None
+            )
+            rows, attempts = retry_records([self.failed(), self.failed(2)], collector)
+        self.assertEqual(len(attempts), 1)
+        self.assertEqual(rows[1], self.failed(2))
+
+    def test_three_transport_errors_stop_remaining_attempts(self):
+        with tempfile.TemporaryDirectory() as d:
+            collector = self.collector(Path(d))
+            collector.request.side_effect = URLError("synthetic reset")
+            _, attempts = retry_records([self.failed(n) for n in range(5)], collector)
+        self.assertEqual(len(attempts), 3)
+
+    def test_explicit_attempt_budget_is_respected(self):
+        with tempfile.TemporaryDirectory() as d:
+            _, attempts = retry_records(
+                [self.failed(), self.failed(2)], self.collector(Path(d)), max_attempts=1
+            )
+        self.assertEqual(len(attempts), 1)
+
+    def test_out_of_scope_retry_is_rejected_without_request(self):
+        with tempfile.TemporaryDirectory() as d:
+            collector = self.collector(Path(d))
+            with self.assertRaisesRegex(ValueError, "unsafe_retry_target"):
+                retry_records(
+                    [{**self.failed(), "url": "https://example.invalid/"}], collector
+                )
+            collector.request.assert_not_called()
+
+    def test_corrupt_raw_cache_is_not_reported_as_recovered(self):
+        with tempfile.TemporaryDirectory() as d:
+            cache = Path(d)
+            key = stable_id(self.failed()["url"])
+            (cache / (key + ".html.gz")).write_bytes(gzip.compress(b"corrupt"))
+            (cache / (key + ".json")).write_text(json.dumps({"raw_sha256": "0" * 64}))
+            collector = self.collector(cache)
+            rows, _ = retry_records([self.failed()], collector)
+            collector.request.assert_not_called()
+        self.assertEqual(rows[0]["fetch_status"], "fetch_or_parse_error")
+        self.assertIn("cache_hash_mismatch", rows[0]["error"])
+
+    def test_libpq_environment_cannot_override_owned_loopback_connection(self):
+        with patch.dict(
+            "os.environ",
+            {
+                "PGHOSTADDR": "192.0.2.1",
+                "PGSERVICE": "hosted",
+                "PGSERVICEFILE": "remote.conf",
+                "PGOPTIONS": "-c role=other",
+                "PGPASSWORD": "synthetic-secret",
+            },
+        ):
+            env = local_psql_environment(
+                "postgresql://postgres:postgres@localhost:62622/postgres"
+            )
+        self.assertEqual(env["PGHOSTADDR"], "127.0.0.1")
+        self.assertEqual(
+            {k for k in env if k.upper().startswith("PG")},
+            {"PGHOSTADDR", "PGCLIENTENCODING", "PGCONNECT_TIMEOUT"},
+        )
+        self.assertEqual(
+            local_psql_environment("postgresql://[::1]:62622/postgres")["PGHOSTADDR"],
+            "::1",
+        )
+
+    def test_complete_source_cannot_be_omitted_from_partition(self):
+        with self.assertRaisesRegex(ValueError, "complete_body_partition_graph"):
+            verify_graph([record()], [], [], {})
+
+    def test_all_source_body_blocks_are_hash_bound(self):
+        s = record()
+        s["blocks"][0]["text"] = "DIFFERENT SYNTHETIC BLOCK"
+        with self.assertRaisesRegex(ValueError, "source_body_graph"):
+            verify_graph([s], [], [], {})
+
+    def test_duplicate_canonical_graph_identity_is_rejected(self):
+        value = {"canonical_id": uid("duplicate")}
+        with self.assertRaisesRegex(ValueError, "canonical_draft_identity_graph"):
+            verify_graph([], [value, value], [value], {})
+
+    def test_supporting_duplicate_sources_are_retained_in_journal(self):
+        first = record()
+        second = record(url="https://digivisa.ir/synthetic-canada")
+        group = canonicalize([first, second])[0][0]
+        draft = cms_payload(group, first, REG, {"CA"})
+        with closing(sqlite3.connect(":memory:")) as db:
+            sqlite_import(db, [draft], {s["source_id"]: s for s in [first, second]})
+            self.assertEqual(
+                db.execute("select count(*) from plan3_documents").fetchone()[0], 2
+            )
+            self.assertEqual(
+                db.execute("select count(*) from plan3_snapshots").fetchone()[0], 2
+            )
+
+    def test_unavailable_source_identity_is_not_forgotten(self):
+        prior = {uid("unavailable-source"): uid("editorial-identity")}
+        self.assertEqual(updated_identities(prior, []), prior)
+
+    def test_redirect_cannot_request_stateful_or_excluded_routes(self):
+        for url in [
+            "https://radvisa.com/logout",
+            "https://radvisa.com/content?view=form",
+            "https://radvisa.com/admin",
+        ]:
+            with (
+                self.subTest(url=url),
+                self.assertRaisesRegex(ValueError, "stateful_denied"),
+            ):
+                SafeRedirect({"radvisa.com"}, lambda _: True, []).redirect_request(
+                    Request("https://radvisa.com/content"), None, 302, "", {}, url
+                )
+
+    def test_redirect_is_throttled_for_target_host(self):
+        calls = []
+        handler = SafeRedirect(
+            {"radvisa.com", "digivisa.ir"}, lambda _: True, [], calls.append
+        )
+        handler.redirect_request(
+            Request("https://radvisa.com/content"),
+            None,
+            302,
+            "",
+            {},
+            "https://digivisa.ir/guide/",
+        )
+        self.assertEqual(calls, ["https://digivisa.ir/guide"])
+
+    def test_diverged_previously_deduplicated_sources_require_identity_review(self):
+        a = record()
+        b = record(url="https://digivisa.ir/synthetic-canada", body=BODY + " Changed.")
+        with self.assertRaisesRegex(
+            ValueError, "canonical_identity_split_requires_review"
+        ):
+            canonicalize(
+                [a, b], {a["source_id"]: uid("prior"), b["source_id"]: uid("prior")}
+            )
+
+    def test_rehashed_changed_cms_text_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, articles = package(Path(d))
+            articles[0]["wire"]["save_visa_article_draft"]["sections"][0]["blocks"][0][
+                "text"
+            ] = "UNSOURCED SYNTHETIC CHANGE"
+            rewrite_payload(p, articles)
+            with self.assertRaisesRegex(
+                ValueError, "source_to_draft_semantic_mismatch"
+            ):
+                load_import(p, REGISTRY)
+
+    def test_removed_evidence_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, articles = package(Path(d))
+            articles[0]["wire"]["save_visa_article_draft"]["sections"][0][
+                "evidence_refs"
+            ] = []
+            rewrite_payload(p, articles)
+            with self.assertRaisesRegex(
+                ValueError, "source_to_draft_semantic_mismatch"
+            ):
+                load_import(p, REGISTRY)
+
+    def test_catalog_block_cannot_be_promoted_by_validation_flags(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, articles = package(
+                Path(d),
+                [
+                    record(
+                        title="Synthetic Ireland",
+                        url="https://radvisa.com/synthetic-ireland",
+                    )
+                ],
+            )
+            articles[0]["validation"]["draft_payload_valid"] = True
+            articles[0]["validation"]["blocking_errors"] = []
+            rewrite_payload(p, articles)
+            with self.assertRaisesRegex(
+                ValueError, "source_to_draft_semantic_mismatch"
+            ):
+                load_import(p, REGISTRY)
 
 
 class UrlTests(unittest.TestCase):
@@ -646,7 +948,7 @@ class ImportTests(unittest.TestCase):
     def test_changed_body_same_canonical_id_conflicts_non_destructively(self):
         s = record()
         a = article(s)
-        with sqlite3.connect(":memory:") as db:
+        with closing(sqlite3.connect(":memory:")) as db:
             sqlite_import(db, [a], {s["source_id"]: s})
             changed = copy.deepcopy(a)
             changed["payload_sha256"] = "0" * 64

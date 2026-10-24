@@ -69,8 +69,9 @@ def disposition(url: str) -> str | None:
 
 
 class SafeRedirect(HTTPRedirectHandler):
-    def __init__(self, allowed, can_fetch, redirects):
+    def __init__(self, allowed, can_fetch, redirects, throttle=None):
         self.allowed, self.can_fetch, self.redirects = allowed, can_fetch, redirects
+        self.throttle = throttle
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if len(self.redirects) >= 5:
@@ -78,9 +79,13 @@ class SafeRedirect(HTTPRedirectHandler):
         target = normalize_url(newurl, req.full_url)
         if urlsplit(target).hostname not in self.allowed or not self.can_fetch(target):
             raise ValueError("redirect_out_of_scope_or_robots_denied")
+        if disposition(target):
+            raise ValueError("redirect_noneditorial_or_stateful_denied")
         if urlsplit(newurl).scheme == "http":
             raise ValueError("https_downgrade_redirect_denied")
         self.redirects.append({"from": req.full_url, "to": target, "status": code})
+        if self.throttle:
+            self.throttle(target)
         # Preserve the server's trailing slash on the wire; canonical identity
         # normalization must not turn a valid redirect into a redirect loop.
         wire = quote(urljoin(req.full_url, newurl), safe="/%:@!$&'()*+,;=-._~?[]")
@@ -108,11 +113,10 @@ class Collector:
         host = urlsplit(url).hostname
         return host in self.robots and self.robots[host].can_fetch(AGENT, url)
 
-    def request(self, url, robots_request=False):
+    def throttle(self, url):
         host = urlsplit(url).hostname
         if host not in HOSTS:
             raise ValueError("scope_violation")
-        redirects = []
         parser = self.robots.get(host)
         delay = (
             max(
@@ -124,33 +128,40 @@ class Collector:
         with self.host_locks[host]:
             time.sleep(max(0, delay - (time.monotonic() - self.last.get(host, 0))))
             self.last[host] = time.monotonic()
-            opener = build_opener(
-                SafeRedirect(
-                    HOSTS, lambda u: robots_request or self.allowed(u), redirects
-                )
+
+    def request(self, url, robots_request=False):
+        self.throttle(url)
+        redirects = []
+        opener = build_opener(
+            SafeRedirect(
+                HOSTS,
+                lambda u: robots_request or self.allowed(u),
+                redirects,
+                self.throttle,
             )
-            with opener.open(
-                Request(
-                    url,
-                    headers={
-                        "User-Agent": AGENT,
-                        "Accept": "text/html,application/xml,text/plain;q=0.8",
-                    },
-                ),
-                timeout=20,
-            ) as response:
-                body = response.read(MAX_BYTES + 1)
-                if len(body) > MAX_BYTES:
-                    raise ValueError("response_size_limit")
-                return body, {
-                    "status": response.status,
-                    "final_url": normalize_url(response.url),
-                    "content_type": response.headers.get("Content-Type", ""),
-                    "last_modified_header": response.headers.get("Last-Modified"),
-                    "etag": response.headers.get("ETag"),
-                    "redirects": redirects,
-                    "retrieved_at": now(),
-                }
+        )
+        with opener.open(
+            Request(
+                url,
+                headers={
+                    "User-Agent": AGENT,
+                    "Accept": "text/html,application/xml,text/plain;q=0.8",
+                },
+            ),
+            timeout=20,
+        ) as response:
+            body = response.read(MAX_BYTES + 1)
+            if len(body) > MAX_BYTES:
+                raise ValueError("response_size_limit")
+            return body, {
+                "status": response.status,
+                "final_url": normalize_url(response.url),
+                "content_type": response.headers.get("Content-Type", ""),
+                "last_modified_header": response.headers.get("Last-Modified"),
+                "etag": response.headers.get("ETag"),
+                "redirects": redirects,
+                "retrieved_at": now(),
+            }
 
     def bootstrap(self, initial: Path | None):
         prior = json.loads(initial.read_text(encoding="utf8")) if initial else []
@@ -327,6 +338,7 @@ class Collector:
                         time.sleep(
                             min(120, max(1, int(retry))) if retry.isdigit() else 30
                         )
+                    exc.close()
                 except (OSError, ValueError, UnicodeError, RecursionError) as exc:
                     row.update(
                         fetch_status="fetch_or_parse_error",

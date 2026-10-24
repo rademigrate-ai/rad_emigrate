@@ -279,8 +279,8 @@ MY,medical-work,True,1,1,1,0,0,0,official_verification_and_human_review_required
 MY,credential-recognition,True,0,0,0,0,0,0,no_source_body
 MY,residence,True,0,0,0,0,0,0,no_source_body
 MY,general,True,0,0,0,0,0,0,no_source_body
-NL,study,True,10,8,8,0,0,0,official_verification_and_human_review_required
-NL,work,True,1,1,1,0,0,0,official_verification_and_human_review_required
+NL,study,True,12,10,10,0,0,0,official_verification_and_human_review_required
+NL,work,True,2,2,2,0,0,0,official_verification_and_human_review_required
 NL,investment,True,2,2,2,0,0,0,official_verification_and_human_review_required
 NL,tourist,True,1,1,1,0,0,0,official_verification_and_human_review_required
 NL,marriage,True,2,2,2,0,0,0,official_verification_and_human_review_required
@@ -288,7 +288,7 @@ NL,medical-study,True,4,4,4,0,0,0,official_verification_and_human_review_require
 NL,medical-work,True,1,1,1,0,0,0,official_verification_and_human_review_required
 NL,credential-recognition,True,0,0,0,0,0,0,no_source_body
 NL,residence,True,0,0,0,0,0,0,no_source_body
-NL,general,True,10,9,6,0,0,0,official_verification_and_human_review_required
+NL,general,True,13,12,9,0,0,0,official_verification_and_human_review_required
 NO,study,True,13,10,10,0,0,0,official_verification_and_human_review_required
 NO,work,True,2,2,2,0,0,0,official_verification_and_human_review_required
 NO,investment,True,0,0,0,0,0,0,no_source_body

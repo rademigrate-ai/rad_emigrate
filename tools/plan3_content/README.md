@@ -48,8 +48,27 @@ backend owner handoffs. PostgreSQL rehearsal requires a matching owned Docker
 runtime/port marker, explicit disposable-write flag and a loopback database with
 no connection-string overrides. Every import transaction rolls back. It tests
 real create/save RPCs, exact retry, draft/unverified state, ordinary-user denial,
-draft search isolation and unchanged publication/Feed state. SQLite is a separate
+draft search isolation, unchanged public AI grounding and publication/Feed state.
+All primary and supporting source documents/snapshots and URL-derived first-party
+origins are rehearsed; article-to-source mappings remain an explicit receipt.
+This classification is not inventory approval or official claim verification.
+libpq environment routing is stripped and the connection address is pinned to
+loopback. SQLite is a separate
 journal test and is never presented as proof of Supabase/RLS behavior.
+
+For an explicit bounded retry of transport errors only (never 403/404 or parser
+failures), use `python -m tools.plan3_content.retry --help`. It checks fresh robots,
+uses a two-second host interval, stops on access denial/rate limiting or repeated
+errors, and does not expand the discovery frontier. Use new owned output/report
+paths. Prior failures are retained in `fetch_history`; rebuild from the resulting
+capture to recalculate completeness, deduplication and technical draft gates.
+Recovery of a URL is not recovery of a substantive article or verification of law.
+
+The library verifier checks a complete partition of substantive source bodies,
+canonical identities/manifests, block hashes, source snapshots and reconstructed
+CMS semantics. Rehashing a changed wire payload cannot bypass source-to-draft
+validation. Identity splits stop for human reconciliation; unavailable sources
+are not removed from the retained identity registry.
 
 Source extraction, closed-schema validity, official legal verification, human
 approval and publication are distinct gates. This library has no verified legal

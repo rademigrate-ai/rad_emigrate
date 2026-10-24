@@ -14,8 +14,10 @@ from contextlib import closing
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .dataset import digest, read_jsonl, uid, validate_package
+from .dataset import cms_payload, digest, read_jsonl, uid, validate_package
 from .parser import HOSTS, normalize_url
+from .quality import assess_references, assess_source
+from .traceability import verify_graph
 
 ADMIN = "f3a00000-0000-4000-8000-000000000001"
 USER = "f3a00000-0000-4000-8000-000000000002"
@@ -46,6 +48,21 @@ def load_import(package_path, registry_path):
         ):
             raise ValueError("source_url_scope")
     articles = read_jsonl(root / package["payload_file"])
+    registry = json.loads(registry_path.read_text(encoding="utf8"))
+    catalog = set(package["destination_catalog_country_codes"])
+    quality_sources = [{**s, "quality": assess_source(s)} for s in sources]
+    assess_references(quality_sources)
+    quality_by_source = {s["source_id"]: s["quality"] for s in quality_sources}
+    assigned = set()
+    for s in sources:
+        if (
+            s.get("publication_allowed") is not False
+            or s.get("official_verification_status") != "not_verified"
+            or s.get("human_review_status") != "not_reviewed"
+        ):
+            raise ValueError("unsafe_source_approval")
+        if s["body_text"] and digest(s["body_text"]) != s["body_sha256"]:
+            raise ValueError("source_body_hash")
     for a in articles:
         s = by_source[a["primary_source_id"]]
         create = a["wire"]["create_visa_article"]
@@ -81,6 +98,73 @@ def load_import(package_path, registry_path):
                     or ref["excerpt"] != s["body_text"][start : min(end, start + 4000)]
                 ):
                     raise ValueError("citation_locator")
+        # File hashes attest bytes, not the relationship between those bytes.
+        # Reconstruct the loss-aware adapter from the original source so changed
+        # text, omitted sections/references and forged catalog flags fail closed.
+        ids = a["source_ids"]
+        members = [by_source[i] for i in ids]
+        if (
+            not ids
+            or len(set(ids)) != len(ids)
+            or assigned.intersection(ids)
+            or s["source_id"] not in ids
+            or any(
+                not m["complete_article_body"]
+                or (
+                    m["body_sha256"],
+                    m["language"],
+                    m["taxonomy"]["country_codes"],
+                    m["taxonomy"]["pathway"],
+                )
+                != (
+                    s["body_sha256"],
+                    s["language"],
+                    s["taxonomy"]["country_codes"],
+                    s["taxonomy"]["pathway"],
+                )
+                for m in members
+            )
+        ):
+            raise ValueError("source_group_mapping")
+        assigned.update(ids)
+        group = {
+            "canonical_id": a["canonical_id"],
+            "source_ids": sorted(ids),
+            "source_urls": sorted(m["url"] for m in members),
+            "country_code": s["taxonomy"]["country_code"],
+            "country_codes": s["taxonomy"]["country_codes"],
+            "pathway": s["taxonomy"]["pathway"],
+            "topic": s["taxonomy"]["topic"],
+            "conflicts": a["conflicts"],
+        }
+        expected = cms_payload(group, s, registry, catalog)
+        quality = quality_by_source[s["source_id"]]
+        expected["validation"]["blocking_errors"] = sorted(
+            set(expected["validation"]["blocking_errors"] + quality["blocking_errors"])
+        )
+        expected["validation"]["warnings"] = sorted(
+            set(expected["validation"]["warnings"] + quality["warnings"])
+        )
+        expected["validation"]["draft_payload_valid"] = not expected["validation"][
+            "blocking_errors"
+        ]
+        if a != expected:
+            raise ValueError("source_to_draft_semantic_mismatch")
+    if "canonical_file" in package:
+        identities_path = (root / package["identity_registry_file"]).resolve()
+        if not identities_path.is_relative_to(root):
+            raise ValueError("identity_registry_path_escape")
+        if (
+            hashlib.sha256(identities_path.read_bytes()).hexdigest()
+            != package["identity_registry_sha256"]
+        ):
+            raise ValueError("identity_registry_hash")
+        verify_graph(
+            sources,
+            read_jsonl(root / package["canonical_file"]),
+            articles,
+            json.loads(identities_path.read_text(encoding="utf8")),
+        )
     return articles, by_source
 
 
@@ -120,20 +204,20 @@ def sqlite_import(connection, articles, sources):
                 connection.execute(
                     "insert or ignore into plan3_requests values(?,?)", (key, body_hash)
                 )
-            s = sources[a["primary_source_id"]]
-            old = connection.execute(
-                "select url from plan3_documents where id=?", (s["source_id"],)
-            ).fetchone()
-            if old and old[0] != s["url"]:
-                raise ValueError("source_identity_conflict")
-            connection.execute(
-                "insert or ignore into plan3_documents values(?,?)",
-                (s["source_id"], s["url"]),
-            )
-            connection.execute(
-                "insert or ignore into plan3_snapshots values(?,?,?,?)",
-                (s["snapshot_id"], s["source_id"], s["body_sha256"], s["body_text"]),
-            )
+            for sid in a["source_ids"]:
+                s = sources[sid]
+                old = connection.execute(
+                    "select url from plan3_documents where id=?", (sid,)
+                ).fetchone()
+                if old and old[0] != s["url"]:
+                    raise ValueError("source_identity_conflict")
+                connection.execute(
+                    "insert or ignore into plan3_documents values(?,?)", (sid, s["url"])
+                )
+                connection.execute(
+                    "insert or ignore into plan3_snapshots values(?,?,?,?)",
+                    (s["snapshot_id"], sid, s["body_sha256"], s["body_text"]),
+                )
             connection.execute(
                 "insert or ignore into plan3_articles values(?,?,?)",
                 (a["canonical_id"], a["payload_sha256"], "draft"),
@@ -214,6 +298,18 @@ def lit(value):
     return "'" + str(value).replace("'", "''") + "'"
 
 
+def local_psql_environment(db_url):
+    # libpq's PGHOSTADDR can override even an explicit URI host. Never inherit
+    # service files, connection routing or session options from the host shell.
+    env = {k: v for k, v in os.environ.items() if not k.upper().startswith("PG")}
+    env.update(
+        PGCLIENTENCODING="UTF8",
+        PGCONNECT_TIMEOUT="10",
+        PGHOSTADDR="::1" if urlsplit(db_url).hostname == "::1" else "127.0.0.1",
+    )
+    return env
+
+
 def postgres_rehearsal(
     package_path,
     registry_path,
@@ -235,7 +331,7 @@ def postgres_rehearsal(
         raise ValueError("no_valid_draft_payloads")
     # SQL runs only against the independently owned, loopback container checked above.
     command = [str(psql), "--dbname", db_url, "-XAtq", "-v", "ON_ERROR_STOP=1"]
-    env = {**os.environ, "PGCLIENTENCODING": "UTF8"}
+    env = local_psql_environment(db_url)
 
     def sql(statement):
         p = subprocess.run(
@@ -253,7 +349,7 @@ def postgres_rehearsal(
             raise RuntimeError("owned_postgres_rehearsal_failed: " + p.stderr[-3500:])
         return p.stdout.strip()
 
-    chosen = {a["primary_source_id"]: sources[a["primary_source_id"]] for a in articles}
+    chosen = {sid: sources[sid] for a in articles for sid in a["source_ids"]}
     wanted = [
         {"id": s["source_id"], "url": s["url"], "hash": s["body_sha256"]}
         for s in chosen.values()
@@ -292,8 +388,22 @@ def postgres_rehearsal(
         f"update public.profiles set role='admin' where id='{ADMIN}';",
         "create temp table plan3_guard as select (select count(*) from public.feed_items) feed_count,(select count(*) from public.visa_article_revision_events where state='published') published_count;",
         "create temp table plan3_receipts(article_id uuid, first_result jsonb, replay_result jsonb);",
+        "create temp table plan3_ai_guard(request jsonb, response jsonb);",
         "grant select,insert on plan3_guard,plan3_receipts to authenticated;",
     ]
+    for locale in sorted({a["locale"] for a in articles}):
+        example = next(a for a in articles if a["locale"] == locale)
+        words = re.findall(r"[^\W\d_]{3,30}", example["title"])
+        query = max(words, key=len) if words else "RAD"
+        statements.append(
+            "insert into plan3_ai_guard values("
+            + lit(json.dumps({"query": query, "locale": locale}))
+            + "::jsonb,public.retrieve_verified_official_claims("
+            + lit(query)
+            + ","
+            + lit(locale)
+            + ",null,null));"
+        )
     for s in chosen.values():
         m = mapping[s["source_id"]]
         content_source_id = uid("content-source:" + s["url"])
@@ -357,6 +467,11 @@ def postgres_rehearsal(
             )
             + ") on conflict(document_id,content_hash) do nothing;"
         )
+        # First-party origin classification is descriptive URL provenance,
+        # separate from inventory approval and official claim verification.
+        statements.append(
+            "select private.rad_classify_snapshot(" + lit(m["snapshot_id"]) + "::uuid);"
+        )
     statements.extend(
         [
             "set local role authenticated;",
@@ -378,12 +493,19 @@ def postgres_rehearsal(
         s = lit(json.dumps(save, ensure_ascii=False))
         statements.extend(
             [
-                f"do $$ declare a jsonb;b jsonb;begin a:=public.create_visa_article({c}::jsonb);b:=public.create_visa_article({c}::jsonb);if a<>b then raise exception 'create retry differs';end if;end $$;",
+                f"do $$ declare a jsonb;b jsonb;begin a:=public.create_visa_article({c}::jsonb);b:=public.create_visa_article({c}::jsonb);if a is null or a is distinct from b or a->'data'->>'article_id' is distinct from {lit(a['canonical_id'])} then raise exception 'create retry differs';end if;end $$;",
                 f"insert into plan3_receipts values({lit(a['canonical_id'])},public.save_visa_article_draft({s}::jsonb),public.save_visa_article_draft({s}::jsonb));",
             ]
         )
     statements.append(
-        "do $$ begin if exists(select 1 from plan3_receipts where first_result<>replay_result or first_result->'data'->>'editorial_state'<>'draft' or first_result->'data'->>'verification_state'<>'unverified') then raise exception 'draft or idempotency invariant failed';end if; end $$;"
+        "do $$ begin if exists(select 1 from plan3_receipts where first_result is null or first_result is distinct from replay_result or first_result->'data'->>'article_id' is distinct from article_id::text or first_result->'data'->>'revision' is distinct from '1' or coalesce(first_result->'data'->>'content_hash','') !~ '^[a-f0-9]{64}$' or first_result->'data'->>'editorial_state' is distinct from 'draft' or first_result->'data'->>'verification_state' is distinct from 'unverified') then raise exception 'draft or idempotency invariant failed';end if; end $$;"
+    )
+    # Read-only peer review found Plan 4's editor supplying this placeholder.
+    # Prove the server rejects it; never relax the exact-revision/hash gate.
+    statements.append(
+        "do $$ declare result jsonb;begin select first_result->'data' into result from plan3_receipts order by article_id limit 1;begin perform public.submit_visa_article_review(jsonb_build_object('article_id',result->'article_id','revision_id',result->'revision_id','expected_revision',result->'revision','content_hash',repeat('0',64),'note','Synthetic disposable contract regression','request_key',"
+        + lit(uid("plan3-placeholder-hash-negative-test"))
+        + "));raise exception 'placeholder content hash accepted';exception when sqlstate 'PT409' then null;end;end $$;"
     )
     # Public search must not expose any of these unapproved drafts.
     for locale in sorted({a["locale"] for a in articles}):
@@ -418,6 +540,8 @@ def postgres_rehearsal(
             )
             + "::jsonb);raise exception 'CMS draft leaked to ordinary user';exception when sqlstate 'PT403' then null;end;end $$;",
             "reset role;",
+            "select set_config('request.jwt.claims','{\"role\":\"service_role\"}',true);",
+            "do $$ begin if exists(select 1 from plan3_ai_guard where response is distinct from public.retrieve_verified_official_claims(request->>'query',request->>'locale',null,null)) then raise exception 'draft affected public AI grounding';end if;end $$;",
             "do $$ begin if (select count(*) from public.feed_items)<>(select feed_count from plan3_guard) or (select count(*) from public.visa_article_revision_events where state='published')<>(select published_count from plan3_guard) or exists(select 1 from public.visa_article_heads h join plan3_receipts r on r.article_id=h.article_id where h.published_id is not null) then raise exception 'publication side effect';end if;end $$;",
             "select 'PLAN3_RESULT:'||jsonb_build_object('articles',count(*),'replayed_equal',bool_and(first_result=replay_result),'all_draft',bool_and(first_result->'data'->>'editorial_state'='draft'))::text from plan3_receipts;",
             "rollback;",
@@ -436,8 +560,16 @@ def postgres_rehearsal(
         "transaction_rolled_back": True,
         "ordinary_user_denied": True,
         "public_search_draft_isolation": True,
+        "ai_grounding_unchanged": True,
+        "placeholder_review_hash_rejected": True,
         "feed_and_publication_unchanged": True,
         "snapshot_rebinding": mapping,
+        "source_documents_rehearsed": len(mapping),
+        "first_party_origins_classified": True,
+        "article_source_mapping": {
+            a["canonical_id"]: {sid: mapping[sid] for sid in a["source_ids"]}
+            for a in articles
+        },
         "hosted_mutations": False,
     }
 
@@ -477,7 +609,12 @@ def main():
     a.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
     print(
         json.dumps(
-            {k: v for k, v in result.items() if k != "snapshot_rebinding"}, indent=2
+            {
+                k: v
+                for k, v in result.items()
+                if k not in ("snapshot_rebinding", "article_source_mapping")
+            },
+            indent=2,
         )
     )
 
