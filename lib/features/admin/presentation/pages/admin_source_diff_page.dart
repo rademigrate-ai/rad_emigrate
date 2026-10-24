@@ -24,6 +24,7 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
   late final TextEditingController _notesController;
   bool _isSubmitting = false;
   int _generation = 0;
+  int _selectedViewTab = 0; // 0: Section Diff, 1: Evidence, 2: Raw JSON
   late Future<AdminSourceChangeProposal?> _proposal;
   late AdminCmsRepository _repository;
   AdminSourceChangeProposal? _displayedProposal;
@@ -90,6 +91,240 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
     }
   }
 
+  Widget _buildOperationBadge(String operation) {
+    Color bg;
+    Color fg;
+    String label;
+    switch (operation.toLowerCase()) {
+      case 'add':
+        bg = AppColors.success.withValues(alpha: 0.12);
+        fg = AppColors.success;
+        label = 'افزودن بخش جدید';
+        break;
+      case 'remove':
+        bg = AppColors.error.withValues(alpha: 0.12);
+        fg = AppColors.error;
+        label = 'حذف بخش';
+        break;
+      case 'replace':
+      default:
+        bg = AppColors.primaryRed.withValues(alpha: 0.12);
+        fg = AppColors.primaryRed;
+        label = 'جایگزینی محتوا';
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: fg,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionDiffCard(SectionChange change) {
+    final replacement = change.replacement;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                replacement?.heading ?? 'بخش شناسه: ${change.sectionId.substring(0, 8)}…',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.navy,
+                ),
+              ),
+              _buildOperationBadge(change.operation),
+            ],
+          ),
+          if (replacement?.anchor != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              'لنگر: #${replacement!.anchor}',
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.textSecondary,
+                fontFamily: 'monospace',
+              ),
+            ),
+          ],
+          if (change.beforeHash != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              'هش قبل: ${change.beforeHash!.substring(0, 16)}…',
+              style: const TextStyle(
+                fontSize: 10,
+                color: AppColors.textSecondary,
+                fontFamily: 'monospace',
+              ),
+            ),
+          ],
+          const SizedBox(height: 10),
+          if (replacement != null && replacement.blocks.isNotEmpty) ...[
+            const Text(
+              'محتوای جدید بخش:',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.navy,
+              ),
+            ),
+            const SizedBox(height: 6),
+            ...replacement.blocks.map((block) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 6),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (block.text.isNotEmpty)
+                      Text(
+                        block.text,
+                        style: const TextStyle(fontSize: 12, height: 1.4),
+                      ),
+                    if (block.items.isNotEmpty)
+                      ...block.items.map(
+                        (item) => Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            '• $item',
+                            style: const TextStyle(fontSize: 12, height: 1.3),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+          ] else if (change.operation == 'remove') ...[
+            const Text(
+              'این بخش طبق سند رسمی حذف خواهد شد.',
+              style: TextStyle(fontSize: 12, color: AppColors.error),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEvidenceCard(EvidenceRef ref) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.verified, size: 16, color: AppColors.teal),
+                  const SizedBox(width: 6),
+                  Text(
+                    ref.publisher,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.teal.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  ref.sourceClass,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.teal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            ref.url,
+            style: const TextStyle(
+              fontSize: 11,
+              color: AppColors.primaryRed,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceMuted,
+              borderRadius: BorderRadius.circular(6),
+              border: const Border(
+                right: BorderSide(color: AppColors.teal, width: 3),
+              ),
+            ),
+            child: Text(
+              '«${ref.excerpt}»',
+              style: const TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+                height: 1.4,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Text(
+                'وضعیت راستی‌آزمایی: ${ref.verificationState.toDisplayPersian()}',
+                style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+              ),
+              const Spacer(),
+              Text(
+                'تازگی: ${ref.freshnessState}',
+                style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(authenticatedUserIdProvider, (previous, next) {
@@ -103,6 +338,7 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
         _proposal = _repository.getProposalDetail(widget.sourceId);
       });
     });
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -181,108 +417,151 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
               ),
               const SizedBox(height: 16),
 
-              // Visual Diff Comparison: Previous vs New
-              const Text(
-                'مقایسه متن پیشین با تغییرات کشف‌شده جدید',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.navy,
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Previous text box (red tint)
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(AppRadii.md),
-                  border: Border.all(
-                    color: AppColors.error.withValues(alpha: 0.3),
+              // Segmented View Selector
+              Row(
+                children: [
+                  ChoiceChip(
+                    label: const Text('تغییرات بخش‌ها'),
+                    selected: _selectedViewTab == 0,
+                    onSelected: (_) => setState(() => _selectedViewTab = 0),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.remove_circle_outline,
-                          color: AppColors.error,
-                          size: 16,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          'متن قبلی مقاله در سیستم:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.error,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      proposal.previousText,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textPrimary,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Proposed text box (green tint)
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(AppRadii.md),
-                  border: Border.all(
-                    color: AppColors.success.withValues(alpha: 0.3),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: Text('شواهد و مدارک (${proposal.evidence.length})'),
+                    selected: _selectedViewTab == 1,
+                    onSelected: (_) => setState(() => _selectedViewTab = 1),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.add_circle_outline,
-                          color: AppColors.success,
-                          size: 16,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          'متن جدید استخراج‌شده از منبع رسمی:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.success,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      proposal.proposedText,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textPrimary,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: const Text('کد خام JSON'),
+                    selected: _selectedViewTab == 2,
+                    onSelected: (_) => setState(() => _selectedViewTab = 2),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
 
-              // Factual status decision dropdown
+              // Tab Content
+              if (_selectedViewTab == 0) ...[
+                if (proposal.changes.isNotEmpty)
+                  ...proposal.changes.map(_buildSectionDiffCard)
+                else ...[
+                  // Fallback to previous vs proposed text boxes
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.error.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(AppRadii.md),
+                      border: Border.all(
+                        color: AppColors.error.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.remove_circle_outline,
+                              color: AppColors.error,
+                              size: 16,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'متن قبلی مقاله در سیستم:',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          proposal.previousText,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textPrimary,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(AppRadii.md),
+                      border: Border.all(
+                        color: AppColors.success.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: AppColors.success,
+                              size: 16,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'متن جدید استخراج‌شده از منبع رسمی:',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.success,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          proposal.proposedText,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textPrimary,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ] else if (_selectedViewTab == 1) ...[
+                if (proposal.evidence.isNotEmpty)
+                  ...proposal.evidence.map(_buildEvidenceCard)
+                else
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: Text('شواهد مستقیمی ثبت نشده است.')),
+                  ),
+              ] else ...[
+                // Raw JSON Inspector
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.navy,
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                  ),
+                  child: SelectableText(
+                    proposal.proposedText,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 11,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 16),
+
+              // Human Review Decision Container
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -301,9 +580,36 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                         color: AppColors.navy,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'این بررسی، وضعیت رسمی شواهد یا انتشار مقاله را تغییر نمی‌دهد.',
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.warning.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: AppColors.warning.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 16,
+                            color: AppColors.warning,
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'توجه: تأیید پیشنهاد صرفاً یک پیش‌نویس (Draft) غیرمنتشر در CMS ایجاد می‌کند و به هیچ وجه مقاله را به‌صورت خودکار منتشر نمی‌سازد.',
+                              style: TextStyle(
+                                fontSize: 11,
+                                height: 1.4,
+                                color: AppColors.navy,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 14),
                     TextField(
@@ -331,8 +637,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                       onPressed: _isSubmitting
                           ? null
                           : () => _submitDecision(
-                              SourceProposalReviewStatus.rejected,
-                            ),
+                                SourceProposalReviewStatus.rejected,
+                              ),
                       child: const Text(
                         'رد تغییرات',
                         style: TextStyle(color: AppColors.error),
@@ -350,8 +656,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                       onPressed: _isSubmitting
                           ? null
                           : () => _submitDecision(
-                              SourceProposalReviewStatus.approved,
-                            ),
+                                SourceProposalReviewStatus.approved,
+                              ),
                       child: const Text('تأیید و ایجاد پیش‌نویس'),
                     ),
                   ),

@@ -11,6 +11,7 @@ import '../../domain/entities/canonical_pathway_entities.dart';
 import '../../domain/entities/search_entities.dart';
 import '../../data/canonical_pathway_repository.dart';
 import '../providers/canonical_pathway_controller.dart';
+import '../widgets/article_change_highlights_banner.dart';
 import '../widgets/currency_converter_modal.dart';
 
 class CanonicalPathwayPage extends ConsumerStatefulWidget {
@@ -387,6 +388,12 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    ArticleChangeHighlightsBanner(
+                      lastFactCheckedAt: article.lastFactCheckedAt,
+                      officialSources: article.officialSources,
+                      sections: article.sections,
+                    ),
 
                     // Custom Sections from Pathway
                     for (final sec in article.sections) ...[
