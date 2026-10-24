@@ -17,11 +17,12 @@ final adminProposalsProvider =
       return repo.listProposals();
     });
 
-final adminAuthoritiesProvider =
-    FutureProvider.autoDispose<List<Authority>>((ref) async {
-      final repo = ref.watch(adminCmsRepositoryProvider);
-      return repo.listOfficialAuthorities();
-    });
+final adminAuthoritiesProvider = FutureProvider.autoDispose<List<Authority>>((
+  ref,
+) async {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  return repo.listOfficialAuthorities();
+});
 
 class AdminSourceMonitorPage extends ConsumerStatefulWidget {
   const AdminSourceMonitorPage({super.key});
@@ -31,8 +32,7 @@ class AdminSourceMonitorPage extends ConsumerStatefulWidget {
       _AdminSourceMonitorPageState();
 }
 
-class _AdminSourceMonitorPageState
-    extends ConsumerState<AdminSourceMonitorPage>
+class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final Set<String> _refreshingAuthorities = {};
@@ -138,16 +138,15 @@ class _AdminSourceMonitorPageState
         SnackBar(
           content: Text(
             res['deduplicated'] == true
-              ? 'درخواست واکشی قبلاً در صف قرار گرفته است.'
-              : 'فرمان واکشی منبع رسمی با موفقیت در صف قرار گرفت.',
+                ? 'درخواست واکشی قبلاً در صف قرار گرفته است.'
+                : 'فرمان واکشی منبع رسمی با موفقیت در صف قرار گرفت.',
           ),
         ),
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطا در واکشی: $e')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('خطا در واکشی: $e')));
       }
     } finally {
       if (mounted) {
@@ -215,7 +214,8 @@ class _AdminSourceMonitorPageState
                             await repo.discoverOfficialAuthorities(
                               countryCode: countryController.text.trim(),
                               topic: topicController.text.trim(),
-                              profession: professionController.text.trim().isEmpty
+                              profession:
+                                  professionController.text.trim().isEmpty
                                   ? null
                                   : professionController.text.trim(),
                               requestKey: newRadRequestKey(),
@@ -225,7 +225,9 @@ class _AdminSourceMonitorPageState
                             ref.invalidate(adminAuthoritiesProvider);
                             messenger.showSnackBar(
                               const SnackBar(
-                                content: Text('درخواست شناسایی مراجع رسمی ثبت شد.'),
+                                content: Text(
+                                  'درخواست شناسایی مراجع رسمی ثبت شد.',
+                                ),
                               ),
                             );
                           } catch (e) {
@@ -467,7 +469,9 @@ class _AdminSourceMonitorPageState
                                     )
                                   : const Icon(Icons.refresh, size: 16),
                               label: Text(
-                                isRefreshing ? 'در حال ارسال…' : 'واکشی تغییرات منبع',
+                                isRefreshing
+                                    ? 'در حال ارسال…'
+                                    : 'واکشی تغییرات منبع',
                                 style: const TextStyle(fontSize: 12),
                               ),
                             ),

@@ -50,10 +50,11 @@ class CmsArticleDraft {
     List<Map<String, dynamic>>? sections,
     required String requestKey,
   }) {
-    final req = (jsonDecode(jsonEncode(_content)) as Map).cast<String, dynamic>()
-      ..['title'] = title
-      ..['summary'] = summary
-      ..['request_key'] = requestKey;
+    final req =
+        (jsonDecode(jsonEncode(_content)) as Map).cast<String, dynamic>()
+          ..['title'] = title
+          ..['summary'] = summary
+          ..['request_key'] = requestKey;
     if (sections != null) {
       req['sections'] = sections;
     }
@@ -557,9 +558,7 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
       }
       revisions.addAll(
         items.map(
-          (e) => RevisionSummary.fromJson(
-            Map<String, dynamic>.from(e as Map),
-          ),
+          (e) => RevisionSummary.fromJson(Map<String, dynamic>.from(e as Map)),
         ),
       );
       cursor = (response['page'] as Map)['next_cursor'] as String?;

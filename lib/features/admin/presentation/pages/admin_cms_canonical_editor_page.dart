@@ -244,9 +244,12 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: AppColors.teal.withValues(alpha: 0.1),
-                                      borderRadius:
-                                          BorderRadius.circular(AppRadii.pill),
+                                      color: AppColors.teal.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        AppRadii.pill,
+                                      ),
                                     ),
                                     child: Text(
                                       rev.editorialState.toDisplayPersian(),
@@ -296,10 +299,8 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                                         color: AppColors.warning,
                                       ),
                                     ),
-                                    onPressed: () => _confirmRollback(
-                                      rev,
-                                      sheetContext,
-                                    ),
+                                    onPressed: () =>
+                                        _confirmRollback(rev, sheetContext),
                                     child: const Text(
                                       'بازگردانی به این نسخه',
                                       style: TextStyle(
@@ -374,7 +375,9 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                   );
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('مقاله با موفقیت بازگردانی شد.')),
+                    const SnackBar(
+                      content: Text('مقاله با موفقیت بازگردانی شد.'),
+                    ),
                   );
                   await _load();
                 } catch (e) {
@@ -498,7 +501,9 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                       Expanded(
                         child: FilledButton(
                           onPressed: _saving ? null : _save,
-                          child: Text(_saving ? 'در حال ذخیره…' : 'ذخیره پیش‌نویس'),
+                          child: Text(
+                            _saving ? 'در حال ذخیره…' : 'ذخیره پیش‌نویس',
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -521,7 +526,8 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                     ),
                     const SizedBox(height: 8),
                     ..._draft!.rawSections.map((sec) {
-                      final heading = sec['heading']?.toString() ?? 'بدون عنوان';
+                      final heading =
+                          sec['heading']?.toString() ?? 'بدون عنوان';
                       final anchor = sec['anchor']?.toString() ?? '';
                       return Container(
                         margin: const EdgeInsets.only(bottom: 8),
@@ -566,8 +572,6 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                     }),
                     const SizedBox(height: 16),
                   ],
-
-
                 ],
               ],
             ),

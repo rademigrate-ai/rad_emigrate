@@ -122,11 +122,7 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: fg,
-        ),
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: fg),
       ),
     );
   }
@@ -148,7 +144,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                replacement?.heading ?? 'بخش شناسه: ${change.sectionId.substring(0, 8)}…',
+                replacement?.heading ??
+                    'بخش شناسه: ${change.sectionId.substring(0, 8)}…',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -311,12 +308,18 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
             children: [
               Text(
                 'وضعیت راستی‌آزمایی: ${ref.verificationState.toDisplayPersian()}',
-                style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                ),
               ),
               const Spacer(),
               Text(
                 'تازگی: ${ref.freshnessState}',
-                style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                ),
               ),
             ],
           ),
@@ -637,8 +640,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                       onPressed: _isSubmitting
                           ? null
                           : () => _submitDecision(
-                                SourceProposalReviewStatus.rejected,
-                              ),
+                              SourceProposalReviewStatus.rejected,
+                            ),
                       child: const Text(
                         'رد تغییرات',
                         style: TextStyle(color: AppColors.error),
@@ -656,8 +659,8 @@ class _AdminSourceDiffPageState extends ConsumerState<AdminSourceDiffPage> {
                       onPressed: _isSubmitting
                           ? null
                           : () => _submitDecision(
-                                SourceProposalReviewStatus.approved,
-                              ),
+                              SourceProposalReviewStatus.approved,
+                            ),
                       child: const Text('تأیید و ایجاد پیش‌نویس'),
                     ),
                   ),

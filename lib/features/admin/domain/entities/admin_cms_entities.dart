@@ -97,7 +97,8 @@ enum SourceProposalReviewStatus {
 @immutable
 class ContentBlock {
   final String id;
-  final String type; // 'paragraph', 'heading', 'bullet_list', 'numbered_list', 'callout'
+  final String
+  type; // 'paragraph', 'heading', 'bullet_list', 'numbered_list', 'callout'
   final String text;
   final List<String> items;
 
@@ -113,17 +114,18 @@ class ContentBlock {
       id: json['id'] as String,
       type: json['type'] as String,
       text: json['text'] as String? ?? '',
-      items: (json['items'] as List?)?.map((e) => e.toString()).toList() ??
+      items:
+          (json['items'] as List?)?.map((e) => e.toString()).toList() ??
           const [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'type': type,
-        'text': text,
-        'items': items,
-      };
+    'id': id,
+    'type': type,
+    'text': text,
+    'items': items,
+  };
 }
 
 @immutable
@@ -150,11 +152,11 @@ class EvidenceInput {
   }
 
   Map<String, dynamic> toJson() => {
-        'snapshot_id': snapshotId,
-        'claim_id': claimId,
-        'excerpt': excerpt,
-        'locator': locator,
-      };
+    'snapshot_id': snapshotId,
+    'claim_id': claimId,
+    'excerpt': excerpt,
+    'locator': locator,
+  };
 }
 
 @immutable
@@ -181,25 +183,33 @@ class ArticleSectionInput {
       anchor: json['anchor'] as String,
       heading: json['heading'] as String,
       order: json['order'] as int,
-      blocks: (json['blocks'] as List?)
-              ?.map((e) => ContentBlock.fromJson(Map<String, dynamic>.from(e as Map)))
+      blocks:
+          (json['blocks'] as List?)
+              ?.map(
+                (e) =>
+                    ContentBlock.fromJson(Map<String, dynamic>.from(e as Map)),
+              )
               .toList() ??
           const [],
-      evidenceRefs: (json['evidence_refs'] as List?)
-              ?.map((e) => EvidenceInput.fromJson(Map<String, dynamic>.from(e as Map)))
+      evidenceRefs:
+          (json['evidence_refs'] as List?)
+              ?.map(
+                (e) =>
+                    EvidenceInput.fromJson(Map<String, dynamic>.from(e as Map)),
+              )
               .toList() ??
           const [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'anchor': anchor,
-        'heading': heading,
-        'order': order,
-        'blocks': blocks.map((b) => b.toJson()).toList(),
-        'evidence_refs': evidenceRefs.map((e) => e.toJson()).toList(),
-      };
+    'id': id,
+    'anchor': anchor,
+    'heading': heading,
+    'order': order,
+    'blocks': blocks.map((b) => b.toJson()).toList(),
+    'evidence_refs': evidenceRefs.map((e) => e.toJson()).toList(),
+  };
 }
 
 @immutable
@@ -228,18 +238,19 @@ class SectionChange {
               Map<String, dynamic>.from(json['replacement'] as Map),
             )
           : null,
-      claimIds: (json['claim_ids'] as List?)?.map((e) => e.toString()).toList() ??
+      claimIds:
+          (json['claim_ids'] as List?)?.map((e) => e.toString()).toList() ??
           const [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'section_id': sectionId,
-        'operation': operation,
-        'before_hash': beforeHash,
-        'replacement': replacement?.toJson(),
-        'claim_ids': claimIds,
-      };
+    'section_id': sectionId,
+    'operation': operation,
+    'before_hash': beforeHash,
+    'replacement': replacement?.toJson(),
+    'claim_ids': claimIds,
+  };
 }
 
 @immutable
@@ -305,22 +316,22 @@ class EvidenceRef {
   }
 
   Map<String, dynamic> toJson() => {
-        'source_document_id': sourceDocumentId,
-        'snapshot_id': snapshotId,
-        'claim_id': claimId,
-        'section_id': sectionId,
-        'url': url,
-        'publisher': publisher,
-        'source_class': sourceClass,
-        'authority_id': authorityId,
-        'excerpt': excerpt,
-        'locator': locator,
-        'fetched_at': fetchedAt.toIso8601String(),
-        'verified_at': verifiedAt?.toIso8601String(),
-        'fresh_until': freshUntil?.toIso8601String(),
-        'verification_state': verificationState.name,
-        'freshness_state': freshnessState,
-      };
+    'source_document_id': sourceDocumentId,
+    'snapshot_id': snapshotId,
+    'claim_id': claimId,
+    'section_id': sectionId,
+    'url': url,
+    'publisher': publisher,
+    'source_class': sourceClass,
+    'authority_id': authorityId,
+    'excerpt': excerpt,
+    'locator': locator,
+    'fetched_at': fetchedAt.toIso8601String(),
+    'verified_at': verifiedAt?.toIso8601String(),
+    'fresh_until': freshUntil?.toIso8601String(),
+    'verification_state': verificationState.name,
+    'freshness_state': freshnessState,
+  };
 }
 
 @immutable
@@ -381,9 +392,7 @@ class AdminSourceChangeProposal {
         } catch (_) {}
       } else if (e is Map) {
         try {
-          evidenceList.add(
-            EvidenceRef.fromJson(Map<String, dynamic>.from(e)),
-          );
+          evidenceList.add(EvidenceRef.fromJson(Map<String, dynamic>.from(e)));
         } catch (_) {}
       }
     }
@@ -397,9 +406,7 @@ class AdminSourceChangeProposal {
         } catch (_) {}
       } else if (c is Map) {
         try {
-          changeList.add(
-            SectionChange.fromJson(Map<String, dynamic>.from(c)),
-          );
+          changeList.add(SectionChange.fromJson(Map<String, dynamic>.from(c)));
         } catch (_) {}
       }
     }
@@ -408,7 +415,8 @@ class AdminSourceChangeProposal {
         ? rawEvidence.first as Map
         : null;
     final evidenceUrl = firstEvMap?['url'] as String? ?? '';
-    final publisher = firstEvMap?['publisher'] as String? ??
+    final publisher =
+        firstEvMap?['publisher'] as String? ??
         (json['authority_id'] as String? ?? '');
 
     return AdminSourceChangeProposal(
@@ -434,14 +442,16 @@ class AdminSourceChangeProposal {
         (json['editorial_state'] == 'approved'
             ? 'approved'
             : json['editorial_state'] == 'rejected'
-                ? 'rejected'
-                : 'pending'),
+            ? 'rejected'
+            : 'pending'),
       ),
       previousText: 'نسخه مبنا: ${json['base_revision']}',
-      proposedText: const JsonEncoder.withIndent('  ').convert(json['changes'] ?? []),
+      proposedText: const JsonEncoder.withIndent('  ')
+          .convert(json['changes'] ?? []),
       summaryOfChanges:
           '${(json['changes'] as List?)?.length ?? 0} تغییر در بخش‌های مقاله',
-      reviewerNotes: json['reviewer_notes']?.toString() ??
+      reviewerNotes:
+          json['reviewer_notes']?.toString() ??
           json['reviewerNotes']?.toString(),
       changes: changeList,
       evidence: evidenceList,
@@ -604,11 +614,13 @@ class Authority {
       authorityType: json['authority_type'] as String,
       countryCode: json['country_code'] as String?,
       jurisdiction: json['jurisdiction'] as String,
-      competenceTopics: (json['competence_topics'] as List?)
+      competenceTopics:
+          (json['competence_topics'] as List?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
-      officialDomains: (json['official_domains'] as List?)
+      officialDomains:
+          (json['official_domains'] as List?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],

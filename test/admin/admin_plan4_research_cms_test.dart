@@ -21,72 +21,68 @@ Map<String, dynamic> sampleRevisionResult({
   int revision = 8,
   String state = 'review',
 }) => {
-      'data': {
-        'article_id': articleId,
-        'revision_id': revisionId,
-        'revision': revision,
-        'content_hash': dummyHash,
-        'editorial_state': state,
-        'verification_state': 'verified',
-        'updated_at': '2026-10-24T12:00:00Z',
-      },
-      'meta': contractMeta(),
-    };
+  'data': {
+    'article_id': articleId,
+    'revision_id': revisionId,
+    'revision': revision,
+    'content_hash': dummyHash,
+    'editorial_state': state,
+    'verification_state': 'verified',
+    'updated_at': '2026-10-24T12:00:00Z',
+  },
+  'meta': contractMeta(),
+};
 
 Map<String, dynamic> samplePublicationResult({
   String articleId = fixtureId,
   String revisionId = fixtureId,
   int revision = 8,
 }) => {
-      'data': {
-        'resource_id': articleId,
-        'revision_id': revisionId,
-        'revision': revision,
-        'event_id': fixtureId,
-        'published_at': '2026-10-24T12:00:00Z',
-        'target': {
-          'kind': 'visa_article',
-          'id': articleId,
-          'section_id': null,
-        },
-      },
-      'meta': contractMeta(),
-    };
+  'data': {
+    'resource_id': articleId,
+    'revision_id': revisionId,
+    'revision': revision,
+    'event_id': fixtureId,
+    'published_at': '2026-10-24T12:00:00Z',
+    'target': {'kind': 'visa_article', 'id': articleId, 'section_id': null},
+  },
+  'meta': contractMeta(),
+};
 
 Map<String, dynamic> sampleRevisionSummary({
   String revisionId = fixtureId,
   int revision = 1,
   String state = 'published',
 }) => {
-      'revision_id': revisionId,
-      'revision': revision,
-      'locale': 'en',
-      'content_hash': dummyHash,
-      'editorial_state': state,
-      'verification_state': 'verified',
-      'created_at': '2026-10-24T10:00:00Z',
-      'created_by': testOwner,
-      'reviewed_at': '2026-10-24T11:00:00Z',
-      'reviewed_by': testOwner,
-      'reason': 'Official policy revision update',
-    };
+  'revision_id': revisionId,
+  'revision': revision,
+  'locale': 'en',
+  'content_hash': dummyHash,
+  'editorial_state': state,
+  'verification_state': 'verified',
+  'created_at': '2026-10-24T10:00:00Z',
+  'created_by': testOwner,
+  'reviewed_at': '2026-10-24T11:00:00Z',
+  'reviewed_by': testOwner,
+  'reason': 'Official policy revision update',
+};
 
 Map<String, dynamic> sampleAuthority({
   String id = fixtureId,
   String name = 'Immigration Refugees and Citizenship Canada',
 }) => {
-      'id': id,
-      'name': name,
-      'authority_type': 'government',
-      'country_code': 'CA',
-      'jurisdiction': 'federal',
-      'competence_topics': ['immigration', 'visa'],
-      'official_domains': ['canada.ca', 'cic.gc.ca'],
-      'verification_state': 'verified',
-      'verification_revision': 1,
-      'verified_at': '2026-10-24T00:00:00Z',
-      'expires_at': '2027-10-24T00:00:00Z',
-    };
+  'id': id,
+  'name': name,
+  'authority_type': 'government',
+  'country_code': 'CA',
+  'jurisdiction': 'federal',
+  'competence_topics': ['immigration', 'visa'],
+  'official_domains': ['canada.ca', 'cic.gc.ca'],
+  'verification_state': 'verified',
+  'verification_revision': 1,
+  'verified_at': '2026-10-24T00:00:00Z',
+  'expires_at': '2027-10-24T00:00:00Z',
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -164,7 +160,10 @@ void main() {
         requestKey: fixtureId,
       );
 
-      expect(receivedRequest!['note'], 'Discrepancy found with official source');
+      expect(
+        receivedRequest!['note'],
+        'Discrepancy found with official source',
+      );
       expect(res.articleId, fixtureId);
     });
 
@@ -213,36 +212,45 @@ void main() {
       );
 
       expect(receivedRequest!['from_revision_id'], fixtureId);
-      expect(receivedRequest!['reason'], 'Emergency rollback due to regulation freeze');
+      expect(
+        receivedRequest!['reason'],
+        'Emergency rollback due to regulation freeze',
+      );
       expect(res.revision, 9);
     });
 
-    test('listArticleRevisions retrieves paginated list of revision summaries', () async {
-      final service = await mockSupabaseService((r) async {
-        if (r.url.path.endsWith('list_visa_article_revisions')) {
-          return rpcJson({
-            'data': {
-              'items': [
-                sampleRevisionSummary(revision: 1),
-                sampleRevisionSummary(
-                  revisionId: 'c2222222-2222-4222-8222-222222222222',
-                  revision: 2,
-                ),
-              ],
-            },
-            'meta': contractMeta(),
-            'page': {'has_more': false, 'next_cursor': null},
-          });
-        }
-        return rpcJson({}, 404);
-      });
+    test(
+      'listArticleRevisions retrieves paginated list of revision summaries',
+      () async {
+        final service = await mockSupabaseService((r) async {
+          if (r.url.path.endsWith('list_visa_article_revisions')) {
+            return rpcJson({
+              'data': {
+                'items': [
+                  sampleRevisionSummary(revision: 1),
+                  sampleRevisionSummary(
+                    revisionId: 'c2222222-2222-4222-8222-222222222222',
+                    revision: 2,
+                  ),
+                ],
+              },
+              'meta': contractMeta(),
+              'page': {'has_more': false, 'next_cursor': null},
+            });
+          }
+          return rpcJson({}, 404);
+        });
 
-      final repo = SupabaseAdminCmsRepository(service);
-      final items = await repo.listArticleRevisions(articleId: fixtureId, locale: 'en');
-      expect(items.length, 2);
-      expect(items.first.revision, 1);
-      expect(items.first.reason, 'Official policy revision update');
-    });
+        final repo = SupabaseAdminCmsRepository(service);
+        final items = await repo.listArticleRevisions(
+          articleId: fixtureId,
+          locale: 'en',
+        );
+        expect(items.length, 2);
+        expect(items.first.revision, 1);
+        expect(items.first.reason, 'Official policy revision update');
+      },
+    );
   });
 
   group('Plan 4 Official Authorities & Source Lifecycle RPCs', () {
@@ -347,10 +355,7 @@ void main() {
       final repo = SupabaseAdminCmsRepository(service);
       final res = await repo.approveVisaSourceInventory(
         articleId: fixtureId,
-        sourceSnapshotIds: [
-          fixtureId,
-          'c2222222-2222-4222-8222-222222222222',
-        ],
+        sourceSnapshotIds: [fixtureId, 'c2222222-2222-4222-8222-222222222222'],
         expectedInventoryRevision: 2,
         requestKey: fixtureId,
       );
@@ -362,166 +367,175 @@ void main() {
   });
 
   group('Plan 4 Admin UI Widgets Verification', () {
-    testWidgets('AdminSourceDiffPage renders section diff tabs and human review disclaimer', (
-      tester,
-    ) async {
-      final service = await tester.runAsync(
-        () => mockSupabaseService((r) async {
-          if (r.url.path.endsWith('get_research_proposal')) {
-            return rpcJson({
-              'data': {
-                'id': fixtureId,
-                'revision': 1,
-                'target_article_id': fixtureId,
-                'base_revision': 1,
-                'old_snapshot_id': null,
-                'new_snapshot_id': fixtureId,
-                'authority_id': fixtureId,
-                'changes': [
-                  {
-                    'section_id': fixtureId,
-                    'operation': 'replace',
-                    'before_hash': dummyHash,
-                    'replacement': {
-                      'id': fixtureId,
-                      'anchor': 'eligibility-criteria',
-                      'heading': 'شرایط جدید پذیرش ویزا',
-                      'order': 1,
-                      'blocks': [
-                        {
-                          'id': fixtureId,
-                          'type': 'paragraph',
-                          'text': 'حداقل تمکن مالی به ۱۰,۰۰۰ یورو افزایش یافت.',
-                          'items': [],
-                        },
-                      ],
-                      'evidence_refs': [],
+    testWidgets(
+      'AdminSourceDiffPage renders section diff tabs and human review disclaimer',
+      (tester) async {
+        final service = await tester.runAsync(
+          () => mockSupabaseService((r) async {
+            if (r.url.path.endsWith('get_research_proposal')) {
+              return rpcJson({
+                'data': {
+                  'id': fixtureId,
+                  'revision': 1,
+                  'target_article_id': fixtureId,
+                  'base_revision': 1,
+                  'old_snapshot_id': null,
+                  'new_snapshot_id': fixtureId,
+                  'authority_id': fixtureId,
+                  'changes': [
+                    {
+                      'section_id': fixtureId,
+                      'operation': 'replace',
+                      'before_hash': dummyHash,
+                      'replacement': {
+                        'id': fixtureId,
+                        'anchor': 'eligibility-criteria',
+                        'heading': 'شرایط جدید پذیرش ویزا',
+                        'order': 1,
+                        'blocks': [
+                          {
+                            'id': fixtureId,
+                            'type': 'paragraph',
+                            'text':
+                                'حداقل تمکن مالی به ۱۰,۰۰۰ یورو افزایش یافت.',
+                            'items': [],
+                          },
+                        ],
+                        'evidence_refs': [],
+                      },
+                      'claim_ids': [fixtureId],
                     },
-                    'claim_ids': [fixtureId],
-                  },
-                ],
-                'evidence': [
-                  {
-                    'source_document_id': fixtureId,
-                    'snapshot_id': fixtureId,
-                    'claim_id': null,
-                    'section_id': null,
-                    'url': 'https://canada.ca/immigration/rules',
-                    'publisher': 'IRCC Canada',
-                    'source_class': 'official_primary',
-                    'authority_id': fixtureId,
-                    'excerpt': 'Funds required for single applicant is updated.',
-                    'locator': null,
-                    'fetched_at': '2026-10-24T00:00:00Z',
-                    'verified_at': '2026-10-24T00:00:00Z',
-                    'fresh_until': '2027-10-24T00:00:00Z',
-                    'verification_state': 'verified',
-                    'freshness_state': 'fresh',
-                  },
-                ],
-                'verification_state': 'verified',
-                'editorial_state': 'review',
-                'created_at': '2026-10-24T00:00:00Z',
-                'reviewed_at': null,
-                'reviewed_by': null,
-              },
-              'meta': contractMeta(),
-            });
-          }
-          return rpcJson({}, 404);
-        }),
-      );
+                  ],
+                  'evidence': [
+                    {
+                      'source_document_id': fixtureId,
+                      'snapshot_id': fixtureId,
+                      'claim_id': null,
+                      'section_id': null,
+                      'url': 'https://canada.ca/immigration/rules',
+                      'publisher': 'IRCC Canada',
+                      'source_class': 'official_primary',
+                      'authority_id': fixtureId,
+                      'excerpt':
+                          'Funds required for single applicant is updated.',
+                      'locator': null,
+                      'fetched_at': '2026-10-24T00:00:00Z',
+                      'verified_at': '2026-10-24T00:00:00Z',
+                      'fresh_until': '2027-10-24T00:00:00Z',
+                      'verification_state': 'verified',
+                      'freshness_state': 'fresh',
+                    },
+                  ],
+                  'verification_state': 'verified',
+                  'editorial_state': 'review',
+                  'created_at': '2026-10-24T00:00:00Z',
+                  'reviewed_at': null,
+                  'reviewed_by': null,
+                },
+                'meta': contractMeta(),
+              });
+            }
+            return rpcJson({}, 404);
+          }),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            adminCmsRepositoryProvider.overrideWithValue(
-              SupabaseAdminCmsRepository(service!),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adminCmsRepositoryProvider.overrideWithValue(
+                SupabaseAdminCmsRepository(service!),
+              ),
+            ],
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: AdminSourceDiffPage(sourceId: fixtureId),
             ),
-          ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: AdminSourceDiffPage(sourceId: fixtureId),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Verify Section Diff is displayed
-      expect(find.text('شرایط جدید پذیرش ویزا'), findsOneWidget);
-      expect(find.text('جایگزینی محتوا'), findsOneWidget);
-      expect(find.textContaining('حداقل تمکن مالی'), findsOneWidget);
+        // Verify Section Diff is displayed
+        expect(find.text('شرایط جدید پذیرش ویزا'), findsOneWidget);
+        expect(find.text('جایگزینی محتوا'), findsOneWidget);
+        expect(find.textContaining('حداقل تمکن مالی'), findsOneWidget);
 
-      // Verify Safety Disclaimer is present
-      expect(
-        find.textContaining('تأیید پیشنهاد صرفاً یک پیش‌نویس (Draft) غیرمنتشر در CMS ایجاد می‌کند'),
-        findsOneWidget,
-      );
+        // Verify Safety Disclaimer is present
+        expect(
+          find.textContaining(
+            'تأیید پیشنهاد صرفاً یک پیش‌نویس (Draft) غیرمنتشر در CMS ایجاد می‌کند',
+          ),
+          findsOneWidget,
+        );
 
-      // Switch to Evidence Tab
-      await tester.tap(find.textContaining('شواهد و مدارک'));
-      await tester.pumpAndSettle();
+        // Switch to Evidence Tab
+        await tester.tap(find.textContaining('شواهد و مدارک'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('IRCC Canada'), findsNWidgets(2));
-      expect(find.textContaining('Funds required for single applicant'), findsOneWidget);
-    });
+        expect(find.text('IRCC Canada'), findsNWidgets(2));
+        expect(
+          find.textContaining('Funds required for single applicant'),
+          findsOneWidget,
+        );
+      },
+    );
 
-    testWidgets('AdminSourceMonitorPage displays proposals and official authorities tab', (
-      tester,
-    ) async {
-      final service = await tester.runAsync(
-        () => mockSupabaseService((r) async {
-          if (r.url.path.endsWith('list_research_proposals')) {
-            return rpcJson({
-              'data': {'items': []},
-              'meta': contractMeta(),
-              'page': {'has_more': false, 'next_cursor': null},
-            });
-          }
-          if (r.url.path.endsWith('list_official_authorities')) {
-            return rpcJson({
-              'data': {
-                'items': [
-                  sampleAuthority(name: 'German Federal Foreign Office'),
-                ],
-              },
-              'meta': contractMeta(),
-              'page': {'has_more': false, 'next_cursor': null},
-            });
-          }
-          return rpcJson({}, 404);
-        }),
-      );
+    testWidgets(
+      'AdminSourceMonitorPage displays proposals and official authorities tab',
+      (tester) async {
+        final service = await tester.runAsync(
+          () => mockSupabaseService((r) async {
+            if (r.url.path.endsWith('list_research_proposals')) {
+              return rpcJson({
+                'data': {'items': []},
+                'meta': contractMeta(),
+                'page': {'has_more': false, 'next_cursor': null},
+              });
+            }
+            if (r.url.path.endsWith('list_official_authorities')) {
+              return rpcJson({
+                'data': {
+                  'items': [
+                    sampleAuthority(name: 'German Federal Foreign Office'),
+                  ],
+                },
+                'meta': contractMeta(),
+                'page': {'has_more': false, 'next_cursor': null},
+              });
+            }
+            return rpcJson({}, 404);
+          }),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            adminCmsRepositoryProvider.overrideWithValue(
-              SupabaseAdminCmsRepository(service!),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adminCmsRepositoryProvider.overrideWithValue(
+                SupabaseAdminCmsRepository(service!),
+              ),
+            ],
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: AdminSourceMonitorPage(),
             ),
-          ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: AdminSourceMonitorPage(),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Proposals empty state
-      expect(find.text('هیچ تغییر جدیدی یافت نشد.'), findsOneWidget);
+        // Proposals empty state
+        expect(find.text('هیچ تغییر جدیدی یافت نشد.'), findsOneWidget);
 
-      // Switch to Authorities Tab
-      await tester.tap(find.text('مراجع رسمی و معتبر'));
-      await tester.pumpAndSettle();
+        // Switch to Authorities Tab
+        await tester.tap(find.text('مراجع رسمی و معتبر'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('German Federal Foreign Office'), findsOneWidget);
-      expect(find.text('تأییدشده رسمی'), findsOneWidget);
-      expect(find.text('واکشی تغییرات منبع'), findsOneWidget);
-    });
+        expect(find.text('German Federal Foreign Office'), findsOneWidget);
+        expect(find.text('تأییدشده رسمی'), findsOneWidget);
+        expect(find.text('واکشی تغییرات منبع'), findsOneWidget);
+      },
+    );
   });
 }
