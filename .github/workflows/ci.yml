@@ -189,6 +189,8 @@ jobs:
         run: python3 scripts/verify_local_auth_isolation.py
       - name: Verify no authenticated cross-user entitlement RPC access
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/ai_entitlement_rpc_privacy.sql
+      - name: Plan5 AI fail-closed and owner-scope regression
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/plan5_ai_fail_closed_regression.sql
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true
