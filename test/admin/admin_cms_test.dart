@@ -50,6 +50,34 @@ Map<String, dynamic> draftResponse({String id = fixtureId}) => {
   },
   'meta': contractMeta(),
 };
+
+Map<String, dynamic> revisionsListResponse({
+  String id = fixtureId,
+  int revision = 7,
+  String hash =
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+}) => {
+  'data': {
+    'items': [
+      {
+        'revision_id': id,
+        'revision': revision,
+        'locale': 'en',
+        'content_hash': hash,
+        'editorial_state': 'draft',
+        'verification_state': 'unverified',
+        'created_at': '2026-10-21T00:00:00Z',
+        'created_by': fixtureId,
+        'reviewed_at': null,
+        'reviewed_by': null,
+        'reason': null,
+      },
+    ],
+  },
+  'page': {'next_cursor': null, 'has_more': false},
+  'meta': contractMeta(),
+};
+
 Map<String, dynamic> revisionAck({String id = fixtureId, int revision = 8}) => {
   'data': {
     'article_id': id,
@@ -84,6 +112,9 @@ void main() {
     test('CMS rejects a multi-page cursor cycle, proposals=$proposals', () async {
       var calls = 0;
       final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse());
+        }
         calls++;
         if (calls > 3) {
           return rpcJson({'code': 'XX000', 'message': 'cycle watchdog'}, 500);
@@ -146,6 +177,9 @@ void main() {
   test('CMS list parses closed envelopes and explicit empty results for both locales', () async {
     final seen = <String>[];
     final service = await mockSupabaseService((r) async {
+      if (r.url.path.endsWith('list_visa_article_revisions')) {
+        return rpcJson(revisionsListResponse());
+      }
       final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
       seen.add(request['locale'] as String);
       return rpcJson({
@@ -162,18 +196,22 @@ void main() {
   });
   for (final status in [401, 403, 409, 404, 503]) {
     test('CMS read/write failure $status never acknowledges success', () async {
-      final service = await mockSupabaseService(
-        (r) async => r.url.path.endsWith('get_cms_article_draft')
-            ? rpcJson(draftResponse())
-            : rpcJson({
-                'code': status == 409
-                    ? 'PT409'
-                    : status == 404
-                    ? 'PGRST202'
-                    : 'PT$status',
-                'message': 'synthetic failure',
-              }, status),
-      );
+      final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('get_cms_article_draft')) {
+          return rpcJson(draftResponse());
+        }
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse());
+        }
+        return rpcJson({
+          'code': status == 409
+              ? 'PT409'
+              : status == 404
+              ? 'PGRST202'
+              : 'PT$status',
+          'message': 'synthetic failure',
+        }, status);
+      });
       final repo = SupabaseAdminCmsRepository(service);
       final draft = await repo.getArticleDraft(fixtureId, locale: 'en');
       await expectLater(
@@ -199,6 +237,9 @@ void main() {
   test('lossless draft save uses selected identity, real revision, locale and evidence', () async {
     Map? saved;
     final service = await mockSupabaseService((r) async {
+      if (r.url.path.endsWith('list_visa_article_revisions')) {
+        return rpcJson(revisionsListResponse());
+      }
       final request = (jsonDecode(r.body) as Map)['p_request'];
       if (r.url.path.endsWith('get_cms_article_draft')) {
         expect(request, {'article_id': fixtureId, 'locale': 'en'});
@@ -240,6 +281,9 @@ void main() {
   ]) {
     test('CMS rejects $mutation', () async {
       final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse());
+        }
         if (r.url.path.endsWith('get_cms_article_draft')) {
           final value = draftResponse();
           if (mutation == 'wrong_id') {
@@ -283,6 +327,9 @@ void main() {
   }
   test('proposal requests use correct envelope and optimistic revision; review only creates draft', () async {
     final service = await mockSupabaseService((r) async {
+      if (r.url.path.endsWith('list_visa_article_revisions')) {
+        return rpcJson(revisionsListResponse());
+      }
       final req = (jsonDecode(r.body) as Map)['p_request'] as Map;
       if (r.url.path.endsWith('list_research_proposals')) {
         expect(req.keys.toSet(), {
@@ -374,11 +421,15 @@ void main() {
     tester,
   ) async {
     final service = await tester.runAsync(
-      () => mockSupabaseService(
-        (r) async => r.url.path.endsWith('get_cms_article_draft')
-            ? rpcJson(draftResponse())
-            : rpcJson({'code': 'PT409', 'message': 'revision_conflict'}, 409),
-      ),
+      () => mockSupabaseService((r) async {
+        if (r.url.path.endsWith('get_cms_article_draft')) {
+          return rpcJson(draftResponse());
+        }
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse());
+        }
+        return rpcJson({'code': 'PT409', 'message': 'revision_conflict'}, 409);
+      }),
     );
     await tester.pumpWidget(
       ProviderScope(
@@ -403,4 +454,64 @@ void main() {
     expect(find.byKey(const Key('cms-error')), findsOneWidget);
     expect(find.textContaining('پیش‌نویس ذخیره شد'), findsNothing);
   });
+
+  test(
+    'getArticleDraft binds server content_hash from matching revision',
+    () async {
+      final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('get_cms_article_draft')) {
+          return rpcJson(draftResponse());
+        }
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse(hash: 'b' * 64));
+        }
+        return rpcJson({'code': 'PT404', 'message': 'unexpected'}, 404);
+      });
+      final repo = SupabaseAdminCmsRepository(service);
+      final draft = await repo.getArticleDraft(fixtureId, locale: 'en');
+      expect(draft.contentHash, 'b' * 64);
+      expect(draft.revisionId, fixtureId);
+      expect(draft.revision, 7);
+    },
+  );
+
+  test(
+    'getArticleDraft fails closed when revision content_hash missing',
+    () async {
+      final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('get_cms_article_draft')) {
+          return rpcJson(draftResponse());
+        }
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse(hash: '0' * 64));
+        }
+        return rpcJson({'code': 'PT404', 'message': 'unexpected'}, 404);
+      });
+      final repo = SupabaseAdminCmsRepository(service);
+      await expectLater(
+        repo.getArticleDraft(fixtureId, locale: 'en'),
+        throwsA(isA<CmsException>()),
+      );
+    },
+  );
+
+  test(
+    'getArticleDraft fails closed when revision_id does not match',
+    () async {
+      final service = await mockSupabaseService((r) async {
+        if (r.url.path.endsWith('get_cms_article_draft')) {
+          return rpcJson(draftResponse());
+        }
+        if (r.url.path.endsWith('list_visa_article_revisions')) {
+          return rpcJson(revisionsListResponse(id: testOwner));
+        }
+        return rpcJson({'code': 'PT404', 'message': 'unexpected'}, 404);
+      });
+      final repo = SupabaseAdminCmsRepository(service);
+      await expectLater(
+        repo.getArticleDraft(fixtureId, locale: 'en'),
+        throwsA(isA<CmsException>()),
+      );
+    },
+  );
 }
