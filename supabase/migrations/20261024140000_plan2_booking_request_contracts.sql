@@ -163,15 +163,44 @@ end;
 $$;
 
 create or replace function public.list_my_booking_requests()
-returns setof public.booking_requests
+returns table (
+  id uuid,
+  user_id uuid,
+  service_id uuid,
+  service_title text,
+  message text,
+  status text,
+  preferred_start_utc timestamptz,
+  preferred_end_utc timestamptz,
+  time_zone text,
+  idempotency_key text,
+  created_at timestamptz,
+  updated_at timestamptz
+)
 language sql
 stable
 security definer
 set search_path = public
 as $$
-  select * from public.booking_requests
-  where user_id = auth.uid()
-  order by created_at desc;
+  select
+    b.id,
+    b.user_id,
+    b.service_id,
+    coalesce(l.title, s.slug, b.service_id::text) as service_title,
+    b.message,
+    b.status,
+    b.preferred_start_utc,
+    b.preferred_end_utc,
+    b.time_zone,
+    b.idempotency_key,
+    b.created_at,
+    b.updated_at
+  from public.booking_requests b
+  left join public.service_catalog s on s.id = b.service_id
+  left join public.service_catalog_localizations l
+    on l.service_id = b.service_id and l.locale = 'en'
+  where b.user_id = auth.uid()
+  order by b.created_at desc;
 $$;
 
 revoke all on function public.list_service_catalog(text) from public, anon, authenticated;

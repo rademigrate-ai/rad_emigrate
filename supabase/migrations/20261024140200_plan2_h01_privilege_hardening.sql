@@ -1,9 +1,8 @@
-﻿-- Plan 2 H01: narrow excessive table privileges for sensitive admin/ops tables.
+-- Plan 2 H01: narrow excessive table privileges for sensitive admin/ops tables.
 -- Does not weaken RLS. Preserves service_role. Consultation writes stay via RPC.
 begin;
 
--- Admin-only operational tables: clients must not hold table-level DML/DDL.
-do $h01$
+do $$
 declare
   t text;
 begin
@@ -17,27 +16,23 @@ begin
   loop
     if to_regclass(format('public.%I', t)) is not null then
       execute format('revoke all on table public.%I from public, anon, authenticated', t);
-      -- Authenticated may need SELECT under RLS for own application history only.
       if t = 'application_status_history' then
         execute format('grant select on table public.%I to authenticated', t);
       end if;
       execute format('grant all on table public.%I to service_role', t);
     end if;
   end loop;
+
+  if to_regclass('public.consultation_requests') is not null then
+    execute 'revoke all on table public.consultation_requests from public, anon';
+    execute 'revoke insert, update, delete, truncate, references, trigger on table public.consultation_requests from authenticated';
+    execute 'grant select on table public.consultation_requests to authenticated';
+    execute 'grant all on table public.consultation_requests to service_role';
+  end if;
 end
-$h01$;
+$$;
 
--- consultation_requests: keep SELECT for owner via RLS; no direct INSERT for clients
--- (submit goes through submit_consultation_request SECURITY DEFINER).
-if to_regclass('public.consultation_requests') is not null then
-  revoke all on table public.consultation_requests from public, anon;
-  revoke insert, update, delete, truncate, references, trigger on table public.consultation_requests from authenticated;
-  grant select on table public.consultation_requests to authenticated;
-  grant all on table public.consultation_requests to service_role;
-end if;
-
--- Defense in depth: strip non-row privileges that RLS cannot constrain (PG17).
-do $nonrow$
+do $$
 declare
   r record;
 begin
@@ -59,6 +54,6 @@ begin
     );
   end loop;
 end
-$nonrow$;
+$$;
 
 commit;
