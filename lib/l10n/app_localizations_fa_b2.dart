@@ -4,16 +4,19 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get adminResearchAssistant => 'Ø¯Ø³ØªÛŒØ§Ø± Ù¾Ú˜ÙˆÙ‡Ø´ Ù…Ø¯ÛŒØ±ÛŒØª';
   @override
-  String get adminResearchSubtitle => 'Ù¾Ú˜ÙˆÙ‡Ø´ Ú¯Ø³ØªØ±Ø¯Ù‡â€ŒØªØ± Ø¨Ø¯ÙˆÙ† Ø§Ù†ØªØ´Ø§Ø± Ø®ÙˆØ¯Ú©Ø§Ø±.';
+  String get adminResearchSubtitle =>
+      'Ù¾Ú˜ÙˆÙ‡Ø´ Ú¯Ø³ØªØ±Ø¯Ù‡â€ŒØªØ± Ø¨Ø¯ÙˆÙ† Ø§Ù†ØªØ´Ø§Ø± Ø®ÙˆØ¯Ú©Ø§Ø±.';
   @override
   String get untrustedResearchDisclaimer =>
       'Ù…Ø­ØªÙˆØ§ÛŒ Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒâ€ŒØ´Ø¯Ù‡ ØºÛŒØ±Ù‚Ø§Ø¨Ù„ Ø§Ø¹ØªÙ…Ø§Ø¯ Ø§Ø³ØªØ› Ø§Ù†ØªØ´Ø§Ø± Ø®ÙˆØ¯Ú©Ø§Ø± Ø§Ù†Ø¬Ø§Ù… Ù†Ù…ÛŒâ€ŒØ´ÙˆØ¯.';
   @override
   String get providerSaved => 'Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ø°Ø®ÛŒØ±Ù‡ Ø´Ø¯.';
   @override
-  String get providerSaveFailed => 'Ø°Ø®ÛŒØ±Ù‡ Ù¾ÛŒÚ©Ø±Ø¨Ù†Ø¯ÛŒ Ù…Ù…Ú©Ù† Ù†Ø´Ø¯.';
+  String get providerSaveFailed =>
+      'Ø°Ø®ÛŒØ±Ù‡ Ù¾ÛŒÚ©Ø±Ø¨Ù†Ø¯ÛŒ Ù…Ù…Ú©Ù† Ù†Ø´Ø¯.';
   @override
-  String get providerTestFailed => 'Ø¢Ø²Ù…Ø§ÛŒØ´ Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.';
+  String get providerTestFailed =>
+      'Ø¢Ø²Ù…Ø§ÛŒØ´ Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.';
   @override
   String get modelDiscoveryFailed => 'Ú©Ø´Ù Ù…Ø¯Ù„ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.';
   @override
@@ -29,7 +32,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get baseUrl => 'Ø¢Ø¯Ø±Ø³ Ù¾Ø§ÛŒÙ‡';
   @override
-  String get lowercaseSlugHint => 'ÙÙ‚Ø· Ø­Ø±ÙˆÙ Ú©ÙˆÚ†Ú©ØŒ Ø±Ù‚Ù… Ùˆ Ø²ÛŒØ±Ø®Ø·';
+  String get lowercaseSlugHint =>
+      'ÙÙ‚Ø· Ø­Ø±ÙˆÙ Ú©ÙˆÚ†Ú©ØŒ Ø±Ù‚Ù… Ùˆ Ø²ÛŒØ±Ø®Ø·';
   @override
   String providerReachable(int count) =>
       'Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ø§Ø³Øª ($count Ù…Ø¯Ù„).';
@@ -37,23 +41,29 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String modelDiscoveryCompleted(int discovered, int added) =>
       'Ú©Ø´Ù Ù…Ø¯Ù„: $discovered ÛŒØ§ÙØª Ø´Ø¯ØŒ $added Ø§Ø¶Ø§ÙÙ‡ Ø´Ø¯.';
   @override
-  String get noContentSources => 'Ù…Ù†Ø¨Ø¹ Ù…Ø­ØªÙˆØ§ÛŒÛŒ Ù¾ÛŒÚ©Ø±Ø¨Ù†Ø¯ÛŒ Ù†Ø´Ø¯Ù‡ Ø§Ø³Øª.';
+  String get noContentSources =>
+      'Ù…Ù†Ø¨Ø¹ Ù…Ø­ØªÙˆØ§ÛŒÛŒ Ù¾ÛŒÚ©Ø±Ø¨Ù†Ø¯ÛŒ Ù†Ø´Ø¯Ù‡ Ø§Ø³Øª.';
   @override
-  String get approvedSourcesAppearHere => 'Ù…Ù†Ø§Ø¨Ø¹ ØªØ£ÛŒÛŒØ¯Ø´Ø¯Ù‡ Ø§ÛŒÙ†Ø¬Ø§ Ø¸Ø§Ù‡Ø± Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.';
+  String get approvedSourcesAppearHere =>
+      'Ù…Ù†Ø§Ø¨Ø¹ ØªØ£ÛŒÛŒØ¯Ø´Ø¯Ù‡ Ø§ÛŒÙ†Ø¬Ø§ Ø¸Ø§Ù‡Ø± Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.';
   @override
   String get noResearchJobs => 'Ù‡Ù†ÙˆØ² Ú©Ø§Ø± Ù¾Ú˜ÙˆÙ‡Ø´ÛŒ Ù†ÛŒØ³Øª.';
   @override
   String get operationsHealth => 'Ø³Ù„Ø§Ù…Øª Ø¹Ù…Ù„ÛŒØ§Øª';
   @override
-  String get noOperationalComponents => 'Ù…Ø¤Ù„ÙÙ‡ Ø¹Ù…Ù„ÛŒØ§ØªÛŒ Ø«Ø¨Øª Ù†Ø´Ø¯Ù‡ Ø§Ø³Øª.';
+  String get noOperationalComponents =>
+      'Ù…Ø¤Ù„ÙÙ‡ Ø¹Ù…Ù„ÛŒØ§ØªÛŒ Ø«Ø¨Øª Ù†Ø´Ø¯Ù‡ Ø§Ø³Øª.';
   @override
-  String get componentInventoryUnavailable => 'ÙÙ‡Ø±Ø³Øª Ù…Ø¤Ù„ÙÙ‡â€ŒÙ‡Ø§ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ù†ÛŒØ³Øª.';
+  String get componentInventoryUnavailable =>
+      'ÙÙ‡Ø±Ø³Øª Ù…Ø¤Ù„ÙÙ‡â€ŒÙ‡Ø§ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ù†ÛŒØ³Øª.';
   @override
   String get auditSecurity => 'Ù…Ù…ÛŒØ²ÛŒ / Ø§Ù…Ù†ÛŒØª';
   @override
-  String get noAuditEvents => 'Ø±ÙˆÛŒØ¯Ø§Ø¯ Ù…Ù…ÛŒØ²ÛŒ Ù‚Ø§Ø¨Ù„ Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù†ÛŒØ³Øª.';
+  String get noAuditEvents =>
+      'Ø±ÙˆÛŒØ¯Ø§Ø¯ Ù…Ù…ÛŒØ²ÛŒ Ù‚Ø§Ø¨Ù„ Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù†ÛŒØ³Øª.';
   @override
-  String get auditRestricted => 'ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ù…Ù…ÛŒØ²ÛŒ Ù…Ø­Ø¯ÙˆØ¯ Ø¨Ù‡ Ù…Ø¯ÛŒØ± Ø§Ø±Ø´Ø¯ Ø§Ø³Øª.';
+  String get auditRestricted =>
+      'ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ù…Ù…ÛŒØ²ÛŒ Ù…Ø­Ø¯ÙˆØ¯ Ø¨Ù‡ Ù…Ø¯ÛŒØ± Ø§Ø±Ø´Ø¯ Ø§Ø³Øª.';
   @override
   String get categoryUpdate => 'Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ';
   @override
@@ -67,9 +77,11 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get sourceAddress => 'Ø¢Ø¯Ø±Ø³ Ù…Ù†Ø¨Ø¹';
   @override
-  String get sourceSavedDisabled => 'Ù…Ù†Ø¨Ø¹ Ø°Ø®ÛŒØ±Ù‡ Ø´Ø¯. Ù¾Ø³ Ø§Ø² Ø¨Ø±Ø±Ø³ÛŒ ÙØ¹Ø§Ù„ Ú©Ù†ÛŒØ¯.';
+  String get sourceSavedDisabled =>
+      'Ù…Ù†Ø¨Ø¹ Ø°Ø®ÛŒØ±Ù‡ Ø´Ø¯. Ù¾Ø³ Ø§Ø² Ø¨Ø±Ø±Ø³ÛŒ ÙØ¹Ø§Ù„ Ú©Ù†ÛŒØ¯.';
   @override
-  String get sourceDuplicate => 'Ø§ÛŒÙ† Ø¢Ø¯Ø±Ø³ Ù‚Ø¨Ù„Ø§Ù‹ Ø«Ø¨Øª Ø´Ø¯Ù‡ Ø§Ø³Øª.';
+  String get sourceDuplicate =>
+      'Ø§ÛŒÙ† Ø¢Ø¯Ø±Ø³ Ù‚Ø¨Ù„Ø§Ù‹ Ø«Ø¨Øª Ø´Ø¯Ù‡ Ø§Ø³Øª.';
   @override
   String get sourceSaveFailed => 'Ø°Ø®ÛŒØ±Ù‡ Ù…Ù†Ø¨Ø¹ Ù…Ù…Ú©Ù† Ù†Ø´Ø¯.';
   @override
@@ -87,17 +99,20 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get brandIntroTitle => 'Ú¯Ø§Ù… Ø¨Ø¹Ø¯ÛŒ Ø´Ù…Ø§ Ø¨Ø§ Ø±Ø§Ø¯';
   @override
-  String get brandIntroBody => 'Ù…Ø³ÛŒØ±Ù‡Ø§ÛŒ ÙˆÛŒØ²Ø§ØŒ Ù…Ø¯Ø§Ø±Ú© Ùˆ Ù¾Ø±ÙˆÙ†Ø¯Ù‡ Ø¯Ø± ÛŒÚ© Ø¬Ø§.';
+  String get brandIntroBody =>
+      'Ù…Ø³ÛŒØ±Ù‡Ø§ÛŒ ÙˆÛŒØ²Ø§ØŒ Ù…Ø¯Ø§Ø±Ú© Ùˆ Ù¾Ø±ÙˆÙ†Ø¯Ù‡ Ø¯Ø± ÛŒÚ© Ø¬Ø§.';
   @override
   String get exploreVisa => 'Ú©Ø§ÙˆØ´ Ù…Ø³ÛŒØ±Ù‡Ø§ÛŒ ÙˆÛŒØ²Ø§';
   @override
-  String get reviewQueueEmpty => 'ÛŒØ§ÙØªÙ‡ ÛŒØ§ Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ÛŒ Ø¯Ø± ØµÙ Ù†ÛŒØ³Øª.';
+  String get reviewQueueEmpty =>
+      'ÛŒØ§ÙØªÙ‡ ÛŒØ§ Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ÛŒ Ø¯Ø± ØµÙ Ù†ÛŒØ³Øª.';
   @override
   String get sourceStateUnknown => 'Ù‡Ù†ÙˆØ² Ø§Ø¬Ø±Ø§ Ù†Ø´Ø¯Ù‡';
   @override
   String get sourceLastSuccess => 'Ø¢Ø®Ø±ÛŒÙ† Ø¯Ø±ÛŒØ§ÙØª Ù…ÙˆÙÙ‚';
   @override
-  String get sourceHttpRejected => 'Ø§Ø² Ø¢Ø¯Ø±Ø³ HTTPS Ø¹Ù…ÙˆÙ…ÛŒ Ø§Ø³ØªÙØ§Ø¯Ù‡ Ú©Ù†ÛŒØ¯.';
+  String get sourceHttpRejected =>
+      'Ø§Ø² Ø¢Ø¯Ø±Ø³ HTTPS Ø¹Ù…ÙˆÙ…ÛŒ Ø§Ø³ØªÙØ§Ø¯Ù‡ Ú©Ù†ÛŒØ¯.';
   @override
   String get providerSavedDiscoveryFailed =>
       'Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ø°Ø®ÛŒØ±Ù‡ Ø´Ø¯Ø› Ú©Ø´Ù Ù…Ø¯Ù„ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.';
@@ -105,11 +120,14 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get aiCredentialRejected =>
       'Ø§Ø¹ØªØ¨Ø§Ø± Ø§Ø±Ø§Ø¦Ù‡â€ŒØ¯Ù‡Ù†Ø¯Ù‡ Ù†ÛŒØ§Ø² Ø¨Ù‡ Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ø¯Ø§Ø±Ø¯.';
   @override
-  String get aiNoEligibleModel => 'Ù…Ø¯Ù„ ÙˆØ§Ø¬Ø¯ Ø´Ø±Ø§ÛŒØ·ÛŒ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ù†ÛŒØ³Øª.';
+  String get aiNoEligibleModel =>
+      'Ù…Ø¯Ù„ ÙˆØ§Ø¬Ø¯ Ø´Ø±Ø§ÛŒØ·ÛŒ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ù†ÛŒØ³Øª.';
   @override
-  String get aiRateLimited => 'Ø³Ø±ÙˆÛŒØ³ Ø´Ù„ÙˆØº Ø§Ø³Øª. Ú©Ù…ÛŒ Ø¨Ø¹Ø¯ ØªÙ„Ø§Ø´ Ú©Ù†ÛŒØ¯.';
+  String get aiRateLimited =>
+      'Ø³Ø±ÙˆÛŒØ³ Ø´Ù„ÙˆØº Ø§Ø³Øª. Ú©Ù…ÛŒ Ø¨Ø¹Ø¯ ØªÙ„Ø§Ø´ Ú©Ù†ÛŒØ¯.';
   @override
-  String get aiRequestFailed => 'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ù‡ÙˆØ´ Ù…ØµÙ†ÙˆØ¹ÛŒ Ú©Ø§Ù…Ù„ Ù†Ø´Ø¯.';
+  String get aiRequestFailed =>
+      'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ù‡ÙˆØ´ Ù…ØµÙ†ÙˆØ¹ÛŒ Ú©Ø§Ù…Ù„ Ù†Ø´Ø¯.';
 
   @override
   String get aiInsufficientEvidence =>
@@ -121,7 +139,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get requiredField => 'Ø§ÛŒÙ† ÙÛŒÙ„Ø¯ Ø§Ù„Ø²Ø§Ù…ÛŒ Ø§Ø³Øª';
   @override
-  String get invalidUrl => 'Ø¢Ø¯Ø±Ø³ HTTPS Ø¹Ù…ÙˆÙ…ÛŒ Ù…Ø¹ØªØ¨Ø± ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯';
+  String get invalidUrl =>
+      'Ø¢Ø¯Ø±Ø³ HTTPS Ø¹Ù…ÙˆÙ…ÛŒ Ù…Ø¹ØªØ¨Ø± ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯';
   @override
   String get titleLabel => 'Ø¹Ù†ÙˆØ§Ù†';
   @override
@@ -129,18 +148,22 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get researchPipelineSummary => 'Ø®Ø· Ù„ÙˆÙ„Ù‡ Ù¾Ú˜ÙˆÙ‡Ø´';
   @override
-  String findingsCount(int count) => '$count ÛŒØ§ÙØªÙ‡ Ø¯Ø± Ø§Ù†ØªØ¸Ø§Ø± Ø¨Ø±Ø±Ø³ÛŒ';
+  String findingsCount(int count) =>
+      '$count ÛŒØ§ÙØªÙ‡ Ø¯Ø± Ø§Ù†ØªØ¸Ø§Ø± Ø¨Ø±Ø±Ø³ÛŒ';
   @override
-  String draftsInReview(int count) => '$count Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ Ø¯Ø± Ø¨Ø±Ø±Ø³ÛŒ';
+  String draftsInReview(int count) =>
+      '$count Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ Ø¯Ø± Ø¨Ø±Ø±Ø³ÛŒ';
   @override
-  String get feedPublishedOnly => 'ÙÛŒØ¯ ÙÙ‚Ø· Ù…ÙˆØ§Ø±Ø¯ Ù…Ù†ØªØ´Ø±Ø´Ø¯Ù‡ Ø±Ø§ Ù†Ø´Ø§Ù† Ù…ÛŒâ€ŒØ¯Ù‡Ø¯';
+  String get feedPublishedOnly =>
+      'ÙÛŒØ¯ ÙÙ‚Ø· Ù…ÙˆØ§Ø±Ø¯ Ù…Ù†ØªØ´Ø±Ø´Ø¯Ù‡ Ø±Ø§ Ù†Ø´Ø§Ù† Ù…ÛŒâ€ŒØ¯Ù‡Ø¯';
   @override
   String get lastResearchRun => 'Ø¢Ø®Ø±ÛŒÙ† Ø§Ø¬Ø±Ø§';
   @override
   String get researchNeverAutoPublishes =>
       'Ù¾Ú˜ÙˆÙ‡Ø´ Ùˆ Ù‡ÙˆØ´ Ù…ØµÙ†ÙˆØ¹ÛŒ Ù‡Ø±Ú¯Ø² Ø¨Ù‡â€ŒØµÙˆØ±Øª Ø®ÙˆØ¯Ú©Ø§Ø± Ø¯Ø± ÙÛŒØ¯ Ù…Ù†ØªØ´Ø± Ù†Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.';
   @override
-  String get researchQueued => 'Ø§Ø¬Ø±Ø§ÛŒ Ù¾Ú˜ÙˆÙ‡Ø´ Ø¯Ø± ØµÙ Ù‚Ø±Ø§Ø± Ú¯Ø±ÙØª';
+  String get researchQueued =>
+      'Ø§Ø¬Ø±Ø§ÛŒ Ù¾Ú˜ÙˆÙ‡Ø´ Ø¯Ø± ØµÙ Ù‚Ø±Ø§Ø± Ú¯Ø±ÙØª';
   @override
   String get reviewQueueTitle => 'ØµÙ Ø¨Ø±Ø±Ø³ÛŒ Ø§Ù†Ø³Ø§Ù†ÛŒ';
   @override
@@ -156,9 +179,11 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get publishExplicit => 'Ø§Ù†ØªØ´Ø§Ø±';
   @override
-  String get publishRequiresHuman => 'Ø§Ù†ØªØ´Ø§Ø± Ù†ÛŒØ§Ø² Ø¨Ù‡ ØªØ£ÛŒÛŒØ¯ ØµØ±ÛŒØ­ Ø§Ù†Ø³Ø§Ù†ÛŒ Ø¯Ø§Ø±Ø¯.';
+  String get publishRequiresHuman =>
+      'Ø§Ù†ØªØ´Ø§Ø± Ù†ÛŒØ§Ø² Ø¨Ù‡ ØªØ£ÛŒÛŒØ¯ ØµØ±ÛŒØ­ Ø§Ù†Ø³Ø§Ù†ÛŒ Ø¯Ø§Ø±Ø¯.';
   @override
-  String get findingPublishNote => 'ÛŒØ§ÙØªÙ‡â€ŒÙ‡Ø§ Ø¨Ù‡â€ŒØµÙˆØ±Øª Ø®ÙˆØ¯Ú©Ø§Ø± Ù…Ù†ØªØ´Ø± Ù†Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.';
+  String get findingPublishNote =>
+      'ÛŒØ§ÙØªÙ‡â€ŒÙ‡Ø§ Ø¨Ù‡â€ŒØµÙˆØ±Øª Ø®ÙˆØ¯Ú©Ø§Ø± Ù…Ù†ØªØ´Ø± Ù†Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.';
   @override
   String get editTitle => 'ÙˆÛŒØ±Ø§ÛŒØ´ Ø¹Ù†ÙˆØ§Ù†';
   @override
@@ -188,7 +213,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   @override
   String get healthUnknown => 'Ø¨Ø±Ø±Ø³ÛŒâ€ŒÙ†Ø´Ø¯Ù‡';
   @override
-  String get modelSaveFailed => 'Ø°Ø®ÛŒØ±Ù‡ ØªÙ†Ø¸ÛŒÙ…Ø§Øª Ù…Ø¯Ù„ Ù…Ù…Ú©Ù† Ù†Ø´Ø¯.';
+  String get modelSaveFailed =>
+      'Ø°Ø®ÛŒØ±Ù‡ ØªÙ†Ø¸ÛŒÙ…Ø§Øª Ù…Ø¯Ù„ Ù…Ù…Ú©Ù† Ù†Ø´Ø¯.';
   @override
   String get sourceQueryRejected =>
       'Ø¢Ø¯Ø±Ø³ Ø¨Ø¯ÙˆÙ† query Ùˆ Ø¨Ø§ HTTPS Ø¹Ù…ÙˆÙ…ÛŒ Ø§Ø³ØªÙØ§Ø¯Ù‡ Ú©Ù†ÛŒØ¯.';
@@ -197,10 +223,12 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get worldTimeTitle => 'Ø³Ø§Ø¹Øª Ø¬Ù‡Ø§Ù†ÛŒ';
 
   @override
-  String get worldTimeSubtitle => 'Ø³Ø§Ø¹Øª Ø¬Ù‡Ø§Ù†ÛŒØŒ Ù‡Ù…Ø§Ù‡Ù†Ú¯ Ø¨Ø§ Ù…Ø³ÛŒØ± Ù…Ù‡Ø§Ø¬Ø±Øª Ø´Ù…Ø§';
+  String get worldTimeSubtitle =>
+      'Ø³Ø§Ø¹Øª Ø¬Ù‡Ø§Ù†ÛŒØŒ Ù‡Ù…Ø§Ù‡Ù†Ú¯ Ø¨Ø§ Ù…Ø³ÛŒØ± Ù…Ù‡Ø§Ø¬Ø±Øª Ø´Ù…Ø§';
 
   @override
-  String get worldTimeSearchHint => 'Ø¬Ø³ØªØ¬ÙˆÛŒ Ø´Ù‡Ø±ØŒ Ú©Ø´ÙˆØ± ÛŒØ§ Ù…Ù†Ø·Ù‚Ù‡ Ø²Ù…Ø§Ù†ÛŒâ€¦';
+  String get worldTimeSearchHint =>
+      'Ø¬Ø³ØªØ¬ÙˆÛŒ Ø´Ù‡Ø±ØŒ Ú©Ø´ÙˆØ± ÛŒØ§ Ù…Ù†Ø·Ù‚Ù‡ Ø²Ù…Ø§Ù†ÛŒâ€¦';
 
   @override
   String get worldTimeAdd => 'Ø§ÙØ²ÙˆØ¯Ù†';
@@ -212,7 +240,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get worldTimeTimeline => 'Ø®Ø· Ø²Ù…Ø§Ù†ÛŒ Û²Û´ Ø³Ø§Ø¹ØªÙ‡';
 
   @override
-  String get worldTimeSelectManual => 'Ø§Ù†ØªØ®Ø§Ø¨ Ø¯Ø³ØªÛŒ Ù…Ù†Ø·Ù‚Ù‡ Ø²Ù…Ø§Ù†ÛŒ';
+  String get worldTimeSelectManual =>
+      'Ø§Ù†ØªØ®Ø§Ø¨ Ø¯Ø³ØªÛŒ Ù…Ù†Ø·Ù‚Ù‡ Ø²Ù…Ø§Ù†ÛŒ';
 
   @override
   String get worldTimeUnresolvedOcean =>
@@ -244,7 +273,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get meetingPlannerSuggested => 'Ù¾Ù†Ø¬Ø±Ù‡â€ŒÙ‡Ø§ÛŒ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ÛŒ';
 
   @override
-  String get meetingPlannerTitle => 'Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒØ±ÛŒØ²ÛŒ ØªÙ…Ø§Ø³ Ø¨ÛŒÙ†â€ŒØ§Ù„Ù…Ù„Ù„ÛŒ';
+  String get meetingPlannerTitle =>
+      'Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒØ±ÛŒØ²ÛŒ ØªÙ…Ø§Ø³ Ø¨ÛŒÙ†â€ŒØ§Ù„Ù…Ù„Ù„ÛŒ';
 
   @override
   String get meetingPlannerHint =>
@@ -282,7 +312,8 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
   String get guestAiTitle => 'Ø¯Ø³ØªÛŒØ§Ø± Ù‡ÙˆØ´Ù…Ù†Ø¯ Ù…Ù‡Ø§Ø¬Ø±Øª';
 
   @override
-  String get guestAiBody => 'Ø±Ø§Ù‡Ù†Ù…Ø§ÛŒÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø¨Ù‡ Ù‡Ù…Ø±Ø§Ù‡ ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ú¯ÙØªâ€ŒÙˆÚ¯ÙˆÙ‡Ø§.';
+  String get guestAiBody =>
+      'Ø±Ø§Ù‡Ù†Ù…Ø§ÛŒÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø¨Ù‡ Ù‡Ù…Ø±Ø§Ù‡ ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ú¯ÙØªâ€ŒÙˆÚ¯ÙˆÙ‡Ø§.';
 
   @override
   String get guestConsultationTitle => 'Ù…Ø´Ø§ÙˆØ±Ù‡ Ø¨Ø§ Ù…ØªØ®ØµØµÛŒÙ†';
@@ -296,13 +327,15 @@ mixin AppLocalizationsFaB2 on AppLocalizations {
       'Ø¨Ø±Ø§ÛŒ Ù…Ø´Ø§Ù‡Ø¯Ù‡ ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ù…Ø´Ø§ÙˆØ±Ù‡â€ŒÙ‡Ø§ ÙˆØ§Ø±Ø¯ Ø´ÙˆÛŒØ¯';
 
   @override
-  String get signInToChatAi => 'Ø¨Ø±Ø§ÛŒ Ú¯ÙØªâ€ŒÙˆÚ¯Ùˆ Ø¨Ø§ Ø¯Ø³ØªÛŒØ§Ø± Ù‡ÙˆØ´Ù…Ù†Ø¯ ÙˆØ§Ø±Ø¯ Ø´ÙˆÛŒØ¯';
+  String get signInToChatAi =>
+      'Ø¨Ø±Ø§ÛŒ Ú¯ÙØªâ€ŒÙˆÚ¯Ùˆ Ø¨Ø§ Ø¯Ø³ØªÛŒØ§Ø± Ù‡ÙˆØ´Ù…Ù†Ø¯ ÙˆØ§Ø±Ø¯ Ø´ÙˆÛŒØ¯';
 
   @override
   String get signInToSave => 'Ø¨Ø±Ø§ÛŒ Ø°Ø®ÛŒØ±Ù‡ Ø®Ø¨Ø±Ù‡Ø§ ÙˆØ§Ø±Ø¯ Ø´ÙˆÛŒØ¯';
 
   @override
-  String get consultationDraftRestored => 'Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ Ù…Ø´Ø§ÙˆØ±Ù‡ Ø´Ù…Ø§ Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ø´Ø¯.';
+  String get consultationDraftRestored =>
+      'Ù¾ÛŒØ´â€ŒÙ†ÙˆÛŒØ³ Ù…Ø´Ø§ÙˆØ±Ù‡ Ø´Ù…Ø§ Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ø´Ø¯.';
 
   @override
   String get aiPromptRestored => 'Ù¾Ø±Ø³Ø´ Ø´Ù…Ø§ Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ø´Ø¯.';
