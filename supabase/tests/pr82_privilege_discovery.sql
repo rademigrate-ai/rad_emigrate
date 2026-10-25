@@ -60,12 +60,12 @@ begin
  perform public.ingest_ai_model_catalogue(provider,1,models);
  if (select enabled from public.ai_models where provider_id=provider and slug='SYNTHETIC-CHAT') then
   raise exception 'disabled rediscovery enabled'; end if;
- update public.ai_models set enabled=true,runtime_scope='research',priority=17,
+ update public.ai_models set enabled=true,runtime_scope='admin',priority=17,
   capability_source='configured',context_window=12345,cost_source='configured',cost_input_per_million=7
   where provider_id=provider and slug='SYNTHETIC-CHAT';
  perform public.ingest_ai_model_catalogue(provider,1,models);
  if not exists(select 1 from public.ai_models where provider_id=provider and slug='SYNTHETIC-CHAT'
-  and enabled and runtime_scope='research' and priority=17 and context_window=12345
+  and enabled and runtime_scope='admin' and priority=17 and context_window=12345
   and capability_source='configured' and cost_input_per_million=7 and cost_source='configured') then
   raise exception 'explicit Admin decisions overwritten'; end if;
  perform public.ingest_ai_model_catalogue(provider,1,'[]');
