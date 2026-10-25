@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
-import '../domain/entities/admin_cms_entities.dart';
+import '../../domain/entities/admin_cms_entities.dart';
 import 'source_provenance_badge.dart';
 
 /// Presentation mode for the full-page comparison.
