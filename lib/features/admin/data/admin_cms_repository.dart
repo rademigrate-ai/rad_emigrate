@@ -26,13 +26,21 @@ class CmsException implements Exception {
 
 /// Lossless draft input, separate from the public display projection.
 class CmsArticleDraft {
-  CmsArticleDraft._(this._content, this.revisionId, this.contentHash);
+  CmsArticleDraft._(
+    this._content,
+    this.revisionId,
+    this.contentHash, [
+    this.editorialState = ArticleEditorialStatus.draft,
+  ]);
   final Map<String, dynamic> _content;
   final String revisionId;
 
   /// Server-issued SHA-256 of the current head revision body.
   /// Never invent or client-hash this value.
   final String contentHash;
+
+  /// Authoritative editorial lifecycle state from the server ledger.
+  final ArticleEditorialStatus editorialState;
 
   String get id => _content['article_id'] as String;
   String get locale => _content['locale'] as String;
@@ -314,7 +322,9 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
       throw const CmsException('malformed');
     }
 
-    return CmsArticleDraft._(content, revisionId, hash);
+    final editorialState = matched.editorialState;
+
+    return CmsArticleDraft._(content, revisionId, hash, editorialState);
   }
 
   @override
