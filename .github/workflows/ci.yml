@@ -282,6 +282,12 @@ jobs:
       - name: Verify targeted privilege and discovery regression contracts
         run: |
           psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_privilege_discovery.sql
+      - name: Verify missing-profile bootstrap cannot provision privileged roles
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_profile_bootstrap.sql
+      - name: Verify legacy keyed request replay rejects changed payloads
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_legacy_request_receipts.sql
+      - name: Verify newly created functions fail closed for client execution
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_function_defaults.sql
       - name: Verify appointment receipts through real Auth and PostgREST
         run: python3 scripts/verify_pr82_appointment_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
       - name: Stop disposable Supabase stack
