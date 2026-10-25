@@ -213,6 +213,11 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
             )),
     );
 
+    final isFa =
+        (widget.resolvedLocale ??
+            Localizations.localeOf(context).languageCode) ==
+        'fa';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -257,7 +262,10 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
             if (article.faqItems.isNotEmpty)
               {'anchor': 'faq', 'label': 'پرسش‌های متداول'},
             if (article.relatedArticles.isNotEmpty)
-              {'anchor': 'related', 'label': 'عناوین دیگر'},
+              {
+                'anchor': 'related',
+                'label': isFa ? 'دیگر عناوین' : 'Other Titles',
+              },
           ];
 
           if (!_initialScrollScheduled && _activeAnchor != null) {
@@ -699,16 +707,16 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   Icons.library_books_outlined,
                                   color: AppColors.primaryRed,
                                   size: 20,
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
-                                  'عناوین دیگر و مقالات تخصصی مرتبط',
-                                  style: TextStyle(
+                                  isFa ? 'دیگر عناوین' : 'Other Titles',
+                                  style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.navy,
@@ -717,8 +725,16 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                               ],
                             ),
                             const SizedBox(height: 14),
-                            ...article.relatedArticles.map((rel) {
-                              return InkWell(
+                            for (final rel
+                                in article.relatedArticles
+                                    .fold<List<IndependentArticleSummary>>(
+                                      [],
+                                      (acc, item) =>
+                                          acc.any((x) => x.id == item.id)
+                                          ? acc
+                                          : [...acc, item],
+                                    ))
+                              InkWell(
                                 onTap: () =>
                                     context.go('/visa/articles/${rel.id}'),
                                 borderRadius: BorderRadius.circular(
@@ -770,8 +786,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                     ],
                                   ),
                                 ),
-                              );
-                            }),
+                              ),
                           ],
                         ),
                       ),

@@ -12,6 +12,7 @@ import '../../features/admin/presentation/pages/admin_cms_articles_page.dart';
 import '../../features/admin/presentation/pages/admin_cms_canonical_editor_page.dart';
 import '../../features/admin/presentation/pages/admin_source_monitor_page.dart';
 import '../../features/admin/presentation/pages/admin_source_diff_page.dart';
+import '../../features/admin/presentation/pages/admin_full_page_diff_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import '../../features/applications/presentation/pages/applications_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -238,6 +239,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/admin/sources/:sourceId/review',
+            builder: (_, state) => AdminFullPageDiffPage(
+              sourceId: state.pathParameters['sourceId'] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: '/admin/sources/:sourceId/diff',
             builder: (_, state) => AdminSourceDiffPage(
               sourceId: state.pathParameters['sourceId'] ?? '',
             ),

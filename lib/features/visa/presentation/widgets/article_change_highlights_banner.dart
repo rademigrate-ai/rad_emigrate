@@ -37,7 +37,7 @@ class _ArticleChangeHighlightsBannerState
 
     final dateStr = widget.lastFactCheckedAt != null
         ? '${widget.lastFactCheckedAt!.year}/${widget.lastFactCheckedAt!.month.toString().padLeft(2, '0')}/${widget.lastFactCheckedAt!.day.toString().padLeft(2, '0')}'
-        : 'اخیراً';
+        : 'در انتظار ثبت تاریخ انطباق';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -185,7 +185,7 @@ class _ArticleChangeHighlightsBannerState
                     })
                   else
                     const Text(
-                      'کلیه بندها مستقیماً با پایگاه‌های قوانین اداره مهاجرت تطبیق یافته است.',
+                      'این نسخه بر اساس اسناد استنادی اولیه ثبت شده و در انتظار ممیزی نهایی است.',
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
