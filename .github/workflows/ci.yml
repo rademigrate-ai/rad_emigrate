@@ -277,6 +277,13 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/plan5_ai_fail_closed_regression.sql
       - name: Plan5 AI v1 RPC surface (reserve/settle)
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/plan5_ai_v1_rpc_surface.sql
+      - name: Verify appointment RPC contracts and owner-scoped persisted receipts
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_appointment_contract.sql
+      - name: Verify targeted privilege and discovery regression contracts
+        run: |
+          psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_privilege_discovery.sql
+      - name: Verify appointment receipts through real Auth and PostgREST
+        run: python3 scripts/verify_pr82_appointment_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true
