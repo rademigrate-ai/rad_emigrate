@@ -157,7 +157,11 @@ class _AdminConsultationsPageState
         leading: const AppBackButton(fallback: '/admin'),
         title: Text(l10n.adminConsultations),
         actions: [
-          IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
+          IconButton(
+            tooltip: l10n.refresh,
+            onPressed: _load,
+            icon: const Icon(Icons.refresh),
+          ),
         ],
       ),
       body: PremiumCanvas(

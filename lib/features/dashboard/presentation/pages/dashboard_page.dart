@@ -10,8 +10,12 @@ import '../../../../core/widgets/reference_widgets.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../applications/presentation/providers/application_controller.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
+import '../../../booking/presentation/booking_labels.dart';
+import '../../../comparison/presentation/comparison_labels.dart';
+import '../../../cost_calculator/presentation/cost_calculator_labels.dart';
 import '../../../documents/domain/entities/document.dart';
 import '../../../documents/presentation/providers/document_controller.dart';
+import '../../../interviews/presentation/interview_labels.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -19,6 +23,7 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final session = ref.watch(verifiedUserSessionProvider);
     final isAuthed = session != null && session.isAuthenticated;
     final name = isAuthed
@@ -40,25 +45,25 @@ class DashboardPage extends ConsumerWidget {
       (
         Icons.event_available_outlined,
         const Color(0xFF345CFF),
-        'Booking',
+        BookingLabels(locale).shortTitle,
         '/booking',
       ),
       (
         Icons.calendar_month_outlined,
         const Color(0xFF6C4DFF),
-        'Interviews',
+        InterviewLabels(locale).shortTitle,
         '/interviews',
       ),
       (
         Icons.calculate_outlined,
         const Color(0xFF00A986),
-        'Cost calculator',
+        CostCalculatorLabels(locale).shortTitle,
         '/calculator/cost',
       ),
       (
         Icons.compare_arrows_outlined,
         const Color(0xFFD91F2B),
-        'Compare',
+        ComparisonLabels(locale).shortTitle,
         '/compare/pathways',
       ),
       (
@@ -140,25 +145,28 @@ class DashboardPage extends ConsumerWidget {
                   onAction: () => context.go('/profile'),
                 ),
                 LayoutBuilder(
-                  builder: (context, constraints) => Wrap(
-                    runSpacing: 8,
-                    children: [
-                      for (final item in quick)
-                        SizedBox(
-                          width:
-                              constraints.maxWidth /
-                              (MediaQuery.textScalerOf(context).scale(14) > 20
-                                  ? 2
-                                  : 4),
-                          child: ReferenceQuickAction(
-                            icon: item.$1,
-                            color: item.$2,
-                            label: item.$3,
-                            onTap: () => context.go(item.$4),
+                  builder: (context, constraints) {
+                    final isLargeText =
+                        MediaQuery.textScalerOf(context).scale(14) > 18;
+                    final int cols = isLargeText
+                        ? 2
+                        : (constraints.maxWidth >= 960 ? 6 : 3);
+                    return Wrap(
+                      runSpacing: 8,
+                      children: [
+                        for (final item in quick)
+                          SizedBox(
+                            width: constraints.maxWidth / cols,
+                            child: ReferenceQuickAction(
+                              icon: item.$1,
+                              color: item.$2,
+                              label: item.$3,
+                              onTap: () => context.go(item.$4),
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
+                      ],
+                    );
+                  },
                 ),
                 ReferenceSection(
                   title: l10n.recentActivity,

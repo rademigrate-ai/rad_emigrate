@@ -505,6 +505,7 @@ class _EditorState extends ConsumerState<AdminCmsCanonicalEditorPage> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
+                          tooltip: widget.locale == 'fa' ? 'بستن' : 'Close',
                           onPressed: () => Navigator.pop(sheetContext),
                         ),
                       ],

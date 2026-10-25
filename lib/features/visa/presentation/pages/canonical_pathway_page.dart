@@ -222,6 +222,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
+            tooltip: 'جستجو',
             onPressed: () => context.go('/visa/search'),
           ),
         ],
