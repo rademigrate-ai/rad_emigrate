@@ -60,6 +60,30 @@ constraints remain enforced. No new public JSON field was introduced.
 
 ## Staging transition boundaries
 
+### F17 profile completion compatibility
+
+Real Chromium acceptance exposed an existing 403 in `completeProfile`:
+the shipped PostgREST upsert includes `updated_at` on INSERT and `id` on conflict
+UPDATE. Foundation grants intentionally excluded both. The forward migration
+`20261025202614_pr82_profile_upsert_compatibility_guard.sql` grants exactly those
+two column operations and adds an invoker trigger: client IDs are immutable and
+client `updated_at` values are replaced with server time. Role write grants remain
+denied; existing Admin role values survive the upsert; own missing-profile
+bootstrap still defaults to user. The migration aborts if RLS/role-column ACL
+prerequisites are absent. It neither changes existing rows nor grants table-wide
+INSERT/UPDATE. No frontend file was edited.
+
+The exact merge-upsert SQL shape fails before the correction and passes afterward,
+including cross-owner, identity reassignment, timestamp spoofing and F16/privacy
+regressions. Actual Chromium profile completion subsequently persisted and
+restored the intended CMS route. This does not verify signup email delivery.
+
+The appointment adapter retains the documented `P0002` missing/other-owner error.
+Current PostgREST maps it to HTTP 500. Negative acceptance asserts that exact
+SQLSTATE and absence of cross-owner changes; it does not count arbitrary 500s as
+successful authorization tests. A coordinated future transport contract can use
+an explicit not-found status without silently changing the existing error code.
+
 Target: `epolbumcfbohtmgvomki`, never `inshddthftkhcdosoqcn`.
 The historical 43-record staging lineage was reproduced using its recorded SQL,
 then compared with a clean source reconstruction. The forward transition retains
