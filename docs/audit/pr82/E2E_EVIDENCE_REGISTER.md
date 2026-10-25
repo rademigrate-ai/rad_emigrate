@@ -1,5 +1,12 @@
 # PR82 E2E evidence register
 
+Current continuation: [MASTER_FINALIZATION_20261026.md](MASTER_FINALIZATION_20261026.md).
+The blocked scenarios and local infrastructure limits below describe the earlier
+audit. Dedicated staging subsequently enabled actual GoTrue/API and Chromium
+acceptance. The continuation distinguishes those new receipts from retained
+historical evidence, exact source SHA, native fixtures and untested mail/device
+paths. It does not erase or relabel the old failures.
+
 Historical integration evidence is preserved, never relabeled as fresh acceptance:
 
 | Evidence set | Result | Limits |
