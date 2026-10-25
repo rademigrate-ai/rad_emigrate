@@ -299,26 +299,55 @@ class _ProfilePageState extends ConsumerState<_ProfilePageForIdentity> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppButton(
-                        label: l10n.signIn,
-                        icon: Icons.login_rounded,
-                        onPressed: () => context.go('/login?from=%2Fprofile'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: AppButton(
-                        label: l10n.createAccount,
-                        variant: AppButtonVariant.secondary,
-                        icon: Icons.person_add_outlined,
-                        onPressed: () =>
-                            context.go('/register?from=%2Fprofile'),
-                      ),
-                    ),
-                  ],
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isNarrow =
+                        constraints.maxWidth < 340 ||
+                        MediaQuery.textScalerOf(context).scale(14) > 16;
+                    if (isNarrow) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AppButton(
+                            label: l10n.signIn,
+                            icon: Icons.login_rounded,
+                            onPressed: () =>
+                                context.go('/login?from=%2Fprofile'),
+                          ),
+                          const SizedBox(height: 10),
+                          AppButton(
+                            label: l10n.createAccount,
+                            variant: AppButtonVariant.secondary,
+                            icon: Icons.person_add_outlined,
+                            onPressed: () =>
+                                context.go('/register?from=%2Fprofile'),
+                          ),
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            label: l10n.signIn,
+                            icon: Icons.login_rounded,
+                            onPressed: () =>
+                                context.go('/login?from=%2Fprofile'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: AppButton(
+                            label: l10n.createAccount,
+                            variant: AppButtonVariant.secondary,
+                            icon: Icons.person_add_outlined,
+                            onPressed: () =>
+                                context.go('/register?from=%2Fprofile'),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

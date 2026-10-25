@@ -185,6 +185,7 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
                       suffixIcon: _textController.text.isNotEmpty
                           ? IconButton(
                               icon: const Icon(Icons.clear, size: 18),
+                              tooltip: 'پاک کردن',
                               onPressed: () {
                                 _textController.clear();
                                 notifier.clear();

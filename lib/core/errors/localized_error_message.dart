@@ -14,16 +14,45 @@ String localizedAuthError(
   AppLocalizations l10n, {
   AuthErrorContext context = AuthErrorContext.signIn,
 }) {
-  if (error is! ApiException) return l10n.errorGeneric;
+  if (error is TimeoutException) return l10n.errorNetwork;
 
-  final code = error.code?.toLowerCase() ?? '';
-  final message = error.message.toLowerCase();
-  final known = '$code $message';
+  final errStr = error.toString().toLowerCase();
+  String code = '';
+  String message = errStr;
+  int? statusCode;
+
+  if (error is ApiException) {
+    code = error.code?.toLowerCase() ?? '';
+    message = error.message.toLowerCase();
+    statusCode = error.statusCode;
+  } else {
+    try {
+      final dynamic dyn = error;
+      if (dyn.code != null) code = '${dyn.code}'.toLowerCase();
+      if (dyn.message != null) message = '${dyn.message}'.toLowerCase();
+      if (dyn.statusCode != null) {
+        final sc = dyn.statusCode;
+        if (sc is int) {
+          statusCode = sc;
+        } else if (sc is String) {
+          statusCode = int.tryParse(sc);
+        }
+      }
+    } catch (_) {}
+  }
+
+  final known = '$code $message $errStr';
 
   if (known.contains('network') ||
       known.contains('socket') ||
       known.contains('connection') ||
-      known.contains('timeout')) {
+      known.contains('timeout') ||
+      known.contains('failed host lookup') ||
+      known.contains('xmlhttprequest') ||
+      known.contains('clientexception') ||
+      statusCode == 502 ||
+      statusCode == 503 ||
+      statusCode == 504) {
     return l10n.errorNetwork;
   }
   if (context == AuthErrorContext.otp &&
@@ -36,7 +65,7 @@ String localizedAuthError(
   if (known.contains('session') ||
       known.contains('expired token') ||
       code == 'unauthorized' ||
-      error.statusCode == 401) {
+      statusCode == 401) {
     return l10n.errorAuthSession;
   }
   if (context == AuthErrorContext.registration &&
@@ -46,7 +75,9 @@ String localizedAuthError(
   if (known.contains('invalid') ||
       known.contains('credentials') ||
       known.contains('wrong') ||
-      known.contains('not found')) {
+      known.contains('not found') ||
+      code == 'invalid_credentials' ||
+      code == 'user_not_found') {
     return l10n.errorAuthInvalid;
   }
   return l10n.errorGeneric;

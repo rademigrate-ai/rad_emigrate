@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/core/errors/localized_error_message.dart';
@@ -42,4 +44,27 @@ void main() {
       fa.otpInvalidOrExpired,
     );
   });
+
+  test(
+    'D-14: differentiates network outages from invalid credentials safely',
+    () {
+      final timeout = TimeoutException('Connection timed out');
+      final socketErr = Exception(
+        'SocketException: Connection refused (OS Error: Connection refused)',
+      );
+      final invalidCreds = ApiException(
+        message: 'Invalid login credentials',
+        code: 'invalid_credentials',
+        statusCode: 400,
+      );
+
+      // Network outage produces network error message
+      expect(localizedAuthError(timeout, en), en.errorNetwork);
+      expect(localizedAuthError(socketErr, fa), fa.errorNetwork);
+
+      // Invalid credentials produces generic auth invalid message without enumeration
+      expect(localizedAuthError(invalidCreds, en), en.errorAuthInvalid);
+      expect(localizedAuthError(invalidCreds, fa), fa.errorAuthInvalid);
+    },
+  );
 }

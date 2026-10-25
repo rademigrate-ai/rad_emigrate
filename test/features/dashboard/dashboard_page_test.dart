@@ -279,6 +279,17 @@ void main() {
           // Greeting in Persian
           expect(find.textContaining('مهرداد راد'), findsOneWidget);
 
+          // Quick-action tiles must be localized (regression: hardcoded
+          // English labels used to leak into the Persian dashboard).
+          expect(find.text('رزرو'), findsWidgets);
+          expect(find.text('مصاحبه‌ها'), findsWidgets);
+          expect(find.text('هزینه‌ها'), findsWidgets);
+          expect(find.text('مقایسه'), findsWidgets);
+          expect(find.text('Booking'), findsNothing);
+          expect(find.text('Interviews'), findsNothing);
+          expect(find.text('Cost calculator'), findsNothing);
+          expect(find.text('Compare'), findsNothing);
+
           // Verify no unhandled layout overflow exceptions
           expect(tester.takeException(), isNull);
         }

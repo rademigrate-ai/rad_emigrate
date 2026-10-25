@@ -10,6 +10,9 @@ class ComparisonLabels {
 
   String get title => fa ? 'مقایسه مسیرها' : 'Compare pathways';
 
+  /// Compact dashboard-tile label (dashboard quick actions).
+  String get shortTitle => fa ? 'مقایسه' : 'Compare';
+
   String get intro => fa
       ? 'چند مقصد و مسیر را کنار هم مقایسه کنید. فقط داده‌های منتشرشده و دارای منبع نمایش داده می‌شود.'
       : 'Compare several destinations and pathways side by side. Only published, sourced data is shown.';
