@@ -288,8 +288,8 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
           unselectedLabelColor: AppColors.textSecondary,
           indicatorColor: AppColors.primaryRed,
           tabs: const [
-            Tab(text: 'یافته‌های پژوهش و تغییرات مغایرت'),
-            Tab(text: 'مدیریت مراجع و منابع اطلاعاتی'),
+            Tab(text: 'پیشنهادهای مغایرت'),
+            Tab(text: 'مراجع رسمی و معتبر'),
           ],
         ),
         backgroundColor: Colors.white,
