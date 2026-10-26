@@ -330,6 +330,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
+      - name: Verify published-only legacy slug compatibility
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_legacy_slug.sql
       - name: Verify appointment receipts through real Auth and PostgREST
         run: python3 scripts/verify_pr82_appointment_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
       - name: Stop disposable Supabase stack

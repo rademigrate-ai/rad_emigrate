@@ -271,3 +271,47 @@ class EditorialArticlePage extends ConsumerWidget {
     );
   }
 }
+
+class EditorialLegacySlugPage extends ConsumerWidget {
+  const EditorialLegacySlugPage({
+    super.key,
+    required this.country,
+    required this.slug,
+  });
+  final String country;
+  final String slug;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = Localizations.localeOf(context).languageCode == 'fa'
+        ? 'fa'
+        : 'en';
+    final key = (country: country, slug: slug, locale: locale);
+    return ref
+        .watch(editorialSlugProvider(key))
+        .when(
+          data: (id) => EditorialArticlePage(articleId: id, locale: locale),
+          loading: () => Scaffold(
+            body: Center(
+              child: RadLoadingIndicator(
+                label: locale == 'fa'
+                    ? 'در حال دریافت محتوا'
+                    : 'Loading content',
+              ),
+            ),
+          ),
+          error: (_, _) => Scaffold(
+            appBar: AppBar(leading: const AppBackButton(fallback: '/visa')),
+            body: Center(
+              child: TextButton(
+                onPressed: () => ref.invalidate(editorialSlugProvider(key)),
+                child: Text(
+                  locale == 'fa'
+                      ? 'محتوا یا ترجمه در دسترس نیست؛ تلاش دوباره'
+                      : 'Content or translation unavailable; retry',
+                ),
+              ),
+            ),
+          ),
+        );
+  }
+}

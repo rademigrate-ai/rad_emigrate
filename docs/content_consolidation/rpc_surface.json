@@ -1,6 +1,6 @@
 {
   "contract_version": "editorial-3 + rad-original-references-1",
-  "source": "PostgreSQL17 clean 99-migration reconstruction; managed services are fixtures",
+  "source": "PostgreSQL17 clean 100-migration reconstruction; managed services are fixtures",
   "rpcs": [
     {
       "name": "attach_editorial_reference_map",
@@ -157,6 +157,18 @@
       "anon_execute": false,
       "authenticated_execute": false,
       "service_execute": true
+    },
+    {
+      "name": "resolve_editorial_article_slug",
+      "arguments": "p_country_code text, p_slug text, p_locale text",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
     },
     {
       "name": "review_country_other_title",

@@ -12,6 +12,38 @@ import 'package:rad_emigrate/features/visa/presentation/widgets/editorial_rich_b
 import 'package:rad_emigrate/features/visa/presentation/widgets/other_titles.dart';
 
 void main() {
+  testWidgets('legacy slug route delegates to published UUID rich reader', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          editorialSlugProvider(
+            (country: 'CA', slug: 'synthetic', locale: 'en'),
+          ).overrideWith((ref) async => 'f1000000-0000-4000-8000-000000000011'),
+          editorialArticleProvider((
+            id: 'f1000000-0000-4000-8000-000000000011',
+            locale: 'en',
+            preview: false,
+          )).overrideWith(
+            (ref) async => {
+              'title': 'SYNTHETIC published legacy route',
+              'revision_id': 'synthetic',
+              'sections': [],
+              'other_titles': [],
+            },
+          ),
+        ],
+        child: const MaterialApp(
+          home: EditorialLegacySlugPage(country: 'CA', slug: 'synthetic'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('SYNTHETIC published legacy route'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Other Titles has one exact label and unique identity links', (
     tester,
   ) async {

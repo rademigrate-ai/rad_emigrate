@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 
 import 'pages/canonical_pathway_page.dart';
-import 'pages/independent_article_page.dart';
 import 'pages/visa_page.dart';
 import 'pages/visa_search_page.dart';
 import 'pages/editorial_article_page.dart';
@@ -60,9 +59,9 @@ GoRoute visaRoute() => GoRoute(
       routes: [
         GoRoute(
           path: 'articles/:articleSlug',
-          builder: (_, state) => IndependentArticlePage(
-            countrySlug: state.pathParameters['countryId']!,
-            articleSlug: state.pathParameters['articleSlug']!,
+          builder: (_, state) => EditorialLegacySlugPage(
+            country: state.pathParameters['countryId']!,
+            slug: state.pathParameters['articleSlug']!,
           ),
         ),
         GoRoute(

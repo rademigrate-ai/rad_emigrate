@@ -134,3 +134,31 @@ final visaContentCountriesProvider = FutureProvider.autoDispose
         )['items'],
       );
     });
+
+typedef EditorialSlugKey = ({String country, String slug, String locale});
+final editorialSlugProvider = FutureProvider.autoDispose
+    .family<String, EditorialSlugKey>((ref, key) async {
+      ref.watch(supabaseAuthUserIdProvider);
+      final service = ref.watch(supabaseClientServiceProvider);
+      if (!service.isInitialized) throw StateError('backend_unavailable');
+      final data = editorialData(
+        await service.client
+            .rpc(
+              'resolve_editorial_article_slug',
+              params: {
+                'p_country_code': key.country,
+                'p_slug': key.slug,
+                'p_locale': key.locale,
+              },
+            )
+            .timeout(const Duration(seconds: 20)),
+      );
+      final id = data['article_id'];
+      if (id is! String ||
+          !RegExp(
+            r'^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
+          ).hasMatch(id)) {
+        throw const FormatException('invalid_article_identity');
+      }
+      return id;
+    });
