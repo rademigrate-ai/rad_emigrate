@@ -1,8 +1,12 @@
-import '../../../../core/widgets/rad_loading.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../../core/widgets/rad_loading.dart';
+import '../../../../core/supabase/rad_contract.dart';
+import '../../../../core/supabase/supabase_providers.dart';
+
+import 'dart:convert';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
@@ -15,21 +19,40 @@ Future<void> showAdminSourceDialog(BuildContext context) => showDialog<void>(
 
 class AdminSourceDialog extends ConsumerStatefulWidget {
   const AdminSourceDialog({super.key});
+
   @override
   ConsumerState<AdminSourceDialog> createState() => _AdminSourceDialogState();
 }
 
 class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
   final _form = GlobalKey<FormState>();
-  final _name = TextEditingController();
-  final _url = TextEditingController();
+  late final TextEditingController _name;
+  late final TextEditingController _url;
+  late final TextEditingController _topic;
+  String? _requestKey;
+  String? _lastPayload;
+  String? _owner;
+
+  String _selectedSourceType = 'admin_reference';
+  String? _selectedCountryCode;
   var _saving = false;
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController();
+    _url = TextEditingController();
+    _topic = TextEditingController();
+    final service = ref.read(supabaseClientServiceProvider);
+    _owner = service.isInitialized ? service.client.auth.currentUser?.id : null;
+  }
 
   @override
   void dispose() {
     _name.dispose();
     _url.dispose();
+    _topic.dispose();
     super.dispose();
   }
 
@@ -42,11 +65,32 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
   }
 
   Future<void> _save() async {
-    if (_saving || !_form.currentState!.validate()) return;
+    if (_saving ||
+        ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
+            _owner ||
+        !_form.currentState!.validate()) {
+      return;
+    }
     final l10n = AppLocalizations.of(context);
-    final address = canonicalResearchSourceUrl(
-      parseResearchSourceUrl(_url.text)!,
-    );
+    final parsedUri = parseResearchSourceUrl(_url.text);
+    if (parsedUri == null) {
+      setState(() => _error = l10n.invalidUrl);
+      return;
+    }
+
+    final address = canonicalResearchSourceUrl(parsedUri);
+    final payload = jsonEncode([
+      _name.text.trim(),
+      address,
+      _selectedSourceType,
+      _selectedCountryCode,
+      _topic.text.trim(),
+    ]);
+    if (_lastPayload != payload) {
+      _lastPayload = payload;
+      _requestKey = newRadRequestKey();
+    }
+
     final data = ref.read(adminConsoleProvider).valueOrNull;
     if (data?.researchSources.any((source) {
           final uri = parseResearchSourceUrl(source.baseUrl);
@@ -56,22 +100,33 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
       setState(() => _error = l10n.sourceDuplicate);
       return;
     }
+
     setState(() {
       _saving = true;
       _error = null;
     });
+
     try {
+      // Admin-entered sources are explicitly designated 'admin_defined' (unverified)
+      // Never imply that a manually entered source is automatically authoritative.
       await ref
           .read(adminOperationsRepositoryProvider)
           .createResearchSource(
             displayName: _name.text.trim(),
             baseUrl: address,
-            sourceType: 'external',
+            sourceType: _selectedSourceType,
             trustClass: 'admin_defined',
             runtimeScope: 'admin',
+            countryCode: _selectedCountryCode,
+            visaCategory: _topic.text.trim().isEmpty
+                ? null
+                : _topic.text.trim(),
+            requestKey: _requestKey,
           );
+
       ref.invalidate(adminConsoleProvider);
       ref.invalidate(adminSnapshotProvider);
+
       if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l10n.sourceSavedDisabled)));
@@ -91,7 +146,20 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(supabaseAuthUserIdProvider, (_, next) {
+      if (next.valueOrNull != _owner && mounted) {
+        _name.clear();
+        _url.clear();
+        _topic.clear();
+        setState(
+          () => _error = 'Administrator session changed. Reopen the dialog.',
+        );
+      }
+    });
+
     final l10n = AppLocalizations.of(context);
+    final isFa = Localizations.localeOf(context).languageCode == 'fa';
+
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
@@ -109,7 +177,9 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                     l10n.researchNeverAutoPublishes,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
+
+                  // 1. Source Name (TextFormField index 0)
                   TextFormField(
                     controller: _name,
                     enabled: !_saving,
@@ -120,6 +190,8 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                         : null,
                   ),
                   const SizedBox(height: 12),
+
+                  // 2. Source Address URL (TextFormField index 1)
                   TextFormField(
                     controller: _url,
                     enabled: !_saving,
@@ -132,6 +204,132 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                     validator: _validateUrl,
                   ),
                   const SizedBox(height: 16),
+
+                  TextFormField(
+                    controller: _topic,
+                    enabled: !_saving,
+                    maxLength: 100,
+                    decoration: InputDecoration(
+                      labelText: isFa
+                          ? 'دسته ویزا / موضوع (اختیاری)'
+                          : 'Visa category / topic (optional)',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // 3. Source Type Dropdown
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    initialValue: _selectedSourceType,
+                    decoration: InputDecoration(
+                      labelText: isFa ? 'نوع منبع' : 'Source Type Category',
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                        value: 'government',
+                        child: Text(
+                          isFa
+                              ? 'دولتی مهاجرت'
+                              : 'Official Government Department',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'embassy',
+                        child: Text(
+                          isFa ? 'سفارت / کنسولگری' : 'Embassy / Consulate',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'university',
+                        child: Text(
+                          isFa ? 'دانشگاه رسمی' : 'Official University',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'professional_body',
+                        child: Text(
+                          isFa
+                              ? 'سازمان ارزیابی مدارک'
+                              : 'Professional Recognition Body',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'admin_reference',
+                        child: Text(
+                          isFa ? 'منبع سفارشی مدیر' : 'Admin Custom Reference',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                    onChanged: _saving
+                        ? null
+                        : (v) => setState(
+                            () => _selectedSourceType = v ?? 'government',
+                          ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 4. Country Code Dropdown
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    initialValue: _selectedCountryCode,
+                    decoration: InputDecoration(
+                      labelText: isFa ? 'کشور مربوطه' : 'Associated Country',
+                    ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'CA',
+                        child: Text(
+                          '🇨🇦 کانادا (Canada)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'DE',
+                        child: Text(
+                          '🇩🇪 آلمان (Germany)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'AU',
+                        child: Text(
+                          '🇦🇺 استرالیا (Australia)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'GB',
+                        child: Text(
+                          '🇬🇧 انگلستان (UK)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'US',
+                        child: Text(
+                          '🇺🇸 ایالات متحده (USA)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'GLOBAL',
+                        child: Text(
+                          '🌍 بین‌المللی (Global)',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                    onChanged: _saving
+                        ? null
+                        : (v) => setState(() => _selectedCountryCode = v),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Disclaimer
                   Text(
                     l10n.sourceSavedDisabled,
                     style: Theme.of(context).textTheme.bodySmall,

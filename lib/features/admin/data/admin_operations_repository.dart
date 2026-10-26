@@ -1,3 +1,5 @@
+import '../../../core/supabase/rad_contract.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/supabase/supabase_client.dart';
@@ -122,6 +124,8 @@ class AdminResearchSourceRecord {
     required this.lastErrorCode,
     required this.lastAttemptAt,
     required this.lastSuccessAt,
+    this.countryCode,
+    this.visaCategory,
   });
 
   final String id;
@@ -133,6 +137,8 @@ class AdminResearchSourceRecord {
   final String runtimeScope;
   final String trustClass;
   final String sourceType;
+  final String? countryCode;
+  final String? visaCategory;
   final String? lastErrorCode;
   final DateTime? lastAttemptAt;
   final DateTime? lastSuccessAt;
@@ -350,7 +356,7 @@ class AdminOperationsRepository {
         .from('research_sources')
         .select(
           'id,base_url,allowed_host,authority,enabled,last_attempt_at,last_success_at,'
-          'display_name,runtime_scope,trust_class,source_type,last_error_code',
+          'display_name,runtime_scope,trust_class,source_type,editorial_source_type,country_code,topic,last_error_code',
         )
         .order('authority')
         .limit(100);
@@ -500,7 +506,12 @@ class AdminOperationsRepository {
                   row['allowed_host'] as String,
               runtimeScope: row['runtime_scope'] as String? ?? 'both',
               trustClass: row['trust_class'] as String? ?? 'admin_defined',
-              sourceType: row['source_type'] as String? ?? 'external',
+              sourceType:
+                  row['editorial_source_type'] as String? ??
+                  row['source_type'] as String? ??
+                  'external',
+              countryCode: row['country_code'] as String?,
+              visaCategory: row['topic'] as String?,
               lastErrorCode: row['last_error_code'] as String?,
               lastAttemptAt: _date(row['last_attempt_at']),
               lastSuccessAt: _date(row['last_success_at']),
@@ -584,19 +595,22 @@ class AdminOperationsRepository {
     required String sourceType,
     required String trustClass,
     required String runtimeScope,
+    String? countryCode,
+    String? visaCategory,
+    String? requestKey,
   }) async {
     await _supabase.client.rpc(
-      'upsert_research_source',
+      'upsert_editorial_research_source',
       params: {
-        'p_source_id': null,
-        'p_display_name': displayName,
-        'p_base_url': baseUrl,
-        'p_source_type': sourceType,
-        'p_trust_class': trustClass,
-        'p_runtime_scope': runtimeScope,
-        'p_enabled': false,
-        'p_country_code': null,
-        'p_topic': null,
+        'p_request': {
+          'source_id': null,
+          'display_name': displayName,
+          'base_url': baseUrl,
+          'source_type': sourceType,
+          'country_code': countryCode,
+          'visa_category': visaCategory,
+          'request_key': requestKey ?? newRadRequestKey(),
+        },
       },
     );
   }

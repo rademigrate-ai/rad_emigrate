@@ -1,0 +1,158 @@
+{
+  "contract_version": "stage7-review-1",
+  "schemas": {
+    "save_research_review_request": {
+      "type": "object",
+      "properties": {
+        "proposal_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "expected_proposal_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expected_review_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "base_revision_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "base_content_hash": {
+          "$ref": "#/$defs/SHA256"
+        },
+        "mode": {
+          "enum": [
+            "save_review",
+            "create_draft",
+            "reject_proposal"
+          ]
+        },
+        "decisions": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "section_id": {
+                "$ref": "#/$defs/UUID"
+              },
+              "decision": {
+                "enum": [
+                  "accept",
+                  "reject",
+                  "edit"
+                ]
+              },
+              "edited_text": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 20000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "section_id",
+              "decision",
+              "edited_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "expected_proposal_revision",
+        "expected_review_revision",
+        "base_revision_id",
+        "base_content_hash",
+        "mode",
+        "decisions",
+        "note",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "upsert_editorial_research_source_request": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "base_url": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 2000
+        },
+        "source_type": {
+          "enum": [
+            "government",
+            "embassy",
+            "university",
+            "professional_body",
+            "admin_reference"
+          ]
+        },
+        "country_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "visa_category": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "source_id",
+        "display_name",
+        "base_url",
+        "source_type",
+        "country_code",
+        "visa_category",
+        "request_key"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
