@@ -10,7 +10,9 @@ class EditorialRichBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final original = block['original_structure'] is Map
+    final original = block['current_structure'] is Map
+        ? Map<String, dynamic>.from(block['current_structure'] as Map)
+        : block['original_structure'] is Map
         ? Map<String, dynamic>.from(block['original_structure'] as Map)
         : block;
     final type = original['type'];

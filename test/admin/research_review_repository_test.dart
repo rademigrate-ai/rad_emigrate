@@ -9,6 +9,41 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../support/mock_supabase_service.dart';
 
 void main() {
+  test(
+    'structured review selects versioned context and safe save RPC',
+    () async {
+      final paths = <String>[];
+      final context = <String, dynamic>{
+        'proposal': {'id': 'proposal', 'revision': 1},
+        'base': {
+          'revision_id': 'base',
+          'content_hash': 'hash',
+          'body': {'sections': []},
+          'rich_sections': [],
+        },
+        'review_revision': 0,
+        'stale': false,
+        'decisions': [],
+        'structured_patches': [],
+        'base_rich_hash': 'hash',
+      };
+      final service = await mockSupabaseService((r) async {
+        paths.add(r.url.path);
+        return rpcJson({'data': context});
+      });
+      final repository = ResearchReviewRepository(service);
+      final loaded = await repository.context('proposal');
+      await repository.save(
+        context: loaded,
+        mode: 'save_review',
+        decisions: {},
+        edits: {},
+        note: '',
+      );
+      expect(paths[0], endsWith('/get_research_review_context_v2'));
+      expect(paths[1], endsWith('/save_structured_research_review'));
+    },
+  );
   final context = <String, dynamic>{
     'proposal': {'id': 'proposal', 'revision': 1},
     'base': {

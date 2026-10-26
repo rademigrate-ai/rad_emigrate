@@ -56,7 +56,7 @@ class ResearchReviewRepository {
   }
 
   Future<Map<String, dynamic>> context(String proposalId) async {
-    final data = await _call('get_research_review_context', {
+    final data = await _call('get_research_review_context_v2', {
       'p_proposal_id': proposalId,
     });
     final base = data['base'];
@@ -71,6 +71,12 @@ class ResearchReviewRepository {
         data['review_revision'] is! int ||
         data['stale'] is! bool ||
         data['decisions'] is! List) {
+      throw const CmsException('malformed');
+    }
+    if (data.containsKey('structured_patches') &&
+        (data['structured_patches'] is! List ||
+            base['rich_sections'] is! List ||
+            data['base_rich_hash'] is! String)) {
       throw const CmsException('malformed');
     }
     return data;
@@ -107,7 +113,12 @@ class ResearchReviewRepository {
     };
     final fingerprint = jsonEncode(request);
     request['request_key'] = _keys.putIfAbsent(fingerprint, newRadRequestKey);
-    return _call('save_research_review', {'p_request': request});
+    return _call(
+      context['structured_patches'] is List
+          ? 'save_structured_research_review'
+          : 'save_research_review',
+      {'p_request': request},
+    );
   }
 }
 

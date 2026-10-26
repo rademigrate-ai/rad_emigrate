@@ -11,6 +11,7 @@ import '../../data/research_review_repository.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 import '../widgets/full_page_comparison_viewer.dart';
+import '../widgets/structured_review_viewer.dart';
 import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 
 class AdminFullPageDiffPage extends ConsumerStatefulWidget {
@@ -396,8 +397,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  if ((_reviewContext?['base'] as Map?)?['rich_sections']
-                      is List)
+                  if (_reviewContext?['structured_patches'] == null &&
+                      (_reviewContext?['base'] as Map?)?['rich_sections']
+                          is List)
                     ExpansionTile(
                       title: Text(
                         isFa
@@ -422,28 +424,44 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                       ],
                     ),
                   // Full-Page Comparison Viewer Component
-                  FullPageComparisonViewer(
-                    articleTitle:
-                        (_reviewContext!['base'] as Map)['title'] as String,
-                    countryFlag: _flagForCountry(_proposal!.countryCode),
-                    countryName: _nameForCountry(_proposal!.countryCode, isFa),
-                    category: _proposal!.pathwaySlug,
-                    baseRevision: _proposal!.baseRevision,
-                    proposedRevision: _proposal!.baseRevision + 1,
-                    lastVerifiedAt: null,
-                    hasConflicts:
-                        _reviewContext?['stale'] == true ||
-                        _proposal!.factualStatus == FactualStatus.conflicting,
-                    baseSections: _baseSections,
-                    changes: _proposal!.changes,
-                    evidence: _proposal!.evidence,
-                    reviewerNotes: _proposal!.reviewerNotes,
-                    sectionReviewDecisions: _sectionDecisions,
-                    sectionEdits: _manualSectionEdits,
-                    onSectionAction: _handleSectionAction,
-                    onSectionEdit: _handleSectionEdit,
-                    isPersian: isFa,
-                  ),
+                  if (_reviewContext?['structured_patches'] is List)
+                    StructuredReviewViewer(
+                      sections:
+                          (_reviewContext!['base'] as Map)['rich_sections']
+                              as List,
+                      patches: _reviewContext!['structured_patches'] as List,
+                      decisions: _sectionDecisions,
+                      edits: _manualSectionEdits,
+                      onAction: _handleSectionAction,
+                      onEdit: _handleSectionEdit,
+                      isPersian: isFa,
+                    )
+                  else
+                    FullPageComparisonViewer(
+                      articleTitle:
+                          (_reviewContext!['base'] as Map)['title'] as String,
+                      countryFlag: _flagForCountry(_proposal!.countryCode),
+                      countryName: _nameForCountry(
+                        _proposal!.countryCode,
+                        isFa,
+                      ),
+                      category: _proposal!.pathwaySlug,
+                      baseRevision: _proposal!.baseRevision,
+                      proposedRevision: _proposal!.baseRevision + 1,
+                      lastVerifiedAt: null,
+                      hasConflicts:
+                          _reviewContext?['stale'] == true ||
+                          _proposal!.factualStatus == FactualStatus.conflicting,
+                      baseSections: _baseSections,
+                      changes: _proposal!.changes,
+                      evidence: _proposal!.evidence,
+                      reviewerNotes: _proposal!.reviewerNotes,
+                      sectionReviewDecisions: _sectionDecisions,
+                      sectionEdits: _manualSectionEdits,
+                      onSectionAction: _handleSectionAction,
+                      onSectionEdit: _handleSectionEdit,
+                      isPersian: isFa,
+                    ),
 
                   const SizedBox(height: 24),
 
@@ -545,6 +563,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
           // Reviewer Notes
           TextField(
             controller: _reviewerNotesController,
+            onChanged: (_) => setState(() => _isDirty = true),
             maxLines: 3,
             decoration: InputDecoration(
               labelText: isFa
