@@ -113,7 +113,13 @@ jobs:
           target = Path(os.environ['RUNNER_TEMP']) / 'country-category-rebuild'
           build(Path('artifacts/RAD_PLAN3_VISA_CONTENT_20261024'), [], target,
                 capture, hashlib.sha256(capture.read_bytes()).hexdigest())
-          assert (original / 'manifest.json').read_bytes() == (target / 'manifest.json').read_bytes(), 'Country/category reconstruction drift'
+          expected = json.loads((original / 'manifest.json').read_text(encoding='utf8'))
+          actual = json.loads((target / 'manifest.json').read_text(encoding='utf8'))
+          assert expected == actual, 'Country/category manifest data drift'
+          for name in expected['files']:
+              assert (original / name).read_bytes() == (target / name).read_bytes(), f'Country/category artifact drift: {name}'
+          # The imported manifest remains sealed with its original Windows CRLF.
+          # Linux JSON pretty-print line endings do not alter source/body bytes.
           print('PASS: byte-identical composition, source maps, exact duplicates and extraction capture')
           PY
       - name: Reproduce sealed library offline with identical bytes
