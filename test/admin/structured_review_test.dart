@@ -116,4 +116,50 @@ void main() {
       });
     }
   }
+
+  testWidgets('edit modal supports large leaf content up to 40000 chars', (
+    tester,
+  ) async {
+    String? editedResult;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StructuredReviewViewer(
+            sections: [
+              {
+                'heading': 'Test Section',
+                'blocks': [table],
+              },
+            ],
+            patches: [patch],
+            decisions: const {},
+            edits: const {},
+            onAction: (_, _) {},
+            onEdit: (_, text) => editedResult = text,
+            isPersian: false,
+          ),
+        ),
+      ),
+    );
+
+    // Tap "Edit" to open modal
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+
+    final textField = find.byType(TextField);
+    expect(textField, findsOneWidget);
+    final widget = tester.widget<TextField>(textField);
+    expect(widget.maxLength, 40000);
+
+    // Enter large text exceeding 20,000 chars
+    final largeText = 'A' * 25000;
+    await tester.enterText(textField, largeText);
+    await tester.pump();
+
+    await tester.tap(find.text('Use edit'));
+    await tester.pumpAndSettle();
+
+    expect(editedResult, largeText);
+    expect(tester.takeException(), isNull);
+  });
 }

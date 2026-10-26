@@ -38,7 +38,7 @@ class StructuredReviewViewer extends StatelessWidget {
             controller: controller,
             minLines: 3,
             maxLines: 12,
-            maxLength: 20000,
+            maxLength: 40000,
           ),
         ),
         actions: [
