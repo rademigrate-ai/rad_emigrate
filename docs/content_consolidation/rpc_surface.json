@@ -1,0 +1,198 @@
+{
+  "contract_version": "editorial-3 + rad-original-references-1",
+  "source": "PostgreSQL17 clean 99-migration reconstruction; managed services are fixtures",
+  "rpcs": [
+    {
+      "name": "attach_editorial_reference_map",
+      "arguments": "p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_execute": true
+    },
+    {
+      "name": "clear_editorial_revision",
+      "arguments": "p_revision_id uuid, p_note text",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "get_editorial_article",
+      "arguments": "p_article_id uuid, p_locale text, p_preview boolean DEFAULT false",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "get_editorial_link_review",
+      "arguments": "p_article_id uuid, p_locale text",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "get_editorial_reference_links",
+      "arguments": "p_article_id uuid, p_locale text, p_preview boolean DEFAULT false",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "get_editorial_source_snapshot",
+      "arguments": "p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid DEFAULT NULL::uuid",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "import_editorial_draft",
+      "arguments": "p_batch_id uuid, p_manifest_hash text, p_actor_id uuid, p_item jsonb, p_sources jsonb",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_execute": true
+    },
+    {
+      "name": "list_country_visa_content",
+      "arguments": "p_country_code text, p_locale text, p_preview boolean DEFAULT false",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "list_editorial_articles",
+      "arguments": "p_locale text, p_category text DEFAULT NULL::text, p_country_code text DEFAULT NULL::text, p_query text DEFAULT NULL::text, p_cursor text DEFAULT NULL::text, p_limit integer DEFAULT 20, p_content_class text DEFAULT 'editorial'::text",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "list_editorial_relations",
+      "arguments": "p_article_id uuid, p_locale text, p_preview boolean DEFAULT false",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "list_editorial_review_queue",
+      "arguments": "p_locale text, p_offset integer DEFAULT 0, p_limit integer DEFAULT 20",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "list_visa_content_countries",
+      "arguments": "p_locale text, p_preview boolean DEFAULT false",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "propose_editorial_relations",
+      "arguments": "p_relations jsonb",
+      "result": "integer",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_execute": true
+    },
+    {
+      "name": "review_country_other_title",
+      "arguments": "p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "review_editorial_relation",
+      "arguments": "p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_execute": false
+    },
+    {
+      "name": "rollback_editorial_import",
+      "arguments": "p_batch_id uuid",
+      "result": "jsonb",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_execute": true
+    }
+  ]
+}

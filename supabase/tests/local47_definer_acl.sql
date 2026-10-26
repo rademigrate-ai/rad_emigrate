@@ -18,6 +18,13 @@ do $$ declare f record; begin
     if f.nspname='public' then assert not has_function_privilege('anon',f.oid,'EXECUTE') or f.oid=any(array[
       'public.get_backend_contract_status(jsonb)'::regprocedure,
       'public.get_visa_article(jsonb)'::regprocedure,
+      -- Country/category content readers: published-only; preview is Admin-only.
+      'public.get_editorial_article(uuid,text,boolean)'::regprocedure,
+      'public.get_editorial_reference_links(uuid,text,boolean)'::regprocedure,
+      'public.list_editorial_relations(uuid,text,boolean)'::regprocedure,
+      'public.list_editorial_articles(text,text,text,text,text,integer,text)'::regprocedure,
+      'public.list_country_visa_content(text,text,boolean)'::regprocedure,
+      'public.list_visa_content_countries(text,boolean)'::regprocedure,
       'public.list_related_visa_articles(jsonb)'::regprocedure,
       'public.get_fx_quote(jsonb)'::regprocedure,
       'public.convert_currency(jsonb)'::regprocedure,

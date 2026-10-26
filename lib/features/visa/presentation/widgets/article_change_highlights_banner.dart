@@ -37,7 +37,7 @@ class _ArticleChangeHighlightsBannerState
 
     final dateStr = widget.lastFactCheckedAt != null
         ? '${widget.lastFactCheckedAt!.year}/${widget.lastFactCheckedAt!.month.toString().padLeft(2, '0')}/${widget.lastFactCheckedAt!.day.toString().padLeft(2, '0')}'
-        : 'اخیراً';
+        : 'ثبت نشده';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -82,7 +82,7 @@ class _ArticleChangeHighlightsBannerState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'آخرین به‌روزرسانی و انطباق رسمی',
+                          'منابع و وضعیت بررسی',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
@@ -90,7 +90,7 @@ class _ArticleChangeHighlightsBannerState
                           ),
                         ),
                         Text(
-                          'تاریخ انطباق: $dateStr • ${primarySource != null ? primarySource.authorityName : 'مراجع رسمی مهاجرت'}',
+                          'تاریخ بررسی ثبت‌شده: $dateStr • ${primarySource != null ? primarySource.authorityName : 'منبع ارائه نشده'}',
                           style: const TextStyle(
                             fontSize: 11,
                             color: AppColors.textSecondary,
@@ -120,7 +120,7 @@ class _ArticleChangeHighlightsBannerState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'مراجع رسمی و مستندات قانونی این نسخه:',
+                    'منابع ثبت‌شده برای این نسخه:',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -161,7 +161,7 @@ class _ArticleChangeHighlightsBannerState
                             if (source.authorityDomain.isNotEmpty) ...[
                               const SizedBox(height: 4),
                               Text(
-                                'دامنه معتبر دولتی: ${source.authorityDomain}',
+                                'دامنه منبع: ${source.authorityDomain}',
                                 style: const TextStyle(
                                   fontSize: 11,
                                   color: AppColors.textSecondary,
@@ -185,7 +185,7 @@ class _ArticleChangeHighlightsBannerState
                     })
                   else
                     const Text(
-                      'کلیه بندها مستقیماً با پایگاه‌های قوانین اداره مهاجرت تطبیق یافته است.',
+                      'برای این نسخه منبعی ارائه نشده است؛ انطباق قانونی احراز نشده است.',
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
@@ -204,14 +204,14 @@ class _ArticleChangeHighlightsBannerState
                     child: const Row(
                       children: [
                         Icon(
-                          Icons.verified_user_outlined,
+                          Icons.info_outline,
                           size: 16,
                           color: AppColors.success,
                         ),
                         SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'این مقاله تحت کنترل سردبیری انسانی بازبینی و تصویب شده است؛ هوش مصنوعی دسترسی انتشار خودکار ندارد.',
+                            'وجود منبع یا تاریخ به‌تنهایی به معنی تأیید قانونی یا تصویب انسانی نیست. انتشار به تأیید صریح سردبیر نیاز دارد.',
                             style: TextStyle(
                               fontSize: 11,
                               color: AppColors.navy,

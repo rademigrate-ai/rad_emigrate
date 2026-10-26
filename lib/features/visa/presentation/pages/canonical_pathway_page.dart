@@ -257,7 +257,12 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
             if (article.faqItems.isNotEmpty)
               {'anchor': 'faq', 'label': 'پرسش‌های متداول'},
             if (article.relatedArticles.isNotEmpty)
-              {'anchor': 'related', 'label': 'عناوین دیگر'},
+              {
+                'anchor': 'related',
+                'label': Localizations.localeOf(context).languageCode == 'fa'
+                    ? 'دیگر عناوین'
+                    : 'Other Titles',
+              },
           ];
 
           if (!_initialScrollScheduled && _activeAnchor != null) {
@@ -699,7 +704,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.library_books_outlined,
                                   color: AppColors.primaryRed,
@@ -707,7 +712,11 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  'عناوین دیگر و مقالات تخصصی مرتبط',
+                                  Localizations.localeOf(context)
+                                              .languageCode ==
+                                          'fa'
+                                      ? 'دیگر عناوین'
+                                      : 'Other Titles',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,

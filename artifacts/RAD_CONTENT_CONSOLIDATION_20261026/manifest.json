@@ -1,0 +1,58 @@
+{
+  "schema_version": "rad-country-category-consolidation-v3",
+  "original_manifest_sha256": "84dd7af6e72fc1d05691fbb35bde07a48537cfdcad9b099eeb476114653ada79",
+  "url_dispositions": 1922,
+  "dispositions": {
+    "nonarticle_or_incomplete_requires_review": 153,
+    "body_ready_for_unreviewed_composition": 1061,
+    "retained_noneditorial_or_stateful_path_excluded": 148,
+    "retained_http_error": 8,
+    "retained_legacy_template_demo_route_excluded": 256,
+    "retained_fetch_or_parse_error": 294,
+    "retained_noneditorial_query_excluded": 2
+  },
+  "corrected_complete_bodies": 1061,
+  "extraction_changed": 589,
+  "article_candidates": 743,
+  "country_category_proposals": 126,
+  "two_primary_source_canonical_proposals": 48,
+  "source_segments_accounted": 26965,
+  "unaccounted_segments": 0,
+  "country_other_titles_proposals": 422,
+  "standalone_supplementary": 126,
+  "related_proposals": 1741,
+  "categories": {
+    "migration": 126,
+    "general-guide": 617
+  },
+  "languages": {
+    "en": 13,
+    "fa": 730
+  },
+  "verified_legal_claims": 0,
+  "human_approved_articles": 0,
+  "publication_ready": 0,
+  "pipeline_sha256": {
+    "tools/content_consolidation/__init__.py": "efadf08acd83773cb5b57e0416b629463e135f09fce1b422aa1e1263d204dec2",
+    "tools/content_consolidation/build.py": "2919537eefc1cc1109423559fef47bd65e687e7a8f18223beae4e2974e4c1796",
+    "tools/content_consolidation/composition.py": "7117809d2935e3c6e5118bf3f8d461ddecf787ca23a494e8e5b6a9c3ed4c0ac0",
+    "tools/content_consolidation/import_payload.py": "90e8615e1927e445e8debf8a5ac1438e3372c963ed3e6713b708fab30dd93bac",
+    "tools/content_consolidation/importer.py": "eccc59309dac9f5df5312d93104d486c84a83a340ca63fc4909008886be81971",
+    "tools/content_consolidation/mapping.py": "1c7ff13e5d9f079f0fb0f24da8f46cf92455ba10b6342013976ff30ff354a1a3",
+    "tools/content_consolidation/parser.py": "531b5efff0cca4fafc8e206a5c3555ce9cba64dfbf0ac21ca9ca122d651ba429",
+    "tools/content_consolidation/regression.py": "d73e7087ea9ae927d6f6dcfda52958984f1d67c67cc9f42784f99a98028c43f1",
+    "tools/content_consolidation/verify.py": "e46d5b0b364688e62739315a3c3a944c6b30b286fcc6db8cb05e5c3f8f09fcc8"
+  },
+  "files": {
+    "articles.jsonl.gz": "a34cacb5fcb2cbf60889ad33840e1c31a74d85275adb41287e2d3cf3278dbf56",
+    "claims_review_queue.jsonl.gz": "c96d6e8bdb3537fbc9beda771f6a922aab1bdd9422ff62e3e05d90c5cefe4132",
+    "country_other_titles.jsonl.gz": "7250be75f80889aa6575c8f058084508ce6cc1e2e9c1a3e0e949dab62c673aee",
+    "extraction_capture.jsonl.gz": "27b7e2677220d5d3247a8c6588a81e67cd513695788222dc7a29c459795a04bf",
+    "extraction_corrections.jsonl.gz": "8b7258bd998853944df0398b19054fc91caa9a52324cd2442e74b317cc130322",
+    "relations.jsonl.gz": "e87fac8dbffe6b479a58b28810915cf5ef35a2476b2371b9184de1476ffebbed",
+    "segment_preservation.jsonl.gz": "05e51904b193c1afe81c3eb3ec43711faaa8849fb849dba824acd8757afecf1e",
+    "source_destination_mapping.jsonl.gz": "c58d70dea0743e24b46b09f2071004f08ead4819cb8dd0b1e71d2384e5cbb5b2",
+    "sources.jsonl.gz": "19f49de2338580f94c9bf21c69725db3668922d315658c74e6b709b83d8d7d3f",
+    "unaccounted_segments.jsonl.gz": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  }
+}
