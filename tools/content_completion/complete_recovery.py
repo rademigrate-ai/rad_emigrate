@@ -11,16 +11,24 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from tools.content_completion.country_labels import COUNTRIES
+from tools.content_completion.country_scope_placements import country_proposals
+from tools.content_completion.historical_placements import contributions
 from tools.content_completion.recover_exclusions import recover, retain_blocks
 from tools.content_consolidation.import_payload import payload
 from tools.content_consolidation.mapping import LABELS
 from tools.plan3_content.dataset import read_jsonl, uid, write_jsonl
 from tools.plan3_content.parser import digest
-from tools.plan3_content.taxonomy import COUNTRIES
 
 # Full-source inspection: whole educational sections go to Study. Tourism
 # statistics and brief cross-links do not establish tourist/study requirements.
 SELECTIONS = {
+    "6efcf520-e565-5ea3-bb3f-b505df6454d7": (
+        "DE",
+        6,
+        17,
+        "Cologne tuition, scholarships and the complete study-Visa document list belong to Germany Study; its full institution article remains independent.",
+    ),
     "173e387d-aa85-55f9-843f-e43d1df1af87": (
         "IT",
         7,
@@ -106,11 +114,24 @@ def excluded_block_reason(source, index):
     return None
 
 
-def append_contribution(base, independent, indices, program="general"):
+def append_contribution(
+    base, independent, indices, program="general", mirror_source_ids=()
+):
     """Append source-ordered rich sections; keep every existing UUID and block intact."""
     result = copy.deepcopy(base)
     selected = set(indices)
     remap = {}
+    existing = {}
+    mirrors = {}
+    for section in result["sections"]:
+        for block in section["blocks"]:
+            for ref in block["provenance"]:
+                existing[(ref["source_id"], ref["block_index"])] = block
+                if (
+                    ref["source_id"] in mirror_source_ids
+                    and section["program"] == program
+                ):
+                    mirrors[ref["block_index"]] = block
     for section in independent["sections"]:
         new = copy.deepcopy(section)
         new["blocks"] = [
@@ -122,13 +143,29 @@ def append_contribution(base, independent, indices, program="general"):
             "recovered-study-section:" + base["article_id"] + ":" + section["id"]
         )
         new["program"] = program
+        retained = []
         for block in new["blocks"]:
             original_id = block["id"]
+            ref = block["provenance"][0]
+            prior = existing.get((ref["source_id"], ref["block_index"])) or mirrors.get(
+                ref["block_index"]
+            )
+            if prior is not None:
+                if prior["original_structure"] != block["original_structure"]:
+                    raise ValueError("mirror_structure_disagreement")
+                remap[original_id] = prior["id"]
+                for proof in block["provenance"]:
+                    if proof not in prior["provenance"]:
+                        prior["provenance"].append(proof)
+                continue
             block["id"] = uid(
                 "recovered-study-block:" + base["article_id"] + ":" + original_id
             )
             remap[original_id] = block["id"]
-        result["sections"].append(new)
+            retained.append(block)
+        new["blocks"] = retained
+        if retained:
+            result["sections"].append(new)
     result["source_ids"] = sorted(set(base["source_ids"] + independent["source_ids"]))
     result["source_urls"] = sorted(
         set(base["source_urls"] + independent["source_urls"])
@@ -138,6 +175,12 @@ def append_contribution(base, independent, indices, program="general"):
     )
     for original in independent["segment_ledger"]:
         if original["block_index"] in selected:
+            if any(
+                r["source_id"] == original["source_id"]
+                and r["block_index"] == original["block_index"]
+                for r in result["segment_ledger"]
+            ):
+                continue
             result["segment_ledger"].append(
                 {
                     **original,
@@ -147,9 +190,9 @@ def append_contribution(base, independent, indices, program="general"):
             )
     for claim in independent["claims"]:
         if claim["block_id"] in remap:
-            result["claims"].append(
-                {**copy.deepcopy(claim), "block_id": remap[claim["block_id"]]}
-            )
+            mapped = {**copy.deepcopy(claim), "block_id": remap[claim["block_id"]]}
+            if mapped not in result["claims"]:
+                result["claims"].append(mapped)
     result["composition_review"] = (
         "source_bound_recovery_addition_requires_human_editorial_and_official_verification"
     )
@@ -177,7 +220,7 @@ def build(corpus, recovery, output, raw_caches=()):
     output.mkdir(parents=True, exist_ok=True)
     sources = {s["source_id"]: s for s in read_jsonl(corpus / "sources.jsonl.gz")}
     originals = read_jsonl(corpus / "articles.jsonl.gz")
-    articles = {(a["article_id"], a["locale"]): a for a in originals}
+    articles = {(a["article_id"], a["locale"]): copy.deepcopy(a) for a in originals}
     drafts = read_jsonl(recovery / "geographic-drafts.jsonl.gz")
     maps = {
         (r["article_id"], r["locale"]): r
@@ -197,7 +240,32 @@ def build(corpus, recovery, output, raw_caches=()):
         extra_drafts, extra_maps = recover(sources, raw_caches)
         drafts.extend(extra_drafts)
         maps.update({(r["article_id"], r["locale"]): r for r in extra_maps})
+    recovered_drafts = list(drafts)
+    source_references = {
+        r["source_id"]: r
+        for r in read_jsonl(
+            Path(
+                "artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/source_references.jsonl.gz"
+            )
+        )
+    }
+    historical_drafts, historical_maps = contributions(sources, source_references)
+    country_drafts, country_maps, country_evidence = country_proposals(
+        sources, source_references
+    )
+    drafts.extend(historical_drafts)
+    drafts.extend(country_drafts)
+    historical_scopes = {
+        d["source_ids"][0]: (
+            d["country_codes"],
+            d["recovery_placement"]["independent_indices"] is None,
+        )
+        for d in historical_drafts + country_drafts
+    }
+    maps.update({(r["article_id"], r["locale"]): r for r in historical_maps})
+    maps.update({(r["article_id"], r["locale"]): r for r in country_maps})
     decisions, revisions, prepared_maps, new_payloads = [], [], [], []
+    retirements = []
     baseline_articles = copy.deepcopy(articles)
     verification_file = output.parent / "staging-comparison.json"
     verified_baselines = set()
@@ -210,7 +278,64 @@ def build(corpus, recovery, output, raw_caches=()):
         }
         if verified_baselines != set(baseline_articles):
             raise ValueError("staging_baseline_not_identical")
-    changed, source_intake = set(), {}
+    changed, source_intake, country_changes = set(), {}, {}
+    scope_moves = []
+    misplaced = "d8b26ffb-1004-5aea-8fae-341b409d1aa6"
+    for key, article in articles.items():
+        if (
+            article["content_class"] != "canonical"
+            or article["visa_category"] != "study"
+            or misplaced not in article["source_ids"]
+        ):
+            continue
+        removed = []
+        for section in article["sections"]:
+            kept = []
+            for block in section["blocks"]:
+                refs = [r for r in block["provenance"] if r["source_id"] == misplaced]
+                if refs:
+                    if len(refs) != len(block["provenance"]):
+                        raise ValueError("mixed_source_scope_requires_manual_review")
+                    removed.extend(r["block_index"] for r in refs)
+                else:
+                    kept.append(block)
+            section["blocks"] = kept
+        article["sections"] = [s for s in article["sections"] if s["blocks"]]
+        article["source_ids"] = [s for s in article["source_ids"] if s != misplaced]
+        article["source_urls"] = sorted(
+            {sources[s]["url"] for s in article["source_ids"]}
+        )
+        article["source_publishers"] = sorted(
+            {sources[s]["domain"] for s in article["source_ids"]}
+        )
+        article["segment_ledger"] = [
+            r for r in article["segment_ledger"] if r["source_id"] != misplaced
+        ]
+        article["claims"] = [
+            r for r in article["claims"] if r["provenance"]["source_id"] != misplaced
+        ]
+        capture = references[key]["map"]
+        capture["sources"] = [
+            s
+            for s in capture["sources"]
+            if s["snapshot_id"] != sources[misplaced]["snapshot_id"]
+        ]
+        capture["links"] = [
+            link
+            for link in capture["links"]
+            if link["source_snapshot_id"] != sources[misplaced]["snapshot_id"]
+        ]
+        scope_moves.append(
+            {
+                "source_id": misplaced,
+                "from_article_id": article["article_id"],
+                "from_visa_category": "study",
+                "to_visa_category": "work",
+                "removed_source_block_indices": removed,
+                "reason": "Global Talent for researchers/academic leaders is a distinct employment/talent route, not student admission. Preserve the complete source under UK Work and all prior immutable history.",
+            }
+        )
+        changed.add(key)
     for draft in drafts:
         sid = draft["source_ids"][0]
         source = sources[sid]
@@ -238,12 +363,52 @@ def build(corpus, recovery, output, raw_caches=()):
                             "indices": list(range(start, end)),
                         }
                     ]
+        historical = placement.get("historical_existing_source", False)
+        old_independent = (
+            [
+                a
+                for a in originals
+                if sid in a["source_ids"] and a["content_class"] == "editorial"
+            ]
+            if historical
+            else []
+        )
+        if historical and (
+            len(old_independent) != 1
+            or any(
+                historical_scopes.get(x) != historical_scopes[sid]
+                for x in old_independent[0]["source_ids"]
+            )
+        ):
+            raise ValueError(
+                "historical_identity_requires_manual_reconciliation:" + sid
+            )
+        if (
+            placement.get("country_scope_evidence")
+            and placement["independent_indices"] is not None
+        ):
+            old = old_independent[0]
+            old_key = (old["article_id"], old["locale"])
+            articles[old_key]["country_codes"] = list(draft["country_codes"])
+            articles[old_key]["country_scope_evidence"] = placement[
+                "country_scope_evidence"
+            ]
+            country_changes[old_key] = {
+                "kind": "body_evidenced_country_association",
+                "country_codes": draft["country_codes"],
+                "reason": "Country explicitly established by the original body; preserve full independent reader and immutable history.",
+            }
+            changed.add(old_key)
         decision = {
             "source_id": sid,
             "source_url": source["url"],
             "source_body_sha256": source["body_sha256"],
             "source_structure_sha256": digest(source["blocks"]),
-            "independent_article_id": draft["article_id"]
+            "independent_article_id": (
+                old_independent[0]["article_id"]
+                if historical and old_independent
+                else draft["article_id"]
+            )
             if placement["independent_indices"] is not None
             else None,
             "independent_indices": placement["independent_indices"],
@@ -300,7 +465,17 @@ def build(corpus, recovery, output, raw_caches=()):
                     }
                 }
             enriched, remap = append_contribution(
-                articles[key], draft, indices, contribution.get("program", "general")
+                articles[key],
+                draft,
+                indices,
+                contribution.get("program", "general"),
+                mirror_source_ids=[
+                    s
+                    for s in articles[key]["source_ids"]
+                    if s != sid
+                    and sources[s]["body_sha256"] == source["body_sha256"]
+                    and sources[s]["blocks"] == source["blocks"]
+                ],
             )
             if sid == "9a312140-6273-5aaf-afe4-ab1ed4f901f9" and route == "family":
                 enriched["conflicts"].append(
@@ -342,7 +517,43 @@ def build(corpus, recovery, output, raw_caches=()):
                     ],
                 }
             )
-        if placement["independent_indices"] is not None:
+        if historical and placement["independent_indices"] is None:
+            for old in old_independent:
+                articles[(old["article_id"], old["locale"])]["catalog_active"] = False
+                retirement = {
+                    "article_id": old["article_id"],
+                    "locale": old["locale"],
+                    "source_ids": old["source_ids"],
+                    "expected_sections": old["sections"],
+                    "expected_composition": {
+                        k: v
+                        for k, v in payload(old, sources, registry)["item"].items()
+                        if k != "draft_request"
+                    },
+                    "replacement_article_ids": [
+                        x["article_id"] for x in decision["main_contributions"]
+                    ],
+                    "reason": "All source blocks move to explicit canonical Visa scopes; retain original immutable source snapshots and revisions, hide duplicate Visa source-article cards.",
+                }
+                prior_retirement = next(
+                    (
+                        r
+                        for r in retirements
+                        if r["article_id"] == old["article_id"]
+                        and r["locale"] == old["locale"]
+                    ),
+                    None,
+                )
+                if prior_retirement is None:
+                    retirements.append(retirement)
+                else:
+                    prior_retirement["replacement_article_ids"] = sorted(
+                        set(
+                            prior_retirement["replacement_article_ids"]
+                            + retirement["replacement_article_ids"]
+                        )
+                    )
+        if placement["independent_indices"] is not None and not historical:
             independent = retain_blocks(draft, placement["independent_indices"])
             prepared = payload(independent, sources, registry)
             if prepared["status"] != "technical_draft_only":
@@ -378,6 +589,16 @@ def build(corpus, recovery, output, raw_caches=()):
                     "to_content_class": "editorial",
                     "reason": "Source explicitly concerns medical student transfer from foreign universities back to Iran, not an Iran Visa application.",
                 }
+            if key in country_changes:
+                prepared["catalog_reclassification"] = country_changes[key]
+            if "catalog_reclassification" in prepared:
+                prepared["catalog_reclassification"]["expected_composition"] = {
+                    k: v
+                    for k, v in payload(baseline_articles[key], sources, registry)[
+                        "item"
+                    ].items()
+                    if k != "draft_request"
+                }
             revisions.append(prepared)
         else:
             new_payloads.append(prepared)
@@ -392,6 +613,8 @@ def build(corpus, recovery, output, raw_caches=()):
     write_jsonl(output / "source-intake.jsonl.gz", list(source_intake.values()))
     destinations = defaultdict(list)
     for article in articles.values():
+        if not article.get("catalog_active", True):
+            continue
         for section in article["sections"]:
             for block in section["blocks"]:
                 for ref in block["provenance"]:
@@ -430,6 +653,17 @@ def build(corpus, recovery, output, raw_caches=()):
                             "admin_rendered": False,
                         }
                     )
+    for retirement in retirements:
+        for sid in retirement["source_ids"]:
+            if any(
+                not any(
+                    d["content_class"] == "canonical"
+                    for d in destinations[(sid, index)]
+                )
+                for index in range(len(sources[sid]["blocks"]))
+            ):
+                raise ValueError("cannot_retire_source_with_unplaced_blocks:" + sid)
+    write_jsonl(output / "source-reading-retirements.jsonl.gz", retirements)
     ledger = []
     for source in sources.values():
         offset = 0
@@ -472,6 +706,13 @@ def build(corpus, recovery, output, raw_caches=()):
     (output / "classification-decisions.json").write_text(
         json.dumps(decisions, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    (output / "body-country-evidence.json").write_text(
+        json.dumps(country_evidence, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (output / "source-category-moves.json").write_text(
+        json.dumps(scope_moves, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     inventory = [
         {
             "article_id": a["article_id"],
@@ -484,6 +725,7 @@ def build(corpus, recovery, output, raw_caches=()):
             "section_count": len(a["sections"]),
             "block_count": sum(len(s["blocks"]) for s in a["sections"]),
             "published": False,
+            "catalog_active": a.get("catalog_active", True),
         }
         for a in articles.values()
     ]
@@ -494,7 +736,11 @@ def build(corpus, recovery, output, raw_caches=()):
         ),
         (
             "other-titles-inventory",
-            [a for a in inventory if a["content_class"] == "editorial"],
+            [
+                a
+                for a in inventory
+                if a["content_class"] == "editorial" and a["catalog_active"]
+            ],
         ),
     ):
         (output / (name + ".json")).write_text(
@@ -521,9 +767,53 @@ def build(corpus, recovery, output, raw_caches=()):
         writer.writerows(
             {key: s.get(key) for key in writer.fieldnames} for s in sources.values()
         )
+    country_cards = []
+    for country in sorted(
+        {
+            c
+            for a in inventory
+            if a["content_class"] == "canonical"
+            for c in a["country_codes"]
+        }
+    ):
+        cards = [
+            {
+                k: a[k]
+                for k in (
+                    "article_id",
+                    "locale",
+                    "visa_category",
+                    "source_ids",
+                    "block_count",
+                )
+            }
+            for a in inventory
+            if a["content_class"] == "canonical" and a["country_codes"] == [country]
+        ]
+        if len({(c["locale"], c["visa_category"]) for c in cards}) != len(cards):
+            raise ValueError("duplicate_country_category_locale")
+        country_cards.append(
+            {
+                "country_code": country,
+                "cards": sorted(cards, key=lambda c: (c["visa_category"], c["locale"])),
+                "state": "unverified_draft_proposal",
+                "source_scope": "primary source passages; no publication authorization",
+            }
+        )
+    (output.parent / "country-card-inventory.json").write_text(
+        json.dumps(country_cards, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     summary = {
         "original_sources": len(sources),
-        "recovered_source_articles": len(drafts),
+        "recovered_source_articles": len(recovered_drafts),
+        "historical_sources_reconciled": len(historical_drafts),
+        "source_category_moves": len(scope_moves),
+        "misclassified_blocks_moved_from_study_to_work": sum(
+            len(m["removed_source_block_indices"]) for m in scope_moves
+        ),
+        "body_country_scopes_reconciled": len(country_drafts),
+        "existing_country_associations_corrected": len(country_changes),
+        "duplicate_visa_readers_retired": len(retirements),
         "new_independent_articles": sum(
             r["item"]["content_class"] == "editorial" for r in new_payloads
         ),
@@ -534,11 +824,14 @@ def build(corpus, recovery, output, raw_caches=()):
         "original_article_locales": len(originals),
         "new_full_article_drafts": len(new_payloads),
         "recovered_original_blocks": sum(
-            len(sources[d["source_ids"][0]]["blocks"]) for d in drafts
+            len(sources[d["source_ids"][0]]["blocks"]) for d in recovered_drafts
+        ),
+        "historical_original_blocks": sum(
+            len(sources[d["source_ids"][0]]["blocks"]) for d in historical_drafts
         ),
         "recovered_unique_source_blocks_represented": sum(
             bool(destinations[(d["source_ids"][0], i)])
-            for d in drafts
+            for d in recovered_drafts
             for i in range(len(sources[d["source_ids"][0]]["blocks"]))
         ),
         "canonical_pages_enriched": sum(
@@ -547,8 +840,33 @@ def build(corpus, recovery, output, raw_caches=()):
         "existing_drafts_reclassified": sum(
             "catalog_reclassification" in r for r in revisions
         ),
-        "added_main_source_blocks": sum(
+        "mapped_main_source_blocks": sum(
             len(c["block_indices"]) for d in decisions for c in d["main_contributions"]
+        ),
+        "added_main_source_blocks": sum(
+            sum(
+                block["id"]
+                not in {
+                    old["id"]
+                    for section in baseline_articles.get(key, {"sections": []})[
+                        "sections"
+                    ]
+                    for old in section["blocks"]
+                }
+                for section in articles[key]["sections"]
+                for block in section["blocks"]
+            )
+            for key in changed
+            if articles[key]["content_class"] == "canonical"
+        ),
+        "main_block_count_net_change": sum(
+            sum(len(s["blocks"]) for s in articles[key]["sections"])
+            - sum(
+                len(s["blocks"])
+                for s in baseline_articles.get(key, {"sections": []})["sections"]
+            )
+            for key in changed
+            if articles[key]["content_class"] == "canonical"
         ),
         "reference_maps": len(prepared_maps),
         "recovered_classifications_unresolved": 0,

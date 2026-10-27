@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 
 from tools.content_consolidation.regression import quote
+from tools.plan3_content.dataset import read_jsonl
 
 
 def rehearse(directory, psql, database, port):
@@ -42,7 +43,7 @@ def rehearse(directory, psql, database, port):
     ]
     body = sql.replace(
         "begin;\n",
-        "begin;\ncreate temporary table recovery_heads_before on commit drop as select * from public.visa_article_heads;\n",
+        "begin;\ncreate temporary table recovery_heads_before on commit drop as select * from public.visa_article_heads;\ncreate temporary table recovery_catalog_before on commit drop as select * from private.rad_editorial_catalog;\n",
         1,
     ).removesuffix("commit;\n")
     body += "create temporary table recovery_counts_once as select (select count(*) from public.visa_article_revisions) revisions,(select count(*) from private.rad_editorial_rich_revisions) rich,(select count(*) from public.source_snapshots) snapshots;\n"
@@ -51,6 +52,20 @@ def rehearse(directory, psql, database, port):
         + main
     )
     body += "do $$begin if exists(select 1 from recovery_counts_once where revisions<>(select count(*) from public.visa_article_revisions) or rich<>(select count(*) from private.rad_editorial_rich_revisions) or snapshots<>(select count(*) from public.source_snapshots)) then raise exception 'exact_retry_created_duplicates';end if;end$$;\n"
+    retirements = read_jsonl(directory / "prepared/source-reading-retirements.jsonl.gz")
+    for row in retirements:
+        a = row["article_id"]
+        body += f"do $$begin if not exists(select 1 from private.rad_editorial_catalog where article_id='{a}' and not active) or not exists(select 1 from recovery_heads_before b join private.rad_editorial_rich_revisions r on r.revision_id=b.head_id where b.article_id='{a}') then raise exception 'duplicate_reader_retirement_lost_history';end if;end$$;\n"
+    # Simulate a human link approval inside a subtransaction. The import must
+    # conflict, and the injected review itself is rolled back by that exception.
+    if retirements:
+        a = retirements[0]["article_id"]
+        body += (
+            "select set_config('request.jwt.claims','{\"role\":\"service_role\"}',true);\n"
+            f"do $review_guard$begin insert into private.rad_editorial_country_titles(country_code,article_id,state) values('CA','{a}','approved') on conflict(country_code,article_id) do update set state='approved';execute "
+            + quote(main)
+            + ";raise exception 'human_review_not_protected';exception when raise_exception then if sqlerrm<>'duplicate_reader_changed_or_reviewed' then raise;end if;end$review_guard$;\n"
+        )
     with gzip.open(
         directory / "prepared/new-draft-payloads.jsonl.gz", "rt", encoding="utf-8"
     ) as stream:
@@ -74,7 +89,7 @@ def rehearse(directory, psql, database, port):
         "update private.rad_editorial_import_target set enabled=false where project_ref='epolbumcfbohtmgvomki';\n"
         + rollback.split("begin;\n", 1)[1].removesuffix("commit;\n")
     )
-    body += "do $$begin if exists(select 1 from recovery_heads_before b left join public.visa_article_heads h using(article_id,locale) where h.head_id is distinct from b.head_id or h.published_id is distinct from b.published_id) then raise exception 'rollback_did_not_restore_original_heads';end if;end$$;\nrollback;\n"
+    body += "do $$begin if exists(select 1 from recovery_heads_before b left join public.visa_article_heads h using(article_id,locale) where h.head_id is distinct from b.head_id or h.published_id is distinct from b.published_id) then raise exception 'rollback_did_not_restore_original_heads';end if;if exists(select 1 from recovery_catalog_before b join private.rad_editorial_catalog c using(article_id) where to_jsonb(c) is distinct from to_jsonb(b)) then raise exception 'rollback_did_not_restore_original_catalog';end if;end$$;\nrollback;\n"
     started = time.monotonic()
     environment = {
         k: v for k, v in os.environ.items() if not k.upper().startswith("PG")
@@ -116,6 +131,9 @@ def rehearse(directory, psql, database, port):
         "exact_retry_no_duplicates": result.returncode == 0,
         "changed_input_rejected": result.returncode == 0,
         "rollback_restores_all_original_heads": result.returncode == 0,
+        "rollback_restores_original_catalog": result.returncode == 0,
+        "duplicate_reader_history_preserved": result.returncode == 0,
+        "reviewed_link_blocks_retirement": result.returncode == 0,
         "hosted_executed": False,
     }
     (directory / "retry-rollback-rehearsal.json").write_text(

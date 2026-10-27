@@ -90,11 +90,13 @@
           "413e3351-5084-50b6-b9a2-975147956a57",
           "51a556f3-e756-5770-9446-7b93e1a3dfc8",
           "62bb8795-7a3f-54a0-a768-66d265ab672f",
+          "a6d1b908-117f-50f1-9db5-b47101ddb15a",
+          "b8dccd3e-656d-59b3-9041-93c98a86e42b",
           "ce63748a-32af-54aa-ab06-9885788cbce7",
           "f152f86b-82b0-58e7-81e8-653f8e451566",
           "fa4204d9-dada-5b52-bded-d7c10599370e"
         ],
-        "block_count": 174
+        "block_count": 194
       },
       {
         "article_id": "de963607-5a18-57ea-8394-ef670f8a131d",
@@ -126,17 +128,6 @@
     "country_code": "AU",
     "cards": [
       {
-        "article_id": "e5a52e88-5b93-5c5f-b37b-89acf45663ba",
-        "locale": "en",
-        "visa_category": "study",
-        "source_ids": [
-          "2bf148b3-d3f1-5f91-9c74-692a0779f0fe",
-          "44c43a28-7ec2-5e7e-9f9b-466f95211404",
-          "c51b37ef-b589-58e7-bc60-83b00b4cc29d"
-        ],
-        "block_count": 24
-      },
-      {
         "article_id": "7c0bff00-6c64-5fe1-a247-29b139b96b1e",
         "locale": "fa",
         "visa_category": "family",
@@ -156,6 +147,17 @@
       },
       {
         "article_id": "e5a52e88-5b93-5c5f-b37b-89acf45663ba",
+        "locale": "en",
+        "visa_category": "study",
+        "source_ids": [
+          "2bf148b3-d3f1-5f91-9c74-692a0779f0fe",
+          "44c43a28-7ec2-5e7e-9f9b-466f95211404",
+          "c51b37ef-b589-58e7-bc60-83b00b4cc29d"
+        ],
+        "block_count": 24
+      },
+      {
+        "article_id": "e5a52e88-5b93-5c5f-b37b-89acf45663ba",
         "locale": "fa",
         "visa_category": "study",
         "source_ids": [
@@ -165,7 +167,10 @@
           "39a372bf-9529-5225-b9db-7192a263d34a",
           "3d889a69-6c55-59d0-8bd9-bfc465a32b3d",
           "4c29c2fd-7a73-5fef-ae8c-dd71733a800c",
+          "4f69edc8-061d-5a90-b911-e91a26b10ef5",
+          "5347d1c0-a84d-507a-921d-2ae902a83e29",
           "5be24f93-1319-5d9f-abac-21b43524e5e6",
+          "603faba9-d057-5a7d-9289-f9eac728d7e0",
           "aab1d66b-4470-5471-ab5a-f24910c3019d",
           "b1859b82-8aa2-55b6-beec-f9a761b9638e",
           "c4cd152c-3c57-5af4-b58e-20ec8c606572",
@@ -176,7 +181,7 @@
           "f2c5cb1b-c1d9-58ae-a5fc-393501099327",
           "fbda2e73-b903-5227-bca3-6ff84077b932"
         ],
-        "block_count": 259
+        "block_count": 307
       },
       {
         "article_id": "52e6b02f-b356-58a7-a779-2f75896357eb",
@@ -211,6 +216,15 @@
     "country_code": "BE",
     "cards": [
       {
+        "article_id": "9c764a9e-c6a7-5b38-82d9-2da1072ae3ea",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "d171d707-70c4-5b3f-b021-dd11ce139afd"
+        ],
+        "block_count": 22
+      },
+      {
         "article_id": "bfac2b37-bd22-5b04-bd7e-589f53a41ec3",
         "locale": "en",
         "visa_category": "study",
@@ -218,15 +232,6 @@
           "57324031-63b4-570a-ae89-1519c4bb8704",
           "b61e3ce7-abb0-59c7-8586-c1998a6d07f4",
           "f70ed1c8-6404-59b4-bb8a-a5b27c6dd4c0"
-        ],
-        "block_count": 22
-      },
-      {
-        "article_id": "9c764a9e-c6a7-5b38-82d9-2da1072ae3ea",
-        "locale": "fa",
-        "visa_category": "family",
-        "source_ids": [
-          "d171d707-70c4-5b3f-b021-dd11ce139afd"
         ],
         "block_count": 22
       },
@@ -269,19 +274,51 @@
     "source_scope": "primary source passages; no publication authorization"
   },
   {
-    "country_code": "CA",
+    "country_code": "BY",
     "cards": [
       {
-        "article_id": "d570925f-44e1-52ec-ab91-e801dd4be6b6",
-        "locale": "en",
+        "article_id": "cc95d9a2-8d70-5670-a50a-3d257a2135d9",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "19794c9e-4e57-567e-b7ea-a30cb4bffe8f"
+        ],
+        "block_count": 4
+      },
+      {
+        "article_id": "05691e8a-758c-5761-894b-a2c3063db042",
+        "locale": "fa",
+        "visa_category": "investment",
+        "source_ids": [
+          "19794c9e-4e57-567e-b7ea-a30cb4bffe8f"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "f430acdf-cd6d-52fe-a14c-457b87d839fd",
+        "locale": "fa",
         "visa_category": "study",
         "source_ids": [
-          "391eaf4b-3497-568e-80f0-13a139b5710e",
-          "451f9d51-8fee-5a44-8dd3-1cb0b1c60930",
-          "d04a7117-01b0-5da2-8bd1-1b25e8d9e419"
+          "19794c9e-4e57-567e-b7ea-a30cb4bffe8f"
         ],
-        "block_count": 19
+        "block_count": 2
       },
+      {
+        "article_id": "3e9ad019-2d03-50b9-ad3b-2aef86c19d63",
+        "locale": "fa",
+        "visa_category": "work",
+        "source_ids": [
+          "19794c9e-4e57-567e-b7ea-a30cb4bffe8f"
+        ],
+        "block_count": 2
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
+    "country_code": "CA",
+    "cards": [
       {
         "article_id": "4974aa08-f975-5068-8f73-de62c470209f",
         "locale": "fa",
@@ -302,6 +339,17 @@
       },
       {
         "article_id": "d570925f-44e1-52ec-ab91-e801dd4be6b6",
+        "locale": "en",
+        "visa_category": "study",
+        "source_ids": [
+          "391eaf4b-3497-568e-80f0-13a139b5710e",
+          "451f9d51-8fee-5a44-8dd3-1cb0b1c60930",
+          "d04a7117-01b0-5da2-8bd1-1b25e8d9e419"
+        ],
+        "block_count": 19
+      },
+      {
+        "article_id": "d570925f-44e1-52ec-ab91-e801dd4be6b6",
         "locale": "fa",
         "visa_category": "study",
         "source_ids": [
@@ -309,6 +357,7 @@
           "135baa98-e36c-5c32-9620-f65ca27aa6fb",
           "17a2fd80-e2ea-5625-b9cc-4788c6712d81",
           "1bf4fb60-cd6f-5597-836d-2b8733f64a5d",
+          "1def5422-fedd-5220-9d24-6d0a050f2bc3",
           "1e8d78e0-e05f-5fc4-8663-a45bb8561d13",
           "22f738d1-0bba-515c-b38c-7aa257d5baa2",
           "2ed1f93f-16ec-5c84-9dcd-ed8c1ef77242",
@@ -321,16 +370,20 @@
           "853da1ad-16e6-5d4f-994f-f79d15e04dad",
           "8ebf402f-d14b-5def-bed7-7971691bd171",
           "960fbfb2-0aa2-599d-af7e-366da8fea6ca",
+          "98706b3a-20ff-5ad9-9c0d-20f15ed1639b",
+          "9ef79503-3581-5cf1-af92-be066d2389e1",
           "a712db60-c285-5ca5-8b8c-56ed051635bb",
           "b0bf13a3-e51f-58f6-86e7-4f8667d909e9",
           "b36d58f9-df93-5182-82cd-1038fc056efa",
           "b4770dde-b020-53c5-9087-60736bd8b58f",
           "cbef500e-e442-5a74-bbe1-e564936de96a",
           "cc423f8d-9368-55c5-b17a-b8474cc60925",
+          "d569aa2a-4cdd-5916-b67d-35b7ad07d5e3",
           "d721486b-bfa6-5519-89e1-2591ac9c84c5",
           "d99b707e-2f71-5816-abf9-6d04a06a2373",
           "dab58a31-88c8-5c1a-b93e-cda7ed073455",
           "df52f1d8-df42-54fc-a6a2-ddf7d968c79b",
+          "e0c301b7-202c-50e4-b411-b1fd53964da1",
           "e1227a0d-9d81-5253-a2ef-57b791a9ae43",
           "e829b1f3-1222-5d15-9897-ade1d60e0cfa",
           "f45cf558-ed57-5b2b-a047-7fb70e35a764",
@@ -339,7 +392,7 @@
           "f907fac9-5046-5180-9a8c-38ff0f192ff5",
           "fb81be78-5d14-546d-a2ef-2d4254bb5eb5"
         ],
-        "block_count": 807
+        "block_count": 881
       },
       {
         "article_id": "01293adf-288a-5e8f-b90e-54bf2eca3cef",
@@ -355,13 +408,16 @@
         "locale": "fa",
         "visa_category": "work",
         "source_ids": [
+          "1b4d48bc-014f-5cc7-87b6-6d031156c8d3",
           "425fd2f9-9996-5168-a0a9-b1fd0a51d153",
+          "58fccda5-32d0-5ce2-9cc9-7800250c14de",
           "74fac388-93d4-5074-a774-c4143cfe53f8",
           "8af3edec-a913-537e-b864-a92adbf98e7b",
           "8d7706ae-ef2a-5dd3-8f12-8a27faef5052",
-          "b4c80d04-6ac5-53fa-8998-1f7ba73f6cac"
+          "b4c80d04-6ac5-53fa-8998-1f7ba73f6cac",
+          "b98d2372-74ed-51fd-9028-775462cbf30e"
         ],
-        "block_count": 134
+        "block_count": 181
       }
     ],
     "state": "unverified_draft_proposal",
@@ -445,9 +501,10 @@
         "locale": "fa",
         "visa_category": "study",
         "source_ids": [
+          "3d7223b4-2131-59c6-9769-005003a8f626",
           "8a409e15-b070-5086-b0ff-e111cc97e728"
         ],
-        "block_count": 13
+        "block_count": 19
       }
     ],
     "state": "unverified_draft_proposal",
@@ -501,16 +558,23 @@
           "069faff5-6501-5e31-a584-a0f83d92be6e",
           "08701cac-f14d-529d-9b17-accd316695a8",
           "0d4ac696-0c2d-5da9-b11c-0275061c6c8d",
+          "1c8ba83b-708d-58a9-b351-d2a010cacefc",
+          "2e118466-5ae3-57be-a9d9-71d36221b038",
           "2f1ec5ef-3941-5e9e-81f9-77d667cc38e1",
           "309db237-caac-5917-8427-e02bb148d99f",
           "3d62305b-424c-5752-8fd7-818c0b939355",
           "59fabe8f-466d-52d5-bf9f-753a30a4b638",
+          "6efcf520-e565-5ea3-bb3f-b505df6454d7",
           "927d141b-6841-5857-96f1-bf6322bf4eab",
+          "953ba4c7-7cfb-5aa9-bf5b-a2092793be3c",
+          "97a029b2-13f9-539b-9d7d-86066ea2d7dd",
           "99a9262f-9718-5c9f-a2e9-d2022aba6f20",
           "9c033f89-3dee-5f08-9096-4cb99130e2b2",
           "9dc4b5c6-a6d6-5626-bb08-ee126e8528b1",
           "ba14a13d-cb61-59e4-aff6-0f0729a68a4b",
           "bd9c6ff8-4a4a-5f98-9c89-747c6094c6cd",
+          "c5b655ae-1469-57d2-92a8-b94e931a344a",
+          "d21d0aa5-8b97-5b4e-8b16-8bd116198e1a",
           "d920c59a-6df0-522f-9533-e2f265900a00",
           "d9bc1af3-4b25-5757-966c-11b14ce358d7",
           "dda77189-ffb3-5176-930a-da6c159fcb7a",
@@ -520,9 +584,10 @@
           "e90afcca-a186-5f3f-81f4-d1ea63dc0164",
           "eca056f3-7f13-5334-9c73-6c91d3b763aa",
           "f629cd2a-632b-50b1-bab4-f255423ef623",
-          "f691c423-355c-5af5-a87b-b1a9bfe9706c"
+          "f691c423-355c-5af5-a87b-b1a9bfe9706c",
+          "f92f04d9-116f-5969-b4b5-504e6b4f88c3"
         ],
-        "block_count": 680
+        "block_count": 776
       },
       {
         "article_id": "e0ffdb44-5395-5dfc-a608-2ee31e155886",
@@ -543,12 +608,13 @@
           "4b6a26ce-3715-5d41-87be-43020fac5291",
           "4ef25b04-d121-5134-bd6c-865b004267c8",
           "6b3a0654-1533-51bd-860a-a2413b116891",
+          "8be02204-6a1f-5942-a243-807d9d1ec4bf",
           "c53ac705-ea61-5d8f-a737-c5b18c077af4",
           "e49889e7-ae14-5d3d-adaf-16f69bee0374",
           "f03c0295-370b-5ed9-b1ee-9315c993bc01",
           "f498e9b2-1615-539c-857b-8a749b15cc7f"
         ],
-        "block_count": 269
+        "block_count": 321
       }
     ],
     "state": "unverified_draft_proposal",
@@ -557,6 +623,16 @@
   {
     "country_code": "DK",
     "cards": [
+      {
+        "article_id": "92733abc-7aa5-52c7-a5d7-b02ccb2d06aa",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "0f382220-4040-589a-ac10-fd7111f2b1bc",
+          "9a312140-6273-5aaf-afe4-ab1ed4f901f9"
+        ],
+        "block_count": 36
+      },
       {
         "article_id": "96ffa398-0291-5768-807d-046ecadc144e",
         "locale": "en",
@@ -567,16 +643,6 @@
           "fc1f5869-ca1e-5f16-bfdb-64d8c3408547"
         ],
         "block_count": 41
-      },
-      {
-        "article_id": "92733abc-7aa5-52c7-a5d7-b02ccb2d06aa",
-        "locale": "fa",
-        "visa_category": "family",
-        "source_ids": [
-          "0f382220-4040-589a-ac10-fd7111f2b1bc",
-          "9a312140-6273-5aaf-afe4-ab1ed4f901f9"
-        ],
-        "block_count": 36
       },
       {
         "article_id": "96ffa398-0291-5768-807d-046ecadc144e",
@@ -638,6 +704,49 @@
     "source_scope": "primary source passages; no publication authorization"
   },
   {
+    "country_code": "EC",
+    "cards": [
+      {
+        "article_id": "bc92815c-16fa-5b69-b216-a6aabfbca85a",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "50029d97-7702-55d3-9112-831cc5e2fcf6"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "c41eeeb9-fe62-5a1f-abd4-dfdec340f08a",
+        "locale": "fa",
+        "visa_category": "investment",
+        "source_ids": [
+          "50029d97-7702-55d3-9112-831cc5e2fcf6"
+        ],
+        "block_count": 3
+      },
+      {
+        "article_id": "07950808-00c8-526e-8592-41088b64c85d",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "50029d97-7702-55d3-9112-831cc5e2fcf6"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "b2dafc17-69f9-5356-a3fe-7324a47cb2db",
+        "locale": "fa",
+        "visa_category": "tourist",
+        "source_ids": [
+          "50029d97-7702-55d3-9112-831cc5e2fcf6"
+        ],
+        "block_count": 1
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
     "country_code": "ES",
     "cards": [
       {
@@ -663,11 +772,13 @@
           "71be9a27-9a01-5201-9312-3b333335759d",
           "a2434e44-18eb-5acd-8c22-f368ba0d9eaa",
           "a36629ab-f310-54fc-8bca-d46df4316af9",
+          "c3abcd82-9873-59b4-8af9-2df584a7c9d2",
           "d4c1a9bb-1ae9-5743-94f2-466f133ee9d0",
           "dea3330c-5c44-57dd-8b29-e85d7bfa8d2c",
-          "e533684b-4afa-5434-846e-549eb152888e"
+          "e533684b-4afa-5434-846e-549eb152888e",
+          "f9b092c3-a209-503f-930b-2c7c430ac3b1"
         ],
-        "block_count": 259
+        "block_count": 279
       },
       {
         "article_id": "c89396a8-d292-573f-9256-357bf798c5c1",
@@ -790,7 +901,7 @@
           "eacfb727-9bcc-5087-aca2-c39d11b48721",
           "febf0b77-f7f9-5405-a51e-845da7f44e82"
         ],
-        "block_count": 292
+        "block_count": 294
       },
       {
         "article_id": "a7d3c26c-54d0-5456-995a-d2abde966ca3",
@@ -820,16 +931,13 @@
     "country_code": "GB",
     "cards": [
       {
-        "article_id": "fd5b8e4a-294b-514e-9f9b-1abf5eddfed9",
-        "locale": "en",
-        "visa_category": "study",
+        "article_id": "ae67e7fa-b951-5077-af1d-648454d2c734",
+        "locale": "fa",
+        "visa_category": "family",
         "source_ids": [
-          "47962c03-f714-5fce-ba3a-e5e81dde33c7",
-          "b50cfb47-f70c-5375-9cb0-bc5d21ca7b40",
-          "caa929e1-afeb-5a21-b4c0-96313b911b84",
-          "dc21c0db-df3d-573b-8cf2-d1ec7a48abdd"
+          "b024aeea-7c2c-5664-93cb-924b549c3553"
         ],
-        "block_count": 44
+        "block_count": 6
       },
       {
         "article_id": "f8ab542e-f0f1-5996-a78e-ab9b872d899a",
@@ -844,6 +952,18 @@
       },
       {
         "article_id": "fd5b8e4a-294b-514e-9f9b-1abf5eddfed9",
+        "locale": "en",
+        "visa_category": "study",
+        "source_ids": [
+          "47962c03-f714-5fce-ba3a-e5e81dde33c7",
+          "b50cfb47-f70c-5375-9cb0-bc5d21ca7b40",
+          "caa929e1-afeb-5a21-b4c0-96313b911b84",
+          "dc21c0db-df3d-573b-8cf2-d1ec7a48abdd"
+        ],
+        "block_count": 44
+      },
+      {
+        "article_id": "fd5b8e4a-294b-514e-9f9b-1abf5eddfed9",
         "locale": "fa",
         "visa_category": "study",
         "source_ids": [
@@ -851,6 +971,7 @@
           "0e7c3631-0a88-56de-bfcf-550533e39ee1",
           "11dcd81a-1eea-5e76-a660-bbd328fe8a20",
           "19cfee9b-896d-5a70-8ec8-d6572a39c880",
+          "29032bec-da36-5e1d-b828-df0d0223a672",
           "2b7242fe-7eea-543c-8f41-16d4cfc8187f",
           "2ed21e05-8fbe-5c3b-8bc3-8d8793f67988",
           "3112d48b-b672-5b0b-b4dc-5beaa4c690a0",
@@ -859,15 +980,20 @@
           "37c15874-01c0-5e15-990f-0ceae0c2a0d0",
           "425868be-ca51-5601-828e-62dd55b40b56",
           "45887b86-0718-5854-8d4f-dccba69d8775",
+          "4d8f14a7-b102-5f39-9bac-785b91b6d46e",
           "4e2c328f-c8ca-563d-ac02-60fdc0529500",
+          "51da2da7-1419-5465-bdfa-4168f30bc7d5",
           "5c4099a9-fa5e-524c-8f7c-5f701237ffb5",
+          "5dbe43ff-efe7-57e1-bb38-bc93771f3ee8",
           "6831e4d1-4b0a-5c9e-85e8-d5649335ca6c",
+          "689a8c9a-2766-5848-8b7f-d9238adb421c",
           "6a28e77d-d8c2-5fba-96a0-6154723a6966",
           "748ebc30-716c-5406-8e32-423379a03ce0",
           "7654ec9b-1dd9-55bd-b2d6-d259bb547c40",
           "7735bdb9-335b-55b0-8a88-a68cf52ea4c8",
           "8161feec-a850-5106-8aa1-9544b2539d6b",
           "889551f6-17de-5ed2-87ae-416ca86fbd0b",
+          "9da21ae2-209f-5f0b-b372-c4f40258fcb2",
           "9f475819-ba7e-5a72-8eae-912e823b306c",
           "9f72ecca-04d1-5d1c-bcf4-f0958645bdcf",
           "a18199ad-2ec9-5e00-9fea-71ce6ba7de96",
@@ -878,13 +1004,13 @@
           "cf2ca123-6b8e-5c73-a0b1-6ddbacc87314",
           "d099fa3d-e925-5919-90d5-98c67de743a2",
           "d2588fe8-f4e8-5a8d-97ad-0e2a9dedea01",
-          "d8b26ffb-1004-5aea-8fae-341b409d1aa6",
           "e1ba8fb8-bd0d-535f-843a-eff479dd46fe",
           "e5d51e0b-29fc-5a5d-9c75-8597c8563b62",
+          "eac20177-ecc4-53f1-b9af-90b6c2b0b346",
           "f8cacd9b-dcd5-5814-9a62-f8f081230c18",
           "f9ced239-c7fd-5dd7-845b-ee894dc00fa2"
         ],
-        "block_count": 971
+        "block_count": 1022
       },
       {
         "article_id": "a2d9e6b9-6bad-586b-a640-52f48822f110",
@@ -902,21 +1028,14 @@
         "source_ids": [
           "16229b42-a4a2-55b5-8c1b-27fbd6e864ab",
           "172b327a-c260-55f5-bfec-4cdf9cda0dd1",
+          "49673f4d-2f3c-599f-9856-090d9f30239a",
           "659670c6-d59a-5921-b195-be29e7c801bd",
           "96a47a16-ba18-5d5a-8a43-8d477a6a9fa3",
           "96dcdfe8-66a7-5c76-b167-44441d25d204",
-          "b662a061-45af-5647-bc07-356c2d21c217"
+          "b662a061-45af-5647-bc07-356c2d21c217",
+          "d8b26ffb-1004-5aea-8fae-341b409d1aa6"
         ],
-        "block_count": 180
-      },
-      {
-        "article_id": "ae67e7fa-b951-5077-af1d-648454d2c734",
-        "locale": "fa",
-        "visa_category": "family",
-        "source_ids": [
-          "b024aeea-7c2c-5664-93cb-924b549c3553"
-        ],
-        "block_count": 6
+        "block_count": 226
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1019,6 +1138,49 @@
     "source_scope": "primary source passages; no publication authorization"
   },
   {
+    "country_code": "ID",
+    "cards": [
+      {
+        "article_id": "17630021-a132-5546-9b18-a333cced7821",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "e5e26f16-2c04-5e3a-abeb-128880ee3ff4"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "1f0d9be0-a0de-5ef9-b860-42d2d9f454e5",
+        "locale": "fa",
+        "visa_category": "investment",
+        "source_ids": [
+          "e5e26f16-2c04-5e3a-abeb-128880ee3ff4"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "a0045ff9-8d1b-53a1-9857-3599067de775",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "e5e26f16-2c04-5e3a-abeb-128880ee3ff4"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "f7fbceaa-c25c-55ef-b8d9-afb4c2e61752",
+        "locale": "fa",
+        "visa_category": "work",
+        "source_ids": [
+          "e5e26f16-2c04-5e3a-abeb-128880ee3ff4"
+        ],
+        "block_count": 2
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
     "country_code": "IE",
     "cards": [
       {
@@ -1089,17 +1251,6 @@
     "country_code": "IT",
     "cards": [
       {
-        "article_id": "644ec5fa-d88f-5c62-9582-f42592ca3392",
-        "locale": "en",
-        "visa_category": "study",
-        "source_ids": [
-          "7a5491b7-ad74-54dd-918a-f86ea59eb3a5",
-          "cb411672-9eb9-5927-8135-4ffc63c3f380",
-          "dbc0613d-de9a-5451-bc82-7f7ec47cffda"
-        ],
-        "block_count": 36
-      },
-      {
         "article_id": "5abf4e2e-101e-5945-930b-9355ebb41fe2",
         "locale": "fa",
         "visa_category": "family",
@@ -1116,6 +1267,17 @@
           "66b12ec5-b826-5d68-8cfb-d9ae25014152"
         ],
         "block_count": 10
+      },
+      {
+        "article_id": "644ec5fa-d88f-5c62-9582-f42592ca3392",
+        "locale": "en",
+        "visa_category": "study",
+        "source_ids": [
+          "7a5491b7-ad74-54dd-918a-f86ea59eb3a5",
+          "cb411672-9eb9-5927-8135-4ffc63c3f380",
+          "dbc0613d-de9a-5451-bc82-7f7ec47cffda"
+        ],
+        "block_count": 36
       },
       {
         "article_id": "644ec5fa-d88f-5c62-9582-f42592ca3392",
@@ -1194,6 +1356,56 @@
     "source_scope": "primary source passages; no publication authorization"
   },
   {
+    "country_code": "KW",
+    "cards": [
+      {
+        "article_id": "74997a67-6de8-5788-8599-0b85f3b63e8b",
+        "locale": "fa",
+        "visa_category": "investment",
+        "source_ids": [
+          "a7660bcf-2acd-539b-aa26-75dbf8c568e5"
+        ],
+        "block_count": 6
+      },
+      {
+        "article_id": "f75789b4-8203-514e-8911-c8d067e37852",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "a7660bcf-2acd-539b-aa26-75dbf8c568e5"
+        ],
+        "block_count": 4
+      },
+      {
+        "article_id": "e916100f-f1cc-5dd7-8c0b-6d660c4ee73c",
+        "locale": "fa",
+        "visa_category": "work",
+        "source_ids": [
+          "a7660bcf-2acd-539b-aa26-75dbf8c568e5"
+        ],
+        "block_count": 7
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
+    "country_code": "LK",
+    "cards": [
+      {
+        "article_id": "736d3ec4-640e-5c20-ba65-e6b2f3466a6a",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "d32193d3-a067-55ff-9f75-8d120d97a11b"
+        ],
+        "block_count": 66
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
     "country_code": "LU",
     "cards": [
       {
@@ -1206,6 +1418,22 @@
           "f367ae0a-20ea-58e6-90d3-ad71db877895"
         ],
         "block_count": 36
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
+    "country_code": "MX",
+    "cards": [
+      {
+        "article_id": "2eef4e56-66bb-5844-9b6c-1a1982a4295c",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "e95db69f-f0c2-5722-b9e9-444de1559456"
+        ],
+        "block_count": 27
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1274,6 +1502,7 @@
           "6b00fb3a-ae34-566a-b6ff-5b656bd79698",
           "6be5da96-c338-598c-bab1-67f460c4dd9e",
           "791061fc-1ce2-505c-913e-eededc8b490b",
+          "7b7935bb-11a3-55be-b96c-fcdf460d788e",
           "7e87effa-c6de-56ef-aea8-be6444da8329",
           "8e834a32-0e56-530f-8e25-df141b405afe",
           "a0d0d92f-5175-59ba-8412-c0fadd557b81",
@@ -1281,7 +1510,7 @@
           "e9226795-aa5c-5e05-b008-c0e474912598",
           "ee28279e-b4df-5fbb-accc-9c8550928b51"
         ],
-        "block_count": 281
+        "block_count": 296
       },
       {
         "article_id": "2926da91-dc0a-5eb1-82e8-3e2bb47d7c91",
@@ -1297,11 +1526,12 @@
         "locale": "fa",
         "visa_category": "work",
         "source_ids": [
+          "41e87a17-d628-58e9-b569-31e3432ed36c",
           "55adf0d7-57b2-5f8b-a46a-68bf780be25b",
           "8417cb9a-7168-525b-b14c-dbc78b301bf3",
           "d904d1b4-0942-537a-80f2-e43f198c2e28"
         ],
-        "block_count": 102
+        "block_count": 108
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1338,7 +1568,7 @@
           "d1ffda2f-eb3f-5721-9ed4-82ab2cc7b36a",
           "f5e646ed-82bb-5e25-b918-9907204f0cd9"
         ],
-        "block_count": 228
+        "block_count": 233
       },
       {
         "article_id": "054d6c0f-c908-561c-9789-7fb8d7ecbfd1",
@@ -1388,6 +1618,7 @@
           "177b44b2-6b95-5dc8-8917-ce3a34feadbd",
           "286c4b31-81f9-52ce-b45c-90de92ce3a66",
           "387f0bd2-2455-55bb-a6cb-706542ed328f",
+          "58cb5387-7d65-517f-8988-deb03b5f2b5a",
           "66302324-f8f4-53de-8109-c4dc6e523d3c",
           "7f44e9b4-491e-5e76-b249-4ac719aa20f4",
           "85fd9c72-9519-5f8a-babf-5fb092028b53",
@@ -1399,7 +1630,7 @@
           "e641803c-5f77-5c8d-a01b-436c37bc9d46",
           "edc8fc8d-96aa-5d55-bc38-d4580de8f9b5"
         ],
-        "block_count": 241
+        "block_count": 245
       },
       {
         "article_id": "4ed22060-b825-5870-9f3c-9cb8ba344cce",
@@ -1418,13 +1649,14 @@
         "source_ids": [
           "39f5b2d0-b9a5-5463-975b-24dd00bba459",
           "3e5a71b2-07d4-512e-bdd8-652cd923a7ae",
+          "58cb5387-7d65-517f-8988-deb03b5f2b5a",
           "641274ea-1800-5fa1-a129-4e5595461115",
           "a7e59a1e-6b06-58ab-8124-bc83031601f3",
           "ae49d702-69aa-5a39-8e37-fc11781382b5",
           "d5d14ef0-94ec-5bd6-b50b-67091e63b8bc",
           "f1917735-077b-5c8e-9b67-71d9363b363a"
         ],
-        "block_count": 263
+        "block_count": 273
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1613,6 +1845,15 @@
     "country_code": "SE",
     "cards": [
       {
+        "article_id": "899f74e9-331d-5679-931f-c445dfef8922",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "1861f340-ba3d-565d-bd7c-6f8c7f0c4b41"
+        ],
+        "block_count": 21
+      },
+      {
         "article_id": "86d753b9-955d-5f9a-bd00-406be80d38e6",
         "locale": "en",
         "visa_category": "study",
@@ -1622,15 +1863,6 @@
           "68d2bb73-78a8-55a3-8352-fc7c286898aa"
         ],
         "block_count": 31
-      },
-      {
-        "article_id": "899f74e9-331d-5679-931f-c445dfef8922",
-        "locale": "fa",
-        "visa_category": "family",
-        "source_ids": [
-          "1861f340-ba3d-565d-bd7c-6f8c7f0c4b41"
-        ],
-        "block_count": 21
       },
       {
         "article_id": "86d753b9-955d-5f9a-bd00-406be80d38e6",
@@ -1675,6 +1907,49 @@
           "fdb20258-f792-54df-aef1-0bfc9185f07f"
         ],
         "block_count": 117
+      }
+    ],
+    "state": "unverified_draft_proposal",
+    "source_scope": "primary source passages; no publication authorization"
+  },
+  {
+    "country_code": "SI",
+    "cards": [
+      {
+        "article_id": "7c1f108c-5b6b-5d65-a5e3-6e8c3d5c8f4c",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "6b2a7979-13fd-59ff-98eb-c7fba615263b"
+        ],
+        "block_count": 3
+      },
+      {
+        "article_id": "c55f7ad3-8202-5d26-b61b-45cfff93447e",
+        "locale": "fa",
+        "visa_category": "investment",
+        "source_ids": [
+          "6b2a7979-13fd-59ff-98eb-c7fba615263b"
+        ],
+        "block_count": 2
+      },
+      {
+        "article_id": "23d75ce8-607a-5a4c-9acb-2d1aefb49ab5",
+        "locale": "fa",
+        "visa_category": "study",
+        "source_ids": [
+          "6b2a7979-13fd-59ff-98eb-c7fba615263b"
+        ],
+        "block_count": 3
+      },
+      {
+        "article_id": "3d33b28a-6914-5f33-b606-6f49b68e0bb1",
+        "locale": "fa",
+        "visa_category": "work",
+        "source_ids": [
+          "6b2a7979-13fd-59ff-98eb-c7fba615263b"
+        ],
+        "block_count": 2
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1736,10 +2011,11 @@
         "visa_category": "work",
         "source_ids": [
           "2bab7097-05c7-5f23-aae7-2a65e99ba4d5",
+          "36b595e2-f242-5f55-b22d-d38e662539d3",
           "a21b2d5f-836b-5946-8869-7f2bc0128cd0",
           "db81c006-e5b5-5202-b7b2-010e72a652d0"
         ],
-        "block_count": 88
+        "block_count": 99
       }
     ],
     "state": "unverified_draft_proposal",
@@ -1783,6 +2059,7 @@
           "4f59233c-1376-5a05-a98a-bcbbf4b0d44a",
           "57789f1f-8dc3-5deb-8677-0f9eb8f2e4cd",
           "5b0937bb-8798-528e-91ae-d79e9e615abb",
+          "67b6a64a-81c7-5731-86e9-b2674bdfb3a0",
           "6bc2f92e-7b56-5258-becf-ea45c7495e1f",
           "9030fc2c-d06b-5f37-8650-7c3c33da64cd",
           "91f7c1a5-c0bc-517e-a348-ba6520c2c093",
@@ -1790,7 +2067,7 @@
           "c0f31bf5-80a6-57d0-905c-94f8ccc530d2",
           "e281bba2-4b80-57e1-bece-8f40dc1b46b1"
         ],
-        "block_count": 203
+        "block_count": 207
       },
       {
         "article_id": "b033b2cd-8780-5dc9-bbed-92768787f3cf",

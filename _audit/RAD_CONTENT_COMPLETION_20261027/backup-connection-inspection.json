@@ -1,0 +1,14 @@
+{
+  "project": "epolbumcfbohtmgvomki",
+  "inspection_date_utc": "2026-10-27",
+  "scope": "RAD local configuration file/key names; Staging non-sensitive pg_roles names and permission flags",
+  "approved_read_only_connection_established": false,
+  "custom_roles_found": [],
+  "credentials_printed": false,
+  "credentials_tried": false,
+  "backup_started": false,
+  "restore_started": false,
+  "hosted_writes": 0,
+  "production_accessed": false,
+  "required_next_step": "Owner provision/approve dedicated complete-read backup access and secure local connection manifest, following READ_ONLY_BACKUP_SETUP.md"
+}

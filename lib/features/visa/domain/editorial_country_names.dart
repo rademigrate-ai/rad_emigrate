@@ -56,6 +56,13 @@ String editorialCountryName(String code, String locale) {
     "BG": {"fa": "بلغارستان", "en": "Bulgaria"},
     "MD": {"fa": "مولداوی", "en": "Moldova"},
     "IR": {"fa": "ایران", "en": "Iran"},
+    "KW": {"fa": "کویت", "en": "Kuwait"},
+    "ID": {"fa": "اندونزی", "en": "Indonesia"},
+    "SI": {"fa": "اسلوونی", "en": "Slovenia"},
+    "EC": {"fa": "اکوادور", "en": "Ecuador"},
+    "BY": {"fa": "بلاروس", "en": "Belarus"},
+    "LK": {"fa": "سریلانکا", "en": "Sri Lanka"},
+    "MX": {"fa": "مکزیک", "en": "Mexico"},
   };
   return names[code]?[locale] ?? code;
 }

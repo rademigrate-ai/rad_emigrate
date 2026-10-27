@@ -32,7 +32,7 @@ class RecoveryDeliveryTests(unittest.TestCase):
         }
         new = rows(delivery / "new-draft-payloads.jsonl.gz")
         revised = rows(delivery / "canonical-revision-payloads.jsonl.gz")
-        self.assertEqual((len(new), len(revised)), (58, 15))
+        self.assertEqual((len(new), len(revised)), (79, 88))
         items = {
             (r["article_id"], r["item"]["locale"]): r["item"] for r in new + revised
         }
@@ -76,6 +76,28 @@ class RecoveryDeliveryTests(unittest.TestCase):
         for record in ledger:
             if not record["destinations"]:
                 self.assertTrue(record["exception"])
+        retirements = rows(delivery / "source-reading-retirements.jsonl.gz")
+        self.assertEqual(len(retirements), 19)
+        by_source = {}
+        for record in ledger:
+            by_source.setdefault(record["source_id"], []).append(record)
+        for retirement in retirements:
+            for sid in retirement["source_ids"]:
+                self.assertEqual(len(by_source[sid]), len(sources[sid]["blocks"]))
+                for record in by_source[sid]:
+                    self.assertTrue(record["destinations"])
+                    self.assertTrue(
+                        all(
+                            d["content_class"] == "canonical"
+                            for d in record["destinations"]
+                        )
+                    )
+                    self.assertTrue(
+                        all(
+                            d["article_id"] != retirement["article_id"]
+                            for d in record["destinations"]
+                        )
+                    )
         medical = [
             section
             for item in items.values()
@@ -88,6 +110,76 @@ class RecoveryDeliveryTests(unittest.TestCase):
         ]
         self.assertTrue(medical)
         self.assertTrue(all(s["program"] == "medical-study" for s in medical))
+        evidence = json.loads(
+            (delivery / "body-country-evidence.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(len(evidence), 71)
+        originals = {
+            (r["article_id"], r["locale"]): r
+            for r in rows(
+                root / "artifacts/RAD_CONTENT_CONSOLIDATION_20261026/articles.jsonl.gz"
+            )
+        }
+        associated = [
+            r
+            for r in revised
+            if r.get("catalog_reclassification", {}).get("kind")
+            == "body_evidenced_country_association"
+        ]
+        self.assertEqual(len(associated), 60)
+        for row in associated:
+            item = row["item"]
+            old = originals[(row["article_id"], item["locale"])]
+            self.assertEqual(item["sections"], old["sections"])
+            self.assertEqual(old["country_codes"], [])
+            proof = item["country_scope_evidence"]
+            source = sources[proof["source_id"]]
+            self.assertEqual(
+                proof["excerpt"], source["blocks"][proof["source_block_index"]]["text"]
+            )
+            self.assertEqual(item["country_codes"], [proof["country_code"]])
+        madrid = {
+            ref["block_index"]
+            for item in items.values()
+            if item["content_class"] == "canonical"
+            for sec in item["sections"]
+            for block in sec["blocks"]
+            for ref in block["provenance"]
+            if ref["source_id"] == "f9b092c3-a209-503f-930b-2c7c430ac3b1"
+        }
+        self.assertTrue(set(range(4, 18)).issubset(madrid))
+        talent = [
+            (item["visa_category"], ref["block_index"])
+            for item in items.values()
+            if item["content_class"] == "canonical"
+            for sec in item["sections"]
+            for block in sec["blocks"]
+            for ref in block["provenance"]
+            if ref["source_id"] == "d8b26ffb-1004-5aea-8fae-341b409d1aa6"
+        ]
+        self.assertEqual(set(talent), {("work", i) for i in range(34)})
+        nova = [
+            block
+            for item in items.values()
+            if item["visa_category"] == "work"
+            for sec in item["sections"]
+            for block in sec["blocks"]
+            if any(
+                ref["source_id"] == "b98d2372-74ed-51fd-9028-775462cbf30e"
+                for ref in block["provenance"]
+            )
+        ]
+        self.assertEqual(len(nova), 15)
+        self.assertTrue(
+            all(
+                {ref["source_id"] for ref in block["provenance"]}
+                == {
+                    "b98d2372-74ed-51fd-9028-775462cbf30e",
+                    "1b4d48bc-014f-5cc7-87b6-6d031156c8d3",
+                }
+                for block in nova
+            )
+        )
 
     def test_append_preserves_existing_rich_body_and_limits_source_scope(self):
         blocks = [
@@ -111,7 +203,13 @@ class RecoveryDeliveryTests(unittest.TestCase):
         independent = make_draft(source)
         base = copy.deepcopy(independent)
         base["article_id"] = "existing-canonical"
-        base["source_ids"] = []
+        base["source_ids"] = ["existing-source"]
+        for section in base["sections"]:
+            for block in section["blocks"]:
+                for ref in block["provenance"]:
+                    ref["source_id"] = "existing-source"
+        for ref in base["segment_ledger"]:
+            ref["source_id"] = "existing-source"
         baseline = copy.deepcopy(base)
         actual, _ = append_contribution(base, independent, [2, 3])
         self.assertEqual(base, baseline)
@@ -137,6 +235,48 @@ class RecoveryDeliveryTests(unittest.TestCase):
                 if r["block_index"] in (2, 3)
             ],
         )
+
+    def test_mirror_keeps_one_body_both_provenances_and_exact_retry(self):
+        blocks = [
+            {"type": "heading", "text": "Physician stream"},
+            {"type": "paragraph", "text": "Distinct eligibility exception"},
+        ]
+        source = {
+            "source_id": "a",
+            "snapshot_id": "sa",
+            "url": "https://radvisa.com/article/a",
+            "title": "Stream",
+            "domain": "radvisa.com",
+            "language": "en",
+            "taxonomy": {"country_codes": ["CA"]},
+            "body_text": "\n\n".join(b["text"] for b in blocks),
+            "blocks": blocks,
+        }
+        source["body_sha256"] = digest(source["body_text"])
+        first = make_draft(source)
+        first["sections"][0]["program"] = "physician-stream"
+        baseline = copy.deepcopy(first)
+        mirror = make_draft(
+            {
+                **source,
+                "source_id": "b",
+                "snapshot_id": "sb",
+                "url": "https://digivisa.ir/article/b",
+            }
+        )
+        result, _ = append_contribution(
+            first, mirror, [0, 1], "physician-stream", ["a"]
+        )
+        self.assertEqual(first, baseline)
+        actual = [b for s in result["sections"] for b in s["blocks"]]
+        self.assertEqual(len(actual), 2)
+        self.assertTrue(
+            all({r["source_id"] for r in b["provenance"]} == {"a", "b"} for b in actual)
+        )
+        repeated, _ = append_contribution(
+            result, mirror, [0, 1], "physician-stream", ["a"]
+        )
+        self.assertEqual(repeated, result)
 
     def test_resume_reuses_historical_journal_without_metadata_sidecar(self):
         with tempfile.TemporaryDirectory() as folder:
