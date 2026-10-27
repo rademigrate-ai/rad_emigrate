@@ -114,7 +114,7 @@ Deno.test("E2E currency: primary failure falls back and labels fawazahmed0", asy
     if (url.includes("fawazahmed0") || url.includes("jsdelivr")) {
       return await Promise.resolve(
         new Response(
-          JSON.stringify({ date: "2026-10-19", usd: { eur: 0.92 } }),
+          JSON.stringify({ date: new Date().toISOString().slice(0, 10), usd: { eur: "0.92" } }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         ),
       );
@@ -163,7 +163,7 @@ Deno.test("E2E currency worker: forbidden without token; records observation on 
               base: "USD",
               quote: "EUR",
               rate: "0.91",
-              date: "2026-10-19",
+              date: new Date().toISOString().slice(0, 10),
             }),
             { status: 200, headers: { "Content-Type": "application/json" } },
           ),

@@ -626,12 +626,17 @@ class AdminOperationsRepository {
           'manual-$userId-${DateTime.now().toUtc().microsecondsSinceEpoch}',
       'input': {'requested_from': 'admin_console'},
     });
-    final response = await _supabase.client.functions.invoke(
-      'research-sync',
-      body: const {},
-    );
-    if (response.data is Map && (response.data as Map)['error'] != null) {
-      throw StateError((response.data as Map)['error'].toString());
+    try {
+      final response = await _supabase.client.functions.invoke(
+        'research-sync',
+        body: const {},
+      );
+      if (response.data is Map && (response.data as Map)['error'] != null) {
+        throw StateError((response.data as Map)['error'].toString());
+      }
+    } catch (_) {
+      // Best-effort Edge Function worker notification.
+      // The background job is safely enqueued in PostgreSQL.
     }
   }
 }
