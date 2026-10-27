@@ -704,14 +704,19 @@ def build(corpus, recovery, output, raw_caches=()):
     write_jsonl(output / "reference-maps.jsonl.gz", prepared_maps)
     write_jsonl(output / "source-section-ledger.jsonl.gz", ledger)
     (output / "classification-decisions.json").write_text(
-        json.dumps(decisions, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(decisions, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     (output / "body-country-evidence.json").write_text(
         json.dumps(country_evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     (output / "source-category-moves.json").write_text(
-        json.dumps(scope_moves, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(scope_moves, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     inventory = [
         {
@@ -744,7 +749,9 @@ def build(corpus, recovery, output, raw_caches=()):
         ),
     ):
         (output / (name + ".json")).write_text(
-            json.dumps(rows, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+            newline="\n",
         )
     with (output / "source-url-inventory.csv").open(
         "w", encoding="utf-8-sig", newline=""
@@ -801,7 +808,9 @@ def build(corpus, recovery, output, raw_caches=()):
             }
         )
     (output.parent / "country-card-inventory.json").write_text(
-        json.dumps(country_cards, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(country_cards, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     summary = {
         "original_sources": len(sources),
@@ -879,7 +888,7 @@ def build(corpus, recovery, output, raw_caches=()):
         "verdict": "NO_GO_PENDING_COVERAGE_AND_HOSTED_SAFETY_AUTHORIZATION",
     }
     (output / "summary.json").write_text(
-        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     return summary
 

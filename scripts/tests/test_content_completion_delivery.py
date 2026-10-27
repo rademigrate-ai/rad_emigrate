@@ -16,6 +16,29 @@ from tools.plan3_content.parser import digest
 
 
 class RecoveryDeliveryTests(unittest.TestCase):
+    def test_review_manifest_matches_portable_checked_in_bytes(self):
+        root = (
+            Path(__file__).resolve().parents[2]
+            / "_audit/RAD_CONTENT_COMPLETION_20261027"
+        )
+        plan = json.loads(
+            (root / "import-review/import-plan.json").read_text(encoding="utf-8")
+        )
+        for filename, checksum in plan["input_files"].items():
+            data = (root / "prepared" / filename).read_bytes()
+            self.assertEqual(hashlib.sha256(data).hexdigest(), checksum, filename)
+            if filename.endswith(".json"):
+                self.assertNotIn(b"\r\n", data, filename)
+        for filename, key, compressed in [
+            ("PROPOSED_IMPORT_REVIEW_ONLY.sql.gz", "sql_sha256", True),
+            ("PROPOSED_ROLLBACK_REVIEW_ONLY.sql.gz", "rollback_sql_sha256", True),
+            ("READ_ONLY_PREFLIGHT.sql", "read_only_preflight_sha256", False),
+        ]:
+            data = (root / "import-review" / filename).read_bytes()
+            if compressed:
+                data = gzip.decompress(data)
+            self.assertEqual(hashlib.sha256(data).hexdigest(), plan[key])
+
     def test_delivered_recovery_preserves_originals_and_explicit_scope(self):
         root = Path(__file__).resolve().parents[2]
         delivery = root / "_audit/RAD_CONTENT_COMPLETION_20261027/prepared"

@@ -14,3 +14,12 @@ artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/** -text
 
 # Preserve sealed Windows manifest bytes while treating CRLF as intentional.
 artifacts/RAD_CONTENT_CONSOLIDATION_20261026/manifest.json whitespace=cr-at-eol
+
+# Continuation review manifests hash exact portable bytes.
+tools/content_completion/** text eol=lf
+scripts/tests/test_content_completion_delivery.py text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/prepared/*.json text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/prepared/*.gz -text
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.json text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.sql text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.gz -text

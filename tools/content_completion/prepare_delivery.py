@@ -328,7 +328,9 @@ def prepare(directory, output, project):
         + "]::text[])code where not exists(select 1 from public.destinations d where d.code=code.code)),"
         + "'rich_revisions',(select count(*) from private.rad_editorial_rich_revisions),'reference_maps',(select count(*) from private.rad_editorial_reference_maps where active),'import_gate',(select jsonb_agg(to_jsonb(t)) from private.rad_editorial_import_target t),'imported_published',(select count(*) from public.visa_article_heads h join private.rad_editorial_catalog c on c.article_id=h.article_id where h.published_id is not null));\n"
     )
-    (output / "READ_ONLY_PREFLIGHT.sql").write_text(preflight, encoding="utf-8")
+    (output / "READ_ONLY_PREFLIGHT.sql").write_text(
+        preflight, encoding="utf-8", newline="\n"
+    )
     plan = {
         "project": project,
         "actor_id": ACTOR,
@@ -361,7 +363,7 @@ def prepare(directory, output, project):
         ],
     }
     (output / "import-plan.json").write_text(
-        json.dumps(plan, indent=2) + "\n", encoding="utf-8"
+        json.dumps(plan, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     return plan
 

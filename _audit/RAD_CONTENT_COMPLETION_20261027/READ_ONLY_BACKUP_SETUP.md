@@ -11,6 +11,8 @@ A Staging `pg_roles` metadata query returned no nonstandard custom roles after e
 
 ## Provisioning steps
 
+**Existing-role option first:** subsequent non-sensitive inspection confirmed that the platform role `supabase_read_only_user` exists with LOGIN, BYPASSRLS and membership in `pg_read_all_data`, without superuser or role-administration capability. It can SELECT all 155 checked relations across the six scoped schemas, has no direct INSERT/UPDATE/DELETE/TRUNCATE privilege there, and cannot execute the editorial save/import routines. `existing-readonly-role-evidence.json` records the check. This is permission metadata, **not an approved or tested connection**. If an authorized operator already has an approved credential for this role, the Owner can approve that connection and supply the secure local manifest below; a new role might be unnecessary. Do not retrieve, guess or reset a managed role password, mint credentials, or modify its grants under this task's current authorization. If no approved credential is available, use the separately authorized dedicated-role procedure below.
+
 1. An authorized Owner opens the **Staging** project Dashboard, verifies `epolbumcfbohtmgvomki` and opens **Connect**. Copy its direct connection or session-pooler endpoint privately. Do not use the transaction pooler for the dump. Do not copy an application API key as a database password.
 2. Provision a dedicated login named `rad_content_backup_ro`, with a new password entered privately. Creating a role or granting privileges changes hosted metadata and is **not authorized for execution in this task yet**. An Owner must perform it or explicitly authorize the exact change separately. Do not reuse `postgres`, a service-role API key, or synthetic local credentials.
 3. The initial grants below are a review template for the Owner. Verify that these schemas still exist before execution; resolve additional dependencies before declaring the scope complete. Grant no table mutation, sequence mutation, schema creation, role administration, replication or superuser privilege.
@@ -41,6 +43,7 @@ grant select on all sequences in schema public, private, auth, storage,
   "project_ref": "epolbumcfbohtmgvomki",
   "purpose": "read-only logical backup and isolated local restore",
   "approval_reference": "Owner confirmation of this exact role and scope",
+  "database_role": "OWNER_APPROVED_READ_ONLY_LOGIN",
   "service_name": "rad_staging_backup_ro",
   "service_file": "ABSOLUTE_PRIVATE_PATH_TO_pg_service.conf",
   "password_file": "ABSOLUTE_PRIVATE_PATH_TO_pgpass.conf",
@@ -49,7 +52,7 @@ grant select on all sequences in schema public, private, auth, storage,
 }
 ```
 
-The service entry must specify the actual host/port, `dbname=postgres`, the dedicated login (session-pooler username includes the exact project suffix), TLS CA and `sslmode=verify-full`. The manifest contains no password. Send **only the absolute `connection.json` path** in chat when the role and files are approved and ready.
+The service entry must specify the actual host/port, `dbname=postgres`, the approved read-only login (session-pooler username includes the exact project suffix), TLS CA and `sslmode=verify-full`. The manifest contains no password. Send **only the absolute `connection.json` path** in chat when the role and files are approved and ready.
 
 ## Checks before any real dump
 
