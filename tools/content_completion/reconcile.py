@@ -152,6 +152,7 @@ def make_records(sources, articles, mappings, ledger, fresh, cache):
                 if observed
                 else None,
                 "fresh_raw_status": raw_status,
+                "fresh_raw_sha256": observed.get("raw_sha256") if observed else None,
                 "fresh_body_sha256": new_hash,
                 "fresh_structure_sha256": new_structure,
                 "fresh_links_sha256": new_links,
