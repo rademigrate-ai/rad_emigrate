@@ -119,21 +119,34 @@ final countryVisaContentProvider = FutureProvider.autoDispose
     });
 
 final visaContentCountriesProvider = FutureProvider.autoDispose
-    .family<List<Map<String, dynamic>>, String>((ref, locale) async {
-      ref.watch(supabaseAuthUserIdProvider);
-      final service = ref.watch(supabaseClientServiceProvider);
-      if (!service.isInitialized) throw StateError('backend_unavailable');
-      return editorialRows(
-        editorialData(
-          await service.client
-              .rpc(
-                'list_visa_content_countries',
-                params: {'p_locale': locale, 'p_preview': false},
-              )
-              .timeout(const Duration(seconds: 20)),
-        )['items'],
-      );
-    });
+    .family<List<Map<String, dynamic>>, String>(
+      (ref, locale) => loadVisaContentCountries(ref, locale, false),
+    );
+
+final visaContentPreviewCountriesProvider = FutureProvider.autoDispose
+    .family<List<Map<String, dynamic>>, String>(
+      (ref, locale) => loadVisaContentCountries(ref, locale, true),
+    );
+
+Future<List<Map<String, dynamic>>> loadVisaContentCountries(
+  Ref ref,
+  String locale,
+  bool preview,
+) async {
+  ref.watch(supabaseAuthUserIdProvider);
+  final service = ref.watch(supabaseClientServiceProvider);
+  if (!service.isInitialized) throw StateError('backend_unavailable');
+  return editorialRows(
+    editorialData(
+      await service.client
+          .rpc(
+            'list_visa_content_countries',
+            params: {'p_locale': locale, 'p_preview': preview},
+          )
+          .timeout(const Duration(seconds: 20)),
+    )['items'],
+  );
+}
 
 typedef EditorialSlugKey = ({String country, String slug, String locale});
 final editorialSlugProvider = FutureProvider.autoDispose

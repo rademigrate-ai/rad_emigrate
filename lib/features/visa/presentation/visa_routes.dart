@@ -14,12 +14,15 @@ GoRoute visaRoute() => GoRoute(
   routes: [
     GoRoute(
       path: 'content-countries',
-      builder: (_, _) => const VisaContentCountriesPage(),
+      builder: (_, state) => VisaContentCountriesPage(
+        preview: state.uri.queryParameters['preview'] == 'true',
+      ),
       routes: [
         GoRoute(
           path: ':countryCode',
           builder: (_, state) => VisaContentCountriesPage(
             countryCode: state.pathParameters['countryCode']!,
+            preview: state.uri.queryParameters['preview'] == 'true',
           ),
         ),
       ],

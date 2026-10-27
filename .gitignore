@@ -26,6 +26,13 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
+.venv/
+_audit/**/cache/
+_audit/**/local-backup/
+_audit/**/browser-server*
+_audit/**/source-resume/reconciliation/*.csv
+_audit/**/source-resume/reconciliation/*.jsonl
+_audit/**/import-review/generation.log
 build/
 coverage/
 

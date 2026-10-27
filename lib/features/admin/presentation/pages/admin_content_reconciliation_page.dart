@@ -80,6 +80,16 @@ class _State extends ConsumerState<AdminContentReconciliationPage> {
               return ListView(
                 padding: const EdgeInsets.all(24),
                 children: [
+                  TextButton.icon(
+                    onPressed: () =>
+                        context.push('/visa/content-countries?preview=true'),
+                    icon: const Icon(Icons.preview_outlined),
+                    label: Text(
+                      locale == 'fa'
+                          ? 'پیش‌نمایش کشورها و دسته‌بندی‌های ویزا'
+                          : 'Preview Visa countries and categories',
+                    ),
+                  ),
                   Text(
                     locale == 'fa'
                         ? 'ورود داده، تأیید حقوقی یا اجازه انتشار نیست.'

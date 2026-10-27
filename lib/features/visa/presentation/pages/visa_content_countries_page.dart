@@ -12,8 +12,13 @@ import '../widgets/country_visa_content.dart';
 import '../../domain/editorial_country_names.dart';
 
 class VisaContentCountriesPage extends ConsumerWidget {
-  const VisaContentCountriesPage({super.key, this.countryCode});
+  const VisaContentCountriesPage({
+    super.key,
+    this.countryCode,
+    this.preview = false,
+  });
   final String? countryCode;
+  final bool preview;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = Localizations.localeOf(context).languageCode == 'fa'
@@ -31,10 +36,17 @@ class VisaContentCountriesPage extends ConsumerWidget {
       body: countryCode != null
           ? SingleChildScrollView(
               padding: const EdgeInsets.all(24),
-              child: CountryVisaContent(countryCode: countryCode!),
+              child: CountryVisaContent(
+                countryCode: countryCode!,
+                preview: preview,
+              ),
             )
           : ref
-                .watch(visaContentCountriesProvider(locale))
+                .watch(
+                  preview
+                      ? visaContentPreviewCountriesProvider(locale)
+                      : visaContentCountriesProvider(locale),
+                )
                 .when(
                   loading: () => RadLoadingIndicator(
                     label: locale == 'fa'
@@ -43,8 +55,11 @@ class VisaContentCountriesPage extends ConsumerWidget {
                   ),
                   error: (_, _) => Center(
                     child: TextButton(
-                      onPressed: () =>
-                          ref.invalidate(visaContentCountriesProvider(locale)),
+                      onPressed: () => ref.invalidate(
+                        preview
+                            ? visaContentPreviewCountriesProvider(locale)
+                            : visaContentCountriesProvider(locale),
+                      ),
                       child: Text(
                         locale == 'fa'
                             ? 'دریافت دوباره کشورها'
@@ -74,7 +89,7 @@ class VisaContentCountriesPage extends ConsumerWidget {
                                   ),
                                   trailing: Icon(directionalForward(context)),
                                   onTap: () => context.push(
-                                    '/visa/content-countries/${country['country_code']}',
+                                    '/visa/content-countries/${country['country_code']}${preview ? '?preview=true' : ''}',
                                   ),
                                 ),
                               ),

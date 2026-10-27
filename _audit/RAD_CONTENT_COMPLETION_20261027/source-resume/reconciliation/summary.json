@@ -1,0 +1,36 @@
+{
+  "historical_sources": 1922,
+  "article_locales": 743,
+  "segment_destination_entries": 27688,
+  "observed_urls": 1930,
+  "all_known_urls": 1930,
+  "dispositions": {
+    "fresh_body_missing_or_nonarticle": 14,
+    "body_blocks_and_links_unchanged": 1087,
+    "fresh_fetch_unresolved": 829
+  },
+  "domains": {
+    "digivisa.ir": 616,
+    "radmohajer.ir": 863,
+    "radvisa.com": 451
+  },
+  "historical_dispositions": {
+    "nonarticle_or_incomplete_requires_review": 153,
+    "body_ready_for_unreviewed_composition": 1061,
+    "retained_noneditorial_or_stateful_path_excluded": 148,
+    "retained_http_error": 8,
+    "new_discovery": 8,
+    "retained_legacy_template_demo_route_excluded": 256,
+    "retained_fetch_or_parse_error": 294,
+    "retained_noneditorial_query_excluded": 2
+  },
+  "captured_segment_statuses": {
+    "preserved": 26501,
+    "exact_duplicate_represented": 1187
+  },
+  "limitations": [
+    "Crawler may be incomplete",
+    "Mapping and legal content require human review",
+    "No proof of live CMS equivalence or rendered coverage"
+  ]
+}

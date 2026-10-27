@@ -10,6 +10,7 @@ import argparse
 import gzip
 import json
 import os
+import re
 import subprocess
 import uuid
 from pathlib import Path
@@ -25,7 +26,13 @@ def main():
     parser.add_argument("--staging-hashes", type=Path, required=True)
     parser.add_argument("--psql", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--local-port", type=int, default=64132)
+    parser.add_argument("--local-database", default="rad_stage71_20261026_patch_v2")
     args = parser.parse_args()
+    if not 1024 <= args.local_port <= 65535 or not re.fullmatch(
+        r"rad_[a-z0-9_]+", args.local_database
+    ):
+        raise ValueError("owned_loopback_database_required")
     recorded = json.loads(args.staging_hashes.read_text(encoding="utf-8"))
     if recorded.get("project") != "epolbumcfbohtmgvomki":
         raise ValueError("unexpected_staging_project")
@@ -53,7 +60,7 @@ def main():
         run = subprocess.run(
             [
                 str(args.psql),
-                "postgresql://postgres@127.0.0.1:64132/rad_stage71_20261026_patch_v2",
+                f"postgresql://postgres@127.0.0.1:{args.local_port}/{args.local_database}",
                 "-XAtq",
                 "-F",
                 "\t",
