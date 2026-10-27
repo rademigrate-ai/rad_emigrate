@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -77,7 +78,7 @@ class InterviewSchedulingPage extends ConsumerWidget {
                             ? 'درخواست مشاوره تخصصی'
                             : 'Request Consultation',
                         onPressed: () =>
-                            Navigator.of(context).pushNamed('/consultation'),
+                            context.push('/consultation'),
                       ),
                     ],
                   ),
