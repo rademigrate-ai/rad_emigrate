@@ -90,6 +90,14 @@ def make_records(sources, articles, mappings, ledger, fresh, cache):
         new_hash = (
             digest(parsed["body_text"]) if parsed and parsed.get("body_text") else None
         )
+        old_structure = digest(old["blocks"]) if old and "blocks" in old else None
+        new_structure = (
+            digest(parsed["blocks"]) if parsed and "blocks" in parsed else None
+        )
+        old_links = digest(old["body_links"]) if old and "body_links" in old else None
+        new_links = (
+            digest(parsed["body_links"]) if parsed and "body_links" in parsed else None
+        )
         if not observed:
             change = "not_recrawled"
         elif observed.get("fetch_status") != "fetched":
@@ -101,7 +109,17 @@ def make_records(sources, articles, mappings, ledger, fresh, cache):
         elif not old or not old_hash:
             change = "fresh_body_requires_placement_review"
         elif old_hash == new_hash:
-            change = "body_text_unchanged_structure_not_yet_compared"
+            if (
+                old_structure is None
+                or new_structure is None
+                or old_links is None
+                or new_links is None
+            ):
+                change = "body_text_unchanged_structure_or_links_unavailable"
+            elif old_structure == new_structure and old_links == new_links:
+                change = "body_blocks_and_links_unchanged"
+            else:
+                change = "structure_or_links_changed_requires_reconciliation"
         else:
             change = "body_changed_requires_reconciliation"
         entries = by_source.get(old["source_id"], []) if old else []
@@ -119,6 +137,8 @@ def make_records(sources, articles, mappings, ledger, fresh, cache):
                 "old_fetch_status": old.get("fetch_status") if old else None,
                 "old_fetch_error": old.get("fetch_error") if old else None,
                 "old_body_sha256": old_hash,
+                "old_structure_sha256": old_structure,
+                "old_links_sha256": old_links,
                 "old_complete_body": old.get("complete_article_body") if old else None,
                 "fresh_fetch_status": observed.get("fetch_status")
                 if observed
@@ -132,7 +152,10 @@ def make_records(sources, articles, mappings, ledger, fresh, cache):
                 if observed
                 else None,
                 "fresh_raw_status": raw_status,
+                "fresh_raw_sha256": observed.get("raw_sha256") if observed else None,
                 "fresh_body_sha256": new_hash,
+                "fresh_structure_sha256": new_structure,
+                "fresh_links_sha256": new_links,
                 "fresh_block_count": len(parsed.get("blocks", [])) if parsed else None,
                 "change_disposition": change,
                 "country_codes_proposed": mapping.get("country_codes", []),

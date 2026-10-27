@@ -2,8 +2,10 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.content_completion.reconcile import make_records, progress
+from tools.plan3_content.parser import digest
 
 
 class ReconciliationTests(unittest.TestCase):
@@ -60,6 +62,36 @@ class ReconciliationTests(unittest.TestCase):
         row = progress(self.cache)[url]
         self.assertEqual(row["fetch_status"], "fetched")
         self.assertEqual(row["latest_access_status"], "robots_denied_or_unavailable")
+
+    @patch("tools.content_completion.reconcile.fresh_body")
+    def test_same_text_does_not_hide_changed_table_or_link(self, body):
+        url = self.source["url"]
+        self.source.update(
+            body_sha256=digest("same"),
+            blocks=[{"type": "table", "rows": [["a"]]}],
+            body_links=[{"url": "https://example.org/a"}],
+        )
+        observed = {url: {"url": url, "fetch_status": "fetched"}}
+        body.return_value = (
+            {
+                "body_text": "same",
+                "blocks": self.source["blocks"],
+                "body_links": self.source["body_links"],
+            },
+            "hash_verified_raw",
+        )
+        row = make_records(
+            [self.source], [self.article], [], [self.ledger], observed, self.cache
+        )[0]
+        self.assertEqual(row["change_disposition"], "body_blocks_and_links_unchanged")
+        body.return_value[0]["body_links"] = [{"url": "https://example.org/different"}]
+        row = make_records(
+            [self.source], [self.article], [], [self.ledger], observed, self.cache
+        )[0]
+        self.assertEqual(
+            row["change_disposition"],
+            "structure_or_links_changed_requires_reconciliation",
+        )
 
 
 if __name__ == "__main__":
