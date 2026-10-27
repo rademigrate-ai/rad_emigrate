@@ -20,6 +20,7 @@ on:
       - 'scripts/**'
       - 'tools/plan3_content/**'
       - 'tools/content_consolidation/**'
+      - 'tools/content_completion/**'
       - 'tools/editorial_reference_capture.py'
       - 'artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/**'
       - 'artifacts/RAD_CONTENT_CONSOLIDATION_20261026/**'
@@ -45,6 +46,7 @@ on:
       - 'scripts/**'
       - 'tools/plan3_content/**'
       - 'tools/content_consolidation/**'
+      - 'tools/content_completion/**'
       - 'tools/editorial_reference_capture.py'
       - 'artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/**'
       - 'artifacts/RAD_CONTENT_CONSOLIDATION_20261026/**'
@@ -87,6 +89,8 @@ jobs:
       - run: python3 -m pip install -r requirements-plan3.txt
       - name: Format and lint owned content tools
         run: |
+          python3 -m ruff format --isolated --check tools/content_completion scripts/tests/test_content_completion_reconcile.py scripts/tests/test_guarded_content_crawl.py scripts/tests/test_content_completion_compare.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/content_completion scripts/tests/test_content_completion_reconcile.py scripts/tests/test_guarded_content_crawl.py scripts/tests/test_content_completion_compare.py
           python3 -m ruff format --isolated --check tools/plan3_content scripts/tests/test_plan3_content.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/plan3_content scripts/tests/test_plan3_content.py
           python3 -m ruff format --isolated --check tools/content_consolidation scripts/tests/test_content_consolidation.py
