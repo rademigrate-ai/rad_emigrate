@@ -1,5 +1,13 @@
 [
   {
+    "article_id": "03d92fe2-de0b-53cc-8b1f-31bd608edb94",
+    "content_class": "editorial",
+    "category": "general-guide",
+    "country_codes": [],
+    "active": true,
+    "composition_sha256": "f40f15966d177dee16e788e587f1aa3c76ca9e507b820973650fa69214afe17c"
+  },
+  {
     "article_id": "05030cac-7bc9-5476-95e1-7a565123eff7",
     "content_class": "editorial",
     "category": "general-guide",

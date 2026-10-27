@@ -32,7 +32,7 @@ class RecoveryDeliveryTests(unittest.TestCase):
         }
         new = rows(delivery / "new-draft-payloads.jsonl.gz")
         revised = rows(delivery / "canonical-revision-payloads.jsonl.gz")
-        self.assertEqual((len(new), len(revised)), (79, 88))
+        self.assertEqual((len(new), len(revised)), (80, 91))
         items = {
             (r["article_id"], r["item"]["locale"]): r["item"] for r in new + revised
         }
@@ -77,7 +77,7 @@ class RecoveryDeliveryTests(unittest.TestCase):
             if not record["destinations"]:
                 self.assertTrue(record["exception"])
         retirements = rows(delivery / "source-reading-retirements.jsonl.gz")
-        self.assertEqual(len(retirements), 19)
+        self.assertEqual(len(retirements), 20)
         by_source = {}
         for record in ledger:
             by_source.setdefault(record["source_id"], []).append(record)
@@ -113,7 +113,7 @@ class RecoveryDeliveryTests(unittest.TestCase):
         evidence = json.loads(
             (delivery / "body-country-evidence.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(len(evidence), 71)
+        self.assertEqual(len(evidence), 72)
         originals = {
             (r["article_id"], r["locale"]): r
             for r in rows(
@@ -180,6 +180,25 @@ class RecoveryDeliveryTests(unittest.TestCase):
                 for block in nova
             )
         )
+        skilled = [
+            r
+            for r in ledger
+            if r["source_id"] == "e2fac2da-900a-5744-91ff-7ad7649b619c"
+        ]
+        for record in skilled:
+            index = record["source_block_index"]
+            expected = (
+                {"AU"}
+                if index in set(range(1, 7)) | set(range(14, 26))
+                else ({"CA"} if index in range(7, 14) else set())
+            )
+            actual = {
+                country
+                for d in record["destinations"]
+                if d["content_class"] == "canonical"
+                for country in d["country_codes"]
+            }
+            self.assertEqual(actual, expected)
 
     def test_append_preserves_existing_rich_body_and_limits_source_scope(self):
         blocks = [

@@ -204,9 +204,10 @@
           "8d4741c9-bd27-5e50-b99e-aa20fe2d77ba",
           "bf3458bb-91a9-5ebe-bee1-2d6b99b87b9d",
           "c601761b-0205-5ba4-8ba5-ba43c9356dc8",
-          "d1dce0ed-ddb0-59fe-8a03-2e8d4a064fc2"
+          "d1dce0ed-ddb0-59fe-8a03-2e8d4a064fc2",
+          "e2fac2da-900a-5744-91ff-7ad7649b619c"
         ],
-        "block_count": 279
+        "block_count": 297
       }
     ],
     "state": "unverified_draft_proposal",
@@ -415,9 +416,10 @@
           "8af3edec-a913-537e-b864-a92adbf98e7b",
           "8d7706ae-ef2a-5dd3-8f12-8a27faef5052",
           "b4c80d04-6ac5-53fa-8998-1f7ba73f6cac",
-          "b98d2372-74ed-51fd-9028-775462cbf30e"
+          "b98d2372-74ed-51fd-9028-775462cbf30e",
+          "e2fac2da-900a-5744-91ff-7ad7649b619c"
         ],
-        "block_count": 181
+        "block_count": 188
       }
     ],
     "state": "unverified_draft_proposal",
@@ -537,9 +539,10 @@
         "source_ids": [
           "2c503a0e-37ed-5fa0-ac74-d011cab739b4",
           "6572d59f-6330-560a-8888-8fdfd7ee6816",
-          "b024aeea-7c2c-5664-93cb-924b549c3553"
+          "b024aeea-7c2c-5664-93cb-924b549c3553",
+          "ff6d490b-8c9a-5c76-ae58-8349a5b73e34"
         ],
-        "block_count": 53
+        "block_count": 55
       },
       {
         "article_id": "21c270fe-5da5-5b93-958c-e89defe630c1",
@@ -611,10 +614,11 @@
           "8be02204-6a1f-5942-a243-807d9d1ec4bf",
           "c53ac705-ea61-5d8f-a737-c5b18c077af4",
           "e49889e7-ae14-5d3d-adaf-16f69bee0374",
+          "e6ca083f-850d-546a-8898-3170d6fb2d5c",
           "f03c0295-370b-5ed9-b1ee-9315c993bc01",
           "f498e9b2-1615-539c-857b-8a749b15cc7f"
         ],
-        "block_count": 321
+        "block_count": 336
       }
     ],
     "state": "unverified_draft_proposal",
@@ -866,9 +870,10 @@
         "locale": "fa",
         "visa_category": "family",
         "source_ids": [
-          "7619d767-3e2c-5899-9cdb-638223f43ca9"
+          "7619d767-3e2c-5899-9cdb-638223f43ca9",
+          "ff6d490b-8c9a-5c76-ae58-8349a5b73e34"
         ],
-        "block_count": 16
+        "block_count": 18
       },
       {
         "article_id": "429031da-1873-554a-ae66-f636bbfeaf65",
@@ -935,9 +940,10 @@
         "locale": "fa",
         "visa_category": "family",
         "source_ids": [
-          "b024aeea-7c2c-5664-93cb-924b549c3553"
+          "b024aeea-7c2c-5664-93cb-924b549c3553",
+          "ff6d490b-8c9a-5c76-ae58-8349a5b73e34"
         ],
-        "block_count": 6
+        "block_count": 8
       },
       {
         "article_id": "f8ab542e-f0f1-5996-a78e-ab9b872d899a",
@@ -1255,9 +1261,10 @@
         "locale": "fa",
         "visa_category": "family",
         "source_ids": [
-          "3a192b99-4e22-5bcb-a0c8-a7d8cf54e883"
+          "3a192b99-4e22-5bcb-a0c8-a7d8cf54e883",
+          "ff6d490b-8c9a-5c76-ae58-8349a5b73e34"
         ],
-        "block_count": 17
+        "block_count": 19
       },
       {
         "article_id": "e2a8e5e6-ee57-5b59-83f5-d54cc0deb519",
@@ -1408,6 +1415,15 @@
   {
     "country_code": "LU",
     "cards": [
+      {
+        "article_id": "2dee7921-5dea-5bde-b2e6-d35797838b24",
+        "locale": "fa",
+        "visa_category": "family",
+        "source_ids": [
+          "ff6d490b-8c9a-5c76-ae58-8349a5b73e34"
+        ],
+        "block_count": 2
+      },
       {
         "article_id": "710b3ae0-325d-5ff4-8e5d-63e720e6df64",
         "locale": "fa",

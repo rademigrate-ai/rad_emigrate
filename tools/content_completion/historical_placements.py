@@ -68,14 +68,42 @@ PLANS = {
     ),
 }
 
+# General/comparative readers stay country-neutral. Only passages naming a
+# country and its actual requirements contribute to that country's route.
+GLOBAL_PLANS = {
+    "e2fac2da-900a-5744-91ff-7ad7649b619c": [
+        (
+            "AU",
+            "work",
+            list(range(1, 7)) + list(range(14, 26)),
+            "skilled-worker-points",
+        ),
+        ("CA", "work", list(range(7, 14)), "skilled-worker-express-entry"),
+    ],
+    "ff6d490b-8c9a-5c76-ae58-8349a5b73e34": [
+        ("LU", "family", [11, 12], "birth-citizenship"),
+        ("DE", "family", [13, 14], "birth-citizenship"),
+        ("GB", "family", [15, 16], "birth-citizenship"),
+        ("IT", "family", [17, 18], "birth-citizenship"),
+        ("FR", "family", [19, 20], "birth-citizenship"),
+    ],
+}
+
 
 def contributions(sources, source_references):
     drafts, maps = [], []
-    for sid, (country, independent, groups) in PLANS.items():
+    plans = {
+        **PLANS,
+        **{
+            sid: (None, list(range(len(sources[sid]["blocks"]))), [])
+            for sid in GLOBAL_PLANS
+        },
+    }
+    for sid, (country, independent, groups) in plans.items():
         source = sources[sid]
         if source["domain"] == "radmohajer.ir" or source["taxonomy"][
             "country_codes"
-        ] != [country]:
+        ] != ([country] if country else []):
             raise ValueError("historical_source_scope_conflict:" + sid)
         draft = make_draft(source)
         draft["recovery_placement"] = {
@@ -92,6 +120,19 @@ def contributions(sources, source_references):
             "rationale": "Source concerns rights during/after study or the explicitly separated nursing pathway. Visa-specific sections join the continuous category page; source facts and dated claims remain unverified.",
             "historical_existing_source": True,
         }
+        if sid in GLOBAL_PLANS:
+            draft["recovery_placement"]["contributions"] = [
+                {
+                    "country": country,
+                    "visa_category": route,
+                    "indices": indices,
+                    "program": program,
+                }
+                for country, route, indices, program in GLOBAL_PLANS[sid]
+            ]
+            draft["recovery_placement"]["rationale"] = (
+                "Keep the complete comparative/general reader independent and country-neutral. Only explicitly country-specific original requirements join the named country/category; source claims remain dated and unverified."
+            )
         capture = source_references[sid]
         drafts.append(draft)
         maps.append(

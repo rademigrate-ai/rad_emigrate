@@ -81,6 +81,7 @@ e5e26f16-2c04-5e3a-abeb-128880ee3ff4 ID 1
 d32193d3-a067-55ff-9f75-8d120d97a11b LK 0
 e95db69f-f0c2-5722-b9e9-444de1559456 MX 0
 840270b2-4bbc-5b0c-a264-0a5b1c72d973 KW 1
+e6ca083f-850d-546a-8898-3170d6fb2d5c DE 3
 """
 
 # Inclusive original ranges. Complete document/language/degree requirements
@@ -109,6 +110,7 @@ STUDY_RANGES = {
 }
 
 FULL_ROUTES = {
+    "e6ca083f-850d-546a-8898-3170d6fb2d5c": ("work", "job-seeker"),
     "1def5422-fedd-5220-9d24-6d0a050f2bc3": ("study", "quebec-caq"),
     "b98d2372-74ed-51fd-9028-775462cbf30e": ("work", "nova-scotia-physician-stream"),
     "1b4d48bc-014f-5cc7-87b6-6d031156c8d3": ("work", "nova-scotia-physician-stream"),
