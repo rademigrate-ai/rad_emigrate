@@ -29,10 +29,22 @@ class GeographicDeliveryTests(unittest.TestCase):
         ]
         self.assertEqual(
             (len(drafts), len(payloads), len(maps), len(decisions), len(observed)),
-            (49, 33, 49, 49, 49),
+            (49, 41, 49, 49, 49),
         )
         by_article = {(a["article_id"], a["locale"]): a for a in drafts}
         self.assertEqual(len(by_article), len(drafts))
+        country_evidence = json.loads(
+            (root / "country-evidence.json").read_text(encoding="utf8")
+        )
+        self.assertEqual(len(country_evidence), 8)
+        self.assertEqual(
+            {row["source_id"] for row in country_evidence},
+            {
+                a["source_ids"][0]
+                for a in drafts
+                if a.get("country_source_evidence") is not None
+            },
+        )
         for article in drafts:
             self.assertEqual(len(article["source_ids"]), 1)
             source = originals[article["source_ids"][0]]
@@ -43,6 +55,11 @@ class GeographicDeliveryTests(unittest.TestCase):
             self.assertFalse(article["publication_allowed"])
             self.assertFalse(article["published"])
             self.assertIsNone(article["reviewer_id"])
+            evidence = article.get("country_source_evidence")
+            if evidence is not None:
+                self.assertEqual(evidence["source_id"], source["source_id"])
+                self.assertEqual(article["country_codes"], [evidence["country_code"]])
+                self.assertIn(evidence["excerpt"], source["body_text"])
             for index, block in enumerate(blocks):
                 ref = block["provenance"][0]
                 self.assertEqual(ref["block_index"], index)

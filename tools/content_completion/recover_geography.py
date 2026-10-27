@@ -49,7 +49,7 @@ def is_geographic_candidate(source):
     return bool(taxonomy.get("country_codes") or re.search(r"شهر|city", title))
 
 
-def make_draft(source):
+def make_draft(source, country_evidence=None):
     body = source["body_text"]
     if (
         digest(body) != source["body_sha256"]
@@ -62,6 +62,16 @@ def make_draft(source):
         if source["taxonomy"].get("country_disagreement")
         else source["taxonomy"].get("country_codes", [])
     )
+    if country_evidence is not None:
+        if (
+            country_codes
+            or country_evidence["source_id"] != source["source_id"]
+            or not re.fullmatch(r"[A-Z]{2}", country_evidence["country_code"])
+            or not country_evidence["excerpt"]
+            or country_evidence["excerpt"] not in body
+        ):
+            raise ValueError("invalid_country_source_evidence")
+        country_codes = [country_evidence["country_code"]]
     sections, ledger, claims = [], [], []
     offset = 0
     for index, block in enumerate(source["blocks"]):
@@ -145,6 +155,7 @@ def make_draft(source):
         "english_translation": "original_english_source_only"
         if source["language"] == "en"
         else "not_available",
+        "country_source_evidence": country_evidence,
     }
 
 
@@ -163,7 +174,7 @@ def reference_capture(source, caches):
     return None
 
 
-def build(sources, old_articles, observations, registry, caches):
+def build(sources, old_articles, observations, registry, caches, country_evidence=None):
     observations = {
         row["source_id"]: row for row in observations if row.get("source_id")
     }
@@ -204,7 +215,7 @@ def build(sources, old_articles, observations, registry, caches):
             or candidate_hashes[(source["language"], source["body_sha256"])] > 1
         ):
             reasons.append("duplicate_identity_review_required")
-        draft = make_draft(source)
+        draft = make_draft(source, (country_evidence or {}).get(sid))
         capture = reference_capture(source, caches)
         if capture is None:
             reasons.append("original_reference_capture_unavailable")
@@ -288,6 +299,7 @@ def main():
     parser.add_argument("--observations", type=Path, required=True)
     parser.add_argument("--registry", type=Path, required=True)
     parser.add_argument("--raw-cache", type=Path, action="append", required=True)
+    parser.add_argument("--country-evidence", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():
@@ -299,8 +311,12 @@ def main():
         for line in args.observations.read_text(encoding="utf-8").splitlines()
     ]
     registry = json.loads(args.registry.read_text(encoding="utf-8"))
+    evidence_rows = json.loads(args.country_evidence.read_text(encoding="utf-8"))
+    evidence = {row["source_id"]: row for row in evidence_rows}
+    if len(evidence) != len(evidence_rows):
+        raise ValueError("duplicate_country_source_evidence")
     rows, drafts, ready, reference_maps = build(
-        sources, articles, observations, registry, args.raw_cache
+        sources, articles, observations, registry, args.raw_cache, evidence
     )
     args.output.mkdir(parents=True)
     write_jsonl(args.output / "geographic-drafts.jsonl.gz", drafts)

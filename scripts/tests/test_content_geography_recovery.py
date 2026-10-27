@@ -62,6 +62,20 @@ class GeographyRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "source_body_hash"):
             make_draft(source)
 
+    def test_country_proposal_requires_exact_original_source_excerpt(self):
+        source = self.source()
+        source["taxonomy"]["country_codes"] = []
+        evidence = {
+            "source_id": source["source_id"],
+            "country_code": "CA",
+            "excerpt": "Unique paragraph.",
+        }
+        draft = make_draft(source, evidence)
+        self.assertEqual(draft["country_codes"], ["CA"])
+        self.assertEqual(draft["country_source_evidence"], evidence)
+        with self.assertRaisesRegex(ValueError, "invalid_country_source_evidence"):
+            make_draft(source, {**evidence, "excerpt": "not in the source"})
+
     @patch("tools.content_completion.recover_geography.payload")
     @patch("tools.content_completion.recover_geography.reference_capture")
     def test_unmatched_current_source_cannot_become_technical_candidate(

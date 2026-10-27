@@ -45,13 +45,13 @@
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%B4%D9%87%D8%B1-%D9%85%D9%88%D9%86%DB%8C%D8%AE",
     "title": "درباره شهر مونیخ",
     "article_id": "5324f014-b7a4-5491-93f8-bb67da92a185",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "DE"
+    ],
     "source_blocks": 56,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "65e2f61a-849d-51b0-95ab-ccd038db8b55",
@@ -73,78 +73,78 @@
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A7%D8%B3%D8%AA%DA%A9%D9%87%D9%84%D9%85",
     "title": "درباره ی شهر استکهلم",
     "article_id": "bf3f6ba0-ee1b-5911-aed2-76862de537a7",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "SE"
+    ],
     "source_blocks": 21,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "43a432d6-9d08-5729-acf3-5162baff7652",
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%A7%D8%B1%D8%B3%D9%84%D9%88%D9%86",
     "title": "درباره ی شهر بارسلون",
     "article_id": "004f1034-4d3a-5863-af5c-cdc2d9dc6e85",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "ES"
+    ],
     "source_blocks": 25,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "bac4622a-f7ad-5c80-b7e2-ea83ca6779b8",
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%B1%D9%88%DA%A9%D8%B3%D9%84",
     "title": "درباره ی شهر بروکسل",
     "article_id": "212f98e5-d06d-5d61-b9ee-ea5a851b00c1",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "BE"
+    ],
     "source_blocks": 29,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "5d8de3f4-bfb2-54a7-8797-5694e0cf0f36",
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%84%DB%8C%D9%88%D8%B1%D9%BE%D9%88%D9%84",
     "title": "درباره ی شهر لیورپول",
     "article_id": "a7c50e38-0f1a-558a-86b8-de72a1085a33",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "GB"
+    ],
     "source_blocks": 15,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "c9ae269d-0b5a-5052-bb84-0b63d3052ffd",
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%85%D9%86%DA%86%D8%B3%D8%AA%D8%B1",
     "title": "درباره ی شهر منچستر",
     "article_id": "65fd303c-8915-588c-a9ee-89936c034ce7",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "GB"
+    ],
     "source_blocks": 19,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "3e3255a4-ace9-5c06-a55e-d6de3492fc21",
     "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%88%D8%A7%D9%84%D9%86%D8%B3%DB%8C%D8%A7",
     "title": "درباره ی شهر والنسیا",
     "article_id": "1f8833c6-d81b-578b-b133-7a35785931c5",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "ES"
+    ],
     "source_blocks": 31,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   },
   {
     "source_id": "c231f332-1c43-5cb5-a9c4-83bda5dc273b",
@@ -644,12 +644,12 @@
     "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%B1%D9%88%DA%A9%D8%B3%D9%84",
     "title": "درباره ی شهر بروکسل",
     "article_id": "5feb0161-7cd1-589c-9561-f95ad78ae485",
-    "country_codes_proposed": [],
+    "country_codes_proposed": [
+      "BE"
+    ],
     "source_blocks": 47,
     "fresh_disposition": "body_blocks_and_links_unchanged",
-    "technical_status": "blocked_review",
-    "reasons": [
-      "country_mapping_requires_review"
-    ]
+    "technical_status": "local_draft_candidate",
+    "reasons": []
   }
 ]
