@@ -39,8 +39,9 @@ Widget _app(Locale locale) {
       ),
       GoRoute(
         path: '/consultation',
-        builder: (_, _) =>
-            const Scaffold(body: Center(child: Text('consultation-destination'))),
+        builder: (_, _) => const Scaffold(
+          body: Center(child: Text('consultation-destination')),
+        ),
       ),
       GoRoute(
         path: '/dashboard',

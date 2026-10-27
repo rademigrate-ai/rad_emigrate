@@ -77,8 +77,7 @@ class InterviewSchedulingPage extends ConsumerWidget {
                         label: isFa
                             ? 'درخواست مشاوره تخصصی'
                             : 'Request Consultation',
-                        onPressed: () =>
-                            context.push('/consultation'),
+                        onPressed: () => context.push('/consultation'),
                       ),
                     ],
                   ),
