@@ -121,7 +121,12 @@ Deno.test("E2E currency: primary failure falls back and labels fawazahmed0", asy
     }
     throw new Error(`unexpected ${url}`);
   };
-  const obs = await fetchObservation("USD", "EUR", fetcher);
+  const obs = await fetchObservation(
+    "USD",
+    "EUR",
+    fetcher,
+    new Date("2026-10-19T12:00:00Z"),
+  );
   assertEquals(obs.provider, "fawazahmed0");
   assertEquals(obs.base, "USD");
   assertEquals(obs.quote, "EUR");
@@ -163,7 +168,9 @@ Deno.test("E2E currency worker: forbidden without token; records observation on 
               base: "USD",
               quote: "EUR",
               rate: "0.91",
-              date: "2026-10-19",
+              // The worker validates age against its real clock. Keep the
+              // synthetic provider observation fresh on every test run.
+              date: new Date().toISOString().slice(0, 10),
             }),
             { status: 200, headers: { "Content-Type": "application/json" } },
           ),
