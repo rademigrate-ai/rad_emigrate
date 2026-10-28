@@ -44,7 +44,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('بررسی مجدد منبع با موفقیت انجام شد و وضعیت اتصال به‌روزرسانی گردید.'),
+            content: Text(
+              'بررسی مجدد منبع با موفقیت انجام شد و وضعیت اتصال به‌روزرسانی گردید.',
+            ),
             backgroundColor: AppColors.teal,
           ),
         );
@@ -58,17 +60,26 @@ class _SourceManagementViewState extends State<SourceManagementView> {
   Widget build(BuildContext context) {
     // Filter sources
     final filtered = widget.sources.where((s) {
-      if (_countryFilter != 'all' && s.countryCode.toUpperCase() != _countryFilter.toUpperCase()) {
+      if (_countryFilter != 'all' &&
+          s.countryCode.toUpperCase() != _countryFilter.toUpperCase()) {
         return false;
       }
       if (_typeFilter != 'all') {
-        if (_typeFilter == 'official' && s.verificationTier != SourceVerificationTier.officialAuthority) return false;
-        if (_typeFilter == 'university' && s.verificationTier != SourceVerificationTier.accreditedUniversity) return false;
-        if (_typeFilter == 'employer' && s.verificationTier != SourceVerificationTier.employerDefinedUnverified) return false;
+        if (_typeFilter == 'official' &&
+            s.verificationTier != SourceVerificationTier.officialAuthority)
+          return false;
+        if (_typeFilter == 'university' &&
+            s.verificationTier != SourceVerificationTier.accreditedUniversity)
+          return false;
+        if (_typeFilter == 'employer' &&
+            s.verificationTier !=
+                SourceVerificationTier.employerDefinedUnverified)
+          return false;
       }
       if (_searchQuery.isNotEmpty) {
         final q = _searchQuery.toLowerCase();
-        final match = s.name.toLowerCase().contains(q) ||
+        final match =
+            s.name.toLowerCase().contains(q) ||
             s.baseUrl.toLowerCase().contains(q) ||
             s.topic.toLowerCase().contains(q) ||
             (s.universityName?.toLowerCase().contains(q) ?? false);
@@ -89,7 +100,10 @@ class _SourceManagementViewState extends State<SourceManagementView> {
           child: filtered.isEmpty
               ? _buildEmptyState()
               : ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
                   itemCount: filtered.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 14),
                   itemBuilder: (context, index) {
@@ -115,7 +129,10 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                     prefixIcon: Icon(Icons.search, size: 18),
                     hintText: 'جستجوی نام سازمان، پورتال دانشگاه یا دامنه...',
                     border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                   ),
                   onChanged: (v) => setState(() => _searchQuery = v.trim()),
                 ),
@@ -124,7 +141,10 @@ class _SourceManagementViewState extends State<SourceManagementView> {
               FilledButton.icon(
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.navy,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: widget.onAddNewSource,
                 icon: const Icon(Icons.add, size: 16),
@@ -138,7 +158,14 @@ class _SourceManagementViewState extends State<SourceManagementView> {
             child: Row(
               children: [
                 // Country Filter Chips
-                const Text('کشور: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.navy)),
+                const Text(
+                  'کشور: ',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.navy,
+                  ),
+                ),
                 Wrap(
                   spacing: 6,
                   children: [
@@ -171,7 +198,14 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                 ),
                 const SizedBox(width: 16),
                 // Type Filter Chips
-                const Text('نوع: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.navy)),
+                const Text(
+                  'نوع: ',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.navy,
+                  ),
+                ),
                 Wrap(
                   spacing: 6,
                   children: [
@@ -183,17 +217,20 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                     ChoiceChip(
                       label: const Text('مراجع دولتی'),
                       selected: _typeFilter == 'official',
-                      onSelected: (_) => setState(() => _typeFilter = 'official'),
+                      onSelected: (_) =>
+                          setState(() => _typeFilter = 'official'),
                     ),
                     ChoiceChip(
                       label: const Text('دانشگاه‌ها'),
                       selected: _typeFilter == 'university',
-                      onSelected: (_) => setState(() => _typeFilter = 'university'),
+                      onSelected: (_) =>
+                          setState(() => _typeFilter = 'university'),
                     ),
                     ChoiceChip(
                       label: const Text('افزوده‌شده کارفرما'),
                       selected: _typeFilter == 'employer',
-                      onSelected: (_) => setState(() => _typeFilter = 'employer'),
+                      onSelected: (_) =>
+                          setState(() => _typeFilter = 'employer'),
                     ),
                   ],
                 ),
@@ -226,7 +263,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppRadii.lg),
         border: Border.all(
-          color: source.hasFailure ? AppColors.error.withValues(alpha: 0.5) : AppColors.border,
+          color: source.hasFailure
+              ? AppColors.error.withValues(alpha: 0.5)
+              : AppColors.border,
           width: source.hasFailure ? 1.5 : 1,
         ),
         boxShadow: [
@@ -246,7 +285,10 @@ class _SourceManagementViewState extends State<SourceManagementView> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_flagForCountry(source.countryCode), style: const TextStyle(fontSize: 22)),
+                Text(
+                  _flagForCountry(source.countryCode),
+                  style: const TextStyle(fontSize: 22),
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -268,7 +310,8 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                           Switch.adaptive(
                             value: source.isEnabled,
                             activeTrackColor: AppColors.teal,
-                            onChanged: (val) => widget.onToggleSource?.call(source.id),
+                            onChanged: (val) =>
+                                widget.onToggleSource?.call(source.id),
                           ),
                         ],
                       ),
@@ -289,10 +332,13 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         runSpacing: 4,
                         children: [
                           SourceProvenanceBadge(
-                            trustLevel: source.verificationTier ==
-                                        SourceVerificationTier.officialAuthority ||
+                            trustLevel:
+                                source.verificationTier ==
+                                        SourceVerificationTier
+                                            .officialAuthority ||
                                     source.verificationTier ==
-                                        SourceVerificationTier.accreditedUniversity
+                                        SourceVerificationTier
+                                            .accreditedUniversity
                                 ? SourceTrustLevel.officiallyVerified
                                 : SourceTrustLevel.adminDefined,
                             fontSize: 10,
@@ -304,7 +350,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                             ),
                             decoration: BoxDecoration(
                               color: tierColor.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(AppRadii.pill),
+                              borderRadius: BorderRadius.circular(
+                                AppRadii.pill,
+                              ),
                               border: Border.all(
                                 color: tierColor.withValues(alpha: 0.3),
                               ),
@@ -369,9 +417,19 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.timer_outlined, size: 14, color: AppColors.textSecondary),
+                    const Icon(
+                      Icons.timer_outlined,
+                      size: 14,
+                      color: AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 4),
-                    const Text('دوره پایش:', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                    const Text(
+                      'دوره پایش:',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(width: 6),
                     DropdownButton<MonitoringInterval>(
                       value: source.interval,
@@ -382,7 +440,11 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                           value: interval,
                           child: Text(
                             interval.toPersian(),
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.navy),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.navy,
+                            ),
                           ),
                         );
                       }).toList(),
@@ -402,7 +464,10 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                   children: [
                     // Connection Status Chip
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: source.hasFailure
                             ? AppColors.error.withValues(alpha: 0.1)
@@ -413,9 +478,13 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            source.hasFailure ? Icons.error_outline : Icons.check_circle_outline,
+                            source.hasFailure
+                                ? Icons.error_outline
+                                : Icons.check_circle_outline,
                             size: 12,
-                            color: source.hasFailure ? AppColors.error : AppColors.success,
+                            color: source.hasFailure
+                                ? AppColors.error
+                                : AppColors.success,
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -425,7 +494,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: source.hasFailure ? AppColors.error : AppColors.success,
+                              color: source.hasFailure
+                                  ? AppColors.error
+                                  : AppColors.success,
                             ),
                           ),
                         ],
@@ -437,7 +508,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         visualDensity: VisualDensity.compact,
                         side: const BorderSide(color: AppColors.border),
                       ),
-                      onPressed: isRefreshing ? null : () => _handleRefresh(source.id),
+                      onPressed: isRefreshing
+                          ? null
+                          : () => _handleRefresh(source.id),
                       icon: isRefreshing
                           ? const SizedBox(
                               width: 12,
@@ -463,16 +536,25 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                 decoration: BoxDecoration(
                   color: AppColors.error.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(AppRadii.sm),
-                  border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
+                  border: Border.all(
+                    color: AppColors.error.withValues(alpha: 0.2),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, size: 14, color: AppColors.error),
+                    const Icon(
+                      Icons.info_outline,
+                      size: 14,
+                      color: AppColors.error,
+                    ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         'پیام خطا: ${source.lastErrorMessage!} (تعداد تلاش‌های مجدد: ${source.retryAttempts})',
-                        style: const TextStyle(fontSize: 11, color: AppColors.error),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.error,
+                        ),
                       ),
                     ),
                   ],
@@ -503,7 +585,11 @@ class _SourceManagementViewState extends State<SourceManagementView> {
           const SizedBox(width: 4),
           Text(
             label,
-            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: color),
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
           ),
         ],
       ),
@@ -517,7 +603,11 @@ class _SourceManagementViewState extends State<SourceManagementView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.search_off, size: 48, color: AppColors.textSecondary),
+            const Icon(
+              Icons.search_off,
+              size: 48,
+              color: AppColors.textSecondary,
+            ),
             const SizedBox(height: 12),
             const Text(
               'هیچ مرجع یا منبعی با فیلترهای انتخابی یافت نشد.',

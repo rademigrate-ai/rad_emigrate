@@ -32,70 +32,75 @@ final adminAuthoritiesProvider = FutureProvider.autoDispose<List<Authority>>((
 
 final adminDashboardMetricsProvider =
     Provider.autoDispose<ResearchDashboardMetrics>((ref) {
-  final repo = ref.watch(adminCmsRepositoryProvider);
-  if (repo is MockResearchAdminRepository) {
-    return repo.getDashboardMetrics();
-  }
-  final proposals = ref.watch(adminProposalsProvider).valueOrNull ?? const [];
-  final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
-  return ResearchDashboardMetrics(
-    monitoredCountriesCount: authorities
-        .map((a) => a.countryCode)
-        .whereType<String>()
-        .toSet()
-        .length,
-    activeOfficialSourcesCount: authorities.length,
-    employerAddedSourcesCount: 0,
-    monitoredUniversitiesCount:
-        authorities.where((a) => a.authorityType == 'university').length,
-    detectedChangesCount: proposals.length,
-    pendingAdminReviewsCount: proposals
-        .where((p) => p.reviewStatus == SourceProposalReviewStatus.pending)
-        .length,
-    monitoringFailuresCount: 0,
-    overdueSourceChecksCount: 0,
-    lastCrawlCompletedAt: DateTime.now(),
-  );
-});
+      final repo = ref.watch(adminCmsRepositoryProvider);
+      if (repo is MockResearchAdminRepository) {
+        return repo.getDashboardMetrics();
+      }
+      final proposals =
+          ref.watch(adminProposalsProvider).valueOrNull ?? const [];
+      final authorities =
+          ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
+      return ResearchDashboardMetrics(
+        monitoredCountriesCount: authorities
+            .map((a) => a.countryCode)
+            .whereType<String>()
+            .toSet()
+            .length,
+        activeOfficialSourcesCount: authorities.length,
+        employerAddedSourcesCount: 0,
+        monitoredUniversitiesCount: authorities
+            .where((a) => a.authorityType == 'university')
+            .length,
+        detectedChangesCount: proposals.length,
+        pendingAdminReviewsCount: proposals
+            .where((p) => p.reviewStatus == SourceProposalReviewStatus.pending)
+            .length,
+        monitoringFailuresCount: 0,
+        overdueSourceChecksCount: 0,
+        lastCrawlCompletedAt: DateTime.now(),
+      );
+    });
 
 final adminManagedSourcesProvider =
     Provider.autoDispose<List<ManagedResearchSource>>((ref) {
-  final repo = ref.watch(adminCmsRepositoryProvider);
-  if (repo is MockResearchAdminRepository) {
-    return repo.listManagedSources();
-  }
-  final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
-  if (authorities.isEmpty) {
-    return const [];
-  }
-  return authorities.map((auth) {
-    final isUni = auth.authorityType == 'university';
-    return ManagedResearchSource(
-      id: auth.id,
-      name: auth.name,
-      baseUrl: auth.officialDomains.isNotEmpty
-          ? 'https://${auth.officialDomains.first}'
-          : 'https://official.gov',
-      countryCode: auth.countryCode ?? 'GLOBAL',
-      universityName: isUni ? auth.name : null,
-      topic: auth.competenceTopics.join('، '),
-      relevantArticles: const ['مهاجرت کاری', 'ویزای تحصیلی'],
-      verificationTier: isUni
-          ? SourceVerificationTier.accreditedUniversity
-          : (auth.verificationState == 'verified'
-              ? SourceVerificationTier.officialAuthority
-              : SourceVerificationTier.employerDefinedUnverified),
-      isEnabled: true,
-      interval: MonitoringInterval.daily,
-      lastCheckedAt: auth.verifiedAt ?? DateTime.now(),
-      nextScheduledCheckAt: DateTime.now().add(const Duration(hours: 12)),
-      connectionStatus: 'ok_200',
-    );
-  }).toList();
-});
+      final repo = ref.watch(adminCmsRepositoryProvider);
+      if (repo is MockResearchAdminRepository) {
+        return repo.listManagedSources();
+      }
+      final authorities =
+          ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
+      if (authorities.isEmpty) {
+        return const [];
+      }
+      return authorities.map((auth) {
+        final isUni = auth.authorityType == 'university';
+        return ManagedResearchSource(
+          id: auth.id,
+          name: auth.name,
+          baseUrl: auth.officialDomains.isNotEmpty
+              ? 'https://${auth.officialDomains.first}'
+              : 'https://official.gov',
+          countryCode: auth.countryCode ?? 'GLOBAL',
+          universityName: isUni ? auth.name : null,
+          topic: auth.competenceTopics.join('، '),
+          relevantArticles: const ['مهاجرت کاری', 'ویزای تحصیلی'],
+          verificationTier: isUni
+              ? SourceVerificationTier.accreditedUniversity
+              : (auth.verificationState == 'verified'
+                    ? SourceVerificationTier.officialAuthority
+                    : SourceVerificationTier.employerDefinedUnverified),
+          isEnabled: true,
+          interval: MonitoringInterval.daily,
+          lastCheckedAt: auth.verifiedAt ?? DateTime.now(),
+          nextScheduledCheckAt: DateTime.now().add(const Duration(hours: 12)),
+          connectionStatus: 'ok_200',
+        );
+      }).toList();
+    });
 
-final adminCrawlRunsProvider =
-    Provider.autoDispose<List<CrawlRunHistoryItem>>((ref) {
+final adminCrawlRunsProvider = Provider.autoDispose<List<CrawlRunHistoryItem>>((
+  ref,
+) {
   final repo = ref.watch(adminCmsRepositoryProvider);
   if (repo is MockResearchAdminRepository) {
     return repo.listCrawlRuns();
@@ -105,21 +110,21 @@ final adminCrawlRunsProvider =
 
 final adminSourceSnapshotsProvider =
     Provider.autoDispose<List<SourceSnapshotItem>>((ref) {
-  final repo = ref.watch(adminCmsRepositoryProvider);
-  if (repo is MockResearchAdminRepository) {
-    return repo.listSourceSnapshots();
-  }
-  return const [];
-});
+      final repo = ref.watch(adminCmsRepositoryProvider);
+      if (repo is MockResearchAdminRepository) {
+        return repo.listSourceSnapshots();
+      }
+      return const [];
+    });
 
 final adminDecisionHistoryProvider =
     Provider.autoDispose<List<AdminDecisionHistoryItem>>((ref) {
-  final repo = ref.watch(adminCmsRepositoryProvider);
-  if (repo is MockResearchAdminRepository) {
-    return repo.listAdminDecisions();
-  }
-  return const [];
-});
+      final repo = ref.watch(adminCmsRepositoryProvider);
+      if (repo is MockResearchAdminRepository) {
+        return repo.listAdminDecisions();
+      }
+      return const [];
+    });
 
 class AdminSourceMonitorPage extends ConsumerStatefulWidget {
   const AdminSourceMonitorPage({super.key});
@@ -250,8 +255,6 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     );
   }
 
-
-
   Future<void> _refreshAuthority(String authorityId) async {
     setState(() => _refreshingAuthorities.add(authorityId));
     try {
@@ -329,10 +332,22 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
           isScrollable: true,
           tabAlignment: TabAlignment.center,
           tabs: const [
-            Tab(icon: Icon(Icons.policy_outlined, size: 18), text: 'پیشنهادهای مغایرت'),
-            Tab(icon: Icon(Icons.dashboard_outlined, size: 18), text: 'داشبورد پایش'),
-            Tab(icon: Icon(Icons.source_outlined, size: 18), text: 'مراجع رسمی و معتبر'),
-            Tab(icon: Icon(Icons.history_edu_outlined, size: 18), text: 'تاریخچه و کپسول‌ها'),
+            Tab(
+              icon: Icon(Icons.policy_outlined, size: 18),
+              text: 'پیشنهادهای مغایرت',
+            ),
+            Tab(
+              icon: Icon(Icons.dashboard_outlined, size: 18),
+              text: 'داشبورد پایش',
+            ),
+            Tab(
+              icon: Icon(Icons.source_outlined, size: 18),
+              text: 'مراجع رسمی و معتبر',
+            ),
+            Tab(
+              icon: Icon(Icons.history_edu_outlined, size: 18),
+              text: 'تاریخچه و کپسول‌ها',
+            ),
           ],
         ),
         backgroundColor: Colors.white,
@@ -387,7 +402,8 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
       crawlRuns: runs,
       snapshots: snapshots,
       decisions: decisions,
-      onInspectProposal: (propId) => context.go('/admin/sources/$propId/review'),
+      onInspectProposal: (propId) =>
+          context.go('/admin/sources/$propId/review'),
     );
   }
 
@@ -815,9 +831,7 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     );
   }
 
-  Widget _buildSourcesTab(
-    List<ManagedResearchSource> sources,
-  ) {
+  Widget _buildSourcesTab(List<ManagedResearchSource> sources) {
     return SourceManagementView(
       sources: sources,
       onToggleSource: (id) {

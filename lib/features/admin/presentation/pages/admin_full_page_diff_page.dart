@@ -59,7 +59,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       try {
         proposal = await repo.getProposalDetail(widget.sourceId);
       } catch (_) {}
-      proposal ??= await ref.read(mockResearchAdminRepositoryProvider).getProposalDetail(widget.sourceId);
+      proposal ??= await ref
+          .read(mockResearchAdminRepositoryProvider)
+          .getProposalDetail(widget.sourceId);
 
       if (proposal == null) {
         setState(() {
@@ -79,7 +81,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
               .toList();
         } catch (_) {
           try {
-            final mockDraft = await ref.read(mockResearchAdminRepositoryProvider).getArticleDraft(proposal.targetArticleId);
+            final mockDraft = await ref
+                .read(mockResearchAdminRepositoryProvider)
+                .getArticleDraft(proposal.targetArticleId);
             baseSections = mockDraft.rawSections
                 .map((s) => ArticleSectionInput.fromJson(s))
                 .toList();
@@ -239,12 +243,14 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
           reviewerNotes: _reviewerNotesController.text.trim(),
         );
       } catch (_) {
-        ok = await ref.read(mockResearchAdminRepositoryProvider).reviewProposal(
-          proposalId: widget.sourceId,
-          expectedRevision: prop.revision,
-          decision: decision,
-          reviewerNotes: _reviewerNotesController.text.trim(),
-        );
+        ok = await ref
+            .read(mockResearchAdminRepositoryProvider)
+            .reviewProposal(
+              proposalId: widget.sourceId,
+              expectedRevision: prop.revision,
+              decision: decision,
+              reviewerNotes: _reviewerNotesController.text.trim(),
+            );
       }
 
       if (!mounted) return;
@@ -554,7 +560,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
   }
 
   Widget _buildRelatedArticlesSection(bool isFa) {
-    final related = ref.read(mockResearchAdminRepositoryProvider).getRelatedArticlesImpact(widget.sourceId);
+    final related = ref
+        .read(mockResearchAdminRepositoryProvider)
+        .getRelatedArticlesImpact(widget.sourceId);
     if (related.isEmpty) return const SizedBox.shrink();
 
     return Container(
@@ -573,8 +581,14 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
               const Icon(Icons.hub_outlined, size: 16, color: AppColors.navy),
               const SizedBox(width: 8),
               Text(
-                isFa ? 'مقالات مرتبط متأثر از تغییرات این منبع:' : 'Affected Related Articles:',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.navy),
+                isFa
+                    ? 'مقالات مرتبط متأثر از تغییرات این منبع:'
+                    : 'Affected Related Articles:',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.navy,
+                ),
               ),
             ],
           ),
@@ -590,7 +604,11 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.article_outlined, size: 14, color: AppColors.primaryRed),
+                  const Icon(
+                    Icons.article_outlined,
+                    size: 14,
+                    color: AppColors.primaryRed,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Column(
@@ -598,25 +616,39 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                       children: [
                         Text(
                           item.title,
-                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.navy),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.navy,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           item.impactReason,
-                          style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.warning.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(AppRadii.pill),
                     ),
                     child: Text(
                       isFa ? 'نیازمند بررسی هماهنگ' : 'Review Recommended',
-                      style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.warning),
+                      style: const TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.warning,
+                      ),
                     ),
                   ),
                 ],

@@ -46,7 +46,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
         return AlertDialog(
           title: Row(
             children: [
-              const Icon(Icons.archive_outlined, color: AppColors.navy, size: 20),
+              const Icon(
+                Icons.archive_outlined,
+                color: AppColors.navy,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               const Flexible(
                 child: Text(
@@ -66,13 +70,27 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                   _buildDetailRow('شناسه کپسول:', snap.snapshotId),
                   _buildDetailRow('مرجع حقوقی:', snap.authorityName),
                   _buildDetailRow('آدرس رسمی:', snap.url),
-                  _buildDetailRow('زمان استخراج:', '${snap.fetchedAt.toLocal()}'),
-                  _buildDetailRow('هش محتوا (SHA-256):', snap.contentHash, isMono: true),
-                  _buildDetailRow('حجم داده دریافتی:', '${snap.byteSize} بایت (وضعیت: ${snap.httpStatusCode} OK)'),
+                  _buildDetailRow(
+                    'زمان استخراج:',
+                    '${snap.fetchedAt.toLocal()}',
+                  ),
+                  _buildDetailRow(
+                    'هش محتوا (SHA-256):',
+                    snap.contentHash,
+                    isMono: true,
+                  ),
+                  _buildDetailRow(
+                    'حجم داده دریافتی:',
+                    '${snap.byteSize} بایت (وضعیت: ${snap.httpStatusCode} OK)',
+                  ),
                   const SizedBox(height: 12),
                   const Text(
                     'متن خام و استخراج‌شده از منبع رسمی:',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.navy),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.navy,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Container(
@@ -85,7 +103,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                     ),
                     child: SelectableText(
                       snap.excerpt,
-                      style: const TextStyle(fontSize: 11, fontFamily: 'monospace', height: 1.4),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontFamily: 'monospace',
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ],
@@ -113,7 +135,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
             width: 140,
             child: Text(
               label,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textSecondary,
+              ),
             ),
           ),
           Expanded(
@@ -144,9 +170,18 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
             unselectedLabelColor: AppColors.textSecondary,
             indicatorColor: AppColors.primaryRed,
             tabs: const [
-              Tab(icon: Icon(Icons.history, size: 16), text: 'دوره‌های پویش (Crawl Runs)'),
-              Tab(icon: Icon(Icons.archive, size: 16), text: 'آرشیو تصاویر مراجع (Snapshots)'),
-              Tab(icon: Icon(Icons.gavel, size: 16), text: 'تصمیمات سردبیری (Audit Log)'),
+              Tab(
+                icon: Icon(Icons.history, size: 16),
+                text: 'دوره‌های پویش (Crawl Runs)',
+              ),
+              Tab(
+                icon: Icon(Icons.archive, size: 16),
+                text: 'آرشیو تصاویر مراجع (Snapshots)',
+              ),
+              Tab(
+                icon: Icon(Icons.gavel, size: 16),
+                text: 'تصمیمات سردبیری (Audit Log)',
+              ),
             ],
           ),
         ),
@@ -181,7 +216,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.history_toggle_off, size: 48, color: AppColors.textSecondary),
+              Icon(
+                Icons.history_toggle_off,
+                size: 48,
+                color: AppColors.textSecondary,
+              ),
               SizedBox(height: 12),
               Text(
                 'هیچ دوره پویشی در سرور ثبت نشده است.',
@@ -233,14 +272,21 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                         Flexible(
                           child: Text(
                             'پویش شماره ${run.runId}',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.navy),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.navy,
+                            ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: isSuccess
                                 ? AppColors.success.withValues(alpha: 0.1)
@@ -252,7 +298,9 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: isSuccess ? AppColors.success : AppColors.warning,
+                              color: isSuccess
+                                  ? AppColors.success
+                                  : AppColors.warning,
                             ),
                           ),
                         ),
@@ -261,7 +309,10 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                     const SizedBox(height: 4),
                     Text(
                       'شروع: ${run.startedAt.toLocal()} • مدت زمان پویش: ${run.duration.inMinutes} دقیقه و ${run.duration.inSeconds % 60} ثانیه',
-                      style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -271,7 +322,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                 children: [
                   Text(
                     '${run.sourcesScanned} منبع بررسی شد',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.navy),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -279,7 +334,9 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: run.changesFound > 0 ? AppColors.primaryRed : AppColors.textSecondary,
+                      color: run.changesFound > 0
+                          ? AppColors.primaryRed
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -299,7 +356,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.archive_outlined, size: 48, color: AppColors.textSecondary),
+              Icon(
+                Icons.archive_outlined,
+                size: 48,
+                color: AppColors.textSecondary,
+              ),
               SizedBox(height: 12),
               Text(
                 'هیچ تصویر لحظه‌ای از مراجع رسمی ذخیره نشده است.',
@@ -329,26 +390,43 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
             children: [
               Row(
                 children: [
-                  const Icon(Icons.file_present_outlined, color: AppColors.navy, size: 20),
+                  const Icon(
+                    Icons.file_present_outlined,
+                    color: AppColors.navy,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       snap.authorityName,
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.navy),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.navy,
+                      ),
                     ),
                   ),
                   OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(visualDensity: VisualDensity.compact),
+                    style: OutlinedButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                    ),
                     onPressed: () => _showSnapshotDetailModal(snap),
                     icon: const Icon(Icons.visibility, size: 14),
-                    label: const Text('مشاهده جزئیات کپسول', style: TextStyle(fontSize: 11)),
+                    label: const Text(
+                      'مشاهده جزئیات کپسول',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 6),
               Text(
                 snap.url,
-                style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, fontFamily: 'monospace'),
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textSecondary,
+                  fontFamily: 'monospace',
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -361,7 +439,10 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                 ),
                 child: Text(
                   snap.excerpt,
-                  style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -372,11 +453,18 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                 children: [
                   Text(
                     'زمان ثبت: ${snap.fetchedAt.toLocal()}',
-                    style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   Text(
                     'هش: ${snap.contentHash.substring(0, 16)}...',
-                    style: const TextStyle(fontSize: 10, fontFamily: 'monospace', color: AppColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'monospace',
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -395,7 +483,11 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.gavel_outlined, size: 48, color: AppColors.textSecondary),
+              Icon(
+                Icons.gavel_outlined,
+                size: 48,
+                color: AppColors.textSecondary,
+              ),
               SizedBox(height: 12),
               Text(
                 'هیچ تصمیم سردبیری ثبت نشده است.',
@@ -453,19 +545,32 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                   Expanded(
                     child: Text(
                       dec.articleTitle,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.navy),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.navy,
+                      ),
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: badgeColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(AppRadii.pill),
-                      border: Border.all(color: badgeColor.withValues(alpha: 0.3)),
+                      border: Border.all(
+                        color: badgeColor.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Text(
                       badgeLabel,
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: badgeColor),
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: badgeColor,
+                      ),
                     ),
                   ),
                 ],
@@ -473,7 +578,10 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
               const SizedBox(height: 6),
               Text(
                 'بازبین: ${dec.reviewerName} • تاریخ: ${dec.reviewedAt.toLocal()}',
-                style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(height: 8),
               Container(
@@ -485,14 +593,22 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
                 ),
                 child: Text(
                   'یادداشت سردبیری: ${dec.reviewerNotes}',
-                  style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.navy),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    height: 1.4,
+                    color: AppColors.navy,
+                  ),
                 ),
               ),
               if (dec.resultingRevisionHash.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Text(
                   'هش پیش‌نویس نگارش مصوب: ${dec.resultingRevisionHash.substring(0, 24)}...',
-                  style: const TextStyle(fontSize: 10, fontFamily: 'monospace', color: AppColors.teal),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontFamily: 'monospace',
+                    color: AppColors.teal,
+                  ),
                 ),
               ],
             ],

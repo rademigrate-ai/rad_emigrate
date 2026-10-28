@@ -18,7 +18,9 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       pendingAdminReviewsCount: 4,
       monitoringFailuresCount: 2,
       overdueSourceChecksCount: 3,
-      lastCrawlCompletedAt: DateTime.now().subtract(const Duration(minutes: 24)),
+      lastCrawlCompletedAt: DateTime.now().subtract(
+        const Duration(minutes: 24),
+      ),
     );
   }
 
@@ -30,7 +32,11 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       baseUrl: 'https://www.canada.ca/en/immigration-refugees-citizenship.html',
       countryCode: 'CA',
       topic: 'مهاجرت کاری، تحصیلی و اقامت دائم',
-      relevantArticles: ['اکسپرس اینتری (FSWP)', 'برنامه نامزدی استانی (PNP)', 'ویزای تحصیلی'],
+      relevantArticles: [
+        'اکسپرس اینتری (FSWP)',
+        'برنامه نامزدی استانی (PNP)',
+        'ویزای تحصیلی',
+      ],
       verificationTier: SourceVerificationTier.officialAuthority,
       isEnabled: true,
       interval: MonitoringInterval.daily,
@@ -44,7 +50,11 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       baseUrl: 'https://www.auswaertiges-amt.de/de/service/visa-und-aufenthalt',
       countryCode: 'DE',
       topic: 'ویزای دانشجویی، کارت شانس (Chancenkarte) و بلوکارت',
-      relevantArticles: ['کارت شانس آلمان', 'ویزای تحصیلی آلمان', 'بلوکارت کاری'],
+      relevantArticles: [
+        'کارت شانس آلمان',
+        'ویزای تحصیلی آلمان',
+        'بلوکارت کاری',
+      ],
       verificationTier: SourceVerificationTier.officialAuthority,
       isEnabled: true,
       interval: MonitoringInterval.daily,
@@ -55,15 +65,22 @@ class MockResearchAdminRepository implements AdminCmsRepository {
     ManagedResearchSource(
       id: 'src-au-homeaffairs',
       name: 'وزارت امور داخلی استرالیا (Department of Home Affairs)',
-      baseUrl: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing',
+      baseUrl:
+          'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing',
       countryCode: 'AU',
       topic: 'ویزاهای اسکیل ورکر ساب‌کلاس ۱۸۹، ۱۹۰ و فارغ‌التحصیلی ۴۸۵',
-      relevantArticles: ['ویزای ۱۸۹ استرالیا', 'ویزای ۱۹۰ استرالیا', 'ویزای ۴۸۵ فارغ‌التحصیلی'],
+      relevantArticles: [
+        'ویزای ۱۸۹ استرالیا',
+        'ویزای ۱۹۰ استرالیا',
+        'ویزای ۴۸۵ فارغ‌التحصیلی',
+      ],
       verificationTier: SourceVerificationTier.officialAuthority,
       isEnabled: true,
       interval: MonitoringInterval.every12Hours,
       lastCheckedAt: DateTime.now().subtract(const Duration(hours: 14)),
-      nextScheduledCheckAt: DateTime.now().subtract(const Duration(hours: 2)), // Overdue
+      nextScheduledCheckAt: DateTime.now().subtract(
+        const Duration(hours: 2),
+      ), // Overdue
       connectionStatus: 'ok_200',
     ),
     ManagedResearchSource(
@@ -72,7 +89,10 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       baseUrl: 'https://www.gov.uk/browse/visas-immigration',
       countryCode: 'UK',
       topic: 'ویزای نیروی کار ماهر (Skilled Worker) و ویزای دانشجویی',
-      relevantArticles: ['ویزای کاری اسکیلد ورکر انگلستان', 'ویزای تحصیلی دانش‌آموزی و دانشجویی بریتانیا'],
+      relevantArticles: [
+        'ویزای کاری اسکیلد ورکر انگلستان',
+        'ویزای تحصیلی دانش‌آموزی و دانشجویی بریتانیا',
+      ],
       verificationTier: SourceVerificationTier.officialAuthority,
       isEnabled: true,
       interval: MonitoringInterval.daily,
@@ -87,7 +107,10 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       countryCode: 'CA',
       universityName: 'دانشگاه تورنتو (University of Toronto)',
       topic: 'پذیرش تحصیلی، شرایط زبان و بورسیه Lester B. Pearson',
-      relevantArticles: ['تحصیل در دانشگاه تورنتو', 'بورسیه‌های برتر دانشگاه‌های کانادا'],
+      relevantArticles: [
+        'تحصیل در دانشگاه تورنتو',
+        'بورسیه‌های برتر دانشگاه‌های کانادا',
+      ],
       verificationTier: SourceVerificationTier.accreditedUniversity,
       isEnabled: true,
       interval: MonitoringInterval.weekly,
@@ -107,7 +130,9 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       isEnabled: true,
       interval: MonitoringInterval.every12Hours,
       lastCheckedAt: DateTime.now().subtract(const Duration(hours: 13)),
-      nextScheduledCheckAt: DateTime.now().subtract(const Duration(hours: 1)), // Overdue & Failed
+      nextScheduledCheckAt: DateTime.now().subtract(
+        const Duration(hours: 1),
+      ), // Overdue & Failed
       connectionStatus: 'timeout',
       retryAttempts: 2,
       lastErrorMessage: 'ارتباط با سرور دانشگاه به دلیل وقفه زمانی برقرار نشد (Connection Timeout).',
@@ -129,7 +154,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
     ManagedResearchSource(
       id: 'src-de-daad-iran',
       name: 'پایگاه راهنمای بورسیه دااد (DAAD Regional Guide)',
-      baseUrl: 'https://www.daad-iran.org/fa/find-funding/scholarship-database/',
+      baseUrl:
+          'https://www.daad-iran.org/fa/find-funding/scholarship-database/',
       countryCode: 'DE',
       topic: 'بورسیه‌های تحقیقاتی دکتری و فرصت مطالعاتی',
       relevantArticles: ['بورسیه‌های تحصیلی دااد آلمان'],
@@ -137,14 +163,18 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       isEnabled: false,
       interval: MonitoringInterval.weekly,
       lastCheckedAt: DateTime.now().subtract(const Duration(days: 8)),
-      nextScheduledCheckAt: DateTime.now().subtract(const Duration(days: 1)), // Overdue & Error
+      nextScheduledCheckAt: DateTime.now().subtract(
+        const Duration(days: 1),
+      ), // Overdue & Error
       connectionStatus: 'http_503',
       retryAttempts: 3,
-      lastErrorMessage: 'سرویس‌دهنده پاسخ ۵۰۳ (Service Temporarily Unavailable) بازگرداند.',
+      lastErrorMessage:
+          'سرویس‌دهنده پاسخ ۵۰۳ (Service Temporarily Unavailable) بازگرداند.',
     ),
   ];
 
-  List<ManagedResearchSource> getManagedSources() => List.unmodifiable(_sources);
+  List<ManagedResearchSource> getManagedSources() =>
+      List.unmodifiable(_sources);
   List<ManagedResearchSource> listManagedSources() => getManagedSources();
 
   void toggleSourceEnabled(String id) {
@@ -433,7 +463,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       detectedAt: DateTime.now().subtract(const Duration(hours: 18)),
       factualStatus: FactualStatus.conflicting, // Explicit Conflict!
       reviewStatus: SourceProposalReviewStatus.pending,
-      previousText: 'حداکثر سن مجاز برای دریافت ویزای فارغ‌التحصیلی ۵۰ سال تمام بود.',
+      previousText:
+          'حداکثر سن مجاز برای دریافت ویزای فارغ‌التحصیلی ۵۰ سال تمام بود.',
       proposedText: 'مقررات جدید فدرال سقف سنی را به ۳۵ سال کاهش داده، اما کمیسیون ایالتی ویکتوریا برای فارغ‌التحصیلان دوره تحقیقاتی ارشد و دکتری استثنای ۵۰ سال قائل شده است.',
       summaryOfChanges: 'ویزای فارغ‌التحصیلی ۴۸۵ استرالیا — مغایرت در سقف سن مجاز متقاضیان دوره‌های پژوهشی',
       changes: [
@@ -601,7 +632,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
     ),
   ];
 
-  List<CrawlRunHistoryItem> getCrawlHistory() => List.unmodifiable(_crawlHistory);
+  List<CrawlRunHistoryItem> getCrawlHistory() =>
+      List.unmodifiable(_crawlHistory);
   List<CrawlRunHistoryItem> listCrawlRuns() => getCrawlHistory();
 
   final List<SourceSnapshotItem> _snapshots = [
@@ -610,7 +642,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       authorityName: 'اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)',
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html',
       fetchedAt: DateTime.now().subtract(const Duration(hours: 4)),
-      contentHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      contentHash:
+          'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
       excerpt: '<div class="table-responsive"><table class="table"><caption>Proof of funds 2026</caption><thead><tr><th>Number of family members</th><th>Funds required (in CAD)</th></tr></thead><tbody><tr><td>1</td><td>\$14,690</td></tr><tr><td>2</td><td>\$18,288</td></tr></tbody></table></div>',
       byteSize: 42180,
       httpStatusCode: 200,
@@ -620,7 +653,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       authorityName: 'وزارت امور خارجه آلمان (Auswärtiges Amt)',
       url: 'https://www.auswaertiges-amt.de/de/sperrkonto-studium',
       fetchedAt: DateTime.now().subtract(const Duration(hours: 10)),
-      contentHash: '7d793037a0760186574b0282f2f435e70d73a4e04d3eef92e6d60f9b50073038',
+      contentHash:
+          '7d793037a0760186574b0282f2f435e70d73a4e04d3eef92e6d60f9b50073038',
       excerpt: '<p class="lead">Voraussichtlich ab 01.10.2026 beträgt der monatliche BAföG-Höchstsatz und damit der Regelsatz für das Sperrkonto 992 Euro (11.904 Euro pro Jahr).</p>',
       byteSize: 31200,
       httpStatusCode: 200,
@@ -630,14 +664,16 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       authorityName: 'وزارت امور داخلی استرالیا',
       url: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485',
       fetchedAt: DateTime.now().subtract(const Duration(hours: 19)),
-      contentHash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+      contentHash:
+          '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
       excerpt: '<div class="alert alert-warning"><p>From 1 July 2024, applicants for the Temporary Graduate visa must be 35 years of age or under. Exemption applies for Hong Kong/BNO passport holders and select doctoral graduates.</p></div>',
       byteSize: 58940,
       httpStatusCode: 200,
     ),
   ];
 
-  List<SourceSnapshotItem> getSourceSnapshots() => List.unmodifiable(_snapshots);
+  List<SourceSnapshotItem> getSourceSnapshots() =>
+      List.unmodifiable(_snapshots);
   List<SourceSnapshotItem> listSourceSnapshots() => getSourceSnapshots();
 
   final List<AdminDecisionHistoryItem> _decisionHistory = [
@@ -649,7 +685,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       reviewerName: 'سردبیر ارشد مهاجرت (مهرداد رضایی)',
       reviewedAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
       reviewerNotes: 'تغییرات امتیاز کتگوری زبان فرانسوی با رفرنس رسمی IRCC مطابقت دارد. پیش‌نویس برای نگارش v4 ذخیره گردید.',
-      resultingRevisionHash: 'a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0',
+      resultingRevisionHash:
+          'a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0',
     ),
     AdminDecisionHistoryItem(
       id: 'dec-20261026-02',
@@ -659,7 +696,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
       reviewerName: 'کارشناس تطبیق قوانین (سارا احمدی)',
       reviewedAt: DateTime.now().subtract(const Duration(days: 2, hours: 4)),
       reviewerNotes: 'متن فارسی توسط بازبین بازنویسی شد تا استثنائات کدهای شغلی بهداشت و درمان (Health & Care) به تفکیک درج گردد.',
-      resultingRevisionHash: '9876543210abcdef0123456789abcdef0123456789abcdef0123456789abcdef1',
+      resultingRevisionHash:
+          '9876543210abcdef0123456789abcdef0123456789abcdef0123456789abcdef1',
     ),
     AdminDecisionHistoryItem(
       id: 'dec-20261025-01',
@@ -673,7 +711,8 @@ class MockResearchAdminRepository implements AdminCmsRepository {
     ),
   ];
 
-  List<AdminDecisionHistoryItem> getDecisionHistory() => List.unmodifiable(_decisionHistory);
+  List<AdminDecisionHistoryItem> getDecisionHistory() =>
+      List.unmodifiable(_decisionHistory);
   List<AdminDecisionHistoryItem> listAdminDecisions() => getDecisionHistory();
 
   // Implementation of AdminCmsRepository interface methods:
@@ -684,7 +723,9 @@ class MockResearchAdminRepository implements AdminCmsRepository {
   }
 
   @override
-  Future<AdminSourceChangeProposal?> getProposalDetail(String proposalId) async {
+  Future<AdminSourceChangeProposal?> getProposalDetail(
+    String proposalId,
+  ) async {
     try {
       return _proposals.firstWhere((p) => p.id == proposalId);
     } catch (_) {
@@ -828,20 +869,25 @@ class MockResearchAdminRepository implements AdminCmsRepository {
   }
 
   @override
-  Future<CmsArticleDraft> getArticleDraft(String articleId, {String locale = 'fa'}) async {
+  Future<CmsArticleDraft> getArticleDraft(
+    String articleId, {
+    String locale = 'fa',
+  }) async {
     // Generate realistic multi-section base document for full article reading
     return CmsArticleDraft.fromContent(
       content: {
         'article_id': articleId,
         'locale': locale,
         'expected_revision': 3,
-        'title': 'راهنمای جامع ویزای کاری اسکیلد ورکر کانادا (Express Entry & FSWP)',
+        'title':
+            'راهنمای جامع ویزای کاری اسکیلد ورکر کانادا (Express Entry & FSWP)',
         'summary': 'کلیه شرایط، حداقل نمرات مدرک زبان، جدول تمکن مالی سال ۲۰۲۶ و مراحل گام‌به‌گام ثبت‌نام در سامانه مهاجرت کانادا.',
         'sections': [
           {
             'id': 'sec-overview',
             'anchor': 'general-overview',
-            'heading': '۱. کلیات و الزامات عمومی برنامه نیروی متخصص فدرال (FSWP)',
+            'heading':
+                '۱. کلیات و الزامات عمومی برنامه نیروی متخصص فدرال (FSWP)',
             'order': 1,
             'blocks': [
               {
@@ -1090,7 +1136,11 @@ class MockResearchAdminRepository implements AdminCmsRepository {
     required List<String> authorityIds,
     required String requestKey,
   }) async {
-    return {'job_id': 'job-crawl-fresh', 'enqueued_count': authorityIds.length, 'status': 'processing'};
+    return {
+      'job_id': 'job-crawl-fresh',
+      'enqueued_count': authorityIds.length,
+      'status': 'processing',
+    };
   }
 
   @override
@@ -1105,6 +1155,7 @@ class MockResearchAdminRepository implements AdminCmsRepository {
 }
 
 /// Provider for MockResearchAdminRepository
-final mockResearchAdminRepositoryProvider = Provider<MockResearchAdminRepository>((ref) {
-  return MockResearchAdminRepository();
-});
+final mockResearchAdminRepositoryProvider =
+    Provider<MockResearchAdminRepository>((ref) {
+      return MockResearchAdminRepository();
+    });

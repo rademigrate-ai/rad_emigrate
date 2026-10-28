@@ -283,8 +283,12 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                       enabled: !_saving,
                       maxLength: 150,
                       decoration: InputDecoration(
-                        labelText: isFa ? 'نام دانشگاه مرتبط' : 'Associated University Name',
-                        hintText: isFa ? 'مثال: دانشگاه تورنتو (U of T)' : 'e.g. University of Toronto',
+                        labelText: isFa
+                            ? 'نام دانشگاه مرتبط'
+                            : 'Associated University Name',
+                        hintText: isFa
+                            ? 'مثال: دانشگاه تورنتو (U of T)'
+                            : 'e.g. University of Toronto',
                       ),
                     ),
                   ],
@@ -293,7 +297,9 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                     isExpanded: true,
                     initialValue: _selectedInterval,
                     decoration: InputDecoration(
-                      labelText: isFa ? 'بازه زمانی پایش دوره‌ای' : 'Monitoring Check Interval',
+                      labelText: isFa
+                          ? 'بازه زمانی پایش دوره‌ای'
+                          : 'Monitoring Check Interval',
                     ),
                     items: [
                       DropdownMenuItem(
@@ -306,28 +312,35 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                       DropdownMenuItem(
                         value: 'every12h',
                         child: Text(
-                          isFa ? 'هر ۱۲ ساعت (Every 12 hours)' : 'Every 12 hours',
+                          isFa
+                              ? 'هر ۱۲ ساعت (Every 12 hours)'
+                              : 'Every 12 hours',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       DropdownMenuItem(
                         value: 'daily',
                         child: Text(
-                          isFa ? 'روزانه - هر ۲۴ ساعت (Daily / 24h)' : 'Daily (every 24 hours)',
+                          isFa
+                              ? 'روزانه - هر ۲۴ ساعت (Daily / 24h)'
+                              : 'Daily (every 24 hours)',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       DropdownMenuItem(
                         value: 'weekly',
                         child: Text(
-                          isFa ? 'هفتگی - هر ۷ روز (Weekly / 7 days)' : 'Weekly (every 7 days)',
+                          isFa
+                              ? 'هفتگی - هر ۷ روز (Weekly / 7 days)'
+                              : 'Weekly (every 7 days)',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                     onChanged: _saving
                         ? null
-                        : (v) => setState(() => _selectedInterval = v ?? 'daily'),
+                        : (v) =>
+                              setState(() => _selectedInterval = v ?? 'daily'),
                   ),
                   const SizedBox(height: 16),
 

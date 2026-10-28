@@ -45,7 +45,9 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('پویش دستی مراجع رسمی با موفقیت آغاز شد و در صف پردازش قرار گرفت.'),
+            content: Text(
+              'پویش دستی مراجع رسمی با موفقیت آغاز شد و در صف پردازش قرار گرفت.',
+            ),
             backgroundColor: AppColors.teal,
           ),
         );
@@ -67,7 +69,9 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('درخواست اتصال مجدد به ۲ مرجع با خطای ارتباطی ارسال گردید.'),
+            content: Text(
+              'درخواست اتصال مجدد به ۲ مرجع با خطای ارتباطی ارسال گردید.',
+            ),
             backgroundColor: AppColors.navy,
           ),
         );
@@ -82,7 +86,8 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 900;
-        final isMedium = constraints.maxWidth >= 600 && constraints.maxWidth < 900;
+        final isMedium =
+            constraints.maxWidth >= 600 && constraints.maxWidth < 900;
 
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -93,7 +98,8 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
             const SizedBox(height: 20),
 
             // 2. Monitoring Failures & Overdue Alert Banner (if any)
-            if (widget.metrics.monitoringFailuresCount > 0 || widget.metrics.overdueSourceChecksCount > 0) ...[
+            if (widget.metrics.monitoringFailuresCount > 0 ||
+                widget.metrics.overdueSourceChecksCount > 0) ...[
               _buildAlertBanner(),
               const SizedBox(height: 20),
             ],
@@ -147,7 +153,11 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.travel_explore, color: AppColors.primaryRed, size: 24),
+                  const Icon(
+                    Icons.travel_explore,
+                    color: AppColors.primaryRed,
+                    size: 24,
+                  ),
                   const SizedBox(width: 8),
                   const Text(
                     'داشبورد هوشمند پایش و دستیار پژوهش',
@@ -177,7 +187,10 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.navy,
                   side: const BorderSide(color: AppColors.border),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: widget.onAddNewSource,
                 icon: const Icon(Icons.add_link, size: 16),
@@ -186,17 +199,25 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
               FilledButton.icon(
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primaryRed,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: _isCrawling ? null : _handleManualCrawl,
                 icon: _isCrawling
                     ? const SizedBox(
                         width: 14,
                         height: 14,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
                       )
                     : const Icon(Icons.refresh, size: 16),
-                label: Text(_isCrawling ? 'در حال پویش مراجع...' : 'پویش دستی فوری'),
+                label: Text(
+                  _isCrawling ? 'در حال پویش مراجع...' : 'پویش دستی فوری',
+                ),
               ),
             ],
           ),
@@ -216,7 +237,11 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 24),
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: AppColors.warning,
+            size: 24,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -233,16 +258,18 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                 const SizedBox(height: 4),
                 Text(
                   '${widget.metrics.monitoringFailuresCount} مرجع به دلیل خطای اتصال (Timeout یا HTTP 503) با شکست مواجه شده و ${widget.metrics.overdueSourceChecksCount} مرجع از موعد مقرر بررسی عبور کرده‌اند.',
-                  style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.navy),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    height: 1.4,
+                    color: AppColors.navy,
+                  ),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 12),
           FilledButton.tonalIcon(
-            style: FilledButton.styleFrom(
-              visualDensity: VisualDensity.compact,
-            ),
+            style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
             onPressed: _isRetryingFailures ? null : _handleRetryFailures,
             icon: _isRetryingFailures
                 ? const SizedBox(
@@ -342,11 +369,46 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
 
   Widget _buildCountriesSpotlight(bool isWide) {
     final countries = [
-      {'code': 'CA', 'flag': '🇨🇦', 'name': 'کانادا (Canada)', 'sources': '۷ مرجع', 'unis': '۴ دانشگاه', 'status': 'تغییر تمکن و نمرات زبان'},
-      {'code': 'DE', 'flag': '🇩🇪', 'name': 'آلمان (Germany)', 'sources': '۵ مرجع', 'unis': '۳ دانشگاه', 'status': 'افزایش حساب مسدودشده'},
-      {'code': 'AU', 'flag': '🇦🇺', 'name': 'استرالیا (Australia)', 'sources': '۴ مرجع', 'unis': '۳ دانشگاه', 'status': 'مغایرت سقف سنی ساب‌کلاس ۴۸۵'},
-      {'code': 'UK', 'flag': '🇬🇧', 'name': 'انگلستان (United Kingdom)', 'sources': '۴ مرجع', 'unis': '۲ دانشگاه', 'status': 'بدون تغییر جدید'},
-      {'code': 'IT', 'flag': '🇮🇹', 'name': 'ایتالیا (Italy)', 'sources': '۲ مرجع', 'unis': '۱ دانشگاه', 'status': 'بدون تغییر جدید'},
+      {
+        'code': 'CA',
+        'flag': '🇨🇦',
+        'name': 'کانادا (Canada)',
+        'sources': '۷ مرجع',
+        'unis': '۴ دانشگاه',
+        'status': 'تغییر تمکن و نمرات زبان',
+      },
+      {
+        'code': 'DE',
+        'flag': '🇩🇪',
+        'name': 'آلمان (Germany)',
+        'sources': '۵ مرجع',
+        'unis': '۳ دانشگاه',
+        'status': 'افزایش حساب مسدودشده',
+      },
+      {
+        'code': 'AU',
+        'flag': '🇦🇺',
+        'name': 'استرالیا (Australia)',
+        'sources': '۴ مرجع',
+        'unis': '۳ دانشگاه',
+        'status': 'مغایرت سقف سنی ساب‌کلاس ۴۸۵',
+      },
+      {
+        'code': 'UK',
+        'flag': '🇬🇧',
+        'name': 'انگلستان (United Kingdom)',
+        'sources': '۴ مرجع',
+        'unis': '۲ دانشگاه',
+        'status': 'بدون تغییر جدید',
+      },
+      {
+        'code': 'IT',
+        'flag': '🇮🇹',
+        'name': 'ایتالیا (Italy)',
+        'sources': '۲ مرجع',
+        'unis': '۱ دانشگاه',
+        'status': 'بدون تغییر جدید',
+      },
     ];
 
     return Container(
@@ -364,11 +426,19 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.flag_outlined, color: AppColors.navy, size: 20),
+                  const Icon(
+                    Icons.flag_outlined,
+                    color: AppColors.navy,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   const Text(
                     'وضعیت پوشش مراجع رسمی به تفکیک کشور',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: AppColors.navy),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.navy,
+                    ),
                   ),
                 ],
               ),
@@ -402,12 +472,19 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                         children: [
                           Text(
                             c['name']!,
-                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.navy),
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.navy,
+                            ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '${c['sources']} • ${c['unis']}',
-                            style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -448,7 +525,11 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
               const SizedBox(width: 8),
               const Text(
                 'آخرین دوره‌های پویش و استخراج دستیار پژوهش',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: AppColors.navy),
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.navy,
+                ),
               ),
             ],
           ),
@@ -460,7 +541,10 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
               final isSuccess = run.status == 'completed';
               return Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceMuted,
                   borderRadius: BorderRadius.circular(AppRadii.sm),
@@ -477,12 +561,19 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                     Expanded(
                       child: Text(
                         'دوره پویش ${run.runId} — ${run.sourcesScanned} منبع پایش شد',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.navy),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.navy,
+                        ),
                       ),
                     ),
                     Text(
                       '${run.changesFound} تغییر جدید • مدت: ${run.duration.inMinutes} دقیقه',
-                      style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -508,7 +599,11 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
           const Expanded(
             child: Text(
               'تضمین حاکمیت سردبیری: دستیار پژوهش منحصراً به کشف تغییرات در مراجع رسمی و پیشنهاد اصلاحات به تفکیک بند می‌پردازد. هیچ تغییری تا زمان تأیید صریح سردبیر انسانی در قالب پیش‌نویس (Draft) ذخیره نمی‌گردد و انتشار نهایی نیازمند اقدام رسمی مجزاست.',
-              style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.navy),
+              style: TextStyle(
+                fontSize: 11,
+                height: 1.4,
+                color: AppColors.navy,
+              ),
             ),
           ),
         ],
@@ -551,7 +646,9 @@ class _MetricCard extends StatelessWidget {
           color: isHighlight ? color.withValues(alpha: 0.04) : Colors.white,
           borderRadius: BorderRadius.circular(AppRadii.md),
           border: Border.all(
-            color: isHighlight ? color.withValues(alpha: 0.4) : AppColors.border,
+            color: isHighlight
+                ? color.withValues(alpha: 0.4)
+                : AppColors.border,
             width: isHighlight ? 1.5 : 1,
           ),
           boxShadow: [
@@ -592,7 +689,10 @@ class _MetricCard extends StatelessWidget {
                 if (badgeLabel != null) ...[
                   const SizedBox(width: 6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(AppRadii.pill),

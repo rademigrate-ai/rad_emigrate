@@ -401,7 +401,9 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(AppRadii.sm),
-              border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: AppColors.warning.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -410,7 +412,11 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                   isFa
                       ? 'مغایرت استخراج‌شده: ادعای منبع فدرال (سقف سنی ۳۵ سال) در برابر استثنای مصوب ایالتی (سقف سنی ۵۰ سال برای دوره ارشد پژوهشی).'
                       : 'Detected Conflict: Federal claim (max age 35) vs State exemption (max age 50 for research masters).',
-                  style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.navy),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    height: 1.4,
+                    color: AppColors.navy,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -435,7 +441,9 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                       },
                       icon: const Icon(Icons.account_balance, size: 14),
                       label: Text(
-                        isFa ? 'اعمال استناد منبع فدرال' : 'Apply Federal Source',
+                        isFa
+                            ? 'اعمال استناد منبع فدرال'
+                            : 'Apply Federal Source',
                         style: const TextStyle(fontSize: 11),
                       ),
                     ),
@@ -1204,11 +1212,18 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.calendar_today_outlined, size: 12, color: AppColors.teal),
+                  const Icon(
+                    Icons.calendar_today_outlined,
+                    size: 12,
+                    color: AppColors.teal,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '${isFa ? "تاریخ انتشار منبع" : "Published"}: ${ev.fetchedAt.toLocal().toString().substring(0, 10)}',
-                    style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -1216,11 +1231,18 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.event_available_outlined, size: 12, color: AppColors.teal),
+                    const Icon(
+                      Icons.event_available_outlined,
+                      size: 12,
+                      color: AppColors.teal,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${isFa ? "تاریخ اعتبار و اجرا" : "Effective"}: ${ev.verifiedAt!.toLocal().toString().substring(0, 10)}',
-                      style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -1256,12 +1278,22 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.teal.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadii.lg - 1)),
-              border: Border(bottom: BorderSide(color: AppColors.teal.withValues(alpha: 0.3))),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppRadii.lg - 1),
+              ),
+              border: Border(
+                bottom: BorderSide(
+                  color: AppColors.teal.withValues(alpha: 0.3),
+                ),
+              ),
             ),
             child: Row(
               children: [
-                const Icon(Icons.preview_outlined, color: AppColors.teal, size: 22),
+                const Icon(
+                  Icons.preview_outlined,
+                  color: AppColors.teal,
+                  size: 22,
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -1271,27 +1303,41 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                         isFa
                             ? 'پیش‌نمایش سند نهایی پیش‌نویس (Clean Unified Preview)'
                             : 'Final Document Preview (Clean Unified View)',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.navy),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.navy,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         isFa
                             ? 'این نما سند کامل را به صورت یکپارچه با اعمال کلیه اصلاحات و متون ویرایش‌شده مصوب نمایش می‌دهد.'
                             : 'Demonstrates the final approved continuous article with all accepted changes applied seamlessly.',
-                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.teal,
                     borderRadius: BorderRadius.circular(AppRadii.pill),
                   ),
                   child: Text(
                     isFa ? 'نگارش آماده پیش‌نویس' : 'Ready for Draft',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ],
@@ -1306,44 +1352,63 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               children: [
                 Text(
                   widget.articleTitle,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.navy),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.navy,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Divider(height: 1),
                 const SizedBox(height: 20),
 
-                ...sections.where((sec) => sec.status != _SectionDiffStatus.removed).map((sec) {
-                  final heading = sec.proposedContent?.heading ?? sec.heading;
-                  final decision = widget.sectionReviewDecisions[sec.id];
-                  final manualEdit = _editControllers[sec.id]?.text;
+                ...sections
+                    .where((sec) => sec.status != _SectionDiffStatus.removed)
+                    .map((sec) {
+                      final heading =
+                          sec.proposedContent?.heading ?? sec.heading;
+                      final decision = widget.sectionReviewDecisions[sec.id];
+                      final manualEdit = _editControllers[sec.id]?.text;
 
-                  // Resolve blocks to display
-                  List<ContentBlock> blocksToRender;
-                  if (manualEdit != null && manualEdit.isNotEmpty) {
-                    blocksToRender = [
-                      ContentBlock(id: 'manual-${sec.id}', type: 'paragraph', text: manualEdit, items: const []),
-                    ];
-                  } else if (decision == 'rejected') {
-                    blocksToRender = sec.baseContent?.blocks ?? [];
-                  } else {
-                    blocksToRender = sec.proposedContent?.blocks ?? sec.baseContent?.blocks ?? [];
-                  }
+                      // Resolve blocks to display
+                      List<ContentBlock> blocksToRender;
+                      if (manualEdit != null && manualEdit.isNotEmpty) {
+                        blocksToRender = [
+                          ContentBlock(
+                            id: 'manual-${sec.id}',
+                            type: 'paragraph',
+                            text: manualEdit,
+                            items: const [],
+                          ),
+                        ];
+                      } else if (decision == 'rejected') {
+                        blocksToRender = sec.baseContent?.blocks ?? [];
+                      } else {
+                        blocksToRender =
+                            sec.proposedContent?.blocks ??
+                            sec.baseContent?.blocks ??
+                            [];
+                      }
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          heading,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.navy),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              heading,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.navy,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _renderBlocks(blocksToRender),
+                          ],
                         ),
-                        const SizedBox(height: 10),
-                        _renderBlocks(blocksToRender),
-                      ],
-                    ),
-                  );
-                }),
+                      );
+                    }),
               ],
             ),
           ),
@@ -1387,7 +1452,10 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               ),
               children: headerCells.map((h) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
                   child: Text(
                     h,
                     style: baseStyle.copyWith(
@@ -1414,7 +1482,10 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                 ),
                 children: cells.map((cell) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
                     child: Text(cell, style: baseStyle),
                   );
                 }).toList(),
