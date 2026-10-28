@@ -1,9 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../data/user_ai_profile_repository.dart';
 import '../../domain/entities/ai_user_profile.dart';
+
+/// Encrypted local cache for voluntary immigration profile fields.
+/// SharedPreferences is never used for sensitive profile values going forward;
+/// any legacy plaintext keys are deleted on load/clear.
+const _secure = FlutterSecureStorage(
+  aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+);
 
 class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
   AiUserProfileNotifier(this._ref) : super(const AiImmigrationProfile()) {
@@ -19,11 +28,16 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
 
     _ref.listen<String?>(authenticatedUserIdProvider, (previous, next) {
       if (previous != next) {
+        // Clear in-memory state immediately on logout / user switch.
+        state = const AiImmigrationProfile();
         _currentUserId = next;
         _loadProfile(next);
       }
     });
   }
+
+  String _k(String userId, String field) =>
+      'ai_profile_secure_${userId}_$field';
 
   int _parseYears(String? value) {
     if (value == null || value.isEmpty) return 0;
@@ -34,29 +48,96 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
     return 0;
   }
 
+  /// Remove legacy plaintext SharedPreferences keys for this user (one-time hygiene).
+  Future<void> _purgeLegacyPlaintext(String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keyPrefix = 'ai_profile_${userId}_';
+      await prefs.remove('${keyPrefix}education');
+      await prefs.remove('${keyPrefix}experience');
+      await prefs.remove('${keyPrefix}language');
+      await prefs.remove('${keyPrefix}country');
+      await prefs.remove('${keyPrefix}budget');
+      await prefs.remove('${keyPrefix}enabled');
+    } catch (_) {}
+  }
+
+  Future<void> _writeSecure(String userId, AiImmigrationProfile profile) async {
+    await _secure.write(key: _k(userId, 'education'), value: profile.education);
+    await _secure.write(
+      key: _k(userId, 'experience'),
+      value: '${profile.workExperienceYears}',
+    );
+    await _secure.write(
+      key: _k(userId, 'language'),
+      value: profile.languageScore,
+    );
+    await _secure.write(
+      key: _k(userId, 'country'),
+      value: profile.targetCountry,
+    );
+    await _secure.write(
+      key: _k(userId, 'budget'),
+      value: profile.estimatedBudget,
+    );
+    await _secure.write(
+      key: _k(userId, 'enabled'),
+      value: profile.enableAiPersonalization ? '1' : '0',
+    );
+  }
+
+  Future<void> _deleteSecure(String userId) async {
+    for (final field in [
+      'education',
+      'experience',
+      'language',
+      'country',
+      'budget',
+      'enabled',
+    ]) {
+      await _secure.delete(key: _k(userId, field));
+    }
+  }
+
+  Future<AiImmigrationProfile?> _readSecure(String userId) async {
+    final education = await _secure.read(key: _k(userId, 'education'));
+    final experience = await _secure.read(key: _k(userId, 'experience'));
+    final language = await _secure.read(key: _k(userId, 'language'));
+    final country = await _secure.read(key: _k(userId, 'country'));
+    final budget = await _secure.read(key: _k(userId, 'budget'));
+    final enabled = await _secure.read(key: _k(userId, 'enabled'));
+    if (education == null &&
+        experience == null &&
+        language == null &&
+        country == null &&
+        budget == null) {
+      return null;
+    }
+    return AiImmigrationProfile(
+      education: education ?? '',
+      workExperienceYears: int.tryParse(experience ?? '') ?? 0,
+      languageScore: language ?? '',
+      targetCountry: country ?? '',
+      estimatedBudget: budget ?? '',
+      enableAiPersonalization: enabled != '0',
+    );
+  }
+
   Future<void> _loadProfile(String? userId) async {
     if (userId == null || userId.isEmpty) {
       state = const AiImmigrationProfile();
       return;
     }
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final keyPrefix = 'ai_profile_${userId}_';
-      final loaded = AiImmigrationProfile(
-        education: prefs.getString('${keyPrefix}education') ?? '',
-        workExperienceYears: prefs.getInt('${keyPrefix}experience') ?? 0,
-        languageScore: prefs.getString('${keyPrefix}language') ?? '',
-        targetCountry: prefs.getString('${keyPrefix}country') ?? '',
-        estimatedBudget: prefs.getString('${keyPrefix}budget') ?? '',
-        enableAiPersonalization: prefs.getBool('${keyPrefix}enabled') ?? true,
-      );
+      await _purgeLegacyPlaintext(userId);
 
-      if (loaded.hasContent) {
-        state = loaded;
+      final secure = await _readSecure(userId);
+      if (secure != null && secure.hasContent) {
+        state = secure;
         return;
       }
 
-      // If local SharedPreferences is empty, attempt optional cloud restore
+      // Optional cloud restore when local cache empty (owner-scoped RPC).
       try {
         final repo = _ref.read(userAiProfileRepositoryProvider);
         final remote = await repo.fetchMine();
@@ -72,38 +153,14 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
             enableAiPersonalization: remote.consentAt != null,
           );
           state = cloudProfile;
-          // Cache locally
-          await prefs.setString(
-            '${keyPrefix}education',
-            cloudProfile.education,
-          );
-          await prefs.setInt(
-            '${keyPrefix}experience',
-            cloudProfile.workExperienceYears,
-          );
-          await prefs.setString(
-            '${keyPrefix}language',
-            cloudProfile.languageScore,
-          );
-          await prefs.setString(
-            '${keyPrefix}country',
-            cloudProfile.targetCountry,
-          );
-          await prefs.setString(
-            '${keyPrefix}budget',
-            cloudProfile.estimatedBudget,
-          );
-          await prefs.setBool(
-            '${keyPrefix}enabled',
-            cloudProfile.enableAiPersonalization,
-          );
+          await _writeSecure(userId, cloudProfile);
           return;
         }
       } catch (_) {
-        // Safe offline/fallback behavior
+        // Offline / pre-migration safe fallback
       }
 
-      state = loaded;
+      state = secure ?? const AiImmigrationProfile();
     } catch (_) {
       state = const AiImmigrationProfile();
     }
@@ -114,19 +171,9 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
     final userId = _currentUserId;
     if (userId == null || userId.isEmpty) return;
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final keyPrefix = 'ai_profile_${userId}_';
-      await prefs.setString('${keyPrefix}education', profile.education);
-      await prefs.setInt('${keyPrefix}experience', profile.workExperienceYears);
-      await prefs.setString('${keyPrefix}language', profile.languageScore);
-      await prefs.setString('${keyPrefix}country', profile.targetCountry);
-      await prefs.setString('${keyPrefix}budget', profile.estimatedBudget);
-      await prefs.setBool(
-        '${keyPrefix}enabled',
-        profile.enableAiPersonalization,
-      );
+      await _writeSecure(userId, profile);
+      await _purgeLegacyPlaintext(userId);
 
-      // Attempt optional cloud sync
       try {
         final repo = _ref.read(userAiProfileRepositoryProvider);
         await repo.upsert(
@@ -156,15 +203,8 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
     final userId = _currentUserId;
     if (userId == null || userId.isEmpty) return;
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final keyPrefix = 'ai_profile_${userId}_';
-      await prefs.remove('${keyPrefix}education');
-      await prefs.remove('${keyPrefix}experience');
-      await prefs.remove('${keyPrefix}language');
-      await prefs.remove('${keyPrefix}country');
-      await prefs.remove('${keyPrefix}budget');
-      await prefs.remove('${keyPrefix}enabled');
-
+      await _deleteSecure(userId);
+      await _purgeLegacyPlaintext(userId);
       try {
         final repo = _ref.read(userAiProfileRepositoryProvider);
         await repo.deleteMine();

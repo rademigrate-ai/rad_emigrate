@@ -293,7 +293,6 @@ export async function handler(req: Request): Promise<Response> {
         evidence_state: grounding.hasConflicts ? "conflicting" : grounding.unavailable ? "unavailable" : "insufficient",
         intent,
         web_search_mode: webSearchMode,
-        web_search_status: "skipped",
         locale: grounding.locale,
         request_id: requestId,
         failover: false,
@@ -330,16 +329,14 @@ export async function handler(req: Request): Promise<Response> {
   if (runSearch && webSearchMode !== "off") {
     webSearch = await performWebSearch(lastUser);
     systemParts.push(
-      `<UNTRUSTED_WEB_SEARCH>\n${formatSearchForPrompt(webSearch)}
-</UNTRUSTED_WEB_SEARCH>`,
+      `<UNTRUSTED_WEB_SEARCH>\n${formatSearchForPrompt(webSearch)}\n</UNTRUSTED_WEB_SEARCH>`,
     );
   } else if (webSearchMode === "on") {
     systemParts.push(
       "<TRUSTED_TOOL_STATUS>web_search=skipped_or_unavailable; do not invent search results</TRUSTED_TOOL_STATUS>",
     );
   }
-  messages.unshift({ role: "system", content: systemParts.join("
-") });
+  messages.unshift({ role: "system", content: systemParts.join("\n") });
 
   if (user && requestId) {
     const sessionCandidate = typeof payload.session_id === "string" ? payload.session_id.trim() : "";
@@ -450,7 +447,6 @@ export async function handler(req: Request): Promise<Response> {
         web_search_adapter: webSearch.adapter,
         web_citations: webSearch.citations ?? [],
         web_search_mode: webSearchMode,
-        web_search_status: "skipped",
         locale: grounding.locale,
         provider: runtime.provider_slug,
         model: runtime.model_slug,
