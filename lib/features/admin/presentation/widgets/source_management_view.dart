@@ -66,15 +66,18 @@ class _SourceManagementViewState extends State<SourceManagementView> {
       }
       if (_typeFilter != 'all') {
         if (_typeFilter == 'official' &&
-            s.verificationTier != SourceVerificationTier.officialAuthority)
+            s.verificationTier != SourceVerificationTier.officialAuthority) {
           return false;
+        }
         if (_typeFilter == 'university' &&
-            s.verificationTier != SourceVerificationTier.accreditedUniversity)
+            s.verificationTier != SourceVerificationTier.accreditedUniversity) {
           return false;
+        }
         if (_typeFilter == 'employer' &&
             s.verificationTier !=
-                SourceVerificationTier.employerDefinedUnverified)
+                SourceVerificationTier.employerDefinedUnverified) {
           return false;
+        }
       }
       if (_searchQuery.isNotEmpty) {
         final q = _searchQuery.toLowerCase();
