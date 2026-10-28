@@ -1,4 +1,4 @@
-import { assertEquals, assert } from "https://deno.land/std@0.224.0/assert/mod.ts";
+import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
   normalizeAndValidateBaseUrl,
 } from "../ai-orchestrator/protocol_detect.ts";
@@ -15,6 +15,16 @@ Deno.test("rejects localhost and metadata hosts", () => {
   assertEquals(normalizeAndValidateBaseUrl("https://127.0.0.1/v1").ok, false);
   assertEquals(normalizeAndValidateBaseUrl("https://169.254.169.254/latest").ok, false);
   assertEquals(normalizeAndValidateBaseUrl("https://metadata.google.internal/").ok, false);
+});
+
+Deno.test("rejects credentials embedded in Base URL", () => {
+  const r = normalizeAndValidateBaseUrl("https://user:pass@openrouter.ai/api/v1");
+  assertEquals(r.ok, false);
+});
+
+Deno.test("rejects non-443 ports", () => {
+  const r = normalizeAndValidateBaseUrl("https://openrouter.ai:8443/api/v1");
+  assertEquals(r.ok, false);
 });
 
 Deno.test("accepts public https OpenAI-compatible URL", () => {

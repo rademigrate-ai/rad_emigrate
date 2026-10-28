@@ -1,4 +1,4 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/supabase/supabase_client.dart';
 import '../../../core/supabase/supabase_providers.dart';
@@ -37,11 +37,13 @@ class UserAiProfile {
       fieldOfStudy: json['field_of_study'] as String?,
       workExperience: json['work_experience'] as String?,
       languageLevel: json['language_level'] as String?,
-      preferredDestinations: (json['preferred_destinations'] as List?)
+      preferredDestinations:
+          (json['preferred_destinations'] as List?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
-      interestedPathways: (json['interested_pathways'] as List?)
+      interestedPathways:
+          (json['interested_pathways'] as List?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
@@ -67,7 +69,7 @@ class UserAiProfileRepository {
         .select()
         .eq('user_id', uid)
         .limit(1);
-    if (rows is! List || rows.isEmpty) return null;
+    if (rows.isEmpty) return null;
     return UserAiProfile.fromJson(Map<String, dynamic>.from(rows.first as Map));
   }
 

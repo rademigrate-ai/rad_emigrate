@@ -36,6 +36,11 @@ export function normalizeAndValidateBaseUrl(raw: string): ProtocolDetection {
     return { ok: false, error: "invalid_base_url" };
   }
   if (url.protocol !== "https:") return { ok: false, error: "https_required" };
+  if (url.username || url.password) return { ok: false, error: "credentials_in_url_forbidden" };
+  // Restrict to default HTTPS port to reduce SSRF pivot surface.
+  if (url.port && url.port !== "" && url.port !== "443") {
+    return { ok: false, error: "unsafe_port" };
+  }
   if (!isSafePublicHttpsUrl(url.href.replace(/\/$/, "")) && !isSafePublicHttpsUrl(url.origin)) {
     return { ok: false, error: "unsafe_base_url" };
   }
