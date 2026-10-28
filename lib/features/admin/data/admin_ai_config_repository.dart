@@ -42,6 +42,55 @@ class AdminAiConfigRepository {
     return result.toString();
   }
 
+  /// Two-field onboarding: Base URL + API Key only.
+  /// Server detects protocol, stores secret, discovers models.
+  Future<Map<String, dynamic>> onboardProviderTwoField({
+    required String baseUrl,
+    required String apiKey,
+    String displayName = '',
+    String slug = '',
+  }) async {
+    if (!_supabase.isInitialized) {
+      throw StateError('Supabase is not configured.');
+    }
+    try {
+      final response = await _supabase.client.functions.invoke(
+        'ai-orchestrator',
+        body: {
+          'action': 'onboard_provider',
+          'base_url': baseUrl,
+          'api_key': apiKey,
+          if (displayName.isNotEmpty) 'display_name': displayName,
+          if (slug.isNotEmpty) 'slug': slug,
+        },
+      );
+      return _responseMap(response.data);
+    } on FunctionException catch (error) {
+      final details = error.details;
+      throw AdminAiOperationException(
+        details is Map ? details['error'] as String? : null,
+      );
+    }
+  }
+
+  Future<Map<String, dynamic>> syncAllCatalogues() async {
+    if (!_supabase.isInitialized) {
+      throw StateError('Supabase is not configured.');
+    }
+    try {
+      final response = await _supabase.client.functions.invoke(
+        'ai-orchestrator',
+        body: {'action': 'sync_catalogues'},
+      );
+      return _responseMap(response.data);
+    } on FunctionException catch (error) {
+      final details = error.details;
+      throw AdminAiOperationException(
+        details is Map ? details['error'] as String? : null,
+      );
+    }
+  }
+
   Future<Map<String, dynamic>> testProvider(String providerId) async {
     return _invoke('test_provider', providerId);
   }

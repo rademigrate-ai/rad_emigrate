@@ -23,6 +23,7 @@ class AiRequest {
     this.metadata = const {},
     this.authorizedDataScopes = const [],
     this.context = const {},
+    this.webSearchMode = 'auto',
   });
 
   final String prompt;
@@ -37,4 +38,7 @@ class AiRequest {
   /// Explicit user-authorized tool scopes, separate from display metadata.
   final List<String> authorizedDataScopes;
   final Map<String, String?> context;
+
+  /// auto | on | off — server-side web research mode.
+  final String webSearchMode;
 }

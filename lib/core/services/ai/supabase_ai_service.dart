@@ -140,6 +140,12 @@ class SupabaseAiService implements AiService {
           'session_id': cleanUuid(request.conversationId),
           'guest_key': cleanGuestKey,
           'locale': cleanLocale,
+          'web_search':
+              (request.webSearchMode == 'on' ||
+                  request.webSearchMode == 'off' ||
+                  request.webSearchMode == 'auto')
+              ? request.webSearchMode
+              : 'auto',
           'authorized_data_scopes': cleanScopes,
           'context': cleanContext,
           'messages': [
@@ -259,7 +265,8 @@ class SupabaseAiService implements AiService {
       case 'empty_evidence':
       case 'stale_evidence':
       case 'unavailable_evidence':
-        return 'شواهد رسمی و مستندات کافی برای این درخواست در پایگاه داده یافت نشد.';
+      case 'insufficient':
+        return l10n.aiInsufficientEvidence;
       default:
         return l10n.aiRequestFailed;
     }
