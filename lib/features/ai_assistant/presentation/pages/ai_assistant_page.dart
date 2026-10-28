@@ -14,7 +14,6 @@ import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/supabase/rad_contract.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../../../core/supabase/supabase_storage.dart';
-import '../../../../core/supabase/supabase_client.dart';
 
 import 'dart:typed_data';
 
