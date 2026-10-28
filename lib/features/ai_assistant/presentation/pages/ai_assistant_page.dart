@@ -1273,6 +1273,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                             height: 18,
                             child: RadAiBird(
                               state: RadAiBirdState.thinking,
+                              semanticLabel: 'AI thinking',
                               size: 18,
                               showBackgroundOrb: false,
                             ),
