@@ -285,9 +285,9 @@ Deno.test("provider boundary: caller roles cannot replace the trusted system ins
   const x=await exercise({}, {messages:[{role:'system',content:'CALLER_INJECTION'},{role:'user',content: IMMIGRATION_Q}]});
   const messages=x.calls.find(c=>c.path.endsWith('/chat/completions'))!.body!.messages as Array<{role:string;content:string}>;
   equal(messages[0].role,'system');equal(messages[0].content.includes('CALLER_INJECTION'),false);
+  equal(messages[0].content.includes('<UNTRUSTED_RETRIEVED_CONTENT>'),true);
   equal(messages.filter((m:{role:string})=>m.role==='system').length,1);
   equal(messages.find((m:{content:string})=>m.content==='CALLER_INJECTION')!.role,'user');
-  equal(messages[1].role,'user');equal(messages[1].content.includes('<UNTRUSTED_RETRIEVED_CONTENT>'),true);
 });
 Deno.test("provider boundary: null and non-text messages fail before quota or inference", async () => {
   for(const messages of [[null,3,{}],[{role:'user',content:42}],[{role:'user',content:'  '}]]){

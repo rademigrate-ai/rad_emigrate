@@ -2,7 +2,7 @@ import { bodyJson, contractValid, envelope } from "../_shared/rad_contract.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { loadGrounding } from "./knowledge_grounding.ts";
 import { classifyQuestionIntent, generalSystemPrompt, appHelpSystemPrompt } from "./question_intent.ts";
-import { performWebSearch, shouldAutoSearch, formatSearchForPrompt } from "./web_search.ts";
+import { performWebSearch, shouldAutoSearch, formatSearchForPrompt, type WebSearchResult } from "./web_search.ts";
 import type { Runtime } from "./handler_providers.ts";
 
 type Db = (path: string, init?: RequestInit) => Promise<unknown>;
@@ -261,17 +261,11 @@ export function createCopilotHandler(options: Options) {
         : body.web_search === false || body.web_search === "off"
         ? "off"
         : "auto";
-      let webSearchResult = {
-        status: "skipped" as string,
+      let webSearchResult: WebSearchResult = {
+        status: "unavailable",
         adapter: "none",
         query: "",
-        citations: [] as Array<{
-          title: string;
-          url: string;
-          publisher: string;
-          excerpt: string;
-          retrieved_at: string;
-        }>,
+        citations: [],
       };
       if (
         webMode === "on" ||

@@ -326,14 +326,10 @@ export async function handler(req: Request): Promise<Response> {
   };
   const runSearch = webSearchMode === "on"
     || (webSearchMode === "auto" && (shouldAutoSearch(lastUser, intent) || intent === "immigration_or_rad"));
-  if (runSearch && webSearchMode !== "off") {
+  if (runSearch) {
     webSearch = await performWebSearch(lastUser);
     systemParts.push(
       `<UNTRUSTED_WEB_SEARCH>\n${formatSearchForPrompt(webSearch)}\n</UNTRUSTED_WEB_SEARCH>`,
-    );
-  } else if (webSearchMode === "on") {
-    systemParts.push(
-      "<TRUSTED_TOOL_STATUS>web_search=skipped_or_unavailable; do not invent search results</TRUSTED_TOOL_STATUS>",
     );
   }
   messages.unshift({ role: "system", content: systemParts.join("\n") });

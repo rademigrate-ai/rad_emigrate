@@ -131,7 +131,7 @@ async function searchBrave(query: string, key: string): Promise<WebSearchResult>
     citations.push({
       title,
       url: href,
-      publisher: asString(item.profile?.name) || new URL(href).hostname,
+      publisher: asString(asRecord(item.profile).name) || new URL(href).hostname,
       excerpt,
       retrieved_at,
       publication_date: asString(item.age) || undefined,

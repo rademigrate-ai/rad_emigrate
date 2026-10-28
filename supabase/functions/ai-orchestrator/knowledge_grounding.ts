@@ -30,7 +30,7 @@ export async function loadGrounding(
   queryHint?: string,
   localeHint?: string,
 ) {
-  const locale = localeHint === "fa" || localeHint === "en"
+  const locale: "fa" | "en" = localeHint === "fa" || localeHint === "en"
     ? localeHint
     : /[\u0600-\u06FF]/.test(queryHint ?? "")
     ? "fa"
