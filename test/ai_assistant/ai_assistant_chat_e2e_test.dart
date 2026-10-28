@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,13 +7,9 @@ import 'package:rad_emigrate/core/services/ai/ai_request.dart';
 import 'package:rad_emigrate/core/services/ai/ai_response.dart';
 import 'package:rad_emigrate/core/services/ai/ai_service.dart';
 import 'package:rad_emigrate/features/ai_assistant/data/ai_session_repository.dart';
-import 'package:rad_emigrate/features/ai_assistant/domain/entities/ai_user_profile.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/pages/ai_assistant_page.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_adviser_handoff_card.dart';
-import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_citation_card.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_document_chip.dart';
-import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_history_drawer.dart';
-import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_immigration_profile_sheet.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_interactive_report_view.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_markdown_view.dart';
 import 'package:rad_emigrate/features/ai_assistant/presentation/widgets/ai_search_progress_card.dart';
