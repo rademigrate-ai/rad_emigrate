@@ -180,13 +180,9 @@ with gzip.open(
 print(f"Loaded Antigravity unique recoveries: {len(antigravity_recovered)} URLs")
 
 # 3. Load Codex prepared canonical & other-titles inventories
-with open(
-    audit_dir / "prepared/canonical-page-inventory.json", encoding="utf-8"
-) as f:
+with open(audit_dir / "prepared/canonical-page-inventory.json", encoding="utf-8") as f:
     canonical_pages = json.load(f)
-with open(
-    audit_dir / "prepared/other-titles-inventory.json", encoding="utf-8"
-) as f:
+with open(audit_dir / "prepared/other-titles-inventory.json", encoding="utf-8") as f:
     existing_other_titles = json.load(f)
 
 print(
