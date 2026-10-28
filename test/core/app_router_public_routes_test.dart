@@ -12,6 +12,9 @@ import 'package:rad_emigrate/features/auth/presentation/pages/otp_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/pages/register_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
 import 'package:rad_emigrate/features/visa/presentation/pages/visa_page.dart';
+import 'package:rad_emigrate/features/interview_scheduling/presentation/pages/interview_scheduling_page.dart';
+import 'package:rad_emigrate/features/interviews/presentation/pages/interviews_page.dart';
+import 'package:rad_emigrate/features/consultation/presentation/pages/consultation_page.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +27,7 @@ late GoRouter _router;
 
 /// Pumps the real app router for an unauthenticated visitor. The bootstrap
 /// future resolves immediately so restoration never blocks navigation.
-Future<void> _pumpApp(WidgetTester tester) async {
+Future<void> _pumpApp(WidgetTester tester, {Locale? locale}) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
 
@@ -41,6 +44,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
         builder: (context, ref, _) {
           _router = ref.watch(appRouterProvider);
           return MaterialApp.router(
+            locale: locale,
             routerConfig: _router,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
@@ -61,6 +65,27 @@ Future<void> _go(WidgetTester tester, String location) async {
 }
 
 void main() {
+  for (final language in ['en', 'fa']) {
+    testWidgets(
+      'production interview scheduling route and consultation CTA $language',
+      (tester) async {
+        await _pumpApp(tester, locale: Locale(language));
+        await _go(tester, '/interview-scheduling');
+        expect(find.byType(InterviewSchedulingPage), findsOneWidget);
+        expect(find.byType(InterviewsPage), findsNothing);
+        final consultation = find.text(
+          language == 'fa' ? 'درخواست مشاوره تخصصی' : 'Request Consultation',
+        );
+        expect(consultation, findsOneWidget);
+        await tester.ensureVisible(consultation);
+        await tester.tap(consultation);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.byType(ConsultationPage), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   testWidgets('/signup renders the register form as a /register alias', (
     tester,
   ) async {
@@ -166,6 +191,17 @@ void main() {
     expect(find.byType(OtpPage), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
     expect(find.text('qa@example.test'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('/interviews routes to InterviewsPage', (tester) async {
+    await _pumpApp(tester);
+    await _go(tester, '/interviews');
+
+    expect(find.byType(InterviewsPage), findsOneWidget);
+    expect(find.byType(InterviewSchedulingPage), findsNothing);
+    expect(find.byType(NotFoundPage), findsNothing);
+    expect(find.byType(LoginPage), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

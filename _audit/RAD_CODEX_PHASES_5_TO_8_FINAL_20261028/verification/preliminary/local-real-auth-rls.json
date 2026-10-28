@@ -1,0 +1,91 @@
+{
+  "project": "rad_codex_final_20261028",
+  "lineage": "canonical",
+  "production_mutations": false,
+  "started_at": "2026-10-28T11:16:57.020880+00:00",
+  "fingerprint": {
+    "rls": "f774d2521876438405d177897df727d3",
+    "bucket": "4082dda1bd1da983bda51a025c66ac93",
+    "columns": "2ba2195f7633063ea3f5c8b16ed77db8",
+    "indexes": "7acee1a5bf1766061fc151166d1ea00a",
+    "policies": "55e8a4ebace6d08cdf6581783d56ed8c",
+    "triggers": "9be9b50fb51f41c9e9dacb7e0ef56509",
+    "functions": "fc57d0f49dfab1be19b4469a05b19cf8",
+    "constraints": "d67f6384ff0ec977d106e5ada5bf711d"
+  },
+  "final_catalog_sha256": "2a8870213e3c17e6771572120af13c65735890d88f29c94bae8a3d48e267e1dc",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "clean-schema pinned fingerprint",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/reconciliation/security_regression.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_constraint_backfill.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase_a_security.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/ai_entitlement_rpc_privacy.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/corrective_routing_research.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage2_knowledge_completion.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/stage4_user_ai.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_crm_notifications.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_payment_sandbox.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/phase24_mock_checkout_search.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_definer_acl.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_document_processing.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "supabase/tests/local47_observability.sql",
+      "exit_code": 0
+    },
+    {
+      "check": "read-only staging initialization readiness",
+      "exit_code": 0
+    },
+    {
+      "check": "two-user Auth RLS Storage quotas and human Feed",
+      "exit_code": 0
+    },
+    {
+      "check": "final metadata-only catalog capture",
+      "exit_code": 0
+    }
+  ],
+  "finished_at": "2026-10-28T11:17:11.301805+00:00",
+  "source_head": "862b71483f81077cd542086a3a8db042c5dd9d54",
+  "source_dirty": true
+}
