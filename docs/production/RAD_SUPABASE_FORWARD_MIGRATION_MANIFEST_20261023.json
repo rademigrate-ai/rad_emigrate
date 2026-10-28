@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "title": "RAD Emigrate Production Forward Migration Reconciliation",
+  "observedAt": "2026-10-23",
+  "repository": "rademigrate-ai/rad_emigrate",
+  "sourceRef": "origin/main",
+  "sourceSha": "16810a583ad4544d87f289bd16984c0e758a1515",
+  "productionProjectRef": "inshddthftkhcdosoqcn",
+  "productionWritePerformed": false,
+  "repositoryMigrationFileCount": 83,
+  "productionLedgerCount": 54,
+  "productionLedgerLast": {
+    "version": "20261019171732",
+    "name": "repair_admin_consultation_rpcs"
+  },
+  "nameReconciliation": {
+    "logicalNamesMatched": 50,
+    "matchingNamesWithVersionTimestampMismatch": 23,
+    "repoFilesWithoutExactLedgerName": 33,
+    "ledgerNamesWithoutExactRepoName": 4,
+    "warning": "Counts are not the pending migration count. Do not replay by timestamp or repair history without content equivalence."
+  },
+  "priorManifestSequence": [
+    {
+      "order": 1,
+      "file": "20261019204906_rad_security_contract_foundation.sql",
+      "sha256": "3f6fb779b2b39202f1ad9a254a1cdb952903f3a1cfb9670d642434459f4667dd",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 2,
+      "file": "20261019205040_rad_visa_cms_official_evidence.sql",
+      "sha256": "86f063682a53ae7de40ff9547cfb50790f8c4051ed3e20e68eb38f5d9ca2557d",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 3,
+      "file": "20261019205454_rad_currency_cache_alerts.sql",
+      "sha256": "f5dd28555fd2a391b3b45b1c87a96531753f6d9c0375b4b6329c82df48450884",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 4,
+      "file": "20261019205459_rad_feed_notifications_search.sql",
+      "sha256": "4eecd6634e3501ac10eebf8d17d50116999353ec848b1af025061377e1e0c42e",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 5,
+      "file": "20261019205502_rad_copilot_scoped_reservations.sql",
+      "sha256": "9dc47563d265e7783702ec7330fef2290a4482862cf9b03e83d60f7d240d748b",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 6,
+      "file": "20261019210000_g002_content_architecture_scaffolding.sql",
+      "sha256": "f5fc08f64fd22efa914cc46c58ceb692ca347cae5a9a09702929e0d0095f8994",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 7,
+      "file": "20261019210423_rad_content_workflows.sql",
+      "sha256": "807875ea31b7098d1f520a70fdc4d914fb132aaad6b514ab9ae194324e305e3d",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 8,
+      "file": "20261019211000_security_quota_owner_and_publish_approved.sql",
+      "sha256": "672148a8a51ad33eff61ea1f4b68f09317c69166ab4c7f88490958f6211b16fa",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 9,
+      "file": "20261019211908_rad_feed_delivery_contracts.sql",
+      "sha256": "55f2560b4e46c342c306782c1246c6fb310814d1e384c070c40e72cc478babcc",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 10,
+      "file": "20261019212615_rad_source_jobs_merge_enforcement.sql",
+      "sha256": "d417e2b35b4a05190fd22d8da22c2179be44370fb9a0a246e864394fad88b160",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 11,
+      "file": "20261019213129_rad_contract_finalization.sql",
+      "sha256": "e21c565f2f377f2f3b2201b33031b2fa7a7f140b65f8b449e4e2eb85a83cc5fb",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 12,
+      "file": "20261019214411_rad_legacy_quota_budget_compatibility.sql",
+      "sha256": "7d65098001f2dbecc52ad74ff46f262d69efb9638e217346e16c20225a0834ad",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 13,
+      "file": "20261020103648_rad_backend_integrity_completion.sql",
+      "sha256": "ac86171d4aa63e27c113efa811035be00c383be855b80a3e539bfdfd5767fd47",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 14,
+      "file": "20261020105854_rad_search_aliases_currency_history.sql",
+      "sha256": "1f6440f176a1333da2bebc3b5ae1ecdc84af4e378040552467edfa0c0046b985",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 15,
+      "file": "20261020111217_rad_restore_legacy_publish_privileges.sql",
+      "sha256": "8cd83db51feb86bbe40b2ea5e325a93ddaf642b534f056eda0fa39139870d981",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 16,
+      "file": "20261020112300_rad_crm_search_integration_hardening.sql",
+      "sha256": "de82f8350f330cdb3bb5dc5a2978353824ed8bab7637b2c6f89ce36455b7f0b6",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 17,
+      "file": "20261020114612_rad_transport_contract_registry_alignment.sql",
+      "sha256": "8ae61793f441ade43a7bfc9fb37f22ff1817a2fd6014c9c8d0a1e152cd1b81f4",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 18,
+      "file": "20261020115539_rad_leased_research_base_contract.sql",
+      "sha256": "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 19,
+      "file": "20261020123523_rad_explicit_service_profile_bootstrap.sql",
+      "sha256": "569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 20,
+      "file": "20261020192732_rad_revoke_client_nonrow_table_privileges.sql",
+      "sha256": "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 21,
+      "file": "20261021210337_rad_cms_admin_draft_reads.sql",
+      "sha256": "63bb109c7b7d1ae57a4fdcf2c8394828601644004d94fe032705a33d3cc2b021",
+      "classification": "prior_21_migration_manifest"
+    },
+    {
+      "order": 22,
+      "file": "20261023010000_rad_ai_discovery_fail_closed.sql",
+      "sha256": "a6bd360a440bb811c5c8bb51499c94101bf324124421fb95cf5d170544294841",
+      "classification": "PR76_followup"
+    },
+    {
+      "order": 23,
+      "file": "20261023010001_radmohajer_source_seed_parity.sql",
+      "sha256": "c1afbb8911ba2f7758927c57f9225e58873b1463c793539be3d667884264de11",
+      "classification": "PR76_followup"
+    }
+  ],
+  "additionalCandidates": [
+    {
+      "file": "20261007220000_stage5_visa_editorial_summaries.sql",
+      "sha256": "f1dfaa42a40274e04611d698c3bdfda654ceace67e814b62d3eeb388701374cc",
+      "classification": "additional_candidate_not_in_prior_signed_manifest",
+      "notes": "Local SQL replay passed, but schema-only clone contained no destination/program data; production backfill effect not verified."
+    },
+    {
+      "file": "20261018210000_stage10_covering_fk_indexes_completion.sql",
+      "sha256": "332d6101d12698367820263d6cfab048f9cd0aebebb2a427656f770d39b4b7c2",
+      "classification": "additional_candidate_not_in_prior_signed_manifest",
+      "notes": "Local SQL replay passed; target indexes already existed in rehearsal."
+    }
+  ],
+  "proposedCandidateCount": 25,
+  "executionAllowed": false,
+  "requiredBeforeExecution": [
+    "Owner verifies managed backup/PITR recovery point and restore readiness.",
+    "Owner signs the updated 25-candidate manifest; the prior 21+2 manifest did not include the two additional candidates.",
+    "Reconcile the two Stage 2 alias migrations by function-definition equivalence; do not replay them.",
+    "Compare live-only stage4_guest_quota_advisory_lock behavior against rad_legacy_quota_budget_compatibility.",
+    "Run migrations sequentially and stop on the first error; verify ACL/RPC postconditions after relevant steps."
+  ],
+  "alreadyAppliedAliases": [
+    {
+      "repoFile": "20261007180001_stage2_knowledge_promote.sql",
+      "liveLedgerName": "stage2_promote_knowledge_fn",
+      "action": "Do not replay; verify current function equivalence before any ledger repair."
+    },
+    {
+      "repoFile": "20261007180002_stage2_knowledge_retrieve_conflict.sql",
+      "liveLedgerName": "stage2_retrieve_and_conflict_fn",
+      "action": "Do not replay; verify current function equivalence before any ledger repair."
+    }
+  ],
+  "supersededOrLegacyLedgerNames": [
+    {
+      "liveLedgerName": "ai_discovery_auto_enable_chat",
+      "currentReplacement": "20261023010000_rad_ai_discovery_fail_closed.sql",
+      "action": "Apply current fail-closed migration; never replay historical auto-enable migration."
+    },
+    {
+      "liveLedgerName": "stage4_guest_quota_advisory_lock",
+      "currentCandidate": "20261019214411_rad_legacy_quota_budget_compatibility.sql",
+      "action": "Function-level equivalence review required; do not repair history yet."
+    }
+  ],
+  "excludedFromProduction": [
+    {
+      "file": "20261018125432_local47_crm_notification_outbox.sql",
+      "reason": "Explicitly local-first; requires separate release approval."
+    },
+    {
+      "file": "20261018143455_local47_notification_privilege_alignment.sql",
+      "reason": "Tested only on disposable local stacks; requires separate release approval."
+    },
+    {
+      "file": "20261018142313_local47_payment_sandbox_integrity.sql",
+      "reason": "Payment sandbox foundation."
+    },
+    {
+      "file": "20261018152513_local47_document_atomic_processing.sql",
+      "reason": "Local document-processing lease foundation."
+    },
+    {
+      "file": "20261018154834_local47_observability_privacy_and_triage.sql",
+      "reason": "Local operational-events/incidents foundation."
+    },
+    {
+      "file": "20261018211645_phase24_mock_checkout_and_crm_search.sql",
+      "reason": "Contains mock checkout; split/review before Production use."
+    }
+  ],
+  "productionFindings": {
+    "publicTables": 57,
+    "rlsEnabled": 57,
+    "rlsDisabled": 0,
+    "prohibitedNonRowPrivilegeTables": [
+      "public.admin_case_notes",
+      "public.admin_saved_views",
+      "public.admin_tasks",
+      "public.ai_entitlements",
+      "public.application_status_history",
+      "public.consultation_requests"
+    ],
+    "effectiveNonRowCapabilities": 48,
+    "effectiveColumnReferencesPerRole": {
+      "anon": 50,
+      "authenticated": 50
+    },
+    "profileRoleInsertPrivilege": {
+      "authenticated": true,
+      "anon": false,
+      "authenticatedUpdate": false
+    },
+    "pgNetSchema": "public",
+    "missingRpc": [
+      "search_visa_articles",
+      "list_service_catalog",
+      "submit_booking_request",
+      "list_interview_requests",
+      "submit_interview_request",
+      "reschedule_interview_request",
+      "cancel_interview_request"
+    ],
+    "deployedEdgeFunctions": [
+      "ai-orchestrator:v11",
+      "research-sync:v4",
+      "document-intelligence:v3"
+    ],
+    "repoEdgeFunctionsNotDeployed": [
+      "currency-refresh",
+      "notification-dispatch",
+      "official-source-worker",
+      "visa-content-ingest"
+    ],
+    "doNotDeployToProduction": [
+      "payment-sandbox"
+    ]
+  },
+  "localRehearsal": {
+    "aclMigrationRegression": "PASS",
+    "postAclNonRowCapabilities": 0,
+    "postAclEffectiveColumnReferences": 0,
+    "aiFailClosedMigration": "PASS",
+    "sourceSeedParityMigration": "PASS",
+    "correctiveRoutingResearchRegression": "PASS after recreating required restricted function ACLs omitted by schema-only dump",
+    "stage5VisaEditorialMigration": "SQL replay PASS; data backfill not verified because clone had no content rows",
+    "stage10CoveringIndexMigration": "PASS; indexes already existed",
+    "limitation": "Schema-only clone came from a local 54-ledger rehearsal with 72 public tables; it is not an exact Production clone or a backup."
+  },
+  "releaseGates": {
+    "productionMigrationExecution": "NO-GO",
+    "authenticatedFullProductTesting": "NO-GO",
+    "productionRelease": "NO-GO"
+  },
+  "signature": {
+    "status": "PENDING_OWNER_APPROVAL",
+    "signedBy": null,
+    "signedAt": null
+  }
+}
