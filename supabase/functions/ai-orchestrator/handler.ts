@@ -1,5 +1,8 @@
 import { loadGrounding } from "./knowledge_grounding.ts";
 import { classifyQuestionIntent, generalSystemPrompt, appHelpSystemPrompt } from "./question_intent.ts";
+import { performWebSearch, shouldAutoSearch, formatSearchForPrompt, type WebSearchResult } from "./web_search.ts";
+import { syncAllEnabledProviderCatalogues } from "./catalogue_sync.ts";
+import { detectProviderProtocol, normalizeAndValidateBaseUrl } from "./protocol_detect.ts";
 import { readProviderJson } from "./provider_response.ts";
 import { createCopilotHandler } from "./copilot.ts";
 import {
@@ -85,6 +88,75 @@ export async function handler(req: Request): Promise<Response> {
     }
   } else {
     return safeJson(401, { error: "authentication_required" });
+  }
+
+  if (action === "onboard_provider") {
+    if (role !== "super_admin" && role !== "admin") return safeJson(403, { error: "forbidden" });
+    const baseUrl = typeof payload.base_url === "string" ? payload.base_url : "";
+    const apiKey = typeof payload.api_key === "string" ? payload.api_key : "";
+    const displayName = typeof payload.display_name === "string" ? payload.display_name.trim().slice(0, 120) : "";
+    const slugHint = typeof payload.slug === "string" ? payload.slug.trim().slice(0, 64) : "";
+    const validated = normalizeAndValidateBaseUrl(baseUrl);
+    if (!validated.ok) return safeJson(400, { error: validated.error ?? "invalid_base_url" });
+    const detected = await detectProviderProtocol(baseUrl, apiKey);
+    if (!detected.ok || !detected.adapter || !detected.normalized_base_url) {
+      return safeJson(422, { error: detected.error ?? "protocol_detection_failed" });
+    }
+    // Persist via existing configure_ai_provider RPC (server-side secret storage).
+    const slug = slugHint || detected.adapter + "-" + crypto.randomUUID().slice(0, 8);
+    try {
+      const row = await db("rpc/configure_ai_provider", {
+        method: "POST",
+        body: JSON.stringify({
+          p_slug: slug,
+          p_display_name: displayName || slug,
+          p_adapter: detected.adapter,
+          p_base_url: detected.normalized_base_url,
+          p_api_key: apiKey,
+          p_enabled: true,
+          p_priority: 100,
+        }),
+      });
+      // Immediate discovery after onboarding
+      const providerId = Array.isArray(row) ? row[0]?.id : (row as { id?: string })?.id;
+      let discovery: unknown = null;
+      if (typeof providerId === "string") {
+        try {
+          const runtime = await providerRuntime(providerId);
+          const models = await discover(runtime);
+          discovery = await db("rpc/ingest_ai_model_catalogue", {
+            method: "POST",
+            body: JSON.stringify({
+              p_provider_id: providerId,
+              p_credential_version: runtime.credential_version,
+              p_models: models,
+            }),
+          });
+        } catch {
+          discovery = { status: "discovery_deferred" };
+        }
+      }
+      return safeJson(200, {
+        status: "connected",
+        adapter: detected.adapter,
+        base_url: detected.normalized_base_url,
+        provider: row,
+        discovery,
+      });
+    } catch {
+      return safeJson(502, { error: "provider_configure_failed" });
+    }
+  }
+
+  if (action === "sync_catalogues") {
+    const isService = authorization === `Bearer ${SERVICE_KEY}` || authorization === SERVICE_KEY;
+    if (!isService && role !== "super_admin") return safeJson(403, { error: "forbidden" });
+    try {
+      const summary = await syncAllEnabledProviderCatalogues();
+      return safeJson(200, { status: "synced", ...summary });
+    } catch {
+      return safeJson(502, { error: "catalogue_sync_failed" });
+    }
   }
 
   if (action === "test_provider" || action === "discover_models") {
@@ -221,7 +293,7 @@ export async function handler(req: Request): Promise<Response> {
         evidence_state: grounding.hasConflicts ? "conflicting" : grounding.unavailable ? "unavailable" : "insufficient",
         intent,
         web_search_mode: webSearchMode,
-        web_search_status: webSearchRequested ? "unavailable_not_configured" : "skipped",
+        web_search_status: "skipped",
         locale: grounding.locale,
         request_id: requestId,
         failover: false,
@@ -245,12 +317,29 @@ export async function handler(req: Request): Promise<Response> {
     systemParts.push(
       `<UNTRUSTED_RETRIEVED_CONTENT>\n${grounding.text || "No approved evidence is currently available."}\n</UNTRUSTED_RETRIEVED_CONTENT>`,
     );
-  } else if (webSearchRequested) {
+  }
+
+  let webSearch: WebSearchResult = {
+    status: "unavailable",
+    adapter: "none",
+    query: "",
+    citations: [],
+  };
+  const runSearch = webSearchMode === "on"
+    || (webSearchMode === "auto" && (shouldAutoSearch(lastUser, intent) || intent === "immigration_or_rad"));
+  if (runSearch && webSearchMode !== "off") {
+    webSearch = await performWebSearch(lastUser);
     systemParts.push(
-      "<TRUSTED_TOOL_STATUS>web_search=unavailable_not_configured; do not invent search results or citations</TRUSTED_TOOL_STATUS>",
+      `<UNTRUSTED_WEB_SEARCH>\n${formatSearchForPrompt(webSearch)}
+</UNTRUSTED_WEB_SEARCH>`,
+    );
+  } else if (webSearchMode === "on") {
+    systemParts.push(
+      "<TRUSTED_TOOL_STATUS>web_search=skipped_or_unavailable; do not invent search results</TRUSTED_TOOL_STATUS>",
     );
   }
-  messages.unshift({ role: "system", content: systemParts.join("\n") });
+  messages.unshift({ role: "system", content: systemParts.join("
+") });
 
   if (user && requestId) {
     const sessionCandidate = typeof payload.session_id === "string" ? payload.session_id.trim() : "";
@@ -357,8 +446,11 @@ export async function handler(req: Request): Promise<Response> {
         truncated: result.truncated,
         has_approved_evidence: grounding.hasApprovedEvidence,
         intent,
+        web_search_status: webSearch.status,
+        web_search_adapter: webSearch.adapter,
+        web_citations: webSearch.citations ?? [],
         web_search_mode: webSearchMode,
-        web_search_status: webSearchRequested ? "unavailable_not_configured" : "skipped",
+        web_search_status: "skipped",
         locale: grounding.locale,
         provider: runtime.provider_slug,
         model: runtime.model_slug,
