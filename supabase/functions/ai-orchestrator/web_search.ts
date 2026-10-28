@@ -36,6 +36,8 @@ const MAX_RESULTS = 5;
 const FETCH_TIMEOUT_MS = 8000;
 
 function sanitizeQuery(raw: string): string {
+  // Control chars stripped intentionally before outbound search query.
+  // deno-lint-ignore no-control-regex
   return raw.replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, MAX_QUERY);
 }
 

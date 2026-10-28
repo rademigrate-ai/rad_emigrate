@@ -255,7 +255,6 @@ export async function handler(req: Request): Promise<Response> {
     : payload.web_search === false || payload.web_search === "off"
     ? "off"
     : "auto";
-  const webSearchRequested = webSearchMode === "on" || (webSearchMode === "auto" && intent === "immigration_or_rad");
 
   let grounding = {
     text: "",

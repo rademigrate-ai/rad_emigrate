@@ -17,21 +17,22 @@ revoke all on table private.ai_catalogue_sync_runs from public, anon, authentica
 grant all on table private.ai_catalogue_sync_runs to service_role;
 
 -- Advisory lock prevents overlapping sync jobs.
+-- Empty search_path required for SECURITY DEFINER (local47_definer_acl).
 create or replace function private.enqueue_ai_catalogue_sync()
 returns void
 language plpgsql
 security definer
-set search_path = public, private, extensions
+set search_path = ''
 as $$
 declare
   got_lock boolean;
 begin
-  got_lock := pg_try_advisory_xact_lock(87201428);
+  got_lock := pg_catalog.pg_try_advisory_xact_lock(87201428);
   if not got_lock then
     return;
   end if;
   insert into private.ai_catalogue_sync_runs(status, result)
-  values ('running', jsonb_build_object('queued_at', now()));
+  values ('running', jsonb_build_object('queued_at', pg_catalog.now()));
   -- Actual HTTP discovery is performed by Edge Function invoked by platform scheduler
   -- or ops runbook calling ai-orchestrator action=sync_catalogues with service role.
   -- This function only records the schedule tick and prevents duplicate ticks.

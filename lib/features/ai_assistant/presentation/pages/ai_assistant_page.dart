@@ -12,6 +12,12 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/supabase/rad_contract.dart';
+import '../../../../core/supabase/supabase_providers.dart';
+import '../../../../core/supabase/supabase_storage.dart';
+import '../../../../core/supabase/supabase_client.dart';
+
+import 'dart:typed_data';
+
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -529,6 +535,52 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       kind = AiRequestKind.immigrationQuestion;
     }
 
+    String? uploadedDocumentId;
+    if (attachment != null &&
+        attachment.bytes != null &&
+        attachment.bytes!.isNotEmpty &&
+        userId != null &&
+        userId.isNotEmpty) {
+      try {
+        final storage = ref.read(supabaseStorageServiceProvider);
+        final documentId =
+            newRadRequestKey(); // uuid-shaped request key ok for path id
+        final contentType = switch (attachment.extension.toLowerCase()) {
+          'pdf' => 'application/pdf',
+          'png' => 'image/png',
+          'jpg' || 'jpeg' => 'image/jpeg',
+          _ => null,
+        };
+        if (contentType != null) {
+          final storagePath = await storage.upload(
+            userId: userId,
+            documentId: documentId,
+            fileName: attachment.name,
+            bytes: Uint8List.fromList(attachment.bytes!),
+            contentType: contentType,
+          );
+          // Register ownership row so document-intelligence can claim the path.
+          final client = ref.read(supabaseClientServiceProvider).client;
+          final row = await client
+              .from('documents')
+              .upsert({
+                'id': documentId,
+                'user_id': userId,
+                'name': attachment.name,
+                'status': 'uploaded',
+                'file_path': storagePath,
+                'updated_at': DateTime.now().toIso8601String(),
+              })
+              .select('id')
+              .single();
+          uploadedDocumentId = row['id']?.toString() ?? documentId;
+        }
+      } catch (_) {
+        // Fail closed: chat may continue without OCR; never invent extraction.
+        uploadedDocumentId = null;
+      }
+    }
+
     final request =
         replacing?.retryRequest ??
         AiRequest(
@@ -542,6 +594,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             ...profileContext,
             if (attachment != null) 'file_name': attachment.name,
             if (attachment != null) 'file_ext': attachment.extension,
+            if (uploadedDocumentId != null) 'document_id': uploadedDocumentId,
           },
           metadata: {
             'request_key': newRadRequestKey(),

@@ -123,6 +123,7 @@ class SupabaseAiService implements AiService {
         'article_id': cleanUuid(request.context['article_id']),
         'section_id': cleanUuid(request.context['section_id']),
         'case_id': cleanUuid(request.context['case_id']),
+        'document_id': cleanUuid(request.context['document_id']),
       };
 
       if (!sameOwner()) return changedSession();
