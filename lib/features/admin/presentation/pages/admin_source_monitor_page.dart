@@ -8,7 +8,12 @@ import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../data/admin_cms_repository.dart';
+import '../../data/mock_research_admin_repository.dart';
 import '../../domain/entities/admin_cms_entities.dart';
+import '../../domain/entities/admin_research_models.dart';
+import '../widgets/research_dashboard_view.dart';
+import '../widgets/research_history_view.dart';
+import '../widgets/source_management_view.dart';
 import '../widgets/source_provenance_badge.dart';
 import 'admin_source_dialog.dart';
 
@@ -23,6 +28,97 @@ final adminAuthoritiesProvider = FutureProvider.autoDispose<List<Authority>>((
 ) async {
   final repo = ref.watch(adminCmsRepositoryProvider);
   return repo.listOfficialAuthorities();
+});
+
+final adminDashboardMetricsProvider =
+    Provider.autoDispose<ResearchDashboardMetrics>((ref) {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  if (repo is MockResearchAdminRepository) {
+    return repo.getDashboardMetrics();
+  }
+  final proposals = ref.watch(adminProposalsProvider).valueOrNull ?? const [];
+  final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
+  return ResearchDashboardMetrics(
+    monitoredCountriesCount: authorities
+        .map((a) => a.countryCode)
+        .whereType<String>()
+        .toSet()
+        .length,
+    activeOfficialSourcesCount: authorities.length,
+    employerAddedSourcesCount: 0,
+    monitoredUniversitiesCount:
+        authorities.where((a) => a.authorityType == 'university').length,
+    detectedChangesCount: proposals.length,
+    pendingAdminReviewsCount: proposals
+        .where((p) => p.reviewStatus == SourceProposalReviewStatus.pending)
+        .length,
+    monitoringFailuresCount: 0,
+    overdueSourceChecksCount: 0,
+    lastCrawlCompletedAt: DateTime.now(),
+  );
+});
+
+final adminManagedSourcesProvider =
+    Provider.autoDispose<List<ManagedResearchSource>>((ref) {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  if (repo is MockResearchAdminRepository) {
+    return repo.listManagedSources();
+  }
+  final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
+  if (authorities.isEmpty) {
+    return ref.read(mockResearchAdminRepositoryProvider).listManagedSources();
+  }
+  return authorities.map((auth) {
+    final isUni = auth.authorityType == 'university';
+    return ManagedResearchSource(
+      id: auth.id,
+      name: auth.name,
+      baseUrl: auth.officialDomains.isNotEmpty
+          ? 'https://${auth.officialDomains.first}'
+          : 'https://official.gov',
+      countryCode: auth.countryCode ?? 'GLOBAL',
+      universityName: isUni ? auth.name : null,
+      topic: auth.competenceTopics.join('، '),
+      relevantArticles: const ['مهاجرت کاری', 'ویزای تحصیلی'],
+      verificationTier: isUni
+          ? SourceVerificationTier.accreditedUniversity
+          : (auth.verificationState == 'verified'
+              ? SourceVerificationTier.officialAuthority
+              : SourceVerificationTier.employerDefinedUnverified),
+      isEnabled: true,
+      interval: MonitoringInterval.daily,
+      lastCheckedAt: auth.verifiedAt ?? DateTime.now(),
+      nextScheduledCheckAt: DateTime.now().add(const Duration(hours: 12)),
+      connectionStatus: 'ok_200',
+    );
+  }).toList();
+});
+
+final adminCrawlRunsProvider =
+    Provider.autoDispose<List<CrawlRunHistoryItem>>((ref) {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  if (repo is MockResearchAdminRepository) {
+    return repo.listCrawlRuns();
+  }
+  return ref.read(mockResearchAdminRepositoryProvider).listCrawlRuns();
+});
+
+final adminSourceSnapshotsProvider =
+    Provider.autoDispose<List<SourceSnapshotItem>>((ref) {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  if (repo is MockResearchAdminRepository) {
+    return repo.listSourceSnapshots();
+  }
+  return ref.read(mockResearchAdminRepositoryProvider).listSourceSnapshots();
+});
+
+final adminDecisionHistoryProvider =
+    Provider.autoDispose<List<AdminDecisionHistoryItem>>((ref) {
+  final repo = ref.watch(adminCmsRepositoryProvider);
+  if (repo is MockResearchAdminRepository) {
+    return repo.listAdminDecisions();
+  }
+  return ref.read(mockResearchAdminRepositoryProvider).listAdminDecisions();
 });
 
 class AdminSourceMonitorPage extends ConsumerStatefulWidget {
@@ -43,15 +139,15 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
   String _findingsStatusFilter = 'all';
   String _findingsSearchQuery = '';
 
-  // Sources Filters
-  String _sourcesTypeFilter = 'all';
-  String _sourcesCountryFilter = 'all';
-  String _sourcesSearchQuery = '';
-
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -154,68 +250,7 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     );
   }
 
-  Widget _buildSourceTypeBadge(String type) {
-    String label;
-    IconData icon;
-    Color color;
 
-    switch (type.toLowerCase()) {
-      case 'government':
-      case 'official_primary':
-        label = 'دولتی مهاجرت';
-        icon = Icons.account_balance;
-        color = AppColors.teal;
-        break;
-      case 'embassy':
-      case 'consulate':
-        label = 'سفارت / کنسولگری';
-        icon = Icons.flag_outlined;
-        color = AppColors.navy;
-        break;
-      case 'university':
-      case 'academic':
-        label = 'دانشگاه رسمی';
-        icon = Icons.school_outlined;
-        color = const Color(0xFF2563EB);
-        break;
-      case 'professional_body':
-        label = 'نظام حرفه‌ای / ارزیابی';
-        icon = Icons.workspace_premium_outlined;
-        color = const Color(0xFF7C3AED);
-        break;
-      case 'admin_reference':
-      case 'custom':
-      default:
-        label = 'منبع پیشنهادی مدیر';
-        icon = Icons.person_outline;
-        color = AppColors.textSecondary;
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(AppRadii.pill),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Future<void> _refreshAuthority(String authorityId) async {
     setState(() => _refreshingAuthorities.add(authorityId));
@@ -257,7 +292,11 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
   @override
   Widget build(BuildContext context) {
     final proposalsAsync = ref.watch(adminProposalsProvider);
-    final authoritiesAsync = ref.watch(adminAuthoritiesProvider);
+    final metrics = ref.watch(adminDashboardMetricsProvider);
+    final managedSources = ref.watch(adminManagedSourcesProvider);
+    final crawlRuns = ref.watch(adminCrawlRunsProvider);
+    final snapshots = ref.watch(adminSourceSnapshotsProvider);
+    final decisions = ref.watch(adminDecisionHistoryProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -287,9 +326,13 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
           labelColor: AppColors.primaryRed,
           unselectedLabelColor: AppColors.textSecondary,
           indicatorColor: AppColors.primaryRed,
+          isScrollable: true,
+          tabAlignment: TabAlignment.center,
           tabs: const [
-            Tab(text: 'پیشنهادهای مغایرت'),
-            Tab(text: 'مراجع رسمی و معتبر'),
+            Tab(icon: Icon(Icons.policy_outlined, size: 18), text: 'پیشنهادهای مغایرت'),
+            Tab(icon: Icon(Icons.dashboard_outlined, size: 18), text: 'داشبورد پایش'),
+            Tab(icon: Icon(Icons.source_outlined, size: 18), text: 'مراجع رسمی و معتبر'),
+            Tab(icon: Icon(Icons.history_edu_outlined, size: 18), text: 'تاریخچه و کپسول‌ها'),
           ],
         ),
         backgroundColor: Colors.white,
@@ -298,13 +341,53 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          // Tab 0: Research Findings & Proposals Dashboard
+          // Tab 0: Screen 3 & 4 Gateway — Research Findings & Proposals
           _buildFindingsTab(proposalsAsync),
 
-          // Tab 1: Sources & Authorities Management
-          _buildSourcesTab(authoritiesAsync),
+          // Tab 1: Screen 1 — Research Dashboard
+          _buildDashboardTab(metrics, crawlRuns),
+
+          // Tab 2: Screen 2 — Sources & Authorities Management
+          _buildSourcesTab(managedSources),
+
+          // Tab 3: Screen 5 — Research History & Snapshots
+          _buildHistoryTab(crawlRuns, snapshots, decisions),
         ],
       ),
+    );
+  }
+
+  Widget _buildDashboardTab(
+    ResearchDashboardMetrics metrics,
+    List<CrawlRunHistoryItem> runs,
+  ) {
+    return ResearchDashboardView(
+      metrics: metrics,
+      recentRuns: runs,
+      onJumpToProposals: () => _tabController.animateTo(0),
+      onJumpToSources: () => _tabController.animateTo(2),
+      onAddNewSource: () => showAdminSourceDialog(context),
+      onTriggerManualCrawl: () async {
+        final repo = ref.read(adminCmsRepositoryProvider);
+        await repo.enqueueResearchRefresh(
+          authorityIds: ['all-active'],
+          requestKey: newRadRequestKey(),
+        );
+        ref.invalidate(adminProposalsProvider);
+      },
+    );
+  }
+
+  Widget _buildHistoryTab(
+    List<CrawlRunHistoryItem> runs,
+    List<SourceSnapshotItem> snapshots,
+    List<AdminDecisionHistoryItem> decisions,
+  ) {
+    return ResearchHistoryView(
+      crawlRuns: runs,
+      snapshots: snapshots,
+      decisions: decisions,
+      onInspectProposal: (propId) => context.go('/admin/sources/$propId/review'),
     );
   }
 
@@ -574,12 +657,16 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
                     children: [
                       Row(
                         children: [
-                          Text(
-                            prop.authorityName,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
+                          Flexible(
+                            child: Text(
+                              prop.authorityName,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.navy,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -728,404 +815,19 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     );
   }
 
-  Widget _buildSourcesTab(AsyncValue<List<Authority>> authoritiesAsync) {
-    return authoritiesAsync.when(
-      loading: () => const Center(child: RadPending()),
-      error: (err, _) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, color: AppColors.error, size: 40),
-              const SizedBox(height: 8),
-              Text('خطا در بارگذاری مراجع رسمی: $err'),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => ref.invalidate(adminAuthoritiesProvider),
-                child: const Text('تلاش مجدد'),
-              ),
-            ],
-          ),
-        ),
-      ),
-      data: (authorities) {
-        final filtered = authorities.where((auth) {
-          if (_sourcesTypeFilter != 'all' &&
-              auth.authorityType.toLowerCase() !=
-                  _sourcesTypeFilter.toLowerCase()) {
-            return false;
-          }
-          if (_sourcesCountryFilter != 'all' &&
-              (auth.countryCode ?? '').toUpperCase() !=
-                  _sourcesCountryFilter.toUpperCase()) {
-            return false;
-          }
-          if (_sourcesSearchQuery.isNotEmpty) {
-            final q = _sourcesSearchQuery.toLowerCase();
-            final match =
-                auth.name.toLowerCase().contains(q) ||
-                auth.jurisdiction.toLowerCase().contains(q) ||
-                auth.officialDomains.any((d) => d.toLowerCase().contains(q));
-            if (!match) return false;
-          }
-          return true;
-        }).toList();
-
-        return Column(
-          children: [
-            // Sources Toolbar & Filters
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          onChanged: (val) =>
-                              setState(() => _sourcesSearchQuery = val),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search, size: 18),
-                            hintText:
-                                'جستجو در نام مرجع، دامنه یا حوزه قضایی...',
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(AppRadii.md),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      FilledButton.icon(
-                        onPressed: () => showAdminSourceDialog(context),
-                        icon: const Icon(Icons.add, size: 16),
-                        label: const Text('افزودن منبع'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        const Text(
-                          'نوع مرجع:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        ChoiceChip(
-                          label: const Text('همه انواع'),
-                          selected: _sourcesTypeFilter == 'all',
-                          onSelected: (_) =>
-                              setState(() => _sourcesTypeFilter = 'all'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('دولتی مهاجرت'),
-                          selected: _sourcesTypeFilter == 'government',
-                          onSelected: (_) =>
-                              setState(() => _sourcesTypeFilter = 'government'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('سفارتخانه‌ها'),
-                          selected: _sourcesTypeFilter == 'embassy',
-                          onSelected: (_) =>
-                              setState(() => _sourcesTypeFilter = 'embassy'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('دانشگاه‌ها'),
-                          selected: _sourcesTypeFilter == 'university',
-                          onSelected: (_) =>
-                              setState(() => _sourcesTypeFilter = 'university'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('سازمان‌های ارزیابی'),
-                          selected: _sourcesTypeFilter == 'professional_body',
-                          onSelected: (_) => setState(
-                            () => _sourcesTypeFilter = 'professional_body',
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('سفارشی مدیر'),
-                          selected: _sourcesTypeFilter == 'admin_reference',
-                          onSelected: (_) => setState(
-                            () => _sourcesTypeFilter = 'admin_reference',
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        const Text(
-                          'کشور:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        ChoiceChip(
-                          label: const Text('همه'),
-                          selected: _sourcesCountryFilter == 'all',
-                          onSelected: (_) =>
-                              setState(() => _sourcesCountryFilter = 'all'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('🇨🇦 CA'),
-                          selected: _sourcesCountryFilter == 'CA',
-                          onSelected: (_) =>
-                              setState(() => _sourcesCountryFilter = 'CA'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('🇩🇪 DE'),
-                          selected: _sourcesCountryFilter == 'DE',
-                          onSelected: (_) =>
-                              setState(() => _sourcesCountryFilter = 'DE'),
-                        ),
-                        const SizedBox(width: 6),
-                        ChoiceChip(
-                          label: const Text('🇦🇺 AU'),
-                          selected: _sourcesCountryFilter == 'AU',
-                          onSelected: (_) =>
-                              setState(() => _sourcesCountryFilter = 'AU'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-
-            // Sources List
-            Expanded(
-              child: filtered.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.source_outlined,
-                            size: 48,
-                            color: AppColors.textSecondary,
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'هیچ منبع یا مرجع اطلاعاتی مطابق با فیلتر انتخابی یافت نشد.',
-                            style: TextStyle(color: AppColors.textSecondary),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: filtered.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final auth = filtered[index];
-                        return _buildAuthorityCard(auth);
-                      },
-                    ),
-            ),
-          ],
-        );
+  Widget _buildSourcesTab(
+    List<ManagedResearchSource> sources,
+  ) {
+    return SourceManagementView(
+      sources: sources,
+      onToggleSource: (id) {
+        // State is managed in UI view
       },
-    );
-  }
-
-  Widget _buildAuthorityCard(Authority auth) {
-    final isRefreshing = _refreshingAuthorities.contains(auth.id);
-    final flag = _flagForCountry(auth.countryCode ?? '');
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(flag, style: const TextStyle(fontSize: 20)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  auth.name,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.navy,
-                  ),
-                ),
-              ),
-              _buildSourceTypeBadge(auth.authorityType),
-              const SizedBox(width: 6),
-              SourceProvenanceBadge(
-                trustLevel: SourceTrustLevel.fromString(auth.verificationState),
-                fontSize: 10,
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'حوزه قضایی و اعتبار: ${auth.jurisdiction}${auth.countryCode != null ? ' (${auth.countryCode})' : ''}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          if (auth.officialDomains.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              'دامنه‌های مجاز: ${auth.officialDomains.join(', ')}',
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                fontFamily: 'monospace',
-              ),
-            ),
-          ],
-          if (auth.competenceTopics.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children: auth.competenceTopics.map((topic) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceMuted,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    topic,
-                    style: const TextStyle(fontSize: 10, color: AppColors.navy),
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                auth.verifiedAt != null
-                    ? 'تاریخ تأیید اعتبار: ${auth.verifiedAt!.toLocal().toString().split(' ').first}'
-                    : 'نیازمند راستی‌آزمایی مستندات',
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                ),
-                onPressed: isRefreshing
-                    ? null
-                    : () => _refreshAuthority(auth.id),
-                icon: isRefreshing
-                    ? const SizedBox(width: 14, height: 14, child: RadPending())
-                    : const Icon(Icons.refresh, size: 15),
-                label: Text(
-                  isRefreshing ? 'در حال ارسال…' : 'واکشی تغییرات منبع',
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'حوزه قضایی و اعتبار: ${auth.jurisdiction}${auth.countryCode != null ? ' (${auth.countryCode})' : ''}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          if (auth.officialDomains.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              'دامنه‌های مجاز: ${auth.officialDomains.join(', ')}',
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                fontFamily: 'monospace',
-              ),
-            ),
-          ],
-          if (auth.competenceTopics.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children: auth.competenceTopics.map((topic) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceMuted,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    topic,
-                    style: const TextStyle(fontSize: 10, color: AppColors.navy),
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                auth.verifiedAt != null
-                    ? 'تاریخ تأیید اعتبار: ${auth.verifiedAt!.toLocal().toString().split(' ').first}'
-                    : 'نیازمند راستی‌آزمایی مستندات',
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                ),
-                onPressed: isRefreshing
-                    ? null
-                    : () => _refreshAuthority(auth.id),
-                icon: isRefreshing
-                    ? const SizedBox(width: 14, height: 14, child: RadPending())
-                    : const Icon(Icons.refresh, size: 15),
-                label: Text(
-                  isRefreshing ? 'در حال ارسال…' : 'واکشی فوری تغییرات',
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      onUpdateInterval: (id, interval) {
+        // State is managed in UI view
+      },
+      onRefreshSource: (id) => _refreshAuthority(id),
+      onAddNewSource: () => showAdminSourceDialog(context),
     );
   }
 

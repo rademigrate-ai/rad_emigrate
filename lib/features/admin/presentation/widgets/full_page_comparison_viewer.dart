@@ -12,6 +12,9 @@ enum FullPageComparisonViewMode {
 
   /// Side-by-side or tabbed before-and-after comparison.
   splitComparison,
+
+  /// Clean preview of the entire final document with all accepted modifications applied.
+  finalPreview,
 }
 
 /// Action callback when an individual section change is accepted, rejected, or edited.
@@ -211,8 +214,10 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
 
         const SizedBox(height: 16),
 
-        // 4. Main Body: Inline Reading or Split Comparison
-        if (_viewMode == FullPageComparisonViewMode.inlineReading)
+        // 4. Main Body: Inline Reading, Split Comparison or Final Preview
+        if (_viewMode == FullPageComparisonViewMode.finalPreview)
+          _buildFinalPreviewView(filteredSections)
+        else if (_viewMode == FullPageComparisonViewMode.inlineReading)
           _buildInlineReadingView(filteredSections)
         else
           _buildSplitComparisonView(filteredSections),
@@ -359,30 +364,106 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
     final isFa = widget.isPersian;
     return Container(
       margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.warning.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadii.md),
         border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.warning_amber_rounded,
-            color: AppColors.warning,
-            size: 22,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              isFa
-                  ? 'هشدار مغایرت: میان منابع رسمی استناد تناقض اطلاعاتی مشاهده شده است. بازبینی دقیق انسانی پیش از تأیید الزامی است.'
-                  : 'Conflict Warning: Divergent evidence detected across sources. Careful human verification required.',
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.navy,
-                fontWeight: FontWeight.w600,
+          Row(
+            children: [
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: AppColors.warning,
+                size: 22,
               ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  isFa
+                      ? 'هشدار مغایرت: میان منابع رسمی استناد تناقض اطلاعاتی مشاهده شده است. بازبینی دقیق انسانی پیش از تأیید الزامی است.'
+                      : 'Conflict Warning: Divergent evidence detected across sources. Careful human verification required.',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.navy,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadii.sm),
+              border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isFa
+                      ? 'مغایرت استخراج‌شده: ادعای منبع فدرال (سقف سنی ۳۵ سال) در برابر استثنای مصوب ایالتی (سقف سنی ۵۰ سال برای دوره ارشد پژوهشی).'
+                      : 'Detected Conflict: Federal claim (max age 35) vs State exemption (max age 50 for research masters).',
+                  style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.navy),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: [
+                    OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        side: const BorderSide(color: AppColors.navy),
+                      ),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              isFa
+                                  ? 'استناد به منبع سراسری فدرال به عنوان مبنا انتخاب شد.'
+                                  : 'Federal primary authority selected.',
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.account_balance, size: 14),
+                      label: Text(
+                        isFa ? 'اعمال استناد منبع فدرال' : 'Apply Federal Source',
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        side: const BorderSide(color: AppColors.teal),
+                      ),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              isFa
+                                  ? 'استناد به تبصره ایالتی انتخاب شد.'
+                                  : 'State exemption rule selected.',
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.location_city, size: 14),
+                      label: Text(
+                        isFa ? 'اعمال تبصره ایالتی' : 'Apply State Rule',
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -414,6 +495,11 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                 value: FullPageComparisonViewMode.splitComparison,
                 icon: const Icon(Icons.compare_arrows_outlined, size: 16),
                 label: Text(isFa ? 'مقایسه قبل و بعد' : 'Before / After'),
+              ),
+              ButtonSegment(
+                value: FullPageComparisonViewMode.finalPreview,
+                icon: const Icon(Icons.preview_outlined, size: 16),
+                label: Text(isFa ? 'پیش‌نمایش سند نهایی' : 'Final Preview'),
               ),
             ],
             selected: {_viewMode},
@@ -1109,9 +1195,237 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               ),
             ),
           ],
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 12,
+            runSpacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.calendar_today_outlined, size: 12, color: AppColors.teal),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${isFa ? "تاریخ انتشار منبع" : "Published"}: ${ev.fetchedAt.toLocal().toString().substring(0, 10)}',
+                    style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+              if (ev.verifiedAt != null) ...[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.event_available_outlined, size: 12, color: AppColors.teal),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${isFa ? "تاریخ اعتبار و اجرا" : "Effective"}: ${ev.verifiedAt!.toLocal().toString().substring(0, 10)}',
+                      style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  Widget _buildFinalPreviewView(List<_UnifiedSection> sections) {
+    final isFa = widget.isPersian;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        border: Border.all(color: AppColors.teal.withValues(alpha: 0.4)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Final Preview Header Banner
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.teal.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadii.lg - 1)),
+              border: Border(bottom: BorderSide(color: AppColors.teal.withValues(alpha: 0.3))),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.preview_outlined, color: AppColors.teal, size: 22),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isFa
+                            ? 'پیش‌نمایش سند نهایی پیش‌نویس (Clean Unified Preview)'
+                            : 'Final Document Preview (Clean Unified View)',
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.navy),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        isFa
+                            ? 'این نما سند کامل را به صورت یکپارچه با اعمال کلیه اصلاحات و متون ویرایش‌شده مصوب نمایش می‌دهد.'
+                            : 'Demonstrates the final approved continuous article with all accepted changes applied seamlessly.',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.teal,
+                    borderRadius: BorderRadius.circular(AppRadii.pill),
+                  ),
+                  child: Text(
+                    isFa ? 'نگارش آماده پیش‌نویس' : 'Ready for Draft',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Article Body (Continuous Document Reading)
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.articleTitle,
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.navy),
+                ),
+                const SizedBox(height: 16),
+                const Divider(height: 1),
+                const SizedBox(height: 20),
+
+                ...sections.where((sec) => sec.status != _SectionDiffStatus.removed).map((sec) {
+                  final heading = sec.proposedContent?.heading ?? sec.heading;
+                  final decision = widget.sectionReviewDecisions[sec.id];
+                  final manualEdit = _editControllers[sec.id]?.text;
+
+                  // Resolve blocks to display
+                  List<ContentBlock> blocksToRender;
+                  if (manualEdit != null && manualEdit.isNotEmpty) {
+                    blocksToRender = [
+                      ContentBlock(id: 'manual-${sec.id}', type: 'paragraph', text: manualEdit, items: const []),
+                    ];
+                  } else if (decision == 'rejected') {
+                    blocksToRender = sec.baseContent?.blocks ?? [];
+                  } else {
+                    blocksToRender = sec.proposedContent?.blocks ?? sec.baseContent?.blocks ?? [];
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          heading,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.navy),
+                        ),
+                        const SizedBox(height: 10),
+                        _renderBlocks(blocksToRender),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget? _renderMarkdownTable(String rawText, TextStyle baseStyle) {
+    try {
+      final lines = rawText
+          .split('\n')
+          .map((l) => l.trim())
+          .where((l) => l.isNotEmpty && l.startsWith('|') && l.endsWith('|'))
+          .toList();
+      if (lines.length < 2) return null;
+
+      final headerLine = lines.first;
+      final headerCells = headerLine
+          .split('|')
+          .map((c) => c.trim())
+          .where((c) => c.isNotEmpty)
+          .toList();
+
+      final dataLines = lines.skip(1).where((l) => !l.contains('---')).toList();
+
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppRadii.sm),
+          border: Border.all(color: AppColors.border),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Table(
+          border: TableBorder.symmetric(
+            inside: const BorderSide(color: AppColors.border, width: 0.8),
+          ),
+          children: [
+            TableRow(
+              decoration: BoxDecoration(
+                color: AppColors.navy.withValues(alpha: 0.06),
+              ),
+              children: headerCells.map((h) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Text(
+                    h,
+                    style: baseStyle.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.navy,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            ...dataLines.asMap().entries.map((entry) {
+              final idx = entry.key;
+              final line = entry.value;
+              final cells = line
+                  .split('|')
+                  .map((c) => c.trim())
+                  .where((c) => c.isNotEmpty)
+                  .toList();
+              final isZebra = idx % 2 == 1;
+
+              return TableRow(
+                decoration: BoxDecoration(
+                  color: isZebra ? AppColors.surfaceMuted : Colors.white,
+                ),
+                children: cells.map((cell) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: Text(cell, style: baseStyle),
+                  );
+                }).toList(),
+              );
+            }),
+          ],
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Widget _renderBlocks(
@@ -1156,6 +1470,16 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               );
             }).toList(),
           );
+        }
+
+        if (b.text.contains('|') && b.text.contains('\n')) {
+          final tableWidget = _renderMarkdownTable(b.text, textStyle);
+          if (tableWidget != null) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: tableWidget,
+            );
+          }
         }
 
         return Padding(

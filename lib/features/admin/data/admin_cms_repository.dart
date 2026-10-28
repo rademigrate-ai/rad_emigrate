@@ -32,6 +32,14 @@ class CmsArticleDraft {
     this.contentHash, [
     this.editorialState = ArticleEditorialStatus.draft,
   ]);
+
+  factory CmsArticleDraft.fromContent({
+    required Map<String, dynamic> content,
+    required String revisionId,
+    required String contentHash,
+    ArticleEditorialStatus editorialState = ArticleEditorialStatus.draft,
+  }) => CmsArticleDraft._(content, revisionId, contentHash, editorialState);
+
   final Map<String, dynamic> _content;
   final String revisionId;
 
