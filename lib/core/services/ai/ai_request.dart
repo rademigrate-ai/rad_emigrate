@@ -42,4 +42,3 @@ class AiRequest {
   /// auto | on | off — server-side web research mode.
   final String webSearchMode;
 }
-

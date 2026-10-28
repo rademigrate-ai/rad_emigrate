@@ -140,7 +140,8 @@ class SupabaseAiService implements AiService {
           'session_id': cleanUuid(request.conversationId),
           'guest_key': cleanGuestKey,
           'locale': cleanLocale,
-          'web_search': (request.webSearchMode == 'on' ||
+          'web_search':
+              (request.webSearchMode == 'on' ||
                   request.webSearchMode == 'off' ||
                   request.webSearchMode == 'auto')
               ? request.webSearchMode
