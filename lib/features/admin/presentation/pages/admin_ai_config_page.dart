@@ -6,6 +6,7 @@ import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/rad_flapping_bird.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_ai_config_repository.dart';
@@ -348,7 +349,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                 ? const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: RadFlappingBird(size: 16, showAura: false),
                   )
                 : const Icon(Icons.sync),
             onPressed: _syncingCatalogue ? null : _syncCatalogues,
@@ -462,7 +463,7 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                 ? const SizedBox(
                     width: 14,
                     height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: RadFlappingBird(size: 16, showAura: false),
                   )
                 : const Icon(Icons.sync, size: 16),
             label: const Text('همگام‌سازی فوری'),

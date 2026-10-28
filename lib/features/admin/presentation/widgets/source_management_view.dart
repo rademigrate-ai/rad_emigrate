@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -518,7 +519,7 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                           ? const SizedBox(
                               width: 12,
                               height: 12,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: RadFlappingBird(size: 12, showAura: false),
                             )
                           : const Icon(Icons.refresh, size: 14),
                       label: Text(

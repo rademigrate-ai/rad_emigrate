@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -86,7 +87,7 @@ class AiDocumentChip extends StatelessWidget {
           child: SizedBox(
             width: 10,
             height: 10,
-            child: CircularProgressIndicator(strokeWidth: 1.5),
+            child: RadFlappingBird(size: 10, showAura: false),
           ),
         );
         break;
@@ -98,10 +99,7 @@ class AiDocumentChip extends StatelessWidget {
           child: SizedBox(
             width: 10,
             height: 10,
-            child: CircularProgressIndicator(
-              strokeWidth: 1.5,
-              valueColor: AlwaysStoppedAnimation(AppColors.warning),
-            ),
+            child: RadFlappingBird(size: 10, showAura: false),
           ),
         );
         break;

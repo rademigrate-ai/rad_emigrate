@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -209,10 +210,7 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                     ? const SizedBox(
                         width: 14,
                         height: 14,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
+                        child: RadFlappingBird(size: 14, showAura: false),
                       )
                     : const Icon(Icons.refresh, size: 16),
                 label: Text(
@@ -275,7 +273,7 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                 ? const SizedBox(
                     width: 12,
                     height: 12,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: RadFlappingBird(size: 12, showAura: false),
                   )
                 : const Icon(Icons.sync_problem, size: 14),
             label: const Text('تلاش مجدد مراجع ناموفق'),

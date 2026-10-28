@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rad_emigrate/core/widgets/rad_flapping_bird.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -36,10 +37,7 @@ class AiSearchProgressCard extends StatelessWidget {
             child: isSearching
                 ? const Padding(
                     padding: EdgeInsets.all(6),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation(AppColors.teal),
-                    ),
+                    child: RadFlappingBird(size: 16, showAura: false),
                   )
                 : const Icon(
                     Icons.travel_explore,
