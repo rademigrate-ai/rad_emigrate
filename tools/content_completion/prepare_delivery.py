@@ -3,6 +3,7 @@
 import argparse
 import gzip
 import hashlib
+import io
 import json
 from pathlib import Path
 
@@ -12,6 +13,13 @@ from tools.plan3_content.dataset import read_jsonl, uid
 
 PROJECT = "epolbumcfbohtmgvomki"
 ACTOR = "0166163b-582b-4d2e-82dc-f9942c2f80b5"
+
+
+def deterministic_gzip(data):
+    stream = io.BytesIO()
+    with gzip.GzipFile(filename="", fileobj=stream, mode="wb", mtime=0) as zipped:
+        zipped.write(data)
+    return stream.getvalue()
 
 
 def literal(value):
@@ -76,7 +84,7 @@ def prepare(directory, output, project):
         "insert into public.content_sources(id,publisher,source_type,title,url,language_code,retrieved_at,content_hash) select cs,'RAD first-party editorial source, not legal verification','rad_official',s->>'title',s->>'url',s->>'language',(s->>'retrieved_at')::timestamptz,s->>'body_sha256' where not exists(select 1 from public.content_sources where url=s->>'url');",
         "select id into cs from public.content_sources where url=s->>'url' order by created_at,id limit 1;",
         "insert into public.source_documents(id,canonical_url,source_id,source_authority,title,language_code,jurisdiction,last_content_hash) values(doc,s->>'url',cs,'rad_official',s->>'title',s->>'language','',s->>'body_sha256') on conflict(id) do nothing;",
-        "insert into public.source_snapshots(id,document_id,content_hash,normalized_text,http_status,fetched_at,metadata) values(snap,doc,s->>'body_sha256',s->>'body_text',200,(s->>'retrieved_at')::timestamptz,jsonb_build_object('raw_html_sha256',s->>'raw_html_sha256','recovery_manifest',"
+        "insert into public.source_snapshots(id,document_id,content_hash,normalized_text,http_status,fetched_at,metadata) values(snap,doc,s->>'body_sha256',s->>'body_text',case when s ? 'source_evidence' then (s->'source_evidence'->>'original_http_status')::integer else 200 end,(s->>'retrieved_at')::timestamptz,jsonb_build_object('raw_html_sha256',s->>'raw_html_sha256','source_evidence',s->'source_evidence','recovery_manifest',"
         + quote(manifest)
         + ",'factual_verification','not_verified')) on conflict(id) do nothing;",
         "perform private.rad_classify_snapshot(snap);end loop;",
@@ -205,15 +213,20 @@ def prepare(directory, output, project):
             + quote(item["article_id"])
             + "::uuid and r.related_id=c.article_id)),'[]'::jsonb));"
         )
+    # Verify every reader in its own statement. One giant DO made the aggregate
+    # verification of hundreds of full pages exhaust the per-statement timeout.
+    # All checks still run inside the same atomic transaction.
+    lines.append("end $recovery$;")
     for row in new + changes:
         a, locale = row["article_id"], row["item"]["locale"]
         lines += [
+            "do $reader$begin",
             f'perform set_config(\'request.jwt.claims\',\'{{"role":"authenticated","sub":"{ACTOR}"}}\',true);',
             f"if public.get_editorial_article('{a}','{locale}',true)->'data'->'rich_sections' is distinct from {literal(row['item']['sections'])} then raise exception 'admin_reader_body_mismatch';end if;",
             f"begin perform public.get_editorial_article('{a}','{locale}',false);raise exception 'draft_leaked';exception when sqlstate 'PT404' then null;end;",
+            "end $reader$;",
         ]
     lines += [
-        "end $recovery$;",
         "do $$begin if exists(select 1 from recovery_publication_before b join public.visa_article_heads h using(article_id,locale) where b.published_id is distinct from h.published_id) then raise exception 'publication_pointer_changed';end if;end$$;",
         "update private.rad_editorial_import_target set enabled=false where project_ref='epolbumcfbohtmgvomki';",
         "commit;",
@@ -221,9 +234,11 @@ def prepare(directory, output, project):
     sql = "\n".join(lines) + "\n"
     if sql.count("$recovery$") != 2:
         raise ValueError("source_contains_sql_delimiter")
+    if sql.count("$reader$") != 2 * (len(new) + len(changes)):
+        raise ValueError("source_contains_reader_sql_delimiter")
     output.mkdir(parents=True, exist_ok=True)
     (output / "PROPOSED_IMPORT_REVIEW_ONLY.sql.gz").write_bytes(
-        gzip.compress(sql.encode(), mtime=0)
+        deterministic_gzip(sql.encode())
     )
     rollback = [
         "-- REVIEW ONLY. Staging only; immutable revisions and snapshots remain preserved.",
@@ -291,7 +306,7 @@ def prepare(directory, output, project):
     ]
     rollback_sql = "\n".join(rollback) + "\n"
     (output / "PROPOSED_ROLLBACK_REVIEW_ONLY.sql.gz").write_bytes(
-        gzip.compress(rollback_sql.encode(), mtime=0)
+        deterministic_gzip(rollback_sql.encode())
     )
     source_values = ",".join(
         "("

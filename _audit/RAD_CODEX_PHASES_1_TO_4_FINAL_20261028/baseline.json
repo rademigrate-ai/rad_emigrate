@@ -1,0 +1,37 @@
+{
+  "repository": "rademigrate-ai/rad_emigrate",
+  "starting_head": "2484537ce05c11bf7463d62b043851dc04a35057",
+  "base_branch": "integration/stage7-unified-20261026",
+  "branch": "support/codex-phases1-4-20261028",
+  "PR85": {
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head_sha": "2484537ce05c11bf7463d62b043851dc04a35057",
+    "reverified_date_UTC": "2026-10-28"
+  },
+  "baseline_CI": {
+    "id": 40650871013,
+    "head_sha": "2484537ce05c11bf7463d62b043851dc04a35057",
+    "conclusion": "success",
+    "jobs": 8
+  },
+  "own_worktrees": [
+    "worktree C:/Users/Mehrshad/.codex/.chatgpt-projects/g-p-6ac0d7441b788191a2bebe4046483d35/rad_emigrate",
+    "HEAD 71ebb689a871bd8ab1ea4288dbb673ddb405a33b",
+    "branch refs/heads/feature/premium-ui-ux-overhaul-20261016",
+    "",
+    "worktree C:/Users/Mehrshad/.codex/.chatgpt-projects/g-p-6ac0d7441b788191a2bebe4046483d35/rad_content_worktree",
+    "HEAD 2484537ce05c11bf7463d62b043851dc04a35057",
+    "branch refs/heads/support/codex-phases1-4-20261028"
+  ],
+  "ancestry": {
+    "8321370035cc8a8ff7cff349e5cd55a56fa78da3": true,
+    "04056872a064ad215a87ac164efb0c0244488ba1": true
+  },
+  "hosted_writes": 0,
+  "production_accessed": false,
+  "active_Desktop_worktrees": "read-only; no reset/clean/edit; untracked recovery corpus preserved",
+  "migration_files_added": 0,
+  "actual_hosted_backup_restore_verified": false
+}

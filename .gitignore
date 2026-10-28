@@ -61,3 +61,9 @@ android/key.properties
 # Generated analysis cache (gitleaks noise)
 graphify-out/
 
+# Reproducible phase handoff excludes transient network/runtime working files.
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/.network-cache/
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/verification/
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/*.zip
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/*.progress.jsonl
+

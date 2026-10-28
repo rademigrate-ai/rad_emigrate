@@ -1,0 +1,21 @@
+{
+  "authentication_or_bypass": false,
+  "cached_successes_reused": true,
+  "host_circuit": {},
+  "minimum_interval_seconds": 3,
+  "recursive_crawl": false,
+  "robots_observations": [
+    {
+      "body": "# If the Joomla site is installed within a folder\n# eg www.example.com/joomla/ then the robots.txt file\n# MUST be moved to the site root\n# eg www.example.com/robots.txt\n# AND the joomla folder name MUST be prefixed to all of the\n# paths.\n# eg the Disallow rule for the /administrator/ folder MUST\n# be changed to read\n# Disallow: /joomla/administrator/\n#\n# For more information about the robots.txt standard, see:\n# http://www.robotstxt.org/orig.html\n#\n# For syntax checking, see:\n# http://tool.motoricerca.info/robots-checker.phtml\n\nUser-agent: *\r\nAllow: /*.js*\r\nAllow: /*.css*\r\nAllow: /*.png*\r\nAllow: /*.jpg*\r\nAllow: /*.gif*\r\n\nDisallow: /administrator/\nDisallow: /bin/\nDisallow: /cache/\nDisallow: /cli/\n\nDisallow: /includes/\nDisallow: /installation/\nDisallow: /language/\nDisallow: /layouts/\nDisallow: /libraries/\nDisallow: /logs/\n\n\nDisallow: /tmp/\n",
+      "content_type": "text/plain",
+      "etag": null,
+      "final_url": "https://radmohajer.ir/robots.txt",
+      "host": "radmohajer.ir",
+      "last_modified_header": "Fri, 06 Mar 2020 21:06:40 GMT",
+      "redirects": [],
+      "retrieved_at": "2026-10-28T09:45:01.702380Z",
+      "status": 200
+    }
+  ],
+  "targets": 126
+}
