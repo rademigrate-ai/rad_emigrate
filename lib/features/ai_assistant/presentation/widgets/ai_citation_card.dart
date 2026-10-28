@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/premium_tokens.dart';
+
+enum CitationCategory {
+  radArticle,
+  officialAuthority,
+  generalWeb,
+}
 
 class AiCitationCard extends StatelessWidget {
   final int index;
@@ -19,9 +26,16 @@ class AiCitationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final domain = _extractDomain(source.url);
+    final category = _determineCategory(source.url, source.authority);
 
     return InkWell(
-      onTap: onTap,
+      onTap: onTap ??
+          () {
+            if (source.url != null) {
+              final uri = Uri.tryParse(source.url!);
+              if (uri != null) launchUrl(uri);
+            }
+          },
       borderRadius: BorderRadius.circular(AppRadii.md),
       child: Container(
         margin: const EdgeInsets.only(top: 6),
@@ -37,15 +51,15 @@ class AiCitationCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.primaryRed.withValues(alpha: 0.1),
+                color: _badgeColor(category).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(AppRadii.sm),
               ),
               child: Text(
                 '[$index]',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primaryRed,
+                  color: _badgeColor(category),
                 ),
               ),
             ),
@@ -66,7 +80,10 @@ class AiCitationCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  Row(
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 6,
+                    runSpacing: 4,
                     children: [
                       if (source.authority != null) ...[
                         Text(
@@ -77,7 +94,6 @@ class AiCitationCard extends StatelessWidget {
                             color: AppColors.teal,
                           ),
                         ),
-                        const SizedBox(width: 6),
                       ],
                       if (domain != null)
                         Container(
@@ -97,26 +113,7 @@ class AiCitationCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      const Spacer(),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(
-                            Icons.verified_outlined,
-                            size: 12,
-                            color: AppColors.success,
-                          ),
-                          SizedBox(width: 3),
-                          Text(
-                            'منبع رسمی',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildCategoryChip(category),
                     ],
                   ),
                 ],
@@ -126,6 +123,85 @@ class AiCitationCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _badgeColor(CitationCategory cat) {
+    switch (cat) {
+      case CitationCategory.radArticle:
+        return AppColors.primaryRed;
+      case CitationCategory.officialAuthority:
+        return AppColors.teal;
+      case CitationCategory.generalWeb:
+        return AppColors.navy;
+    }
+  }
+
+  Widget _buildCategoryChip(CitationCategory cat) {
+    IconData icon;
+    String label;
+    Color color;
+
+    switch (cat) {
+      case CitationCategory.radArticle:
+        icon = Icons.article_outlined;
+        label = 'مقاله تخصصی راد';
+        color = AppColors.primaryRed;
+        break;
+      case CitationCategory.officialAuthority:
+        icon = Icons.verified_outlined;
+        label = 'منبع رسمی';
+        color = AppColors.teal;
+        break;
+      case CitationCategory.generalWeb:
+        icon = Icons.public;
+        label = 'وب عمومی';
+        color = AppColors.textSecondary;
+        break;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 11, color: color),
+        const SizedBox(width: 3),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static CitationCategory _determineCategory(String? url, String? authority) {
+    if (url != null) {
+      final u = url.toLowerCase();
+      if (u.contains('radvisa') ||
+          u.contains('digivisa') ||
+          u.contains('radmohajer')) {
+        return CitationCategory.radArticle;
+      }
+      if (u.contains('.gov') ||
+          u.contains('.gc.ca') ||
+          u.contains('canada.ca') ||
+          u.contains('.edu') ||
+          u.contains('homeaffairs') ||
+          u.contains('auswaertiges') ||
+          u.contains('make-it-in-germany')) {
+        return CitationCategory.officialAuthority;
+      }
+    }
+    if (authority != null && authority.isNotEmpty) {
+      return CitationCategory.officialAuthority;
+    }
+    // Default to officialAuthority when neither URL nor authority is given for compatibility
+    if (url == null && authority == null) {
+      return CitationCategory.officialAuthority;
+    }
+    return CitationCategory.generalWeb;
   }
 
   static String? _extractDomain(String? rawUrl) {
@@ -138,3 +214,4 @@ class AiCitationCard extends StatelessWidget {
     }
   }
 }
+
