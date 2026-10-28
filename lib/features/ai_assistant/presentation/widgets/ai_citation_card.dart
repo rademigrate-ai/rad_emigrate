@@ -5,11 +5,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/theme/premium_tokens.dart';
 
-enum CitationCategory {
-  radArticle,
-  officialAuthority,
-  generalWeb,
-}
+enum CitationCategory { radArticle, officialAuthority, generalWeb }
 
 class AiCitationCard extends StatelessWidget {
   final int index;
@@ -29,7 +25,8 @@ class AiCitationCard extends StatelessWidget {
     final category = _determineCategory(source.url, source.authority);
 
     return InkWell(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () {
             if (source.url != null) {
               final uri = Uri.tryParse(source.url!);
@@ -214,4 +211,3 @@ class AiCitationCard extends StatelessWidget {
     }
   }
 }
-

@@ -82,11 +82,8 @@ class _AiImmigrationProfileSheetState
   void _clear() {
     ref.read(aiUserProfileProvider.notifier).clearProfile();
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('اطلاعات پروفایل پاک شد.'),
-      ),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('اطلاعات پروفایل پاک شد.')));
   }
 
   @override
@@ -96,7 +93,9 @@ class _AiImmigrationProfileSheetState
     return Container(
       decoration: BoxDecoration(
         color: context.premium.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadii.lg)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadii.lg),
+        ),
       ),
       padding: EdgeInsets.fromLTRB(20, 16, 20, 20 + bottomInset),
       child: SingleChildScrollView(
@@ -144,7 +143,11 @@ class _AiImmigrationProfileSheetState
             const SizedBox(height: 6),
             const Text(
               'تکمیل این اطلاعات اختیاری است و به هوش مصنوعی کمک می‌کند مشاوره‌ها و شرایط ویزا را دقیقاً بر اساس وضعیت شما تنظیم کند.',
-              style: TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.4),
+              style: TextStyle(
+                fontSize: 12,
+                color: AppColors.textSecondary,
+                height: 1.4,
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -224,7 +227,10 @@ class _AiImmigrationProfileSheetState
                   ),
                   subtitle: const Text(
                     'با فعال بودن، هوش مصنوعی بدون نیاز به تکرار سوال شرایط شما را لحاظ می‌کند.',
-                    style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   onChanged: (val) => setState(() => _enableAiReuse = val),
                 ),
@@ -241,8 +247,15 @@ class _AiImmigrationProfileSheetState
               children: [
                 TextButton.icon(
                   onPressed: _clear,
-                  icon: const Icon(Icons.delete_outline, size: 16, color: AppColors.error),
-                  label: const Text('پاک‌سازی پروفایل', style: TextStyle(color: AppColors.error)),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    size: 16,
+                    color: AppColors.error,
+                  ),
+                  label: const Text(
+                    'پاک‌سازی پروفایل',
+                    style: TextStyle(color: AppColors.error),
+                  ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -286,7 +299,10 @@ class _AiImmigrationProfileSheetState
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.md),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
       ),
     );
   }

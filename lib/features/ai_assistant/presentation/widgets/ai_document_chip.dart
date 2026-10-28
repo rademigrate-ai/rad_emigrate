@@ -61,11 +61,7 @@ class AiDocumentAttachment {
 }
 
 class AiDocumentChip extends StatelessWidget {
-  const AiDocumentChip({
-    super.key,
-    required this.attachment,
-    this.onRemove,
-  });
+  const AiDocumentChip({super.key, required this.attachment, this.onRemove});
 
   final AiDocumentAttachment attachment;
   final VoidCallback? onRemove;

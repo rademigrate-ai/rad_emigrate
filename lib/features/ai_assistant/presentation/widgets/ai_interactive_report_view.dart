@@ -4,11 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
 
-enum RequirementTier {
-  mandatory,
-  recommended,
-  missing,
-}
+enum RequirementTier { mandatory, recommended, missing }
 
 class ChecklistItemData {
   ChecklistItemData({
@@ -38,7 +34,8 @@ class AiInteractiveReportView extends StatefulWidget {
   final List<ChecklistItemData> items;
 
   @override
-  State<AiInteractiveReportView> createState() => _AiInteractiveReportViewState();
+  State<AiInteractiveReportView> createState() =>
+      _AiInteractiveReportViewState();
 }
 
 class _AiInteractiveReportViewState extends State<AiInteractiveReportView> {
@@ -96,8 +93,9 @@ class _AiInteractiveReportViewState extends State<AiInteractiveReportView> {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: context.premium.surfaceElevated,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(AppRadii.lg)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppRadii.lg),
+              ),
             ),
             child: Row(
               children: [
@@ -132,8 +130,10 @@ class _AiInteractiveReportViewState extends State<AiInteractiveReportView> {
                 ),
                 // Progress Pill
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.teal.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(AppRadii.pill),
@@ -165,8 +165,10 @@ class _AiInteractiveReportViewState extends State<AiInteractiveReportView> {
                   setState(() => item.isCompleted = !item.isCompleted);
                 },
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -125,8 +125,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         ),
         _ChatMessage(
           isUser: false,
-          text:
-              '### مدارک اصلی ویزای تحصیلی کانادا\n\nبرای درخواست استادی پرمیت (Study Permit)، مدارک زیر الزامی هستند:\n\n- **نامه پذیرش معتبر (LOA)** از موسسه آموزشی معتبر (DLI)\n- **گواهی تمکن مالی (Proof of Financial Support)** شامل حساب بانکی و منبع درآمد\n- **پاسپورت معتبر** با حداقل ۶ ماه اعتبار\n- **گواهی عدم سوء پیشینه و مدیکال** (در صورت لزوم)\n\n| عنوان مدرک | وضعیت | مهلت |\n|---|---|---|\n| پذیرش DLI | الزامی | قبل از ثبت درخواست |\n| تمکن مالی ۲۰,۶۳۵ دلار کانادا | الزامی | ۶ ماه اخیر |\n| مدرک زبان (IELTS 6.0+) | پیشنهادی | معتبر تا ۲ سال |',
+          text: '### مدارک اصلی ویزای تحصیلی کانادا\n\nبرای درخواست استادی پرمیت (Study Permit)، مدارک زیر الزامی هستند:\n\n- **نامه پذیرش معتبر (LOA)** از موسسه آموزشی معتبر (DLI)\n- **گواهی تمکن مالی (Proof of Financial Support)** شامل حساب بانکی و منبع درآمد\n- **پاسپورت معتبر** با حداقل ۶ ماه اعتبار\n- **گواهی عدم سوء پیشینه و مدیکال** (در صورت لزوم)\n\n| عنوان مدرک | وضعیت | مهلت |\n|---|---|---|\n| پذیرش DLI | الزامی | قبل از ثبت درخواست |\n| تمکن مالی ۲۰,۶۳۵ دلار کانادا | الزامی | ۶ ماه اخیر |\n| مدرک زبان (IELTS 6.0+) | پیشنهادی | معتبر تا ۲ سال |',
           sources: const [
             AiSource(
               title: 'راهنمای رسمی اداره مهاجرت کانادا (IRCC) - Study Permit Requirements',
@@ -360,9 +359,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطا در انتخاب فایل: $e')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('خطا در انتخاب فایل: $e')));
       }
     }
   }
@@ -452,11 +450,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     if (!_sameIdentity(userId, epoch)) return;
     setState(() {
       _messages.add(
-        _ChatMessage(
-          isUser: true,
-          text: promptToSend,
-          attachment: attachment,
-        ),
+        _ChatMessage(isUser: true, text: promptToSend, attachment: attachment),
       );
       _loading = true;
       _controller.clear();
@@ -535,7 +529,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       kind = AiRequestKind.immigrationQuestion;
     }
 
-    final request = replacing?.retryRequest ??
+    final request =
+        replacing?.retryRequest ??
         AiRequest(
           prompt: text,
           kind: kind,
@@ -570,7 +565,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
           userId.isNotEmpty &&
           _sessionId != null) {
         try {
-          await ref.read(aiSessionRepositoryProvider).saveMessage(
+          await ref
+              .read(aiSessionRepositoryProvider)
+              .saveMessage(
                 sessionId: _sessionId!,
                 userId: userId,
                 role: 'assistant',
@@ -587,7 +584,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
       final bool hasSearchSources =
           response.sources.isNotEmpty && _webSearchMode != 'off';
-      final bool needsAdviser = text.contains('وکیل') ||
+      final bool needsAdviser =
+          text.contains('وکیل') ||
           text.contains('مشاوره') ||
           text.contains('پرونده') ||
           text.contains('ریجکت');
@@ -687,7 +685,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       {
         'title': 'جستجو در اینترنت و وب زنده',
         'desc': 'دریافت اخبار موثق و آخرین مبالغ تمکن مالی',
-        'prompt': 'آخرین تغییرات تمکن مالی ویزای تحصیلی کانادا در سال جاری چیست؟',
+        'prompt':
+            'آخرین تغییرات تمکن مالی ویزای تحصیلی کانادا در سال جاری چیست؟',
         'icon': Icons.travel_explore,
         'color': AppColors.teal,
       },
@@ -710,8 +709,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     final draftContext = ref.watch(aiPromptDraftProvider).contextLabel;
     final effectiveContext =
         (widget.contextLabel != null && widget.contextLabel!.trim().isNotEmpty)
-            ? widget.contextLabel
-            : draftContext;
+        ? widget.contextLabel
+        : draftContext;
 
     final chatContent = Column(
       children: [
@@ -748,9 +747,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 widget.adminMode
                     ? l10n.untrustedResearchDisclaimer
                     : l10n.aiDisclaimer,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: context.premium.mutedText, fontSize: 10),
                 textAlign: TextAlign.center,
               ),
@@ -853,10 +850,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
     return PremiumCanvas(
       accent: context.premium.accent,
-      child: AmbientBackdrop(
-        active: _loading,
-        child: scaffold,
-      ),
+      child: AmbientBackdrop(active: _loading, child: scaffold),
     );
   }
 
@@ -1063,19 +1057,13 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   ],
 
                   // Rich Markdown message rendering
-                  AiMarkdownView(
-                    content: m.text,
-                    isUserMessage: m.isUser,
-                  ),
+                  AiMarkdownView(content: m.text, isUserMessage: m.isUser),
 
                   // Citations list
                   if (m.sources != null && m.sources!.isNotEmpty) ...[
                     const SizedBox(height: 10),
                     for (var i = 0; i < m.sources!.length; i++)
-                      AiCitationCard(
-                        index: i + 1,
-                        source: m.sources![i],
-                      ),
+                      AiCitationCard(index: i + 1, source: m.sources![i]),
                   ],
 
                   // Interactive checklist if present
@@ -1088,15 +1076,14 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   ],
 
                   // Human adviser handoff CTA if relevant
-                  if (m.showAdviserHandoff) ...[
-                    const AiAdviserHandoffCard(),
-                  ],
+                  if (m.showAdviserHandoff) ...[const AiAdviserHandoffCard()],
 
                   // Message Actions toolbar (copy, thumbs up/down, retry)
                   if (!m.isUser) ...[
                     AiMessageActions(
                       messageText: m.text,
-                      showRetry: m.retryPrompt != null &&
+                      showRetry:
+                          m.retryPrompt != null &&
                           index == _messages.length - 1,
                       onRetry: () => _retry(m),
                     ),
@@ -1177,7 +1164,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(searchModeIcon, size: 16, color: searchModeColor),
+                          Icon(
+                            searchModeIcon,
+                            size: 16,
+                            color: searchModeColor,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             searchModeLabel,

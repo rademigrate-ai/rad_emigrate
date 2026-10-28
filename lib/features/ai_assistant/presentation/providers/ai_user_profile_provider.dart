@@ -48,8 +48,7 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
         languageScore: prefs.getString('${keyPrefix}language') ?? '',
         targetCountry: prefs.getString('${keyPrefix}country') ?? '',
         estimatedBudget: prefs.getString('${keyPrefix}budget') ?? '',
-        enableAiPersonalization:
-            prefs.getBool('${keyPrefix}enabled') ?? true,
+        enableAiPersonalization: prefs.getBool('${keyPrefix}enabled') ?? true,
       );
 
       if (loaded.hasContent) {
@@ -74,7 +73,10 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
           );
           state = cloudProfile;
           // Cache locally
-          await prefs.setString('${keyPrefix}education', cloudProfile.education);
+          await prefs.setString(
+            '${keyPrefix}education',
+            cloudProfile.education,
+          );
           await prefs.setInt(
             '${keyPrefix}experience',
             cloudProfile.workExperienceYears,
@@ -87,7 +89,10 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
             '${keyPrefix}country',
             cloudProfile.targetCountry,
           );
-          await prefs.setString('${keyPrefix}budget', cloudProfile.estimatedBudget);
+          await prefs.setString(
+            '${keyPrefix}budget',
+            cloudProfile.estimatedBudget,
+          );
           await prefs.setBool(
             '${keyPrefix}enabled',
             cloudProfile.enableAiPersonalization,
@@ -129,13 +134,15 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
           workExperience: profile.workExperienceYears > 0
               ? '${profile.workExperienceYears} years'
               : null,
-          languageLevel:
-              profile.languageScore.isEmpty ? null : profile.languageScore,
+          languageLevel: profile.languageScore.isEmpty
+              ? null
+              : profile.languageScore,
           preferredDestinations: profile.targetCountry.isEmpty
               ? []
               : [profile.targetCountry],
-          budgetRange:
-              profile.estimatedBudget.isEmpty ? null : profile.estimatedBudget,
+          budgetRange: profile.estimatedBudget.isEmpty
+              ? null
+              : profile.estimatedBudget,
           consent: profile.enableAiPersonalization,
         );
       } catch (_) {
@@ -168,5 +175,5 @@ class AiUserProfileNotifier extends StateNotifier<AiImmigrationProfile> {
 
 final aiUserProfileProvider =
     StateNotifierProvider<AiUserProfileNotifier, AiImmigrationProfile>((ref) {
-  return AiUserProfileNotifier(ref);
-});
+      return AiUserProfileNotifier(ref);
+    });

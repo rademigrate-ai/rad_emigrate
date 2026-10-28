@@ -76,9 +76,7 @@ class AiHistoryDrawer extends StatelessWidget {
             child: const Text('انصراف'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () {
               Navigator.pop(dialogCtx);
               onDeleteSession(session.id);
@@ -201,7 +199,9 @@ class AiHistoryDrawer extends StatelessWidget {
                             borderRadius: BorderRadius.circular(AppRadii.md),
                             border: Border.all(
                               color: isSelected
-                                  ? context.premium.accent.withValues(alpha: 0.3)
+                                  ? context.premium.accent.withValues(
+                                      alpha: 0.3,
+                                    )
                                   : Colors.transparent,
                             ),
                           ),
@@ -209,81 +209,87 @@ class AiHistoryDrawer extends StatelessWidget {
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(AppRadii.md),
                             child: ListTile(
-                            dense: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 2,
-                            ),
-                            leading: Icon(
-                              isSelected
-                                  ? Icons.chat_bubble
-                                  : Icons.chat_bubble_outline,
-                              size: 18,
-                              color: isSelected
-                                  ? context.premium.accent
-                                  : context.premium.mutedText,
-                            ),
-                            title: Text(
-                              'گفتگوی ${_formatDate(session.createdAt)}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: isSelected
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
-                                color: context.premium.text,
+                              dense: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 2,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              '${session.questionCount} پیام',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: context.premium.mutedText,
+                              leading: Icon(
+                                isSelected
+                                    ? Icons.chat_bubble
+                                    : Icons.chat_bubble_outline,
+                                size: 18,
+                                color: isSelected
+                                    ? context.premium.accent
+                                    : context.premium.mutedText,
                               ),
-                            ),
-                            trailing: PopupMenuButton<String>(
-                              icon: const Icon(Icons.more_vert, size: 16),
-                              onSelected: (action) {
-                                if (action == 'rename') {
-                                  _showRenameDialog(context, session);
-                                } else if (action == 'delete') {
-                                  _showDeleteDialog(context, session);
-                                }
-                              },
-                              itemBuilder: (ctx) => [
-                                const PopupMenuItem(
-                                  value: 'rename',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit_outlined, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('تغییر نام'),
-                                    ],
-                                  ),
+                              title: Text(
+                                'گفتگوی ${_formatDate(session.createdAt)}',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
+                                  color: context.premium.text,
                                 ),
-                                const PopupMenuItem(
-                                  value: 'delete',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete_outline,
-                                          size: 16, color: AppColors.error),
-                                      SizedBox(width: 8),
-                                      Text('حذف',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                '${session.questionCount} پیام',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: context.premium.mutedText,
+                                ),
+                              ),
+                              trailing: PopupMenuButton<String>(
+                                icon: const Icon(Icons.more_vert, size: 16),
+                                onSelected: (action) {
+                                  if (action == 'rename') {
+                                    _showRenameDialog(context, session);
+                                  } else if (action == 'delete') {
+                                    _showDeleteDialog(context, session);
+                                  }
+                                },
+                                itemBuilder: (ctx) => [
+                                  const PopupMenuItem(
+                                    value: 'rename',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.edit_outlined, size: 16),
+                                        SizedBox(width: 8),
+                                        Text('تغییر نام'),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'delete',
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.delete_outline,
+                                          size: 16,
+                                          color: AppColors.error,
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'حذف',
                                           style: TextStyle(
-                                              color: AppColors.error)),
-                                    ],
+                                            color: AppColors.error,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.of(context).maybePop();
+                                onSelectSession(session.id);
+                              },
                             ),
-                            onTap: () {
-                              Navigator.of(context).maybePop();
-                              onSelectSession(session.id);
-                            },
                           ),
-                        ),
-                      );
+                        );
                       },
                     ),
             ),
@@ -302,8 +308,11 @@ class AiHistoryDrawer extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline,
-                        color: AppColors.warning, size: 18),
+                    const Icon(
+                      Icons.info_outline,
+                      color: AppColors.warning,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     const Expanded(
                       child: Text(

@@ -67,9 +67,11 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       final result = await repository.syncAllCatalogues();
       ref.invalidate(adminConsoleProvider);
       if (mounted) {
-        final syncedCount = result['synced_providers'] ?? result['providers_synced'] ?? 1;
+        final syncedCount =
+            result['synced_providers'] ?? result['providers_synced'] ?? 1;
         setState(() {
-          _status = 'همگام‌سازی کاتالوگ با موفقیت انجام شد ($syncedCount ارائه‌دهنده بررسی شدند).';
+          _status =
+              'همگام‌سازی کاتالوگ با موفقیت انجام شد ($syncedCount ارائه‌دهنده بررسی شدند).';
         });
       }
     } catch (error) {
@@ -447,7 +449,11 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
             padding: EdgeInsets.only(top: 2),
             child: Text(
               'سرویس هوشمند راد به صورت دوره‌ای مدل‌های جدید ارائه‌دهندگان را کشف و سلامت اتصال آن‌ها را می‌سنجد.',
-              style: TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.3),
+              style: TextStyle(
+                fontSize: 11,
+                color: AppColors.textSecondary,
+                height: 1.3,
+              ),
             ),
           ),
           trailing: FilledButton.tonalIcon(
@@ -494,7 +500,11 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                 SizedBox(height: 4),
                 Text(
                   'موتور ارکستراسیون راد بر اساس هزینه، تاخیر، پیچیدگی سوال و نوع فایل، مدل بهینه را به صورت خودکار انتخاب می‌کند. اولویت‌بندی دستی مدل‌ها توسط مدیر لازم نیست.',
-                  style: TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.4),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
@@ -523,8 +533,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
       statusText = 'متصل و فعال';
     }
 
-    final providerModels =
-        allModels.where((m) => m.providerId == provider.id).toList();
+    final providerModels = allModels
+        .where((m) => m.providerId == provider.id)
+        .toList();
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -564,7 +575,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                             ),
                             decoration: BoxDecoration(
                               color: statusColor.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(AppRadii.pill),
+                              borderRadius: BorderRadius.circular(
+                                AppRadii.pill,
+                              ),
                             ),
                             child: Text(
                               statusText,
@@ -626,7 +639,10 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
               const Divider(height: 24),
               Text(
                 'مدل‌های شناسایی‌شده (${providerModels.length} مدل):',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 6),
               for (final model in providerModels)
@@ -639,7 +655,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                         ? Icons.check_circle_outline
                         : Icons.pause_circle_outline,
                     size: 18,
-                    color: model.enabled ? AppColors.teal : AppColors.textSecondary,
+                    color: model.enabled
+                        ? AppColors.teal
+                        : AppColors.textSecondary,
                   ),
                   title: Directionality(
                     textDirection: TextDirection.ltr,
@@ -669,14 +687,19 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.add_circle_outline, color: AppColors.primaryRed),
+                  const Icon(
+                    Icons.add_circle_outline,
+                    color: AppColors.primaryRed,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _editingExisting
                           ? 'به‌روزرسانی ارائه‌دهنده هوش مصنوعی'
                           : 'افزودن ارائه‌دهنده جدید هوش مصنوعی (تنها ۲ فیلد)',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ],
@@ -698,7 +721,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                   final value = v?.trim() ?? '';
                   if (value.isEmpty) return l10n.required;
                   final uri = Uri.tryParse(value);
-                  if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+                  if (uri == null ||
+                      uri.scheme != 'https' ||
+                      uri.host.isEmpty) {
                     return l10n.publicHttpsOnly;
                   }
                   return null;
@@ -739,7 +764,10 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     l10n.keepCurrentCredential,
-                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ),
 
@@ -789,11 +817,17 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
                           items: const [
                             DropdownMenuItem(
                               value: 'openai_compatible',
-                              child: Text('openai_compatible', textDirection: TextDirection.ltr),
+                              child: Text(
+                                'openai_compatible',
+                                textDirection: TextDirection.ltr,
+                              ),
                             ),
                             DropdownMenuItem(
                               value: 'gemini',
-                              child: Text('gemini', textDirection: TextDirection.ltr),
+                              child: Text(
+                                'gemini',
+                                textDirection: TextDirection.ltr,
+                              ),
                             ),
                           ],
                           onChanged: (value) {
@@ -824,7 +858,9 @@ class _AdminAiConfigPageState extends ConsumerState<AdminAiConfigPage> {
               const SizedBox(height: 16),
 
               AppButton(
-                label: _editingExisting ? l10n.saveProvider : 'اتصال و شناسایی خودکار مدل‌ها',
+                label: _editingExisting
+                    ? l10n.saveProvider
+                    : 'اتصال و شناسایی خودکار مدل‌ها',
                 loading: _submitting,
                 onPressed: _submitting ? null : _submit,
               ),

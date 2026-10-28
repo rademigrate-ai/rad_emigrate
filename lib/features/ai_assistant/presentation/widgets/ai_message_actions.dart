@@ -101,7 +101,9 @@ class _AiMessageActionsState extends State<AiMessageActions> {
           _ActionButton(
             tooltip: 'پاسخ مفید بود',
             icon: _thumbsUp == true ? Icons.thumb_up : Icons.thumb_up_outlined,
-            color: _thumbsUp == true ? AppColors.teal : context.premium.mutedText,
+            color: _thumbsUp == true
+                ? AppColors.teal
+                : context.premium.mutedText,
             onPressed: () {
               setState(() => _thumbsUp = _thumbsUp == true ? null : true);
             },

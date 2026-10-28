@@ -22,9 +22,7 @@ class AiSearchProgressCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.teal.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(
-          color: AppColors.teal.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.teal.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [

@@ -24,7 +24,8 @@ class AiMarkdownView extends StatelessWidget {
     if (isUserMessage) {
       return Text(
         content,
-        style: textStyle ??
+        style:
+            textStyle ??
             TextStyle(
               color: context.premium.onAccent,
               fontSize: 14,
@@ -43,12 +44,9 @@ class AiMarkdownView extends StatelessWidget {
   }
 
   Widget _renderBlock(BuildContext context, _MarkdownBlock block) {
-    final baseStyle = textStyle ??
-        TextStyle(
-          color: context.premium.text,
-          fontSize: 14,
-          height: 1.6,
-        );
+    final baseStyle =
+        textStyle ??
+        TextStyle(color: context.premium.text, fontSize: 14, height: 1.6);
 
     switch (block.type) {
       case _BlockType.h1:
@@ -170,77 +168,84 @@ class AiMarkdownView extends StatelessWidget {
 
     for (final match in regex.allMatches(text)) {
       if (match.start > lastEnd) {
-        spans.add(TextSpan(
-          text: text.substring(lastEnd, match.start),
-          style: baseStyle,
-        ));
+        spans.add(
+          TextSpan(
+            text: text.substring(lastEnd, match.start),
+            style: baseStyle,
+          ),
+        );
       }
 
       if (match.group(1) != null) {
         // Bold: **text**
-        spans.add(TextSpan(
-          text: match.group(2),
-          style: baseStyle.copyWith(fontWeight: FontWeight.bold),
-        ));
+        spans.add(
+          TextSpan(
+            text: match.group(2),
+            style: baseStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
+        );
       } else if (match.group(3) != null) {
         // Italic: *text*
-        spans.add(TextSpan(
-          text: match.group(4),
-          style: baseStyle.copyWith(fontStyle: FontStyle.italic),
-        ));
+        spans.add(
+          TextSpan(
+            text: match.group(4),
+            style: baseStyle.copyWith(fontStyle: FontStyle.italic),
+          ),
+        );
       } else if (match.group(5) != null) {
         // Inline code: `code`
-        spans.add(WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-            decoration: BoxDecoration(
-              color: context.premium.surfaceElevated,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: context.premium.border),
-            ),
-            child: Text(
-              match.group(6) ?? '',
-              style: TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 12,
-                color: AppColors.primaryRed,
+        spans.add(
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: context.premium.surfaceElevated,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: context.premium.border),
+              ),
+              child: Text(
+                match.group(6) ?? '',
+                style: TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                  color: AppColors.primaryRed,
+                ),
               ),
             ),
           ),
-        ));
+        );
       } else if (match.group(7) != null) {
         // Link: [text](url)
         final linkText = match.group(8) ?? '';
         final url = match.group(9) ?? '';
-        spans.add(WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: InkWell(
-            onTap: () {
-              final uri = Uri.tryParse(url);
-              if (uri != null) launchUrl(uri);
-            },
-            child: Text(
-              linkText,
-              style: TextStyle(
-                color: AppColors.primaryRed,
-                decoration: TextDecoration.underline,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+        spans.add(
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: InkWell(
+              onTap: () {
+                final uri = Uri.tryParse(url);
+                if (uri != null) launchUrl(uri);
+              },
+              child: Text(
+                linkText,
+                style: TextStyle(
+                  color: AppColors.primaryRed,
+                  decoration: TextDecoration.underline,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ));
+        );
       }
 
       lastEnd = match.end;
     }
 
     if (lastEnd < text.length) {
-      spans.add(TextSpan(
-        text: text.substring(lastEnd),
-        style: baseStyle,
-      ));
+      spans.add(TextSpan(text: text.substring(lastEnd), style: baseStyle));
     }
 
     return Text.rich(TextSpan(children: spans));
@@ -282,8 +287,9 @@ class AiMarkdownView extends StatelessWidget {
                       cell.trim(),
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight:
-                            isHeader ? FontWeight.w700 : FontWeight.normal,
+                        fontWeight: isHeader
+                            ? FontWeight.w700
+                            : FontWeight.normal,
                         color: isHeader ? AppColors.navy : context.premium.text,
                       ),
                     ),
@@ -317,11 +323,13 @@ class AiMarkdownView extends StatelessWidget {
           codeBlockContent.clear();
         } else {
           inCodeBlock = false;
-          blocks.add(_MarkdownBlock(
-            type: _BlockType.codeBlock,
-            text: codeBlockContent.toString().trimRight(),
-            language: codeBlockLang,
-          ));
+          blocks.add(
+            _MarkdownBlock(
+              type: _BlockType.codeBlock,
+              text: codeBlockContent.toString().trimRight(),
+              language: codeBlockLang,
+            ),
+          );
         }
         continue;
       }
@@ -345,71 +353,70 @@ class AiMarkdownView extends StatelessWidget {
         currentTable.add(cells);
         continue;
       } else if (currentTable.isNotEmpty) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.table,
-          text: '',
-          rows: List.from(currentTable),
-        ));
+        blocks.add(
+          _MarkdownBlock(
+            type: _BlockType.table,
+            text: '',
+            rows: List.from(currentTable),
+          ),
+        );
         currentTable.clear();
       }
 
       if (trimmed.isEmpty) continue;
 
       if (trimmed.startsWith('### ')) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.h3,
-          text: trimmed.substring(4),
-        ));
+        blocks.add(
+          _MarkdownBlock(type: _BlockType.h3, text: trimmed.substring(4)),
+        );
       } else if (trimmed.startsWith('## ')) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.h2,
-          text: trimmed.substring(3),
-        ));
+        blocks.add(
+          _MarkdownBlock(type: _BlockType.h2, text: trimmed.substring(3)),
+        );
       } else if (trimmed.startsWith('# ')) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.h1,
-          text: trimmed.substring(2),
-        ));
+        blocks.add(
+          _MarkdownBlock(type: _BlockType.h1, text: trimmed.substring(2)),
+        );
       } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.bulletList,
-          text: trimmed.substring(2),
-        ));
+        blocks.add(
+          _MarkdownBlock(
+            type: _BlockType.bulletList,
+            text: trimmed.substring(2),
+          ),
+        );
       } else if (RegExp(r'^\d+\.\s').hasMatch(trimmed)) {
         final match = RegExp(r'^(\d+)\.\s(.*)$').firstMatch(trimmed);
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.numberedList,
-          text: match?.group(2) ?? trimmed,
-          number: match?.group(1),
-        ));
+        blocks.add(
+          _MarkdownBlock(
+            type: _BlockType.numberedList,
+            text: match?.group(2) ?? trimmed,
+            number: match?.group(1),
+          ),
+        );
       } else if (trimmed.startsWith('> ')) {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.quote,
-          text: trimmed.substring(2),
-        ));
+        blocks.add(
+          _MarkdownBlock(type: _BlockType.quote, text: trimmed.substring(2)),
+        );
       } else if (trimmed == '---' || trimmed == '***') {
         blocks.add(_MarkdownBlock(type: _BlockType.divider, text: ''));
       } else {
-        blocks.add(_MarkdownBlock(
-          type: _BlockType.paragraph,
-          text: trimmed,
-        ));
+        blocks.add(_MarkdownBlock(type: _BlockType.paragraph, text: trimmed));
       }
     }
 
     if (inCodeBlock) {
-      blocks.add(_MarkdownBlock(
-        type: _BlockType.codeBlock,
-        text: codeBlockContent.toString().trimRight(),
-        language: codeBlockLang,
-      ));
+      blocks.add(
+        _MarkdownBlock(
+          type: _BlockType.codeBlock,
+          text: codeBlockContent.toString().trimRight(),
+          language: codeBlockLang,
+        ),
+      );
     }
     if (currentTable.isNotEmpty) {
-      blocks.add(_MarkdownBlock(
-        type: _BlockType.table,
-        text: '',
-        rows: currentTable,
-      ));
+      blocks.add(
+        _MarkdownBlock(type: _BlockType.table, text: '', rows: currentTable),
+      );
     }
 
     return blocks;
@@ -480,7 +487,9 @@ class _CodeBlockWidgetState extends State<_CodeBlockWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: const BoxDecoration(
               color: Color(0xFF181825),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.md)),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppRadii.md),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -497,8 +506,10 @@ class _CodeBlockWidgetState extends State<_CodeBlockWidget> {
                   onTap: _copy,
                   borderRadius: BorderRadius.circular(4),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

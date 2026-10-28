@@ -21,9 +21,7 @@ class AiAdviserHandoffCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.navy.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(
-          color: AppColors.navy.withValues(alpha: 0.15),
-        ),
+        border: Border.all(color: AppColors.navy.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,8 +74,10 @@ class AiAdviserHandoffCard extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.navy,
                   foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
                   visualDensity: VisualDensity.compact,
                 ),
                 onPressed: () => context.push('/consultation'),
