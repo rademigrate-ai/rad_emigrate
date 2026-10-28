@@ -1,0 +1,13 @@
+{
+  "canonical_rpcs": {
+    "create_visa_article": false,
+    "save_visa_article_draft": false,
+    "search_visa_articles": false
+  },
+  "canonical_tables": {
+    "visa_article_heads": false,
+    "visa_article_revisions": false,
+    "visa_articles": false
+  },
+  "observed_at": "2026-10-24T14:18:13.958572+00:00"
+}

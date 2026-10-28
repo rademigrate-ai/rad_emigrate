@@ -12,6 +12,7 @@ const Set<String> _authRoutes = {
 /// Public in-app explore routes accessible to anonymous guest visitors.
 const Set<String> _publicInAppRoutes = {
   '/dashboard',
+  '/explore',
   '/visa',
   '/visa/search',
   '/feed',

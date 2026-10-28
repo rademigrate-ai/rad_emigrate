@@ -1,0 +1,211 @@
+{
+  "total": 36,
+  "passed": 36,
+  "failed": 0,
+  "blocked": 0,
+  "timestamp": "2026-10-24T23:43:49.631Z",
+  "networkErrors": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/get_visa_article",
+      "body": "{\"code\":\"PT404\",\"details\":null,\"hint\":null,\"message\":\"not_found\"}"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/get_visa_article",
+      "body": "{\"code\":\"PT404\",\"details\":null,\"hint\":null,\"message\":\"not_found\"}"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/get_visa_article",
+      "body": "{\"code\":\"PT404\",\"details\":null,\"hint\":null,\"message\":\"not_found\"}"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/get_visa_article",
+      "body": "{\"code\":\"PT404\",\"details\":null,\"hint\":null,\"message\":\"not_found\"}"
+    }
+  ],
+  "results": [
+    {
+      "id": "admin.browser_login",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/dashboard storage_keys=9"
+    },
+    {
+      "id": "admin.dashboard_access",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/admin"
+    },
+    {
+      "id": "admin.cms_list_access",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/admin/cms"
+    },
+    {
+      "id": "admin.cms_editor_access",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/admin/cms/canonical/b1111111-1111-4111-8111-111111111111"
+    },
+    {
+      "id": "cms.admin_auth_token",
+      "status": "PASS",
+      "detail": "valid admin token"
+    },
+    {
+      "id": "cms.retrieve_synthetic_draft",
+      "status": "PASS",
+      "detail": "{\"content\":{\"title\":\"Draft Rev Update\",\"locale\":\"fa\",\"summary\":\"Updated summary for e2e test\",\"sections\":[],\"article_id\":\"b1111111-1111-4111-8111-111111111111\","
+    },
+    {
+      "id": "cms.server_issued_content_hash",
+      "status": "PASS",
+      "detail": "hash=008beec258e50ef550400200f0fb1d4ebf58c66eecedd177e9d7d478143a36ed"
+    },
+    {
+      "id": "cms.save_draft_revision",
+      "status": "PASS",
+      "detail": "rev=8 hash=295de9c066bc3b3644150d1d48db7052504d7048d057eb391239e1ba4cbf4fdf"
+    },
+    {
+      "id": "cms.submit_for_review",
+      "status": "PASS",
+      "detail": "state=review"
+    },
+    {
+      "id": "cms.approve_revision",
+      "status": "PASS",
+      "detail": "state=approved"
+    },
+    {
+      "id": "cms.publish_revision",
+      "status": "PASS",
+      "detail": "published_id=316f63bc-47ed-4422-b20e-a1d045a99fd1 event=e34399df-24c0-4d5a-8999-e7a760d6be4a"
+    },
+    {
+      "id": "cms.public_reader_view",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/visa/ca/study title=RAD International Institute"
+    },
+    {
+      "id": "cms.revision_conflict_guard",
+      "status": "PASS",
+      "detail": "status=409 body={\"code\":\"PT409\",\"details\":null,\"hint\":null,\"message\":\"revision_conflict\"}"
+    },
+    {
+      "id": "cms.forward_rollback",
+      "status": "PASS",
+      "detail": "new_rev=9 id=6b48bf7e-c977-4ced-94f8-a7317488ae9d"
+    },
+    {
+      "id": "isolation.user_a_token",
+      "status": "PASS",
+      "detail": "uid=1f4c52c9-488d-42f7-b5a9-0bc3bffb506a"
+    },
+    {
+      "id": "isolation.user_b_token",
+      "status": "PASS",
+      "detail": "uid=87e77994-5c72-4231-b665-419f34fe6710"
+    },
+    {
+      "id": "user_a.submit_consultation",
+      "status": "PASS",
+      "detail": "id=c009e89a-4921-4857-82ac-cbe1f4c87a78"
+    },
+    {
+      "id": "user_a.read_own_consultation",
+      "status": "PASS",
+      "detail": "count=3"
+    },
+    {
+      "id": "isolation.cross_account_consultation_leak",
+      "status": "PASS",
+      "detail": "leak=false user_b_items=0"
+    },
+    {
+      "id": "isolation.direct_id_query_denied",
+      "status": "PASS",
+      "detail": "rows=0"
+    },
+    {
+      "id": "isolation.admin_cms_role_fence",
+      "status": "PASS",
+      "detail": "status=403 res={\"code\":\"PT403\",\"details\":null,\"hint\":null,\"message\":\"forbidden\"}"
+    },
+    {
+      "id": "visual.mobile.explore.fa",
+      "status": "PASS",
+      "detail": "390x844"
+    },
+    {
+      "id": "visual.mobile.pathway_ca_study.fa",
+      "status": "PASS",
+      "detail": "390x844"
+    },
+    {
+      "id": "visual.mobile.dashboard.fa",
+      "status": "PASS",
+      "detail": "390x844"
+    },
+    {
+      "id": "visual.mobile.ai_assistant.fa",
+      "status": "PASS",
+      "detail": "390x844"
+    },
+    {
+      "id": "visual.mobile.login.fa",
+      "status": "PASS",
+      "detail": "390x844"
+    },
+    {
+      "id": "visual.tablet.explore.fa",
+      "status": "PASS",
+      "detail": "768x1024"
+    },
+    {
+      "id": "visual.tablet.pathway_ca_study.fa",
+      "status": "PASS",
+      "detail": "768x1024"
+    },
+    {
+      "id": "visual.tablet.dashboard.fa",
+      "status": "PASS",
+      "detail": "768x1024"
+    },
+    {
+      "id": "visual.tablet.ai_assistant.fa",
+      "status": "PASS",
+      "detail": "768x1024"
+    },
+    {
+      "id": "visual.tablet.login.fa",
+      "status": "PASS",
+      "detail": "768x1024"
+    },
+    {
+      "id": "visual.desktop.explore.fa",
+      "status": "PASS",
+      "detail": "1280x900"
+    },
+    {
+      "id": "visual.desktop.pathway_ca_study.fa",
+      "status": "PASS",
+      "detail": "1280x900"
+    },
+    {
+      "id": "visual.desktop.dashboard.fa",
+      "status": "PASS",
+      "detail": "1280x900"
+    },
+    {
+      "id": "visual.desktop.ai_assistant.fa",
+      "status": "PASS",
+      "detail": "1280x900"
+    },
+    {
+      "id": "visual.desktop.login.fa",
+      "status": "PASS",
+      "detail": "1280x900"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "article_body_assessments": {
+    "body_unavailable": 734,
+    "complete_substantive_source_container": 1157,
+    "soft_404_not_an_article": 28,
+    "thin_or_metadata_only_body": 3
+  },
+  "body_status_counts": {
+    "complete_source_container": 1188,
+    "empty_body": 6,
+    "no_recognized_article_container": 20,
+    "not_extracted": 708
+  },
+  "canonical_drafts": 837,
+  "capture_file": "data/capture.jsonl.gz",
+  "capture_sha256": "841b6e113200cbc48e8b0448fdd9814fdfba4c75fcea0209336071c93fef3871",
+  "client_task_date": "2026-10-24",
+  "complete_article_bodies": 1090,
+  "compression": {
+    "filename": "",
+    "format": "gzip",
+    "level": 9,
+    "library_version": "2.2.5",
+    "mtime": 0,
+    "writer": "zlib-ng==1.0.0"
+  },
+  "discovered_urls": 1922,
+  "exact_duplicate_groups": 85,
+  "existing_source_ids_preserved": 6,
+  "fetch_states": {
+    "fetch_or_parse_error": 294,
+    "fetched": 1214,
+    "http_error": 8,
+    "legacy_template_demo_route_excluded": 256,
+    "noneditorial_or_stateful_path_excluded": 148,
+    "noneditorial_query_excluded": 2
+  },
+  "format_version": "rad-plan3-1",
+  "historical_10_canonical_count_verified": false,
+  "historical_812_count_verified": false,
+  "human_approved_articles": 0,
+  "near_or_conflict_candidates": 222,
+  "pipeline_file_sha256": {
+    "tools/plan3_content/__init__.py": "ebe3b32fb93bdacbf7b3572df6feda55ac89e431d5c92eeae4aded6829549470",
+    "tools/plan3_content/build.py": "8f8dadf6a75be789018c9952a2410644a97145bb39e142c5e7a600a491dedfa9",
+    "tools/plan3_content/cli.py": "2e6a0289a3f1f52ff94a1fac1c4d015f390d21430fd02c620447fbfe4e10edc7",
+    "tools/plan3_content/crawl.py": "a6292b94079cabf91deee0da69c7723aeea2886c6888f214ca6a2051a6794e4d",
+    "tools/plan3_content/dataset.py": "47d5b627b1952eac37bb5d2a15c6661236735d558bbeaff9b1528a6465b89699",
+    "tools/plan3_content/importer.py": "ebc5e56a5c48419c68d474a6763c75b4e8c119cac5d8eb0fd135af8b5e1132b7",
+    "tools/plan3_content/parser.py": "0a07bc4443c3f32367334c754d7a9de40ea5a341ad84ccdfac5ce169e7daacb3",
+    "tools/plan3_content/quality.py": "fe33901c5c6e13fd8a08d2cf47f0eaf35a1cfa5e923b1f491048f3b60ebaf721",
+    "tools/plan3_content/reports.py": "a2e1b706dc5a4fcdc6bb2b7071d042e8d46250b1bb4381a84af995402b9b99c9",
+    "tools/plan3_content/retry.py": "ce68179645e5a57634a48667f63daf425e823129351ca3c304766a7da0a26f8b",
+    "tools/plan3_content/taxonomy.py": "dcd8680bdbf48c1c478e342968045b30fce6da62b3c7ae05e47448cdc4f64f82",
+    "tools/plan3_content/traceability.py": "cf250f34475b8d40bf4a46f9a58490748ecca40cb7ab9f22283e18bc9fae6a90"
+  },
+  "production_baseline_counts": {
+    "destinations": 22,
+    "drafts": 22,
+    "knowledge_items": 7,
+    "requirements": 8,
+    "source_documents": 6,
+    "source_snapshots": 15,
+    "steps": 18,
+    "visa_programs": 10
+  },
+  "production_canonical_cms_tables_present": false,
+  "publication_ready_articles": 0,
+  "published_articles_by_this_task": 0,
+  "source_counts_by_domain": {
+    "digivisa.ir": 616,
+    "radmohajer.ir": 855,
+    "radvisa.com": 451
+  },
+  "structurally_valid_draft_payloads": 581,
+  "successfully_retrieved_pages": 1214,
+  "validation": {
+    "articles": 837,
+    "production_import_enabled": false,
+    "publication_ready": 0,
+    "valid_draft_payloads": 581
+  },
+  "verified_claims": 0
+}

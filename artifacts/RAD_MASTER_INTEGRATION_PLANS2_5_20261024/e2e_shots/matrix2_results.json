@@ -1,0 +1,170 @@
+{
+  "results": [
+    {
+      "id": "guest.path_login",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/login labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_register",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/register labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_explore",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/explore labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_feed",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/feed labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_ai",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/ai-assistant labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_booking",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/booking labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_interviews",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/interviews labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_admin",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/login?from=/admin labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_admin_cms",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/login?from=/admin/cms labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.path_profile",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/profile labels=[\"RAD International Institute\",\"Enable accessibility\"]"
+    },
+    {
+      "id": "guest.explore_mobile",
+      "status": "PASS",
+      "detail": "screenshot"
+    },
+    {
+      "id": "auth.user_a_token",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "id": "auth.user_b_token",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "id": "user_a.me",
+      "status": "PASS",
+      "detail": "e2e.user.a@example.local"
+    },
+    {
+      "id": "user_a.dashboard",
+      "status": "PASS",
+      "detail": "url=http://127.0.0.1:8090/dashboard nodes=2"
+    },
+    {
+      "id": "user_a.ai_route",
+      "status": "PASS",
+      "detail": "screenshot"
+    },
+    {
+      "id": "user_a.admin_cms_attempt",
+      "status": "PASS",
+      "detail": "screenshot_expect_deny"
+    },
+    {
+      "id": "isolation.user_ids_differ",
+      "status": "PASS",
+      "detail": "A=1f4c52c9-488d-42f7-b5a9-0bc3bffb506a B=87e77994-5c72-4231-b665-419f34fe6710"
+    },
+    {
+      "id": "admin.browser_login",
+      "status": "BLOCKED",
+      "detail": "seeded admin has no GoTrue password path in this session"
+    },
+    {
+      "id": "admin.cms_ui_lifecycle",
+      "status": "BLOCKED",
+      "detail": "requires admin browser session"
+    }
+  ],
+  "network": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/destinations?select=id%2Ccode%2Cslug%2Cflag_emoji%2Cdestination_localizations%21inner%28name%2Csummary%2Cloca"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/visa_programs?select=id%2Cslug%2Cdestination_id%2Ccategory_id%2Cprocessing_time_text%2Cfees_text%2Cvisa_progr"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/program_categories?select=id%2Cslug%2Cprogram_category_localizations%21inner%28name%2Cdescription%2Clocale%29"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/program_categories?select=id%2Cslug%2Cprogram_category_localizations%21inner%28name%2Cdescription%2Clocale%29"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/visa_programs?select=id%2Cslug%2Cdestination_id%2Ccategory_id%2Cprocessing_time_text%2Cfees_text%2Cvisa_progr"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/destinations?select=id%2Ccode%2Cslug%2Cflag_emoji%2Cdestination_localizations%21inner%28name%2Csummary%2Cloca"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/feed_items?select=id%2Cslug%2Ccategory%2Csource_url%2Cpublished_at%2Cfeed_item_localizations%28locale%2Ctitle"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/feed_items?select=id%2Cslug%2Ccategory%2Csource_url%2Cpublished_at%2Cfeed_item_localizations%28locale%2Ctitle"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/list_service_catalog"
+    },
+    {
+      "status": 401,
+      "url": "http://127.0.0.1:54321/rest/v1/rpc/list_service_catalog"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/destinations?select=id%2Ccode%2Cslug%2Cflag_emoji%2Cdestination_localizations%21inner%28name%2Csummary%2Cloca"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/program_categories?select=id%2Cslug%2Cprogram_category_localizations%21inner%28name%2Cdescription%2Clocale%29"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/visa_programs?select=id%2Cslug%2Cdestination_id%2Ccategory_id%2Cprocessing_time_text%2Cfees_text%2Cvisa_progr"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/program_categories?select=id%2Cslug%2Cprogram_category_localizations%21inner%28name%2Cdescription%2Clocale%29"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/destinations?select=id%2Ccode%2Cslug%2Cflag_emoji%2Cdestination_localizations%21inner%28name%2Csummary%2Cloca"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/visa_programs?select=id%2Cslug%2Cdestination_id%2Ccategory_id%2Cprocessing_time_text%2Cfees_text%2Cvisa_progr"
+    }
+  ]
+}

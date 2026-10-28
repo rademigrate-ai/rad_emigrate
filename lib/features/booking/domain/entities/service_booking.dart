@@ -132,10 +132,12 @@ class BookingRequest {
     this.preferredStartUtc,
     this.preferredEndUtc,
     this.timeZoneId,
+    this.idempotencyKey,
   });
 
   final String serviceId;
   final String message;
+  final String? idempotencyKey;
 
   /// Preferred slot in UTC when the user picked one. Never interpreted as
   /// availability — the Backend decides the actual slot.

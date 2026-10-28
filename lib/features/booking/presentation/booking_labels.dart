@@ -10,6 +10,9 @@ class BookingLabels {
   bool get fa => language == 'fa';
 
   String get title => fa ? 'رزرو خدمات' : 'Book a service';
+
+  /// Compact dashboard-tile label (dashboard quick actions).
+  String get shortTitle => fa ? 'رزرو' : 'Booking';
   String get intro => fa
       ? 'خدمات RAD را مرور کنید و درخواست رزرو ثبت کنید. زمان انتخابی شما تنها یک ترجیح است و پس از تأیید کارشناس نهایی می‌شود.'
       : 'Browse RAD services and submit a booking request. Your chosen time is a preference only; a human advisor confirms the final slot.';
@@ -82,8 +85,8 @@ class BookingLabels {
   String get durationLabel => fa ? 'مدت تقریبی' : 'Approximate duration';
   String get minutesUnit => fa ? 'دقیقه' : 'min';
   String get noPriceNote => fa
-      ? 'قیمت‌ها فقط پس از تأیید رسمی در Backend اینجا نمایش داده می‌شوند.'
-      : 'Prices appear here only once the Backend publishes them officially.';
+      ? 'قیمت‌ها فقط پس از تأیید رسمی توسط RAD اینجا نمایش داده می‌شوند.'
+      : 'Prices appear here only once RAD publishes them officially.';
   String get durationUnavailable => fa
       ? 'مدت این خدمت هنوز اعلام نشده است.'
       : 'Duration for this service has not been published.';

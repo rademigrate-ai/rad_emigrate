@@ -16,6 +16,8 @@ const offering = ServiceOffering(
 const request = BookingRequest(serviceId: fixtureId, message: 'Synthetic');
 Map<String, dynamic> row() => {
   'id': fixtureId,
+  'user_id': testOwner,
+  'notes': '',
   'service_id': fixtureId,
   'title': 'Synthetic',
   'kind': 'radSession',
@@ -35,8 +37,13 @@ void main() {
   ]) {
     test('booking and interview reject malformed receipt $invalid', () async {
       final service = await mockSupabaseService(
-        (_) async => rpcJson([
-          {...row(), ...invalid},
+        (r) async => rpcJson([
+          {
+            ...row(),
+            if (r.url.path.endsWith('/submit_rad_appointment'))
+              'status': 'requested',
+            ...invalid,
+          },
         ]),
       );
       final booking = SupabaseBookingRepository(service);
@@ -89,8 +96,13 @@ void main() {
       'receipt binds to the requested service/internal appointment $patch',
       () async {
         final service = await mockSupabaseService(
-          (_) async => rpcJson([
-            {...row(), ...patch},
+          (r) async => rpcJson([
+            {
+              ...row(),
+              if (r.url.path.endsWith('/submit_rad_appointment'))
+                'status': 'requested',
+              ...patch,
+            },
           ]),
         );
         if (patch.containsKey('service_id')) {

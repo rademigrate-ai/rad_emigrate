@@ -1,0 +1,48 @@
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_login PASS url=http://127.0.0.1:8090/login labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_register PASS url=http://127.0.0.1:8090/register labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_explore PASS url=http://127.0.0.1:8090/explore labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_feed PASS url=http://127.0.0.1:8090/feed labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_ai PASS url=http://127.0.0.1:8090/ai-assistant labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+CONSOLE error Failed to load resource: the server responded with a status of 401 (Unauthorized)
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_booking PASS url=http://127.0.0.1:8090/booking labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_interviews PASS url=http://127.0.0.1:8090/interviews labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_admin PASS url=http://127.0.0.1:8090/login?from=/admin labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_admin_cms PASS url=http://127.0.0.1:8090/login?from=/admin/cms labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT guest.path_profile PASS url=http://127.0.0.1:8090/profile labels=["RAD International Institute","Enable accessibility"]
+CONSOLE debug Injecting <script> tag. Using callback.
+RESULT guest.explore_mobile PASS screenshot
+RESULT auth.user_a_token PASS ok
+RESULT auth.user_b_token PASS ok
+RESULT user_a.me PASS e2e.user.a@example.local
+CONSOLE debug Injecting <script> tag. Using callback.
+CONSOLE debug Injecting <script> tag. Using callback.
+A11Y_FAIL Node is either not clickable or not an Element
+RESULT user_a.dashboard PASS url=http://127.0.0.1:8090/dashboard nodes=2
+CONSOLE debug Injecting <script> tag. Using callback.
+RESULT user_a.ai_route PASS screenshot
+CONSOLE debug Injecting <script> tag. Using callback.
+RESULT user_a.admin_cms_attempt PASS screenshot_expect_deny
+RESULT isolation.user_ids_differ PASS A=1f4c52c9-488d-42f7-b5a9-0bc3bffb506a B=87e77994-5c72-4231-b665-419f34fe6710
+RESULT admin.browser_login BLOCKED seeded admin has no GoTrue password path in this session
+RESULT admin.cms_ui_lifecycle BLOCKED requires admin browser session
+MATRIX2_COMPLETE 20

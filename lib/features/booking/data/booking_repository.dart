@@ -237,6 +237,8 @@ class SupabaseBookingRepository implements BookingRepository {
                   ?.toUtc()
                   .toIso8601String(),
               'p_time_zone': request.timeZoneId,
+              if (request.idempotencyKey != null)
+                'p_idempotency_key': request.idempotencyKey,
             },
           )
           .timeout(const Duration(seconds: 15));

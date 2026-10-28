@@ -1,0 +1,17 @@
+{
+  "changes_reviewed": "Formatting, additional mocked security/concurrency tests, cross-agent handoff; shared JSON registry unchanged",
+  "contract_document_conflicts": [
+    "Handoff describes package-sidecar fields as direct CMS input; actual RPC uses closed wire objects",
+    "Handoff writes in_review; registry/backend wire state is review",
+    "Handoff prescribes app_metadata role; private.has_role reads server-controlled profiles.role"
+  ],
+  "observed_at": "2026-10-24T18:41:37.701615+00:00",
+  "peer_branches_modified": false,
+  "peer_test_runs_claimed_passed_by_this_review": false,
+  "placeholder_hash_still_present": true,
+  "plan4_handoff_sha256": "0471d72e01f0b5a631d1de9f4fb0d501d0f519936ff05042bd2884ed64851b7c",
+  "plan4_sha": "ee1d9b8ccab6a6df2a17d9eac5d4f43bf35f5c93",
+  "plan5_sha": "a2fd158fb4b8bc6386fc3b9242333580c75d30dc",
+  "prior_plan4_sha": "605b1978cd73ad104724deadc25851c8dc893875",
+  "registry_git_blob": "f179298a2a960ee9670418ddf599a5560085762a"
+}

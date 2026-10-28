@@ -96,18 +96,23 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
   }) async {
     if (!_service.isInitialized) return null;
     try {
+      final isUuid = RegExp(
+        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+      ).hasMatch(articleSlug);
+
+      final selector = isUuid
+          ? <String, dynamic>{'id': articleSlug}
+          : <String, dynamic>{
+              'country_code': countryCode.toUpperCase(),
+              'pathway_slug': articleSlug,
+              'kind': 'related',
+            };
+
       final response = await _service.client
           .rpc(
             'get_visa_article',
             params: {
-              'p_request': {
-                'selector': {
-                  'country_code': countryCode.toUpperCase(),
-                  'pathway_slug': articleSlug,
-                  'kind': 'related',
-                },
-                'locale': locale,
-              },
+              'p_request': {'selector': selector, 'locale': locale},
             },
           )
           .timeout(const Duration(seconds: 4));

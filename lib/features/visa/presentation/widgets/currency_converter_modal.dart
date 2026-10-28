@@ -113,6 +113,7 @@ class _CurrencyConverterModalState
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: isFa ? 'بستن' : 'Close',
                   onPressed: () => Navigator.pop(context),
                 ),
               ],

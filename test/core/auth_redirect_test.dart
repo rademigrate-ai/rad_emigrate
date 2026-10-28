@@ -244,6 +244,19 @@ void main() {
   });
 
   group('public compatibility, unknown routes, and OTP context', () {
+    test('/explore is classified as public route matching /visa', () {
+      expect(
+        authRedirect(
+          uri: Uri.parse('/explore'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        isNull,
+      );
+      expect(restoredProtectedDestination('/explore'), '/explore');
+    });
+
     test('/signup behaves like /register', () {
       expect(
         authRedirect(

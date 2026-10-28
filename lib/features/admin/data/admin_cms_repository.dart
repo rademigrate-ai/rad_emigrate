@@ -26,22 +26,61 @@ class CmsException implements Exception {
 
 /// Lossless draft input, separate from the public display projection.
 class CmsArticleDraft {
-  CmsArticleDraft._(this._content, this.revisionId);
+  CmsArticleDraft._(
+    this._content,
+    this.revisionId,
+    this.contentHash, [
+    this.editorialState = ArticleEditorialStatus.draft,
+  ]);
+
+  factory CmsArticleDraft.fromContent({
+    required Map<String, dynamic> content,
+    required String revisionId,
+    required String contentHash,
+    ArticleEditorialStatus editorialState = ArticleEditorialStatus.draft,
+  }) => CmsArticleDraft._(content, revisionId, contentHash, editorialState);
+
   final Map<String, dynamic> _content;
   final String revisionId;
+
+  /// Server-issued SHA-256 of the current head revision body.
+  /// Never invent or client-hash this value.
+  final String contentHash;
+
+  /// Authoritative editorial lifecycle state from the server ledger.
+  final ArticleEditorialStatus editorialState;
+
   String get id => _content['article_id'] as String;
   String get locale => _content['locale'] as String;
   int get revision => _content['expected_revision'] as int;
   String get title => _content['title'] as String;
   String get summary => _content['summary'] as String;
+  List<Map<String, dynamic>> get rawSections =>
+      ((_content['sections'] as List?) ?? const [])
+          .map((e) => Map<String, dynamic>.from(e as Map))
+          .toList();
+  List<String> get relatedArticleIds =>
+      ((_content['related_article_ids'] as List?) ?? const [])
+          .map((e) => e.toString())
+          .toList();
+  String? get mergeManifestId => _content['merge_manifest_id'] as String?;
+
   Map<String, dynamic> request({
     required String title,
     required String summary,
+    List<Map<String, dynamic>>? sections,
     required String requestKey,
-  }) => (jsonDecode(jsonEncode(_content)) as Map).cast<String, dynamic>()
-    ..['title'] = title
-    ..['summary'] = summary
-    ..['request_key'] = requestKey;
+  }) {
+    final req =
+        (jsonDecode(jsonEncode(_content)) as Map).cast<String, dynamic>()
+          ..['title'] = title
+          ..['summary'] = summary
+          ..['request_key'] = requestKey;
+    if (sections != null) {
+      req['sections'] = sections;
+    }
+    return req;
+  }
 }
 
 abstract class AdminCmsRepository {
@@ -62,6 +101,82 @@ abstract class AdminCmsRepository {
     CmsArticleDraft article, {
     required String title,
     required String summary,
+    List<Map<String, dynamic>>? sections,
+    required String requestKey,
+  });
+
+  // Full CMS Revision Lifecycle
+  Future<ArticleRevisionResult> submitArticleReview({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  });
+
+  Future<ArticleRevisionResult> approveArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  });
+
+  Future<ArticleRevisionResult> rejectArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  });
+
+  Future<PublicationResult> publishArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required String contentHash,
+    required String requestKey,
+  });
+
+  Future<ArticleRevisionResult> rollbackArticle({
+    required String articleId,
+    required String locale,
+    required String fromRevisionId,
+    required int expectedRevision,
+    required String reason,
+    required String requestKey,
+  });
+
+  Future<List<RevisionSummary>> listArticleRevisions({
+    required String articleId,
+    required String locale,
+  });
+
+  // Source & Authority Lifecycle
+  Future<List<Authority>> listOfficialAuthorities({
+    String? countryCode,
+    String? topic,
+    String? state,
+  });
+
+  Future<Map<String, dynamic>> discoverOfficialAuthorities({
+    required String countryCode,
+    required String topic,
+    String? profession,
+    required String requestKey,
+  });
+
+  Future<Map<String, dynamic>> enqueueResearchRefresh({
+    required List<String> authorityIds,
+    required String requestKey,
+  });
+
+  Future<Map<String, dynamic>> approveVisaSourceInventory({
+    required String articleId,
+    required List<String> sourceSnapshotIds,
+    required int expectedInventoryRevision,
     required String requestKey,
   });
 }
@@ -183,13 +298,41 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     }, 'get_cms_article_draft_response');
     final data = response['data'] as Map;
     final content = Map<String, dynamic>.from(data['content'] as Map);
+    final revisionId = data['revision_id'] as String;
+    final revision = data['revision'] as int;
     if (content['article_id'] != articleId ||
         content['locale'] != locale ||
-        content['expected_revision'] != data['revision'] ||
+        content['expected_revision'] != revision ||
         (response['meta'] as Map)['resolved_locale'] != locale) {
       throw const CmsException('malformed');
     }
-    return CmsArticleDraft._(content, data['revision_id'] as String);
+
+    // get_cms_article_draft does not return content_hash; resolve it from the
+    // authoritative revision ledger for the same article/locale/revision_id.
+    final revisions = await listArticleRevisions(
+      articleId: articleId,
+      locale: locale,
+    );
+    RevisionSummary? matched;
+    for (final rev in revisions) {
+      if (rev.revisionId == revisionId &&
+          rev.revision == revision &&
+          rev.locale == locale) {
+        matched = rev;
+        break;
+      }
+    }
+    final hash = matched?.contentHash.trim() ?? '';
+    if (matched == null ||
+        hash.isEmpty ||
+        hash == ('0' * 64) ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
+      throw const CmsException('malformed');
+    }
+
+    final editorialState = matched.editorialState;
+
+    return CmsArticleDraft._(content, revisionId, hash, editorialState);
   }
 
   @override
@@ -280,11 +423,13 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
     CmsArticleDraft article, {
     required String title,
     required String summary,
+    List<Map<String, dynamic>>? sections,
     required String requestKey,
   }) async {
     final request = article.request(
       title: title,
       summary: summary,
+      sections: sections,
       requestKey: requestKey,
     );
     requireRadContract('save_visa_article_draft_request', request);
@@ -301,6 +446,252 @@ class SupabaseAdminCmsRepository implements AdminCmsRepository {
       throw const CmsException('malformed');
     }
     return true;
+  }
+
+  @override
+  Future<ArticleRevisionResult> submitArticleReview({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('submit_visa_article_review', {
+      'article_id': articleId,
+      'revision_id': revisionId,
+      'expected_revision': expectedRevision,
+      'content_hash': contentHash,
+      'note': note,
+      'request_key': requestKey,
+    }, 'submit_visa_article_review_response');
+    final result = ArticleRevisionResult.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (result.articleId != articleId ||
+        result.revisionId != revisionId ||
+        result.editorialState != ArticleEditorialStatus.inReview) {
+      throw const CmsException('malformed');
+    }
+    return result;
+  }
+
+  @override
+  Future<ArticleRevisionResult> approveArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('approve_visa_article_revision', {
+      'article_id': articleId,
+      'revision_id': revisionId,
+      'expected_revision': expectedRevision,
+      'content_hash': contentHash,
+      'note': note,
+      'request_key': requestKey,
+    }, 'approve_visa_article_revision_response');
+    final result = ArticleRevisionResult.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (result.articleId != articleId ||
+        result.revisionId != revisionId ||
+        result.editorialState != ArticleEditorialStatus.approved) {
+      throw const CmsException('malformed');
+    }
+    return result;
+  }
+
+  @override
+  Future<ArticleRevisionResult> rejectArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required int expectedRevision,
+    required String contentHash,
+    required String note,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('reject_visa_article_revision', {
+      'article_id': articleId,
+      'revision_id': revisionId,
+      'expected_revision': expectedRevision,
+      'content_hash': contentHash,
+      'note': note,
+      'request_key': requestKey,
+    }, 'reject_visa_article_revision_response');
+    final result = ArticleRevisionResult.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (result.articleId != articleId || result.revisionId != revisionId) {
+      throw const CmsException('malformed');
+    }
+    return result;
+  }
+
+  @override
+  Future<PublicationResult> publishArticleRevision({
+    required String articleId,
+    required String revisionId,
+    required String contentHash,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('publish_visa_article_revision', {
+      'article_id': articleId,
+      'revision_id': revisionId,
+      'content_hash': contentHash,
+      'request_key': requestKey,
+    }, 'publish_visa_article_revision_response');
+    final result = PublicationResult.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (result.resourceId != articleId || result.revisionId != revisionId) {
+      throw const CmsException('malformed');
+    }
+    return result;
+  }
+
+  @override
+  Future<ArticleRevisionResult> rollbackArticle({
+    required String articleId,
+    required String locale,
+    required String fromRevisionId,
+    required int expectedRevision,
+    required String reason,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('rollback_visa_article', {
+      'article_id': articleId,
+      'locale': locale,
+      'from_revision_id': fromRevisionId,
+      'expected_revision': expectedRevision,
+      'reason': reason,
+      'request_key': requestKey,
+    }, 'rollback_visa_article_response');
+    final result = ArticleRevisionResult.fromJson(
+      Map<String, dynamic>.from(response['data'] as Map),
+    );
+    if (result.articleId != articleId) {
+      throw const CmsException('malformed');
+    }
+    return result;
+  }
+
+  @override
+  Future<List<RevisionSummary>> listArticleRevisions({
+    required String articleId,
+    required String locale,
+  }) async {
+    final revisions = <RevisionSummary>[];
+    String? cursor;
+    final visited = <String?>{};
+    final identities = <String>{};
+    do {
+      if (visited.length >= maxPagesPerList || !visited.add(cursor)) {
+        throw const CmsException('malformed');
+      }
+      final response = await _rpc('list_visa_article_revisions', {
+        'article_id': articleId,
+        'locale': locale,
+        'cursor': cursor,
+        'limit': 50,
+      }, 'list_visa_article_revisions_response');
+      final items = (response['data'] as Map)['items'] as List;
+      if (items.any(
+        (item) =>
+            (item as Map)['locale'] != locale ||
+            !identities.add(item['revision_id'] as String),
+      )) {
+        throw const CmsException('malformed');
+      }
+      revisions.addAll(
+        items.map(
+          (e) => RevisionSummary.fromJson(Map<String, dynamic>.from(e as Map)),
+        ),
+      );
+      cursor = (response['page'] as Map)['next_cursor'] as String?;
+    } while (cursor != null);
+    return revisions;
+  }
+
+  @override
+  Future<List<Authority>> listOfficialAuthorities({
+    String? countryCode,
+    String? topic,
+    String? state,
+  }) async {
+    final authorities = <Authority>[];
+    String? cursor;
+    final visited = <String?>{};
+    final identities = <String>{};
+    do {
+      if (visited.length >= maxPagesPerList || !visited.add(cursor)) {
+        throw const CmsException('malformed');
+      }
+      final response = await _rpc('list_official_authorities', {
+        'country_code': countryCode,
+        'topic': topic,
+        'state': state,
+        'cursor': cursor,
+        'limit': 50,
+      }, 'list_official_authorities_response');
+      final items = (response['data'] as Map)['items'] as List;
+      if (items.any((item) => !identities.add((item as Map)['id'] as String))) {
+        throw const CmsException('malformed');
+      }
+      authorities.addAll(
+        items.map(
+          (e) => Authority.fromJson(Map<String, dynamic>.from(e as Map)),
+        ),
+      );
+      cursor = (response['page'] as Map)['next_cursor'] as String?;
+    } while (cursor != null);
+    return authorities;
+  }
+
+  @override
+  Future<Map<String, dynamic>> discoverOfficialAuthorities({
+    required String countryCode,
+    required String topic,
+    String? profession,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('discover_official_authorities', {
+      'country_code': countryCode,
+      'topic': topic,
+      'profession': profession,
+      'request_key': requestKey,
+    }, 'discover_official_authorities_response');
+    return Map<String, dynamic>.from(response['data'] as Map);
+  }
+
+  @override
+  Future<Map<String, dynamic>> enqueueResearchRefresh({
+    required List<String> authorityIds,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('enqueue_research_refresh', {
+      'authority_ids': authorityIds,
+      'request_key': requestKey,
+    }, 'enqueue_research_refresh_response');
+    return Map<String, dynamic>.from(response['data'] as Map);
+  }
+
+  @override
+  Future<Map<String, dynamic>> approveVisaSourceInventory({
+    required String articleId,
+    required List<String> sourceSnapshotIds,
+    required int expectedInventoryRevision,
+    required String requestKey,
+  }) async {
+    final response = await _rpc('approve_visa_source_inventory', {
+      'article_id': articleId,
+      'source_snapshot_ids': sourceSnapshotIds,
+      'expected_inventory_revision': expectedInventoryRevision,
+      'request_key': requestKey,
+    }, 'approve_visa_source_inventory_response');
+    return Map<String, dynamic>.from(response['data'] as Map);
   }
 }
 
