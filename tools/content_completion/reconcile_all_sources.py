@@ -1,8 +1,6 @@
-import sys
-import os
-import json
 import gzip
-import hashlib
+import json
+import sys
 import urllib.parse
 from pathlib import Path
 
@@ -25,8 +23,6 @@ def normalize_url(u):
 
 
 def get_country_from_url_or_title(url, title, body_text):
-    text = (url + " " + (title or "") + " " + (body_text or "")[:500]).lower()
-
     # Priority country keyword mapping
     mappings = [
         (
@@ -162,7 +158,7 @@ print("Starting comprehensive source reconciliation...")
 # 1. Load Codex baseline and inaccessible register
 root = Path(".")
 audit_dir = root / "_audit/RAD_CONTENT_COMPLETION_20261027"
-with open(audit_dir / "inaccessible-source-list.json", "r", encoding="utf-8") as f:
+with open(audit_dir / "inaccessible-source-list.json", encoding="utf-8") as f:
     inaccessible_list = json.load(f)
 
 inaccessible_by_url = {normalize_url(item["url"]): item for item in inaccessible_list}
@@ -185,11 +181,11 @@ print(f"Loaded Antigravity unique recoveries: {len(antigravity_recovered)} URLs"
 
 # 3. Load Codex prepared canonical & other-titles inventories
 with open(
-    audit_dir / "prepared/canonical-page-inventory.json", "r", encoding="utf-8"
+    audit_dir / "prepared/canonical-page-inventory.json", encoding="utf-8"
 ) as f:
     canonical_pages = json.load(f)
 with open(
-    audit_dir / "prepared/other-titles-inventory.json", "r", encoding="utf-8"
+    audit_dir / "prepared/other-titles-inventory.json", encoding="utf-8"
 ) as f:
     existing_other_titles = json.load(f)
 
