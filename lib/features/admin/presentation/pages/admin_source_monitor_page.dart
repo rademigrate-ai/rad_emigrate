@@ -66,7 +66,7 @@ final adminManagedSourcesProvider =
   }
   final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
   if (authorities.isEmpty) {
-    return ref.read(mockResearchAdminRepositoryProvider).listManagedSources();
+    return const [];
   }
   return authorities.map((auth) {
     final isUni = auth.authorityType == 'university';
@@ -100,7 +100,7 @@ final adminCrawlRunsProvider =
   if (repo is MockResearchAdminRepository) {
     return repo.listCrawlRuns();
   }
-  return ref.read(mockResearchAdminRepositoryProvider).listCrawlRuns();
+  return const [];
 });
 
 final adminSourceSnapshotsProvider =
@@ -109,7 +109,7 @@ final adminSourceSnapshotsProvider =
   if (repo is MockResearchAdminRepository) {
     return repo.listSourceSnapshots();
   }
-  return ref.read(mockResearchAdminRepositoryProvider).listSourceSnapshots();
+  return const [];
 });
 
 final adminDecisionHistoryProvider =
@@ -118,7 +118,7 @@ final adminDecisionHistoryProvider =
   if (repo is MockResearchAdminRepository) {
     return repo.listAdminDecisions();
   }
-  return ref.read(mockResearchAdminRepositoryProvider).listAdminDecisions();
+  return const [];
 });
 
 class AdminSourceMonitorPage extends ConsumerStatefulWidget {

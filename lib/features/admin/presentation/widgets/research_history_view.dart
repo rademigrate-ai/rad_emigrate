@@ -174,6 +174,24 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
   }
 
   Widget _buildCrawlRunsList() {
+    if (widget.crawlRuns.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.history_toggle_off, size: 48, color: AppColors.textSecondary),
+              SizedBox(height: 12),
+              Text(
+                'هیچ دوره پویشی در سرور ثبت نشده است.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: widget.crawlRuns.length,
@@ -274,6 +292,24 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
   }
 
   Widget _buildSnapshotsList() {
+    if (widget.snapshots.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.archive_outlined, size: 48, color: AppColors.textSecondary),
+              SizedBox(height: 12),
+              Text(
+                'هیچ تصویر لحظه‌ای از مراجع رسمی ذخیره نشده است.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: widget.snapshots.length,
@@ -352,6 +388,24 @@ class _ResearchHistoryViewState extends State<ResearchHistoryView>
   }
 
   Widget _buildDecisionsList() {
+    if (widget.decisions.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.gavel_outlined, size: 48, color: AppColors.textSecondary),
+              SizedBox(height: 12),
+              Text(
+                'هیچ تصمیم سردبیری ثبت نشده است.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: widget.decisions.length,

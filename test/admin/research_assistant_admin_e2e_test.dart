@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/features/admin/data/admin_cms_repository.dart';
 import 'package:rad_emigrate/features/admin/data/mock_research_admin_repository.dart';
+import 'package:rad_emigrate/features/admin/domain/entities/admin_cms_entities.dart';
 import 'package:rad_emigrate/features/admin/domain/entities/admin_research_models.dart';
 import 'package:rad_emigrate/features/admin/presentation/pages/admin_full_page_diff_page.dart';
 import 'package:rad_emigrate/features/admin/presentation/pages/admin_source_monitor_page.dart';
@@ -11,16 +12,33 @@ import 'package:rad_emigrate/features/admin/presentation/widgets/research_histor
 import 'package:rad_emigrate/features/admin/presentation/widgets/source_management_view.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
+class _FakeLiveEmptyAdminCmsRepository implements AdminCmsRepository {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+
+  @override
+  Future<List<AdminSourceChangeProposal>> listProposals() async => const [];
+
+  @override
+  Future<List<Authority>> listOfficialAuthorities({
+    String? countryCode,
+    String? topic,
+    String? state,
+  }) async => const [];
+}
+
 Widget createTestContainer({
   required Widget child,
   Size screenSize = const Size(1200, 1000),
   MockResearchAdminRepository? mockRepo,
+  AdminCmsRepository? customRepo,
 }) {
-  final repo = mockRepo ?? MockResearchAdminRepository();
+  final repo = customRepo ?? mockRepo ?? MockResearchAdminRepository();
   return ProviderScope(
     overrides: [
       adminCmsRepositoryProvider.overrideWithValue(repo),
-      mockResearchAdminRepositoryProvider.overrideWithValue(repo),
+      if (repo is MockResearchAdminRepository)
+        mockResearchAdminRepositoryProvider.overrideWithValue(repo),
     ],
     child: MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -471,6 +489,46 @@ void main() {
         await tester.tap(find.text('تاریخچه و کپسول‌ها'));
         await tester.pumpAndSettle();
         expect(find.text('دوره‌های پویش (Crawl Runs)'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Real backend mode: when repository returns empty records, UI shows honest zero/empty state without mock fallback',
+      (tester) async {
+        tester.view.physicalSize = const Size(1200, 1000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final liveRepo = _FakeLiveEmptyAdminCmsRepository();
+
+        await tester.pumpWidget(
+          createTestContainer(
+            customRepo: liveRepo,
+            child: const AdminSourceMonitorPage(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Tab 0: Findings empty state
+        expect(find.text('هیچ تغییر جدیدی یافت نشد.'), findsOneWidget);
+
+        // Tab 1: Dashboard with honest 0 counts
+        await tester.tap(find.text('داشبورد پایش'));
+        await tester.pumpAndSettle();
+        expect(find.text('کشورهای تحت پایش'), findsOneWidget);
+        expect(find.text('0'), findsWidgets);
+
+        // Tab 2: Sources Management with honest empty state (NOT mock IRCC or Auswaertiges Amt)
+        await tester.tap(find.text('مراجع رسمی و معتبر'));
+        await tester.pumpAndSettle();
+        expect(find.text('هیچ مرجع یا منبعی با فیلترهای انتخابی یافت نشد.'), findsOneWidget);
+        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsNothing);
+
+        // Tab 3: History with honest empty states
+        await tester.tap(find.text('تاریخچه و کپسول‌ها'));
+        await tester.pumpAndSettle();
+        expect(find.text('هیچ دوره پویشی در سرور ثبت نشده است.'), findsOneWidget);
       },
     );
   });
