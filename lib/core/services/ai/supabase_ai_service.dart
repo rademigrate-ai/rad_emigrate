@@ -259,7 +259,8 @@ class SupabaseAiService implements AiService {
       case 'empty_evidence':
       case 'stale_evidence':
       case 'unavailable_evidence':
-        return 'شواهد رسمی و مستندات کافی برای این درخواست در پایگاه داده یافت نشد.';
+      case 'insufficient':
+        return l10n.aiInsufficientEvidence;
       default:
         return l10n.aiRequestFailed;
     }

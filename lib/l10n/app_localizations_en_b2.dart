@@ -59,6 +59,10 @@ mixin AppLocalizationsEnB2 on AppLocalizations {
       'The AI request could not be completed. Please try again.';
 
   @override
+  String get aiInsufficientEvidence =>
+      'There is not enough verified official evidence to answer this accurately. Check the official source or a RAD adviser.';
+
+  @override
   String get aiResponseNotSaved =>
       'The answer was generated but could not be saved to your session.';
 
@@ -295,7 +299,7 @@ mixin AppLocalizationsEnB2 on AppLocalizations {
   String get worldTimeSubtitle => 'World time, aligned with your journey';
 
   @override
-  String get worldTimeSearchHint => 'Search city, country, or timezone…';
+  String get worldTimeSearchHint => 'Search city, country, or timezoneâ€¦';
 
   @override
   String get worldTimeAdd => 'Add';
