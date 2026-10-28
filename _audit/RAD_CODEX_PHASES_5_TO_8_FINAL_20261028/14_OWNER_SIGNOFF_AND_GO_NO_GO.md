@@ -17,12 +17,14 @@
   - Web release build compiled cleanly.
 
 ### Gate 2: Application Functional & Route Acceptance (Phase 5)
-- **Verdict**: **GO**
+- **Verdict**: **CONDITIONAL PASS / PARTIAL (11 Full PASS / 10 Partial / 0 Blocked)**
 - **Justification**:
-  - All 21 features audited and exercised.
-  - BUG-001 (P1 routing defect for `/interview-scheduling`) fully resolved with green EN/FA regression tests.
-  - Missing test suites for `SplashPage` and `NotificationsPage` implemented and passing.
-  - Zero unhandled router exceptions.
+  - Automated tests (1,125/1,125 Flutter, 178 Python, 160 Deno) cover all 21 modules completely with 100% pass rate.
+  - BUG-001 (P1 routing defect for `/interview-scheduling`) fully resolved with red-to-green EN/FA regression tests.
+  - Missing test suites for `SplashPage` (5 tests) and `NotificationsPage` (4 tests) implemented and passing.
+  - 11 features achieve full PASS status across automated tests, local SPA rendering (`http://127.0.0.1:64331/`), and local persistence.
+  - 10 features remain PARTIAL because their production workflows rely on live cloud/hosted infrastructure (SMS/SMTP gateways, APNS push notifications, Cloud OCR, live advisor dispatch, hosted LLM keys, unimported hosted staging content) which cannot be validated without Phase 6/7 hosted deployment.
+  - Zero engineering blockers exist.
 
 ### Gate 3: Hosted Staging Backup & Verified Restore (Phase 6)
 - **Verdict**: **NO-GO (BLOCKED)**
@@ -33,8 +35,8 @@
 - **Justification**: Subsumed by Gate 3 dependency. Offline rehearsal, deterministic reproduction (3,157 files), and dry-run SQL fixtures are complete.
 
 ### Gate 5: Client Demo Readiness
-- **Verdict**: **CONDITIONAL GO**
-- **Conditions**: Suitable for live interactive client demo using local SPA (`http://127.0.0.1:64331`) connected to the verified local Supabase QA stack (`http://127.0.0.1:65321`). All UI screens, Persian RTL layouts, visa cards, calculators, and consultation flows demonstrate seamless quality.
+- **Verdict**: **CONDITIONAL / SCRIPTED LOCAL DEMO ONLY**
+- **Conditions**: Suitable ONLY for scripted local SPA walkthrough using `http://127.0.0.1:64331/` and local PostgREST `http://127.0.0.1:65321/`. Public exploration, responsive Persian RTL, visa pathways, university catalog, calculators, comparison matrices, and the interview scheduling route can be demonstrated seamlessly. Live hosted operations (real SMS login, real OCR document scanning, hosted LLM streaming, live admin updates) are strictly NOT verified or authorized for live client presentation.
 
 ### Gate 6: Production Release & PR Merge
 - **Verdict**: **STRICT NO-GO**

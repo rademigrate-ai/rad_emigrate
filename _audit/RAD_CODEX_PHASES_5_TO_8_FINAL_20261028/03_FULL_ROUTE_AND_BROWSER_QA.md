@@ -50,3 +50,19 @@
 - **Headers Verified**: `Cache-Control: no-store`
 - **Fallback Rule**: Direct path requests (e.g. `/interview-scheduling`) rewrite to `/index.html` for client-side routing.
 - **RTL Directionality**: Root HTML explicitly renders `<html lang="fa" dir="rtl">`.
+
+---
+
+## 3. EVIDENCE TIER MATRIX: AUTOMATED TEST HARNESS VS. WITNESSED LOCAL SPA VS. LIVE HOSTED
+
+| Route Group | Automated Test Suite | Witnessed Local SPA Browser (`64331`) | Real Persistence / RLS (`65321`) | Live Hosted / Cloud Status | Overall Route Verdict |
+|---|---|---|---|---|---|
+| **System & Bootstrap** (`/`, `/splash`) | PASS (`splash_page_test.dart`) | PASS (HTTP 200, RTL HTML, branding) | N/A (Client state) | N/A | **PASS** |
+| **Public Auth Forms** (`/login`, `/register`, `/otp`, `/forgot-password`, `/reset-password`) | PASS (12 auth tests, route matrix) | PASS (Form renders, field validation) | PARTIAL (Local GoTrue mock/in-memory) | Sandbox only; Live SMS/SMTP unwitnessed | **PARTIAL** |
+| **Public In-App Discovery** (`/dashboard`, `/universities`, `/feed`, `/world-clock`) | PASS (50+ unit/widget tests) | PASS (Grid layouts, news ticker, clocks) | PASS (Local PostgREST read endpoints) | Real static data; news publishing locked | **PASS** |
+| **Visa Exploration** (`/visa`, `/explore`, `/visa/:countryId/:category`) | PASS (28 visa tests, continuous page) | PASS (Visa explorer UI, square cards, tags) | PARTIAL (Synthetic catalog fixture) | 369 new draft locales unimported on hosted staging | **PARTIAL** |
+| **Comparison & Calculators** (`/compare/*`, `/calculator/cost`) | PASS (24 tests, pathway & uni compare) | PASS (Interactive matrix, currency switcher) | PASS (Static catalog + FX formula engine)| N/A | **PASS** |
+| **Scheduling & Booking** (`/booking`, `/interview-scheduling`, `/interviews`, `/consultation`) | PASS (BUG-001 regression tests, booking tests)| PASS (Dedicated page rendered, CTA resolves) | PARTIAL (Local form capture / fail-closed) | Live calendar sync & advisor dispatch unconfigured | **PARTIAL** |
+| **Protected In-App** (`/applications`, `/documents`, `/notifications`, `/profile`) | PASS (Protected route redirect matrix) | PASS (Unauthenticated redirects to `/login`) | PARTIAL (Local session & Storage RLS) | Real OCR engine & APNS push gateway unwitnessed | **PARTIAL** |
+| **Admin Hub** (`/admin/*`) | PASS (Role-based access matrix tests) | PASS (Non-admin redirect & 403 blocks) | PARTIAL (Local Docker DB role claims) | Hosted Staging admin actions unexercised | **PARTIAL** |
+
