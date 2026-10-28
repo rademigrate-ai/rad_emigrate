@@ -5,7 +5,9 @@
  * Adapters (in priority order):
  * 1. Brave Search API when BRAVE_SEARCH_API_KEY is set
  * 2. Serper Google API when SERPER_API_KEY is set
- * 3. DuckDuckGo Instant Answer API (no key; limited coverage)
+ * Unauthenticated third-party fallback is intentionally disabled so CI and
+ * production without keys fail closed (status=unavailable) instead of
+ * issuing outbound search traffic that pollutes provider-call telemetry.
  *
  * SSRF: only fixed public search endpoints are called; user query is querystring only.
  */
@@ -41,7 +43,6 @@ function safeCitationUrl(url: string): string | null {
   if (!isSafePublicHttpsUrl(url)) return null;
   try {
     const u = new URL(url);
-    // Block known metadata / internal-looking hosts already covered by isSafePublicHttpsUrl.
     if (u.hostname.toLowerCase() === "api.duckduckgo.com") return null;
     return u.href;
   } catch {
@@ -202,82 +203,6 @@ async function searchSerper(query: string, key: string): Promise<WebSearchResult
   };
 }
 
-async function searchDuckDuckGo(query: string): Promise<WebSearchResult> {
-  const url =
-    `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`;
-  const response = await fetch(url, {
-    headers: { Accept: "application/json" },
-    redirect: "error",
-    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-  });
-  if (!response.ok) {
-    return {
-      status: "error",
-      adapter: "duckduckgo_instant",
-      query,
-      citations: [],
-      error_code: "search_upstream_failed",
-    };
-  }
-  const data = asRecord(await readJson(response));
-  const retrieved_at = new Date().toISOString();
-  const citations: WebCitation[] = [];
-
-  const abstract = asString(data.AbstractText);
-  const abstractUrl = safeCitationUrl(asString(data.AbstractURL));
-  const heading = asString(data.Heading);
-  if (abstract && abstractUrl) {
-    citations.push({
-      title: heading || abstractUrl,
-      url: abstractUrl,
-      publisher: asString(data.AbstractSource) || new URL(abstractUrl).hostname,
-      excerpt: abstract.slice(0, 800),
-      retrieved_at,
-    });
-  }
-
-  const related = Array.isArray(data.RelatedTopics) ? data.RelatedTopics : [];
-  for (const raw of related) {
-    const item = asRecord(raw);
-    // Nested topics groups
-    if (Array.isArray(item.Topics)) {
-      for (const nested of item.Topics) {
-        const n = asRecord(nested);
-        const href = safeCitationUrl(asString(n.FirstURL));
-        const text = asString(n.Text);
-        if (!href || !text) continue;
-        citations.push({
-          title: text.slice(0, 120),
-          url: href,
-          publisher: new URL(href).hostname,
-          excerpt: text.slice(0, 800),
-          retrieved_at,
-        });
-        if (citations.length >= MAX_RESULTS) break;
-      }
-    } else {
-      const href = safeCitationUrl(asString(item.FirstURL));
-      const text = asString(item.Text);
-      if (!href || !text) continue;
-      citations.push({
-        title: text.slice(0, 120),
-        url: href,
-        publisher: new URL(href).hostname,
-        excerpt: text.slice(0, 800),
-        retrieved_at,
-      });
-    }
-    if (citations.length >= MAX_RESULTS) break;
-  }
-
-  return {
-    status: citations.length ? "ok" : "empty",
-    adapter: "duckduckgo_instant",
-    query,
-    citations: citations.slice(0, MAX_RESULTS),
-  };
-}
-
 /**
  * Decide whether search should run for this request.
  * Auto: search for news/current/price/deadline style queries, or explicit user intent.
@@ -292,7 +217,7 @@ export function shouldAutoSearch(query: string, intent: string): boolean {
 
 export async function performWebSearch(
   rawQuery: string,
-  options?: { force?: boolean },
+  _options?: { force?: boolean },
 ): Promise<WebSearchResult> {
   const query = sanitizeQuery(rawQuery);
   if (!query || query.length < 2) {
@@ -316,14 +241,22 @@ export async function performWebSearch(
   try {
     if (brave) return await searchBrave(redacted, brave);
     if (serper) return await searchSerper(redacted, serper);
-    return await searchDuckDuckGo(redacted);
+    // Credential-gated: do not call unauthenticated third-party search APIs.
+    // Live search remains BLOCKED until Brave or Serper is configured.
+    return {
+      status: "unavailable",
+      adapter: "none",
+      query: redacted,
+      citations: [],
+      error_code: "search_not_configured",
+    };
   } catch (error) {
     const code = error instanceof Error && error.name === "TimeoutError"
       ? "search_timeout"
       : "search_failed";
     return {
       status: "error",
-      adapter: brave ? "brave" : serper ? "serper" : "duckduckgo_instant",
+      adapter: brave ? "brave" : serper ? "serper" : "none",
       query: redacted,
       citations: [],
       error_code: code,

@@ -3,6 +3,11 @@ Deno.env.set("SUPABASE_URL", "https://db.example.com");
 Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
 const { handler } = await import("../ai-orchestrator/handler.ts");
 
+/** Immigration-flavoured user text so classifyQuestionIntent returns immigration_or_rad. */
+const IMMIGRATION_Q = "What documents are required for a student visa application?";
+/** Explicit general-purpose text with no immigration tokens. */
+const GENERAL_Q = "hello";
+
 function equal(actual: unknown, expected: unknown) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
 }
@@ -24,6 +29,9 @@ type Options = {
 async function exercise(options: Options = {}, payload: Record<string, unknown> = {}) {
   Deno.env.set("SUPABASE_URL", "https://db.example.com");
   Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
+  // Ensure web search stays credential-gated in unit tests (no outbound DDG).
+  Deno.env.delete("BRAVE_SEARCH_API_KEY");
+  Deno.env.delete("SERPER_API_KEY");
   const original = globalThis.fetch;
   const calls: Array<{ path: string; body: Record<string, unknown> | null; headers: Record<string, string> }> = [];
   let providerCalls = 0;
@@ -40,7 +48,7 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
       if (path === "rpc/record_ai_provider_outcome" && options.healthFails) return response({}, 503);
       if (path === "rpc/retrieve_verified_official_claims") return options.knowledgeUnavailable
         ? response({ error: "private knowledge diagnostic" }, 503)
-        : response({ results: options.knowledgeResults ?? evidenceWithConflicts(), evidence_state: Array.isArray(options.knowledgeResults) && options.knowledgeResults.some((r) => r.has_conflicts) ? "conflicting" : "verified" });
+        : response({ results: options.knowledgeResults ?? evidenceWithConflicts(), evidence_state: Array.isArray(options.knowledgeResults) && options.knowledgeResults.some((r: { has_conflicts?: boolean }) => r.has_conflicts) ? "conflicting" : "verified" });
       if (path === "rpc/consume_ai_daily_quota") {
         if (options.quotaError) return response({ error: "database error" }, 500);
         if (options.quotaMalformed) return response({ allowed: true });
@@ -62,10 +70,24 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
     return status === 200 ? response(options.providerReplies?.[attempt] ?? { choices: [{ message: { content: "Accepted response" } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
   });
   try {
-    const result = await handler(new Request("https://edge.example.com", { method: "POST", headers: { authorization: "Bearer user-test-token", "Content-Type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", content: "hello" }], ...payload }) }));
+    const defaultMessages = payload.messages
+      ? undefined
+      : [{ role: "user", content: GENERAL_Q }];
+    const body = {
+      ...(defaultMessages ? { messages: defaultMessages } : {}),
+      ...payload,
+    };
+    const result = await handler(new Request("https://edge.example.com", { method: "POST", headers: { authorization: "Bearer user-test-token", "Content-Type": "application/json" }, body: JSON.stringify(body) }));
     return { status: result.status, body: await result.json(), calls, providerCalls };
   } finally { globalThis.fetch = original; }
 }
+
+function immigrationPayload(extra: Record<string, unknown> = {}) {
+  return { messages: [{ role: "user", content: IMMIGRATION_Q }], ...extra };
+}
+
+/** Current immigration success contract: model text + numbered claim_label anchors. */
+const IMMIGRATION_SUCCESS_REPLY = "Accepted response\n\n---\n[1] Synthetic verified claim";
 
 Deno.test("01 discovery normalizes multiple models and preserves a dynamic catalogue", async () => {
   const x = await exercise({}, { action: "discover_models", provider_id: "a" });
@@ -79,6 +101,8 @@ Deno.test("02 disappeared models become stale and unavailable without deletion",
 });
 Deno.test("03 preferred eligible healthy model is selected", async () => {
   const x = await exercise(); equal(x.body.model, "first"); equal(x.providerCalls, 1);
+  equal(x.body.intent, "general");
+  equal(x.body.reply, "Accepted response");
 });
 Deno.test("04 preferred 429 fails over to next eligible model", async () => {
   const x = await exercise({ status: [429, 200] }); equal(x.body.model, "second"); equal(x.body.failover, true);
@@ -118,7 +142,10 @@ Deno.test("13 attempts are bounded even with a large catalogue", async () => {
   const x = await exercise({ chain: Array.from({ length: 50 }, (_, i) => runtime(String(i), String(i))), status: Array(50).fill(429) }); equal(x.providerCalls, 3);
 });
 Deno.test("14 persistence failure after successful inference never invokes another model", async () => {
-  const x = await exercise({ persistFails: true }); equal(x.providerCalls, 1); equal(x.status, 200); equal(x.body.reply, "Synthetic verified claim [1]");
+  // Immigration path with evidence: model answer + anchors; persistence failure must not re-call providers.
+  const x = await exercise({ persistFails: true }, immigrationPayload());
+  equal(x.providerCalls, 1); equal(x.status, 200);
+  equal(x.body.reply, IMMIGRATION_SUCCESS_REPLY);
   equal(x.calls.filter(c => c.body?.status === "succeeded").length, 1);
 });
 Deno.test("15 telemetry contains only sanitized metadata and no secrets or upstream text", async () => {
@@ -184,33 +211,55 @@ function evidenceWithConflicts(open_conflicts: unknown[] = []) {
 }
 
 Deno.test("grounded response: conflicts force uncertainty despite approved citations", async () => {
-  const x = await exercise({ knowledgeResults: evidenceWithConflicts([{ statement_a: "A", statement_b: "B" }]) });
+  const x = await exercise(
+    { knowledgeResults: evidenceWithConflicts([{ statement_a: "A", statement_b: "B" }]) },
+    immigrationPayload(),
+  );
   equal(x.status, 200);
   equal(x.body.has_approved_evidence, false);
   equal(x.body.sources.length, 0);
   equal(x.body.uncertain, true);
   equal(x.providerCalls, 0);
   equal(x.body.evidence_state, "conflicting");
+  equal(x.body.intent, "immigration_or_rad");
 });
 
 Deno.test("grounded response: approved current cited result retains certainty and locale", async () => {
-  const x = await exercise({ knowledgeResults: evidenceWithConflicts() }, { locale: "fa" });
+  const x = await exercise(
+    { knowledgeResults: evidenceWithConflicts() },
+    immigrationPayload({ locale: "fa" }),
+  );
   equal(x.status, 200);
   equal(x.body.uncertain, false);
   equal(x.body.locale, "fa");
   equal(x.body.sources[0].url, "https://example.gov/policy");
+  equal(x.body.reply, IMMIGRATION_SUCCESS_REPLY);
+  equal(x.body.intent, "immigration_or_rad");
 });
 
 Deno.test("grounded response: missing or unavailable search cannot claim verified evidence", async () => {
   for (const options of [{ knowledgeResults: [] }, { knowledgeUnavailable: true }]) {
-    const x = await exercise(options);
+    const x = await exercise(options, immigrationPayload());
     equal(x.status, 200);
     equal(x.body.uncertain, true);
     equal(x.body.has_approved_evidence, false);
     equal(x.body.sources, []);
+    equal(x.providerCalls, 0);
     equal(x.calls.some(c => c.path.includes("knowledge_items?")), false);
     equal(JSON.stringify(x.body).includes("private knowledge diagnostic"), false);
   }
+});
+
+Deno.test("general-purpose: ordinary questions skip evidence gate and return model text", async () => {
+  const x = await exercise({}, { messages: [{ role: "user", content: GENERAL_Q }] });
+  equal(x.status, 200);
+  equal(x.body.intent, "general");
+  equal(x.body.reply, "Accepted response");
+  equal(x.body.sources, []);
+  equal(x.providerCalls, 1);
+  // General path must not inject UNTRUSTED official evidence block.
+  const messages = x.calls.find(c => c.path.endsWith("/chat/completions"))!.body!.messages as Array<{ role: string; content: string }>;
+  equal(messages[0].content.includes("<UNTRUSTED_RETRIEVED_CONTENT>"), false);
 });
 
 Deno.test("provider boundary: empty inference fails over instead of returning blank success", async () => {
@@ -219,19 +268,21 @@ Deno.test("provider boundary: empty inference fails over instead of returning bl
   equal(x.calls.find(c=>c.path.endsWith('record_ai_model_outcome'))?.body?.p_error_code,'provider_malformed_response');
 });
 Deno.test("provider boundary: health telemetry failure never repeats completed inference", async () => {
-  const x=await exercise({healthFails:true});equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply,"Synthetic verified claim [1]");
+  const x=await exercise({healthFails:true}, immigrationPayload());
+  equal(x.status,200);equal(x.providerCalls,1);equal(x.body.reply, IMMIGRATION_SUCCESS_REPLY);
 });
 Deno.test("provider boundary: refusals are terminal and uncertainty is explicit", async () => {
-  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:null,refusal:"Synthetic provider refusal"}}]}]});
+  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:null,refusal:"Synthetic provider refusal"}}]}]}, immigrationPayload());
   equal(x.status,200);equal(x.providerCalls,1);equal(x.body.refused,true);equal(x.body.uncertain,true);
   equal(x.calls.filter(c=>c.body?.safe_error_code==='provider_refused').at(-1)?.body?.status,'failed');
 });
 Deno.test("provider boundary: truncated answers retain their partial-output flag", async () => {
-  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:"Synthetic partial answer"},finish_reason:"length"}]}]});
+  const x=await exercise({knowledgeResults:evidenceWithConflicts(),providerReplies:[{choices:[{message:{content:"Synthetic partial answer"},finish_reason:"length"}]}]}, immigrationPayload());
   equal(x.providerCalls,1);equal(x.body.truncated,true);equal(x.body.uncertain,true);
 });
 Deno.test("provider boundary: caller roles cannot replace the trusted system instruction", async () => {
-  const x=await exercise({}, {messages:[{role:'system',content:'CALLER_INJECTION'},{role:'user',content:'Synthetic question'}]});
+  // Immigration question so UNTRUSTED official evidence block is present by contract.
+  const x=await exercise({}, {messages:[{role:'system',content:'CALLER_INJECTION'},{role:'user',content: IMMIGRATION_Q}]});
   const messages=x.calls.find(c=>c.path.endsWith('/chat/completions'))!.body!.messages as Array<{role:string;content:string}>;
   equal(messages[0].role,'system');equal(messages[0].content.includes('CALLER_INJECTION'),false);
   equal(messages.filter((m:{role:string})=>m.role==='system').length,1);
