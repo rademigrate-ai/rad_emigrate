@@ -780,7 +780,6 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                 onPressed: () => _scaffoldKey.currentState?.openDrawer(),
               ),
               title: Row(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   RadAiBird(
                     state: _birdState,
@@ -789,11 +788,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                     showBackgroundOrb: false,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    widget.adminMode
-                        ? l10n.adminResearchAssistant
-                        : 'دستیار هوشمند راد',
-                    style: const TextStyle(fontWeight: FontWeight.w800),
+                  Flexible(
+                    child: Text(
+                      widget.adminMode
+                          ? l10n.adminResearchAssistant
+                          : 'دستیار هوشمند راد',
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
@@ -1121,10 +1124,17 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         break;
     }
 
+    final width = MediaQuery.sizeOf(context).width;
+    final textScale = MediaQuery.textScalerOf(context).scale(14);
+    final compact = width < 380 || textScale > 18;
+    final controlSize = compact ? 36.0 : 42.0;
+    final sendSize = compact ? 40.0 : 44.0;
+    final hPad = compact ? 8.0 : 14.0;
+
     return SafeArea(
       child: Container(
         color: context.premium.surface,
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
+        padding: EdgeInsets.fromLTRB(hPad, 8, hPad, 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1140,128 +1150,136 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
               ),
             ],
 
-            // Input Row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // Web Search Mode Toggle Pill
-                Tooltip(
-                  message: 'تنظیم جستجوی زنده در وب (خودکار / روشن / خاموش)',
-                  child: InkWell(
-                    onTap: _toggleSearchMode,
-                    borderRadius: BorderRadius.circular(AppRadii.pill),
-                    child: Container(
-                      height: 42,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: searchModeColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppRadii.pill),
-                        border: Border.all(
-                          color: searchModeColor.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            searchModeIcon,
-                            size: 16,
-                            color: searchModeColor,
+            // Input Row — scale down under extreme text magnification / narrow width
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width - (hPad * 2),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // Web Search Mode Toggle Pill
+                  Tooltip(
+                    message: 'تنظیم جستجوی زنده در وب (خودکار / روشن / خاموش)',
+                    child: InkWell(
+                      onTap: _toggleSearchMode,
+                      borderRadius: BorderRadius.circular(AppRadii.pill),
+                      child: Container(
+                        height: 42,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: searchModeColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(AppRadii.pill),
+                          border: Border.all(
+                            color: searchModeColor.withValues(alpha: 0.3),
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            searchModeLabel,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
+                        ),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              searchModeIcon,
+                              size: 16,
                               color: searchModeColor,
                             ),
-                          ),
-                        ],
+                            // Hide label under tight width / large text scale to avoid composer overflow.
+                            if (!compact) ...[
+                              const SizedBox(width: 4),
+                              Text(
+                                searchModeLabel,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: searchModeColor,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
+                  const SizedBox(width: 8),
 
-                // Attachment Button (PDF & Images)
-                Tooltip(
-                  message: 'پیوست سند یا تصویر (PDF/Image)',
-                  child: IconButton(
+                  // Attachment Button (PDF & Images)
+                  Tooltip(
+                    message: 'پیوست سند یا تصویر (PDF/Image)',
+                    child: IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: context.premium.surfaceElevated,
+                        foregroundColor: AppColors.navy,
+                        minimumSize: Size(controlSize, controlSize),
+                      ),
+                      icon: const Icon(Icons.attach_file, size: 20),
+                      onPressed: _loading ? null : _pickDocument,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // Text Input
+                  Expanded(
+                    child: KeyboardListener(
+                      focusNode: FocusNode(),
+                      onKeyEvent: (event) {
+                        if (event is KeyDownEvent &&
+                            event.logicalKey == LogicalKeyboardKey.enter &&
+                            !HardwareKeyboard.instance.isShiftPressed) {
+                          _send();
+                        }
+                      },
+                      child: TextField(
+                        controller: _controller,
+                        focusNode: _composerFocus,
+                        minLines: 1,
+                        maxLines: 5,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (_) => _send(),
+                        decoration: InputDecoration(
+                          hintText: l10n.askQuestionHint,
+                          fillColor: context.premium.surfaceElevated,
+                          hintStyle: TextStyle(
+                            color: context.premium.mutedText,
+                            fontSize: 13,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide: BorderSide(
+                              color: context.premium.border,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // Send Button (STRICTLY NO VOICE CONTROLS)
+                  IconButton.filled(
+                    tooltip: l10n.sendMessage,
                     style: IconButton.styleFrom(
-                      backgroundColor: context.premium.surfaceElevated,
-                      foregroundColor: AppColors.navy,
-                      minimumSize: const Size(42, 42),
+                      backgroundColor: context.premium.accent,
+                      foregroundColor: context.premium.onAccent,
+                      disabledBackgroundColor: context.premium.disabledSurface,
+                      disabledForegroundColor: context.premium.disabledText,
+                      minimumSize: Size(sendSize, sendSize),
                     ),
-                    icon: const Icon(Icons.attach_file, size: 20),
-                    onPressed: _loading ? null : _pickDocument,
+                    onPressed: _loading ? null : () => _send(),
+                    icon: _loading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.send, size: 20),
                   ),
-                ),
-                const SizedBox(width: 8),
-
-                // Text Input
-                Expanded(
-                  child: KeyboardListener(
-                    focusNode: FocusNode(),
-                    onKeyEvent: (event) {
-                      if (event is KeyDownEvent &&
-                          event.logicalKey == LogicalKeyboardKey.enter &&
-                          !HardwareKeyboard.instance.isShiftPressed) {
-                        _send();
-                      }
-                    },
-                    child: TextField(
-                      controller: _controller,
-                      focusNode: _composerFocus,
-                      minLines: 1,
-                      maxLines: 5,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => _send(),
-                      decoration: InputDecoration(
-                        hintText: l10n.askQuestionHint,
-                        fillColor: context.premium.surfaceElevated,
-                        hintStyle: TextStyle(
-                          color: context.premium.mutedText,
-                          fontSize: 13,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppRadii.md),
-                          borderSide: BorderSide(color: context.premium.border),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-
-                // Send Button (STRICTLY NO VOICE CONTROLS)
-                IconButton.filled(
-                  tooltip: l10n.sendMessage,
-                  style: IconButton.styleFrom(
-                    backgroundColor: context.premium.accent,
-                    foregroundColor: context.premium.onAccent,
-                    disabledBackgroundColor: context.premium.disabledSurface,
-                    disabledForegroundColor: context.premium.disabledText,
-                    minimumSize: const Size(44, 44),
-                  ),
-                  onPressed: _loading ? null : () => _send(),
-                  icon: _loading
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.send, size: 20),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

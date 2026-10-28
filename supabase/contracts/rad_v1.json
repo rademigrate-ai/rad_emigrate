@@ -4486,6 +4486,14 @@
             "user",
             "admin"
           ]
+        },
+        "web_search": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off",
+            "auto"
+          ]
         }
       },
       "required": [
