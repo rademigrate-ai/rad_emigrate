@@ -112,17 +112,17 @@ void main() {
         // 2. Verify metric values
         expect(find.text('5'), findsOneWidget); // 5 countries
         expect(find.text('18'), findsOneWidget); // 18 active official sources
-        expect(find.text('4'), findsWidgets); // employer sources & pending reviews
+        expect(
+          find.text('4'),
+          findsWidgets,
+        ); // employer sources & pending reviews
         expect(find.text('12'), findsOneWidget); // 12 universities
         expect(find.text('7'), findsOneWidget); // 7 detected changes
         expect(find.text('2'), findsOneWidget); // 2 failures
         expect(find.text('3'), findsOneWidget); // 3 overdue
 
         // 3. Verify Failure Alert Banner
-        expect(
-          find.textContaining('مرجع به دلیل خطای اتصال'),
-          findsOneWidget,
-        );
+        expect(find.textContaining('مرجع به دلیل خطای اتصال'), findsOneWidget);
         await tester.tap(find.text('تلاش مجدد مراجع ناموفق'));
         await tester.pumpAndSettle();
         expect(retryTriggered, isTrue);
@@ -146,10 +146,7 @@ void main() {
         // 6. Verify Human in the Loop Security Assurance Notice (scroll to bottom)
         await tester.drag(find.byType(ListView), const Offset(0, -800));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining('تضمین حاکمیت سردبیری'),
-          findsOneWidget,
-        );
+        expect(find.textContaining('تضمین حاکمیت سردبیری'), findsOneWidget);
       },
     );
 
@@ -187,12 +184,18 @@ void main() {
         await tester.pumpAndSettle();
 
         // 1. Verify Official Authorities & Universities are rendered
-        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsOneWidget);
+        expect(
+          find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'),
+          findsOneWidget,
+        );
 
         // Search for university source to avoid ListView viewport scroll virtualization
         await tester.enterText(find.byType(TextField).first, 'تورنتو');
         await tester.pumpAndSettle();
-        expect(find.text('پورتال رسمی پذیرش بین‌الملل دانشگاه تورنتو (U of T)'), findsOneWidget);
+        expect(
+          find.text('پورتال رسمی پذیرش بین‌الملل دانشگاه تورنتو (U of T)'),
+          findsOneWidget,
+        );
 
         // Search for employer source
         await tester.enterText(find.byType(TextField).first, 'BC Tech');
@@ -215,7 +218,9 @@ void main() {
         expect(toggledSourceId, equals('src-ca-ircc'));
 
         // 4. Verify Monitoring Interval Selection
-        final intervalDropdowns = find.byType(DropdownButton<MonitoringInterval>);
+        final intervalDropdowns = find.byType(
+          DropdownButton<MonitoringInterval>,
+        );
         expect(intervalDropdowns, findsWidgets);
         await tester.tap(intervalDropdowns.first);
         await tester.pumpAndSettle();
@@ -234,8 +239,14 @@ void main() {
         // 6. Verify Filter by Country
         await tester.tap(find.text('🇨🇦 کانادا').first);
         await tester.pumpAndSettle();
-        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsOneWidget);
-        expect(find.text('وزارت امور خارجه جمهوری فدرال آلمان (Auswärtiges Amt)'), findsNothing);
+        expect(
+          find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'),
+          findsOneWidget,
+        );
+        expect(
+          find.text('وزارت امور خارجه جمهوری فدرال آلمان (Auswärtiges Amt)'),
+          findsNothing,
+        );
       },
     );
 
@@ -252,9 +263,7 @@ void main() {
         await tester.pumpWidget(
           createTestContainer(
             mockRepo: mockRepo,
-            child: const AdminFullPageDiffPage(
-              sourceId: 'prop-ca-fswp-001',
-            ),
+            child: const AdminFullPageDiffPage(sourceId: 'prop-ca-fswp-001'),
           ),
         );
         await tester.pumpAndSettle();
@@ -306,16 +315,30 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(previewFinder);
         await tester.pumpAndSettle();
-        expect(find.text('پیش‌نمایش سند نهایی پیش‌نویس (Clean Unified Preview)'), findsOneWidget);
-        expect(find.textContaining('این نما سند کامل را به صورت یکپارچه'), findsOneWidget);
+        expect(
+          find.text('پیش‌نمایش سند نهایی پیش‌نویس (Clean Unified Preview)'),
+          findsOneWidget,
+        );
+        expect(
+          find.textContaining('این نما سند کامل را به صورت یکپارچه'),
+          findsOneWidget,
+        );
 
         // 7. Verify Related Articles Impact Panel (scroll down)
         await tester.drag(find.byType(ListView), const Offset(0, -800));
         await tester.pumpAndSettle();
-        final impactFinder = find.text('مقالات مرتبط متأثر از تغییرات این منبع:');
+        final impactFinder = find.text(
+          'مقالات مرتبط متأثر از تغییرات این منبع:',
+        );
         expect(impactFinder, findsOneWidget);
-        expect(find.text('برنامه‌های نامزدی استانی کانادا (PNP)'), findsOneWidget);
-        expect(find.text('ویزای کار پس از تحصیل کانادا (PGWP)'), findsOneWidget);
+        expect(
+          find.text('برنامه‌های نامزدی استانی کانادا (PNP)'),
+          findsOneWidget,
+        );
+        expect(
+          find.text('ویزای کار پس از تحصیل کانادا (PGWP)'),
+          findsOneWidget,
+        );
       },
     );
 
@@ -332,19 +355,22 @@ void main() {
         await tester.pumpWidget(
           createTestContainer(
             mockRepo: mockRepo,
-            child: const AdminFullPageDiffPage(
-              sourceId: 'prop-au-grad-003',
-            ),
+            child: const AdminFullPageDiffPage(sourceId: 'prop-au-grad-003'),
           ),
         );
         await tester.pumpAndSettle();
 
         // 1. Verify Conflict Callout Banner & Dual Source Claims
         expect(
-          find.textContaining('هشدار مغایرت: میان منابع رسمی استناد تناقض اطلاعاتی مشاهده شده است'),
+          find.textContaining(
+            'هشدار مغایرت: میان منابع رسمی استناد تناقض اطلاعاتی مشاهده شده است',
+          ),
           findsOneWidget,
         );
-        expect(find.textContaining('مغایرت استخراج‌شده: ادعای منبع فدرال'), findsOneWidget);
+        expect(
+          find.textContaining('مغایرت استخراج‌شده: ادعای منبع فدرال'),
+          findsOneWidget,
+        );
 
         // 2. Verify Dual Source Claims Resolution Options
         expect(find.text('اعمال استناد منبع فدرال'), findsOneWidget);
@@ -386,19 +412,33 @@ void main() {
         // 2. Snapshots Archive Sub-Tab
         await tester.tap(find.text('آرشیو تصاویر مراجع (Snapshots)'));
         await tester.pumpAndSettle();
-        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsOneWidget);
-        expect(find.text('وزارت امور خارجه آلمان (Auswärtiges Amt)'), findsOneWidget);
+        expect(
+          find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'),
+          findsOneWidget,
+        );
+        expect(
+          find.text('وزارت امور خارجه آلمان (Auswärtiges Amt)'),
+          findsOneWidget,
+        );
 
         // 3. Inspect Snapshot Modal with SHA-256 Hash
         await tester.tap(find.text('مشاهده جزئیات کپسول').first);
         await tester.pumpAndSettle();
-        expect(find.text('کپسول تصویر لحظه‌ای منبع (Source Snapshot)'), findsOneWidget);
-        expect(find.text('هش محتوا (SHA-256):'), findsOneWidget);
         expect(
-          find.textContaining('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'),
+          find.text('کپسول تصویر لحظه‌ای منبع (Source Snapshot)'),
           findsOneWidget,
         );
-        expect(find.text('متن خام و استخراج‌شده از منبع رسمی:'), findsOneWidget);
+        expect(find.text('هش محتوا (SHA-256):'), findsOneWidget);
+        expect(
+          find.textContaining(
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text('متن خام و استخراج‌شده از منبع رسمی:'),
+          findsOneWidget,
+        );
 
         // Close modal
         await tester.tap(find.text('بستن'));
@@ -427,10 +467,7 @@ void main() {
           createTestContainer(
             screenSize: const Size(390, 844),
             child: Scaffold(
-              body: ResearchDashboardView(
-                metrics: metrics,
-                recentRuns: runs,
-              ),
+              body: ResearchDashboardView(metrics: metrics, recentRuns: runs),
             ),
           ),
         );
@@ -442,10 +479,7 @@ void main() {
           createTestContainer(
             screenSize: const Size(1200, 900),
             child: Scaffold(
-              body: ResearchDashboardView(
-                metrics: metrics,
-                recentRuns: runs,
-              ),
+              body: ResearchDashboardView(metrics: metrics, recentRuns: runs),
             ),
           ),
         );
@@ -463,9 +497,7 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
 
         await tester.pumpWidget(
-          createTestContainer(
-            child: const AdminSourceMonitorPage(),
-          ),
+          createTestContainer(child: const AdminSourceMonitorPage()),
         );
         await tester.pumpAndSettle();
 
@@ -482,7 +514,10 @@ void main() {
         // Switch to Tab 2: Sources Management (Screen 2)
         await tester.tap(find.text('مراجع رسمی و معتبر'));
         await tester.pumpAndSettle();
-        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsOneWidget);
+        expect(
+          find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'),
+          findsOneWidget,
+        );
         expect(find.text('واکشی تغییرات منبع'), findsWidgets);
 
         // Switch to Tab 3: History (Screen 5)
@@ -522,13 +557,22 @@ void main() {
         // Tab 2: Sources Management with honest empty state (NOT mock IRCC or Auswaertiges Amt)
         await tester.tap(find.text('مراجع رسمی و معتبر'));
         await tester.pumpAndSettle();
-        expect(find.text('هیچ مرجع یا منبعی با فیلترهای انتخابی یافت نشد.'), findsOneWidget);
-        expect(find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'), findsNothing);
+        expect(
+          find.text('هیچ مرجع یا منبعی با فیلترهای انتخابی یافت نشد.'),
+          findsOneWidget,
+        );
+        expect(
+          find.text('اداره مهاجرت، پناهندگی و شهروندی کانادا (IRCC)'),
+          findsNothing,
+        );
 
         // Tab 3: History with honest empty states
         await tester.tap(find.text('تاریخچه و کپسول‌ها'));
         await tester.pumpAndSettle();
-        expect(find.text('هیچ دوره پویشی در سرور ثبت نشده است.'), findsOneWidget);
+        expect(
+          find.text('هیچ دوره پویشی در سرور ثبت نشده است.'),
+          findsOneWidget,
+        );
       },
     );
   });

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,7 +40,8 @@ class _FakeAiService implements AiService {
     requests.add(request);
     return AiResponse(
       text: nextResponseText,
-      sources: nextSources ??
+      sources:
+          nextSources ??
           const [
             AiSource(
               title: 'اداره مهاجرت استرالیا',
@@ -142,14 +142,8 @@ Widget _buildTestApp({
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: MediaQuery(
-        data: MediaQueryData(
-          size: surfaceSize,
-          disableAnimations: true,
-        ),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: child,
-        ),
+        data: MediaQueryData(size: surfaceSize, disableAnimations: true),
+        child: Directionality(textDirection: TextDirection.rtl, child: child),
       ),
     ),
   );
@@ -199,36 +193,29 @@ void main() {
   });
 
   group('RAD User AI Assistant — Strict Zero Voice Safety Audit', () {
-    testWidgets('strictly zero microphone, speech-to-text, or voice buttons exist in UI', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: const AiAssistantPage(),
-        ),
-      );
-      await tester.pumpAndSettle();
+    testWidgets(
+      'strictly zero microphone, speech-to-text, or voice buttons exist in UI',
+      (tester) async {
+        await tester.pumpWidget(_buildTestApp(child: const AiAssistantPage()));
+        await tester.pumpAndSettle();
 
-      // Strict safety audit: No microphone or audio icons anywhere in the widget tree
-      expect(find.byIcon(Icons.mic), findsNothing);
-      expect(find.byIcon(Icons.mic_none), findsNothing);
-      expect(find.byIcon(Icons.mic_off), findsNothing);
-      expect(find.byIcon(Icons.record_voice_over), findsNothing);
-      expect(find.byIcon(Icons.voice_chat), findsNothing);
-      expect(find.byIcon(Icons.volume_up), findsNothing);
-      expect(find.byIcon(Icons.hearing), findsNothing);
-    });
+        // Strict safety audit: No microphone or audio icons anywhere in the widget tree
+        expect(find.byIcon(Icons.mic), findsNothing);
+        expect(find.byIcon(Icons.mic_none), findsNothing);
+        expect(find.byIcon(Icons.mic_off), findsNothing);
+        expect(find.byIcon(Icons.record_voice_over), findsNothing);
+        expect(find.byIcon(Icons.voice_chat), findsNothing);
+        expect(find.byIcon(Icons.volume_up), findsNothing);
+        expect(find.byIcon(Icons.hearing), findsNothing);
+      },
+    );
   });
 
   group('RAD User AI Assistant — Web Search Mode & Multiline Composer', () {
     testWidgets('web search button toggles between auto, alwaysOn, and off', (
       tester,
     ) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: const AiAssistantPage(),
-        ),
-      );
+      await tester.pumpWidget(_buildTestApp(child: const AiAssistantPage()));
       await tester.pumpAndSettle();
 
       // Initial state is auto search
@@ -255,10 +242,7 @@ void main() {
     ) async {
       final fakeAi = _FakeAiService();
       await tester.pumpWidget(
-        _buildTestApp(
-          child: const AiAssistantPage(),
-          aiService: fakeAi,
-        ),
+        _buildTestApp(child: const AiAssistantPage(), aiService: fakeAi),
       );
       await tester.pumpAndSettle();
 
@@ -278,7 +262,10 @@ void main() {
 
       // Ai completed the request
       expect(fakeAi.requests, hasLength(1));
-      expect(fakeAi.requests.first.prompt, contains('شرایط پذیرش تحصیلی چیست؟'));
+      expect(
+        fakeAi.requests.first.prompt,
+        contains('شرایط پذیرش تحصیلی چیست؟'),
+      );
     });
   });
 
@@ -286,11 +273,7 @@ void main() {
     testWidgets('opens profile sheet, allows editing, and saves', (
       tester,
     ) async {
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: const AiAssistantPage(),
-        ),
-      );
+      await tester.pumpWidget(_buildTestApp(child: const AiAssistantPage()));
       await tester.pumpAndSettle();
 
       // Tap the immigration profile button in AppBar
@@ -358,48 +341,49 @@ def check_eligibility(points):
       expect(find.text('کپی'), findsOneWidget);
     });
 
-    testWidgets('AiInteractiveReportView renders checklist items and toggle updates state', (
-      tester,
-    ) async {
-      final items = [
-        ChecklistItemData(
-          title: 'ارائه مدرک زبان آیلتس ۶.۵',
-          description: 'حداقل نمره ۶ در هر مهارت',
-          tier: RequirementTier.mandatory,
-          isCompleted: false,
-        ),
-        ChecklistItemData(
-          title: 'ارائه گواهی عدم سوء پیشینه',
-          description: 'صادر شده در ۳ ماه اخیر',
-          tier: RequirementTier.recommended,
-          isCompleted: true,
-        ),
-      ];
+    testWidgets(
+      'AiInteractiveReportView renders checklist items and toggle updates state',
+      (tester) async {
+        final items = [
+          ChecklistItemData(
+            title: 'ارائه مدرک زبان آیلتس ۶.۵',
+            description: 'حداقل نمره ۶ در هر مهارت',
+            tier: RequirementTier.mandatory,
+            isCompleted: false,
+          ),
+          ChecklistItemData(
+            title: 'ارائه گواهی عدم سوء پیشینه',
+            description: 'صادر شده در ۳ ماه اخیر',
+            tier: RequirementTier.recommended,
+            isCompleted: true,
+          ),
+        ];
 
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: Scaffold(
-            body: AiInteractiveReportView(
-              title: 'چک‌لیست مدارک ویزا',
-              items: items,
+        await tester.pumpWidget(
+          _buildTestApp(
+            child: Scaffold(
+              body: AiInteractiveReportView(
+                title: 'چک‌لیست مدارک ویزا',
+                items: items,
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('چک‌لیست مدارک ویزا'), findsOneWidget);
-      expect(find.text('ارائه مدرک زبان آیلتس ۶.۵'), findsOneWidget);
-      expect(find.text('الزامی'), findsOneWidget);
-      expect(find.text('پیشنهادی'), findsOneWidget);
+        expect(find.text('چک‌لیست مدارک ویزا'), findsOneWidget);
+        expect(find.text('ارائه مدرک زبان آیلتس ۶.۵'), findsOneWidget);
+        expect(find.text('الزامی'), findsOneWidget);
+        expect(find.text('پیشنهادی'), findsOneWidget);
 
-      // Toggle first item
-      final checkboxFinder = find.byType(Checkbox).first;
-      await tester.tap(checkboxFinder);
-      await tester.pumpAndSettle();
+        // Toggle first item
+        final checkboxFinder = find.byType(Checkbox).first;
+        await tester.tap(checkboxFinder);
+        await tester.pumpAndSettle();
 
-      expect(items.first.isCompleted, isTrue);
-    });
+        expect(items.first.isCompleted, isTrue);
+      },
+    );
 
     testWidgets('AiSearchProgressCard renders search query and live status', (
       tester,
@@ -417,7 +401,10 @@ def check_eligibility(points):
       await tester.pumpAndSettle();
 
       expect(find.text('نتایج جستجوی زنده در پاسخ لحاظ شد'), findsOneWidget);
-      expect(find.text('عبارت جستجو: قوانین ویزای استرالیا ۲۰۲۶'), findsOneWidget);
+      expect(
+        find.text('عبارت جستجو: قوانین ویزای استرالیا ۲۰۲۶'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('AiDocumentChip displays file attachment and delete callback', (
@@ -469,8 +456,14 @@ def check_eligibility(points):
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('مشاوره تخصصی با کارشناسان و وکلای مهاجرتی راد'), findsOneWidget);
-      expect(find.text('نیاز به بررسی دقیق پرونده توسط وکیل رسمی دارید؟'), findsOneWidget);
+      expect(
+        find.text('مشاوره تخصصی با کارشناسان و وکلای مهاجرتی راد'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('نیاز به بررسی دقیق پرونده توسط وکیل رسمی دارید؟'),
+        findsOneWidget,
+      );
       expect(find.text('درخواست وقت مشاوره'), findsOneWidget);
     });
   });
