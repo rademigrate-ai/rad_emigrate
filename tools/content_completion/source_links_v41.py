@@ -122,7 +122,7 @@ def build(directory, output):
             links, base = raw_links(
                 raw,
                 source.get("resolved_url") or source["url"],
-                {text(l.get("label", "")) for l in owned_links},
+                {text(link.get("label", "")) for link in owned_links},
             )
             for owned in owned_links:
                 canonical = owned["url"]

@@ -81,30 +81,16 @@ void main() {
       expect(find.text('Original source — $originalUrl'), findsOneWidget);
       await tester.tap(find.text('Known source — Read in RAD'));
       await tester.pumpAndSettle();
-      expect(
-        router.routeInformationProvider.value.uri.path,
-        '/visa/content/$targetId',
+      // Imperative GoRouter.push retains the base route-information URI.
+      // Assert the actual pushed page and its complete navigation contract.
+      final targetPage = tester.widget<EditorialArticlePage>(
+        find.byType(EditorialArticlePage).last,
       );
-      expect(
-        router.routeInformationProvider.value.uri.queryParameters['preview'],
-        'true',
-      );
-      expect(
-        router.routeInformationProvider.value.uri.queryParameters['locale'],
-        'fa',
-      );
-      expect(
-        router
-            .routeInformationProvider
-            .value
-            .uri
-            .queryParameters['requested_locale'],
-        'en',
-      );
-      expect(
-        router.routeInformationProvider.value.uri.fragment,
-        'retained-block',
-      );
+      expect(targetPage.articleId, targetId);
+      expect(targetPage.preview, isTrue);
+      expect(targetPage.locale, 'fa');
+      expect(targetPage.requestedLocale, 'en');
+      expect(targetPage.initialSectionAnchor, 'retained-block');
       expect(find.text('All retained content'), findsOneWidget);
     },
   );
