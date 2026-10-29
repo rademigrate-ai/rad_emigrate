@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 /// Continuous glass capsule; the original RAD Phoenix rises above its top edge.
 /// Insets are outside the glass: no destination can sit beneath the home gesture.
+///
+/// iOS WebApp: hit-test Material fills the full destination height (bottom: 0)
+/// so canvas paint and semantics/DOM targets stay aligned. Extra bottom padding
+/// is kept small to avoid shifting paint below the semantics rect.
 class RadPhoenixNavigationSurface extends StatelessWidget {
   const RadPhoenixNavigationSurface({
     super.key,
@@ -35,7 +39,7 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    // A 64 px glass body plus the raised bird's headroom. The entire 76 px
+    // A 64 px glass body plus the raised bird's headroom. The entire
     // destination is interactive; device-safe insets remain outside it.
     final height = 58.0 + labelHeight(context);
     const clipper = _PhoenixSurfaceClipper();
@@ -44,7 +48,9 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
       top: false,
       maintainBottomViewPadding: true,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        // Small visual air above the home indicator. Large bottom padding on
+        // iOS WebApp can desync canvas paint from Flutter Web semantics.
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final centreWidth = (constraints.maxWidth * 0.28).clamp(
@@ -119,12 +125,11 @@ class RadPhoenixNavigationSurface extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Ink is painted above the glass, in the same local
-                  // coordinate system as its controls, and clipped for paint
-                  // AND hit testing. Safe-area/headroom is not an ink surface.
+                  // Full-height hit surface (bottom: 0) so iOS WebApp semantics
+                  // match painted destinations. Glass clip still starts at y=11.
                   Positioned(
                     top: 11,
-                    bottom: 1,
+                    bottom: 0,
                     left: 0,
                     right: 0,
                     child: ClipRRect(
