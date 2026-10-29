@@ -131,12 +131,38 @@ jobs:
                 capture, hashlib.sha256(capture.read_bytes()).hexdigest())
           expected = json.loads((original / 'manifest.json').read_text(encoding='utf8'))
           actual = json.loads((target / 'manifest.json').read_text(encoding='utf8'))
-          assert expected == actual, 'Country/category manifest data drift'
+          # The V3 manifest is immutable: it fingerprints the original V3
+          # executable files, while V4 necessarily has newer implementation
+          # source hashes. A historical code hash is not a content hash.
+          old_pipeline = expected['pipeline_sha256']
+          new_pipeline = actual['pipeline_sha256']
+          modified_v4_sources = {
+              'tools/content_consolidation/build.py',
+              'tools/content_consolidation/composition.py',
+              'tools/content_consolidation/import_payload.py',
+          }
+          added_v4_sources = {
+              'tools/content_consolidation/precedence_v4.py',
+              'tools/content_consolidation/v3_composition.py',
+          }
+          assert set(new_pipeline) - set(old_pipeline) == added_v4_sources, 'Unexpected pipeline source inventory drift'
+          assert {
+              name for name in old_pipeline if old_pipeline[name] != new_pipeline.get(name)
+          } == modified_v4_sources, 'Unexpected historical pipeline change'
+          assert all(
+              hashlib.sha256(Path(name).read_bytes()).hexdigest() == fingerprint
+              for name, fingerprint in new_pipeline.items()
+          ), 'Current pipeline source hash mismatch'
+          assert {
+              name: value for name, value in expected.items() if name != 'pipeline_sha256'
+          } == {
+              name: value for name, value in actual.items() if name != 'pipeline_sha256'
+          }, 'Country/category manifest content drift'
           for name in expected['files']:
               assert (original / name).read_bytes() == (target / name).read_bytes(), f'Country/category artifact drift: {name}'
-          # The imported manifest remains sealed with its original Windows CRLF.
-          # Linux JSON pretty-print line endings do not alter source/body bytes.
-          print('PASS: byte-identical composition, source maps, exact duplicates and extraction capture')
+          # The original sealed manifest is never rewritten.
+          # Historical source-code hash differences are explicitly accounted.
+          print('PASS: byte-identical composition, source maps, exact duplicates and extraction capture; V4 source-hash changes accounted')
           PY
       - name: Reproduce sealed library offline with identical bytes
         run: |
