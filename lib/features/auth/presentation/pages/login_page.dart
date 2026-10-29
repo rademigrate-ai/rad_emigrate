@@ -11,6 +11,7 @@ import '../../../../core/routing/auth_redirect.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/directional_icons.dart';
 import '../../../../core/widgets/motion_primitives.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/rad_earth_bird_scene.dart';
@@ -231,7 +232,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               const SizedBox(height: 8),
               AppButton(
                 label: l10n.signIn,
-                icon: Icons.arrow_forward_rounded,
+                icon: directionalForward(context),
                 loading: loading,
                 onPressed: loading ? null : _submit,
               ),

@@ -87,6 +87,7 @@ class ReferenceQuickAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
+    label: label,
     child: InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -102,6 +103,8 @@ class ReferenceQuickAction extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.labelSmall
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
@@ -283,17 +286,21 @@ class ReferenceFlag extends StatelessWidget {
     final flag = code == null
         ? null
         : String.fromCharCodes(code.codeUnits.map((c) => c + 127397));
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: context.premium.surface,
-        borderRadius: BorderRadius.circular(10),
+    return Semantics(
+      label: country,
+      excludeSemantics: true,
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: context.premium.surface,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: flag == null
+            ? const Icon(Icons.public_outlined)
+            : Text(flag, style: TextStyle(fontSize: size * .67)),
       ),
-      child: flag == null
-          ? const Icon(Icons.public_outlined)
-          : Text(flag, style: TextStyle(fontSize: size * .67)),
     );
   }
 }

@@ -33,6 +33,7 @@ class AppButton extends StatefulWidget {
 
 class _AppButtonState extends State<AppButton> {
   bool _hovered = false;
+  bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,11 +125,16 @@ class _AppButtonState extends State<AppButton> {
       cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
       onEnter: enabled ? (_) => setState(() => _hovered = true) : null,
       onExit: enabled ? (_) => setState(() => _hovered = false) : null,
-      child: AnimatedScale(
-        duration: duration,
-        curve: AppMotion.curve(context, preferred: AppMotion.emphasizedCurve),
-        scale: _hovered ? 1.015 : 1,
-        child: result,
+      child: Listener(
+        onPointerDown: enabled ? (_) => setState(() => _pressed = true) : null,
+        onPointerUp: (_) => setState(() => _pressed = false),
+        onPointerCancel: (_) => setState(() => _pressed = false),
+        child: AnimatedScale(
+          duration: duration,
+          curve: AppMotion.curve(context, preferred: AppMotion.emphasizedCurve),
+          scale: _pressed ? 0.98 : (_hovered ? 1.015 : 1),
+          child: result,
+        ),
       ),
     );
     return widget.tooltip == null
