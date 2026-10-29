@@ -250,9 +250,10 @@ export async function handler(req: Request): Promise<Response> {
   const intent = requestedScope === "admin"
     ? "immigration_or_rad" as const
     : classifyQuestionIntent(lastUser);
-  const webSearchMode = payload.web_search === true || payload.web_search === "on"
+  const headerWebSearch = req.headers.get("x-rad-web-search");
+  const webSearchMode = payload.web_search === true || payload.web_search === "on" || headerWebSearch === "on"
     ? "on"
-    : payload.web_search === false || payload.web_search === "off"
+    : payload.web_search === false || payload.web_search === "off" || headerWebSearch === "off"
     ? "off"
     : "auto";
 

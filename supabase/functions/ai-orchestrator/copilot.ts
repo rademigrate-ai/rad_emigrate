@@ -52,6 +52,10 @@ export function createCopilotHandler(options: Options) {
     } catch {
       return error(422, "invalid_request");
     }
+    const webSearchBody = body.web_search;
+    if ("web_search" in body) {
+      delete (body as Record<string, unknown>).web_search;
+    }
     if (!contractValid("ai_orchestrator_request", body)) {
       return error(422, "invalid_request");
     }
@@ -256,9 +260,10 @@ export function createCopilotHandler(options: Options) {
       const intent = body.scope === "admin"
         ? "immigration_or_rad" as const
         : classifyQuestionIntent(question);
-      const webMode = body.web_search === true || body.web_search === "on"
+      const headerWebSearch = request.headers.get("x-rad-web-search");
+      const webMode = webSearchBody === true || webSearchBody === "on" || headerWebSearch === "on"
         ? "on"
-        : body.web_search === false || body.web_search === "off"
+        : webSearchBody === false || webSearchBody === "off" || headerWebSearch === "off"
         ? "off"
         : "auto";
       let webSearchResult: WebSearchResult = {

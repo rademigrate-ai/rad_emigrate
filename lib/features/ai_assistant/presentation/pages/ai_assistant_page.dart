@@ -13,9 +13,6 @@ import '../../../../core/services/ai/ai_request.dart';
 import '../../../../core/services/ai/ai_response.dart';
 import '../../../../core/supabase/rad_contract.dart';
 import '../../../../core/supabase/supabase_providers.dart';
-import '../../../../core/supabase/supabase_storage.dart';
-
-import 'dart:typed_data';
 
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -593,7 +590,8 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
             ...profileContext,
             if (attachment != null) 'file_name': attachment.name,
             if (attachment != null) 'file_ext': attachment.extension,
-            if (uploadedDocumentId != null) 'document_id': uploadedDocumentId,
+            if (uploadedDocumentId != null && uploadedDocumentId.isNotEmpty)
+              'document_id': uploadedDocumentId,
           },
           metadata: {
             'request_key': newRadRequestKey(),

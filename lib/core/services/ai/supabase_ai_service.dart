@@ -123,8 +123,8 @@ class SupabaseAiService implements AiService {
         'article_id': cleanUuid(request.context['article_id']),
         'section_id': cleanUuid(request.context['section_id']),
         'case_id': cleanUuid(request.context['case_id']),
-        'document_id': cleanUuid(request.context['document_id']),
       };
+      final cleanDocumentId = cleanUuid(request.context['document_id']);
 
       if (!sameOwner()) return changedSession();
       final response = await _supabase.client.functions.invoke(
@@ -133,6 +133,14 @@ class SupabaseAiService implements AiService {
           'x-rad-contract-version': '1',
           'x-rad-request-key': requestKey,
           'x-rad-modality': 'text',
+          'x-rad-web-search':
+              (request.webSearchMode == 'on' ||
+                  request.webSearchMode == 'off' ||
+                  request.webSearchMode == 'auto')
+              ? request.webSearchMode
+              : 'auto',
+          if (cleanDocumentId != null && cleanDocumentId.isNotEmpty)
+            'x-rad-document-id': cleanDocumentId,
         },
         body: {
           'action': 'chat',
@@ -141,12 +149,6 @@ class SupabaseAiService implements AiService {
           'session_id': cleanUuid(request.conversationId),
           'guest_key': cleanGuestKey,
           'locale': cleanLocale,
-          'web_search':
-              (request.webSearchMode == 'on' ||
-                  request.webSearchMode == 'off' ||
-                  request.webSearchMode == 'auto')
-              ? request.webSearchMode
-              : 'auto',
           'authorized_data_scopes': cleanScopes,
           'context': cleanContext,
           'messages': [
