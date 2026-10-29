@@ -83,10 +83,20 @@ def apply_source_link_evidence(sources, evidence_rows):
     indexed = {}
     by_source = {}
     for row in evidence_rows:
-        indexed.setdefault((row["source_id"], row["raw_html_sha256"], row["canonical_url"], row["label"]), []).append(row)
+        indexed.setdefault(
+            (
+                row["source_id"],
+                row["raw_html_sha256"],
+                row["canonical_url"],
+                row["label"],
+            ),
+            [],
+        ).append(row)
         by_source.setdefault((row["source_id"], row["raw_html_sha256"]), []).append(row)
     for source in sources:
-        source["source_link_evidence"] = by_source.get((source["source_id"], source["raw_html_sha256"]), [])
+        source["source_link_evidence"] = by_source.get(
+            (source["source_id"], source["raw_html_sha256"]), []
+        )
         result = []
         for link in source.get("body_links", []):
             try:
@@ -94,13 +104,28 @@ def apply_source_link_evidence(sources, evidence_rows):
             except (ValueError, UnicodeError):
                 result.append(link)
                 continue
-            matches = indexed.get((source["source_id"], source["raw_html_sha256"], canonical, link.get("label", "")), [])
+            matches = indexed.get(
+                (
+                    source["source_id"],
+                    source["raw_html_sha256"],
+                    canonical,
+                    link.get("label", ""),
+                ),
+                [],
+            )
             restored = []
             for evidence in matches:
                 for target in evidence.get("original_targets", []):
                     if safe_web_url(target.get("url")):
-                        restored.append({**link, "url": target["url"], "original_href": target.get("original_href"),
-                                         "original_canonicalized_url": link["url"], "href_evidence": evidence})
+                        restored.append(
+                            {
+                                **link,
+                                "url": target["url"],
+                                "original_href": target.get("original_href"),
+                                "original_canonicalized_url": link["url"],
+                                "href_evidence": evidence,
+                            }
+                        )
             for value in restored or [link]:
                 if value not in result:
                     result.append(value)
@@ -126,9 +151,15 @@ def attach_application_targets(articles, source_index):
     for article in articles:
         for source_id in article["source_ids"]:
             source = source_index[source_id]
-            covered = {r["block_index"] for r in article["segment_ledger"] if r["source_id"] == source_id}
+            covered = {
+                r["block_index"]
+                for r in article["segment_ledger"]
+                if r["source_id"] == source_id
+            }
             if covered == set(range(len(source["blocks"]))):
-                by_url.setdefault(normalize_url(source["url"]), []).append((article, source))
+                by_url.setdefault(normalize_url(source["url"]), []).append(
+                    (article, source)
+                )
     for article in articles:
         for link in article.get("source_links", []):
             try:
@@ -137,14 +168,35 @@ def attach_application_targets(articles, source_index):
                 continue
             if not candidates:
                 continue
-            target, source = min(candidates, key=lambda pair: (pair[0]["content_class"] != "editorial", pair[0]["article_id"], pair[1]["source_id"]))
-            link["app_article_id"], link["app_locale"] = target["article_id"], target["locale"]
+            target, source = min(
+                candidates,
+                key=lambda pair: (
+                    pair[0]["content_class"] != "editorial",
+                    pair[0]["article_id"],
+                    pair[1]["source_id"],
+                ),
+            )
+            link["app_article_id"], link["app_locale"] = (
+                target["article_id"],
+                target["locale"],
+            )
             fragment = unquote(urlsplit(link["url"]).fragment)
             if not fragment:
                 continue
-            indices = {e["block_index"] for e in source.get("heading_structure_evidence", []) if e.get("confirmed") is True
-                       and any(fragment in _HeadingIds(r["raw_heading_tag"]).ids for r in e.get("raw_matches", []))}
-            blocks = {r["represented_block_id"] for r in target["segment_ledger"] if r["source_id"] == source["source_id"] and r["block_index"] in indices}
+            indices = {
+                e["block_index"]
+                for e in source.get("heading_structure_evidence", [])
+                if e.get("confirmed") is True
+                and any(
+                    fragment in _HeadingIds(r["raw_heading_tag"]).ids
+                    for r in e.get("raw_matches", [])
+                )
+            }
+            blocks = {
+                r["represented_block_id"]
+                for r in target["segment_ledger"]
+                if r["source_id"] == source["source_id"] and r["block_index"] in indices
+            }
             if len(blocks) == 1:
                 link["app_fragment"] = blocks.pop()
 
@@ -219,7 +271,9 @@ def compose_all(recovery, output):
     historical = Path("artifacts/RAD_CONTENT_CONSOLIDATION_20261026/sources.jsonl.gz")
     historical_sources = read_jsonl(historical) if historical.exists() else []
     supplement_source_metadata(sources + supplements, historical_sources, historical)
-    link_evidence = recovery.parent / "recovery-source-links-v41/source-link-evidence.jsonl.gz"
+    link_evidence = (
+        recovery.parent / "recovery-source-links-v41/source-link-evidence.jsonl.gz"
+    )
     if not link_evidence.exists():
         link_evidence = recovery.parent / "source-link-evidence.jsonl.gz"
     if link_evidence.exists():
@@ -290,7 +344,11 @@ def compose_all(recovery, output):
         "classes": dict(Counter(a["content_class"] for a in articles)),
         "languages": dict(Counter(a["locale"] for a in articles)),
         "publication_allowed": False,
-        "source_link_evidence_sha256": hashlib.sha256(link_evidence.read_bytes()).hexdigest() if link_evidence.exists() else None,
+        "source_link_evidence_sha256": hashlib.sha256(
+            link_evidence.read_bytes()
+        ).hexdigest()
+        if link_evidence.exists()
+        else None,
         "files": {
             p.name: hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(output.glob("*.jsonl.gz"))
@@ -386,14 +444,23 @@ def canonicalize(row, source_index, hosted_sources):
         source["source_variant_id"] = variant
         source["source_id"], source["snapshot_id"] = remap[variant]
         acquisition = original.get("acquisition_timestamp")
-        if not acquisition and original.get("retrieved_at_semantics") != "recorded_local_evidence_intake_not_original_HTTP_fetch" and not str(original.get("acquisition_timestamp_status", "")).startswith("not_recorded"):
+        if (
+            not acquisition
+            and original.get("retrieved_at_semantics")
+            != "recorded_local_evidence_intake_not_original_HTTP_fetch"
+            and not str(original.get("acquisition_timestamp_status", "")).startswith(
+                "not_recorded"
+            )
+        ):
             acquisition = original.get("retrieved_at")
         source["source_evidence"] = {
             "original_acquisition_time_unconfirmed": not bool(acquisition),
             "original_http_status": original.get("http_status"),
             "original_acquisition_timestamp": acquisition,
             "evidence_intake_timestamp": original.get("evidence_intake_timestamp"),
-            "stored_fetched_at_semantics": original.get("retrieved_at_semantics", "recorded_HTTP_fetch_timestamp"),
+            "stored_fetched_at_semantics": original.get(
+                "retrieved_at_semantics", "recorded_HTTP_fetch_timestamp"
+            ),
             "raw_html_asset": original.get("raw_html_asset"),
             "origin_capture_id": original.get("capture_id"),
             "captured_raw_html_sha256": source["raw_html_sha256"],
@@ -426,7 +493,11 @@ def canonicalize(row, source_index, hosted_sources):
                 "kind": entry.get("kind", "reference"),
                 "source_url": entry["source_url"],
                 "original_url": entry.get("original_url", entry["url"]),
-                **{key: entry[key] for key in ("app_article_id", "app_locale", "app_fragment") if key in entry},
+                **{
+                    key: entry[key]
+                    for key in ("app_article_id", "app_locale", "app_fragment")
+                    if key in entry
+                },
             }
             for entry in item.get("source_links", []) + item.get("source_assets", [])
         ],

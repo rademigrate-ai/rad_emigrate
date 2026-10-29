@@ -129,7 +129,10 @@ def prepare(payloads, output, batch_size=40, composition=None):
                     )
             for source in row.get("sources", []):
                 variant = source.get("source_variant_id", source["source_id"])
-                if variant not in source_index or any(source.get(field) != source_index[variant].get(field) for field in ("url", "body_sha256", "body_text")):
+                if variant not in source_index or any(
+                    source.get(field) != source_index[variant].get(field)
+                    for field in ("url", "body_sha256", "body_text")
+                ):
                     raise ValueError("composition_payload_source_body_mismatch")
             bridge[(row["article_id"], item["locale"])] = True
     output.mkdir(parents=True, exist_ok=True)
@@ -169,7 +172,7 @@ def prepare(payloads, output, batch_size=40, composition=None):
     for start in range(0, len(expected), batch_size):
         batch = expected[start : start + batch_size]
         source_expectations = {}
-        for payload_row in rows[start:start + batch_size]:
+        for payload_row in rows[start : start + batch_size]:
             for source in payload_row.get("sources", []):
                 source_expectations[source["snapshot_id"]] = source
         # IDs/locales are validated before interpolation, never publisher text.
@@ -187,11 +190,19 @@ def prepare(payloads, output, batch_size=40, composition=None):
         for source in source_expectations.values():
             uuid.UUID(source["snapshot_id"])
             uuid.UUID(source["source_id"])
-            if hashlib.sha256(source["body_text"].encode("utf-8")).hexdigest() != source["body_sha256"]:
+            if (
+                hashlib.sha256(source["body_text"].encode("utf-8")).hexdigest()
+                != source["body_sha256"]
+            ):
                 raise ValueError("expected_source_body_hash_mismatch")
             url = source["url"].replace("'", "''")
-            snapshot_values.append(f"('{source['snapshot_id']}'::uuid,'{source['source_id']}'::uuid,'{url}','{source['body_sha256']}')")
-        snapshots = ",\n".join(snapshot_values) or "(null::uuid,null::uuid,null::text,null::text)"
+            snapshot_values.append(
+                f"('{source['snapshot_id']}'::uuid,'{source['source_id']}'::uuid,'{url}','{source['body_sha256']}')"
+            )
+        snapshots = (
+            ",\n".join(snapshot_values)
+            or "(null::uuid,null::uuid,null::text,null::text)"
+        )
         sql = f"""begin;
 set local statement_timeout='120s';
 select set_config('request.jwt.claims','{{"role":"authenticated","sub":"{ACTOR}"}}',true);
