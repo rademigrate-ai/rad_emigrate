@@ -23,3 +23,10 @@ _audit/RAD_CONTENT_COMPLETION_20261027/prepared/*.gz -text
 _audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.json text eol=lf
 _audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.sql text eol=lf
 _audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.gz -text
+
+# Preserve original transferred TXT/HTML/reference bytes and sealed handoff hashes.
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/** -text
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/assets/** -diff
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/reference-evidence/** -diff
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/prepared/source-url-inventory.csv whitespace=cr-at-eol
+scripts/tests/test_phase_source_evidence.py text eol=lf

@@ -17,7 +17,7 @@ from tools.content_consolidation.regression import quote
 from tools.plan3_content.dataset import read_jsonl
 
 
-def rehearse(directory, psql, database, port):
+def rehearse(directory, psql, database, port, report_directory=None):
     if (
         not re.fullmatch(r"rad_content_[a-z0-9_]+", database)
         or not 1024 <= port <= 65535
@@ -47,6 +47,17 @@ def rehearse(directory, psql, database, port):
         1,
     ).removesuffix("commit;\n")
     body += "create temporary table recovery_counts_once as select (select count(*) from public.visa_article_revisions) revisions,(select count(*) from private.rad_editorial_rich_revisions) rich,(select count(*) from public.source_snapshots) snapshots;\n"
+    unknown = [
+        s["snapshot_id"]
+        for s in read_jsonl(directory / "prepared/source-intake.jsonl.gz")
+        if s.get("source_evidence", {}).get("original_acquisition_time_unconfirmed")
+    ]
+    if unknown:
+        body += (
+            "do $$begin if exists(select 1 from public.source_snapshots where id=any(array["
+            + ",".join(quote(s) for s in unknown)
+            + "]::uuid[]) and (http_status is not null or metadata->'source_evidence'->>'original_acquisition_time_unconfirmed' is distinct from 'true')) then raise exception 'unknown_capture_metadata_was_fabricated';end if;end$$;\n"
+        )
     body += (
         "update private.rad_editorial_import_target set enabled=true where project_ref='epolbumcfbohtmgvomki';\nselect set_config('request.jwt.claims','{\"role\":\"service_role\"}',true);\n"
         + main
@@ -116,10 +127,12 @@ def rehearse(directory, psql, database, port):
         input=body,
         capture_output=True,
         encoding="utf-8",
-        timeout=180,
+        timeout=600,
         env=environment,
     )
-    (directory / "retry-rollback-rehearsal.log").write_text(
+    reports = report_directory or directory
+    reports.mkdir(parents=True, exist_ok=True)
+    (reports / "retry-rollback-rehearsal.log").write_text(
         result.stdout + result.stderr, encoding="utf-8"
     )
     receipt = {
@@ -134,9 +147,10 @@ def rehearse(directory, psql, database, port):
         "rollback_restores_original_catalog": result.returncode == 0,
         "duplicate_reader_history_preserved": result.returncode == 0,
         "reviewed_link_blocks_retirement": result.returncode == 0,
+        "unknown_original_capture_metadata_preserved": result.returncode == 0,
         "hosted_executed": False,
     }
-    (directory / "retry-rollback-rehearsal.json").write_text(
+    (reports / "retry-rollback-rehearsal.json").write_text(
         json.dumps(receipt, indent=2) + "\n", encoding="utf-8"
     )
     return receipt
@@ -148,7 +162,10 @@ if __name__ == "__main__":
     parser.add_argument("--psql", type=Path, required=True)
     parser.add_argument("--database", required=True)
     parser.add_argument("--port", type=int, required=True)
+    parser.add_argument("--report-directory", type=Path)
     args = parser.parse_args()
-    receipt = rehearse(args.directory, args.psql, args.database, args.port)
+    receipt = rehearse(
+        args.directory, args.psql, args.database, args.port, args.report_directory
+    )
     print(json.dumps(receipt))
     raise SystemExit(0 if receipt["exit_code"] == 0 else 1)

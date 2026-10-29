@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
   pull_request:
-    branches: [main]
+    branches: [main, integration/stage7-unified-20261026]
     paths:
       - '.github/workflows/**'
       - 'lib/**'
@@ -26,6 +26,7 @@ on:
       - 'artifacts/RAD_CONTENT_CONSOLIDATION_20261026/**'
       - 'artifacts/RAD_CONTENT_RECOVERY_20261027/**'
       - 'requirements-plan3.txt'
+      - '_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/**'
       - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
       - 'PLAN3_INTEGRATION_HANDOFF.md'
       - 'docs/plan3_integration_evidence/**'
@@ -70,6 +71,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Verify production recovery callback normalization
         run: node scripts/check_password_recovery_redirect.cjs
       - uses: denoland/setup-deno@v2
@@ -88,6 +91,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - run: python3 -m pip install -r requirements-plan3.txt
       - name: Format and lint owned content tools
         run: |
@@ -107,6 +112,11 @@ jobs:
           python3 -m tools.plan3_content.cli checksums --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
           python3 -m tools.plan3_content.cli validate --package artifacts/RAD_PLAN3_VISA_CONTENT_20261024/10_CMS_DRAFT_IMPORT_PACKAGE.json
           python3 -m tools.plan3_content.cli library --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
+      - name: Verify phases 1–4 source integrity and draft delivery
+        run: |
+          python3 -m ruff format --isolated --check scripts/tests/test_phase_source_evidence.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/tests/test_phase_source_evidence.py
+          python3 -m tools.content_completion.phase_verify --directory _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028
       - name: Verify and reproduce country/category bodies with zero unaccounted segments
         run: |
           python3 -m tools.content_consolidation.verify artifacts/RAD_CONTENT_CONSOLIDATION_20261026
@@ -170,6 +180,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.6'
@@ -196,6 +208,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.6'
@@ -212,6 +226,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.6'
@@ -258,6 +274,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Validate 47-gate delivery evidence ledger (no invented completion)
         run: python3 -m unittest discover -s scripts/tests -p test_master_47_delivery_ledger.py -v
       - name: Scan tracked files for audit keywords (paths only)
@@ -279,6 +297,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: supabase/setup-cli@v1
         with:
           version: 2.119.0
@@ -340,6 +360,7 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_legacy_slug.sql
       - name: Verify full-page Research review and lossless structured editing
         run: |
+          psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrective_routing_research.sql
           psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/stage7_research_review.sql
           psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/stage71_rich_review.sql
       - name: Verify appointment receipts through real Auth and PostgREST
@@ -352,6 +373,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Regression-test read-only live migration history stop gate
         run: python3 -m unittest discover -s scripts/tests -p test_audit_migration_ledger_readonly.py -v
       - name: Verify recorded Production migration SQL fingerprint audit stays NO-GO

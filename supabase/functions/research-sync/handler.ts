@@ -22,7 +22,7 @@ async function digest(value: string) {
 function normalize(html: string) {
   return html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<!--([\s\S]*?)-->/g, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;|&#160;/gi, " ")
-    .replace(/&amp;/gi, "&").replace(/\s+/g, " ").trim().slice(0, 100000);
+    .replace(/&amp;/gi, "&").replace(/\s+/g, " ").trim();
 }
 
 function safeUrl(value: string, allowedHost: string) {
@@ -74,7 +74,7 @@ async function fetchSource(sourceFetch: ProtectedSourceFetch, start: string, all
 
 function safeError(error: unknown) {
   const message = error instanceof Error ? error.message : "";
-  return /^(source_http_[45][0-9]{2}|database_[45][0-9]{2}|unsafe_source_url|unsafe_source_redirect|source_too_large|source_empty)$/.test(message)
+  return /^(source_http_[45][0-9]{2}|database_[45][0-9]{2}|unsafe_source_url|unsafe_source_redirect|source_too_large|source_text_too_large|source_empty)$/.test(message)
     ? message : error instanceof DOMException && error.name === "TimeoutError" ? "source_timeout" : "source_fetch_failed";
 }
 
@@ -113,6 +113,8 @@ return async function handler(req: Request): Promise<Response> {
         const fetched = await fetchSource(options.sourceFetch, source.base_url, source.allowed_host, worker.request_timeout_ms);
         const text = normalize(fetched.text);
         if (!text) throw new Error("source_empty");
+        // Reject over-contract evidence instead of hashing a truncated prefix.
+        if (text.length > 100000) throw new Error("source_text_too_large");
         const hash = await digest(text);
         const documents = await rest(`source_documents?select=id,language_code&canonical_url=eq.${encodeURIComponent(source.base_url)}&limit=1`);
         let documentId = documents?.[0]?.id;

@@ -1,0 +1,2086 @@
+[
+  {
+    "source_id": "a359d9fa-cbeb-54eb-870d-d2345a38f6bd",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7",
+    "title": "معرفی کشور اسپانیا",
+    "country_codes": [
+      "ES"
+    ],
+    "destination_article_ids": [
+      "adafe105-e633-59d2-bee2-30a2f723de4e"
+    ],
+    "old_body_sha256": "475840d3114d226ce2b8085fdd75b04f5197719adeb298a80289c8b1d60dc7cb",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6140,
+    "recovered_text_sha256": "efd08afe953bc6177572ec991cdba956864b9666e3fc7ef346ce58fa26fe3a9b",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_a359d9fa-cbeb_efd08afe95.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "aea42ca0-7fb2-5adf-b566-ef398ce8f054",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7",
+    "title": "هزینه های زندگی در اسپانیا",
+    "country_codes": [
+      "ES"
+    ],
+    "destination_article_ids": [
+      "c4b85acc-94de-57c1-b3e2-6c4ea2ea594b"
+    ],
+    "old_body_sha256": "c4a50073edb36419bf72e60e249c6d3e5c138eeca69c416fa870f9e81b41481b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2493,
+    "recovered_text_sha256": "94588ac29f2b5660bedb9406aa62b0955cb79e3a8fe549e270f2e3237a9a308f",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_aea42ca0-7fb2_94588ac29f.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "0db2d4fd-ba8d-5782-8625-24b76e9e0640",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7",
+    "title": "کار در اسپانیا",
+    "country_codes": [
+      "ES"
+    ],
+    "destination_article_ids": [
+      "e2f2522d-3d21-5b8c-b5e6-a53119153ae3"
+    ],
+    "old_body_sha256": "41f960032393e0715f98e72778aa915c7aed10d1e834037c4e143e7a4cf728c7",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3416,
+    "recovered_text_sha256": "6931b61d6a0077f0e64af9a049f50a24f9a320e0ae14eacab8b64c26be0bc85b",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_0db2d4fd-ba8d_6931b61d6a.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "31af0ae7-6b44-56c7-b107-7651cb005404",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "d1d00243-dc8c-5842-ae64-335682896100"
+    ],
+    "old_body_sha256": "6d92ea620cbbb691f1db2445c34553e250e608ff9ca7d0695111d90b4a0477a1",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 44266,
+    "recovered_text_sha256": "ae6985780977550b0786280de3e3af54a06a3b4d6d516b4831bac69cbd927541",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_31af0ae7-6b44_ae69857809.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "220e3ef2-fea6-558d-a69e-402f197466c6",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "اقامت از طریق ازدواج در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "825b6f79-4eed-5280-8098-6ef1c1de0274"
+    ],
+    "old_body_sha256": "4b5c0b4780f17a61720d55d5f1ab8455364e5e5fcaed115d0efb8d8d1fd0e935",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3026,
+    "recovered_text_sha256": "c9ce7f9447058e1830793c00ae339a0538627a78969743a107c20775adaefc34",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_220e3ef2-fea6_c9ce7f9447.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "7c0208f8-cd92-5285-a3fb-c4bedee8fb67",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C%D8%A7%D9%86-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "ایرانیان انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "ea0208e9-6029-55a5-bc44-e807d86279fe"
+    ],
+    "old_body_sha256": "c4891de46f4edf7fcb7168bed0728c7354425bdfdd8ad41de8e93fe61e93628c",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3293,
+    "recovered_text_sha256": "0b80b156f791abfe925bd90b0695e55be2ae99b05bd4afc154d6928fb5a71d51",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_7c0208f8-cd92_0b80b156f7.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "ea6a5f5e-9725-58a4-850e-da0e7ad3c1f0",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "تحصیل در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "cc7a96fa-4f3c-5b54-a143-ad018fb55eac"
+    ],
+    "old_body_sha256": "01094f905c9079f9a73848999ca1f7a4255f4c569fe4c2e599783edc90c357d4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 14819,
+    "recovered_text_sha256": "d467b961e448a6c10bbb6e6057f7b6556f9ea1534825e4d048b29abf0eb40997",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_ea6a5f5e-9725_d467b961e4.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1b64b8e0-fe06-576a-9ea9-7bf4a672af0a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D9%88-%DA%A9%D8%A7%D8%B1-%D9%BE%D8%B2%D8%B4%DA%A9%D8%A7%D9%86-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "تحصیل و کار پزشکان در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "530f9bda-9d89-5949-b10d-ed0551bf79ec"
+    ],
+    "old_body_sha256": "19b7e7b2c715bc459b1040b5283746e7dfc453843174cd9e578438bc573f5a07",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3028,
+    "recovered_text_sha256": "a13724d49a43433e213e790f8099bfa4faf88449b0af32c4d2fd22f7ee52d170",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1b64b8e0-fe06_a13724d49a.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "d0fc4975-6741-5d68-badd-03c338ed888b",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%AF%D9%88%D8%B1%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D8%A8%D8%A7%D9%86-%D8%A7%D9%86%DA%AF%D9%84%DB%8C%D8%B3%DB%8C-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "دوره های زبان انگلیسی در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "d3899242-5b67-50b8-8483-cd156035cb74"
+    ],
+    "old_body_sha256": "d7807596be229263707772746a12fdf99f0c51a22d8643245ef7d1e94919b3a5",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5079,
+    "recovered_text_sha256": "50bd6b351af2a69cefe7982cd95ee239547232793647520ad4e145d34871be81",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_d0fc4975-6741_50bd6b351a.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1a98f43e-718a-5104-ba44-b4499dbec5e4",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "سرمایه گذاری در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "8dd796a2-31a8-5cf6-89f7-b52f20699502"
+    ],
+    "old_body_sha256": "a4a93883b2677965dd83ea766854dbd19165b59a639901fac190a758e754b832",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6319,
+    "recovered_text_sha256": "3709370dc393a85a0cfbd1bc9163acb6abec7b5539402b76ce690d2a9fc363e7",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1a98f43e-718a_3709370dc3.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "912ddd14-70f7-5729-973e-cb3cc5702d59",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "معرفی دانشگاه های برتر انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "659d9925-d4a1-5eaa-a708-3a00f280ae18"
+    ],
+    "old_body_sha256": "697cd667d9dacd786e3d16c4366b623c3720316cfe1dffe2bd25418e5cda7cb9",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6622,
+    "recovered_text_sha256": "abe1fc03e4deca878fafe332cf9ad23c1cbf1fef3fc58584e6a63ee076a17e24",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_912ddd14-70f7_abe1fc03e4.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "3ac03e9d-54ce-5bff-a0be-faa1b46f904f",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "معرفی کشور انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "1b949f88-8178-5c76-a856-411800427995"
+    ],
+    "old_body_sha256": "18535bcd032121934a4427dea395e10cbab088e7571e1c51968cd77dbfb7aa1e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4284,
+    "recovered_text_sha256": "c01f12778e2c185d02969bc6032e24089886b8cb5bdb9d09697e93d12824bcd0",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_3ac03e9d-54ce_c01f12778e.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "66c38bc8-6a6b-5a69-a358-3dae96eaac9e",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "هزینه های زندگی در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "b733f8bb-3606-5761-aefb-c99781c66f88"
+    ],
+    "old_body_sha256": "07d10c4ce9f0055ae82a4e6e4dca6cfb434eb6ac7457559bf1161acf9f47994d",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2587,
+    "recovered_text_sha256": "8d57a9c5747629464d16742bef1aeab22caeecb49341fa2488d62113b2bc0ea9",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_66c38bc8-6a6b_8d57a9c574.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "76e6f066-fa0e-538b-9be7-20bd05a24b76",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%D9%BE%D9%86%D8%A7%D9%87%D9%86%D8%AF%DA%AF%D9%8A-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "پناهندگي در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "b10018a6-a9fd-57fd-92f1-be91d224ba61"
+    ],
+    "old_body_sha256": "80946f26172e4951d132b8a121531cdc17a5e3bc6a792f4d4fa37e2b83e6a2db",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4854,
+    "recovered_text_sha256": "0bccf38c424a8ef0dd415c35033840b9fefee7384a26a3b7cf23e4f7783b3500",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_76e6f066-fa0e_0bccf38c42.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1b51f20c-5bbb-5d39-b7a2-202387afe363",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "کار در انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "a0439cf1-bf29-59b1-9fcf-c51221626e25"
+    ],
+    "old_body_sha256": "40a8aaa290e73d41b133d2740462469326e173f4315bf38adb506ceb092dc17e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4274,
+    "recovered_text_sha256": "d0747f69b124153abb6965c117a93b8da4f7039faeb36551e55a6e8ed77e438a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1b51f20c-5bbb_d0747f69b1.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "3331c17c-2775-5d29-9430-793e062fa24f",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "37a176c9-6b43-515c-aef5-726a9bb22430"
+    ],
+    "old_body_sha256": "e89ab868577f7167adc4df0716726b6ddee7d0fcb82d715f8ce57104e6a18d27",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 35236,
+    "recovered_text_sha256": "efaf2c07da26f48e265acc195dde5bc89d7c6eed71c74d9d28823effb28ff6f3",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_3331c17c-2775_efaf2c07da.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "33efb2e3-66c6-573c-86f4-6e9cb0099864",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "اقامت از طریق ازدواج در ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "da87f3a7-77c1-5d92-9c41-933739602fc9"
+    ],
+    "old_body_sha256": "6fd5f886dbf4f08c2a5301eb8ff55d059e60a18a9c0821931e805543cfae5d9f",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2075,
+    "recovered_text_sha256": "b5732973a46e7a76d8b58a00a4a33f1e0c91529aede7e8ffe863303eb27fdfe1",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_33efb2e3-66c6_b5732973a4.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "a6a10049-9181-5b9a-9a5b-dcb920451be6",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "تحصیل در ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "4e844da5-da66-5789-a15c-aff228bf9ce8"
+    ],
+    "old_body_sha256": "5fdf7ffe0746731ce731aec71123924903d3462170ad2e12df78992ea6645172",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 10239,
+    "recovered_text_sha256": "4b2e1fa2ad224e5d06811cdfff1dc27b27ae57a08caabdb526663c0fb5eb988a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_a6a10049-9181_4b2e1fa2ad.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "f8f4b47c-ce51-5b69-8ecb-1d7be8a6709d",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "سرمایه گذاری در ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "fc7b1be1-472c-5367-ac7d-c67d1035bd67"
+    ],
+    "old_body_sha256": "d8c5e36ea81f05439d7db8faed3b2d5699e6adb75aa022cb8e1448ef69babcd1",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6778,
+    "recovered_text_sha256": "d5e1b7749c7f6851333b8ae74142d723d66b0729f8ec57ead12604718da920bb",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_f8f4b47c-ce51_d5e1b7749c.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "8bb86fee-1006-5d24-b686-851a77c873cd",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "معرفی دانشگاه های برتر ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "90e4af7c-d0af-5118-a3a3-226b944a3e49"
+    ],
+    "old_body_sha256": "009956edeac360b5145b95e8f7c90c7dcf525d7f09d8ade95885b51f7679bac5",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5077,
+    "recovered_text_sha256": "10089a54b61b4061f5745b37694d34eac99c6db64f96fdc4a7d69c6ce51822a2",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_8bb86fee-1006_10089a54b6.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "db62fbdd-9d80-5566-9e54-5544eedd732f",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "معرفی کشور ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "85311915-1e40-5201-8536-c9d9f45bbdff"
+    ],
+    "old_body_sha256": "b892f3b38111504199269d717ebef11d92e9024fae30e71d2c9882b755a52c25",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 7070,
+    "recovered_text_sha256": "1362fb8827b69c49cf4599a1573818edfd81c0db0f6139cd2f00bfe768f5f214",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_db62fbdd-9d80_1362fb8827.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "7e85395f-ff8e-58f8-aed7-3c3e26f20376",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "هزینه های زندگی در ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "21241446-8587-574a-a488-00bcdaddb8f0"
+    ],
+    "old_body_sha256": "de31e19bd96c384f9336eb79c5921672afc49537e8c090734adb8c0a85d5caae",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3226,
+    "recovered_text_sha256": "370274c7a28c2e98972e18b7bfb6cfa10ad358cf1ee1bead272d607fc826dfbf",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_7e85395f-ff8e_370274c7a2.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "6adaa88f-e8b3-5d5d-98cd-702f5b5630a7",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "کار در ایتالیا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "9bb03762-4b0c-512d-9e3c-e043afa0126b"
+    ],
+    "old_body_sha256": "b01a794661df147c8cc3da3751a21a17006b37f38069517b41cabcbf07eadc68",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3005,
+    "recovered_text_sha256": "341b02e70278cf226495f9dd41bf97ca58421da46cca0fcb60237dea40eeb25d",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_6adaa88f-e8b3_341b02e702.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "c14fe0bd-f5cb-5622-8f3e-14687401649a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%D8%A7%D8%B1%D9%88%D8%B3/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A8%D9%84%D8%A7%D8%B1%D9%88%D8%B3",
+    "title": "سرمایه گذاری در بلاروس",
+    "country_codes": [],
+    "destination_article_ids": [
+      "c9acb215-d065-547a-b50f-6392e9e9edca"
+    ],
+    "old_body_sha256": "38b5bea8f544f7412d8f694a4d831f3b5b97a5f7d46ddcd52a6161f9a7ddd714",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3862,
+    "recovered_text_sha256": "f60b63a1d0cb67afcab749bb61d20d9f57529b8ab3667437d9ceb28925181d7b",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_c14fe0bd-f5cb_f60b63a1d0.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "d028b0df-1f28-55ac-b60f-748c4717d122",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%D8%A7%D8%B1%D9%88%D8%B3/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A8%D9%84%D8%A7%D8%B1%D9%88%D8%B3",
+    "title": "معرفی کشور بلاروس",
+    "country_codes": [],
+    "destination_article_ids": [
+      "4ce5ac23-ad97-5662-9c86-fef12d334bd7"
+    ],
+    "old_body_sha256": "1a73c758ec89686060f28638dd5697206ae667d816e0150e20d8f473afdd137c",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3814,
+    "recovered_text_sha256": "4def7ca7a137a25c3814c02d93877416e0c2fc7a4c59efed444c8fea72e115b2",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_d028b0df-1f28_4def7ca7a1.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "72094210-927f-5d4f-9313-387a6297ff83",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "تحصیل در بلژیک",
+    "country_codes": [
+      "BE"
+    ],
+    "destination_article_ids": [
+      "63fbaf09-5915-5090-b20f-71859078c8be"
+    ],
+    "old_body_sha256": "05532f6839e1760e60fd07a6a410ca44259a8daa2ca7092d0a6e72c7037cd7b4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2966,
+    "recovered_text_sha256": "518945d9b7b9b7ec926a41c6ae240ecf643588462d4835fc6128ea0112c4219e",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_72094210-927f_518945d9b7.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1c586cc5-0c74-5519-ab6f-671148b7a6f6",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "سرمایه گذاری در بلژیک",
+    "country_codes": [
+      "BE"
+    ],
+    "destination_article_ids": [
+      "91bccb94-47ba-5971-991a-247daf59a10c"
+    ],
+    "old_body_sha256": "92b8fc7620f27d79cdd992168a84b1289189c9d82027518346ed288bfacdec23",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 1964,
+    "recovered_text_sha256": "5b1cc29b827a1f955f5598aae95b9c59f7f151233ff98337553790e8adb83d50",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1c586cc5-0c74_5b1cc29b82.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "77bd07c9-985f-5af9-b9aa-e179b1cefb8a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "معرفی دانشگاههای برتر بلژیک",
+    "country_codes": [
+      "BE"
+    ],
+    "destination_article_ids": [
+      "208a0dde-11d3-5f55-b873-9ee3aba525b5"
+    ],
+    "old_body_sha256": "692be2a9dc3df9c447e7d9bc6c8ad3461a609c497db75ba36235f31fa4a51c4a",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2720,
+    "recovered_text_sha256": "cddb39098240409453092898752ae9c816bd1aef06fdbadc0a5ba852791c3081",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_77bd07c9-985f_cddb390982.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "4bf27e12-3d0c-58d2-9122-43f3fdc63f6c",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "معرفی کشور بلژیک",
+    "country_codes": [
+      "BE"
+    ],
+    "destination_article_ids": [
+      "6628531f-97d9-5302-9f03-328a8491f388"
+    ],
+    "old_body_sha256": "47980a37ea35f42fe4a167824872a317e8307335319fd0f80aeb72b4578f0bc5",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4011,
+    "recovered_text_sha256": "ce5bec3f518bf3d98f9cd461ae3838afa7637ac9ff2cfd45ef9af93d36f02556",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_4bf27e12-3d0c_ce5bec3f51.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "4c280f4a-7822-578f-81b0-1fbc8b74e570",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%A8%D9%84%DA%98%DB%8C%DA%A9/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "کار در بلژیک",
+    "country_codes": [
+      "BE"
+    ],
+    "destination_article_ids": [
+      "edd918f0-0935-5670-a642-b80157e0b6c1"
+    ],
+    "old_body_sha256": "2450fb8ac14343d3751e1db0c836eb5fd2f208def66fa855986b9ffa67aac63b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2531,
+    "recovered_text_sha256": "f8968d6e2cd83cb9149e11942f5607b8c1af554811922a6de6ac0ee6af4f4948",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_4c280f4a-7822_f8968d6e2c.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "c886fa36-46a5-554e-9e0b-51c8e4267fa8",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "3f08014b-dc7b-58b4-9cc0-5d375118c49c"
+    ],
+    "old_body_sha256": "3bde9b37ad69d9e31c474f6a96b97d6bd2b49089f3e271c160b83d083d14569e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 28969,
+    "recovered_text_sha256": "31ced8430b9afc0a63c530394a030244e1eee920055122e009793a2847781de7",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_c886fa36-46a5_31ced8430b.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "16085eaa-2e73-5f7f-afe2-59d218b34bfc",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "اقامت از طریق ازدواج در دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "b73fe3f5-1ae7-5c31-9490-37204924e8fa"
+    ],
+    "old_body_sha256": "a9b091c970d8e999ed86175dda7b358d2007f5166c644e7ed4e0dc4986981b45",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2080,
+    "recovered_text_sha256": "f3fd02555aef4c54769eb4a28ce781d0d7c2cebed557bdcfa43036e703ad46f3",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_16085eaa-2e73_f3fd02555a.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "248875c1-259f-57fb-b1f8-baec78c18884",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "تحصیل در دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "a9cee691-c8cb-5a4f-ae1b-2395dae0ea59"
+    ],
+    "old_body_sha256": "f6d0a34274028a6dd9c21e5a26eaec456f98c4cc8ff865c7c4d9fcee4a8b7053",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4237,
+    "recovered_text_sha256": "4ff0eddf97b43ccbae2fcbf95dbd4e7fe35b8d39654e1182768a6f69e55d45d9",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_248875c1-259f_4ff0eddf97.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "f5b4b328-6670-5e66-94b2-23fd34393b1f",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "معرفی دانشگاه های برتر دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "8c507b4a-09c5-5bdc-8692-7621b967d2bb"
+    ],
+    "old_body_sha256": "07097f5909af4d33ffc53e28a1e0cd34f7cb27d5fff31fb336d467458b8ffb98",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3913,
+    "recovered_text_sha256": "e4a0003333ccf3313572f07699d3d34e76efe7eeea56881adaf40a3e739f02ab",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_f5b4b328-6670_e4a0003333.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "b0a381ef-af60-532f-b00d-994bcd8bbef6",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "معرفی کشور دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "2f61d9f3-4863-5569-8d33-86657c7bdfa7"
+    ],
+    "old_body_sha256": "fe0a07e667dd9c09597abe23d8fa91145af5b2b84ca80c829c42306d7bc8de0e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 8867,
+    "recovered_text_sha256": "788c11ad02843d7f6e142868cbc5246904c3a4f3cc886bd6fe78016a42904454",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_b0a381ef-af60_788c11ad02.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "2ebd46b6-0316-5b49-ad81-eabc2781ba4a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "هزینه های زندگی در دانمارک",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "add3d5cc-7358-55e6-9fed-dab0cfe091b7"
+    ],
+    "old_body_sha256": "5be4bde99f181e3471f002e896d9790f2bd2b4102b27b0d5b377e3a9f5710434",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3051,
+    "recovered_text_sha256": "156cbbec48ef5b8fda11157e7a03e54c83dd1ff54b2d740fbb3381c33365e3fa",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_2ebd46b6-0316_156cbbec48.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "71160b0c-5744-58bf-984c-c6de73b4cd4d",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9-%DA%AF%D8%B1%DB%8C%D9%86-%DA%A9%D8%A7%D8%B1%D8%AA",
+    "title": "کار در دانمارک(گرین کارت)",
+    "country_codes": [
+      "DK"
+    ],
+    "destination_article_ids": [
+      "7513846e-7047-5055-af3d-3f5168f00cc6"
+    ],
+    "old_body_sha256": "751562904933c75de440d37bdceab153908c9efb1d5c6181443f97d73c172ad4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 8555,
+    "recovered_text_sha256": "6ced6c3e841dcf8471dcb1591591d53ea70b5b1390625bdc161e4265ecdc8f72",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_71160b0c-5744_6ced6c3e84.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "916f3efc-2e58-5f09-9499-6c82049f05ef",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "c65b72ba-9634-524c-9fcc-9aa2bde4e71e"
+    ],
+    "old_body_sha256": "c3c857d52464b014a9ad11bdfe0561e912ee12c638776fa1622f8eae505dd51b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 50186,
+    "recovered_text_sha256": "b173d62922be47755b971b6b489bea2f83d21f83775c5e0c9957a32ea4205318",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_916f3efc-2e58_b173d62922.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "5cc91cf8-c652-5915-9bb8-5255deb77c3a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF-%D8%B3%D8%A7%D9%85%D8%A8%D9%88",
+    "title": "اقامت از طریق ازدواج در سوئد(سامبو)",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "17085843-9c0a-5da8-9133-64d2df9b652c"
+    ],
+    "old_body_sha256": "b8522495955660e8a8c3fcb4c0c0d440c93d3d150c38bc3f5e2747c99b28ca0b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4447,
+    "recovered_text_sha256": "f2f60bb251fa5b5adc0cb1356994a2be1159689d215cac4782cbce3611821cfd",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_5cc91cf8-c652_f2f60bb251.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa page excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1dc44a79-3489-58b1-900a-22a7fa9e61c9",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C%D8%A7%D9%86-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "ایرانیان سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "a77b2a35-5bb4-5880-ac70-e046f84ecd9e"
+    ],
+    "old_body_sha256": "3c6b00bfe053322e640ea684ed163facde960b374e54ed458a252690079dade1",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5121,
+    "recovered_text_sha256": "69367dc061b876b8f5d52233874a96ec562489d19a92374c0e1a10f30d27a9ee",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1dc44a79-3489_69367dc061.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "65b075c4-cba9-5d07-a9b8-98d725e96971",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "تحصیل در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "b6ffd67b-5c68-588f-af8d-25b88aa8eba8"
+    ],
+    "old_body_sha256": "e5ba7bdf51b6dbd71a3e891cc3348b973b1b972654b613fe79de4d9eb1bf1c9b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 11278,
+    "recovered_text_sha256": "e23a11699e9b8315b413ed6dfa117531c2ef5fa653563f144a3e42416c558d7d",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_65b075c4-cba9_e23a11699e.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "bd59a536-c10a-5d4f-a498-8f66581d9520",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D9%88-%DA%A9%D8%A7%D8%B1-%D9%BE%D8%B2%D8%B4%DA%A9%D8%A7%D9%86-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "تحصیل و کار پزشکان در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "f582c784-6975-5b14-913b-31f1630bf6f8"
+    ],
+    "old_body_sha256": "a8d0ed62c2595b94e7124a4297050dfb30a523768f0777ac941a14ee198ecc68",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 1515,
+    "recovered_text_sha256": "7ec35e22d3e5d4df78d99880768f5f558686c9e6c9d456d56faea0fd0bd74492",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_bd59a536-c10a_7ec35e22d3.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "384a7f39-44f8-5333-bcc8-919270d0ba6d",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%AF%D9%88%D8%B1%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D8%A8%D8%A7%D9%86-%D8%A7%D9%86%DA%AF%D9%84%DB%8C%D8%B3%DB%8C-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "دوره های زبان انگلیسی در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "7349e658-7a36-5a1f-87fe-f1501ab66a14"
+    ],
+    "old_body_sha256": "4b7d5c5af42e3f4449c3fc61e261e3b6cb2347ddff9c207bd107e79de9136874",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4672,
+    "recovered_text_sha256": "f09659588273cdb1c1c84592eb5b441bd215d06121e857fd3b4dab4a07c109ff",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_384a7f39-44f8_f096595882.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "a768a027-5be4-5ead-b1a9-46f3b9309445",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "سرمایه گذاری در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "1e2a3074-1b2d-5635-944f-f080057e0a9c"
+    ],
+    "old_body_sha256": "a33bb20365cbdce99fa3098d6402c7d1bb8af266b1fecb9419f043ac427fbfd2",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3304,
+    "recovered_text_sha256": "0998da55cd3ea649e541262715802b8b354ca24f6785e2fa99dd9969b18a3945",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_a768a027-5be4_0998da55cd.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "c0ff8fe3-e604-533a-ad16-1dda6763271e",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "معرفی دانشگاه های برتر سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "c9ace262-c7e3-55a3-8761-06a92d57f62f"
+    ],
+    "old_body_sha256": "a4d69d8a26ae94fbfa589a6f324a19c5a6d71db8807c0b45c969ed8a66f346d4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3715,
+    "recovered_text_sha256": "2a11e82206f8d33aec385059cf869e2914e73bce1051a3bf61f922f42ad1ed46",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_c0ff8fe3-e604_2a11e82206.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "19bb33f7-74e1-5f7c-9b13-87728bdea658",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "معرفی کشور سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "0390cf1e-808a-5385-88cf-ae137a34ceb5"
+    ],
+    "old_body_sha256": "644a0d3c964d44a9e8dd0fd1a64e54c606abbdf525eb5bbaa4223495762bfe1d",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5836,
+    "recovered_text_sha256": "b0f692e3da7d9127eda09abef436d350fd070882ffb3de5fd2fc93aff88ddaa8",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_19bb33f7-74e1_b0f692e3da.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "233a2339-d1b0-5db6-8416-b35dfe2adb03",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "هزینه های زندگی در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "4b70b010-5ebb-5aca-979f-256d71372c4c"
+    ],
+    "old_body_sha256": "3cc3b3bd9a431e857ebd95bea38f35181b0da0e40a904566a1aca06bd6dea630",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3128,
+    "recovered_text_sha256": "9d5bc5c23131d3b01d072bfd3e494d3ee220a694e172897ca4ff91d4bc6a1ecf",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_233a2339-d1b0_9d5bc5c231.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "41b787f3-6790-5728-9bcd-1c1f61f225d0",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%D9%BE%D9%86%D8%A7%D9%87%D9%86%D8%AF%DA%AF%D9%8A-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "پناهندگي در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "5f13d420-2399-5c4a-8821-a6dfb351ea7a"
+    ],
+    "old_body_sha256": "10df83e1cfaf651c5730dc377b0e82e62a5773026829ada3c33596e38ac5f56d",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4292,
+    "recovered_text_sha256": "a7fc79ec9e04f6cbc9833364925e355de38b73e2d2088b1e098d71b18bf15121",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_41b787f3-6790_a7fc79ec9e.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "4b64d30a-9d77-57a2-930f-014221f6430e",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%D8%AF/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "کار در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "12f5d69b-ced9-51b3-a1a8-ebe210006dd7"
+    ],
+    "old_body_sha256": "43257a16d4b7f1563e39888ab0bff968021692a96819ca099c4b16250c4c8e4d",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 8258,
+    "recovered_text_sha256": "eaa75c815b6ae90d84847c33c08aa0142a473fa3009328894793b515577b1629",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_4b64d30a-9d77_eaa75c815b.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "d941b163-0059-5693-a4cd-2bf23ae76894",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%DB%8C%D8%B3/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%DB%8C%D8%B3",
+    "title": "تحصیل در سوئیس",
+    "country_codes": [
+      "CH"
+    ],
+    "destination_article_ids": [
+      "0c7b72a4-f941-5d8d-8a4f-4534dc1ba848"
+    ],
+    "old_body_sha256": "0dc53a03c442c72ba5b3e8a481338f03f775f654fc4a9fbee5af7f1162de0519",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4269,
+    "recovered_text_sha256": "c8d131ab2c2a4a79358512471b947351fad4dd8d524eadbcdd316c8d80258677",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_d941b163-0059_c8d131ab2c.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "97bb72d3-7f74-5653-b1a5-21c49eba4ace",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%DB%8C%D8%B3/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D8%B3%D9%88%D8%A6%DB%8C%D8%B3",
+    "title": "معرفی دانشگاه های برتر سوئیس",
+    "country_codes": [
+      "CH"
+    ],
+    "destination_article_ids": [
+      "180d8d18-3696-57bb-a75b-e7cc5eac09ff"
+    ],
+    "old_body_sha256": "9a955bb771a3a5247c8ebea9c1ea3de180c9f77afdd65f60e546c3126dba715f",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3754,
+    "recovered_text_sha256": "1091b5d84946c0820fbd8c8785ffa71df9562b04bbf200839fdb231a5ad572a2",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_97bb72d3-7f74_1091b5d849.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "256ac577-8c69-5607-8019-74d04a1f87be",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D8%B3%D9%88%D8%A6%DB%8C%D8%B3/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B3%D9%88%D8%A6%DB%8C%D8%B3",
+    "title": "معرفی کشور سوئیس",
+    "country_codes": [
+      "CH"
+    ],
+    "destination_article_ids": [
+      "cd59e5f7-2075-5da8-a99a-d2cf0b3dbc25"
+    ],
+    "old_body_sha256": "9a6a7f1c514f15aa12b3e26505f69e765468bb4fcb9bed706d6bd1504f26f0a0",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5461,
+    "recovered_text_sha256": "23066f1e97c1e6b7266b3283857f024a7e82326fb66074af3f5600e1cb6ad8e6",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_256ac577-8c69_23066f1e97.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "18211777-d78f-587f-94cc-3d3d30ac00d1",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "409d5567-bbce-5e06-9b81-af79c7fece39"
+    ],
+    "old_body_sha256": "8f6a22332b71daee3bb78d48c1dda76993ba1c0bb1f734ebb2cc59b961279ab6",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 29449,
+    "recovered_text_sha256": "120fe3b121be22533c26bb36bd54a97e51d82f46dc17e9260146e45c5af7ca64",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_18211777-d78f_120fe3b121.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "30d3d9d2-4b67-57b5-b7b0-ef8fdfd4aa04",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "اقامت از طریق ازدواج در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "46163471-d9ed-5249-ae6b-4befeebc0677"
+    ],
+    "old_body_sha256": "be534701893206c2141935ea89cd72494597b78317675fdc1b5b494a1d0731ca",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2033,
+    "recovered_text_sha256": "4e4c278049f1d6bcea0f669a41f57c956350ae1243804c982f58dcdf6e2ba6c6",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_30d3d9d2-4b67_4e4c278049.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "dbbe7d86-ecca-5731-aa06-c4b0f5b1574b",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "تحصیل در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "c66938bd-92a5-5c99-be88-b3e142b8b98d"
+    ],
+    "old_body_sha256": "beb4e7eb198c43cce11c2d0426201a2b56d556c512fb4e937a27b964496c6bb4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6620,
+    "recovered_text_sha256": "d4e911714a2c38434425441cf4e2e67c94dd84ec0fc8174e457e72b4dbf179b7",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_dbbe7d86-ecca_d4e911714a.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "3b2bb620-61d2-511d-b1bc-1a669122fc8d",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "سرمایه گذاری در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "c4081de8-e145-55e7-b20d-9b25f6fb5394"
+    ],
+    "old_body_sha256": "8390d2c493576be96fa9040c4cc4ba9f8bf263a7846861072f2af9d61a09e375",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3191,
+    "recovered_text_sha256": "0df5721680ccd4d787675a309887a1c21fd518a6b5ea67b2d0689b5611f7d6c3",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_3b2bb620-61d2_0df5721680.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "66e51ec3-b59b-5ce2-a85b-d4d1cec4e2e3",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "معرفی دانشگاه های برتر فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "edbb9934-513b-519b-8acd-985eea8789eb"
+    ],
+    "old_body_sha256": "a633764f9838d393614759a135c34b539a6cbcf1c00795072023f35cdb03e9db",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3688,
+    "recovered_text_sha256": "201caf7e4f3b63cdb4e710c782fe80acb3cf5537823ae1ff79c87aa4196a79a3",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_66e51ec3-b59b_201caf7e4f.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "651d06f5-f047-5d64-a5d3-005f59c580f0",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "معرفی کشور فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "6b75096a-fae2-5f81-b26a-11d3a6b9f5e0"
+    ],
+    "old_body_sha256": "f0a8775e7832646145b12c1b0c74c9caf5f355c6968b8cfb858a6412dc720860",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 7239,
+    "recovered_text_sha256": "9780c9279d4346290fe6751c44e02b76c2f864876ebbc8665a8f1a4685ef4f9b",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_651d06f5-f047_9780c9279d.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "2e89b6ab-a9ee-578a-90de-be30e8d14b1b",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "هزینه های زندگی در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "d0944eaf-13b3-5754-9705-a848f0835f83"
+    ],
+    "old_body_sha256": "ff8621c06420a0cf108eaa8b068fb48a5bd5cfab0e576d2075471a77720660e8",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2929,
+    "recovered_text_sha256": "dacb688555218ecb771fa052eaeeff2fca80ff5e11dcced4a6a0ff5fdc7f0ecc",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_2e89b6ab-a9ee_dacb688555.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "f0eec441-8dd8-5c9f-9f4a-0f2ca5c2e601",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "کار در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "7ce9a929-9d00-5078-b323-4fc3498a5365"
+    ],
+    "old_body_sha256": "f83934af6d63b49a2d1755713ef5b42322afd0d0a2ac576599353f8cfcce7501",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3253,
+    "recovered_text_sha256": "ab49ce4c694c69b2d9397d5d3e3e8d30cf29204d4c4bdf66092a0e80dfa2a4d6",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_f0eec441-8dd8_ab49ce4c69.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "ae070cf1-9772-5125-9d16-951ef9f5d8e3",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "8eb50cfb-cdeb-5b23-9e79-427ebe3a9010"
+    ],
+    "old_body_sha256": "8bf1b423843a3460bb6d2c2c0bd744d35f83811904639608d337195285fc6e82",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 19678,
+    "recovered_text_sha256": "305e9e7915d381210deb1e96d36614c38906a50f88d169ec13ca2eae5e487e01",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_ae070cf1-9772_305e9e7915.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "5661b0f8-fdf1-5714-a38f-332ed0ca0019",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "اقامت از طریق ازدواج در فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "366cbb31-99ea-50d0-8d59-ec77762f82b3"
+    ],
+    "old_body_sha256": "986c31514c5bc490b38dfa05a43d32c595a92e3f93d7ca6ba101612d02125446",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2955,
+    "recovered_text_sha256": "88ebb050f2781793e50a0cba063b35810d7dcb1f82773aa7913635528f9d8c74",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_5661b0f8-fdf1_88ebb050f2.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "81487aa6-2eb7-5b5b-9844-d84c6b8dd30b",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "تحصیل در فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "f0a03f4a-32c8-5950-860b-4911621217ed"
+    ],
+    "old_body_sha256": "dfacebaa87bdd5f98d578fdd1b8cc54526cb23594ff3815dcca9c5cdc8ea008a",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6511,
+    "recovered_text_sha256": "b40d388dd8e6b14a711f794f70e42884e8723da124ff90055e2dea0ac3398c2c",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_81487aa6-2eb7_b40d388dd8.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "e39203d9-d651-5582-b3e7-8953e83d0d7d",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%D8%B3%D8%B1%D9%85%D8%A7%DB%8C%D9%87-%DA%AF%D8%B0%D8%A7%D8%B1%DB%8C-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "سرمایه گذاری در فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "cd083148-9f41-5da6-a9e9-f5c4ea32d8f8"
+    ],
+    "old_body_sha256": "34337ba7a0c8b42f7df08d0aea5b8955fb8779245a53adefb1841b3804faf69b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2377,
+    "recovered_text_sha256": "d61a44054c0402168678d3f0f306b5eb74aa25967626feb0a11b22fd3c43c1b9",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_e39203d9-d651_d61a44054c.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "f9fa2a65-80e0-55b4-aff7-17101840775f",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "معرفی دانشگاه های برتر فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "b65465a6-4cf1-5cbb-af0d-af3539f202bc"
+    ],
+    "old_body_sha256": "0372ff43f20012c06ac9c6f17e92a35053decdc25698c890c1c19322a5c547c3",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4875,
+    "recovered_text_sha256": "03b9c5beb760cee4c1073ccba3c7c6c56e77061fcffe4f611feddd050479af10",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_f9fa2a65-80e0_03b9c5beb7.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "99fc36e6-a6c0-56e1-ae5f-3cc555939ed5",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "معرفی کشور فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "f9d21384-c6d1-5c1f-ba07-7873328cb809"
+    ],
+    "old_body_sha256": "80f860b3ca80507d61c05893e2310b79349144696b84a8793220f130fdabbcf7",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5620,
+    "recovered_text_sha256": "c87b7fcbb119a4df3204c6a1715a753c4807768509277725f92e956a4aa5d89e",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_99fc36e6-a6c0_c87b7fcbb1.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "6279195e-b791-5175-8b3f-2b77c29d45e5",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "کار در فنلاند",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "73300437-8d6e-5154-bcb5-c5e1a89ab592"
+    ],
+    "old_body_sha256": "79ef5dcd18c369b3546326ef1ac717ba36379fe8f7b1a61d722771d70b96747e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2507,
+    "recovered_text_sha256": "a9d7834e70c876e6f7e6384de4dd11232334871e17a3a31777a9c347999136cd",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_6279195e-b791_a9d7834e70.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "0b1cde7a-c563-54aa-bad9-7718f7f7d6c8",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98",
+    "title": "نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "2ae99660-fb8d-5763-8bc6-8293e4bb9b46"
+    ],
+    "old_body_sha256": "378bcbb1b45fb679a60821c899d3fd6c20f48205a7b52383213e5615d058d41d",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 23636,
+    "recovered_text_sha256": "b924dc21eda7d828f3e90d8c75ad35a58575eabb8ca82cce8ca9fc1b4afbec35",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_0b1cde7a-c563_b924dc21ed.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "c6d9dc3e-145b-5311-9503-302dedee6889",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "اقامت از طریق ازدواج در نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "444ece84-9197-57f1-8cff-a43733c218da"
+    ],
+    "old_body_sha256": "5286c1fbff8e120db9595a3fe625dc2656a7bf377098a21878ac8b481bd8c14f",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 1678,
+    "recovered_text_sha256": "d690958afac6946a8226b9bc0c97d4665c4b772b308b9ee9253ee0a7e705bf0d",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_c6d9dc3e-145b_d690958afa.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "34a976ca-78f6-5742-8f2a-293c582c0104",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "تحصیل در نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "5bc05ef0-fb11-5ffd-a590-518156aa0fd9"
+    ],
+    "old_body_sha256": "0171d6068c327d640695dd6bee6268b995e8f3f0fac2f612b88de78770f2a980",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 6510,
+    "recovered_text_sha256": "b0bb2438d8a7b37986223f6bd433fc406dfb6d88fe9ba0cc140f72deb6f64b55",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_34a976ca-78f6_b0bb2438d8.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "7569142e-e587-585f-9209-d4f55aefb298",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "معرفی دانشگاه های برتر نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "abf56e35-d65a-594f-bec2-7faece6077d9"
+    ],
+    "old_body_sha256": "d33ae62f677f9b40610656874f29869f2f3c36727b881e4ce83acc8bfbf869a7",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5679,
+    "recovered_text_sha256": "9d7e844fbbdcb3d3f8947703539e9bb0302f8d78de7c3192e4b2d211f18f3d12",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_7569142e-e587_9d7e844fbb.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "e4c93e3c-94f8-50f9-8d5b-a9296215b1f3",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "معرفی کشور نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "e4059eb2-2994-55be-85bc-e00aa3ad40c2"
+    ],
+    "old_body_sha256": "c16bb7d0445824db2d740c1562d5eff3d0b5ee995064ffbab90297d5b55504b8",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 7985,
+    "recovered_text_sha256": "021e0ab6d589cad1e97076f5b96f0853550fa32c12bc1cceed0ec6da50a0d97e",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_e4c93e3c-94f8_021e0ab6d5.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "1fff0160-9380-58ed-a394-962316cbcb7a",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%86%D8%B1%D9%88%DA%98/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "کار در نروژ",
+    "country_codes": [
+      "NO"
+    ],
+    "destination_article_ids": [
+      "306ee91c-61bf-5d8d-82f5-d6eeacdd7d29"
+    ],
+    "old_body_sha256": "c0f09f792b08582a7247e491cde559d4e9873e1652fcda71521a774ba6a15bfc",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2485,
+    "recovered_text_sha256": "b83e6eaba82d7f435484b2c0427aa74a7c3bda53182abcda781674f721b5485f",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_1fff0160-9380_b83e6eaba8.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "2cc77b0d-bb75-560b-9052-4cfc15d7d608",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF",
+    "title": "هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "858f001b-8ca4-5d04-8966-2535811cbb65"
+    ],
+    "old_body_sha256": "521d9a57a1acec7bd63dbb643132cfd107e029bb547b5c249bd9a3c8f18d41fa",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 16030,
+    "recovered_text_sha256": "e1cee1e6070d5db8346ea578ad0117b5f8b5dc9f3222d8f933ba417eba1b52b5",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_2cc77b0d-bb75_e1cee1e607.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "05229177-54bc-5a2e-972a-a154152107f4",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%A7%D8%B2-%D8%B7%D8%B1%DB%8C%D9%82-%D8%A7%D8%B2%D8%AF%D9%88%D8%A7%D8%AC-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "اقامت از طریق ازدواج در هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "4f5b417c-9a90-56f8-928f-f7c375cba3f7"
+    ],
+    "old_body_sha256": "9e6d4a2c74c47208e638002fa36176aa29e355a8d5dea3fb17ba6313c286f4c2",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 1980,
+    "recovered_text_sha256": "36f4900c3ebd263e1b96a5420d935a8738df6251626e330afff0878db5c4eb8a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_05229177-54bc_36f4900c3e.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "5587bc12-09c9-5c3f-91dd-dd84517d97b6",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "تحصیل در هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "bcad9451-b6b1-56b3-887f-0e9bf51aff1c"
+    ],
+    "old_body_sha256": "b22c2c4c24e127d666dff42690c075a3cfa4f57db2c0fc38cfe1603daf426026",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4600,
+    "recovered_text_sha256": "137d32e11416d5694bc36b7911bfe82a0bdfeed054ecabb558cd806d3a662d3e",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_5587bc12-09c9_137d32e114.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "79c2df04-3e32-563c-bdb8-9bdabd03b4f7",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D8%A8%D8%B1%D8%AA%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "معرفی دانشگاه های برتر هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "f6be24f5-c06a-596a-9500-2c3d764b98e3"
+    ],
+    "old_body_sha256": "2160acf7ffb0f04cacbf4b02e62ba44dbbf05230fdab71fb91bf15e861cd30d4",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4050,
+    "recovered_text_sha256": "dfd08437ee063d4374287802ac01ee0eab1a1c188387f0f2a71b4fe8dbea6d02",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_79c2df04-3e32_dfd08437ee.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "8b4b4149-1a9e-5d2b-bd52-931eb1f1d873",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "معرفی کشور هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "4aa6b6c2-3db6-544e-8053-f90e34b1d92e"
+    ],
+    "old_body_sha256": "1eff806aea5bd4037d53b956c586c8056dc7e7c313d6d967f52cb5eb9e357978",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5614,
+    "recovered_text_sha256": "fae7a2a956f8ba4335613d082b225eee5d5f60fde833113398194f2d2878e4ce",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_8b4b4149-1a9e_fae7a2a956.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "a27f9e9d-fa7c-56df-bdee-27341b5ac315",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%87%D8%B2%DB%8C%D9%86%D9%87-%D9%87%D8%A7%DB%8C-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "هزینه های زندگی در هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "8c2a954f-f26a-52a3-b809-e4229406c97c"
+    ],
+    "old_body_sha256": "9a973a19807abd8f8c9b5e19d0858ff83090f6b49e98ba78c6cd1018903ea785",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2772,
+    "recovered_text_sha256": "c49324449d30030f385e5ccf51284f84681de5a6a2c22bd2c3e80fdf5e84c63d",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_a27f9e9d-fa7c_c49324449d.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "b2e2413a-10aa-5bba-84b6-774fcd71ffc2",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D9%BE%D9%86%D8%A7%D9%87%D9%86%D8%AF%DA%AF%D9%8A-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "پناهندگي در هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "86b1713f-441a-5011-9762-4f342e757662"
+    ],
+    "old_body_sha256": "30a23f1f237629d7f04af2ce6ef92ee0daefe465d68702d9e2928a4f285ad639",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2412,
+    "recovered_text_sha256": "52871f63ed96d86780d3d32b6b7bf04d43dbaaaebeae7c90602746ac698596e6",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_b2e2413a-10aa_52871f63ed.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "f112987a-c855-5e1a-a225-210ae980cf70",
+    "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "کار در هلند",
+    "country_codes": [
+      "NL"
+    ],
+    "destination_article_ids": [
+      "b537ab07-f710-5f14-9617-49c36cf095a0"
+    ],
+    "old_body_sha256": "87687225519a9942360c2e8f198fe332ee0cb493fa3f1af086520bb9f2735996",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3325,
+    "recovered_text_sha256": "7744b0271893e85e0003efe7e9fbcf3e688ffe2a8a9925854824f24e6f3eed99",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_f112987a-c855_7744b02718.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "dc7e3741-cefe-51f8-a13e-d674ab356f4b",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/164-%D8%AA%D8%B9%D8%B1%DB%8C%D9%81-%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA-%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA-%D8%A2%D9%85%D8%B1%DB%8C%DA%A9%D8%A7-%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7-%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA-%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D9%84%DB%8C%D8%A7-%D8%AA%D8%A7%D8%A8%D8%B9%DB%8C%D8%AA-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA",
+    "title": "تعریف تابعیت/تابعیت آمریکا/تابعیت کانادا/تابعیت استرالیا/تابعیت اروپا/مهاجرت",
+    "country_codes": [
+      "AU",
+      "CA",
+      "US"
+    ],
+    "destination_article_ids": [
+      "11a93586-5d68-57b5-b563-9284066734fd"
+    ],
+    "old_body_sha256": "bfc79157a8a3d7160dbc96da18ffd1269950731cb5dfd57bea521427b9f0aa8a",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3774,
+    "recovered_text_sha256": "1b2d6aaedd5616f800a7801df2a8b731cdf04064123f0aef53036f184291882a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_dc7e3741-cefe_1b2d6aaedd.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "20e157cd-723a-591b-beaf-d0339ae8db99",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/168-%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF-%D9%88-%D8%A7%D8%AE%D8%B0-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%DB%8C-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "کار در سوئد و اخذ ویزای کاری سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "ecdfd577-3f6a-550f-b48f-d8e97a87e45f"
+    ],
+    "old_body_sha256": "8a8bbcdf53efc49ffa453a409d2edfd5c213f79494f6d8b45d778eb996ddde46",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4125,
+    "recovered_text_sha256": "bedcbb785b1f461206a76b6e2c52637b2c8a166ee93adafd4118585ce782cc8a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_20e157cd-723a_bedcbb785b.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "be5d5003-6f74-5e06-a727-7c72eafe1371",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/169-%D8%AD%D9%88%D8%B2%D9%87-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B3%DA%A9%D8%A7%D9%86%D8%AF%DB%8C%D9%86%D8%A7%D9%88%DB%8C-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B3%DA%A9%D8%A7%D9%86%D8%AF%DB%8C%D9%86%D8%A7%D9%88%DB%8C",
+    "title": "حوزه کشورهای اسکاندیناوی/مهاجرت به اروپا/مهاجرت به کشورهای اسکاندیناوی",
+    "country_codes": [],
+    "destination_article_ids": [
+      "f44b4197-7660-5610-82af-16ca124c4a22"
+    ],
+    "old_body_sha256": "a2a0c370dde34749e784954ec09c0f0e675ce06733fef78aa8d00b29250a5763",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 15870,
+    "recovered_text_sha256": "1a017fd195a76e7230cbc7454ae513db85aad2491ae1a863c28d55ff099c788c",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_be5d5003-6f74_1a017fd195.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "b45770d7-7f5f-5fc8-af3d-802b77e0b268",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/172-%D8%AA%D8%B9%D8%B1%DB%8C%D9%81-%D9%88%DB%8C%D8%B2%D8%A7-%D9%88-%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D9%85%D8%AE%D8%AA%D9%84%D9%81-%D9%88%DB%8C%D8%B2%D8%A7-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%B4%DB%8C%D9%86%DA%AF%D9%86-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%DB%8C-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C",
+    "title": "تعریف ویزا و معرفی انواع مختلف ویزا/ویزای شینگن/ویزای کاری/ویزای تحصیلی/",
+    "country_codes": [],
+    "destination_article_ids": [
+      "a3bde147-783b-526f-98c8-21a6ed518d7c"
+    ],
+    "old_body_sha256": "5def0398043ede950391b7907cb527356fc515115878ecd0a99a3b879fb4811e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 4818,
+    "recovered_text_sha256": "650c3bbc26f891784dd5f368dbff5b0ef6c7d91e7ee09f7f99b30aeee32779d8",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_b45770d7-7f5f_650c3bbc26.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "95bad268-7802-527d-a0a2-3e4528c03a2d",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/174-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86-%D8%AF%D8%B1-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7",
+    "title": "ویزای تحصیلی اروپا/تحصیل رایگان در اروپا/مهاجرت تحصیلی/مهاجرت به اروپا",
+    "country_codes": [],
+    "destination_article_ids": [
+      "2fd34e99-085c-5cf4-810a-c283400b74aa"
+    ],
+    "old_body_sha256": "2334e9c81276394a422ee545508d4dce6aa52dc390edd554405355efcfe7761c",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5341,
+    "recovered_text_sha256": "d3fd9f0e17c034c6335867998637e519053748de8bf3f3b316b7b801ebd9dee1",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_95bad268-7802_d3fd9f0e17.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "a362a741-bfb3-5e2a-94a9-80e11ccbf3dc",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/205-%D8%AA%D8%B9%D8%B1%DB%8C%D9%81-%D8%A8%D9%88%D8%B1%D8%B3-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D9%88-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D8%AF%D8%B1%DB%8C%D8%A7%D9%81%D8%AA-%D8%A8%D9%88%D8%B1%D8%B3-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%A8%D8%A7-%D8%A8%D9%88%D8%B1%D8%B3",
+    "title": "تعریف بورس تحصیلی و شرایط دریافت بورس تحصیلی/مهاجرت تحصیلی/تحصیل با بورس",
+    "country_codes": [],
+    "destination_article_ids": [
+      "e247781a-5143-564b-b05a-60c373585361"
+    ],
+    "old_body_sha256": "9b0c7dd000a1160a5773e4e663f6b635c37ec9fd422209938412c793a7bf0e15",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5517,
+    "recovered_text_sha256": "36055f39ecdae4e4e7e99c50503bac7eba11418397e82a08bb24f6f662e7234f",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_a362a741-bfb3_36055f39ec.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "32345349-cc4c-5524-959d-58fe26844f6a",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/207-%D8%B1%D8%AF%D9%87-%D8%A8%D9%86%D8%AF%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B2-%D9%86%D8%B8%D8%B1-%D8%B1%D9%81%D8%A7%D9%87-%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%DB%8C-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D9%88-%D8%B1%D9%81%D8%A7%D9%87-%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%DB%8C-%D8%AF%D8%B1-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7",
+    "title": "رده بندی کشورهای از نظر رفاه اجتماعی/مهاجرت و رفاه اجتماعی در اروپا",
+    "country_codes": [],
+    "destination_article_ids": [
+      "74ee3c5c-e22d-509c-92b4-9c23d148eeb5"
+    ],
+    "old_body_sha256": "6dc7e0c896bc0eae0ffcc1a412e1bbd2862079a99a7a9aeb3c231800627af33b",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 10733,
+    "recovered_text_sha256": "076a3af9e0a33e55b45f69c680eae7634c934b69172ab10f7f21a102b7b3ceb5",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_32345349-cc4c_076a3af9e0.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "b86934ef-e140-5690-8dfc-f4c938af36c5",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/209-%D8%A7%D8%B3%D8%A7%D8%B3-%D8%B1%D8%AA%D8%A8%D9%87-%D8%A8%D9%86%D8%AF%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87%D9%87%D8%A7%DB%8C-%D8%AF%D9%86%DB%8C%D8%A7-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7",
+    "title": "اساس رتبه بندی دانشگاههای دنیا/مهاجرت تحصیلی/تحصیل رایگان اروپا",
+    "country_codes": [],
+    "destination_article_ids": [
+      "b429dd90-7aa1-5f6c-8536-276edf6317b7"
+    ],
+    "old_body_sha256": "27bfa276c72d00698cc3069a8e6d07420e456a06ea52c31510dd8bf7df8bc210",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 10621,
+    "recovered_text_sha256": "a994cd2700936321792e273f53d3895201477ddf0107f556992e5cf144f68636",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_b86934ef-e140_a994cd2700.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "c083ffad-aa09-5660-844e-306f43063514",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/252-%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%A8%D8%AE%D8%B4-%D8%A7%D8%B3%DA%A9%D8%A7%D8%AA%D9%84%D9%86%D8%AF-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%B4%DB%8C%D9%86%DA%AF%D9%86",
+    "title": "معرفی بخش اسکاتلند/مهاجرت به انگلستان/مهاجرت به اروپا/ویزای شینگن",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "0e764651-a1ba-5224-8c04-b5898fde1b51"
+    ],
+    "old_body_sha256": "0291348abb95fe472789ae22743a3ba56cbe21c60b0501903536d6b67a527d18",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 5365,
+    "recovered_text_sha256": "cb69b1b18f4b7dc65c4ddda7a5bedb9caba9bbf84d8cb718f9e321ac7e418349",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_c083ffad-aa09_cb69b1b18f.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "ccd14303-43c2-5651-adaa-08e62a625fe9",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/283-%D8%A8%D8%B1%D8%B1%D8%B3%DB%8C-%D8%A7%D8%AF%D8%A7%D9%85%D9%87-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D9%88-%DA%A9%D8%A7%D8%B1-%D9%BE%D8%B2%D8%B4%DA%A9%D8%A7%D9%86-%D8%AF%D8%B1-%D8%AE%D8%A7%D8%B1%D8%AC-%D8%A7%D8%B2-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "ادامه تحصیل و کار پزشکان در خارج از کشور/پذیرش و ویزا برای پزشکان",
+    "country_codes": [],
+    "destination_article_ids": [
+      "b8a1afe6-a070-579d-a824-cfa18106ed24"
+    ],
+    "old_body_sha256": "5bde0f36e3a45cfe683a68f6bd17cac3ce7fbeaa8d29052c675d55ac07071c96",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 16159,
+    "recovered_text_sha256": "c0a8dda3b4d188c22362d122dda6f69142441e72be379d79d42f80ba9e7037fc",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_ccd14303-43c2_c0a8dda3b4.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "20d0200f-9fb6-54b8-bbcf-4f3e302302e6",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/288-%D8%AA%D8%AD%D9%88%D9%84%D8%A7%D8%AA-%D8%A7%D8%AE%D9%8A%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87-%DA%A9%D8%A7%D8%B1-%D8%AF%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "تحولات اخير فرانسه/مهاجرت به فرانسه/ویزای تحصیلی فرانسه/کار در فرانسه",
+    "country_codes": [
+      "FR"
+    ],
+    "destination_article_ids": [
+      "c26dc9d8-e572-5f74-967b-3538f3eba23b"
+    ],
+    "old_body_sha256": "4d93470026962efaad389bb311baa2751eaa5cc93ab96ee98e5592db82f7dd95",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3142,
+    "recovered_text_sha256": "509193bb23929a0fd67919d819ada6d4c16b99d13fbcf76baff8457c5c3cc437",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_20d0200f-9fb6_509193bb23.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "671776b7-f222-5c85-870b-43644f02b9b1",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/469-%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%B3%D9%88%D8%A6%D8%AF-%DA%86%DA%AF%D9%88%D9%86%D9%87-%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%B3%D9%88%D8%A6%D8%AF-%D8%B1%D8%A7-%D8%A8%DA%AF%DB%8C%D8%B1%DB%8C%D9%85-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D9%88-%D8%B1%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%DA%AF%D8%B1%D9%81%D8%AA%D9%86-%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "اقامت سوئد/چگونه اقامت سوئد را بگیریم/شرایط و راه های گرفتن اقامت سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "150f0614-f2fd-56ea-8ef4-06e69ec64a07"
+    ],
+    "old_body_sha256": "1427e9f6b33cf7a4d081249b27c4046cfa842ecccc6706f4585453e2df672197",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3027,
+    "recovered_text_sha256": "898d31aed9a742b5d47f152807c2422836bb9b3f7c64b46924979655d421ed32",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_671776b7-f222_898d31aed9.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "53c133a8-cc5d-5414-9dce-278253fc761e",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/490-%D8%B2%D9%86%D8%AF%DA%AF%D9%8A-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D9%88-%D8%A7%D9%82%D8%A7%D9%85%D8%AA-%D9%88-%D8%B2%D9%86%D8%AF%DA%AF%DB%8C-%D8%AF%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "زندگي در سوئد/شرایط زندگی در سوئد/مهاجرت و اقامت و زندگی در سوئد",
+    "country_codes": [
+      "SE"
+    ],
+    "destination_article_ids": [
+      "129bd148-70f8-5851-ada6-e05fc107145a"
+    ],
+    "old_body_sha256": "6f95c6322fb0d0d0f11fd1548e333496130e3e651f44360717187b49bcb76ebd",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2159,
+    "recovered_text_sha256": "4041a723b2fe6b7870c5f4f99b2c68a46f476bf96ca331481641e409ad67f3a2",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_53c133a8-cc5d_4041a723b2.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "714ccac5-eff1-5546-88e3-8f8f3f810b50",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/496-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86-%D9%81%D9%88%D9%82-%D9%84%DB%8C%D8%B3%D8%A7%D9%86%D8%B3-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86-%DA%A9%D8%A7%D8%B1%D8%B4%D9%86%D8%A7%D8%B3%DB%8C-%D8%A7%D8%B1%D8%B4%D8%AF-%D8%AF%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF-%D8%B4%D8%B1%D8%A7%DB%8C%D8%B7-%D8%A7%D8%AE%D8%B0-%D9%BE%D8%B0%DB%8C%D8%B1%D8%B4-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF-%D8%AF%D8%B1-%DA%A9%D8%A7%D8%B1%D8%B4%D9%86%D8%A7%D8%B3%DB%8C-%D8%A7%D8%B1%D8%B4%D8%AF",
+    "title": "فوق لیسانس در فنلاند/تحصیل رایگان کارشناسی ارشد در فنلاند/شرایط اخذ پذیرش دانشگاه های فنلاند در کارشناسی ارشد",
+    "country_codes": [
+      "FI"
+    ],
+    "destination_article_ids": [
+      "d74a3070-ab5c-5de2-b17d-48c8d6d56810"
+    ],
+    "old_body_sha256": "b67f493a23733df8a7b0d2f3172fea359a21678569a5e348cea94bb442219116",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 3503,
+    "recovered_text_sha256": "a35d7f946f642d3e46fa4edde1b0295229d7ff0e063a9215d684bdb4d59a455a",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_714ccac5-eff1_a35d7f946f.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "5bbec67a-599c-516f-8257-d8b829899224",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/566-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%DA%A9%D9%84%D8%A7%D8%B3-489-%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D9%84%DB%8C%D8%A7-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D9%86%DB%8C%D8%B1%D9%88%DB%8C-%D9%85%D8%AA%D8%AE%D8%B5%D8%B5-%D8%A8%D9%87-%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D9%84%DB%8C%D8%A7-%D8%A8%D8%A7-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-489-2",
+    "title": "ویزای کلاس 489 استرالیا/مهاجرت نیروی متخصص به استرالیا با ویزای 489 (2)",
+    "country_codes": [
+      "AU"
+    ],
+    "destination_article_ids": [
+      "2859f5f6-4a06-56a1-8ea2-bdc885c69744"
+    ],
+    "old_body_sha256": "6acd0ceb85c07645d0fb8e5f40772ef15e5fae39b93beb103311d40cf4c217b9",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2408,
+    "recovered_text_sha256": "4b2dfe19262a49846d8ed78976e56c693838efac7a752ff97621cf740ee09a69",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_5bbec67a-599c_4b2dfe1926.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "0da9f760-2510-5862-bddc-6e71301079fd",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/676-%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "ويزاي تحصيلي انگلستان/اخذ ويزاي تحصيلي انگلستان/چگونگي گرفتن ويزاي تحصيلي انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "b84e3c09-8f36-5f49-93d9-84938cf805ff"
+    ],
+    "old_body_sha256": "21d3289444190005ea93d3e41531ffc95e2087284778f1cabbb70c071abdd83e",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2396,
+    "recovered_text_sha256": "a3bcd701a73c8a4a1f55186c2174631b76ac1f23b9c82c96073b262c55278c15",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_0da9f760-2510_a3bcd701a7.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "ce1285a3-1063-5094-a432-3ad312636d0b",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/765-%D8%A2%D8%A8-%D9%88-%D9%87%D9%88%D8%A7%DB%8C-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86-%D9%88-%D8%B7%D8%A8%DB%8C%D8%B9%D8%AA-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "آب و هوای انگلستان/طبیعت انگلستان/تحصیل در انگلستان/اقامت انگلستان",
+    "country_codes": [
+      "GB"
+    ],
+    "destination_article_ids": [
+      "ad5b0a43-d158-5a60-a472-3be2477edbcf"
+    ],
+    "old_body_sha256": "868130d5bf08baad6dad4e7f06d49202984940db6811cd5a05ad95f99140dfe9",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2983,
+    "recovered_text_sha256": "9802d33bf37fa15e811c2a9efbd12d5029779840b337184848371b8644acdd15",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_ce1285a3-1063_9802d33bf3.txt",
+    "recommended_destination": "B_other_titles_independent_with_canonical_review",
+    "destination_rationale": "Pathway-themed independent; full body Other Titles; optional Visa excerpts need human editor",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "e2f9e0e9-ac69-539e-b5a9-66281be1b66c",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/890-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%B1%D8%B4%D8%AA%D9%87-%D9%85%D8%B9%D9%85%D8%A7%D8%B1%DB%8C-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "شرايط تحصيل در رشته معماري ايتاليا",
+    "country_codes": [
+      "IT"
+    ],
+    "destination_article_ids": [
+      "5cd4d259-7c1b-5461-83e8-14bc5d174fd0"
+    ],
+    "old_body_sha256": "986b9fde4e861e34877c493a9f1945673c781c1841f2127922d655bdc890ff49",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2486,
+    "recovered_text_sha256": "75e4e8d8938503ca59c7fa223a821989c86c2c780c704685ea786a81bd027115",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_e2f9e0e9-ac69_75e4e8d893.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  },
+  {
+    "source_id": "98b029cc-2596-5ae4-b04b-5737d3f4e24e",
+    "url": "https://radmohajer.ir/fa/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA/%D9%85%D9%82%D8%A7%D9%84%D8%A7%D8%AA-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA/974-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%D9%85%D8%B9%D8%AA%D8%A8%D8%B1-%DB%8C%D9%88%D9%86%D8%A7%D9%86",
+    "title": "معرفي دانشگاه هاي يونان",
+    "country_codes": [
+      "GR"
+    ],
+    "destination_article_ids": [
+      "49266226-9730-579b-9c53-af7ae2fa5b8f"
+    ],
+    "old_body_sha256": "67b26f4784fe35a88e24dc9d9486ecce8ab9253c7e614b408c721f3b270619fe",
+    "http_status": 200,
+    "recovery_status": "RECOVERED",
+    "text_len": 2683,
+    "recovered_text_sha256": "37fb36c6f1d713d42c9667ab85ae3d95a66be13ed965d61cd57f37e23204aeed",
+    "recovered_text_file": "recovered_bodies_radmohajer/mohajer_98b029cc-2596_37fb36c6f1.txt",
+    "recommended_destination": "B_other_titles_independent",
+    "destination_rationale": "Country/topic independent → Other Titles",
+    "human_review_required": true,
+    "recovery_method": "live_public_fetch"
+  }
+]

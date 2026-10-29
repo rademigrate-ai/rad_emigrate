@@ -1,0 +1,11 @@
+{
+  "starting_head": "862b71483f81077cd542086a3a8db042c5dd9d54",
+  "scope": "decompressed unique public-source raw HTML, not just tracked compressed blobs",
+  "unique_raw_files_scanned": 2719,
+  "high_risk_findings": [],
+  "pages_with_contact_links": 2027,
+  "pages_with_copyright_markers": 2717,
+  "PII_assessment": "Captured official public site pages include public contact information and may identify authors; no hosted user database export was included. Automated scan is not proof that all personal data or secrets are absent. No values are disclosed by this report.",
+  "distribution": "Internal source/editorial review evidence only; no blanket redistribution/media license or public-release approval inferred. Third-party script/image reuse remains unapproved. Original assets preserved.",
+  "hosted_writes": 0
+}

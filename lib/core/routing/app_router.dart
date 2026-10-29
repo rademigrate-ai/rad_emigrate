@@ -38,6 +38,7 @@ import '../../features/visa/presentation/pages/university_scholarship_page.dart'
 import '../../features/visa/presentation/pages/visa_page.dart';
 import '../../features/booking/presentation/pages/booking_page.dart';
 import '../../features/interviews/presentation/pages/interviews_page.dart';
+import '../../features/interview_scheduling/presentation/pages/interview_scheduling_page.dart';
 import '../../features/booking/presentation/pages/booking_service_page.dart';
 import '../../features/cost_calculator/presentation/pages/cost_calculator_page.dart';
 import '../../features/pathway_comparison/presentation/pages/pathway_comparison_page.dart';
@@ -165,7 +166,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/interview-scheduling',
-            builder: (_, _) => const InterviewsPage(),
+            builder: (_, _) => const InterviewSchedulingPage(),
           ),
           GoRoute(
             path: '/interviews',

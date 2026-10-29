@@ -4,7 +4,7 @@ Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "test-only-service-canary");
 const { handler: unconfiguredHandler, createResearchHandler } = await import("../research-sync/handler.ts");
 const json = (value: unknown, status=200) => new Response(JSON.stringify(value), {status});
 function assert(value: unknown) { if (!value) throw new Error("Research assertion failed"); }
-async function run(role="admin", sourceStatus=200, changed: unknown="finding-one", configured=true) {
+async function run(role="admin", sourceStatus=200, changed: unknown="finding-one", configured=true, sourceText='متن منبع برای بررسی انسانی') {
  const handler = configured ? createResearchHandler({ sourceFetch: (url, init) => fetch(url, init) }) : unconfiguredHandler;
  const saved: Array<{path:string;body:Record<string, unknown> | null}> = [];
  const original=globalThis.fetch;
@@ -20,7 +20,7 @@ async function run(role="admin", sourceStatus=200, changed: unknown="finding-one
   if(path.startsWith('research_sources?'))return json([{id:'source-one',base_url:'https://source.example.com/article',allowed_host:'source.example.com',authority:'external',trust_class:'external',source_type:'admin_defined'}]);
   if(path.startsWith('source_documents?'))return json([{id:'document-one',language_code:'fa'}]);
   if(path==='rpc/ingest_research_snapshot')return json(changed);
-  if(url.startsWith('https://source.example.com')) {sourceCalls++; return new Response('متن منبع برای بررسی انسانی', {status:sourceStatus});}
+  if(url.startsWith('https://source.example.com')) {sourceCalls++; return new Response(sourceText, {status:sourceStatus});}
   return json(null);
  });
  try { const result=await handler(new Request('https://edge.example.com',{method:'POST',headers:{Authorization:'Bearer user-test-token'}}));return {status:result.status,body:await result.json(),saved,sourceCalls}; }
@@ -33,6 +33,17 @@ Deno.test('Research fetch invokes one atomic ingest with exact Unicode evidence 
  assert(!x.saved.some(c=>/feed_items|content_drafts|research_findings$|source_snapshots$/.test(c.path)));
 });
 Deno.test('Unchanged evidence reports no new candidate',async()=>{const x=await run('admin',200,null);assert(x.body.changed===0);});
+Deno.test('Oversize Research evidence fails visibly without storing a truncated snapshot',async()=>{
+ const x=await run('admin',200,'finding-one',true,'الف'.repeat(33334));
+ assert(x.status===200 && x.body.failed===1 && x.body.changed===0);
+ assert(x.saved.some(c=>c.body?.last_error_code==='source_text_too_large'));
+ assert(!x.saved.some(c=>c.path==='rpc/ingest_research_snapshot'||/feed_items|content_drafts|source_snapshots/.test(c.path)));
+});
+Deno.test('Research exact text limit preserves its final character',async()=>{
+ const text='ا'.repeat(99999)+'ب';const x=await run('admin',200,'finding-one',true,text);
+ const write=x.saved.find(c=>c.path==='rpc/ingest_research_snapshot');
+ assert(x.body.changed===1 && write?.body?.p_normalized_text===text);
+});
 Deno.test('Source failure is visible and sanitized without a fake finding',async()=>{
  const x=await run('admin',503);assert(x.body.failed===1&&x.body.changed===0);
  assert(x.saved.some(c=>c.body?.last_error_code==='source_http_503'));
