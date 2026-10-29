@@ -1,1 +1,94 @@
-PLACEHOLDER_HTML
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="سامانه RAD برای مدیریت پرونده مهاجرت، مدارک، راهنمای ویزا و دستیار هوشمند با محتوای بررسی‌شده.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#070A0F">
+  <meta name="color-scheme" content="light dark">
+  <meta name="application-name" content="RAD Emigrate">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RAD International Institute">
+  <meta property="og:title" content="RAD Emigrate | مهاجرت، ویزا و مدیریت پرونده">
+  <meta property="og:description" content="مدیریت امن پرونده و مدارک، محتوای ساختاریافته ویزا و دستیار هوشمند RAD.">
+  <meta property="og:locale" content="fa_IR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="assets/assets/branding/rad_official_logo.png">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RAD Emigrate">
+  <meta name="twitter:description" content="Secure immigration case management, structured visa guidance and RAD AI assistance.">
+  <meta name="twitter:image" content="assets/assets/branding/rad_official_logo.png">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RAD Emigrate">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <title>RAD Emigrate | مهاجرت، ویزا و مدیریت پرونده</title>
+  <style>
+    @font-face{font-family:Vazirmatn;src:url("assets/assets/fonts/Vazirmatn-Regular.ttf") format("truetype");font-display:swap}
+    html,body{margin:0;height:100%;min-height:100dvh;background:#070A0F;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    /* Flutter engine hosts (including its shadow DOM semantics) use physical
+       left-origin coordinates. Set direction on their light-DOM ancestor, not
+       just flt-semantics-host, which is inside a shadow root. Flutter owns RTL. */
+    flutter-view{direction:ltr;min-height:100dvh}
+    flt-semantics-host{direction:ltr}
+    /* Prefer immediate taps on bottom-nav semantics (iOS WebApp / Safari). */
+    [flt-semantics-identifier^="rad-navigation-"]{touch-action:manipulation}
+    #rad-startup{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;background:radial-gradient(circle at 50% 44%,#3b0c14 0,#13090e 28%,#070a0f 62%);color:#fff;text-align:center;font:16px/1.6 Vazirmatn,system-ui,sans-serif;letter-spacing:0}
+    #rad-startup img{object-fit:contain;filter:drop-shadow(0 0 24px rgba(217,31,43,.42));max-width:calc(100vw - 64px)}
+    #rad-startup p{margin:0}
+    .rad-startup-bird{position:relative;width:112px;height:112px;animation:rad-float 1.8s ease-in-out infinite}
+    #rad-startup .rad-startup-bird img{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 14px #d91f2b55)}
+    .rad-startup-wing{clip-path:polygon(0 0,70% 0,68% 45%,60% 58%,35% 62%,0 62%);transform-origin:60% 52%;animation:rad-wing 1.8s ease-in-out infinite}
+    .rad-startup-body{clip-path:polygon(58% 0,100% 0,100% 100%,0 100%,0 58%,35% 58%,50% 60%,62% 40%)}
+    #rad-startup-retry{font:inherit;color:#172235;background:#fff;border:0;border-radius:12px;min-height:48px;padding:8px 24px;cursor:pointer}
+    @keyframes rad-wing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(5deg)}}
+    @keyframes rad-float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-2px)}}
+    @media(prefers-reduced-motion:reduce){.rad-startup-bird,.rad-startup-wing{animation:none}}
+  </style>
+</head>
+<body>
+  <div id="rad-startup" role="status" aria-live="polite">
+    <div class="rad-startup-bird" aria-hidden="true">
+      <img class="rad-startup-body" src="assets/assets/branding/rad_flying_bird_1024.png" alt="">
+      <img class="rad-startup-wing" src="assets/assets/branding/rad_flying_bird_1024.png" alt="">
+    </div>
+    <p id="rad-startup-message">در حال بارگذاری راد…</p>
+    <button id="rad-startup-retry" type="button" hidden>تلاش دوباره</button>
+  </div>
+  <noscript>برای استفاده از RAD Emigrate باید JavaScript در مرورگر فعال باشد.</noscript>
+  <script>
+    (() => {
+      let locale = 'fa', mode = 'system';
+      try { locale = JSON.parse(localStorage.getItem('flutter.rad_locale')) || locale;
+            mode = JSON.parse(localStorage.getItem('flutter.rad_theme_mode')) || mode; } catch (_) {}
+      const fa = locale !== 'en';
+      document.documentElement.lang = fa ? 'fa' : 'en';
+      document.documentElement.dir = fa ? 'rtl' : 'ltr';
+      window.radStartupFa = fa;
+      document.getElementById('rad-startup-message').textContent = fa ? 'در حال بارگذاری راد…' : 'Loading RAD…';
+      document.getElementById('rad-startup-retry').textContent = fa ? 'تلاش دوباره' : 'Retry';
+      if (mode === 'light' || (mode === 'system' && !matchMedia('(prefers-color-scheme:dark)').matches)) {
+        const loading = document.getElementById('rad-startup');
+        loading.style.background = 'radial-gradient(circle at 50% 44%,#fbe8ed,#f7fafe 65%)';
+        loading.style.color = '#0f172a';
+      }
+    })();
+  </script>
+  <!-- Normalize allowlisted legacy recovery links before Supabase initializes. -->
+  <script src="rad_recovery_redirect.js"></script>
+  <script src="rad_pointer_alignment.js"></script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
