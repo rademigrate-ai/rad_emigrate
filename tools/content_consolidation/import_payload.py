@@ -42,7 +42,7 @@ def payload(article, sources, registry):
                 blocks.append(
                     (
                         {**value, "id": uid(rich["id"] + ":v1:" + str(i))},
-                        rich["provenance"][0],
+                        rich.get("selected_origin", rich["provenance"][0]),
                         rich["id"],
                     )
                 )

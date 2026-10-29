@@ -112,6 +112,11 @@ class _VisaPageState extends ConsumerState<VisaPage> {
       appBar: AppBar(
         actions: [
           IconButton(
+            tooltip: locale == 'fa' ? 'دیگر عناوین' : 'Other Titles',
+            icon: const Icon(Icons.library_books_outlined),
+            onPressed: () => context.push('/visa/other-titles'),
+          ),
+          IconButton(
             tooltip: locale == 'fa'
                 ? 'محتوای کامل ویزا'
                 : 'Complete Visa content',
