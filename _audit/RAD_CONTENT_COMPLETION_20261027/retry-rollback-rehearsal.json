@@ -1,0 +1,14 @@
+{
+  "scope": "local restored synthetic-Auth fixture with preserved source corpus; NOT hosted backup evidence",
+  "exit_code": 0,
+  "seconds": 71.69,
+  "sql_sha256": "5a719174513e69d9db47c495ef6e1801714f59a88a2e97eb671033609635fee1",
+  "rollback_sql_sha256": "f289c7fe6e162df77a55d32b8e303995f937bd763cb254b73b0c059cf8182efd",
+  "exact_retry_no_duplicates": true,
+  "changed_input_rejected": true,
+  "rollback_restores_all_original_heads": true,
+  "rollback_restores_original_catalog": true,
+  "duplicate_reader_history_preserved": true,
+  "reviewed_link_blocks_retirement": true,
+  "hosted_executed": false
+}

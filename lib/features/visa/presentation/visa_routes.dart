@@ -1,9 +1,10 @@
 import 'package:go_router/go_router.dart';
 
 import 'pages/canonical_pathway_page.dart';
-import 'pages/independent_article_page.dart';
 import 'pages/visa_page.dart';
 import 'pages/visa_search_page.dart';
+import 'pages/editorial_article_page.dart';
+import 'pages/visa_content_countries_page.dart';
 
 /// Real route entries keep browser/system Back aligned with visible detail
 /// controls, and preserve the catalog page (including its scroll position).
@@ -12,12 +13,37 @@ GoRoute visaRoute() => GoRoute(
   builder: (_, _) => const VisaPage(),
   routes: [
     GoRoute(
+      path: 'content-countries',
+      builder: (_, state) => VisaContentCountriesPage(
+        preview: state.uri.queryParameters['preview'] == 'true',
+      ),
+      routes: [
+        GoRoute(
+          path: ':countryCode',
+          builder: (_, state) => VisaContentCountriesPage(
+            countryCode: state.pathParameters['countryCode']!,
+            preview: state.uri.queryParameters['preview'] == 'true',
+          ),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: 'content/:articleId',
+      builder: (_, state) => EditorialArticlePage(
+        articleId: state.pathParameters['articleId']!,
+        locale: state.uri.queryParameters['locale'] == 'en' ? 'en' : 'fa',
+        preview: state.uri.queryParameters['preview'] == 'true',
+        initialSectionAnchor: state.uri.fragment.isNotEmpty
+            ? state.uri.fragment
+            : state.uri.queryParameters['section'],
+        requestedLocale: state.uri.queryParameters['requested_locale'],
+      ),
+    ),
+    GoRoute(
       path: 'articles/:articleId',
-      builder: (_, state) => CanonicalPathwayPage(
-        countrySlug: '',
-        pathwaySlug: '',
-        articleId: state.pathParameters['articleId'],
-        resolvedLocale: state.uri.queryParameters['locale'],
+      builder: (_, state) => EditorialArticlePage(
+        articleId: state.pathParameters['articleId']!,
+        locale: state.uri.queryParameters['locale'] == 'en' ? 'en' : 'fa',
         requestedLocale: state.uri.queryParameters['requested_locale'],
         initialSectionAnchor: state.uri.fragment.isNotEmpty
             ? state.uri.fragment
@@ -36,9 +62,9 @@ GoRoute visaRoute() => GoRoute(
       routes: [
         GoRoute(
           path: 'articles/:articleSlug',
-          builder: (_, state) => IndependentArticlePage(
-            countrySlug: state.pathParameters['countryId']!,
-            articleSlug: state.pathParameters['articleSlug']!,
+          builder: (_, state) => EditorialLegacySlugPage(
+            country: state.pathParameters['countryId']!,
+            slug: state.pathParameters['articleSlug']!,
           ),
         ),
         GoRoute(

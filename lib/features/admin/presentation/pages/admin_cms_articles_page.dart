@@ -89,6 +89,11 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
         centerTitle: true,
         actions: [
           IconButton(
+            tooltip: 'بازبینی یکپارچه‌سازی محتوا',
+            icon: const Icon(Icons.fact_check_outlined),
+            onPressed: () => context.go('/admin/cms/reconciliation'),
+          ),
+          IconButton(
             tooltip: 'پایش منابع رسمی',
             icon: const Icon(Icons.source_outlined),
             onPressed: () => context.go('/admin/sources'),

@@ -19,6 +19,12 @@ on:
       - 'supabase/**'
       - 'scripts/**'
       - 'tools/plan3_content/**'
+      - 'tools/content_consolidation/**'
+      - 'tools/content_completion/**'
+      - 'tools/editorial_reference_capture.py'
+      - 'artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/**'
+      - 'artifacts/RAD_CONTENT_CONSOLIDATION_20261026/**'
+      - 'artifacts/RAD_CONTENT_RECOVERY_20261027/**'
       - 'requirements-plan3.txt'
       - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
       - 'PLAN3_INTEGRATION_HANDOFF.md'
@@ -40,6 +46,12 @@ on:
       - 'supabase/**'
       - 'scripts/**'
       - 'tools/plan3_content/**'
+      - 'tools/content_consolidation/**'
+      - 'tools/content_completion/**'
+      - 'tools/editorial_reference_capture.py'
+      - 'artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/**'
+      - 'artifacts/RAD_CONTENT_CONSOLIDATION_20261026/**'
+      - 'artifacts/RAD_CONTENT_RECOVERY_20261027/**'
       - 'requirements-plan3.txt'
       - 'artifacts/RAD_PLAN3_VISA_CONTENT_20261024/**'
       - 'PLAN3_INTEGRATION_HANDOFF.md'
@@ -79,13 +91,43 @@ jobs:
       - run: python3 -m pip install -r requirements-plan3.txt
       - name: Format and lint owned content tools
         run: |
+          python3 -m ruff format --isolated --check tools/content_completion scripts/tests/test_content_completion_reconcile.py scripts/tests/test_guarded_content_crawl.py scripts/tests/test_content_completion_compare.py scripts/tests/test_content_geography_recovery.py scripts/tests/test_content_geography_delivery.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/content_completion scripts/tests/test_content_completion_reconcile.py scripts/tests/test_guarded_content_crawl.py scripts/tests/test_content_completion_compare.py scripts/tests/test_content_geography_recovery.py scripts/tests/test_content_geography_delivery.py
           python3 -m ruff format --isolated --check tools/plan3_content scripts/tests/test_plan3_content.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/plan3_content scripts/tests/test_plan3_content.py
+          python3 -m ruff format --isolated --check tools/content_consolidation scripts/tests/test_content_consolidation.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/content_consolidation scripts/tests/test_content_consolidation.py
+      - name: Verify versioned original-reference capture
+        run: |
+          python3 -m ruff format --isolated --check tools/editorial_reference_capture.py scripts/tests/test_editorial_references.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/editorial_reference_capture.py scripts/tests/test_editorial_references.py
+          python3 -m unittest scripts.tests.test_editorial_references -v
       - name: Verify sealed source library and closed draft contract
         run: |
           python3 -m tools.plan3_content.cli checksums --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
           python3 -m tools.plan3_content.cli validate --package artifacts/RAD_PLAN3_VISA_CONTENT_20261024/10_CMS_DRAFT_IMPORT_PACKAGE.json
           python3 -m tools.plan3_content.cli library --directory artifacts/RAD_PLAN3_VISA_CONTENT_20261024
+      - name: Verify and reproduce country/category bodies with zero unaccounted segments
+        run: |
+          python3 -m tools.content_consolidation.verify artifacts/RAD_CONTENT_CONSOLIDATION_20261026
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from tools.content_consolidation.build import build
+          original = Path('artifacts/RAD_CONTENT_CONSOLIDATION_20261026')
+          capture = original / 'extraction_capture.jsonl.gz'
+          target = Path(os.environ['RUNNER_TEMP']) / 'country-category-rebuild'
+          build(Path('artifacts/RAD_PLAN3_VISA_CONTENT_20261024'), [], target,
+                capture, hashlib.sha256(capture.read_bytes()).hexdigest())
+          expected = json.loads((original / 'manifest.json').read_text(encoding='utf8'))
+          actual = json.loads((target / 'manifest.json').read_text(encoding='utf8'))
+          assert expected == actual, 'Country/category manifest data drift'
+          for name in expected['files']:
+              assert (original / name).read_bytes() == (target / name).read_bytes(), f'Country/category artifact drift: {name}'
+          # The imported manifest remains sealed with its original Windows CRLF.
+          # Linux JSON pretty-print line endings do not alter source/body bytes.
+          print('PASS: byte-identical composition, source maps, exact duplicates and extraction capture')
+          PY
       - name: Reproduce sealed library offline with identical bytes
         run: |
           python3 - <<'PY'
@@ -292,6 +334,14 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_function_defaults.sql
       - name: Verify publication-head deletion invalidates only its search projection
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
+      - name: Verify editorial import, rich-source privacy and rollback boundaries
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
+      - name: Verify published-only legacy slug compatibility
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_legacy_slug.sql
+      - name: Verify full-page Research review and lossless structured editing
+        run: |
+          psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/stage7_research_review.sql
+          psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/stage71_rich_review.sql
       - name: Verify appointment receipts through real Auth and PostgREST
         run: python3 scripts/verify_pr82_appointment_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
       - name: Stop disposable Supabase stack

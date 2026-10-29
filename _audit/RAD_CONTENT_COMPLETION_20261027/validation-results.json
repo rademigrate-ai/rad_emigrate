@@ -1,0 +1,117 @@
+{
+  "scope": "actual local commands; CI records immutable remote commit separately",
+  "python": {
+    "passed": 166,
+    "status": "PASS"
+  },
+  "flutter": {
+    "passed": 1111,
+    "status": "PASS"
+  },
+  "deno": {
+    "passed": 158,
+    "status": "PASS"
+  },
+  "web_release_build": {
+    "status": "PASS"
+  },
+  "android_debug_build": {
+    "status": "PASS"
+  },
+  "hosted_content_imported": false,
+  "real_hosted_backup_restored": false,
+  "local_rehearsal": {
+    "scope": "local restored synthetic-Auth fixture with preserved source corpus; NOT hosted backup evidence",
+    "exit_code": 0,
+    "seconds": 71.69,
+    "sql_sha256": "5a719174513e69d9db47c495ef6e1801714f59a88a2e97eb671033609635fee1",
+    "rollback_sql_sha256": "f289c7fe6e162df77a55d32b8e303995f937bd763cb254b73b0c059cf8182efd",
+    "exact_retry_no_duplicates": true,
+    "changed_input_rejected": true,
+    "rollback_restores_all_original_heads": true,
+    "rollback_restores_original_catalog": true,
+    "duplicate_reader_history_preserved": true,
+    "reviewed_link_blocks_retirement": true,
+    "hosted_executed": false
+  },
+  "expanded_staging_read_only_preflight": {
+    "project": "epolbumcfbohtmgvomki",
+    "import_gate": [
+      {
+        "enabled": false,
+        "project_ref": "epolbumcfbohtmgvomki"
+      }
+    ],
+    "observed_at": "2026-10-27T21:07:43.716775+00:00",
+    "reference_maps": 743,
+    "rich_revisions": 743,
+    "server_version": "17.11",
+    "imported_published": 0,
+    "snapshot_conflicts": 0,
+    "planned_existing_heads": 111,
+    "existing_new_article_ids": 0,
+    "missing_destination_codes": [
+      "AM",
+      "BY",
+      "CN",
+      "CY",
+      "CZ",
+      "EC",
+      "GE",
+      "GR",
+      "HR",
+      "HU",
+      "ID",
+      "IE",
+      "IN",
+      "IS",
+      "KW",
+      "LK",
+      "LU",
+      "MX",
+      "PH",
+      "PL",
+      "PT",
+      "QA",
+      "RO",
+      "RU",
+      "SI",
+      "SK",
+      "TH",
+      "UA",
+      "ZA"
+    ],
+    "source_identity_conflicts": 0,
+    "planned_new_article_locales": 80,
+    "changed_or_missing_existing_heads": 0
+  },
+  "expanded_catalog_comparison": {
+    "project": "epolbumcfbohtmgvomki",
+    "scope": "81 original catalogs proposed for classification or duplicate-card retirement; full JSONB composition SHA-256 plus active/class/category/country fields",
+    "observed_at": "2026-10-27T21:07:43.716775+00:00",
+    "expected_count": 81,
+    "local_count": 81,
+    "hosted_count": 81,
+    "exactly_equal": true,
+    "hosted_writes": 0,
+    "real_backup_evidence": false
+  },
+  "flutter_preview_regression": {
+    "passed": 2,
+    "status": "PASS",
+    "command": "flutter test test/features/visa/editorial_country_preview_test.dart --reporter expanded",
+    "scope": "latest country-label change; existing explicit preview/public separation"
+  },
+  "canonical_slots_and_review_guards": {
+    "project": "epolbumcfbohtmgvomki",
+    "observed_at": "2026-10-27T21:12:38.589852+00:00",
+    "reviewed_link_conflicts": 0,
+    "canonical_slot_conflicts": 0,
+    "planned_canonical_identities": 141
+  },
+  "portable_manifest": {
+    "all_12_input_hashes_match": true,
+    "utf8_lf_json": true,
+    "preflight_file_hash_matches": true
+  }
+}

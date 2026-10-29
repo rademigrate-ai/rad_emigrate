@@ -1,0 +1,55 @@
+{
+  "role": "supabase_read_only_user",
+  "project": "epolbumcfbohtmgvomki",
+  "observed_at": "2026-10-27T21:13:55.360469+00:00",
+  "schema_access": [
+    {
+      "relations": 27,
+      "schema_name": "auth",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    },
+    {
+      "relations": 36,
+      "schema_name": "private",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    },
+    {
+      "relations": 82,
+      "schema_name": "public",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    },
+    {
+      "relations": 1,
+      "schema_name": "staging_preserved_20261025",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    },
+    {
+      "relations": 8,
+      "schema_name": "storage",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    },
+    {
+      "relations": 1,
+      "schema_name": "supabase_migrations",
+      "can_select_all": true,
+      "any_direct_table_write": false
+    }
+  ],
+  "can_execute_editorial_save": false,
+  "can_execute_editorial_import": false,
+  "role_attributes": {
+    "login": true,
+    "superuser": false,
+    "create_role": false,
+    "bypassrls": true,
+    "member_pg_read_all_data": true
+  },
+  "credential_or_connection_verified": false,
+  "backup_started": false,
+  "hosted_writes": 0
+}

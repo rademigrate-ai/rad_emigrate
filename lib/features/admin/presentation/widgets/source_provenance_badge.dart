@@ -15,8 +15,6 @@ enum SourceTrustLevel {
     switch (val?.toLowerCase()) {
       case 'verified':
       case 'officially_verified':
-      case 'official_primary':
-      case 'official':
         return SourceTrustLevel.officiallyVerified;
       case 'admin_defined':
       case 'custom':

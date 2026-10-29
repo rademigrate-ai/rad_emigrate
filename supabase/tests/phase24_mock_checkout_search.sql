@@ -8,6 +8,7 @@ begin
   end;
   raise exception 'expected rejection %',expected;
 end $$;
+grant execute on function pg_temp.denied(text,text) to anon,authenticated,service_role;
 create temp table fixture(owner_id uuid,other_id uuid,admin_id uuid,request_key uuid,order_id uuid,ends timestamptz);
 insert into fixture values(gen_random_uuid(),gen_random_uuid(),gen_random_uuid(),gen_random_uuid(),null,null);
 grant select,update on fixture to authenticated,service_role;
@@ -47,6 +48,7 @@ create function pg_temp.event_for(oid uuid,uid uuid,ends timestamptz,kind text,s
 language sql as $$ select jsonb_build_object('mode','sandbox','event_id','fixture-'||gen_random_uuid(),
   'subscription_id','mock:'||oid,'user_id',uid,'type',kind,'sequence',seq,'amount_minor',amount,
   'currency','TST','occurred_at',now(),'period_end',ends) $$;
+grant execute on function pg_temp.event_for(uuid,uuid,timestamptz,text,integer,integer) to service_role;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
 set local role service_role;
 select pg_temp.denied(format('select public.apply_sandbox_payment_event(%L::jsonb,%L)',

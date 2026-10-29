@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/widgets/rad_loading.dart';
+import '../../../../core/supabase/rad_contract.dart';
+import '../../../../core/supabase/supabase_providers.dart';
+
+import 'dart:convert';
+
 import '../../../../l10n/app_localizations.dart';
 import '../../data/admin_operations_repository.dart';
 import '../../domain/research_source_url.dart';
@@ -23,11 +28,13 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
   final _form = GlobalKey<FormState>();
   late final TextEditingController _name;
   late final TextEditingController _url;
-  late final TextEditingController _university;
+  late final TextEditingController _topic;
+  String? _requestKey;
+  String? _lastPayload;
+  String? _owner;
 
-  String _selectedSourceType = 'government';
-  String _selectedCountryCode = 'CA';
-  String _selectedInterval = 'daily';
+  String _selectedSourceType = 'admin_reference';
+  String? _selectedCountryCode;
   var _saving = false;
   String? _error;
 
@@ -36,14 +43,16 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
     super.initState();
     _name = TextEditingController();
     _url = TextEditingController();
-    _university = TextEditingController();
+    _topic = TextEditingController();
+    final service = ref.read(supabaseClientServiceProvider);
+    _owner = service.isInitialized ? service.client.auth.currentUser?.id : null;
   }
 
   @override
   void dispose() {
     _name.dispose();
     _url.dispose();
-    _university.dispose();
+    _topic.dispose();
     super.dispose();
   }
 
@@ -56,7 +65,12 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
   }
 
   Future<void> _save() async {
-    if (_saving || !_form.currentState!.validate()) return;
+    if (_saving ||
+        ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
+            _owner ||
+        !_form.currentState!.validate()) {
+      return;
+    }
     final l10n = AppLocalizations.of(context);
     final parsedUri = parseResearchSourceUrl(_url.text);
     if (parsedUri == null) {
@@ -65,6 +79,17 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
     }
 
     final address = canonicalResearchSourceUrl(parsedUri);
+    final payload = jsonEncode([
+      _name.text.trim(),
+      address,
+      _selectedSourceType,
+      _selectedCountryCode,
+      _topic.text.trim(),
+    ]);
+    if (_lastPayload != payload) {
+      _lastPayload = payload;
+      _requestKey = newRadRequestKey();
+    }
 
     final data = ref.read(adminConsoleProvider).valueOrNull;
     if (data?.researchSources.any((source) {
@@ -92,6 +117,11 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
             sourceType: _selectedSourceType,
             trustClass: 'admin_defined',
             runtimeScope: 'admin',
+            countryCode: _selectedCountryCode,
+            visaCategory: _topic.text.trim().isEmpty
+                ? null
+                : _topic.text.trim(),
+            requestKey: _requestKey,
           );
 
       ref.invalidate(adminConsoleProvider);
@@ -116,6 +146,17 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(supabaseAuthUserIdProvider, (_, next) {
+      if (next.valueOrNull != _owner && mounted) {
+        _name.clear();
+        _url.clear();
+        _topic.clear();
+        setState(
+          () => _error = 'Administrator session changed. Reopen the dialog.',
+        );
+      }
+    });
+
     final l10n = AppLocalizations.of(context);
     final isFa = Localizations.localeOf(context).languageCode == 'fa';
 
@@ -164,6 +205,17 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                   ),
                   const SizedBox(height: 16),
 
+                  TextFormField(
+                    controller: _topic,
+                    enabled: !_saving,
+                    maxLength: 100,
+                    decoration: InputDecoration(
+                      labelText: isFa
+                          ? 'دسته ویزا / موضوع (اختیاری)'
+                          : 'Visa category / topic (optional)',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   // 3. Source Type Dropdown
                   DropdownButtonFormField<String>(
                     isExpanded: true,
@@ -250,7 +302,7 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'UK',
+                        value: 'GB',
                         child: Text(
                           '🇬🇧 انگلستان (UK)',
                           overflow: TextOverflow.ellipsis,
@@ -273,74 +325,7 @@ class _AdminSourceDialogState extends ConsumerState<AdminSourceDialog> {
                     ],
                     onChanged: _saving
                         ? null
-                        : (v) =>
-                              setState(() => _selectedCountryCode = v ?? 'CA'),
-                  ),
-                  if (_selectedSourceType == 'university') ...[
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _university,
-                      enabled: !_saving,
-                      maxLength: 150,
-                      decoration: InputDecoration(
-                        labelText: isFa
-                            ? 'نام دانشگاه مرتبط'
-                            : 'Associated University Name',
-                        hintText: isFa
-                            ? 'مثال: دانشگاه تورنتو (U of T)'
-                            : 'e.g. University of Toronto',
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    isExpanded: true,
-                    initialValue: _selectedInterval,
-                    decoration: InputDecoration(
-                      labelText: isFa
-                          ? 'بازه زمانی پایش دوره‌ای'
-                          : 'Monitoring Check Interval',
-                    ),
-                    items: [
-                      DropdownMenuItem(
-                        value: 'every6h',
-                        child: Text(
-                          isFa ? 'هر ۶ ساعت (Every 6 hours)' : 'Every 6 hours',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'every12h',
-                        child: Text(
-                          isFa
-                              ? 'هر ۱۲ ساعت (Every 12 hours)'
-                              : 'Every 12 hours',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'daily',
-                        child: Text(
-                          isFa
-                              ? 'روزانه - هر ۲۴ ساعت (Daily / 24h)'
-                              : 'Daily (every 24 hours)',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'weekly',
-                        child: Text(
-                          isFa
-                              ? 'هفتگی - هر ۷ روز (Weekly / 7 days)'
-                              : 'Weekly (every 7 days)',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                    onChanged: _saving
-                        ? null
-                        : (v) =>
-                              setState(() => _selectedInterval = v ?? 'daily'),
+                        : (v) => setState(() => _selectedCountryCode = v),
                   ),
                   const SizedBox(height: 16),
 

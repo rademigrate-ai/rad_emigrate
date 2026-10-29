@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
@@ -41,6 +42,7 @@ class FullPageComparisonViewer extends StatefulWidget {
   final String? reviewerNotes;
   final Map<String, String>
   sectionReviewDecisions; // sectionId -> 'accepted' | 'rejected'
+  final Map<String, String> sectionEdits;
   final SectionActionCallback? onSectionAction;
   final SectionEditCallback? onSectionEdit;
   final bool isPersian;
@@ -60,6 +62,7 @@ class FullPageComparisonViewer extends StatefulWidget {
     required this.evidence,
     this.reviewerNotes,
     this.sectionReviewDecisions = const {},
+    this.sectionEdits = const {},
     this.onSectionAction,
     this.onSectionEdit,
     this.isPersian = true,
@@ -94,6 +97,23 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
       sectionId,
       () => TextEditingController(text: initialText),
     );
+  }
+
+  ArticleSectionInput? _reviewedReplacement(SectionChange change) {
+    final original = change.replacement;
+    final edit = widget.sectionEdits[change.sectionId];
+    if (edit == null ||
+        original == null ||
+        original.blocks.length != 1 ||
+        original.blocks.first.type != 'paragraph') {
+      return original;
+    }
+    final json = original.toJson();
+    final blocks = (json['blocks'] as List)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+    blocks.first['text'] = edit;
+    return ArticleSectionInput.fromJson({...json, 'blocks': blocks});
   }
 
   // Map changes by sectionId for quick lookup
@@ -162,7 +182,7 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
             anchor: change.replacement?.anchor ?? baseSec.anchor,
             status: _SectionDiffStatus.modified,
             baseContent: baseSec,
-            proposedContent: change.replacement ?? baseSec,
+            proposedContent: _reviewedReplacement(change) ?? baseSec,
             change: change,
           ),
         );
@@ -180,7 +200,7 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
             anchor: change.replacement?.anchor ?? 'new-section',
             status: _SectionDiffStatus.added,
             baseContent: null,
-            proposedContent: change.replacement,
+            proposedContent: _reviewedReplacement(change),
             change: change,
           ),
         );
@@ -486,10 +506,11 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
         .length;
     final unchangedCount = allSections.length - changedCount;
 
-    return Row(
+    return Column(
       children: [
         // View Mode Switcher
-        Expanded(
+        SizedBox(
+          width: double.infinity,
           child: SegmentedButton<FullPageComparisonViewMode>(
             segments: [
               ButtonSegment(
@@ -519,32 +540,38 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
         const SizedBox(width: 12),
 
         // Section Filter Chips
-        FilterChip(
-          label: Text(
-            isFa
-                ? 'همه (${allSections.length})'
-                : 'All (${allSections.length})',
-          ),
-          selected: _sectionFilter == 'all',
-          onSelected: (_) => setState(() => _sectionFilter = 'all'),
-        ),
-        const SizedBox(width: 6),
-        FilterChip(
-          label: Text(
-            isFa ? 'تغییرات ($changedCount)' : 'Changed ($changedCount)',
-          ),
-          selected: _sectionFilter == 'changed',
-          onSelected: (_) => setState(() => _sectionFilter = 'changed'),
-        ),
-        const SizedBox(width: 6),
-        FilterChip(
-          label: Text(
-            isFa
-                ? 'بدون تغییر ($unchangedCount)'
-                : 'Unchanged ($unchangedCount)',
-          ),
-          selected: _sectionFilter == 'unchanged',
-          onSelected: (_) => setState(() => _sectionFilter = 'unchanged'),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            FilterChip(
+              label: Text(
+                isFa
+                    ? 'همه (${allSections.length})'
+                    : 'All (${allSections.length})',
+              ),
+              selected: _sectionFilter == 'all',
+              onSelected: (_) => setState(() => _sectionFilter = 'all'),
+            ),
+            const SizedBox(width: 6),
+            FilterChip(
+              label: Text(
+                isFa ? 'تغییرات ($changedCount)' : 'Changed ($changedCount)',
+              ),
+              selected: _sectionFilter == 'changed',
+              onSelected: (_) => setState(() => _sectionFilter = 'changed'),
+            ),
+            const SizedBox(width: 6),
+            FilterChip(
+              label: Text(
+                isFa
+                    ? 'بدون تغییر ($unchangedCount)'
+                    : 'Unchanged ($unchangedCount)',
+              ),
+              selected: _sectionFilter == 'unchanged',
+              onSelected: (_) => setState(() => _sectionFilter = 'unchanged'),
+            ),
+          ],
         ),
       ],
     );
@@ -591,7 +618,7 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
         headerBg = AppColors.surfaceMuted;
         statusBadge = _buildStatusPill(
           icon: Icons.check_circle_outline,
-          label: isFa ? '[بدون تغییر - مصوب]' : '[Unchanged - Approved]',
+          label: isFa ? '[بدون تغییر]' : '[Unchanged]',
           color: AppColors.teal,
         );
         break;
@@ -717,8 +744,8 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                       children: [
                         Text(
                           isFa
-                              ? 'محتوای اصلی حذف‌شده طبق منبع رسمی:'
-                              : 'Original content removed per official source:',
+                              ? 'حذف پیشنهادی محتوای مبنا:'
+                              : 'Proposed removal of baseline content:',
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -757,14 +784,14 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                                 color: AppColors.textSecondary,
                               ),
                               const SizedBox(width: 6),
-                              Text(
-                                isFa
-                                    ? 'متن مصوب قبلی:'
-                                    : 'Previously Approved Content:',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textSecondary,
+                              Flexible(
+                                child: Text(
+                                  isFa ? 'متن نسخه مبنا:' : 'Baseline Content:',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textSecondary,
+                                  ),
                                 ),
                               ),
                             ],
@@ -797,14 +824,16 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                                 color: AppColors.teal,
                               ),
                               const SizedBox(width: 6),
-                              Text(
-                                isFa
-                                    ? 'متن پیشنهادی استخراج‌شده از منبع رسمی:'
-                                    : 'Proposed Content from Official Source:',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.teal,
+                              Flexible(
+                                child: Text(
+                                  isFa
+                                      ? 'متن پیشنهادی؛ وضعیت اعتبار در منابع مشخص است:'
+                                      : 'Proposed content (check source verification):',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.teal,
+                                  ),
                                 ),
                               ),
                             ],
@@ -850,8 +879,10 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                 // Granular Action Buttons (for changed sections)
                 if (sec.status != _SectionDiffStatus.unchanged) ...[
                   const Divider(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 6,
+                    runSpacing: 6,
                     children: [
                       if (isEditing) ...[
                         TextButton(
@@ -888,9 +919,14 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                             foregroundColor: AppColors.navy,
                             visualDensity: VisualDensity.compact,
                           ),
-                          onPressed: () {
-                            setState(() => _editingSectionIds.add(sec.id));
-                          },
+                          onPressed:
+                              sec.proposedContent?.blocks.length == 1 &&
+                                  sec.proposedContent?.blocks.first.type ==
+                                      'paragraph'
+                              ? () => setState(
+                                  () => _editingSectionIds.add(sec.id),
+                                )
+                              : null,
                           icon: const Icon(Icons.edit, size: 14),
                           label: Text(isFa ? 'ویرایش متن' : 'Edit Text'),
                         ),
@@ -933,8 +969,8 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                   children: [
                     _buildSplitPaneHeader(
                       title: widget.isPersian
-                          ? 'نسخه فعلی مصوب (مبنا v${widget.baseRevision})'
-                          : 'Approved Baseline (v${widget.baseRevision})',
+                          ? 'نسخه فعلی (مبنا v${widget.baseRevision})'
+                          : 'Baseline (v${widget.baseRevision})',
                       color: AppColors.navy,
                       icon: Icons.history,
                     ),
@@ -980,8 +1016,8 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                     icon: const Icon(Icons.history, size: 16),
                     label: Text(
                       isFa
-                          ? 'نسخه مصوب v${widget.baseRevision}'
-                          : 'Approved v${widget.baseRevision}',
+                          ? 'نسخه مبنا v${widget.baseRevision}'
+                          : 'Baseline v${widget.baseRevision}',
                     ),
                   ),
                   ButtonSegment(
@@ -1130,7 +1166,19 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
     final evList = _evidenceBySectionId[sectionId] ?? widget.evidence;
     if (evList.isEmpty) return const SizedBox.shrink();
 
-    final ev = evList.first;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [for (final evidence in evList) _buildEvidence(evidence)],
+    );
+  }
+
+  Widget _buildEvidence(EvidenceRef ev) {
+    final uri = Uri.tryParse(ev.url);
+    final safe =
+        uri != null &&
+        uri.scheme == 'https' &&
+        uri.host.isNotEmpty &&
+        uri.userInfo.isEmpty;
     final isFa = widget.isPersian;
 
     return Container(
@@ -1153,7 +1201,7 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  '${isFa ? 'استناد و مدرک حقوقی' : 'Legal Evidence'}: ${ev.publisher}',
+                  '${isFa ? 'شواهد پیشنهادی' : 'Proposed Evidence'}: ${ev.publisher}',
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -1162,7 +1210,15 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
                 ),
               ),
               SourceProvenanceBadge(
-                trustLevel: SourceTrustLevel.fromString(ev.sourceClass),
+                trustLevel: ev.verificationState == FactualStatus.conflicting
+                    ? SourceTrustLevel.conflicting
+                    : ev.verificationState == FactualStatus.verified &&
+                          ev.authorityId != null &&
+                          ev.verifiedAt != null &&
+                          ev.freshUntil != null &&
+                          ev.freshUntil!.isAfter(DateTime.now())
+                    ? SourceTrustLevel.officiallyVerified
+                    : SourceTrustLevel.fromString(ev.sourceClass),
                 isPersian: isFa,
                 fontSize: 10,
               ),
@@ -1170,16 +1226,21 @@ class _FullPageComparisonViewerState extends State<FullPageComparisonViewer> {
           ),
           if (ev.url.isNotEmpty) ...[
             const SizedBox(height: 4),
-            Text(
-              ev.url,
-              style: const TextStyle(
-                fontSize: 10,
-                color: AppColors.primaryRed,
-                decoration: TextDecoration.underline,
-                fontFamily: 'monospace',
+            TextButton(
+              onPressed: safe
+                  ? () => launchUrl(uri, mode: LaunchMode.externalApplication)
+                  : null,
+              child: Text(
+                ev.url,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: AppColors.primaryRed,
+                  decoration: TextDecoration.underline,
+                  fontFamily: 'monospace',
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
           if (ev.excerpt.isNotEmpty) ...[

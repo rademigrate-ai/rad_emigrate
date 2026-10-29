@@ -1,0 +1,33 @@
+{
+  "original_sources": 1922,
+  "recovered_source_articles": 60,
+  "historical_sources_reconciled": 14,
+  "source_category_moves": 1,
+  "misclassified_blocks_moved_from_study_to_work": 31,
+  "body_country_scopes_reconciled": 72,
+  "existing_country_associations_corrected": 60,
+  "duplicate_visa_readers_retired": 20,
+  "new_independent_articles": 57,
+  "new_canonical_pages": 23,
+  "verified_baseline_article_locales": 743,
+  "original_article_locales": 743,
+  "new_full_article_drafts": 80,
+  "recovered_original_blocks": 1487,
+  "historical_original_blocks": 351,
+  "recovered_unique_source_blocks_represented": 1473,
+  "canonical_pages_enriched": 30,
+  "existing_drafts_reclassified": 61,
+  "mapped_main_source_blocks": 901,
+  "added_main_source_blocks": 878,
+  "main_block_count_net_change": 847,
+  "reference_maps": 171,
+  "recovered_classifications_unresolved": 0,
+  "captured_source_blocks": 31055,
+  "source_block_dispositions": {
+    "represented": 28438,
+    "excluded_with_evidence": 2617
+  },
+  "hosted_mutations": 0,
+  "publication_allowed": false,
+  "verdict": "NO_GO_PENDING_COVERAGE_AND_HOSTED_SAFETY_AUTHORIZATION"
+}

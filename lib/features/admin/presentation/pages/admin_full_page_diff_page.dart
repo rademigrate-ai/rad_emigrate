@@ -7,9 +7,12 @@ import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
 import '../../data/admin_cms_repository.dart';
-import '../../data/mock_research_admin_repository.dart';
+import '../../data/research_review_repository.dart';
+import '../../../../core/supabase/supabase_providers.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 import '../widgets/full_page_comparison_viewer.dart';
+import '../widgets/structured_review_viewer.dart';
+import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 
 class AdminFullPageDiffPage extends ConsumerStatefulWidget {
   final String sourceId;
@@ -30,6 +33,8 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
   final Map<String, String> _manualSectionEdits = {}; // sectionId -> editedText
 
   AdminSourceChangeProposal? _proposal;
+  Map<String, dynamic>? _reviewContext;
+  String? _owner;
   List<ArticleSectionInput> _baseSections = [];
   bool _loading = true;
   String? _error;
@@ -38,6 +43,8 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
   void initState() {
     super.initState();
     _reviewerNotesController = TextEditingController();
+    final service = ref.read(supabaseClientServiceProvider);
+    _owner = service.isInitialized ? service.client.auth.currentUser?.id : null;
     _loadData();
   }
 
@@ -54,48 +61,43 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
     });
 
     try {
-      final repo = ref.read(adminCmsRepositoryProvider);
-      AdminSourceChangeProposal? proposal;
-      try {
-        proposal = await repo.getProposalDetail(widget.sourceId);
-      } catch (_) {}
-      proposal ??= await ref
-          .read(mockResearchAdminRepositoryProvider)
-          .getProposalDetail(widget.sourceId);
-
-      if (proposal == null) {
-        setState(() {
-          _loading = false;
-          _error = 'پیشنهاد تغییرات منبع یافت نشد.';
-        });
+      final context = await ref
+          .read(researchReviewRepositoryProvider)
+          .context(widget.sourceId);
+      final proposal = AdminSourceChangeProposal.fromJson(
+        Map<String, dynamic>.from(context['proposal'] as Map),
+      );
+      if (proposal.changes.length !=
+          ((context['proposal'] as Map)['changes'] as List).length) {
+        throw const CmsException('malformed');
+      }
+      final base = context['base'] as Map;
+      final baseSections = ((base['body'] as Map)['sections'] as List)
+          .map(
+            (s) => ArticleSectionInput.fromJson(
+              Map<String, dynamic>.from(s as Map),
+            ),
+          )
+          .toList();
+      if (!mounted ||
+          ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
+              _owner) {
         return;
       }
-
-      // Synthesize or load base sections
-      List<ArticleSectionInput> baseSections = [];
-      if (proposal.targetArticleId.isNotEmpty) {
-        try {
-          final draft = await repo.getArticleDraft(proposal.targetArticleId);
-          baseSections = draft.rawSections
-              .map((s) => ArticleSectionInput.fromJson(s))
-              .toList();
-        } catch (_) {
-          try {
-            final mockDraft = await ref
-                .read(mockResearchAdminRepositoryProvider)
-                .getArticleDraft(proposal.targetArticleId);
-            baseSections = mockDraft.rawSections
-                .map((s) => ArticleSectionInput.fromJson(s))
-                .toList();
-          } catch (_) {}
+      _reviewContext = context;
+      _sectionDecisions.clear();
+      _manualSectionEdits.clear();
+      for (final value in context['decisions'] as List) {
+        final choice = value as Map;
+        final id = choice['section_id'] as String;
+        _sectionDecisions[id] = choice['decision'] == 'reject'
+            ? 'rejected'
+            : 'accepted';
+        if (choice['decision'] == 'edit') {
+          _manualSectionEdits[id] = choice['edited_text'] as String;
         }
       }
-
-      // If baseSections is still empty, synthesize baseline from proposal
-      if (baseSections.isEmpty) {
-        baseSections = _synthesizeBaseSections(proposal);
-      }
-
+      _reviewerNotesController.text = context['note'] as String? ?? '';
       if (mounted) {
         setState(() {
           _proposal = proposal;
@@ -107,67 +109,20 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       if (mounted) {
         setState(() {
           _loading = false;
-          _error = 'خطا در بارگذاری اطلاعات: $e';
+          _error = e is CmsException
+              ? e.toString()
+              : const CmsException('unavailable').toString();
         });
       }
     }
   }
 
-  List<ArticleSectionInput> _synthesizeBaseSections(
-    AdminSourceChangeProposal proposal,
-  ) {
-    final list = <ArticleSectionInput>[];
-
-    // Build base sections from changes that have beforeHash or operation=replace/remove
-    for (final c in proposal.changes) {
-      if (c.operation == 'replace' || c.operation == 'remove') {
-        list.add(
-          ArticleSectionInput(
-            id: c.sectionId,
-            anchor:
-                c.replacement?.anchor ?? 'sec-${c.sectionId.substring(0, 4)}',
-            heading: c.replacement?.heading ?? 'بخش اطلاعات اختصاصی',
-            order: 1,
-            blocks: [
-              ContentBlock(
-                id: 'b-base-${c.sectionId}',
-                type: 'paragraph',
-                text: 'متن مبنای پیشین ثبت‌شده در سامانه برای این بخش.',
-                items: const [],
-              ),
-            ],
-            evidenceRefs: const [],
-          ),
-        );
-      }
-    }
-
-    // Add a standard unchanged overview section for full-page context
-    list.insert(
-      0,
-      ArticleSectionInput(
-        id: 'sec-overview-${proposal.id}',
-        anchor: 'overview',
-        heading: 'کلیات و الزامات عمومی مسیر مهاجرتی',
-        order: 0,
-        blocks: [
-          ContentBlock(
-            id: 'b-ov-1',
-            type: 'paragraph',
-            text: 'این مسیر مهاجرتی بر اساس مصوبات رسمی و چارچوب قانونی تعریف شده است. کلیه متقاضیان ملزم به احراز شرایط پایه قانونی هستند.',
-            items: const [],
-          ),
-        ],
-        evidenceRefs: const [],
-      ),
-    );
-
-    return list;
-  }
-
   void _handleSectionAction(String sectionId, String action) {
     setState(() {
-      _sectionDecisions[sectionId] = action;
+      _sectionDecisions[sectionId] = action == 'accept'
+          ? 'accepted'
+          : 'rejected';
+      if (action == 'reject') _manualSectionEdits.remove(sectionId);
       _isDirty = true;
     });
   }
@@ -182,7 +137,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
 
   Future<void> _submitDecision(SourceProposalReviewStatus decision) async {
     final prop = _proposal;
-    if (prop == null || _isSubmitting) return;
+    if (prop == null || _isSubmitting || _reviewContext?['stale'] == true) {
+      return;
+    }
 
     final isFa = Localizations.localeOf(context).languageCode == 'fa';
 
@@ -228,31 +185,33 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       ),
     );
 
-    if (confirmed != true) return;
+    if (confirmed != true ||
+        !mounted ||
+        _reviewContext == null ||
+        ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
+            _owner) {
+      return;
+    }
 
     setState(() => _isSubmitting = true);
 
     try {
-      final repo = ref.read(adminCmsRepositoryProvider);
-      bool ok = false;
-      try {
-        ok = await repo.reviewProposal(
-          proposalId: widget.sourceId,
-          expectedRevision: prop.revision,
-          decision: decision,
-          reviewerNotes: _reviewerNotesController.text.trim(),
-        );
-      } catch (_) {
-        ok = await ref
-            .read(mockResearchAdminRepositoryProvider)
-            .reviewProposal(
-              proposalId: widget.sourceId,
-              expectedRevision: prop.revision,
-              decision: decision,
-              reviewerNotes: _reviewerNotesController.text.trim(),
-            );
-      }
-
+      final result = await ref
+          .read(researchReviewRepositoryProvider)
+          .save(
+            context: _reviewContext!,
+            mode: decision == SourceProposalReviewStatus.approved
+                ? 'create_draft'
+                : 'reject_proposal',
+            decisions: _sectionDecisions,
+            edits: _manualSectionEdits,
+            note: _reviewerNotesController.text.trim(),
+          );
+      final ok =
+          result['published'] == false &&
+          (decision != SourceProposalReviewStatus.approved ||
+              (result['draft_revision'] is Map &&
+                  result['draft_revision']['editorial_state'] == 'draft'));
       if (!mounted) return;
 
       if (!ok) throw const CmsException('malformed');
@@ -273,8 +232,46 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       context.go('/admin/sources');
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('خطا در ثبت تصمیم: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e is CmsException
+                  ? e.toString()
+                  : const CmsException('unavailable').toString(),
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
+  Future<void> _saveReview() async {
+    if (_reviewContext == null || _isSubmitting) return;
+    setState(() => _isSubmitting = true);
+    try {
+      await ref
+          .read(researchReviewRepositoryProvider)
+          .save(
+            context: _reviewContext!,
+            mode: 'save_review',
+            decisions: _sectionDecisions,
+            edits: _manualSectionEdits,
+            note: _reviewerNotesController.text.trim(),
+          );
+      if (!mounted) return;
+      setState(() => _isDirty = false);
+      await _loadData();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Review was not saved. Refresh if the version changed.',
+            ),
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -309,6 +306,25 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(supabaseAuthUserIdProvider, (_, next) {
+      if (next.valueOrNull != _owner && mounted) {
+        setState(() {
+          _proposal = null;
+          _reviewContext = null;
+          _baseSections = [];
+          _sectionDecisions.clear();
+          _manualSectionEdits.clear();
+          _reviewerNotesController.clear();
+          _isDirty = false;
+        });
+      }
+    });
+    if (ref.watch(supabaseAuthUserIdProvider).valueOrNull != _owner ||
+        _owner == null) {
+      return const Scaffold(
+        body: Center(child: Text('Administrator session required.')),
+      );
+    }
     final isFa = Localizations.localeOf(context).languageCode == 'fa';
 
     return PopScope(
@@ -381,32 +397,90 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  if (_reviewContext?['structured_patches'] == null &&
+                      (_reviewContext?['base'] as Map?)?['rich_sections']
+                          is List)
+                    ExpansionTile(
+                      title: Text(
+                        isFa
+                            ? 'ساختار کامل نسخه اصلی'
+                            : 'Complete original structure',
+                      ),
+                      subtitle: Text(
+                        isFa
+                            ? 'تصمیم‌ها قابل ذخیره‌اند. تغییر متن واردشده تا تطبیق ساختار اصلی مسدود است.'
+                            : 'Review decisions can be saved. Imported body changes require rich-structure reconciliation.',
+                      ),
+                      children: [
+                        for (final section
+                            in (_reviewContext!['base'] as Map)['rich_sections']
+                                as List) ...[
+                          Text((section as Map)['heading'] as String? ?? ''),
+                          for (final block in section['blocks'] as List)
+                            EditorialRichBlock(
+                              block: Map<String, dynamic>.from(block as Map),
+                            ),
+                        ],
+                      ],
+                    ),
                   // Full-Page Comparison Viewer Component
-                  FullPageComparisonViewer(
-                    articleTitle: _proposal!.summaryOfChanges.isNotEmpty
-                        ? _proposal!.summaryOfChanges
-                        : 'مسیر مهاجرتی ${_proposal!.countryCode} - ${_proposal!.pathwaySlug}',
-                    countryFlag: _flagForCountry(_proposal!.countryCode),
-                    countryName: _nameForCountry(_proposal!.countryCode, isFa),
-                    category: _proposal!.pathwaySlug,
-                    baseRevision: _proposal!.baseRevision,
-                    proposedRevision: _proposal!.revision,
-                    lastVerifiedAt: _proposal!.detectedAt,
-                    hasConflicts:
-                        _proposal!.factualStatus == FactualStatus.conflicting,
-                    baseSections: _baseSections,
-                    changes: _proposal!.changes,
-                    evidence: _proposal!.evidence,
-                    reviewerNotes: _proposal!.reviewerNotes,
-                    sectionReviewDecisions: _sectionDecisions,
-                    onSectionAction: _handleSectionAction,
-                    onSectionEdit: _handleSectionEdit,
-                    isPersian: isFa,
-                  ),
+                  if (_reviewContext?['structured_patches'] is List)
+                    StructuredReviewViewer(
+                      sections:
+                          (_reviewContext!['base'] as Map)['rich_sections']
+                              as List,
+                      patches: _reviewContext!['structured_patches'] as List,
+                      decisions: _sectionDecisions,
+                      edits: _manualSectionEdits,
+                      onAction: _handleSectionAction,
+                      onEdit: _handleSectionEdit,
+                      isPersian: isFa,
+                    )
+                  else
+                    FullPageComparisonViewer(
+                      articleTitle:
+                          (_reviewContext!['base'] as Map)['title'] as String,
+                      countryFlag: _flagForCountry(_proposal!.countryCode),
+                      countryName: _nameForCountry(
+                        _proposal!.countryCode,
+                        isFa,
+                      ),
+                      category: _proposal!.pathwaySlug,
+                      baseRevision: _proposal!.baseRevision,
+                      proposedRevision: _proposal!.baseRevision + 1,
+                      lastVerifiedAt: null,
+                      hasConflicts:
+                          _reviewContext?['stale'] == true ||
+                          _proposal!.factualStatus == FactualStatus.conflicting,
+                      baseSections: _baseSections,
+                      changes: _proposal!.changes,
+                      evidence: _proposal!.evidence,
+                      reviewerNotes: _proposal!.reviewerNotes,
+                      sectionReviewDecisions: _sectionDecisions,
+                      sectionEdits: _manualSectionEdits,
+                      onSectionAction: _handleSectionAction,
+                      onSectionEdit: _handleSectionEdit,
+                      isPersian: isFa,
+                    ),
 
                   const SizedBox(height: 24),
 
                   // Editorial Reviewer Controls & Human Authorization
+                  if (_reviewContext?['stale'] == true)
+                    Text(
+                      isFa
+                          ? 'نسخه مبنا تغییر کرده است؛ ذخیره مسدود است.'
+                          : 'The baseline has changed. Reload before saving.',
+                    ),
+                  TextButton.icon(
+                    onPressed: _isSubmitting || _reviewContext?['stale'] == true
+                        ? null
+                        : _saveReview,
+                    icon: const Icon(Icons.save_outlined),
+                    label: Text(
+                      isFa ? 'ذخیره پیش‌نویس بازبینی' : 'Save review draft',
+                    ),
+                  ),
                   _buildReviewerControls(isFa),
                 ],
               ),
@@ -486,12 +560,10 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
 
           const SizedBox(height: 16),
 
-          // Affected Related Articles Impact Analysis
-          _buildRelatedArticlesSection(isFa),
-
           // Reviewer Notes
           TextField(
             controller: _reviewerNotesController,
+            onChanged: (_) => setState(() => _isDirty = true),
             maxLines: 3,
             decoration: InputDecoration(
               labelText: isFa
@@ -554,107 +626,6 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRelatedArticlesSection(bool isFa) {
-    final related = ref
-        .read(mockResearchAdminRepositoryProvider)
-        .getRelatedArticlesImpact(widget.sourceId);
-    if (related.isEmpty) return const SizedBox.shrink();
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.hub_outlined, size: 16, color: AppColors.navy),
-              const SizedBox(width: 8),
-              Text(
-                isFa
-                    ? 'مقالات مرتبط متأثر از تغییرات این منبع:'
-                    : 'Affected Related Articles:',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.navy,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ...related.map((item) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 6),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppRadii.sm),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.article_outlined,
-                    size: 14,
-                    color: AppColors.primaryRed,
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.navy,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.impactReason,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.warning.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(AppRadii.pill),
-                    ),
-                    child: Text(
-                      isFa ? 'نیازمند بررسی هماهنگ' : 'Review Recommended',
-                      style: const TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.warning,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }),
         ],
       ),
     );

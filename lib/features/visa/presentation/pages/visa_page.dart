@@ -18,6 +18,9 @@ import '../../data/visa_repository.dart';
 import '../providers/visa_catalog_provider.dart';
 import '../../../../core/widgets/reference_widgets.dart';
 import '../widgets/country_photography.dart';
+import '../widgets/country_visa_content.dart';
+import '../../data/editorial_repository.dart';
+import 'visa_content_countries_page.dart';
 
 part 'visa_page_countries.dart';
 part 'visa_page_country_detail.dart';
@@ -81,6 +84,13 @@ class _VisaPageState extends ConsumerState<VisaPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
+    final publishedContentCountries = ref.watch(
+      visaContentCountriesProvider(locale),
+    );
+    if (widget.countryId == null &&
+        (publishedContentCountries.valueOrNull?.isNotEmpty ?? false)) {
+      return const VisaContentCountriesPage();
+    }
     final catalog = ref.watch(visaCatalogProvider(locale));
     // Routed detail pages derive selection from the catalog instead of requiring
     // a preceding tap. Invalid/stale IDs offer a visible route back to Visa.
@@ -100,6 +110,15 @@ class _VisaPageState extends ConsumerState<VisaPage> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            tooltip: locale == 'fa'
+                ? 'محتوای کامل ویزا'
+                : 'Complete Visa content',
+            icon: const Icon(Icons.menu_book_outlined),
+            onPressed: () => context.push('/visa/content-countries'),
+          ),
+        ],
         title: Text(switch (_stage) {
           _VisaStage.countries => l10n.visaPathways,
           _VisaStage.countryDetail => _country?.name ?? l10n.visaPathways,

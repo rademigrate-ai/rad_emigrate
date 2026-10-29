@@ -158,7 +158,7 @@ void main() {
 
         // 1. Unchanged Section (sec-1) is visible in full context
         expect(find.text('شرایط پایه و الزامات عمومی'), findsOneWidget);
-        expect(find.text('[بدون تغییر - مصوب]'), findsOneWidget);
+        expect(find.text('[بدون تغییر]'), findsOneWidget);
         expect(
           find.text(
             'متقاضیان باید دارای مدرک زبان معتبر و تمکن مالی پایه باشند.',
@@ -218,7 +218,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Unchanged section should be filtered out
-        expect(find.text('[بدون تغییر - مصوب]'), findsNothing);
+        expect(find.text('[بدون تغییر]'), findsNothing);
         expect(find.text('[+] بخش جدید افزوده شده'), findsOneWidget);
         expect(find.text('[~] بخش اصلاح شده'), findsOneWidget);
 
@@ -226,7 +226,7 @@ void main() {
         await tester.tap(find.textContaining('بدون تغییر (1)'));
         await tester.pumpAndSettle();
 
-        expect(find.text('[بدون تغییر - مصوب]'), findsOneWidget);
+        expect(find.text('[بدون تغییر]'), findsOneWidget);
         expect(find.text('[+] بخش جدید افزوده شده'), findsNothing);
       },
     );

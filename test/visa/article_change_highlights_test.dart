@@ -36,27 +36,21 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify banner header
-      expect(find.text('آخرین به‌روزرسانی و انطباق رسمی'), findsOneWidget);
+      expect(find.text('منابع و وضعیت بررسی'), findsOneWidget);
       expect(
         find.textContaining('Federal Foreign Office Germany'),
         findsOneWidget,
       );
 
       // Expand details
-      await tester.tap(find.text('آخرین به‌روزرسانی و انطباق رسمی'));
+      await tester.tap(find.text('منابع و وضعیت بررسی'));
       await tester.pumpAndSettle();
 
-      expect(
-        find.text('مراجع رسمی و مستندات قانونی این نسخه:'),
-        findsOneWidget,
-      );
-      expect(
-        find.text('دامنه معتبر دولتی: auswaertiges-amt.de'),
-        findsOneWidget,
-      );
+      expect(find.text('منابع ثبت‌شده برای این نسخه:'), findsOneWidget);
+      expect(find.text('دامنه منبع: auswaertiges-amt.de'), findsOneWidget);
       expect(
         find.textContaining(
-          'این مقاله تحت کنترل سردبیری انسانی بازبینی و تصویب شده است',
+          'وجود منبع یا تاریخ به‌تنهایی به معنی تأیید قانونی یا تصویب انسانی نیست',
         ),
         findsOneWidget,
       );
