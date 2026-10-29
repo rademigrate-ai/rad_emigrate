@@ -356,6 +356,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
+      - name: Verify quarantined Staging evidence archive integrity and ACLs
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_evidence_archive_security.sql
       - name: Verify published-only legacy slug compatibility
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_legacy_slug.sql
       - name: Verify full-page Research review and lossless structured editing
