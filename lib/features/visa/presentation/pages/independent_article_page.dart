@@ -85,7 +85,6 @@ class IndependentArticlePage extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: AppBackButton(fallback: '/visa/$countrySlug'),
         title: const Text('مقاله تخصصی'),
@@ -97,8 +96,6 @@ class IndependentArticlePage extends ConsumerWidget {
             onPressed: () => context.go('/visa/search'),
           ),
         ],
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: articleAsync.when(
         loading: () => const Center(child: RadPending()),
@@ -120,9 +117,9 @@ class IndependentArticlePage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.premium.surface,
                   borderRadius: BorderRadius.circular(AppRadii.lg),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: context.premium.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,15 +133,15 @@ class IndependentArticlePage extends ConsumerWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceMuted,
+                            color: context.premium.surfaceElevated,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             '${article.countryName} • ${article.category}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.navyMuted,
+                              color: context.premium.mutedText,
                             ),
                           ),
                         ),
@@ -154,27 +151,27 @@ class IndependentArticlePage extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Text(
                       article.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                        color: context.premium.text,
                         height: 1.4,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.timer_outlined,
                           size: 14,
-                          color: AppColors.textTertiary,
+                          color: context.premium.disabledText,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           'زمان مطالعه: حدود ${article.readingTimeMinutes} دقیقه',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.textTertiary,
+                            color: context.premium.disabledText,
                           ),
                         ),
                       ],
@@ -231,15 +228,15 @@ class IndependentArticlePage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.premium.surface,
                   borderRadius: BorderRadius.circular(AppRadii.lg),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: context.premium.border),
                 ),
                 child: Text(
                   article.bodyMarkdown,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textPrimary,
+                    color: context.premium.text,
                     height: 1.8,
                   ),
                 ),
@@ -251,27 +248,27 @@ class IndependentArticlePage extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: context.premium.surface,
                     borderRadius: BorderRadius.circular(AppRadii.lg),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.premium.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.verified_user_outlined,
                             color: AppColors.success,
                             size: 18,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
                             'منابع رسمی و مستندات دولتی',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
+                              color: context.premium.text,
                             ),
                           ),
                         ],
@@ -290,9 +287,9 @@ class IndependentArticlePage extends ConsumerWidget {
                               Expanded(
                                 child: Text(
                                   '${src.authorityName} (${src.authorityDomain}) — پیوند مرجع: ${src.originalEvidenceUrl}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 11,
-                                    color: AppColors.textSecondary,
+                                    color: context.premium.mutedText,
                                     height: 1.4,
                                   ),
                                 ),

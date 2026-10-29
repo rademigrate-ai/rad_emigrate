@@ -149,20 +149,18 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
     final notifier = ref.read(visaSearchControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: const AppBackButton(fallback: '/visa'),
         title: const Text('جستجوی هوشمند ویزا و مقالات'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: Column(
           children: [
             // Search Input Container
             Container(
-              color: Colors.white,
+              color: context.premium.surface,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Column(
                 children: [
@@ -227,19 +225,19 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
                                   ? FontWeight.w700
                                   : FontWeight.w500,
                               color: isSelected
-                                  ? Colors.white
-                                  : AppColors.textPrimary,
+                                  ? context.premium.accentForeground
+                                  : context.premium.text,
                             ),
-                            selectedColor: AppColors.navy,
-                            backgroundColor: Colors.white,
+                            selectedColor: context.premium.surfaceElevated,
+                            backgroundColor: context.premium.surface,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                 AppRadii.pill,
                               ),
                               side: BorderSide(
                                 color: isSelected
-                                    ? AppColors.navy
-                                    : AppColors.border,
+                                    ? context.premium.accent
+                                    : context.premium.border,
                               ),
                             ),
                             onSelected: (_) {
@@ -368,14 +366,14 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
             children: _popularQueries.map((tag) {
               return ActionChip(
                 label: Text(tag),
-                labelStyle: const TextStyle(
+                labelStyle: TextStyle(
                   fontSize: 12,
-                  color: AppColors.navyMuted,
+                  color: context.premium.mutedText,
                 ),
-                backgroundColor: Colors.white,
+                backgroundColor: context.premium.surface,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadii.pill),
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: context.premium.border),
                 ),
                 onPressed: () => _onTagTapped(tag),
               );
@@ -385,9 +383,9 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.premium.surface,
               borderRadius: BorderRadius.circular(AppRadii.md),
-              border: Border.all(color: AppColors.border),
+              border: Border.all(color: context.premium.border),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -477,9 +475,9 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.premium.surface,
           borderRadius: BorderRadius.circular(AppRadii.md),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.premium.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x06000000),
@@ -496,10 +494,10 @@ class _VisaSearchPageState extends ConsumerState<VisaSearchPage> {
               children: [
                 Text(
                   hit.countryName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.navy,
+                    color: context.premium.text,
                   ),
                 ),
                 const SizedBox(width: 6),

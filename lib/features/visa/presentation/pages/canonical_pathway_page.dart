@@ -219,7 +219,6 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
         'fa';
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: const AppBackButton(fallback: '/visa'),
         title: const Text('راهنمای جامع ویزا'),
@@ -231,8 +230,6 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
             onPressed: () => context.go('/visa/search'),
           ),
         ],
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: pathwayAsync.when(
         loading: () => const Center(child: RadPending()),
@@ -284,7 +281,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
               // Sticky TOC Bar
               Container(
                 height: 46,
-                color: Colors.white,
+                color: context.premium.surface,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
@@ -303,15 +300,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                               : FontWeight.w500,
                           color: isCurrent
                               ? Colors.white
-                              : AppColors.textSecondary,
+                              : context.premium.mutedText,
                         ),
                         backgroundColor: isCurrent
-                            ? AppColors.navy
-                            : AppColors.surfaceMuted,
+                            ? context.premium.accent
+                            : context.premium.surfaceElevated,
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppRadii.pill),
-                          side: BorderSide.none,
+                          side: BorderSide(
+                            color: isCurrent
+                                ? context.premium.accent
+                                : context.premium.border,
+                          ),
                         ),
                         onPressed: () => _scrollToSection(item['anchor']!),
                       ),
@@ -319,7 +320,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                   },
                 ),
               ),
-              const Divider(height: 1, thickness: 1, color: AppColors.border),
+              Divider(height: 1, thickness: 1, color: context.premium.border),
 
               // Scrollable Article Body
               Expanded(
@@ -332,9 +333,9 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                       key: _getOrCreateKey('article-overview'),
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.premium.surface,
                         borderRadius: BorderRadius.circular(AppRadii.lg),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: context.premium.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,10 +352,10 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                 children: [
                                   Text(
                                     article.countryName,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.textSecondary,
+                                      color: context.premium.mutedText,
                                     ),
                                   ),
                                   Text(
@@ -372,19 +373,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                           const SizedBox(height: 12),
                           Text(
                             article.pathwayTitle,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
+                              color: context.premium.text,
                               height: 1.4,
                             ),
                           ),
                           const SizedBox(height: 10),
                           Text(
                             article.summary,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.textSecondary,
+                              color: context.premium.mutedText,
                               height: 1.6,
                             ),
                           ),
@@ -411,27 +412,27 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.premium.surface,
                           borderRadius: BorderRadius.circular(AppRadii.lg),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.premium.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               sec.title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.navy,
+                                color: context.premium.text,
                               ),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               sec.bodyMarkdown,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
-                                color: AppColors.textPrimary,
+                                color: context.premium.text,
                                 height: 1.7,
                               ),
                             ),
@@ -447,9 +448,9 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.premium.surface,
                           borderRadius: BorderRadius.circular(AppRadii.lg),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.premium.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -458,19 +459,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  children: const [
-                                    Icon(
+                                  children: [
+                                    const Icon(
                                       Icons.account_balance_wallet_outlined,
                                       color: AppColors.teal,
                                       size: 20,
                                     ),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     Text(
                                       'هزینه‌های رسمی و تمکن مالی',
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w700,
-                                        color: AppColors.navy,
+                                        color: context.premium.text,
                                       ),
                                     ),
                                   ],
@@ -523,18 +524,20 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                         children: [
                                           Text(
                                             cost.label,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.w600,
-                                              color: AppColors.textPrimary,
+                                              color: context.premium.text,
                                             ),
                                           ),
                                           if (cost.description != null)
                                             Text(
                                               cost.description!,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 11,
-                                                color: AppColors.textTertiary,
+                                                color: context
+                                                    .premium
+                                                    .disabledText,
                                               ),
                                             ),
                                         ],
@@ -542,10 +545,10 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                     ),
                                     Text(
                                       '${cost.amount.toStringAsFixed(0)} ${cost.currency}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
-                                        color: AppColors.navy,
+                                        color: context.premium.text,
                                       ),
                                     ),
                                   ],
@@ -563,19 +566,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.premium.surface,
                           borderRadius: BorderRadius.circular(AppRadii.lg),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.premium.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'مراحل قانونی و فرآیند درخواست',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.navy,
+                                color: context.premium.text,
                               ),
                             ),
                             const SizedBox(height: 14),
@@ -587,7 +590,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                   children: [
                                     CircleAvatar(
                                       radius: 12,
-                                      backgroundColor: AppColors.navy,
+                                      backgroundColor: context.premium.accent,
                                       child: Text(
                                         '${st.stepNumber}',
                                         style: const TextStyle(
@@ -604,18 +607,18 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                         children: [
                                           Text(
                                             st.title,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.w700,
-                                              color: AppColors.textPrimary,
+                                              color: context.premium.text,
                                             ),
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
                                             st.description,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 12,
-                                              color: AppColors.textSecondary,
+                                              color: context.premium.mutedText,
                                               height: 1.5,
                                             ),
                                           ),
@@ -648,19 +651,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.premium.surface,
                           borderRadius: BorderRadius.circular(AppRadii.lg),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.premium.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'چک‌لیست مدارک مورد نیاز سفارت',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.navy,
+                                color: context.premium.text,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -678,9 +681,9 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                     Expanded(
                                       child: Text(
                                         doc,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 12,
-                                          color: AppColors.textPrimary,
+                                          color: context.premium.text,
                                         ),
                                       ),
                                     ),
@@ -699,9 +702,9 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                         margin: const EdgeInsets.only(bottom: 24),
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.premium.surface,
                           borderRadius: BorderRadius.circular(AppRadii.lg),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: context.premium.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -716,10 +719,10 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                 const SizedBox(width: 8),
                                 Text(
                                   isFa ? 'دیگر عناوین' : 'Other Titles',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: AppColors.navy,
+                                    color: context.premium.text,
                                   ),
                                 ),
                               ],
@@ -744,7 +747,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                   margin: const EdgeInsets.only(bottom: 10),
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: AppColors.surfaceMuted,
+                                    color: context.premium.surfaceElevated,
                                     borderRadius: BorderRadius.circular(
                                       AppRadii.md,
                                     ),
@@ -758,18 +761,19 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                           children: [
                                             Text(
                                               rel.title,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w700,
-                                                color: AppColors.textPrimary,
+                                                color: context.premium.text,
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               rel.summary,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 11,
-                                                color: AppColors.textSecondary,
+                                                color:
+                                                    context.premium.mutedText,
                                               ),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
@@ -781,7 +785,7 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
                                       Icon(
                                         directionalForward(context),
                                         size: 14,
-                                        color: AppColors.textTertiary,
+                                        color: context.premium.disabledText,
                                       ),
                                     ],
                                   ),

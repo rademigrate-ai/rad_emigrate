@@ -92,6 +92,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   final _controller = TextEditingController();
   final _scroll = ScrollController();
   final _composerFocus = FocusNode();
+  final _composerKeyboardFocus = FocusNode();
   final _messages = <_ChatMessage>[];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -373,6 +374,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     _controller.removeListener(_onPromptChanged);
     _composerFocus.removeListener(_onComposerFocusChanged);
     _composerFocus.dispose();
+    _composerKeyboardFocus.dispose();
     _birdTimer?.cancel();
     _controller.dispose();
     _scroll.dispose();
@@ -1252,11 +1254,11 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
                   // Attachment Button (PDF & Images)
                   Tooltip(
-                    message: 'پیوست سند یا تصویر (PDF/Image)',
+                    message: l10n.uploadDocument,
                     child: IconButton(
                       style: IconButton.styleFrom(
                         backgroundColor: context.premium.surfaceElevated,
-                        foregroundColor: AppColors.navy,
+                        foregroundColor: context.premium.text,
                         minimumSize: Size(controlSize, controlSize),
                       ),
                       icon: const Icon(Icons.attach_file, size: 20),
@@ -1268,7 +1270,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                   // Text Input
                   Expanded(
                     child: KeyboardListener(
-                      focusNode: FocusNode(),
+                      focusNode: _composerKeyboardFocus,
                       onKeyEvent: (event) {
                         if (event is KeyDownEvent &&
                             event.logicalKey == LogicalKeyboardKey.enter &&

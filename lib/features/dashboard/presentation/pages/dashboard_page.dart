@@ -325,67 +325,73 @@ class _InformationCard extends StatelessWidget {
   final String subtitle;
   final VoidCallback onTap;
   @override
-  Widget build(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(18),
-    child: Material(
-      color: const Color(0xFF101A2B),
-      child: InkWell(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-                excludeFromSemantics: true,
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: '$title, $subtitle',
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Material(
+        color: const Color(0xFF101A2B),
+        child: InkWell(
+          onTap: onTap,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                ),
               ),
-            ),
-            const Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0x100B1220), Color(0xF00B1220)],
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0x100B1220), Color(0xF00B1220)],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 40, 12, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 14,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 40, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFFEDF3FF),
-                      fontSize: 11,
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFFEDF3FF),
+                        fontSize: 11,
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: Icon(
-                      directionalChevron(context),
-                      color: Colors.white,
-                      size: 20,
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Icon(
+                        directionalChevron(context),
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ),
