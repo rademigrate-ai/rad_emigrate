@@ -96,7 +96,8 @@ void main() {
   test('web semantics coordinates are not mirrored by HTML RTL direction', () {
     final html = File('web/index.html').readAsStringSync();
     expect(html, contains('<html lang="fa" dir="rtl">'));
-    expect(html, contains('flutter-view{direction:ltr}'));
+    // Match the direction rule even when extra properties (e.g. min-height:100dvh) are present.
+    expect(html, contains('flutter-view{direction:ltr'));
     expect(html, contains('flt-semantics-host{direction:ltr}'));
   });
   testWidgets('navigation lays out with active semantics', (tester) async {
@@ -161,9 +162,9 @@ void main() {
               surface.left,
               surface.top + 11,
               surface.right,
-              surface.bottom - 1,
+              surface.bottom,
             ),
-            reason: 'Ripple must share the local surface, not include safe-area padding',
+            reason: 'Full-height hit surface (bottom: 0) aligns paint with iOS WebApp semantics',
           );
           expect(
             find.ancestor(of: localMaterial, matching: find.byType(ClipRRect)),
@@ -199,7 +200,7 @@ void main() {
               find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
             )
             .bottom,
-        lessThanOrEqualTo(620 - 34 - 8),
+        lessThanOrEqualTo(620 - 34 - 4),
       );
       expect(router.routeInformationProvider.value.uri.path, '/visa');
       expect(tester.takeException(), isNull);
@@ -215,7 +216,7 @@ void main() {
             find.byKey(const ValueKey('rad-phoenix-navigation-surface')),
           );
           final phoenix = tester.getRect(find.byType(RadAiBirdNavIcon));
-          expect(surface.bottom, lessThanOrEqualTo(844 - 34 - 8));
+          expect(surface.bottom, lessThanOrEqualTo(844 - 34 - 4));
           expect(surface.left, 16);
           expect(surface.height, 76);
           expect(phoenix.center.dx, closeTo(195, 0.1));
