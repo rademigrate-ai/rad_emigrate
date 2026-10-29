@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rad_emigrate/features/admin/data/admin_cms_repository.dart';
 import 'package:rad_emigrate/features/admin/data/mock_research_admin_repository.dart';
+import 'package:rad_emigrate/features/admin/data/research_review_repository.dart';
+import 'package:rad_emigrate/core/supabase/supabase_providers.dart';
 import 'package:rad_emigrate/features/admin/domain/entities/admin_cms_entities.dart';
 import 'package:rad_emigrate/features/admin/domain/entities/admin_research_models.dart';
 import 'package:rad_emigrate/features/admin/presentation/pages/admin_full_page_diff_page.dart';
@@ -27,6 +29,68 @@ class _FakeLiveEmptyAdminCmsRepository implements AdminCmsRepository {
   }) async => const [];
 }
 
+class _FixtureResearchReviewRepository implements ResearchReviewRepository {
+  _FixtureResearchReviewRepository(this._mock);
+
+  final MockResearchAdminRepository _mock;
+
+  @override
+  Future<Map<String, dynamic>> context(String proposalId) async {
+    final proposal = await _mock.getProposalDetail(proposalId);
+    if (proposal == null) throw StateError('Unknown fixture proposal');
+    final draft = await _mock.getArticleDraft(proposal.targetArticleId);
+    return {
+      'proposal': {
+        'id': proposal.id,
+        'revision': proposal.revision,
+        'target_article_id': proposal.targetArticleId,
+        'base_revision': proposal.baseRevision,
+        'new_snapshot_id': proposal.newSnapshotId,
+        'authority_id': proposal.authorityId,
+        'country_code': proposal.countryCode,
+        'pathway_slug': proposal.pathwaySlug,
+        'created_at': proposal.detectedAt.toIso8601String(),
+        'verification_state': proposal.factualStatus.name,
+        'editorial_state': proposal.reviewStatus.name,
+        'changes': [for (final change in proposal.changes) change.toJson()],
+        'evidence': [for (final item in proposal.evidence) item.toJson()],
+      },
+      'base': {
+        'title': draft.title,
+        'related_articles': [
+          for (final item in _mock.getRelatedArticlesImpact(proposalId))
+            {
+              'article_id': item.articleId,
+              'title': item.title,
+              'impact_reason': item.impactReason,
+            },
+        ],
+        'revision_id': 'fixture-base-revision',
+        'content_hash': 'fixture-base-content-hash',
+        'body': {'sections': draft.rawSections},
+      },
+      'review_revision': 1,
+      'stale': false,
+      'decisions': <Map<String, dynamic>>[],
+    };
+  }
+
+  @override
+  Future<Map<String, dynamic>> save({
+    required Map<String, dynamic> context,
+    required String mode,
+    required Map<String, String> decisions,
+    required Map<String, String> edits,
+    required String note,
+  }) async => {
+    'published': false,
+    'draft_revision': {'editorial_state': 'draft'},
+  };
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 Widget createTestContainer({
   required Widget child,
   Size screenSize = const Size(1200, 1000),
@@ -39,6 +103,17 @@ Widget createTestContainer({
       adminCmsRepositoryProvider.overrideWithValue(repo),
       if (repo is MockResearchAdminRepository)
         mockResearchAdminRepositoryProvider.overrideWithValue(repo),
+      if (mockRepo != null) ...[
+        researchReviewRepositoryProvider.overrideWithValue(
+          _FixtureResearchReviewRepository(mockRepo),
+        ),
+        adminResearchActorReaderProvider.overrideWithValue(
+          () => 'fixture-admin',
+        ),
+        supabaseAuthUserIdProvider.overrideWith(
+          (ref) => Stream.value('fixture-admin'),
+        ),
+      ],
     ],
     child: MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -280,7 +355,10 @@ void main() {
         expect(find.text('۱۴,۶۹۰ CAD'), findsOneWidget);
 
         // 3. Verify Official Source Attribution Box with Publication & Effective Dates
-        expect(find.textContaining('استناد و مدرک حقوقی'), findsWidgets);
+        // Stage 7 identifies proposed evidence explicitly, rather than
+        // presenting it as already-authoritative legal proof.
+        expect(find.textContaining('شواهد پیشنهادی'), findsWidgets);
+        expect(find.textContaining('canada.ca'), findsWidgets);
         expect(find.textContaining('تاریخ انتشار منبع'), findsWidgets);
 
         // 4. Verify Granular Section Accept Action
@@ -291,14 +369,32 @@ void main() {
         await tester.pumpAndSettle();
 
         // 5. Verify In-Place Live Text Editing
-        final editFinder = find.text('ویرایش متن').first;
-        await tester.ensureVisible(editFinder);
+        // Structured tables are intentionally not editable as plain text.
+        // Select only the enabled edit action for a single-paragraph change.
+        final editFinder = find
+            .ancestor(
+              of: find.text('ویرایش متن'),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is OutlinedButton && widget.onPressed != null,
+              ),
+            )
+            .first;
+        await tester.scrollUntilVisible(
+          editFinder,
+          240,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.pumpAndSettle();
         await tester.tap(editFinder);
         await tester.pumpAndSettle();
 
         final saveFinder = find.text('ثبت ویرایش');
-        await tester.ensureVisible(saveFinder);
+        await tester.scrollUntilVisible(
+          saveFinder,
+          240,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.pumpAndSettle();
         expect(saveFinder, findsOneWidget);
 

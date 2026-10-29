@@ -14,6 +14,14 @@ import '../widgets/full_page_comparison_viewer.dart';
 import '../widgets/structured_review_viewer.dart';
 import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 
+/// Reads the *current* authenticated actor on every call. Tests override the
+/// reader with a fixture; production always checks the live Supabase session.
+final adminResearchActorReaderProvider = Provider<String? Function()>((ref) {
+  final service = ref.watch(supabaseClientServiceProvider);
+  return () =>
+      service.isInitialized ? service.client.auth.currentUser?.id : null;
+});
+
 class AdminFullPageDiffPage extends ConsumerStatefulWidget {
   final String sourceId;
 
@@ -43,8 +51,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
   void initState() {
     super.initState();
     _reviewerNotesController = TextEditingController();
-    final service = ref.read(supabaseClientServiceProvider);
-    _owner = service.isInitialized ? service.client.auth.currentUser?.id : null;
+    _owner = ref.read(adminResearchActorReaderProvider)();
     _loadData();
   }
 
@@ -79,9 +86,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             ),
           )
           .toList();
-      if (!mounted ||
-          ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
-              _owner) {
+      if (!mounted || ref.read(adminResearchActorReaderProvider)() != _owner) {
         return;
       }
       _reviewContext = context;
@@ -188,8 +193,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
     if (confirmed != true ||
         !mounted ||
         _reviewContext == null ||
-        ref.read(supabaseClientServiceProvider).client.auth.currentUser?.id !=
-            _owner) {
+        ref.read(adminResearchActorReaderProvider)() != _owner) {
       return;
     }
 
@@ -463,6 +467,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                       isPersian: isFa,
                     ),
 
+                  // Only server-supplied related-article metadata is displayed.
+                  // Never infer impacted titles from the research proposal.
+                  _buildRelatedArticlesImpact(isFa),
                   const SizedBox(height: 24),
 
                   // Editorial Reviewer Controls & Human Authorization
@@ -484,6 +491,81 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                   _buildReviewerControls(isFa),
                 ],
               ),
+      ),
+    );
+  }
+
+  /// Displays only related articles explicitly returned in the authenticated
+  /// review context. No mock lookup or inferred impact is used in production.
+  Widget _buildRelatedArticlesImpact(bool isFa) {
+    final base = _reviewContext?['base'];
+    final raw = base is Map ? base['related_articles'] : null;
+    if (raw is! List) return const SizedBox.shrink();
+    final entries = <Map<String, String>>[];
+    for (final value in raw) {
+      if (value is! Map ||
+          value['article_id'] is! String ||
+          value['title'] is! String) {
+        continue;
+      }
+      final title = (value['title'] as String).trim();
+      if (title.isEmpty) continue;
+      entries.add({
+        'title': title,
+        'reason': value['impact_reason'] is String
+            ? (value['impact_reason'] as String).trim()
+            : '',
+      });
+    }
+    if (entries.isEmpty) return const SizedBox.shrink();
+    return Container(
+      margin: const EdgeInsets.only(top: 12, bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isFa
+                ? 'مقالات مرتبط متأثر از تغییرات این منبع:'
+                : 'Affected Related Articles:',
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              color: AppColors.navy,
+            ),
+          ),
+          const SizedBox(height: 8),
+          for (final entry in entries)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    entry['title']!,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy,
+                    ),
+                  ),
+                  if (entry['reason']!.isNotEmpty)
+                    Text(
+                      entry['reason']!,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
