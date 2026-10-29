@@ -16,7 +16,7 @@ const body = () => ({
   locale: "en",
   authorized_data_scopes: [],
   context: { article_id: null, section_id: null, case_id: null },
-  messages: [{ role: "user", content: "Synthetic question" }],
+  messages: [{ role: "user", content: "What are the Canada student visa requirements?" }],
 });
 const evidence = () => ({
   claim_id: id,
@@ -254,4 +254,21 @@ Deno.test("wire date formats reject impossible dates rather than JavaScript norm
   }
   equal(contractValid("Timestamp", "2024-02-29T00:00:00.123456Z"), true);
   equal(contractValid("Date", "2024-02-29"), true);
+});
+
+
+Deno.test("general-purpose questions do not require official evidence", async () => {
+  const result = await run({
+    input: {
+      ...body(),
+      messages: [{ role: "user", content: "Explain what a binary search tree is" }],
+    },
+    generated: { text: "A binary search tree stores ordered keys for log-time lookup." },
+    evidence: [],
+  });
+  equal(result.status, 200);
+  equal(result.data.data.evidence_state, "not_applicable");
+  equal(result.data.data.uncertain, false);
+  equal(result.data.data.reply.includes("binary search"), true);
+  equal(result.providerCalls >= 1, true);
 });

@@ -1,0 +1,796 @@
+{
+  "captured_at": "2026-10-24T13:16:22.447031+00:00",
+  "categories": [
+    {
+      "id": "301be2fe-ce4f-467d-bb4b-ab732d69758d",
+      "slug": "study",
+      "status": "published"
+    },
+    {
+      "id": "050dd934-26da-46c4-a0c1-9f92a23171d2",
+      "slug": "work",
+      "status": "published"
+    },
+    {
+      "id": "52bc6f91-a3fa-45ad-94b0-4da11aa15c52",
+      "slug": "investment",
+      "status": "published"
+    },
+    {
+      "id": "061f9ef0-1596-47ed-a617-666164e86bdd",
+      "slug": "tourist",
+      "status": "published"
+    },
+    {
+      "id": "a9f87de2-612e-46c6-b3ad-87c7aee281dc",
+      "slug": "marriage",
+      "status": "published"
+    },
+    {
+      "id": "4dbb4654-8476-4550-a36e-a72984d39428",
+      "slug": "medical-study",
+      "status": "published"
+    },
+    {
+      "id": "601a07d1-6923-4b88-9c02-d378f7826f96",
+      "slug": "medical-work",
+      "status": "published"
+    },
+    {
+      "id": "979fed3b-361c-4bd0-b225-70d7035e13c0",
+      "slug": "credential-recognition",
+      "status": "published"
+    }
+  ],
+  "counts": {
+    "destinations": 22,
+    "drafts": 22,
+    "knowledge_items": 7,
+    "requirements": 8,
+    "source_documents": 6,
+    "source_snapshots": 15,
+    "steps": 18,
+    "visa_programs": 10
+  },
+  "destinations": [
+    {
+      "code": "AT",
+      "id": "b4e18089-9f14-4f46-bbe2-0a3675158756",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Austria",
+          "summary": "Austria appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "اتریش",
+          "summary": "اتریش در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "austria",
+      "status": "published"
+    },
+    {
+      "code": "AU",
+      "id": "76c17ec6-5543-4afe-8ff4-a7cc87224c29",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Australia",
+          "summary": "Australia appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "استرالیا",
+          "summary": "استرالیا در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "australia",
+      "status": "published"
+    },
+    {
+      "code": "BE",
+      "id": "56cb4e0b-0986-463d-a14d-83c46acd8510",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Belgium",
+          "summary": "Belgium appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "بلژیک",
+          "summary": "بلژیک در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "belgium",
+      "status": "published"
+    },
+    {
+      "code": "CA",
+      "id": "0df49cae-7fbf-4ca3-81a7-cd4efcf86cbe",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "کانادا",
+          "summary": "کانادا در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "Canada",
+          "summary": "Canada appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "canada",
+      "status": "published"
+    },
+    {
+      "code": "CH",
+      "id": "38dd0c2f-7686-4dc6-b0ea-38ab7f0657e3",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Switzerland",
+          "summary": "Switzerland appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "سوئیس",
+          "summary": "سوئیس در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "switzerland",
+      "status": "published"
+    },
+    {
+      "code": "DE",
+      "id": "c967cf80-3a4d-428e-864d-af412560f0ca",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Germany",
+          "summary": "Germany appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "آلمان",
+          "summary": "آلمان در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "germany",
+      "status": "published"
+    },
+    {
+      "code": "DK",
+      "id": "4b6dc2ca-fc06-43d8-9dfb-4827ad0117ee",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "دانمارک",
+          "summary": "دانمارک در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "Denmark",
+          "summary": "Denmark appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "denmark",
+      "status": "published"
+    },
+    {
+      "code": "ES",
+      "id": "940d6321-1be6-49ff-9e57-63d9bfc6d581",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Spain",
+          "summary": "Spain appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "اسپانیا",
+          "summary": "اسپانیا در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "spain",
+      "status": "published"
+    },
+    {
+      "code": "FI",
+      "id": "cbe70703-64a2-4d79-90e0-b2fb7345cfba",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Finland",
+          "summary": "Finland appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "فنلاند",
+          "summary": "فنلاند در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "finland",
+      "status": "published"
+    },
+    {
+      "code": "FR",
+      "id": "bb042f76-e226-4f5d-a370-9fa0b03858a7",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "فرانسه",
+          "summary": "فرانسه در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "France",
+          "summary": "France appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "france",
+      "status": "published"
+    },
+    {
+      "code": "GB",
+      "id": "34635c32-b831-46f9-ad7f-be8c2d090d45",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "United Kingdom",
+          "summary": "United Kingdom appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "انگلستان",
+          "summary": "انگلستان در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "united-kingdom",
+      "status": "published"
+    },
+    {
+      "code": "IT",
+      "id": "19c1f981-d2b9-445c-96a7-519ee0d856c7",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "ایتالیا",
+          "summary": "ایتالیا در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "Italy",
+          "summary": "Italy appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "italy",
+      "status": "published"
+    },
+    {
+      "code": "JP",
+      "id": "3339a19c-fe9f-4f27-b77f-2c7e41054cea",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Japan",
+          "summary": "Japan appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "ژاپن",
+          "summary": "ژاپن در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "japan",
+      "status": "published"
+    },
+    {
+      "code": "MY",
+      "id": "3de6fbd1-87ef-4804-8528-77eb4e2dc625",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "مالزی",
+          "summary": "مالزی در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "Malaysia",
+          "summary": "Malaysia appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "malaysia",
+      "status": "published"
+    },
+    {
+      "code": "NL",
+      "id": "18c948bb-2866-4027-82da-3df98196f747",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Netherlands",
+          "summary": "Netherlands appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "هلند",
+          "summary": "هلند در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "netherlands",
+      "status": "published"
+    },
+    {
+      "code": "NO",
+      "id": "a132cf08-9670-4bb1-9074-d2a67dda7d93",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Norway",
+          "summary": "Norway appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "نروژ",
+          "summary": "نروژ در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "norway",
+      "status": "published"
+    },
+    {
+      "code": "NZ",
+      "id": "40c9062e-b523-422b-bbe1-b2d8b731138d",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "New Zealand",
+          "summary": "New Zealand appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "نیوزیلند",
+          "summary": "نیوزیلند در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "new-zealand",
+      "status": "published"
+    },
+    {
+      "code": "OM",
+      "id": "40a7aaaa-47e0-4475-8445-ef7c55b41df3",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Oman",
+          "summary": "Oman appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "عمان",
+          "summary": "عمان در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "oman",
+      "status": "published"
+    },
+    {
+      "code": "SE",
+      "id": "690b97ed-abdc-4d49-8162-c8ff99d4a6f4",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Sweden",
+          "summary": "Sweden appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "سوئد",
+          "summary": "سوئد در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "sweden",
+      "status": "published"
+    },
+    {
+      "code": "TR",
+      "id": "fc69b604-f354-4239-9970-6c8677501bdf",
+      "localizations": [
+        {
+          "locale": "en",
+          "name": "Turkey",
+          "summary": "Turkey appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        },
+        {
+          "locale": "fa",
+          "name": "ترکیه",
+          "summary": "ترکیه در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        }
+      ],
+      "slug": "turkey",
+      "status": "published"
+    },
+    {
+      "code": "US",
+      "id": "05cb5db1-221f-4dae-b3c7-6e70a51db9be",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "آمریکا",
+          "summary": "آمریکا در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "United States",
+          "summary": "United States appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "united-states",
+      "status": "published"
+    },
+    {
+      "code": "AE",
+      "id": "69c2c9d8-1f52-4dd9-9019-cdf46de42c92",
+      "localizations": [
+        {
+          "locale": "fa",
+          "name": "امارات",
+          "summary": "امارات در فهرست مقاصد راد برای مشاوره مهاجرت و تحصیل بین‌المللی قرار دارد. وجود مسیرهای ویزا و شرایط واجدشرایط بودن باید پیش از هر اقدام با منابع رسمی دولتی جاری تأیید شود."
+        },
+        {
+          "locale": "en",
+          "name": "United Arab Emirates",
+          "summary": "United Arab Emirates appears in the RAD destination catalog for immigration and international-education consultation. Availability of specific visa routes and eligibility rules must be confirmed against current official government sources before any application."
+        }
+      ],
+      "slug": "united-arab-emirates",
+      "status": "published"
+    }
+  ],
+  "draft_statuses": {
+    "review": 22
+  },
+  "programs": [
+    {
+      "category_id": "301be2fe-ce4f-467d-bb4b-ab732d69758d",
+      "destination_id": "0df49cae-7fbf-4ca3-81a7-cd4efcf86cbe",
+      "effective_date": null,
+      "fees": null,
+      "id": "c042ac01-e387-4f10-88fb-449a0bed8c4c",
+      "localizations": [
+        {
+          "description": "This RAD catalog entry covers study pathways in Canada. RAD provides consultation and guidance based on published service content. Study permit eligibility, designated learning institutions, financial requirements, and processing rules are set by Immigration, Refugees and Citizenship Canada (IRCC) and change over time. Always verify current official rules before applying.",
+          "locale": "en",
+          "summary": "RAD publishes guidance on admission and study pathways in Canada. Details must be checked against current official sources before action.",
+          "title": "Study in Canada"
+        },
+        {
+          "description": "این ورودی فهرست راد مسیرهای تحصیل در کانادا را پوشش می‌دهد. راد بر اساس محتوای خدماتی منتشرشده مشاوره و راهنمایی ارائه می‌کند. شرایط مجوز تحصیل، مؤسسات آموزشی تعیین‌شده، الزامات مالی و قواعد رسیدگی توسط اداره مهاجرت کانادا (IRCC) تعیین می‌شود و ممکن است تغییر کند. پیش از اقدام، قواعد رسمی جاری را بررسی کنید.",
+          "locale": "fa",
+          "summary": "راد درباره پذیرش و مسیر تحصیل در کانادا محتوای تخصصی منتشر کرده است. جزئیات باید پیش از اقدام با منابع رسمی به‌روز تطبیق داده شود.",
+          "title": "تحصیل در کانادا"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000005",
+      "processing_time": null,
+      "requirements": 8,
+      "slug": "study-canada",
+      "status": "published",
+      "steps": 10
+    },
+    {
+      "category_id": "050dd934-26da-46c4-a0c1-9f92a23171d2",
+      "destination_id": "c967cf80-3a4d-428e-864d-af412560f0ca",
+      "effective_date": null,
+      "fees": null,
+      "id": "4181b05f-480e-4317-9ff6-41d178ce613e",
+      "localizations": [
+        {
+          "description": "This entry covers work pathways in Germany as discussed in RAD published content. Work visa categories, recognition of qualifications, and employment conditions are set by German federal authorities and can change. Verify current official guidance before applying.",
+          "locale": "en",
+          "summary": "RAD publishes information about work pathways in Germany. Eligibility depends on the applicant and current rules.",
+          "title": "Work in Germany"
+        },
+        {
+          "description": "این ورودی مسیرهای کار در آلمان را مطابق محتوای منتشرشده راد پوشش می‌دهد. انواع ویزای کار، معادل‌سازی مدارک و شرایط اشتغال توسط مراجع فدرال آلمان تعیین می‌شود و ممکن است تغییر کند. پیش از اقدام راهنمایی رسمی جاری را بررسی کنید.",
+          "locale": "fa",
+          "summary": "راد درباره مسیرهای کار در آلمان محتوا منتشر کرده است. شرایط هر مسیر وابسته به سابقه و مقررات جاری است.",
+          "title": "کار در آلمان"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000006",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "work-germany",
+      "status": "published",
+      "steps": 8
+    },
+    {
+      "category_id": "52bc6f91-a3fa-45ad-94b0-4da11aa15c52",
+      "destination_id": "0df49cae-7fbf-4ca3-81a7-cd4efcf86cbe",
+      "effective_date": null,
+      "fees": null,
+      "id": "694b8185-e3e3-416e-86d7-fde0dac9c078",
+      "localizations": [
+        {
+          "description": "This entry refers to Canada investment-related immigration topics published in RAD/DigiVisa content. Investment and business immigration pathways change frequently and require case-specific official assessment. Do not treat this catalog summary as current eligibility advice.",
+          "locale": "en",
+          "summary": "This topic is published by DigiVisa and requires official review because programs change.",
+          "title": "Investment in Canada"
+        },
+        {
+          "description": "این ورودی به موضوعات مهاجرت سرمایه‌گذاری کانادا در محتوای راد/دیجی‌ویزا اشاره دارد. مسیرهای سرمایه‌گذاری و کسب‌وکار به‌طور مکرر تغییر می‌کنند و نیازمند ارزیابی رسمی موردی هستند. این خلاصه را به‌عنوان مشاوره واجدشرایط بودن جاری تلقی نکنید.",
+          "locale": "fa",
+          "summary": "این موضوع در دیجی‌ویزا منتشر شده و به دلیل تغییرپذیری برنامه‌ها نیازمند بازبینی رسمی پیش از استفاده است.",
+          "title": "سرمایه‌گذاری در کانادا"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000007",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "investment-canada",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "301be2fe-ce4f-467d-bb4b-ab732d69758d",
+      "destination_id": "76c17ec6-5543-4afe-8ff4-a7cc87224c29",
+      "effective_date": null,
+      "fees": null,
+      "id": "bdb56d20-40e0-4a5c-8011-c677bb16efa1",
+      "localizations": [
+        {
+          "description": "This entry covers study topics in Australia based on RAD service content. Student visa subclasses and education provider rules are set by the Australian Government and change over time. Verify current official requirements before applying.",
+          "locale": "en",
+          "summary": "RAD covers Australia in its study visa and medical education services.",
+          "title": "Study in Australia"
+        },
+        {
+          "description": "این ورودی موضوعات تحصیل در استرالیا را بر اساس محتوای خدماتی راد پوشش می‌دهد. زیرکلاس‌های ویزای دانشجویی و قواعد ارائه‌دهندگان آموزشی توسط دولت استرالیا تعیین می‌شود و ممکن است تغییر کند. پیش از اقدام الزامات رسمی جاری را بررسی کنید.",
+          "locale": "fa",
+          "summary": "راد استرالیا را در خدمات ویزای تحصیلی و تحصیل پزشکی پوشش می‌دهد.",
+          "title": "تحصیل در استرالیا"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000001",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "study-australia",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "301be2fe-ce4f-467d-bb4b-ab732d69758d",
+      "destination_id": "34635c32-b831-46f9-ad7f-be8c2d090d45",
+      "effective_date": null,
+      "fees": null,
+      "id": "68847591-834c-4f49-8dee-9bc491bd0fcf",
+      "localizations": [
+        {
+          "description": "This entry covers study topics in the United Kingdom based on RAD service content. Student visa rules, sponsorship, and financial requirements are set by UK authorities and change over time. Verify current official guidance before applying.",
+          "locale": "en",
+          "summary": "RAD covers the United Kingdom in its study and medical education services.",
+          "title": "Study in the United Kingdom"
+        },
+        {
+          "description": "این ورودی موضوعات تحصیل در بریتانیا را بر اساس محتوای خدماتی راد پوشش می‌دهد. قواعد ویزای دانشجویی، اسپانسری و الزامات مالی توسط مراجع بریتانیا تعیین می‌شود و ممکن است تغییر کند. پیش از اقدام راهنمایی رسمی جاری را بررسی کنید.",
+          "locale": "fa",
+          "summary": "راد انگلستان را در خدمات تحصیلی و تحصیل پزشکی پوشش می‌دهد.",
+          "title": "تحصیل در انگلستان"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000001",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "study-united-kingdom",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "4dbb4654-8476-4550-a36e-a72984d39428",
+      "destination_id": "c967cf80-3a4d-428e-864d-af412560f0ca",
+      "effective_date": null,
+      "fees": null,
+      "id": "58f44b94-ca96-4e7b-9f34-1a7a58ccf610",
+      "localizations": [
+        {
+          "description": "This entry covers medical study topics in Germany based on RAD specialist content. University admission, language requirements, and residence rules for study are set by German institutions and authorities. Confirm current official criteria with the target university and competent authorities.",
+          "locale": "en",
+          "summary": "Medical study in Germany is a published RAD topic.",
+          "title": "Medical study in Germany"
+        },
+        {
+          "description": "این ورودی موضوعات تحصیل پزشکی در آلمان را بر اساس محتوای تخصصی راد پوشش می‌دهد. پذیرش دانشگاه، الزامات زبان و قواعد اقامت تحصیلی توسط مؤسسات و مراجع آلمانی تعیین می‌شود. معیارهای رسمی جاری را با دانشگاه مقصد و مراجع صالح تأیید کنید.",
+          "locale": "fa",
+          "summary": "تحصیل پزشکی در آلمان یکی از موضوعات منتشرشده در وب‌سایت‌های راد است.",
+          "title": "تحصیل پزشکی در آلمان"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000008",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "medical-study-germany",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "601a07d1-6923-4b88-9c02-d378f7826f96",
+      "destination_id": "34635c32-b831-46f9-ad7f-be8c2d090d45",
+      "effective_date": null,
+      "fees": null,
+      "id": "6c3ecd23-cfc1-4b8e-a0ea-f7e4b16f2d34",
+      "localizations": [
+        {
+          "description": "This entry covers medical work topics in the United Kingdom based on RAD published guidance. Professional registration, visa categories, and employer requirements are set by UK professional and immigration authorities. Confirm current official rules for your profession.",
+          "locale": "en",
+          "summary": "RAD publishes services and guidance related to doctors working in the United Kingdom.",
+          "title": "Medical work in the United Kingdom"
+        },
+        {
+          "description": "این ورودی موضوعات کار پزشکی در بریتانیا را بر اساس راهنمایی منتشرشده راد پوشش می‌دهد. ثبت حرفه‌ای، انواع ویزا و الزامات کارفرما توسط مراجع حرفه‌ای و مهاجرتی بریتانیا تعیین می‌شود. قواعد رسمی جاری را برای حرفه خود تأیید کنید.",
+          "locale": "fa",
+          "summary": "راد خدمات محتوایی مرتبط با کار پزشکان در انگلستان را منتشر کرده است.",
+          "title": "کار پزشکان در انگلستان"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000008",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "medical-work-united-kingdom",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "979fed3b-361c-4bd0-b225-70d7035e13c0",
+      "destination_id": "c967cf80-3a4d-428e-864d-af412560f0ca",
+      "effective_date": null,
+      "fees": null,
+      "id": "eab909d4-8286-4f40-820e-d6a51ce9d0fc",
+      "localizations": [
+        {
+          "description": "This entry covers medical credential recognition in Germany as described in RAD specialist content. Recognition procedures are administered by competent German authorities and vary by profession and state. This is not a substitute for official recognition guidance.",
+          "locale": "en",
+          "summary": "Medical credential recognition in Germany is covered in RAD specialist content.",
+          "title": "Medical credential recognition in Germany"
+        },
+        {
+          "description": "این ورودی معادل‌سازی مدارک پزشکی در آلمان را مطابق محتوای تخصصی راد پوشش می‌دهد. فرآیندهای معادل‌سازی توسط مراجع صالح آلمانی انجام می‌شود و بر اساس حرفه و ایالت متفاوت است. این متن جایگزین راهنمایی رسمی معادل‌سازی نیست.",
+          "locale": "fa",
+          "summary": "معادل‌سازی مدارک پزشکی در آلمان در محتوای تخصصی راد پوشش داده شده است.",
+          "title": "معادل‌سازی مدارک پزشکی در آلمان"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000004",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "credential-recognition-germany",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "601a07d1-6923-4b88-9c02-d378f7826f96",
+      "destination_id": "690b97ed-abdc-4d49-8162-c8ff99d4a6f4",
+      "effective_date": null,
+      "fees": null,
+      "id": "b0076e00-2852-4421-8e6f-0feb4984ab7f",
+      "localizations": [
+        {
+          "description": "This entry covers medical work and credential topics in Sweden based on RAD content. Professional licensing and residence permits are governed by Swedish authorities. Confirm current official requirements for your profession and pathway.",
+          "locale": "en",
+          "summary": "RAD covers medical work migration and credential recognition in Sweden.",
+          "title": "Medical work in Sweden"
+        },
+        {
+          "description": "این ورودی موضوعات کار پزشکی و معادل‌سازی در سوئد را بر اساس محتوای راد پوشش می‌دهد. مجوز حرفه‌ای و اجازه اقامت تحت نظارت مراجع سوئدی است. الزامات رسمی جاری را برای حرفه و مسیر خود تأیید کنید.",
+          "locale": "fa",
+          "summary": "راد مهاجرت کاری پزشکان و معادل‌سازی مدارک در سوئد را پوشش می‌دهد.",
+          "title": "کار پزشکان در سوئد"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000008",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "medical-work-sweden",
+      "status": "published",
+      "steps": 0
+    },
+    {
+      "category_id": "061f9ef0-1596-47ed-a617-666164e86bdd",
+      "destination_id": "0df49cae-7fbf-4ca3-81a7-cd4efcf86cbe",
+      "effective_date": null,
+      "fees": null,
+      "id": "3877e1fe-c017-446b-9c89-16d3b315fa57",
+      "localizations": [
+        {
+          "description": "This entry covers Canada visitor (temporary resident) visa topics as listed in RAD service content. Visitor eligibility, biometrics, and supporting documents are governed by IRCC. RAD does not guarantee outcomes; confirm current official requirements before applying.",
+          "locale": "en",
+          "summary": "Canada visitor visas appear in RAD Mohajer services and content.",
+          "title": "Canada visitor visa"
+        },
+        {
+          "description": "این ورودی موضوعات ویزای بازدیدکننده (اقامت موقت) کانادا را مطابق محتوای خدماتی راد پوشش می‌دهد. شرایط واجدشرایط بودن، بیومتریک و مدارک پشتیبان تحت نظارت IRCC است. راد نتیجه‌ای را تضمین نمی‌کند؛ پیش از اقدام الزامات رسمی جاری را تأیید کنید.",
+          "locale": "fa",
+          "summary": "ویزای توریستی کانادا در فهرست خدمات و محتوای راد مهاجر قرار دارد.",
+          "title": "ویزای توریستی کانادا"
+        }
+      ],
+      "primary_source_id": "10000000-0000-4000-8000-000000000008",
+      "processing_time": null,
+      "requirements": 0,
+      "slug": "tourist-canada",
+      "status": "published",
+      "steps": 0
+    }
+  ],
+  "sources": [
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-07T18:02:49.639544+00:00",
+      "id": "4cdda0b2-4ceb-4262-bbad-0a700db56cda",
+      "jurisdiction": "IR",
+      "language": "fa",
+      "last_content_hash": "1720f460d8addfd0398371ee93210730785222f4a1ce36c5a8e01f4865eefc87",
+      "last_seen": "2026-10-07T18:02:49.639544+00:00",
+      "title": "تماس با ما",
+      "url": "https://radmohajer.ir/fa/contacts"
+    },
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-07T18:02:49.639544+00:00",
+      "id": "46b7753a-d790-4b0e-83cc-73957c5770e8",
+      "jurisdiction": "IR",
+      "language": "en",
+      "last_content_hash": "009442bcb63ee35e40eb4d136015083dcc3610f5dc805d5f5be7d4540fa6eeb3",
+      "last_seen": "2026-10-07T18:02:49.639544+00:00",
+      "title": "Contact us",
+      "url": "https://radmohajer.ir/en/contact-us"
+    },
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-07T18:02:49.639544+00:00",
+      "id": "2358a78d-cdef-4ee2-a54e-f5d454a067e4",
+      "jurisdiction": "IR",
+      "language": "en",
+      "last_content_hash": "549c84fa5e3c3734106847d77c071f7bdf2d9582c05210c728a76cc4ca112d59",
+      "last_seen": "2026-10-07T18:02:49.639544+00:00",
+      "title": "About us",
+      "url": "https://radmohajer.ir/en/about-us"
+    },
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-03T21:17:44.465934+00:00",
+      "id": "49719431-f2eb-486f-8120-cb129474cd31",
+      "jurisdiction": null,
+      "language": "fa",
+      "last_content_hash": "a99199f438e3d2e4134a8d1be35c78473e4f7f6e60edc51d9760ec5f38b00110",
+      "last_seen": "2026-10-24T03:27:03.478+00:00",
+      "title": "digivisa.ir",
+      "url": "https://digivisa.ir/"
+    },
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-03T21:17:45.525912+00:00",
+      "id": "ee584003-0e56-4d26-942c-69e1a0451ad5",
+      "jurisdiction": null,
+      "language": "fa",
+      "last_content_hash": "45fd14eb78680d23ee40201b886657a07bf4076750e657da4f73557c4164d732",
+      "last_seen": "2026-10-24T03:27:04.381+00:00",
+      "title": "radmohajer.ir",
+      "url": "https://radmohajer.ir/fa/"
+    },
+    {
+      "authority": "rad_official",
+      "first_seen": "2026-10-03T21:17:43.030139+00:00",
+      "id": "b04986df-bf1b-4939-9b69-eba4e995a315",
+      "jurisdiction": null,
+      "language": "fa",
+      "last_content_hash": "bebfb86a0ed0b41083d522ced175b77234719cb0b8225d445b8c615fb7189012",
+      "last_seen": "2026-10-24T03:27:05.876+00:00",
+      "title": "radvisa.com",
+      "url": "https://radvisa.com/"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# Plan 3 pipeline fingerprints must survive Windows/Linux checkouts.
+tools/plan3_content/** text eol=lf
+scripts/tests/test_plan3_content.py text eol=lf
+requirements-plan3.txt text eol=lf
+# Preserve the exact bytes sealed by CHECKSUMS.sha256.
+artifacts/RAD_PLAN3_VISA_CONTENT_20261024/** -text
+tools/content_consolidation/** text eol=lf
+scripts/tests/test_content_consolidation.py text eol=lf
+artifacts/RAD_CONTENT_CONSOLIDATION_20261026/** -text
+
+tools/editorial_reference_capture.py text eol=lf
+scripts/tests/test_editorial_references.py text eol=lf
+artifacts/RAD_CONTENT_REFERENCE_CAPTURE_20261026/** -text
+
+# Preserve sealed Windows manifest bytes while treating CRLF as intentional.
+artifacts/RAD_CONTENT_CONSOLIDATION_20261026/manifest.json whitespace=cr-at-eol
+
+# Continuation review manifests hash exact portable bytes.
+tools/content_completion/** text eol=lf
+scripts/tests/test_content_completion_delivery.py text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/prepared/*.json text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/prepared/*.gz -text
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.json text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.sql text eol=lf
+_audit/RAD_CONTENT_COMPLETION_20261027/import-review/*.gz -text
+
+# Preserve original transferred TXT/HTML/reference bytes and sealed handoff hashes.
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/** -text
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/assets/** -diff
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/reference-evidence/** -diff
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/prepared/source-url-inventory.csv whitespace=cr-at-eol
+scripts/tests/test_phase_source_evidence.py text eol=lf

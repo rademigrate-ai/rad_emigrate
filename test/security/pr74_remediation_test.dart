@@ -335,6 +335,20 @@ void main() {
       final fetchedLocales = <String>[];
       final service = await tester.runAsync(
         () => mockSupabaseService((r) async {
+          final payload = jsonDecode(r.body) as Map;
+          if (r.url.path.endsWith('get_editorial_article')) {
+            fetchedLocales.add(payload['p_locale'] as String);
+            return rpcJson(article);
+          }
+          if (r.url.path.endsWith('get_editorial_reference_links')) {
+            return rpcJson({
+              'data': {
+                'revision_id': (article['data'] as Map)['revision_id'],
+                'links': [],
+                'capture_status': 'not_captured',
+              },
+            });
+          }
           final request = (jsonDecode(r.body) as Map)['p_request'] as Map;
           if (r.url.path.endsWith('search_visa_articles')) {
             return rpcJson(
@@ -382,7 +396,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(fetchedLocales, ['en']);
+      expect(fetchedLocales, isNotEmpty);
+      expect(fetchedLocales, everyElement('en'));
       expect(find.textContaining('alphabravo'), findsOneWidget);
       expect(
         router

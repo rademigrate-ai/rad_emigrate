@@ -151,6 +151,7 @@ class _RadAiBirdState extends State<RadAiBird>
                 padding: EdgeInsets.all(widget.size * 0.08),
                 child: Image.asset(
                   widget.assetName,
+                  semanticLabel: widget.semanticLabel,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
                 ),

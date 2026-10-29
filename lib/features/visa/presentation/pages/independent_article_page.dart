@@ -93,6 +93,7 @@ class IndependentArticlePage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
+            tooltip: 'جستجو',
             onPressed: () => context.go('/visa/search'),
           ),
         ],

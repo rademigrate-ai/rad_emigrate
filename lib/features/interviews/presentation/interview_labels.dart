@@ -9,6 +9,9 @@ class InterviewLabels {
   bool get fa => language == 'fa';
 
   String get title => fa ? 'مصاحبه و نوبت‌دهی' : 'Interviews & appointments';
+
+  /// Compact dashboard-tile label (dashboard quick actions).
+  String get shortTitle => fa ? 'مصاحبه‌ها' : 'Interviews';
   String get intro => fa
       ? 'درخواست نوبت برای جلسه داخلی RAD ثبت کنید. RAD نوبت سفارت یا کنسولگری را رزرو نمی‌کند و ظرفیت رسمی نمایش نمی‌دهد.'
       : 'Request a slot for an internal RAD session. RAD does not book embassy or consulate appointments and never displays official availability.';
@@ -57,11 +60,11 @@ class InterviewLabels {
       ? 'سیستم نوبت‌دهی آنلاین هنوز راه‌اندازی نشده است. درخواست شما ثبت نشد.'
       : 'Online scheduling is not deployed yet. Your request was not stored.';
   String get rescheduleUnavailable => fa
-      ? 'تغییر زمان نوبت پس از استقرار قابلیت Backend فعال می‌شود.'
-      : 'Rescheduling becomes available once the Backend capability is deployed.';
+      ? 'تغییر زمان نوبت پس از راه‌اندازی این قابلیت فعال می‌شود.'
+      : 'Rescheduling becomes available once this capability is launched.';
   String get cancelUnavailable => fa
-      ? 'لغو نوبت پس از استقرار قابلیت Backend فعال می‌شود.'
-      : 'Cancellation becomes available once the Backend capability is deployed.';
+      ? 'لغو نوبت پس از راه‌اندازی این قابلیت فعال می‌شود.'
+      : 'Cancellation becomes available once this capability is launched.';
   String get reschedule => fa ? 'تغییر زمان' : 'Reschedule';
   String get cancel => fa ? 'لغو نوبت' : 'Cancel appointment';
   String get empty =>

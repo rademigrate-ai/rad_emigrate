@@ -10,6 +10,9 @@ class CostCalculatorLabels {
 
   String get title => fa ? 'هزینه‌های مهاجرت' : 'Immigration costs';
 
+  /// Compact dashboard-tile label (dashboard quick actions).
+  String get shortTitle => fa ? 'هزینه‌ها' : 'Cost calculator';
+
   String get intro => fa
       ? 'مبالغ از متن کاتالوگ استخراج می‌شوند؛ تأیید رسمی در سطح هر مبلغ موجود نیست. این محاسبه شامل همه هزینه‌های مهاجرت نیست.'
       : 'Figures are parsed from catalog text without field-level official verification. Unlisted immigration costs are excluded.';

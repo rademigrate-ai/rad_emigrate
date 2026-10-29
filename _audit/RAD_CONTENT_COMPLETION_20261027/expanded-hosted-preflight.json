@@ -1,0 +1,51 @@
+{
+  "project": "epolbumcfbohtmgvomki",
+  "import_gate": [
+    {
+      "enabled": false,
+      "project_ref": "epolbumcfbohtmgvomki"
+    }
+  ],
+  "observed_at": "2026-10-27T21:07:43.716775+00:00",
+  "reference_maps": 743,
+  "rich_revisions": 743,
+  "server_version": "17.11",
+  "imported_published": 0,
+  "snapshot_conflicts": 0,
+  "planned_existing_heads": 111,
+  "existing_new_article_ids": 0,
+  "missing_destination_codes": [
+    "AM",
+    "BY",
+    "CN",
+    "CY",
+    "CZ",
+    "EC",
+    "GE",
+    "GR",
+    "HR",
+    "HU",
+    "ID",
+    "IE",
+    "IN",
+    "IS",
+    "KW",
+    "LK",
+    "LU",
+    "MX",
+    "PH",
+    "PL",
+    "PT",
+    "QA",
+    "RO",
+    "RU",
+    "SI",
+    "SK",
+    "TH",
+    "UA",
+    "ZA"
+  ],
+  "source_identity_conflicts": 0,
+  "planned_new_article_locales": 80,
+  "changed_or_missing_existing_heads": 0
+}

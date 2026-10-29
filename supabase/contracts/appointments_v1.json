@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RAD appointment adapter v1",
+  "status": "PR82 implementation; integration candidate; human acceptance pending",
+  "canonical_dependencies": {
+    "registry": "rad_v1.json",
+    "migration": "20261024140100_plan2_interview_request_contracts.sql",
+    "unchanged_rpcs": [
+      "submit_interview_request",
+      "list_interview_requests",
+      "reschedule_interview_request",
+      "cancel_interview_request"
+    ]
+  },
+  "authentication": "authenticated EXECUTE and server auth.uid owner; Admin does not gain other-user access; anon/service_role denied",
+  "pagination": "existing unpaginated list, created_at DESC and id tie break",
+  "errors": {
+    "42501": "authentication/privilege",
+    "22023": "invalid input or terminal state",
+    "P0002": "missing or other owner",
+    "PT409": "same owner/key with different current payload"
+  },
+  "state_mapping": {
+    "submitted": "requested",
+    "pending_confirmation": "inReview",
+    "confirmed": "confirmed",
+    "rescheduled": "rescheduled",
+    "cancelled": "cancelled",
+    "completed": "completed"
+  },
+  "semantics": "preferred times are requests, never government slots or confirmed availability",
+  "rpcs": {
+    "list_rad_appointments": {},
+    "submit_rad_appointment": {
+      "p_title": "text",
+      "p_start_utc": "timestamptz",
+      "p_end_utc": "timestamptz|null",
+      "p_time_zone": "text|null",
+      "p_notes": "text",
+      "p_idempotency_key": "uuid"
+    },
+    "reschedule_rad_appointment": {
+      "p_appointment_id": "uuid",
+      "p_start_utc": "timestamptz",
+      "p_end_utc": "timestamptz|null",
+      "p_time_zone": "text|null",
+      "p_notes": "text"
+    },
+    "cancel_rad_appointment": {
+      "p_appointment_id": "uuid",
+      "p_reason": "text"
+    }
+  },
+  "receipt": {
+    "id": "uuid",
+    "user_id": "uuid",
+    "kind": "radSession",
+    "title": "nonempty text",
+    "notes": "text",
+    "start_utc": "timestamptz|null (legacy untimed requests)",
+    "end_utc": "timestamptz|null",
+    "time_zone": "text|null",
+    "status": "mapped state",
+    "created_at": "timestamptz",
+    "updated_at": "timestamptz",
+    "cancellation_reason": "text|null"
+  },
+  "limitations": [
+    "Flutter scheduling requires a non-null preferred time; legacy untimed rows fail closed rather than invent a date.",
+    "Retry key survives uncertain client outcome within repository lifetime; browser restart does not preserve it.",
+    "After reschedule a submit retry with original time returns PT409; use list to recover current state.",
+    "Same-key completed/cancelled submit receipt is rejected by Flutter; list reconciles it.",
+    "No owner-side confirmation or completion transition.",
+    "External frontend/backend owner review is pending in the RAD ChatGPT conversation."
+  ]
+}

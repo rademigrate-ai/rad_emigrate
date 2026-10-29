@@ -1,13 +1,14 @@
 // Appointment data layer.
 //
-// No interview/appointment RPC is installed on any verified Backend branch
-// today, so every operation probes for its capability and fails closed with
-// an explicit unavailable exception instead of fabricating availability,
-// confirmations, or embassy slots.
+// Uses the request-only appointment adapter. Missing capability fails closed;
+// preferred times never imply availability, confirmations, or embassy slots.
+
+import 'dart:convert';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/supabase/rpc_compat.dart';
+import '../../../core/supabase/rad_contract.dart';
 import '../../../core/supabase/server_receipt.dart';
 import '../../../core/supabase/supabase_client.dart';
 import '../domain/entities/interview_appointment.dart';
@@ -65,14 +66,15 @@ abstract class AppointmentRepository {
 }
 
 class SupabaseAppointmentRepository implements AppointmentRepository {
-  const SupabaseAppointmentRepository(this._service);
+  SupabaseAppointmentRepository(this._service);
 
-  static const String _listRpc = 'list_interview_requests';
-  static const String _submitRpc = 'submit_interview_request';
-  static const String _rescheduleRpc = 'reschedule_interview_request';
-  static const String _cancelRpc = 'cancel_interview_request';
+  static const String _listRpc = 'list_rad_appointments';
+  static const String _submitRpc = 'submit_rad_appointment';
+  static const String _rescheduleRpc = 'reschedule_rad_appointment';
+  static const String _cancelRpc = 'cancel_rad_appointment';
 
   final SupabaseClientService _service;
+  final Map<String, String> _pendingRequestKeys = {};
 
   @override
   Future<AppointmentListResult> listMyAppointments() async {
@@ -83,7 +85,8 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
       );
     }
     final client = _service.client;
-    if (client.auth.currentUser?.id == null) {
+    final owner = client.auth.currentUser?.id;
+    if (owner == null) {
       return const AppointmentListResult(
         appointments: [],
         capability: AppointmentCapability.unknown,
@@ -93,9 +96,14 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
       final rows = await client
           .rpc(_listRpc)
           .timeout(const Duration(seconds: 10));
+      if (client.auth.currentUser?.id != owner || rows is! List) {
+        throw const AppointmentException('appointment_session_changed');
+      }
       return AppointmentListResult(
-        appointments: (rows as List<dynamic>)
-            .map((row) => _fromRow(Map<String, dynamic>.from(row as Map)))
+        appointments: rows
+            .map(
+              (row) => _ownedRow(Map<String, dynamic>.from(row as Map), owner),
+            )
             .toList(growable: false),
         capability: AppointmentCapability.available,
       );
@@ -125,9 +133,22 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
     required String notes,
   }) async {
     final client = _requireClient();
-    if (client.auth.currentUser?.id == null) {
+    final owner = client.auth.currentUser?.id;
+    if (owner == null) {
       throw const AppointmentException('appointment_unauthenticated');
     }
+    final fingerprint = jsonEncode([
+      owner,
+      title,
+      startUtc.toUtc().toIso8601String(),
+      endUtc?.toUtc().toIso8601String(),
+      ianaZoneId,
+      notes,
+    ]);
+    final requestKey = _pendingRequestKeys.putIfAbsent(
+      fingerprint,
+      newRadRequestKey,
+    );
     try {
       final rows = await client
           .rpc(
@@ -138,17 +159,30 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
               'p_end_utc': endUtc?.toUtc().toIso8601String(),
               'p_time_zone': ianaZoneId,
               'p_notes': notes,
+              'p_idempotency_key': requestKey,
             },
           )
           .timeout(const Duration(seconds: 15));
       if (rows is! List || rows.length != 1) {
         throw const AppointmentException('appointment_invalid_receipt');
       }
-      final receipt = _fromRow(Map<String, dynamic>.from(rows.single as Map));
+      if (client.auth.currentUser?.id != owner) {
+        throw const AppointmentException('appointment_session_changed');
+      }
+      final receipt = _ownedRow(
+        Map<String, dynamic>.from(rows.single as Map),
+        owner,
+      );
       if (receipt.kind != AppointmentKind.radSession ||
-          receipt.startUtc != startUtc.toUtc()) {
+          receipt.status != AppointmentStatus.requested ||
+          receipt.startUtc != startUtc.toUtc() ||
+          receipt.title != title.trim() ||
+          receipt.endUtc != endUtc?.toUtc() ||
+          receipt.notes != notes ||
+          receipt.ianaZoneId != _normalizedZone(ianaZoneId)) {
         throw const AppointmentException('appointment_mismatched_receipt');
       }
+      _pendingRequestKeys.remove(fingerprint);
       return receipt;
     } catch (error) {
       if (isRpcMissingException(error)) {
@@ -167,8 +201,12 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
     required String notes,
   }) async {
     final client = _requireClient();
+    final owner = client.auth.currentUser?.id;
+    if (owner == null) {
+      throw const AppointmentException('appointment_unauthenticated');
+    }
     try {
-      await client
+      final rows = await client
           .rpc(
             _rescheduleRpc,
             params: {
@@ -180,6 +218,16 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
             },
           )
           .timeout(const Duration(seconds: 15));
+      final receipt = _mutationReceipt(rows, client, owner, appointmentId);
+      if (receipt.status != AppointmentStatus.rescheduled ||
+          receipt.startUtc != startUtc.toUtc() ||
+          receipt.endUtc != endUtc?.toUtc() ||
+          receipt.notes != notes ||
+          (ianaZoneId != null &&
+              ianaZoneId.trim().isNotEmpty &&
+              receipt.ianaZoneId != _normalizedZone(ianaZoneId))) {
+        throw const AppointmentException('appointment_mismatched_receipt');
+      }
     } catch (error) {
       if (isRpcMissingException(error)) {
         throw const AppointmentBackendUnavailableException(_rescheduleRpc);
@@ -194,13 +242,22 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
     required String reason,
   }) async {
     final client = _requireClient();
+    final owner = client.auth.currentUser?.id;
+    if (owner == null) {
+      throw const AppointmentException('appointment_unauthenticated');
+    }
     try {
-      await client
+      final rows = await client
           .rpc(
             _cancelRpc,
             params: {'p_appointment_id': appointmentId, 'p_reason': reason},
           )
           .timeout(const Duration(seconds: 15));
+      final receipt = _mutationReceipt(rows, client, owner, appointmentId);
+      if (receipt.status != AppointmentStatus.cancelled ||
+          (rows as List).single['cancellation_reason'] != reason.trim()) {
+        throw const AppointmentException('appointment_mismatched_receipt');
+      }
     } catch (error) {
       if (isRpcMissingException(error)) {
         throw const AppointmentBackendUnavailableException(_cancelRpc);
@@ -210,6 +267,37 @@ class SupabaseAppointmentRepository implements AppointmentRepository {
   }
 
   SupabaseClientService get _serviceRef => _service;
+
+  InterviewAppointment _mutationReceipt(
+    Object? rows,
+    SupabaseClient client,
+    String owner,
+    String id,
+  ) {
+    if (client.auth.currentUser?.id != owner ||
+        rows is! List ||
+        rows.length != 1) {
+      throw const AppointmentException('appointment_invalid_receipt');
+    }
+    final receipt = _ownedRow(
+      Map<String, dynamic>.from(rows.single as Map),
+      owner,
+    );
+    if (receipt.id != id || receipt.kind != AppointmentKind.radSession) {
+      throw const AppointmentException('appointment_mismatched_receipt');
+    }
+    return receipt;
+  }
+
+  InterviewAppointment _ownedRow(Map<String, dynamic> row, String owner) {
+    if (row['user_id'] != owner) {
+      throw const AppointmentException('appointment_invalid_receipt');
+    }
+    return _fromRow(row);
+  }
+
+  static String? _normalizedZone(String? value) =>
+      value == null || value.trim().isEmpty ? null : value.trim();
 
   SupabaseClient _requireClient() {
     if (!_serviceRef.isInitialized) {

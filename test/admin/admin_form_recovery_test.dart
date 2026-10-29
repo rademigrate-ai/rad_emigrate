@@ -1,3 +1,6 @@
+import '../support/mock_supabase_service.dart';
+
+import 'package:rad_emigrate/core/supabase/supabase_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -62,6 +65,9 @@ class _Sources extends AdminOperationsRepository {
     required String sourceType,
     required String trustClass,
     required String runtimeScope,
+    String? countryCode,
+    String? visaCategory,
+    String? requestKey,
   }) async {
     calls++;
     if (fail) throw StateError('private upstream details');
@@ -99,9 +105,16 @@ void main() {
     'Source rejects unusable URL and retains form on failure for safe retry',
     (tester) async {
       final repository = _Sources();
+      final service = await tester.runAsync(
+        () => mockSupabaseService((request) async => rpcJson([])),
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            supabaseClientServiceProvider.overrideWithValue(service!),
+            supabaseAuthUserIdProvider.overrideWith(
+              (ref) => Stream.value(testOwner),
+            ),
             adminOperationsRepositoryProvider.overrideWithValue(repository),
             adminConsoleProvider.overrideWith((ref) async => _data()),
           ],

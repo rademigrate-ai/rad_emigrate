@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "total_inaccessible_register_examined": 422,
+    "total_antigravity_recovered_unique_urls": 259,
+    "total_substantive_recovered_articles": 206,
+    "total_empty_or_listing_pages": 53,
+    "total_recovered_from_inaccessible_register": 206,
+    "total_truly_unresolved": 216,
+    "total_human_editorial_review_required": 183,
+    "total_characters_recovered": 836572
+  },
+  "country_distribution": {
+    "PT": 1,
+    "GR": 6,
+    "IT": 13,
+    "AU": 18,
+    "NZ": 1,
+    "ZA": 7,
+    "GB": 19,
+    "US": 20,
+    "CA": 20,
+    "TR": 3,
+    "RU": 4,
+    "SG": 5,
+    "MY": 5,
+    "IN": 4,
+    "CN": 6,
+    "JP": 3,
+    "AT": 5,
+    "NO": 9,
+    "NL": 1,
+    "SE": 8,
+    "GLOBAL": 17,
+    "DE": 9,
+    "FI": 4,
+    "BE": 3,
+    "FR": 2,
+    "ES": 3,
+    "DK": 4,
+    "AR": 1,
+    "CH": 1,
+    "BR": 2,
+    "IE": 1,
+    "UA": 1
+  },
+  "truly_unresolved_breakdown": {
+    "HTTP_403_OR_404_NO_ARCHIVE": 0,
+    "LIVE_HOST_FIREWALL_NO_SNAPSHOT": 216
+  }
+}

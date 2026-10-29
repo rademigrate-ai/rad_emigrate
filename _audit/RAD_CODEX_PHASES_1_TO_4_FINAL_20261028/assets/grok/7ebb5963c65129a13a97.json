@@ -1,0 +1,23 @@
+{
+  "total_excluded": 2617,
+  "total_represented": 28438,
+  "independent_verdict": "No incorrect exclusion of substantive eligibility/document/procedure tables among top reasons. 2487 archive listing teasers; 56 404 pages; 55 company promo; 14 FAQ chrome.",
+  "top_reasons": [
+    [
+      "Archive/news discovery listing teasers/paging",
+      2487
+    ],
+    [
+      "Page-not-found message",
+      56
+    ],
+    [
+      "Company promotion/contact",
+      55
+    ],
+    [
+      "FAQ search/security/pagination control",
+      14
+    ]
+  ]
+}

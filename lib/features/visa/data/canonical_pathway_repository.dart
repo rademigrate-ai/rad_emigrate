@@ -96,16 +96,34 @@ class SupabaseCanonicalPathwayRepository implements CanonicalPathwayRepository {
   }) async {
     if (!_service.isInitialized) return null;
     try {
+      final isUuid = RegExp(
+        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+      ).hasMatch(articleSlug);
+      final resolved = isUuid
+          ? {
+              'data': {'article_id': articleSlug},
+            }
+          : await _service.client
+                .rpc(
+                  'resolve_editorial_article_slug',
+                  params: {
+                    'p_country_code': countryCode,
+                    'p_slug': articleSlug,
+                    'p_locale': locale,
+                  },
+                )
+                .timeout(const Duration(seconds: 20));
+      if (resolved is! Map ||
+          resolved['data'] is! Map ||
+          resolved['data']['article_id'] is! String) {
+        throw const FormatException('invalid_article_identity');
+      }
       final response = await _service.client
           .rpc(
             'get_visa_article',
             params: {
               'p_request': {
-                'selector': {
-                  'country_code': countryCode.toUpperCase(),
-                  'pathway_slug': articleSlug,
-                  'kind': 'related',
-                },
+                'selector': {'article_id': resolved['data']['article_id']},
                 'locale': locale,
               },
             },

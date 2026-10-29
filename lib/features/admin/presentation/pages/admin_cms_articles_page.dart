@@ -6,8 +6,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/premium_tokens.dart';
 import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/rad_loading.dart';
-import '../../../visa/domain/entities/canonical_pathway_entities.dart';
-import '../../../visa/domain/entities/search_entities.dart';
 import '../../data/admin_cms_repository.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 
@@ -90,6 +88,11 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
         title: const Text('مدیریت مقالات و مسیرهای ویزا (CMS)'),
         centerTitle: true,
         actions: [
+          IconButton(
+            tooltip: 'بازبینی یکپارچه‌سازی محتوا',
+            icon: const Icon(Icons.fact_check_outlined),
+            onPressed: () => context.go('/admin/cms/reconciliation'),
+          ),
           IconButton(
             tooltip: 'پایش منابع رسمی',
             icon: const Icon(Icons.source_outlined),

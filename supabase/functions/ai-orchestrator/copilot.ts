@@ -1,6 +1,8 @@
 import { bodyJson, contractValid, envelope } from "../_shared/rad_contract.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { loadGrounding } from "./knowledge_grounding.ts";
+import { classifyQuestionIntent, generalSystemPrompt, appHelpSystemPrompt } from "./question_intent.ts";
+import { performWebSearch, shouldAutoSearch, formatSearchForPrompt, type WebSearchResult } from "./web_search.ts";
 import type { Runtime } from "./handler_providers.ts";
 
 type Db = (path: string, init?: RequestInit) => Promise<unknown>;
@@ -49,6 +51,10 @@ export function createCopilotHandler(options: Options) {
       body = row(await bodyJson(request));
     } catch {
       return error(422, "invalid_request");
+    }
+    const webSearchBody = body.web_search;
+    if ("web_search" in body) {
+      delete (body as Record<string, unknown>).web_search;
     }
     if (!contractValid("ai_orchestrator_request", body)) {
       return error(422, "invalid_request");
@@ -250,7 +256,120 @@ export function createCopilotHandler(options: Options) {
           safe_code: "profile_is_device_local",
         });
       }
+      // GENERAL_PURPOSE_COPILOT_BRANCH
+      const intent = body.scope === "admin"
+        ? "immigration_or_rad" as const
+        : classifyQuestionIntent(question);
+      const headerWebSearch = request.headers.get("x-rad-web-search");
+      const webMode = webSearchBody === true || webSearchBody === "on" || headerWebSearch === "on"
+        ? "on"
+        : webSearchBody === false || webSearchBody === "off" || headerWebSearch === "off"
+        ? "off"
+        : "auto";
+      let webSearchResult: WebSearchResult = {
+        status: "unavailable",
+        adapter: "none",
+        query: "",
+        citations: [],
+      };
+      if (
+        webMode === "on" ||
+        (webMode === "auto" &&
+          (shouldAutoSearch(question, intent) ||
+            intent === "immigration_or_rad"))
+      ) {
+        webSearchResult = await performWebSearch(question);
+      }
+
+      if (intent === "general" || intent === "app_help") {
+        const chain = array(
+          await options.database("rpc/get_ai_runtime_chain_versioned", {
+            method: "POST",
+            body: JSON.stringify({
+              p_capability: "chat",
+              p_scope: body.scope,
+              p_require_tools: false,
+              p_require_structured: false,
+              p_min_context: null,
+            }),
+          }),
+        );
+        let reply = locale === "fa"
+          ? "پاسخ قابل اتکایی تولید نشد."
+          : "A reliable response was not completed.";
+        let refused = false, truncated = false, answered = false;
+        const system = intent === "app_help"
+          ? appHelpSystemPrompt(locale === "fa" ? "fa" : "en")
+          : generalSystemPrompt(locale === "fa" ? "fa" : "en");
+        const webBlock = webSearchResult.status === "ok"
+          ? `\n<UNTRUSTED_WEB_SEARCH>\n${formatSearchForPrompt(webSearchResult)}\n</UNTRUSTED_WEB_SEARCH>`
+          : "";
+        for (const candidate of chain.slice(0, 3)) {
+          if (Date.now() > deadline) break;
+          try {
+            const runtime = {
+              ...candidate,
+              max_output_tokens: 2048,
+              request_timeout_seconds: Math.max(
+                1,
+                Math.min(20, Math.floor((deadline - Date.now()) / 1000)),
+              ),
+              max_retries: 0,
+            } as Runtime;
+            const generated = await options.generate(runtime, [
+              {
+                role: "system",
+                content:
+                  `${system}\n<TRUSTED_APPLICATION_CONTEXT>intent=${intent}; locale=${locale}; web_search=${webSearchResult.status}</TRUSTED_APPLICATION_CONTEXT>${webBlock}`,
+              },
+              { role: "user", content: question },
+            ]);
+            outputTokens += Math.min(
+              2048,
+              generated.usage?.completion_tokens ?? 2048,
+            );
+            refused = generated.refused === true;
+            truncated = generated.truncated === true;
+            const text = typeof generated.text === "string"
+              ? generated.text.trim()
+              : "";
+            if (!refused && !truncated && text) {
+              answered = true;
+              reply = text;
+              break;
+            }
+          } catch {
+            outputTokens = Math.min(4096, outputTokens + 2048);
+          }
+        }
+        const data = {
+          reply: reply.slice(0, 24000),
+          request_id: requestId,
+          session_id: body.session_id,
+          intent,
+          evidence_state: "not_applicable",
+          uncertain: !answered || refused || truncated,
+          refused,
+          truncated,
+          citations: [],
+          web_search_status: webSearchResult.status,
+          web_search_adapter: webSearchResult.adapter,
+          web_citations: webSearchResult.citations ?? [],
+          suggested_actions: [],
+          tool_outcomes: outcomes,
+          quota: {
+            remaining: Math.max(
+              0,
+              Number(reservation.limit ?? 0) - Number(reservation.count ?? 0),
+            ),
+            reset_at: null,
+          },
+        };
+        return finish(200, envelope(data, locale));
+      }
+
       const grounding = await loadGrounding(
+
         options.database,
         body.scope as "user" | "admin",
         question,

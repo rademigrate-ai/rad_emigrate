@@ -1,0 +1,86 @@
+{
+  "approvals": 0,
+  "baseline_plan3_sha": "18900fecda36ff0ca23e7b204a4ecae20340879a",
+  "bounded_public_retries": [
+    {
+      "body_sha256": "8618ffef612175425f766250f67357ed9d9efe2a9b3c95150e842b8578e77331",
+      "content_type": "text/plain",
+      "etag": null,
+      "final_url": "https://radmohajer.ir/robots.txt",
+      "last_modified_header": "Fri, 06 Mar 2020 21:06:40 GMT",
+      "redirects": [],
+      "retrieved_at": "2026-10-24T18:18:10.029833Z",
+      "status": 200,
+      "url": "https://radmohajer.ir/robots.txt"
+    },
+    {
+      "body_chars": 13,
+      "body_status": "complete_source_container",
+      "content_type": "text/html; charset=utf-8",
+      "etag": null,
+      "final_url": "https://radmohajer.ir/en/%D8%AF%D8%B3%D8%AA%D8%B1%D8%B3%DB%8C-%D8%B3%D8%B1%DB%8C%D8%B9/faq",
+      "last_modified_header": "Sat, 24 Oct 2026 18:18:14 GMT",
+      "raw_sha256": "664d1918a0d4b55bef0ef23dd68e788de66fe14cc8f5f4bf04e0197feb45c117",
+      "redirects": [],
+      "retrieved_at": "2026-10-24T18:18:12.268444Z",
+      "status": 200,
+      "url": "https://radmohajer.ir/en/%D8%AF%D8%B3%D8%AA%D8%B1%D8%B3%DB%8C-%D8%B3%D8%B1%DB%8C%D8%B9/faq"
+    },
+    {
+      "body_chars": 4342,
+      "body_status": "complete_source_container",
+      "content_type": "text/html; charset=utf-8",
+      "etag": null,
+      "final_url": "https://radmohajer.ir/en/emg/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D9%88%D8%B1%DB%8C%D8%B3%D8%AA%DB%8C",
+      "last_modified_header": "Sat, 24 Oct 2026 18:18:16 GMT",
+      "raw_sha256": "2975937cb8f251b50294a6e7566a5b9e9190b6ffcc8aa11fd8d877649c4b3968",
+      "redirects": [],
+      "retrieved_at": "2026-10-24T18:18:14.196885Z",
+      "status": 200,
+      "url": "https://radmohajer.ir/en/emg/%D9%88%DB%8C%D8%B2%D8%A7%DB%8C-%D8%AA%D9%88%D8%B1%DB%8C%D8%B3%D8%AA%DB%8C"
+    },
+    {
+      "body_chars": 4247,
+      "body_status": "complete_source_container",
+      "content_type": "text/html; charset=utf-8",
+      "etag": null,
+      "final_url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+      "last_modified_header": "Sat, 24 Oct 2026 18:18:18 GMT",
+      "raw_sha256": "125e6fb2c2a0b41ae74a4b41ac7f7936aab1ef7c2559a1045ddeb0f6f8e87101",
+      "redirects": [],
+      "retrieved_at": "2026-10-24T18:18:16.613490Z",
+      "status": 200,
+      "url": "https://radmohajer.ir/fa/%D8%AA%D9%85%D8%A7%D9%85-%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7/%DA%A9%D8%B4%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7%DB%8C%DB%8C/%D9%87%D9%84%D9%86%D8%AF/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D9%87%D9%84%D9%86%D8%AF"
+    }
+  ],
+  "failure_count": 310,
+  "failure_host_counts": {
+    "radmohajer.ir": 310
+  },
+  "failure_reasons": {
+    "HTTP Error 403: Forbidden": 5,
+    "HTTP Error 404: Not Found": 2,
+    "URLError: <urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>": 303
+  },
+  "hosted_mutations": false,
+  "mismatches": [],
+  "observed_at": "2026-10-24T18:18:18.825899+00:00",
+  "peer_contracts": {
+    "plan4": {
+      "ref": "origin/feat/plan4-research-cms-20261024",
+      "registry_blob": "f179298a2a960ee9670418ddf599a5560085762a",
+      "registry_sha256_lf": "e901c036e3b94f44b676284a670adfe58c72e787aaf33271aaf4dd5b0dc54a0f",
+      "sha": "605b1978cd73ad104724deadc25851c8dc893875"
+    },
+    "plan5": {
+      "ref": "origin/feat/plan5-rad-ai2-finalization-20261024",
+      "registry_blob": "f179298a2a960ee9670418ddf599a5560085762a",
+      "registry_sha256_lf": "e901c036e3b94f44b676284a670adfe58c72e787aaf33271aaf4dd5b0dc54a0f",
+      "sha": "a2fd158fb4b8bc6386fc3b9242333580c75d30dc"
+    }
+  },
+  "raw_review": {
+    "complete_article_bodies_reextracted": 1083,
+    "raw_html_hashes_verified": 1206
+  }
+}

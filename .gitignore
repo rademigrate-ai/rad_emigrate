@@ -26,6 +26,13 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
+.venv/
+_audit/**/cache/
+_audit/**/local-backup/
+_audit/**/browser-server*
+_audit/**/source-resume/reconciliation/*.csv
+_audit/**/source-resume/reconciliation/*.jsonl
+_audit/**/import-review/generation.log
 build/
 coverage/
 
@@ -53,4 +60,10 @@ android/key.properties
 
 # Generated analysis cache (gitleaks noise)
 graphify-out/
+
+# Reproducible phase handoff excludes transient network/runtime working files.
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/.network-cache/
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/verification/
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/*.zip
+_audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/*.progress.jsonl
 

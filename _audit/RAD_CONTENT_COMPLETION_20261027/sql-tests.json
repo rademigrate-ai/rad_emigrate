@@ -1,0 +1,23 @@
+[
+  {
+    "suite": "editorial_content_security",
+    "exit_code": 0,
+    "seconds": 0.64
+  },
+  {
+    "suite": "editorial_legacy_slug",
+    "exit_code": 0,
+    "seconds": 0.12,
+    "fixture_correction": "Applied the missing repository legacy-slug migration to the local restored fixture; regression then passed. No hosted schema change."
+  },
+  {
+    "suite": "stage7_research_review",
+    "exit_code": 0,
+    "seconds": 0.34
+  },
+  {
+    "suite": "stage71_rich_review",
+    "exit_code": 0,
+    "seconds": 0.45
+  }
+]

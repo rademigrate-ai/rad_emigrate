@@ -1,0 +1,27 @@
+{
+  "antigravity_raw_records_verified": 259,
+  "capture_versions": 2833,
+  "contract_rejected_candidates": 0,
+  "frozen_source_records": 1922,
+  "hosted_writes": 0,
+  "listing_excerpts_preserved": 152,
+  "master_sources": 2055,
+  "new_draft_import_readiness": {
+    "technical_draft_only": 289
+  },
+  "new_independent_draft_candidates": 289,
+  "new_live_refetch_pairs_verified": 33,
+  "offline_builder_network_requests": 0,
+  "original_grok_files_verified": 355,
+  "original_grok_mohajer_captures": 100,
+  "original_grok_package_transferred": true,
+  "original_grok_primary_exact_existing_exports": 146,
+  "publication_allowed": false,
+  "source_recovery_status": {
+    "excluded_noneditorial_query_stateful_or_legacy_template_route": 406,
+    "full_body_and_verified_raw": 1385,
+    "raw_without_complete_article": 214,
+    "unavailable_or_unfetched": 50
+  },
+  "targeted_network_observations": "_audit\\RAD_CODEX_PHASES_1_TO_4_FINAL_20261028\\targeted-network-observations.jsonl.gz"
+}

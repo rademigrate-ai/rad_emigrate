@@ -1,0 +1,231 @@
+{
+  "contract_version": "stage71-rich-1",
+  "schemas": {
+    "propose_structured_research_request": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "locale": {
+          "enum": [
+            "fa",
+            "en"
+          ]
+        },
+        "base_revision_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "base_content_hash": {
+          "$ref": "#/$defs/SHA256"
+        },
+        "base_rich_hash": {
+          "$ref": "#/$defs/SHA256"
+        },
+        "source_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "authority_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "snapshot_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "patches": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/UUID"
+              },
+              "section_id": {
+                "$ref": "#/$defs/UUID"
+              },
+              "block_id": {
+                "$ref": "#/$defs/UUID"
+              },
+              "before_hash": {
+                "$ref": "#/$defs/SHA256"
+              },
+              "operation": {
+                "enum": [
+                  "replace_text",
+                  "add_after",
+                  "remove"
+                ]
+              },
+              "path": {
+                "type": "array",
+                "maxItems": 30,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                }
+              },
+              "text": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "new_block_id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/UUID"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "evidence": {
+                "type": "object",
+                "properties": {
+                  "snapshot_id": {
+                    "$ref": "#/$defs/UUID"
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  },
+                  "locator": {
+                    "type": "string",
+                    "maxLength": 1000
+                  }
+                },
+                "required": [
+                  "snapshot_id",
+                  "excerpt",
+                  "locator"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "section_id",
+              "block_id",
+              "before_hash",
+              "operation",
+              "path",
+              "text",
+              "new_block_id",
+              "evidence"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "article_id",
+        "locale",
+        "base_revision_id",
+        "base_content_hash",
+        "base_rich_hash",
+        "source_id",
+        "authority_id",
+        "snapshot_id",
+        "patches",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "save_structured_research_review_request": {
+      "type": "object",
+      "properties": {
+        "proposal_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "expected_proposal_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expected_review_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "base_revision_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "base_content_hash": {
+          "$ref": "#/$defs/SHA256"
+        },
+        "mode": {
+          "enum": [
+            "save_review",
+            "create_draft",
+            "reject_proposal"
+          ]
+        },
+        "decisions": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "section_id": {
+                "$ref": "#/$defs/UUID"
+              },
+              "decision": {
+                "enum": [
+                  "accept",
+                  "reject",
+                  "edit"
+                ]
+              },
+              "edited_text": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 40000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "section_id",
+              "decision",
+              "edited_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "request_key": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "expected_proposal_revision",
+        "expected_review_revision",
+        "base_revision_id",
+        "base_content_hash",
+        "mode",
+        "decisions",
+        "note",
+        "request_key"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

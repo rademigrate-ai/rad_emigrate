@@ -1,0 +1,17 @@
+{
+  "schema_version": "rad-original-references-1",
+  "body_library_manifest_sha256": "df46e65e9b8452b6043b24db7b7528d3c29cf4242a84d367032f705a8dbb9464",
+  "source_captures": 1061,
+  "article_locales": 743,
+  "original_links": 2406,
+  "links_with_fragments": 90,
+  "mapped_in_article_targets": 0,
+  "verified_legal_claims": 0,
+  "human_approvals": 0,
+  "publication_ready": 0,
+  "extractor_sha256": "69d762f54d55409ac48e0dce34a18e9aefc6b856db8378dcdb41895ffdb4d46b",
+  "files": {
+    "article_reference_maps.jsonl.gz": "9a19d0b459c9b18e0892c795ed7f656c5008ea687bafbe500bfb702a3067ae78",
+    "source_references.jsonl.gz": "c572ae2e2dbbc3b264fb373f2d7b5da63de14bc7e1a053afc1400a90734fcd2f"
+  }
+}

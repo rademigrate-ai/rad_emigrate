@@ -124,6 +124,7 @@ class SupabaseAiService implements AiService {
         'section_id': cleanUuid(request.context['section_id']),
         'case_id': cleanUuid(request.context['case_id']),
       };
+      final cleanDocumentId = cleanUuid(request.context['document_id']);
 
       if (!sameOwner()) return changedSession();
       final response = await _supabase.client.functions.invoke(
@@ -132,6 +133,14 @@ class SupabaseAiService implements AiService {
           'x-rad-contract-version': '1',
           'x-rad-request-key': requestKey,
           'x-rad-modality': 'text',
+          'x-rad-web-search':
+              (request.webSearchMode == 'on' ||
+                  request.webSearchMode == 'off' ||
+                  request.webSearchMode == 'auto')
+              ? request.webSearchMode
+              : 'auto',
+          if (cleanDocumentId != null && cleanDocumentId.isNotEmpty)
+            'x-rad-document-id': cleanDocumentId,
         },
         body: {
           'action': 'chat',
@@ -259,7 +268,8 @@ class SupabaseAiService implements AiService {
       case 'empty_evidence':
       case 'stale_evidence':
       case 'unavailable_evidence':
-        return 'شواهد رسمی و مستندات کافی برای این درخواست در پایگاه داده یافت نشد.';
+      case 'insufficient':
+        return l10n.aiInsufficientEvidence;
       default:
         return l10n.aiRequestFailed;
     }

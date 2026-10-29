@@ -1,0 +1,37 @@
+[
+  {
+    "asset": "reference-evidence/RAD_FINALIZATION_ROADMAP_20261028.md",
+    "reference": "RAD_FINALIZATION_ROADMAP_20261028.md",
+    "sha256": "d08347ca5acddbf33d642829fc2b03b0f6b596833ce292b633d769c97770b8c7"
+  },
+  {
+    "asset": "reference-evidence/RAD_FULL_FEATURE_ACCEPTANCE_MATRIX_20261028.md",
+    "reference": "RAD_FULL_FEATURE_ACCEPTANCE_MATRIX_20261028.md",
+    "sha256": "e9fa3c0859aeb13926f391c8d03e19f5980af8468b20877470c41e1a4afd1fe5"
+  },
+  {
+    "asset": "reference-evidence/RAD_SQLQA_20261028/SQL_QA_HANDOFF.md",
+    "reference": "RAD_SQLQA_20261028/SQL_QA_HANDOFF.md",
+    "sha256": "bd87ba1fb077105808eb8a7b4d46d96e695ad66483bc5e5e257ecb610eb090a7"
+  },
+  {
+    "asset": "reference-evidence/RAD_CROSS_AGENT_HASH_QA_20261028/RAD_TRANSFER_RECOVERY_UPDATE_20261028.md",
+    "reference": "RAD_CROSS_AGENT_HASH_QA_20261028/RAD_TRANSFER_RECOVERY_UPDATE_20261028.md",
+    "sha256": "aee0780d282d1b8ac63d97840e7cdb18e93d677f397d5b757c7d19cacec17f15"
+  },
+  {
+    "asset": "reference-evidence/RAD_CROSS_AGENT_HASH_QA_20261028/GROK100_LOCAL_RECONCILIATION.json",
+    "reference": "RAD_CROSS_AGENT_HASH_QA_20261028/GROK100_LOCAL_RECONCILIATION.json",
+    "sha256": "694fb788815bbaafc21d167049d6a31153b9366ec8f767f54f259a8cf760e7b2"
+  },
+  {
+    "asset": "reference-evidence/RAD_CROSS_AGENT_HASH_QA_20261028/LOCAL_REFETCH_PARTIAL_VERIFICATION.json",
+    "reference": "RAD_CROSS_AGENT_HASH_QA_20261028/LOCAL_REFETCH_PARTIAL_VERIFICATION.json",
+    "sha256": "8e0ecfb560326e42cf64f91a51311bdff6e4ede829bee4b40f503c539efaf57e"
+  },
+  {
+    "asset": "reference-evidence/RAD_CROSS_AGENT_HASH_QA_20261028/REFETCH_REMAINING_URLS.json",
+    "reference": "RAD_CROSS_AGENT_HASH_QA_20261028/REFETCH_REMAINING_URLS.json",
+    "sha256": "a18bfe0a6cec1b89b5bd41cc4ca6e9789fe32c0c06fd8918d7c18be825c81d73"
+  }
+]

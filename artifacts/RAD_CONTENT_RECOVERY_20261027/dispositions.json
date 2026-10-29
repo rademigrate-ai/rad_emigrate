@@ -1,0 +1,655 @@
+[
+  {
+    "source_id": "41c629ed-1aaa-512b-bfea-02a5d9336c10",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87%20%DB%8C%20%DA%A9%D8%B4%D9%88%D8%B1%20%DA%98%D8%A7%D9%BE%D9%86",
+    "title": "درباره ی کشور ژاپن",
+    "article_id": "416b7c3f-e214-578c-80d4-a497c484b4f2",
+    "country_codes_proposed": [
+      "JP"
+    ],
+    "source_blocks": 26,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "173e387d-aa85-55f9-843f-e43d1df1af87",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A2%D9%86",
+    "title": "درباره ایتالیا و مهاجرت به آن",
+    "article_id": "6c04a486-5ae6-59f1-b7f1-96288cedd9b1",
+    "country_codes_proposed": [
+      "IT"
+    ],
+    "source_blocks": 37,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "ab44719c-f215-552e-a215-854754a913b3",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%B4%D9%87%D8%B1-%D9%85%D8%A7%D9%84%D9%85%D9%88-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "درباره شهر مالمو سوئد",
+    "article_id": "8f1f96c2-0fe9-57aa-b9a3-60f4813a9094",
+    "country_codes_proposed": [
+      "SE"
+    ],
+    "source_blocks": 10,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "a4c2ab16-841b-5b77-bccb-98e21810758e",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%B4%D9%87%D8%B1-%D9%85%D9%88%D9%86%DB%8C%D8%AE",
+    "title": "درباره شهر مونیخ",
+    "article_id": "5324f014-b7a4-5491-93f8-bb67da92a185",
+    "country_codes_proposed": [
+      "DE"
+    ],
+    "source_blocks": 56,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "65e2f61a-849d-51b0-95ab-ccd038db8b55",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%B9%D9%85%D8%A7%D9%86-%D9%88-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%AF%D8%B1-%D8%B9%D9%85%D8%A7%D9%86",
+    "title": "درباره کشور عمان",
+    "article_id": "16e717c0-32ac-504c-bdd0-58e4b0285cf7",
+    "country_codes_proposed": [
+      "OM"
+    ],
+    "source_blocks": 3,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "a3b7655e-1ef4-52f6-ad8b-91d0c2e84730",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A7%D8%B3%D8%AA%DA%A9%D9%87%D9%84%D9%85",
+    "title": "درباره ی شهر استکهلم",
+    "article_id": "bf3f6ba0-ee1b-5911-aed2-76862de537a7",
+    "country_codes_proposed": [
+      "SE"
+    ],
+    "source_blocks": 21,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "43a432d6-9d08-5729-acf3-5162baff7652",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%A7%D8%B1%D8%B3%D9%84%D9%88%D9%86",
+    "title": "درباره ی شهر بارسلون",
+    "article_id": "004f1034-4d3a-5863-af5c-cdc2d9dc6e85",
+    "country_codes_proposed": [
+      "ES"
+    ],
+    "source_blocks": 25,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "bac4622a-f7ad-5c80-b7e2-ea83ca6779b8",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%B1%D9%88%DA%A9%D8%B3%D9%84",
+    "title": "درباره ی شهر بروکسل",
+    "article_id": "212f98e5-d06d-5d61-b9ee-ea5a851b00c1",
+    "country_codes_proposed": [
+      "BE"
+    ],
+    "source_blocks": 29,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "5d8de3f4-bfb2-54a7-8797-5694e0cf0f36",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%84%DB%8C%D9%88%D8%B1%D9%BE%D9%88%D9%84",
+    "title": "درباره ی شهر لیورپول",
+    "article_id": "a7c50e38-0f1a-558a-86b8-de72a1085a33",
+    "country_codes_proposed": [
+      "GB"
+    ],
+    "source_blocks": 15,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "c9ae269d-0b5a-5052-bb84-0b63d3052ffd",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%85%D9%86%DA%86%D8%B3%D8%AA%D8%B1",
+    "title": "درباره ی شهر منچستر",
+    "article_id": "65fd303c-8915-588c-a9ee-89936c034ce7",
+    "country_codes_proposed": [
+      "GB"
+    ],
+    "source_blocks": 19,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "3e3255a4-ace9-5c06-a55e-d6de3492fc21",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D9%88%D8%A7%D9%84%D9%86%D8%B3%DB%8C%D8%A7",
+    "title": "درباره ی شهر والنسیا",
+    "article_id": "1f8833c6-d81b-578b-b133-7a35785931c5",
+    "country_codes_proposed": [
+      "ES"
+    ],
+    "source_blocks": 31,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "c231f332-1c43-5cb5-a9c4-83bda5dc273b",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A2%D9%81%D8%B1%DB%8C%D9%82%D8%A7-%DB%8C-%D8%AC%D9%86%D9%88%D8%A8%DB%8C",
+    "title": "درباره ی کشور آفریقای جنوبی",
+    "article_id": "cd41bc0b-52ab-58e1-8800-ce0ba6a6a354",
+    "country_codes_proposed": [
+      "ZA"
+    ],
+    "source_blocks": 28,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "4077e6bf-d7dd-5e5b-8196-25bc0e034664",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A2%D9%84%D9%85%D8%A7%D9%86",
+    "title": "درباره ی کشور آلمان",
+    "article_id": "fba6967f-269f-5b80-9685-6152900a5ede",
+    "country_codes_proposed": [
+      "DE"
+    ],
+    "source_blocks": 29,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "30794a2a-4f59-55f7-80b0-906db54a92d8",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%AA%D8%B1%DB%8C%D8%B4",
+    "title": "درباره ی کشور اتریش",
+    "article_id": "6a9b3ef1-80a5-5010-a0e8-f35b4918bc06",
+    "country_codes_proposed": [
+      "AT"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "129e7080-ea1d-5b68-b96b-3e42805cd7f4",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B1%D9%85%D9%86%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "درباره ی کشور ارمنستان",
+    "article_id": "01a7981a-4cba-58dc-931e-8035a10bfe5f",
+    "country_codes_proposed": [
+      "AM"
+    ],
+    "source_blocks": 22,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "1fb52794-dd73-54e4-aac1-883dbdba1ef5",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "درباره ی کشور استرالیا",
+    "article_id": "3ab10ca9-ba15-5e4e-aa08-f53fdcefeca0",
+    "country_codes_proposed": [
+      "AU"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "6762c741-1ddf-5855-bdd9-f9b1a22fe8ec",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D8%B3%D9%BE%D8%A7%D9%86%DB%8C%D8%A7",
+    "title": "درباره ی کشور اسپانیا",
+    "article_id": "d35a64f0-ab51-5e96-b2fb-62daac6dc657",
+    "country_codes_proposed": [
+      "ES"
+    ],
+    "source_blocks": 26,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "34e495b9-9707-56a5-be14-8ae3653994cc",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D9%85%D8%B1%DB%8C%DA%A9%D8%A7",
+    "title": "درباره ی کشور امریکا",
+    "article_id": "06aac901-aab1-5fad-845a-fed40a2b074a",
+    "country_codes_proposed": [
+      "US"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "765f692b-f8d3-5eb5-98eb-c5ed32ed89b2",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D9%86%DA%AF%D9%84%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "درباره ی کشور انگلستان",
+    "article_id": "6dc9df7f-2d8c-54a3-8ee5-1e95f67fc162",
+    "country_codes_proposed": [
+      "GB"
+    ],
+    "source_blocks": 21,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "860eaf77-4317-5651-b564-64396a556a43",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%D9%88%DA%A9%D8%B1%D8%A7%DB%8C%D9%86",
+    "title": "درباره ی کشور اوکراین",
+    "article_id": "1c717287-76d3-53eb-9630-5a3159afabfd",
+    "country_codes_proposed": [
+      "UA"
+    ],
+    "source_blocks": 23,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "f0446730-1f04-538f-ae02-7dd442b868c9",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%DB%8C%D8%AA%D8%A7%D9%84%DB%8C%D8%A7",
+    "title": "درباره ی کشور ایتالیا",
+    "article_id": "b860703c-36f0-5377-b391-8d15b60e27f7",
+    "country_codes_proposed": [
+      "IT"
+    ],
+    "source_blocks": 33,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "cb758723-7e7f-5e96-b952-e8c25d0e0934",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A7%DB%8C%D8%B3%D9%84%D9%86%D8%AF",
+    "title": "درباره ی کشور ایسلند",
+    "article_id": "d718aab8-65d6-595f-9c13-041255357467",
+    "country_codes_proposed": [
+      "IS"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "304811c3-df6b-5fdd-88fb-3d85aa05480a",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%A8%D9%84%DA%98%DB%8C%DA%A9",
+    "title": "درباره ی کشور بلژیک",
+    "article_id": "15df4a91-d0c9-5051-b189-f5964a3c3bc5",
+    "country_codes_proposed": [
+      "BE"
+    ],
+    "source_blocks": 25,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "80571a51-745a-5e1e-8684-5fa2b94fc8e2",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%AA%D8%B1%DA%A9%DB%8C%D9%87",
+    "title": "درباره ی کشور ترکیه",
+    "article_id": "2e8e4206-051d-5134-a409-9701277490bb",
+    "country_codes_proposed": [
+      "TR"
+    ],
+    "source_blocks": 25,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "6ce7b28a-204c-5f2b-9883-57acd1889447",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%AF%D8%A7%D9%86%D9%85%D8%A7%D8%B1%DA%A9",
+    "title": "درباره ی کشور دانمارک",
+    "article_id": "cb0cbdbf-0263-58eb-9fef-9840fa99fb56",
+    "country_codes_proposed": [
+      "DK"
+    ],
+    "source_blocks": 29,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "c32f12df-cfcd-57e4-9ac0-76016b8ddbd2",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B1%D9%88%D8%B3%DB%8C%D9%87",
+    "title": "درباره ی کشور روسیه",
+    "article_id": "37ccfc28-d675-5837-8182-5939ba4d3212",
+    "country_codes_proposed": [
+      "RU"
+    ],
+    "source_blocks": 27,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "27aed81f-707a-5856-bec4-912bafb0873a",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B3%D9%88%D8%A6%D8%AF",
+    "title": "درباره ی کشور سوئد",
+    "article_id": "1faccfcc-cf27-544a-af2c-366836a1a2b1",
+    "country_codes_proposed": [
+      "SE"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "918a9bcf-64e4-51cd-acbc-8190f23b468a",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D8%B3%D9%88%D8%A6%DB%8C%D8%B3",
+    "title": "درباره ی کشور سوئیس",
+    "article_id": "f14b535c-dba9-582e-aa87-540d1da3bdfa",
+    "country_codes_proposed": [
+      "CH"
+    ],
+    "source_blocks": 25,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "88278b6d-fa7d-501e-b543-ad2aa0d82976",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87",
+    "title": "درباره ی کشور فرانسه",
+    "article_id": "91444017-6050-5838-88bb-edd4a1566c30",
+    "country_codes_proposed": [
+      "FR"
+    ],
+    "source_blocks": 27,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "9bf95325-f8e9-5074-9b34-5e5afa4254db",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%81%D9%86%D9%84%D8%A7%D9%86%D8%AF",
+    "title": "درباره ی کشور فنلاند",
+    "article_id": "8a4241cc-5adf-52d9-a7ba-1ec2a3aa3164",
+    "country_codes_proposed": [
+      "FI"
+    ],
+    "source_blocks": 22,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "4297a617-3453-592a-8635-954dc0df897f",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%84%D9%87%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "درباره ی کشور لهستان",
+    "article_id": "fffa56bc-eb91-5235-8c3a-b8cf070f773d",
+    "country_codes_proposed": [
+      "PL"
+    ],
+    "source_blocks": 22,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "8efb573b-9844-5de0-8e10-521cdb9c2760",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%85%D8%A7%D9%84%D8%B2%DB%8C",
+    "title": "درباره ی کشور مالزی",
+    "article_id": "eef14369-ec32-5471-9811-4a418708b237",
+    "country_codes_proposed": [
+      "MY"
+    ],
+    "source_blocks": 23,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "017f7e20-50e0-5594-af4d-477c82a4eb26",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%85%D8%AC%D8%A7%D8%B1%D8%B3%D8%AA%D8%A7%D9%86",
+    "title": "درباره ی کشور مجارستان",
+    "article_id": "19e0e066-f394-5cfc-9834-73b1557aad18",
+    "country_codes_proposed": [
+      "HU"
+    ],
+    "source_blocks": 43,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "b518b19d-acac-5b47-8f0e-09a70127e77c",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%86%D8%B1%D9%88%DA%98",
+    "title": "درباره ی کشور نروژ",
+    "article_id": "89aa27d1-2e81-5adf-b396-7f5c958fc6f0",
+    "country_codes_proposed": [
+      "NO"
+    ],
+    "source_blocks": 27,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "c5d69997-3f32-5ea5-8de4-b0f9366f27b8",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%86%DB%8C%D9%88%D8%B2%DB%8C%D9%84%D9%86%D8%AF",
+    "title": "درباره ی کشور نیوزیلند",
+    "article_id": "ff59b138-3c48-598d-8942-c44719ad3683",
+    "country_codes_proposed": [
+      "NZ"
+    ],
+    "source_blocks": 21,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "6ff382fe-7c59-5545-be7a-bc0654e942ea",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%D9%87%D9%84%D9%86%D8%AF",
+    "title": "درباره ی کشور هلند",
+    "article_id": "c420bc27-1d11-5265-ac45-4bfa11a05e5a",
+    "country_codes_proposed": [
+      "NL"
+    ],
+    "source_blocks": 26,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "93053b06-2b59-5d13-9dfa-b1fa0aa64730",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%DA%86%DA%A9",
+    "title": "درباره ی کشور چک",
+    "article_id": "7b357159-8147-5a5e-ac42-c131b05f3ad2",
+    "country_codes_proposed": [
+      "CZ"
+    ],
+    "source_blocks": 26,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "6d0ae8f4-142c-52a9-86b4-e1e3f2c893d9",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%DA%86%DB%8C%D9%86",
+    "title": "درباره ی کشور چین",
+    "article_id": "6b0b7f24-708c-5f07-a425-f4d00f017797",
+    "country_codes_proposed": [
+      "CN"
+    ],
+    "source_blocks": 22,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "a5da052b-75b7-5e47-b30d-af9d70f1fa53",
+    "url": "https://digivisa.ir/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7",
+    "title": "درباره ی کشور کانادا",
+    "article_id": "f46b75ca-9a93-5a42-a5c4-47a421e878a8",
+    "country_codes_proposed": [
+      "CA"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "9db8d4d8-0978-5f23-802f-b19881cf9ad2",
+    "url": "https://digivisa.ir/article/%D9%87%D9%85%D9%87-%DA%86%DB%8C%D8%B2-%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%82%D8%A8%D8%B1%D8%B3-%D8%B4%D9%85%D8%A7%D9%84%DB%8C",
+    "title": "همه چیز درباره قبرس شمالی",
+    "article_id": "d7152f82-0077-52ef-81bb-8ad3f141a107",
+    "country_codes_proposed": [
+      "CY"
+    ],
+    "source_blocks": 35,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "d9bc1af3-4b25-5757-966c-11b14ce358d7",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%A2%D9%84%D9%85%D8%A7%D9%86-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره آلمان و مهاجرت به این کشور",
+    "article_id": "a343bcd4-15b5-5106-9d42-55aa918db458",
+    "country_codes_proposed": [
+      "DE"
+    ],
+    "source_blocks": 23,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "c8b55fc6-892a-54d6-807c-31e4ad8d166a",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D9%84%DB%8C%D8%A7-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره استرالیا و مهاجرت به این کشور",
+    "article_id": "8095ba3c-8ca6-57cb-93e4-2fc108ad7e1a",
+    "country_codes_proposed": [
+      "AU"
+    ],
+    "source_blocks": 26,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "99579d24-9cff-5221-a992-ff9e82385284",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%A7%DB%8C%D8%B3%D9%84%D9%86%D8%AF-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره ایسلند و مهاجرت به این کشور",
+    "article_id": "a031ee5a-8a77-5d40-8db7-f4cc93be3b3f",
+    "country_codes_proposed": [
+      "IS"
+    ],
+    "source_blocks": 20,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "01029a5b-325e-5c62-96f2-5b5a48e29d17",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%AA%D8%B1%DA%A9%DB%8C%D9%87-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره ترکیه و مهاجرت به این کشور",
+    "article_id": "75b82553-b1fc-5189-abe9-71bafc1b396a",
+    "country_codes_proposed": [
+      "TR"
+    ],
+    "source_blocks": 29,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "b762f0bc-1505-59c5-9a1f-1095e5c20d7d",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%B3%D9%88%D8%A6%DB%8C%D8%B3-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA-%D8%A8%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره سوئیس و مهاجرت به این کشور",
+    "article_id": "45fb3c63-bca1-5f9c-bff5-f18774692fe5",
+    "country_codes_proposed": [
+      "CH"
+    ],
+    "source_blocks": 18,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "febf0b77-f7f9-5405-a51e-845da7f44e82",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%81%D8%B1%D8%A7%D9%86%D8%B3%D9%87-%D9%88-%D9%85%D9%87%D8%A7%D8%AC%D8%B1%D8%AA%20-%D9%87-%D8%A7%DB%8C%D9%86-%DA%A9%D8%B4%D9%88%D8%B1",
+    "title": "درباره فرانسه و مهاجرت به این کشور",
+    "article_id": "da0429a3-ee17-5b0d-81c2-06ddd1a9c2ff",
+    "country_codes_proposed": [
+      "FR"
+    ],
+    "source_blocks": 17,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "blocked_review",
+    "reasons": [
+      "possible_main_visa_contribution_requires_review"
+    ]
+  },
+  {
+    "source_id": "0e90fea0-ec10-5661-ad23-874b6f3a3ff4",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DA%A9%D8%B4%D9%88%D8%B1-%DA%A9%D8%A7%D9%86%D8%A7%D8%AF%D8%A7",
+    "title": "درباره کشور کانادا",
+    "article_id": "5bfe2535-358b-5efb-97c6-7621ab74950b",
+    "country_codes_proposed": [
+      "CA"
+    ],
+    "source_blocks": 15,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "6efcf520-e565-5ea3-bb3f-b505df6454d7",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%AF%D8%A7%D9%86%D8%B4%DA%AF%D8%A7%D9%87-%DA%A9%D9%84%D9%86-%D8%A2%D9%84%D9%85%D8%A7%D9%86",
+    "title": "درباره ی دانشگاه کلن آلمان",
+    "article_id": "1191a723-56bb-5717-a2d1-7abfd05f3330",
+    "country_codes_proposed": [
+      "DE"
+    ],
+    "source_blocks": 24,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  },
+  {
+    "source_id": "188c1080-fccc-5b21-9883-1ddb2a33607d",
+    "url": "https://radvisa.com/article/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%DB%8C-%D8%B4%D9%87%D8%B1-%D8%A8%D8%B1%D9%88%DA%A9%D8%B3%D9%84",
+    "title": "درباره ی شهر بروکسل",
+    "article_id": "5feb0161-7cd1-589c-9561-f95ad78ae485",
+    "country_codes_proposed": [
+      "BE"
+    ],
+    "source_blocks": 47,
+    "fresh_disposition": "body_blocks_and_links_unchanged",
+    "technical_status": "local_draft_candidate",
+    "reasons": []
+  }
+]

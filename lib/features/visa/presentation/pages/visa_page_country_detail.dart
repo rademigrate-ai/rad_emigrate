@@ -1,6 +1,6 @@
 part of 'visa_page.dart';
 
-class _CountryDetailStage extends StatelessWidget {
+class _CountryDetailStage extends ConsumerWidget {
   const _CountryDetailStage({
     required this.catalog,
     required this.country,
@@ -14,10 +14,23 @@ class _CountryDetailStage extends StatelessWidget {
   final ValueChanged<VisaProgram> onSelectProgram;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final programs = catalog.programsForCountry(country.id);
     final width = MediaQuery.sizeOf(context).width;
     final isDesktop = width >= AppBreakpoints.desktop;
+    final locale = Localizations.localeOf(context).languageCode == 'fa'
+        ? 'fa'
+        : 'en';
+    final content = ref
+        .watch(
+          countryVisaContentProvider((
+            country: country.code,
+            locale: locale,
+            preview: false,
+          )),
+        )
+        .valueOrNull;
+    final hasContinuous = editorialRows(content?['categories']).isNotEmpty;
 
     return Center(
       child: ConstrainedBox(
@@ -99,7 +112,16 @@ class _CountryDetailStage extends StatelessWidget {
                 ],
               ),
             ),
-            if (programs.isEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverToBoxAdapter(
+                child: CountryVisaContent(
+                  countryCode: country.code,
+                  showOtherTitles: false,
+                ),
+              ),
+            ),
+            if (programs.isEmpty && !hasContinuous)
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: EmptyState(
@@ -109,7 +131,7 @@ class _CountryDetailStage extends StatelessWidget {
                   onAction: () => context.go('/visa'),
                 ),
               )
-            else
+            else if (!hasContinuous)
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                 sliver: SliverList.separated(
@@ -161,6 +183,15 @@ class _CountryDetailStage extends StatelessWidget {
                   },
                 ),
               ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+              sliver: SliverToBoxAdapter(
+                child: CountryVisaContent(
+                  countryCode: country.code,
+                  showCategories: false,
+                ),
+              ),
+            ),
           ],
         ),
       ),
