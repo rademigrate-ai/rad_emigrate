@@ -11,6 +11,7 @@ import '../../data/research_review_repository.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 import '../widgets/full_page_comparison_viewer.dart';
+import '../widgets/bound_source_evidence_panel.dart';
 import '../widgets/structured_review_viewer.dart';
 import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 
@@ -71,6 +72,10 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       final context = await ref
           .read(researchReviewRepositoryProvider)
           .context(widget.sourceId);
+      if (context.containsKey('bound_source_change') &&
+          !BoundSourceEvidencePanel.isValid(context['bound_source_change'])) {
+        throw const CmsException('malformed');
+      }
       final proposal = AdminSourceChangeProposal.fromJson(
         Map<String, dynamic>.from(context['proposal'] as Map),
       );
@@ -401,6 +406,13 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  if (_reviewContext?['bound_source_change'] is Map)
+                    BoundSourceEvidencePanel(
+                      evidence: Map<String, dynamic>.from(
+                        _reviewContext!['bound_source_change'] as Map,
+                      ),
+                      isPersian: isFa,
+                    ),
                   if (_reviewContext?['structured_patches'] == null &&
                       (_reviewContext?['base'] as Map?)?['rich_sections']
                           is List)
@@ -592,14 +604,16 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             children: [
               const Icon(Icons.fact_check, color: AppColors.navy, size: 20),
               const SizedBox(width: 8),
-              Text(
-                isFa
-                    ? 'تصمیم‌گیری نهایی بازبین سردبیری'
-                    : 'Editorial Review Decision',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.navy,
+              Expanded(
+                child: Text(
+                  isFa
+                      ? 'تصمیم‌گیری نهایی بازبین سردبیری'
+                      : 'Editorial Review Decision',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.navy,
+                  ),
                 ),
               ),
             ],

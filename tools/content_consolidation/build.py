@@ -57,7 +57,9 @@ def topic_key(source):
 
 
 def consolidate(members):
-    from .composition import compose
+    # Frozen V3 corpus reproduction is a compatibility contract. New V4
+    # generation imports composition.py explicitly, without rewriting history.
+    from .v3_composition import compose
 
     if (
         "radmohajer.ir" in {s["domain"] for s in members}
@@ -207,7 +209,7 @@ def build(library, caches, output, capture=None, capture_sha256=None):
             for row in corrected
         ],
     )
-    from .composition import compose_library
+    from .v3_composition import compose_library
 
     articles, mappings, relations, country_relations = compose_library(
         corrected, title_key, topic_key

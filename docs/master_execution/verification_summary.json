@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-31",
+  "created_at": "2026-10-30T21:40:28.295047+00:00",
+  "release_verdict": "NO_GO",
+  "scope": "isolated source verification; no hosted write or production restore",
+  "source_fingerprint": {
+    "algorithm": "sha256(relative-posix-path + NUL + bytes + NUL), sorted",
+    "directories": [
+      "lib",
+      "test",
+      "scripts",
+      "tools",
+      "supabase"
+    ],
+    "extensions": [
+      ".dart",
+      ".py",
+      ".ts",
+      ".sql",
+      ".json",
+      ".cjs",
+      ".sh"
+    ],
+    "files": 904,
+    "sha256": "c1284689a66396fcf1e21ffb41936f2a4f7dcc4f6f3a8d8f0cbae8db03464dad"
+  },
+  "checks": {
+    "flutter_tests": {
+      "status": "PASS",
+      "count": 1175,
+      "log": "_audit\\RAD_MASTER_EXECUTION_20261029_flutter_final.log",
+      "sha256": "af72c04cf7d2f8aaca487827b99982a2d13d4cb06e2dfae23a00b8465c7dd75e"
+    },
+    "flutter_analyze": {
+      "status": "PASS",
+      "count": 0,
+      "log": "_audit\\RAD_MASTER_EXECUTION_20261029_final_analyze.log",
+      "sha256": "95be8735757d7e9dcc9bfec936e05c353cd7ae72890c4da72f59a08f7671f9f7"
+    },
+    "python_tests": {
+      "status": "PASS",
+      "count": 287,
+      "log": "_audit\\RAD_MASTER_EXECUTION_20261029_python_final.log",
+      "sha256": "e6a63e40ae51dc47727e145c3e5b9de6bb4bf388d766a0879e5f8aab0806d5ae"
+    },
+    "deno_tests": {
+      "status": "PASS",
+      "count": 197,
+      "log": "_audit\\RAD_MASTER_EXECUTION_20261029_deno_final.log",
+      "sha256": "79a24d960e288334866578c7e822cfae0dffb108349af6c28b437f549c573d83"
+    },
+    "dart_format": {
+      "status": "PASS",
+      "count": 491,
+      "log": "_audit\\RAD_MASTER_EXECUTION_20261029_dart_format_final.log",
+      "sha256": "0222c791a94a4874ac4ae3051692fc0b91433c7cfaffa3f3ad1f6fb1227f9bd2"
+    }
+  },
+  "native_schema": {
+    "migrations": 109,
+    "sql_suites": 44,
+    "status": "PASS",
+    "receipt": "_audit/RAD_MASTER_EXECUTION_20261029/final-schema-v4/receipt.json",
+    "receipt_sha256": "730074248edf684b010b375e17e45e2cefe269321d5f37a3d37a2de8d9539e26",
+    "managed_services": "synthetic Auth/Storage/Vault/cron; not hosted equivalence"
+  },
+  "content": {
+    "captured_variants": 2452,
+    "accounted_blocks": 60563,
+    "final_article_locales": 1098,
+    "unresolved_urls": 421,
+    "hosted_or_browser_complete": false,
+    "immutable_verdict_sha256": "b8dd41cf52bbbd6fb2bed0b3bfa6cc05b4e629f7c9202c732f3b9eb92dad55f9"
+  },
+  "constraints": {
+    "paid_calls": 0,
+    "hosted_mutations": 0,
+    "render_deployments": 0,
+    "publication_operations": 0,
+    "project_deletions": 0,
+    "browser_e2e": "owner_deferred",
+    "independent_final_review": "pending"
+  },
+  "delivery": "Exact commit, remote CI and rebuilt artifact hashes are recorded after committing in the external final-execution-receipt.json, avoiding a self-referential commit hash."
+}

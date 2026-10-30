@@ -1,0 +1,573 @@
+{
+  "date": "2026-10-31",
+  "source": "docs/RAD_47_TASK_MASTER_LEDGER.md",
+  "scope": "All original 47 gates retained; historical evidence explicitly separated from current verification.",
+  "objectives": {
+    "A": {
+      "status": "BLOCKED",
+      "reason": "Expanded source coverage, database and rendered application receipts plus human editorial authorization outstanding"
+    },
+    "B": {
+      "status": "BLOCKED",
+      "reason": "Bound refresh and protected transport pass isolated tests; Production schema, verified authority bindings, deployed gateway/scheduler and actual provider acceptance remain outstanding"
+    }
+  },
+  "gates": [
+    {
+      "id": 1,
+      "gate": "E0-01 Production baseline and inventory",
+      "historical_status": "VERIFIED_PASS",
+      "status": "VERIFIED_PASS",
+      "acceptance": "Inventory baseline captured, source and read-only Production counts traceable (documentary acceptance).",
+      "implementation": "`docs/RAD_MASTER_COMPLETION_AUDIT.md`; `docs/FINAL_RELEASE_MATRIX.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "docs/master_execution/live_baseline.json",
+        "docs/master_execution/live_refresh_20261030.json",
+        "docs/master_execution/integrity_and_lineage.json"
+      ],
+      "remaining": "Documentary acceptance only; does not certify feature or release readiness."
+    },
+    {
+      "id": 2,
+      "gate": "E0-02 Web/mobile/admin route & control audit",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Test every registered route/control in web/mobile/admin, language, errors, keyboard, protected routes and regression cases against a deployed release SHA.",
+      "implementation": "`lib/core/routing/app_router.dart`; `test/core/app_router_protected_routes_matrix_test.dart`",
+      "historical_evidence": "PR #68 (14 tests) + route audit matrix (20 tests) PASS locally (546 Flutter tests total); deployed web release E2E outstanding.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 3,
+      "gate": "E0-03 PRD feature coverage matrix (47-row traceability in draft PR #60; feature delivery NOT asserted)",
+      "historical_status": "VERIFIED_PASS",
+      "status": "VERIFIED_PASS",
+      "acceptance": "Map all 47 original gates to implementation files and acceptance evidence without claiming their runtime completion.",
+      "implementation": "`docs/RAD_MASTER_COMPLETION_AUDIT.md`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "docs/master_execution/acceptance_gates.json",
+        "docs/RAD_MASTER_EXECUTION_LEDGER.md"
+      ],
+      "remaining": "Documentary acceptance only; does not certify feature or release readiness."
+    },
+    {
+      "id": 4,
+      "gate": "E0-04 Release A/B scope freeze",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Owner-approved Release A/B written scope and feature freeze with named sign-off.",
+      "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 5,
+      "gate": "E1-01 reconcile PR #48/#56 with main (review/integration PASS; production release NO-GO)",
+      "historical_status": "VERIFIED_PASS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Review/integrate Stage 1 PR #48/#56 in isolated replay with clean-schema and negative guards; does not include Production rollout.",
+      "implementation": "`supabase/reconciliation/security_regression.sql`; `scripts/verify_clean_schema.sh`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/native/acceptance.json"
+      ],
+      "remaining": "Isolated source integration/reconstruction evidence exists; final exact-SHA CI and hosted rollout remain separate."
+    },
+    {
+      "id": 6,
+      "gate": "E1-02 migration ledger/content drift reconciliation",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove all 47 live historical migrations' original SQL/catalog/DML effects, reconcile 16 timestamp aliases and 4 live-only with repo-only; rehearse forward-only rollout with verified restore.",
+      "implementation": "`docs/SUPABASE_MIGRATION_LINEAGE_RECONCILIATION.md`; `scripts/verify_migration_reconstruction.sh`",
+      "historical_evidence": "PR #65 + #66: 47 live / 52 repo; 27 exact, 16 timestamp aliases, 4 live-only and 9 repo-only; SQL fingerprint differences unresolved.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 7,
+      "gate": "E1-03 RLS cross-role/adversarial tests",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Exercise two-user/anon/admin/service JWTs for table, RPC and Storage access, including malicious cross-owner writes on production-equivalent clone.",
+      "implementation": "`scripts/verify_local_auth_isolation.py`; `supabase/reconciliation/security_regression.sql`",
+      "historical_evidence": "PR #48 + #67 isolated Postgres tests 7/7 CI; live Stage 1 migration not applied.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/native/test_rad_privacy_security.log",
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-populated-reader-receipt.json"
+      ],
+      "remaining": "Local negative-role/catalog evidence only; Production-equivalent restore and deployed permissions still unverified."
+    },
+    {
+      "id": 8,
+      "gate": "E1-04 SECURITY DEFINER privilege audit",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Inventory each SECURITY DEFINER function, grants, safe search_path and role spoofing; verify on deployed schema.",
+      "implementation": "`docs/SECURITY_DEFINER_PRIVILEGE_AUDIT_20261018.md`; `scripts/tests/test_security_definer_audit.py`",
+      "historical_evidence": "64/64 functions audited; 100% have search_path pinned; public execute revoked in stage9/stage1 migrations; live production rollout pending.",
+      "current_evidence": [
+        "scripts/master_preflight.sql",
+        "docs/master_execution/live_baseline.json"
+      ],
+      "remaining": "Local negative-role/catalog evidence only; Production-equivalent restore and deployed permissions still unverified."
+    },
+    {
+      "id": 9,
+      "gate": "E1-05 Auth/storage/abuse/backup security hardening",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
+      "implementation": "`docs/AUTH_ARCHITECTURE.md`; `docs/ANDROID_RELEASE.md`",
+      "historical_evidence": "PR #58 recovery path, #61 private documents; no mailbox or live two-user verification, PITR evidence missing.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 10,
+      "gate": "E1-06 FK/query performance remediation",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Resolve true uncovered FK indexes using measured EXPLAIN/workload; verify performance without speculative regressions.",
+      "implementation": "`supabase/migrations/20261018210000_stage10_covering_fk_indexes_completion.sql`; `scripts/tests/test_stage10_fk_indexes.py`",
+      "historical_evidence": "Covering partial B-tree indexes staged for knowledge_claims.superseded_by, consultation_requests.assigned_to, and consultation_requests.related_application_id.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 11,
+      "gate": "E2-01 provider credentials/routing operational health",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Validate real configured provider credentials/routing in approved non-production environment and successful user/admin calls.",
+      "implementation": "`lib/features/admin/data/admin_ai_config_repository.dart`; `supabase/functions/ai-orchestrator/handler.ts`",
+      "historical_evidence": "Production AI 10 succeeded / 49 total; 27 no_eligible_model; two providers credential_rejected, one degraded.",
+      "current_evidence": [],
+      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+    },
+    {
+      "id": 12,
+      "gate": "E2-02 AI models eligibility & discovery",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove candidate model eligibility, discovery, scopes, cooldown and failure recovery via stable provider fixtures and operational observations.",
+      "implementation": "`lib/features/admin/presentation/pages/admin_ai_config_page.dart`; `docs/AI_ENTITLEMENT_CONTRACT.md`",
+      "historical_evidence": "721 models (641 nominal available chat); 83 chat models at degraded Kiraai; operational request success not established.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 13,
+      "gate": "E2-03 atomic quotas and concurrency",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Race-test five-question limit and atomic quota reservation under concurrent requests, then verify live deployment compatibility.",
+      "implementation": "`supabase/functions/ai-orchestrator/handler.ts`; `docs/AI_ENTITLEMENT_CONTRACT.md`",
+      "historical_evidence": "Phase A atomic quota SQL staged in main, not deployed; concurrency regression only on disposable database.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 14,
+      "gate": "E2-04 grounded answer + citation evaluation",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Evaluate immigration answers against approved RAD/official citations, stale/missing/conflicting evidence, localization and prompt-injection negatives.",
+      "implementation": "`supabase/functions/ai-orchestrator/knowledge_grounding.ts`; `supabase/functions/tests/knowledge_grounding_test.ts`",
+      "historical_evidence": "Grounded evaluation implemented: open conflict detection, fail-closed insufficient evidence without unapproved items, URL sanitization, and 12 unit tests PASS.",
+      "current_evidence": [],
+      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+    },
+    {
+      "id": 15,
+      "gate": "E2-05 AI observability/security/cost",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove request logs, redaction, latency, provider error taxonomy, cost accounting and admin security visibility.",
+      "implementation": "`docs/FINAL_SECURITY_ACCEPTANCE.md`; `docs/RELEASE_READINESS_MATRIX.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+    },
+    {
+      "id": 16,
+      "gate": "E3-01 RAD source ingestion and snapshots",
+      "historical_status": "IN_PROGRESS",
+      "status": "BLOCKED",
+      "acceptance": "Evidence current RAD three-site ingestion and snapshots with source URI/provenance, freshness, deduplication and safe retrieval.",
+      "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `supabase/functions/research-sync/index.ts`",
+      "historical_evidence": "research-sync Edge source exists; actual three-site inventory and source freshness not accepted.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/FINAL_CONTENT_VERDICT.json"
+      ],
+      "remaining": "All captured blocks locally preserved and 1,098 destinations reconciled;421 URLs unresolved and hosted/application receipts incomplete."
+    },
+    {
+      "id": 17,
+      "gate": "E3-02 authoritative government sources & conflicts",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify authoritative institutional/government sources, conflicts, revisions, currency and independent human assessment.",
+      "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `docs/KNOWLEDGE_RETRIEVAL_CONTRACT.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/research-live/receipt.json"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 18,
+      "gate": "E3-03 finding→draft→human approval→Feed",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Execute finding → review draft → approval → publication with no direct AI/Research Feed write, audits and negative role tests.",
+      "implementation": "`lib/features/feed`; `supabase/functions/research-sync/index.ts`",
+      "historical_evidence": "Live read-only JOIN: all 16 findings map 1:1 to 16 distinct drafts, all in review, zero duplicates and zero Feed. Merged #67 tests human publishing in isolated DB; live human guard remains absent.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 19,
+      "gate": "E3-04 review 16 production drafts",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Have authorized human editor review all actual Production draft candidates with verified sources and disposition; no auto-approval.",
+      "implementation": "`lib/features/admin`; `lib/features/feed`",
+      "historical_evidence": "All 16 Production drafts have linked distinct research findings and status=review; no draft published. Each still requires independent authoritative human editorial disposition.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 20,
+      "gate": "E3-05 bilingual Visa catalog evidence-backed completion",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Populate bilingual Visa program/step/requirements only from verified RAD/official evidence and human editorial approval.",
+      "implementation": "`lib/features/visa`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
+      "historical_evidence": "22 destinations, 10 programs and 18 steps; regulatory sources/approval outstanding.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 21,
+      "gate": "E3-06 bilingual search/FAQ/Feed usability",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify localized search, FAQ, Feed bookmarks, filters, retries and empty states across real browser/viewport matrix.",
+      "implementation": "`lib/features/visa`; `lib/features/feed`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 22,
+      "gate": "E4-01 Auth/OTP/recovery/deep-links E2E",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Verify signup, login, OTP, recovery email/deep-link, password change, expiration/session persistence in controlled test mailbox.",
+      "implementation": "`lib/features/auth`; `docs/AUTH_ARCHITECTURE.md`",
+      "historical_evidence": "#58 and #68 auth UI/widget tests; no verified mailbox or live password recovery credential change.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 23,
+      "gate": "E4-02 consultation intake/admin E2E",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify complete consultation intake, admin role matrix and status/history with isolated two-user and negative access checks.",
+      "implementation": "`lib/features/consultation`; `lib/features/admin`",
+      "historical_evidence": "#64 consultation client compatibility and #68 widget tests; current Production Stage1 consultation RPCs absent.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 24,
+      "gate": "E4-03 applications/documents/private storage E2E",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
+      "implementation": "`lib/features/applications`; `lib/features/documents`",
+      "historical_evidence": "#61 owner-bound preview and URL cache tests; real 2-user Storage/E2E outstanding.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 25,
+      "gate": "E4-04 Admin role matrix & audit E2E",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Validate admin bootstrap, assign roles, privilege escalation denial, all audited admin RPCs and actual UI actions.",
+      "implementation": "`lib/features/admin`; `docs/FINAL_SECURITY_ACCEPTANCE.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/native/test_stage71_rich_review.log"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 26,
+      "gate": "E4-05 RTL/LTR/themes/accessibility",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify RTL/LTR icons, theme/locale persistence, accessible focus/announcements, reduced motion, keyboard across viewports.",
+      "implementation": "`lib/core/theme`; `lib/core/l10n`",
+      "historical_evidence": "#68 dedicated Antigravity UI/UX PR, separate worktree, tested own HEAD but not integrated/deployed.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 27,
+      "gate": "E5-01 CRM lifecycle",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Persist consultation CRM lifecycle, ownership handoff and statuses, retries, audit and failure states.",
+      "implementation": "`lib/features/consultation`; `lib/features/admin`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 28,
+      "gate": "E5-02 notifications email/SMS/push preferences",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Confirm notification opt-in preferences, sandbox email/SMS/push transports, retries, failures and privacy.",
+      "implementation": "`lib/features/notifications`; `lib/features/profile`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 29,
+      "gate": "E5-03 saved/read/user activity",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Validate bookmarks/read marks and user activity persistence, per-user isolation, undo/duplicate resilience.",
+      "implementation": "`lib/features/feed`; `lib/features/dashboard`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 30,
+      "gate": "E5-04 business/AI/research dashboards",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify live business/AI/research dashboards, honest counts, accessible charts, least privilege and stale/error states.",
+      "implementation": "`lib/features/dashboard`; `docs/RELEASE_READINESS_MATRIX.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 31,
+      "gate": "E6-01 immutable release SHA & rollback",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Pin immutable Git SHA in deployed web release, retrieve/verify release artifact and rehearse rollback.",
+      "implementation": "`docs/WEB_RELEASE.md`; `docs/ANDROID_RELEASE.md`",
+      "historical_evidence": "Live Render deploy SHA 449cd3b6cb0a0b53e852015ad4a3648bd817ad65 differs from main; autoDeploy OFF.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 32,
+      "gate": "E6-02 browser/viewport/language matrix",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Manual/automated real-browser EN/FA desktop/tablet/mobile matrix with viewport, input, contrast and navigation evidence.",
+      "implementation": "`docs/UI_UX_ROUTE_ACCEPTANCE.md`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
+      "historical_evidence": "#68 mocks/widget tests; no real-browser acceptance report for deployed current main.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/browser-existing-local/report.json"
+      ],
+      "remaining": "QA API 64521 offline because Docker Secrets Engine IPC startup failed; owner explicitly deferred browser E2E."
+    },
+    {
+      "id": 33,
+      "gate": "E6-03 native Android/iOS release & real devices",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Build/sign/release Android and iOS identities with authorized keystores/Xcode and real physical device acceptance.",
+      "implementation": "`docs/ANDROID_RELEASE.md`; `docs/IOS_RELEASE.md`",
+      "historical_evidence": "GitHub Android build CI success; iOS signing, stores and physical devices blocked.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/build-artifacts.json"
+      ],
+      "remaining": "Web release and Android debug builds PASS; permanent identities, owner signing, iOS Xcode/stores and real devices outstanding."
+    },
+    {
+      "id": 34,
+      "gate": "E6-04 load/security/backup/SLO/UAT",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
+      "implementation": "`docs/FINAL_RELEASE_MATRIX.md`; `docs/FINAL_SECURITY_ACCEPTANCE.md`",
+      "historical_evidence": "Security isolated database CI success; no verified PITR restore, SLO/load or real-client UAT.",
+      "current_evidence": [
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-rehearsal/rehearsal-receipt.json"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 35,
+      "gate": "E6-05 Release A client handover",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Owner and client sign Release A handover using immutable artefacts, documentation and support/rollback.",
+      "implementation": "`docs/RELEASE_EXTERNAL_DEPENDENCIES.md`; `docs/FINAL_RELEASE_MATRIX.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 36,
+      "gate": "E7-01 payment provider/store compliance",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Select licensed approved payment provider, merchant account, terms/tax/store compliance and supported geography.",
+      "implementation": "`docs/PAYMENT_PRODUCTION_READINESS.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
+      "historical_evidence": "Merchant/provider/store contract absent from available evidence; no real charges authorized.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 37,
+      "gate": "E7-02 subscriptions/billing/webhooks/taxes",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Sandbox recurring billing/payment webhook signature, replay/idempotence, cancellation/refund, audit with agreed prices/plans.",
+      "implementation": "`docs/AI_ENTITLEMENT_CONTRACT.md`; `docs/PAYMENT_PRODUCTION_READINESS.md`",
+      "historical_evidence": "Payment plans, billing credentials and sandbox webhook tests not independently established.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 38,
+      "gate": "E7-03 entitlement financial integrity",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove payment-to-entitlement consistency under delayed/out-of-order webhooks, fraudulent callbacks, resets and refunds.",
+      "implementation": "`docs/AI_ENTITLEMENT_CONTRACT.md`; `lib/features/ai_assistant`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 39,
+      "gate": "E8-01 immigration profile/pathway assessment",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Exercise immigration profile and pathway scoring with verified sources and no unauthorized legal guarantees.",
+      "implementation": "`lib/features/profile`; `lib/features/visa`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 40,
+      "gate": "E8-02 case tracker/checklists/reminders",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
+      "implementation": "`lib/features/applications`; `lib/features/notifications`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 41,
+      "gate": "E8-03 OCR processing/review/privacy",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Perform OCR on synthetic files, verify minimization/retention/review/redaction and failure handling without third-party unapproved keys.",
+      "implementation": "`lib/features/documents`; `supabase/functions/document-intelligence/index.ts`",
+      "historical_evidence": "document-intelligence Edge source exists; Production processor disabled; synthetic file E2E pending.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 42,
+      "gate": "E8-04 CV/SOP/document generator",
+      "historical_status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove actual CV/SOP document generation, editable export, human review, accessibility and safe data handling.",
+      "implementation": "[PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70); `lib/features/documents/domain/document_draft_generator.dart`; `lib/features/documents/presentation/pages/document_draft_page.dart`; `test/documents/`",
+      "historical_evidence": "Deterministic bilingual CV/SOP editable plain-text + explicit UTF-8 TXT export implemented; 27 focused and 512 complete Flutter tests PASS locally; zero analyzer issues. PR #70 is DRAFT/not deployed. PDF/DOCX export, physical-device UAT and user/client acceptance remain open.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 43,
+      "gate": "E9-01 continuous policy knowledge/conflict monitor",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Verify scheduled policy changes, evidence provenance, conflict resolution/review without auto-publication.",
+      "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `docs/KNOWLEDGE_RETRIEVAL_CONTRACT.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [
+        "docs/master_execution/RESEARCH_TRANSPORT_RUNBOOK.md"
+      ],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 44,
+      "gate": "E9-02 university/scholarship/calculators",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Test verified university/scholarship discovery/calculators for valid eligibility and date/currency freshness.",
+      "implementation": "`lib/features/visa`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 45,
+      "gate": "E9-03 voice/multilingual handling",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Validate Voice AI accessibility, language behavior, provider privacy/consent and spoken source/uncertainty representation.",
+      "implementation": "`lib/features/ai_assistant`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 46,
+      "gate": "E9-04 recommendations/analytics/performance",
+      "historical_status": "IN_PROGRESS",
+      "status": "IN_PROGRESS",
+      "acceptance": "Prove recommendations/analytics quality, measurable latency, error handling and consent/privacy boundaries.",
+      "implementation": "`lib/features/dashboard`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
+      "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    },
+    {
+      "id": 47,
+      "gate": "E9-05 PRD long-tail integrations + final client acceptance",
+      "historical_status": "BLOCKED",
+      "status": "BLOCKED",
+      "acceptance": "Client acceptance sign-off across all original long-tail scope, deployment, support, training and no high-severity defects.",
+      "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
+      "historical_evidence": "Full client sign-off not present; 3/47 source documentary checks accepted.",
+      "current_evidence": [],
+      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+    }
+  ],
+  "owner_constraints": {
+    "paid_calls": false,
+    "browser_e2e": "owner_deferred_while_Docker_engine_startup_blocked",
+    "Render_deployment": "owner_only",
+    "publication": "separate_human_editorial_authorization"
+  }
+}

@@ -20,6 +20,9 @@ do $$ declare f record; begin
       'public.get_visa_article(jsonb)'::regprocedure,
       -- Country/category content readers: published-only; preview is Admin-only.
       'public.get_editorial_article(uuid,text,boolean)'::regprocedure,
+      -- V4 library: anonymous access only selects published heads; preview requires admin.
+      -- Explicit rollback-only leakage/preview-denial checks: full_content_v4_reader.sql.
+      'public.list_editorial_library(text,boolean,integer,integer)'::regprocedure,
       'public.resolve_editorial_article_slug(text,text,text)'::regprocedure,
       'public.get_editorial_reference_links(uuid,text,boolean)'::regprocedure,
       'public.list_editorial_relations(uuid,text,boolean)'::regprocedure,
