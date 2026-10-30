@@ -1,7 +1,13 @@
 import registry from "../../contracts/rad_v1.json" with { type: "json" };
+import workerExtension from "../../contracts/rad_worker_v2.json" with {
+  type: "json",
+};
 
 type Schema = Record<string, unknown>;
-const definitions = registry.$defs as Record<string, Schema>;
+const definitions = { ...registry.$defs, ...workerExtension.$defs } as Record<
+  string,
+  Schema
+>;
 export function contractValid(name: string, value: unknown): boolean {
   const validate = (s: Schema | undefined, v: unknown, depth = 0): boolean => {
     if (!s || depth > 24) return false;

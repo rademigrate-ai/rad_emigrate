@@ -26,6 +26,15 @@ class VisaContentCountriesPage extends ConsumerWidget {
         : 'en';
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            tooltip: locale == 'fa' ? 'دیگر عناوین' : 'Other Titles',
+            icon: const Icon(Icons.library_books_outlined),
+            onPressed: () => context.push(
+              '/visa/other-titles${preview ? '?preview=true' : ''}',
+            ),
+          ),
+        ],
         leading: const AppBackButton(fallback: '/visa'),
         title: Text(
           countryCode == null

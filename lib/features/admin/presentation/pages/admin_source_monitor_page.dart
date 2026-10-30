@@ -36,28 +36,33 @@ final adminDashboardMetricsProvider =
       if (repo is MockResearchAdminRepository) {
         return repo.getDashboardMetrics();
       }
-      final proposals =
-          ref.watch(adminProposalsProvider).valueOrNull ?? const [];
-      final authorities =
-          ref.watch(adminAuthoritiesProvider).valueOrNull ?? const [];
+      final proposals = ref.watch(adminProposalsProvider).valueOrNull;
+      final authorities = ref.watch(adminAuthoritiesProvider).valueOrNull;
       return ResearchDashboardMetrics(
         monitoredCountriesCount: authorities
-            .map((a) => a.countryCode)
+            ?.map((a) => a.countryCode)
             .whereType<String>()
             .toSet()
             .length,
-        activeOfficialSourcesCount: authorities.length,
-        employerAddedSourcesCount: 0,
+        activeOfficialSourcesCount: authorities
+            ?.where((a) => a.isVerified && !a.isExpired)
+            .length,
+        employerAddedSourcesCount: null,
         monitoredUniversitiesCount: authorities
-            .where((a) => a.authorityType == 'university')
+            ?.where(
+              (a) =>
+                  a.authorityType == 'university' &&
+                  a.isVerified &&
+                  !a.isExpired,
+            )
             .length,
-        detectedChangesCount: proposals.length,
+        detectedChangesCount: proposals?.length,
         pendingAdminReviewsCount: proposals
-            .where((p) => p.reviewStatus == SourceProposalReviewStatus.pending)
+            ?.where((p) => p.reviewStatus == SourceProposalReviewStatus.pending)
             .length,
-        monitoringFailuresCount: 0,
-        overdueSourceChecksCount: 0,
-        lastCrawlCompletedAt: DateTime.now(),
+        monitoringFailuresCount: null,
+        overdueSourceChecksCount: null,
+        lastCrawlCompletedAt: null,
       );
     });
 
@@ -79,21 +84,21 @@ final adminManagedSourcesProvider =
           name: auth.name,
           baseUrl: auth.officialDomains.isNotEmpty
               ? 'https://${auth.officialDomains.first}'
-              : 'https://official.gov',
+              : '',
           countryCode: auth.countryCode ?? 'GLOBAL',
           universityName: isUni ? auth.name : null,
           topic: auth.competenceTopics.join('، '),
-          relevantArticles: const ['مهاجرت کاری', 'ویزای تحصیلی'],
-          verificationTier: isUni
-              ? SourceVerificationTier.accreditedUniversity
-              : (auth.verificationState == 'verified'
-                    ? SourceVerificationTier.officialAuthority
-                    : SourceVerificationTier.employerDefinedUnverified),
-          isEnabled: true,
-          interval: MonitoringInterval.daily,
-          lastCheckedAt: auth.verifiedAt ?? DateTime.now(),
-          nextScheduledCheckAt: DateTime.now().add(const Duration(hours: 12)),
-          connectionStatus: 'ok_200',
+          relevantArticles: const [],
+          verificationTier: auth.isVerified && !auth.isExpired
+              ? (isUni
+                    ? SourceVerificationTier.accreditedUniversity
+                    : SourceVerificationTier.officialAuthority)
+              : SourceVerificationTier.employerDefinedUnverified,
+          isEnabled: null,
+          interval: null,
+          lastCheckedAt: null,
+          nextScheduledCheckAt: null,
+          connectionStatus: 'unknown',
         );
       }).toList();
     });
@@ -379,17 +384,35 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     return ResearchDashboardView(
       metrics: metrics,
       recentRuns: runs,
+      monitoringHistoryAvailable:
+          ref.read(adminCmsRepositoryProvider) is MockResearchAdminRepository,
       onJumpToProposals: () => _tabController.animateTo(0),
       onJumpToSources: () => _tabController.animateTo(2),
       onAddNewSource: () => showAdminSourceDialog(context),
-      onTriggerManualCrawl: () async {
-        final repo = ref.read(adminCmsRepositoryProvider);
-        await repo.enqueueResearchRefresh(
-          authorityIds: ['all-active'],
-          requestKey: newRadRequestKey(),
-        );
-        ref.invalidate(adminProposalsProvider);
-      },
+      onTriggerManualCrawl:
+          (ref.watch(adminAuthoritiesProvider).valueOrNull?.isNotEmpty ?? false)
+          ? () async {
+              final repo = ref.read(adminCmsRepositoryProvider);
+              final ids = (await repo.listOfficialAuthorities())
+                  .where(
+                    (a) => !a.isExpired && a.verificationState != 'blacklisted',
+                  )
+                  .map((a) => a.id)
+                  .toSet()
+                  .toList();
+              if (ids.isEmpty) throw const CmsException('no_sources');
+              for (var offset = 0; offset < ids.length; offset += 20) {
+                await repo.enqueueResearchRefresh(
+                  authorityIds: ids.sublist(
+                    offset,
+                    offset + 20 > ids.length ? ids.length : offset + 20,
+                  ),
+                  requestKey: newRadRequestKey(),
+                );
+              }
+              ref.invalidate(adminProposalsProvider);
+            }
+          : null,
     );
   }
 
@@ -398,6 +421,11 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
     List<SourceSnapshotItem> snapshots,
     List<AdminDecisionHistoryItem> decisions,
   ) {
+    if (ref.read(adminCmsRepositoryProvider) is! MockResearchAdminRepository) {
+      return const Center(
+        child: Text('تاریخچه پایش و کپسول‌های منبع در دسترس نیست.'),
+      );
+    }
     return ResearchHistoryView(
       crawlRuns: runs,
       snapshots: snapshots,
@@ -832,14 +860,15 @@ class _AdminSourceMonitorPageState extends ConsumerState<AdminSourceMonitorPage>
   }
 
   Widget _buildSourcesTab(List<ManagedResearchSource> sources) {
+    if (ref.read(adminCmsRepositoryProvider) is! MockResearchAdminRepository) {
+      final authorities = ref.watch(adminAuthoritiesProvider);
+      if (authorities.isLoading) return const Center(child: RadPending());
+      if (authorities.hasError) {
+        return const Center(child: Text('اطلاعات مراجع در دسترس نیست.'));
+      }
+    }
     return SourceManagementView(
       sources: sources,
-      onToggleSource: (id) {
-        // State is managed in UI view
-      },
-      onUpdateInterval: (id, interval) {
-        // State is managed in UI view
-      },
       onRefreshSource: (id) => _refreshAuthority(id),
       onAddNewSource: () => showAdminSourceDialog(context),
     );

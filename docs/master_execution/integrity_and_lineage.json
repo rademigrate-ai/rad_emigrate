@@ -1,0 +1,578 @@
+{
+  "integrity": [
+    {
+      "integrity": {
+        "users": 3,
+        "sessions": 37,
+        "cron_jobs": [
+          {
+            "name": "rad-daily-research-enqueue",
+            "active": true,
+            "schedule": "17 3 * * *"
+          },
+          {
+            "name": "rad-daily-research-worker",
+            "active": true,
+            "schedule": "27 3 * * *"
+          },
+          {
+            "name": "rad-observability-retention",
+            "active": true,
+            "schedule": "41 2 * * *"
+          }
+        ],
+        "storage_objects": 2,
+        "cms_hash_failures": 0,
+        "head_revision_orphans": 0,
+        "evidence_hash_failures": 0,
+        "invocation_token_present": true,
+        "public_tables_without_rls": null,
+        "snapshot_document_orphans": 0,
+        "published_revision_orphans": 0
+      }
+    }
+  ],
+  "migrations": {
+    "production": {
+      "migrations": [
+        {
+          "version": "20261001191421",
+          "name": "initial_rad_core_schema"
+        },
+        {
+          "version": "20261001191653",
+          "name": "create_profile_trigger_and_storage_setup_v2"
+        },
+        {
+          "version": "20261001194638",
+          "name": "security_hardening_handle_new_user"
+        },
+        {
+          "version": "20261001194715",
+          "name": "add_rad_backend_indexes"
+        },
+        {
+          "version": "20261001195750",
+          "name": "security_hardening"
+        },
+        {
+          "version": "20261001195754",
+          "name": "rls_policies"
+        },
+        {
+          "version": "20261001195756",
+          "name": "storage_policies"
+        },
+        {
+          "version": "20261001200202",
+          "name": "ai_sessions_and_document_bootstrap"
+        },
+        {
+          "version": "20261001214952",
+          "name": "project05_launch_hardening"
+        },
+        {
+          "version": "20261001215315",
+          "name": "project05_storage_upload_limits"
+        },
+        {
+          "version": "20261001215758",
+          "name": "project05_minimize_table_privileges"
+        },
+        {
+          "version": "20261001225237",
+          "name": "profile_bootstrap_policy"
+        },
+        {
+          "version": "20261001225632",
+          "name": "storage_validation_policies"
+        },
+        {
+          "version": "20261001225634",
+          "name": "ai_message_ownership_policies"
+        },
+        {
+          "version": "20261001233027",
+          "name": "signup_trigger_search_path"
+        },
+        {
+          "version": "20261001233048",
+          "name": "relationship_policies_and_indexes"
+        },
+        {
+          "version": "20261003102347",
+          "name": "restrict_documents_bucket_uploads"
+        },
+        {
+          "version": "20261003210302",
+          "name": "project09_visa_catalog"
+        },
+        {
+          "version": "20261003211635",
+          "name": "project10_knowledge_research"
+        },
+        {
+          "version": "20261003212339",
+          "name": "project10_security_hardening"
+        },
+        {
+          "version": "20261003213219",
+          "name": "project11_ai_orchestration"
+        },
+        {
+          "version": "20261003214031",
+          "name": "project12_document_intelligence"
+        },
+        {
+          "version": "20261003221324",
+          "name": "project13_admin_operations"
+        },
+        {
+          "version": "20261003222909",
+          "name": "project14_feed_notifications"
+        },
+        {
+          "version": "20261003223717",
+          "name": "project15_observability"
+        },
+        {
+          "version": "20261003235000",
+          "name": "ai_base_url_ssrf_hardening"
+        },
+        {
+          "version": "20261004190000",
+          "name": "fix_profile_update_rls_recursion"
+        },
+        {
+          "version": "20261005123027",
+          "name": "client_delivery_ai_scopes"
+        },
+        {
+          "version": "20261005123202",
+          "name": "stage1_ai_research_completion"
+        },
+        {
+          "version": "20261005123255",
+          "name": "stage2_review_feed_publish"
+        },
+        {
+          "version": "20261005180215",
+          "name": "stage3_fk_covering_indexes"
+        },
+        {
+          "version": "20261006144235",
+          "name": "stage2_visa_structured_steps"
+        },
+        {
+          "version": "20261006144246",
+          "name": "stage5_research_review_candidate_backfill"
+        },
+        {
+          "version": "20261006161823",
+          "name": "fix_profile_update_with_check_role_escalation"
+        },
+        {
+          "version": "20261006221616",
+          "name": "ai_dynamic_routing_architecture"
+        },
+        {
+          "version": "20261007075108",
+          "name": "ai_credential_failure_routing"
+        },
+        {
+          "version": "20261007075110",
+          "name": "research_atomic_review_candidate"
+        },
+        {
+          "version": "20261007142614",
+          "name": "ai_discovery_auto_enable_chat"
+        },
+        {
+          "version": "20261007171212",
+          "name": "stage2_knowledge_completion"
+        },
+        {
+          "version": "20261007171310",
+          "name": "stage2_promote_knowledge_fn"
+        },
+        {
+          "version": "20261007171341",
+          "name": "stage2_retrieve_and_conflict_fn"
+        },
+        {
+          "version": "20261007183840",
+          "name": "stage4_user_ai_quota_grounding"
+        },
+        {
+          "version": "20261007185216",
+          "name": "stage4_guest_quota_advisory_lock"
+        },
+        {
+          "version": "20261007192522",
+          "name": "stage4_limit_ai_runtime_chain"
+        },
+        {
+          "version": "20261007202907",
+          "name": "stage6_entitlement_access_decision"
+        },
+        {
+          "version": "20261007205734",
+          "name": "stage7_ops_consultation_app_status"
+        },
+        {
+          "version": "20261007212140",
+          "name": "stage9_security_grant_hardening"
+        },
+        {
+          "version": "20261019130911",
+          "name": "20261010010000_stage1_p0_security_completion"
+        },
+        {
+          "version": "20261019131205",
+          "name": "20261017190000_security_ai_entitlement_rpc_privacy"
+        },
+        {
+          "version": "20261019131224",
+          "name": "20261010055013_stage1_atomic_ai_quota_reservation"
+        },
+        {
+          "version": "20261019131243",
+          "name": "20261010070000_stage1_ssrf_ipv4_mapped_ipv6"
+        },
+        {
+          "version": "20261019131312",
+          "name": "20261012110945_stage1_security_abuse_storage_alignment"
+        },
+        {
+          "version": "20261019131319",
+          "name": "20261012230000_ai_models_check_constraints_alignment"
+        },
+        {
+          "version": "20261019171732",
+          "name": "repair_admin_consultation_rpcs"
+        },
+        {
+          "version": "20261029135004",
+          "name": "rad_production_20261029_plan2_booking_request_contracts"
+        },
+        {
+          "version": "20261029135009",
+          "name": "rad_production_20261029_plan2_interview_request_contracts"
+        },
+        {
+          "version": "20261029135109",
+          "name": "rad_production_20261029_user_ai_profile_checklist_reports"
+        },
+        {
+          "version": "20261029135359",
+          "name": "rad_production_20261029_plan2_user_ai_rls_performance_hardening"
+        },
+        {
+          "version": "20261029141004",
+          "name": "rad_production_20261029_g002_content_architecture_scaffolding"
+        },
+        {
+          "version": "20261029141214",
+          "name": "rad_production_20261029_pr82_appointment_contract_adapter"
+        },
+        {
+          "version": "20261029141335",
+          "name": "rad_production_20261029_stage7_editorial_source_type"
+        },
+        {
+          "version": "20261029142735",
+          "name": "rad_production_20261029_notification_preferences_forward_alignment"
+        },
+        {
+          "version": "20261029142941",
+          "name": "rad_production_20261029_crm_revision_events_owner_rpc_forward"
+        },
+        {
+          "version": "20261029143209",
+          "name": "rad_production_20261029_cms_foundation_locked_schema_only"
+        },
+        {
+          "version": "20261029143421",
+          "name": "rad_production_20261029_editorial_private_contract_core"
+        },
+        {
+          "version": "20261029144051",
+          "name": "rad_production_20261029_cms_publication_guarded_api"
+        },
+        {
+          "version": "20261029144533",
+          "name": "rad_production_20261029_cms_quarantined_actor_preserving_archive"
+        },
+        {
+          "version": "20261029154943",
+          "name": "rad_production_20261029_private_evidence_import_archive"
+        },
+        {
+          "version": "20261029171607",
+          "name": "rad_production_20261029_owner_visa_reading_state_forward"
+        },
+        {
+          "version": "20261029171616",
+          "name": "cms_visa_articles_nullable_country_code_for_topics"
+        },
+        {
+          "version": "20261029171725",
+          "name": "cms_visa_article_rls_admin_and_published_read"
+        },
+        {
+          "version": "20261029172624",
+          "name": "cms_reading_state_and_research_rls"
+        }
+      ]
+    },
+    "staging": {
+      "migrations": [
+        {
+          "version": "20261025163256",
+          "name": "initial_rad_core_schema"
+        },
+        {
+          "version": "20261025163328",
+          "name": "create_profile_trigger_and_storage_setup_v2"
+        },
+        {
+          "version": "20261025163337",
+          "name": "security_hardening_handle_new_user"
+        },
+        {
+          "version": "20261025163339",
+          "name": "add_rad_backend_indexes"
+        },
+        {
+          "version": "20261025163340",
+          "name": "security_hardening"
+        },
+        {
+          "version": "20261025171907",
+          "name": "rls_policies"
+        },
+        {
+          "version": "20261025171910",
+          "name": "storage_policies"
+        },
+        {
+          "version": "20261025171913",
+          "name": "ai_sessions_and_document_bootstrap"
+        },
+        {
+          "version": "20261025171953",
+          "name": "project05_launch_hardening"
+        },
+        {
+          "version": "20261025172046",
+          "name": "project05_storage_upload_limits"
+        },
+        {
+          "version": "20261025172047",
+          "name": "project05_minimize_table_privileges"
+        },
+        {
+          "version": "20261025172049",
+          "name": "profile_bootstrap_policy"
+        },
+        {
+          "version": "20261025172051",
+          "name": "storage_validation_policies"
+        },
+        {
+          "version": "20261025172128",
+          "name": "ai_message_ownership_policies"
+        },
+        {
+          "version": "20261025172135",
+          "name": "relationship_policies_and_indexes"
+        },
+        {
+          "version": "20261025172416",
+          "name": "signup_trigger_search_path_reconcile"
+        },
+        {
+          "version": "20261025172426",
+          "name": "restrict_documents_bucket_uploads"
+        },
+        {
+          "version": "20261025172749",
+          "name": "project09_visa_catalog_core_roles"
+        },
+        {
+          "version": "20261025174234",
+          "name": "project09_visa_catalog_tables_grants"
+        },
+        {
+          "version": "20261025174312",
+          "name": "project09_visa_catalog_rls_policies"
+        },
+        {
+          "version": "20261025174327",
+          "name": "project09_visa_catalog_seed_sources_en"
+        },
+        {
+          "version": "20261025174422",
+          "name": "project09_visa_catalog_seed_destinations"
+        },
+        {
+          "version": "20261025174453",
+          "name": "project09_visa_catalog_programs_and_triggers"
+        },
+        {
+          "version": "20261025174748",
+          "name": "project10_knowledge_research_tables"
+        },
+        {
+          "version": "20261025174825",
+          "name": "project10_knowledge_research_rls"
+        },
+        {
+          "version": "20261025174834",
+          "name": "project10_security_hardening"
+        },
+        {
+          "version": "20261025174941",
+          "name": "project11_ai_orchestration_core"
+        },
+        {
+          "version": "20261025175022",
+          "name": "project11_ai_orchestration_rpcs"
+        },
+        {
+          "version": "20261025175110",
+          "name": "project12_document_intelligence_core"
+        },
+        {
+          "version": "20261025181506",
+          "name": "project12_document_intelligence_rpcs"
+        },
+        {
+          "version": "20261025181527",
+          "name": "project13_admin_operations"
+        },
+        {
+          "version": "20261025181654",
+          "name": "fix_profile_update_rls_recursion"
+        },
+        {
+          "version": "20261025181700",
+          "name": "client_delivery_ai_scopes"
+        },
+        {
+          "version": "20261025181704",
+          "name": "fix_profile_update_with_check_role_escalation"
+        },
+        {
+          "version": "20261025181737",
+          "name": "project14_feed_notifications"
+        },
+        {
+          "version": "20261025181807",
+          "name": "plan2_booking_request_contracts"
+        },
+        {
+          "version": "20261025181826",
+          "name": "plan2_interview_request_contracts"
+        },
+        {
+          "version": "20261025181936",
+          "name": "ai_base_url_ssrf_hardening"
+        },
+        {
+          "version": "20261025181943",
+          "name": "plan2_h01_privilege_hardening_partial"
+        },
+        {
+          "version": "20261025190610",
+          "name": "ai_models_discovery_columns"
+        },
+        {
+          "version": "20261025190622",
+          "name": "rad_ai_discovery_fail_closed_f15"
+        },
+        {
+          "version": "20261025190702",
+          "name": "cms_visa_articles_core"
+        },
+        {
+          "version": "20261025190706",
+          "name": "consultation_requests_minimal"
+        },
+        {
+          "version": "20261025194124",
+          "name": "codex_f16_profile_bootstrap_guard"
+        },
+        {
+          "version": "20261025194249",
+          "name": "codex_staging_reconstruction_safety"
+        },
+        {
+          "version": "20261025195737",
+          "name": "codex_complete_staging_source_effects_7fe6710"
+        },
+        {
+          "version": "20261025200321",
+          "name": "codex_keyed_receipts_and_function_defaults"
+        },
+        {
+          "version": "20261025202749",
+          "name": "codex_profile_upsert_compatibility_guard"
+        },
+        {
+          "version": "20261025211427",
+          "name": "codex_search_head_delete_invalidation"
+        },
+        {
+          "version": "20261025225002",
+          "name": "editorial_consolidation_staging_contracts"
+        },
+        {
+          "version": "20261025231216",
+          "name": "editorial_reader_projection_and_discovery"
+        },
+        {
+          "version": "20261026072203",
+          "name": "editorial_review_evidence"
+        },
+        {
+          "version": "20261026075337",
+          "name": "editorial_link_review_contract"
+        },
+        {
+          "version": "20261026090730",
+          "name": "editorial_reader_reference_maps"
+        },
+        {
+          "version": "20261026094216",
+          "name": "editorial_legacy_slug_resolution"
+        },
+        {
+          "version": "20261028171424",
+          "name": "full_content_v4_reader_media_and_library"
+        }
+      ]
+    }
+  },
+  "ci": {
+    "main": [
+      {
+        "id": 40918856633,
+        "sha": "0e8b8df206a3824d7a47f2c029e690ec072c6372",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/40918856633"
+      }
+    ],
+    "v4": [
+      {
+        "id": 40884090112,
+        "sha": "c710ab324ddfdd9a62feadaf075d3eca45bd0ba4",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/rademigrate-ai/rad_emigrate/actions/runs/40884090112"
+      }
+    ]
+  },
+  "paid_calls_authorized": false
+}

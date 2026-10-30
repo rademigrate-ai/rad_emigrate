@@ -6,6 +6,42 @@ import '../../../core/supabase/supabase_providers.dart';
 typedef EditorialArticleKey = ({String id, String locale, bool preview});
 typedef CountryContentKey = ({String country, String locale, bool preview});
 
+typedef OtherTitlesKey = ({String locale, bool preview, String? cursor});
+
+/// Public discovery uses published cards only. The preview RPC independently
+/// requires an admin, including when this route is opened from a deep link.
+final otherTitlesLibraryProvider = FutureProvider.autoDispose
+    .family<Map<String, dynamic>, OtherTitlesKey>((ref, key) async {
+      ref.watch(supabaseAuthUserIdProvider);
+      final service = ref.watch(supabaseClientServiceProvider);
+      if (!service.isInitialized) throw StateError('backend_unavailable');
+      final offset = int.tryParse(key.cursor ?? '0');
+      if (offset == null || offset < 0) {
+        throw const FormatException('invalid_library_position');
+      }
+      final response = await service.client
+          .rpc(
+            'list_editorial_library',
+            params: {
+              'p_locale': key.locale,
+              'p_preview': key.preview,
+              'p_offset': offset,
+              'p_limit': 20,
+            },
+          )
+          .timeout(const Duration(seconds: 20));
+      final data = editorialData(response);
+      if (data['has_more'] is! bool ||
+          (data['has_more'] == true && data['next_cursor'] is! String)) {
+        throw const FormatException('invalid_editorial_page');
+      }
+      return {
+        'items': editorialRows(data['items']),
+        'has_more': data['has_more'],
+        'next_cursor': data['next_cursor'],
+      };
+    });
+
 Map<String, dynamic> editorialData(dynamic response) {
   if (response is! Map || response['data'] is! Map) {
     throw const FormatException('invalid_editorial_response');

@@ -190,7 +190,7 @@ class MockResearchAdminRepository implements AdminCmsRepository {
         topic: old.topic,
         relevantArticles: old.relevantArticles,
         verificationTier: old.verificationTier,
-        isEnabled: !old.isEnabled,
+        isEnabled: !(old.isEnabled ?? false),
         interval: old.interval,
         lastCheckedAt: old.lastCheckedAt,
         nextScheduledCheckAt: old.nextScheduledCheckAt,
