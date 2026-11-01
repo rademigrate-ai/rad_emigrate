@@ -86,6 +86,10 @@ jobs:
         run: |
           python3 -m pip install -r requirements-plan3.txt
           python3 -m unittest discover -s scripts/tests -v
+      - name: Check forward, research and evidence-verification tools
+        run: |
+          python3 -m ruff format --isolated --target-version py311 --check scripts/production_forward_package.py scripts/research_worker_acceptance.py scripts/research_authority_lock_acceptance.py scripts/tests/test_production_forward_package.py scripts/tests/test_source_limitations_v42.py scripts/tests/test_targeted_recovery_v42.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/production_forward_package.py scripts/research_worker_acceptance.py scripts/research_authority_lock_acceptance.py scripts/tests/test_production_forward_package.py scripts/tests/test_source_limitations_v42.py scripts/tests/test_targeted_recovery_v42.py
 
   plan3-content:
     runs-on: ubuntu-latest

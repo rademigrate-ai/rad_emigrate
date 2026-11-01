@@ -34,6 +34,28 @@ void main() {
       'snapshot_id': 'snapshot',
     },
   };
+  test('precise comparison reads only the bound current leaf and keeps nested removal text', () {
+    expect(originalStructuredPatchText(table, patch), 'Before');
+    expect(
+      originalStructuredPatchText(previewRichBlock(table, patch), patch),
+      'After',
+    );
+    expect(
+      originalStructuredPatchText(table, {
+        ...patch,
+        'path': ['rows', '99', 'text'],
+      }),
+      isNull,
+    );
+    expect(
+      originalStructuredPatchText(table, {...patch, 'operation': 'remove'}),
+      'Synthetic\nBefore',
+    );
+    expect(
+      originalStructuredPatchText(table, {...patch, 'operation': 'add_after'}),
+      '',
+    );
+  });
   test(
     'cell preview retains source structure, attribution and span geometry',
     () {
@@ -110,6 +132,10 @@ void main() {
         expect(find.text('Before'), findsOneWidget);
         expect(find.text('After'), findsOneWidget);
         expect(find.text('UNIQUE unchanged context فارسی'), findsOneWidget);
+        expect(
+          find.text(rtl ? 'نمایش تغییرات متن' : 'Highlight changed text'),
+          findsOneWidget,
+        );
         await tester.tap(find.text(rtl ? 'رد' : 'Reject'));
         expect(calls, ['patch:reject']);
         expect(tester.takeException(), isNull);

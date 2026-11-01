@@ -4,11 +4,11 @@
   "scope": "All original 47 gates retained; historical evidence explicitly separated from current verification.",
   "objectives": {
     "A": {
-      "status": "BLOCKED",
+      "status": "IN_PROGRESS",
       "reason": "Expanded source coverage, database and rendered application receipts plus human editorial authorization outstanding"
     },
     "B": {
-      "status": "BLOCKED",
+      "status": "IN_PROGRESS",
       "reason": "Bound refresh and protected transport pass isolated tests; Production schema, verified authority bindings, deployed gateway/scheduler and actual provider acceptance remain outstanding"
     }
   },
@@ -57,12 +57,12 @@
       "id": 4,
       "gate": "E0-04 Release A/B scope freeze",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Owner-approved Release A/B written scope and feature freeze with named sign-off.",
       "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Owner-approved Release A/B scope and named sign-off remain unavailable; no scope exclusions invented."
     },
     {
       "id": 5,
@@ -120,7 +120,7 @@
       "id": 9,
       "gate": "E1-05 Auth/storage/abuse/backup security hardening",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
       "implementation": "`docs/AUTH_ARCHITECTURE.md`; `docs/ANDROID_RELEASE.md`",
       "historical_evidence": "PR #58 recovery path, #61 private documents; no mailbox or live two-user verification, PITR evidence missing.",
@@ -142,12 +142,12 @@
       "id": 11,
       "gate": "E2-01 provider credentials/routing operational health",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Validate real configured provider credentials/routing in approved non-production environment and successful user/admin calls.",
       "implementation": "`lib/features/admin/data/admin_ai_config_repository.dart`; `supabase/functions/ai-orchestrator/handler.ts`",
       "historical_evidence": "Production AI 10 succeeded / 49 total; 27 no_eligible_model; two providers credential_rejected, one degraded.",
       "current_evidence": [],
-      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+      "remaining": "Production search-provider registry was empty and deployed AI v11 bundle lacked Web Search; stale provider health is not fresh acceptance. No paid calls authorized."
     },
     {
       "id": 12,
@@ -197,7 +197,7 @@
       "id": 16,
       "gate": "E3-01 RAD source ingestion and snapshots",
       "historical_status": "IN_PROGRESS",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Evidence current RAD three-site ingestion and snapshots with source URI/provenance, freshness, deduplication and safe retrieval.",
       "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `supabase/functions/research-sync/index.ts`",
       "historical_evidence": "research-sync Edge source exists; actual three-site inventory and source freshness not accepted.",
@@ -234,18 +234,18 @@
       "id": 19,
       "gate": "E3-04 review 16 production drafts",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Have authorized human editor review all actual Production draft candidates with verified sources and disposition; no auto-approval.",
       "implementation": "`lib/features/admin`; `lib/features/feed`",
       "historical_evidence": "All 16 Production drafts have linked distinct research findings and status=review; no draft published. Each still requires independent authoritative human editorial disposition.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Actual Production drafts require authorized human source review and disposition; no automated approval or publication."
     },
     {
       "id": 20,
       "gate": "E3-05 bilingual Visa catalog evidence-backed completion",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Populate bilingual Visa program/step/requirements only from verified RAD/official evidence and human editorial approval.",
       "implementation": "`lib/features/visa`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
       "historical_evidence": "22 destinations, 10 programs and 18 steps; regulatory sources/approval outstanding.",
@@ -267,7 +267,7 @@
       "id": 22,
       "gate": "E4-01 Auth/OTP/recovery/deep-links E2E",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Verify signup, login, OTP, recovery email/deep-link, password change, expiration/session persistence in controlled test mailbox.",
       "implementation": "`lib/features/auth`; `docs/AUTH_ARCHITECTURE.md`",
       "historical_evidence": "#58 and #68 auth UI/widget tests; no verified mailbox or live password recovery credential change.",
@@ -289,7 +289,7 @@
       "id": 24,
       "gate": "E4-03 applications/documents/private storage E2E",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
       "implementation": "`lib/features/applications`; `lib/features/documents`",
       "historical_evidence": "#61 owner-bound preview and URL cache tests; real 2-user Storage/E2E outstanding.",
@@ -337,12 +337,12 @@
       "id": 28,
       "gate": "E5-02 notifications email/SMS/push preferences",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Confirm notification opt-in preferences, sandbox email/SMS/push transports, retries, failures and privacy.",
       "implementation": "`lib/features/notifications`; `lib/features/profile`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Existing dispatch creates sandbox receipts only; real email/SMS/push transports and delivery acceptance are not certified."
     },
     {
       "id": 29,
@@ -372,7 +372,7 @@
       "id": 31,
       "gate": "E6-01 immutable release SHA & rollback",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Pin immutable Git SHA in deployed web release, retrieve/verify release artifact and rehearse rollback.",
       "implementation": "`docs/WEB_RELEASE.md`; `docs/ANDROID_RELEASE.md`",
       "historical_evidence": "Live Render deploy SHA 449cd3b6cb0a0b53e852015ad4a3648bd817ad65 differs from main; autoDeploy OFF.",
@@ -383,20 +383,20 @@
       "id": 32,
       "gate": "E6-02 browser/viewport/language matrix",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Manual/automated real-browser EN/FA desktop/tablet/mobile matrix with viewport, input, contrast and navigation evidence.",
       "implementation": "`docs/UI_UX_ROUTE_ACCEPTANCE.md`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
       "historical_evidence": "#68 mocks/widget tests; no real-browser acceptance report for deployed current main.",
       "current_evidence": [
         "_audit/RAD_MASTER_EXECUTION_20261029/browser-existing-local/report.json"
       ],
-      "remaining": "QA API 64521 offline because Docker Secrets Engine IPC startup failed; owner explicitly deferred browser E2E."
+      "remaining": "Owner explicitly deferred browser E2E despite Docker recovery. Preparation and unit/native integration checks are not a browser PASS."
     },
     {
       "id": 33,
       "gate": "E6-03 native Android/iOS release & real devices",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Build/sign/release Android and iOS identities with authorized keystores/Xcode and real physical device acceptance.",
       "implementation": "`docs/ANDROID_RELEASE.md`; `docs/IOS_RELEASE.md`",
       "historical_evidence": "GitHub Android build CI success; iOS signing, stores and physical devices blocked.",
@@ -409,7 +409,7 @@
       "id": 34,
       "gate": "E6-04 load/security/backup/SLO/UAT",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
       "implementation": "`docs/FINAL_RELEASE_MATRIX.md`; `docs/FINAL_SECURITY_ACCEPTANCE.md`",
       "historical_evidence": "Security isolated database CI success; no verified PITR restore, SLO/load or real-client UAT.",
@@ -422,7 +422,7 @@
       "id": 35,
       "gate": "E6-05 Release A client handover",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Owner and client sign Release A handover using immutable artefacts, documentation and support/rollback.",
       "implementation": "`docs/RELEASE_EXTERNAL_DEPENDENCIES.md`; `docs/FINAL_RELEASE_MATRIX.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
@@ -433,23 +433,23 @@
       "id": 36,
       "gate": "E7-01 payment provider/store compliance",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Select licensed approved payment provider, merchant account, terms/tax/store compliance and supported geography.",
       "implementation": "`docs/PAYMENT_PRODUCTION_READINESS.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Merchant/provider/store contract absent from available evidence; no real charges authorized.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Commercial provider, merchant approval and geography/store/tax terms require owner configuration; payment-sandbox is not live payment readiness."
     },
     {
       "id": 37,
       "gate": "E7-02 subscriptions/billing/webhooks/taxes",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Sandbox recurring billing/payment webhook signature, replay/idempotence, cancellation/refund, audit with agreed prices/plans.",
       "implementation": "`docs/AI_ENTITLEMENT_CONTRACT.md`; `docs/PAYMENT_PRODUCTION_READINESS.md`",
       "historical_evidence": "Payment plans, billing credentials and sandbox webhook tests not independently established.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Sandbox webhook/signature/idempotency paths exist; recurring billing, cancellation/refund and agreed live plans need actual provider acceptance."
     },
     {
       "id": 38,
@@ -488,12 +488,12 @@
       "id": 41,
       "gate": "E8-03 OCR processing/review/privacy",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Perform OCR on synthetic files, verify minimization/retention/review/redaction and failure handling without third-party unapproved keys.",
       "implementation": "`lib/features/documents`; `supabase/functions/document-intelligence/index.ts`",
       "historical_evidence": "document-intelligence Edge source exists; Production processor disabled; synthetic file E2E pending.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "OCR transport and correction workflow exist; configured approved processor and privacy/extraction acceptance remain unverified. No paid calls performed."
     },
     {
       "id": 42,
@@ -523,7 +523,7 @@
       "id": 44,
       "gate": "E9-02 university/scholarship/calculators",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Test verified university/scholarship discovery/calculators for valid eligibility and date/currency freshness.",
       "implementation": "`lib/features/visa`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
@@ -534,12 +534,12 @@
       "id": 45,
       "gate": "E9-03 voice/multilingual handling",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Validate Voice AI accessibility, language behavior, provider privacy/consent and spoken source/uncertainty representation.",
       "implementation": "`lib/features/ai_assistant`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Voice domain/state contract exists; operational STT/TTS transport, consent and device acceptance are not implemented/certified."
     },
     {
       "id": 46,
@@ -556,7 +556,7 @@
       "id": 47,
       "gate": "E9-05 PRD long-tail integrations + final client acceptance",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Client acceptance sign-off across all original long-tail scope, deployment, support, training and no high-severity defects.",
       "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Full client sign-off not present; 3/47 source documentary checks accepted.",
@@ -566,8 +566,21 @@
   ],
   "owner_constraints": {
     "paid_calls": false,
-    "browser_e2e": "owner_deferred_while_Docker_engine_startup_blocked",
+    "browser_e2e": "BLOCKED_OWNER_DEFERRED; Docker recovery does not revoke the explicit hold",
     "Render_deployment": "owner_only",
     "publication": "separate_human_editorial_authorization"
-  }
+  },
+  "browser_e2e": "BLOCKED_OWNER_DEFERRED",
+  "production_mutation_gate": {
+    "status": "BLOCKED_EXTERNAL",
+    "reason": "Owner confirms no current approved recovery-ready Production backup/profile; historical 20261017 preservation is not current proof."
+  },
+  "allowed_current_statuses": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "VERIFIED_PASS",
+    "BLOCKED_EXTERNAL",
+    "BLOCKED_OWNER_APPROVAL",
+    "FAILED"
+  ]
 }

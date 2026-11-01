@@ -256,11 +256,15 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
     }
   }
 
-  Future<void> _saveReview() async {
-    if (_reviewContext == null || _isSubmitting) return;
+  Future<void> _saveReview({bool deferDecision = false}) async {
+    if (_reviewContext == null ||
+        _isSubmitting ||
+        _reviewContext?['stale'] == true) {
+      return;
+    }
     setState(() => _isSubmitting = true);
     try {
-      await ref
+      final result = await ref
           .read(researchReviewRepositoryProvider)
           .save(
             context: _reviewContext!,
@@ -270,8 +274,25 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             note: _reviewerNotesController.text.trim(),
           );
       if (!mounted) return;
+      if (result['published'] != false ||
+          result['draft_revision'] != null ||
+          result['review_revision'] is! int) {
+        throw const CmsException('malformed');
+      }
       setState(() => _isDirty = false);
       await _loadData();
+      if (deferDecision && mounted && _error == null) {
+        final isFa = Localizations.localeOf(context).languageCode == 'fa';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isFa
+                  ? 'بازبینی برای بعد ذخیره شد. پیشنهاد در انتظار تصمیم می‌ماند.'
+                  : 'Review saved for later. The proposal remains pending.',
+            ),
+          ),
+        );
+      }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -500,6 +521,15 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                       isFa ? 'ذخیره پیش‌نویس بازبینی' : 'Save review draft',
                     ),
                   ),
+                  TextButton.icon(
+                    onPressed: _isSubmitting || _reviewContext?['stale'] == true
+                        ? null
+                        : () => _saveReview(deferDecision: true),
+                    icon: const Icon(Icons.schedule),
+                    label: Text(
+                      isFa ? 'تصمیم‌گیری در فرصتی دیگر' : 'Defer decision',
+                    ),
+                  ),
                   _buildReviewerControls(isFa),
                 ],
               ),
@@ -661,6 +691,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             controller: _reviewerNotesController,
             onChanged: (_) => setState(() => _isDirty = true),
             maxLines: 3,
+            maxLength: 2000,
             decoration: InputDecoration(
               labelText: isFa
                   ? 'یادداشت بازبین سردبیری (اختیاری)'

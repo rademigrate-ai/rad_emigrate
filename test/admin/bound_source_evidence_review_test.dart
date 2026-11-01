@@ -11,6 +11,29 @@ const testOwner = 'a1111111-1111-4111-8111-111111111111';
 class FixtureReviewRepository implements ResearchReviewRepository {
   FixtureReviewRepository(this.value);
   final Map<String, dynamic> value;
+  final List<String> modes = [];
+  String? savedNote;
+  bool malformedSave = false;
+  @override
+  Future<Map<String, dynamic>> save({
+    required Map<String, dynamic> context,
+    required String mode,
+    required Map<String, String> decisions,
+    required Map<String, String> edits,
+    required String note,
+  }) async {
+    modes.add(mode);
+    savedNote = note;
+    if (malformedSave) return {'published': true};
+    value['review_revision'] = (value['review_revision'] as int) + 1;
+    value['note'] = note;
+    return {
+      'published': false,
+      'draft_revision': null,
+      'review_revision': value['review_revision'],
+    };
+  }
+
   @override
   Future<Map<String, dynamic>> context(String proposalId) async => value;
   @override
@@ -42,7 +65,7 @@ Map<String, dynamic> reviewContext({required bool withEvidence}) => {
   'stale': false,
   'decisions': [],
   if (withEvidence)
-    'bound_source_change': {
+    'bound_source_change': <String, dynamic>{
       'source_url': 'https://official.example.org/source',
       'source_language': 'en',
       'article_locale': 'fa',
@@ -56,16 +79,34 @@ Map<String, dynamic> reviewContext({required bool withEvidence}) => {
     },
 };
 
-Future<void> mountReview(
+Future<FixtureReviewRepository> mountReview(
   WidgetTester tester, {
   required bool withEvidence,
   required Locale locale,
   required double width,
   bool corruptEvidence = false,
+  bool withReviewMetadata = false,
+  bool corruptReviewMetadata = false,
 }) async {
   await tester.binding.setSurfaceSize(Size(width, 1200));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   final context = reviewContext(withEvidence: withEvidence);
+  if (withReviewMetadata) {
+    (context['bound_source_change'] as Map)['review_metadata'] = {
+      'publisher_name': 'Synthetic government publisher',
+      'jurisdiction': 'CA',
+      'authority_state': 'verified',
+      'context_scope': corruptReviewMetadata
+          ? 'verified_capture'
+          : 'current_registry_context_not_capture_verification',
+      'old_fetched_at': '2026-10-29T00:00:00Z',
+      'new_fetched_at': '2026-10-30T00:00:00Z',
+      'source_published_at': null,
+      'effective_date': null,
+      'uncertainty_code': 'human_legal_review_required',
+      'change_classification': 'bound_source_text_change',
+    };
+  }
   if (corruptEvidence) {
     (context['bound_source_change'] as Map).remove('old_content_hash');
   }
@@ -88,9 +129,65 @@ Future<void> mountReview(
     ),
   );
   await tester.pumpAndSettle();
+  return repository;
 }
 
 void main() {
+  testWidgets(
+    'review metadata separates current registry and capture times from legal dates',
+    (tester) async {
+      await mountReview(
+        tester,
+        withEvidence: true,
+        withReviewMetadata: true,
+        locale: const Locale('en'),
+        width: 1200,
+      );
+      expect(
+        find.text(
+          'Current registry context — not verification of this capture',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Publisher: Synthetic government publisher'),
+        findsOneWidget,
+      );
+      expect(find.text('Jurisdiction: CA'), findsOneWidget);
+      expect(
+        find.text('Effective date: Not established by this evidence'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Source publication date: Not established by this evidence'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Source text changed; legal meaning requires human review.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('2026-10-29T00:00:00Z'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets('metadata cannot relabel current registry as verified capture', (
+    tester,
+  ) async {
+    await mountReview(
+      tester,
+      withEvidence: true,
+      withReviewMetadata: true,
+      corruptReviewMetadata: true,
+      locale: const Locale('en'),
+      width: 1200,
+    );
+    expect(
+      find.text('پاسخ سرویس معتبر نیست؛ عملیات تأیید نشد.'),
+      findsOneWidget,
+    );
+    expect(find.text('Complete page comparison — unpublished'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
   for (final (width, locale) in [
     (390.0, const Locale('fa')),
     (1200.0, const Locale('en')),
@@ -143,10 +240,83 @@ void main() {
           ),
         );
         expect(source.textDirection, TextDirection.ltr);
+        expect(
+          source.textSpan,
+          isNotNull,
+          reason: 'Source replacements need selectable highlighted text, not two plain quotations.',
+        );
+        expect(
+          source.textSpan!.toPlainText(includeSemanticsLabels: false),
+          'Old English excerpt <b>verbatim</b>.',
+        );
+        final spans = (source.textSpan as TextSpan).children!
+            .whereType<TextSpan>();
+        expect(
+          spans.any((s) => s.style?.decoration == TextDecoration.lineThrough),
+          isTrue,
+        );
         expect(tester.takeException(), isNull);
       },
     );
   }
+  testWidgets(
+    'invalid defer receipt never claims success or clears reviewer notes',
+    (tester) async {
+      final repository = await mountReview(
+        tester,
+        withEvidence: true,
+        locale: const Locale('en'),
+        width: 1200,
+      );
+      repository.malformedSave = true;
+      await tester.enterText(
+        find.byType(TextField),
+        'Keep this unsaved evidence question.',
+      );
+      await tester.ensureVisible(find.text('Defer decision'));
+      await tester.tap(find.text('Defer decision'));
+      await tester.pumpAndSettle();
+      expect(repository.modes, ['save_review']);
+      expect(
+        find.text('Review saved for later. The proposal remains pending.'),
+        findsNothing,
+      );
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).controller!.text,
+        'Keep this unsaved evidence question.',
+      );
+      expect(
+        find.text('Review was not saved. Refresh if the version changed.'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets(
+    'deferring persists reviewer notes without acceptance or draft creation',
+    (tester) async {
+      final repository = await mountReview(
+        tester,
+        withEvidence: true,
+        locale: const Locale('en'),
+        width: 1200,
+      );
+      await tester.enterText(
+        find.byType(TextField),
+        'Verify effective date before deciding.',
+      );
+      await tester.ensureVisible(find.text('Defer decision'));
+      await tester.tap(find.text('Defer decision'));
+      await tester.pumpAndSettle();
+      expect(repository.modes, ['save_review']);
+      expect(repository.savedNote, 'Verify effective date before deciding.');
+      expect(
+        find.text('Review saved for later. The proposal remains pending.'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets(
     'prior Stage7 context without bound metadata remains reviewable',
     (tester) async {

@@ -1,6 +1,6 @@
 # Owner deployment handoff — NO-GO
 
-31 October 2026. Do not deploy this candidate while the open gates below remain unresolved. This document prepares the owner operation; no Render deployment, hosted schema/data mutation, publication or temporary-project deletion occurred.
+1 November 2026, continuing the 31 October convergence task. Do not deploy this candidate while the open gates below remain unresolved. This document prepares the owner operation; no Render deployment, hosted schema/data mutation, publication or temporary-project deletion occurred.
 
 ## Candidate identity and evidence
 
@@ -8,14 +8,16 @@ The authoritative working branch is `execution/master-completion-20261029`. It c
 
 Source and safe metadata are reviewable in Git. Source archives, raw captures, synthetic accounts, SQL corpus payloads, build configuration and generated artifacts remain outside Git under the shared workspace `_audit/RAD_MASTER_EXECUTION_20261029/`. `content/FINAL_CONTENT_VERDICT.json` pins the original content receipts; its local plan is **not** a hosted import package.
 
+Current continuation evidence is under `_audit/RAD_MASTER_CONVERGENCE_20261031/`: `db_forward_review/README_FINAL.md`, `release_gate_manifest.json` and `RECOVERY_PROCEDURE.md` describe the guarded Production-specific forward and pending recovery. `content-recovery/CONTENT_CONVERGENCE_RECEIPT.json` records the additive recoveries and current limitation proof. `research-worker/research-review.json` and `local-verification.json` record bounded local checks. Consult the final external execution receipt for the delivered commit and matching CI; local synthetic receipts never replace the real recovery gate.
+
 ## Required GO gates before the owner deploys
 
-1. Reconcile actual Production catalog and migration effects against the exact candidate, including dependencies and effective ACLs. The two new Research migrations depend on CMS/Stage7 objects missing from Production; never apply them alone or blindly replay 109 historical migrations.
+1. Reconcile actual Production catalog and migration effects against the exact candidate, including dependencies and effective ACLs. The candidate Research forwards depend on CMS/Stage7 objects missing from Production; never apply them alone or blindly replay historical migrations. The prepared core closure covers 53 RPC roots, not every product feature; its review wrapper intentionally refuses execution.
 2. Produce a current recoverable Production backup and independently verified isolated restore, including required Auth relationships, Storage bytes and configuration evidence. Native synthetic tests are not a Production restore. No approved/tested Production connection or recovery receipt was available to this execution; only dedicated Staging backup scripts were visible in the inspected operator folder.
 3. Build and rehearse the minimal Production-specific forward and provenance-preserving draft reconciliation package against that restore. Bind current heads, source identities, the authorized import actor, hashes, retries and rollback. Preserve existing 738 articles/745 heads and all human work. The 3,806 CMS and 3,187 evidence archive rows already transferred must not be blindly reimported.
 4. Resolve or explicitly disposition the 421 source URL limitations and obtain required editorial review. Offline captured-body preservation passes; complete hosted/application coverage does not. Published-head count remains zero in Production.
 5. Configure and verify protected egress, explicit official source bindings, independently approved authorities, scheduled queue consumption and real Admin review. The owner permits no paid AI/search-provider calls; catalogue presence and stale provider health cannot certify fresh AI acceptance.
-6. Complete real authenticated browser acceptance against the final populated backend and current client. Owner deferred this while Docker Secrets Engine startup is blocked. Native role tests and the 1,098 full SQL-body comparisons do not replace browser E2E.
+6. Complete real authenticated browser acceptance against the final populated backend and current client after the owner lifts the explicit deferral. Docker Engine recovery does not revoke that instruction; the latest QA database probe still reported startup. Native role tests and the 1,098 full SQL-body comparisons do not replace browser E2E.
 7. Review Release A/B feature evidence and external dependencies in acceptance_gates.json. Payments are not certified live; OCR, email/SMS/push, signing/store identity, real devices and client UAT require their own evidence. The Android artifact is debug only; iOS signing was not performed on Windows.
 8. Complete independent final review and exact-SHA CI, then integrate only authorized compatible changes. Keep Draft PR #89 and the execution review unmerged while release-critical gates remain open.
 

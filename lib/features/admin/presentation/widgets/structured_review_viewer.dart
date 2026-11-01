@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 import '../../domain/structured_review.dart';
+import 'source_change_diff.dart';
 
 /// Shows every base block in order. Decisions are keyed by immutable patch ID.
 class StructuredReviewViewer extends StatelessWidget {
@@ -134,6 +135,10 @@ class StructuredReviewViewer extends StatelessWidget {
             ],
           );
     final evidence = patch['evidence'] as Map;
+    final originalText = originalStructuredPatchText(block, patch);
+    final proposedText = operation == 'remove'
+        ? ''
+        : edits[id] ?? patch['text'] as String? ?? '';
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -186,6 +191,38 @@ class StructuredReviewViewer extends StatelessWidget {
             Text(
               '${evidence['excerpt']}\n${evidence['locator']}\n${evidence['snapshot_id']}',
             ),
+            if (originalText != null)
+              ExpansionTile(
+                key: ValueKey('patch-diff-$id'),
+                title: Text(
+                  isPersian ? 'نمایش تغییرات متن' : 'Highlight changed text',
+                ),
+                children: [
+                  Text(
+                    isPersian
+                        ? 'متن حذف‌شده (خط‌خورده)'
+                        : 'Removed text (crossed out)',
+                  ),
+                  SourceChangeText(
+                    before: originalText,
+                    after: proposedText,
+                    showBefore: true,
+                    isPersian: isPersian,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    isPersian
+                        ? 'متن افزوده‌شده (زیرخط‌دار)'
+                        : 'Added text (underlined)',
+                  ),
+                  SourceChangeText(
+                    before: originalText,
+                    after: proposedText,
+                    showBefore: false,
+                    isPersian: isPersian,
+                  ),
+                ],
+              ),
             Wrap(
               spacing: 8,
               children: [

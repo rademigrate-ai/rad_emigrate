@@ -11,6 +11,7 @@ IN_PROGRESS / NO-GO. No Render deployment, content publication, project deletion
 - Refreshed origin/main: `0e8b8df206a3824d7a47f2c029e690ec072c6372`.
 - PR #89 was refreshed as Draft at `c710ab324ddfdd9a62feadaf075d3eca45bd0ba4`; #88/#90/#91 merged. This execution updates that existing review branch without force-pushing; the delivered SHA and remote checks belong in the external execution receipt.
 - Isolated branch: `execution/master-completion-20261029`, directory `rad_master_completion_20261029`; main plus PR #89 combined locally for verification, not merged on GitHub.
+- The committed review baseline is `e2729a9c36ca4eff3f0e33d8ca2250e5566be736`, with all eight jobs passing in CI run `41132909593`. Continuation changes require their own final source checks and exact-head CI; the earlier green run does not certify them.
 - Render live: `ccf041a371baf029ba5a5bccc01cabf394628a43`, manual deploy `dep-dbd5794ipgvc73e51si0`; autoDeploy=no. Owner performs final deployment.
 
 ## Fresh live baseline
@@ -44,7 +45,7 @@ Production lacks public list_official_authorities, discover_official_authorities
 | AI / Web Search | BLOCKED | Production deployed AI bundle has no Web Search module; providers have stale/mixed health. Owner explicitly authorized no paid calls, so no paid live provider/search tests performed. |
 | Features / 47 gates | IN_PROGRESS | All 47 original gates retained in docs/master_execution/acceptance_gates.json; historical source documentary status separated from current proof. No unit-only PASS promotion for full user journeys. |
 | Security | IN_PROGRESS | Fresh security advisors read; contextual review required for expected private deny-all tables and intentionally public reader RPCs. No blind ACL revocation. |
-| Tests / builds / E2E | IN_PROGRESS | Final source: Flutter 1,175, Python 287 and Deno 197 tests PASS; analyze zero issues. Fresh native schema: 109 migrations/44 SQL suites PASS with source hashes checked unchanged. Build and exact remote SHA receipts are maintained outside Git. Browser harness stopped on offline QA API and remains owner-deferred. |
+| Tests / builds / E2E | IN_PROGRESS | Baseline e2729a9: Flutter 1,175, Python 287 and Deno 197 tests PASS; analyze zero issues; native 109 migrations/44 SQL suites PASS. Continuation Admin regressions: 27 PASS; final complete checks pending source convergence. Build and exact remote SHA receipts remain outside Git. Browser E2E remains owner-deferred. |
 | GitHub integration | BLOCKED | Draft #89 content certification and final review/test gates still open; no remote merge. |
 | Decommission | BLOCKED | Security inactive, not inspected internally; unique dependencies/recovery not cleared. Retain all projects. |
 | Owner release handoff | IN_PROGRESS | Exact candidate SHA, hashes, tests, migrations, rollback and owner instructions to be updated after verification. |
@@ -76,7 +77,7 @@ Named Vercel/Impeccable/Strix packages were not found in the available catalog o
 
 Human editorial review and separate publication authorization remain required. Render deployment is owner-only. No temporary project deletion without exact project authorization and recovery/dependency clearance. Live paid-provider testing requires a bounded budget. Missing credentials, backup proof, signing hardware/accounts and editorial decisions remain explicit blockers while independent work continues.
 
-Owner subsequently chose **No paid calls** and **Keep browser E2E blocked for now**. Docker Desktop backend fails initializing Secrets Engine while renaming its zero-byte engine.sock reparse point; neither local engine pipe nor QA API is available. Native Windows app approval timed out. No Docker reset, secret-state deletion, container reset or further recovery is authorized by this execution. Existing contributor containers/worktrees remain preserved.
+Owner chose **No paid calls** and **Keep browser E2E blocked for now**. The earlier Secrets Engine failure is historical: the owner recovered Docker, and Engine 29.9.2 responded during this continuation. A later read-only QA database probe returned `database system is starting up`; this is not a browser result. `BROWSER_E2E = BLOCKED_OWNER_DEFERRED` remains in force. No browser suite was executed, and existing contributor containers/worktrees remain preserved.
 
 ## Verified local content receipts
 
@@ -105,3 +106,22 @@ Local evidence root (outside Git): `_audit/RAD_MASTER_EXECUTION_20261029/` in th
 9. Official refresh lacked durable article impact binding and bounded progress: add explicit verified bindings, immutable captures, frozen per-job targets, guarded lease renewal/yield and atomic cited proposals. Tests cover five chunks beyond the ordinary failure-attempt limit, revocation, stale heads, exact retries, no-op observations and human draft review.
 
 The final source changes were checked by the implementing agent. The requested independent reviewers supplied earlier findings, but their quota became unavailable before the last extension was complete. A fresh independent final review remains a release gate; no final independent approval is claimed.
+
+## 31 October convergence continuation
+
+The owner confirmed that no current approved, recovery-ready Production backup or connection profile is available. `_preservation/RAD_Project_Backup_20261017` and earlier `_audit` restore rehearsals are historical references only. Production stays read-only. Prepare the exact backup/restore procedure and guarded target-specific forward package; never substitute catalog reconstruction for a current Production restore.
+
+- Preserve the existing worktree and sealed source library. Eight cleaned worktrees are not recreated. Check free space before large operations; reuse the marked native PostgreSQL cluster rather than pull new stacks.
+- Admin review now highlights exact inserted/removed passages while preserving selectable source text, languages, hashes and rich context. Explicit deferral uses the existing `save_review` contract, retains notes and creates no article draft or publication. Malformed save receipts fail closed.
+- The final Admin metadata extension distinguishes current registry context from capture verification, uses actual snapshot fetch times and leaves unsupported source publication/effective dates unknown. Current local verification: 1,183 Flutter tests pass, nine changed Dart files need no formatting changes, and static analysis reports zero issues.
+- Independent Research review reproduced authority revocation during an article-head lock wait. The additive authority-lock forward rechecks and locks proof ownership after the head lock. Real concurrent red/green evidence and native HTTP worker-to-review receipts are under `_audit/RAD_MASTER_CONVERGENCE_20261031/research-worker/`. These use synthetic proof and a native RPC adapter, not hosted Edge or browser acceptance.
+- Actual AI-handler regression reproduced invented legal prose inheriting verified anchors with `uncertain=false` (P1). Grounded user/Admin answers now accept known claim IDs only and render complete approved claim text with the original source index. Malformed selections fail closed; oversized claims are rejected instead of truncating away qualifiers. The complete 204-test Edge suite passes with network access denied; no provider request was purchased.
+- The fresh marked native clean-lineage fixture passes 111 migrations and 46 SQL scripts. Auth/Storage/Vault/cron/net remain synthetic; this is not a current Production backup restore. The worker's 14 HTTP/database review checks roll back all eight tracked fixture tables, and both real concurrent revocation orderings pass with explicit transaction coordination.
+- Fresh catalog work found six existing Production source documents with NULL validation status. The forward package must preserve those values and require explicit disposition before any later constraint tightening; never fabricate source validation.
+- Source investigation covers all 421 unresolved URLs and the heading/link/encoding limitations individually. New recoveries are additive overlays; original source seals and the earlier immutable content verdict remain unchanged.
+- Exact URL investigation recovers two original sources with 13 preserved blocks as two additional unverified article locales; affected-only native retry and rollback pass. The other 419 URLs retain explicit unavailable/human-classification outcomes. Original 2,452 variants, 60,563 blocks and 1,098 locales remain sealed. The corrected full heading/link proof remains separately tracked in the continuation content receipt; no provisional broad-frontier result is accepted.
+- Current local verification additionally passes 315 Python tests, the Production-configured web release build, and a zero-finding Gitleaks scan of the staged candidate diff. These checks do not certify the 47 product gates, a hosted content import, a live provider or a Production restore.
+- Free read-only OSV lookup found no known advisories for 161 locked Pub/PyPI package versions. Coverage excludes Gradle, OS, Flutter SDK and unreported vulnerabilities; this is not blanket dependency certification.
+- Local browser preparation records only existing fixture roles and the test matrix. Credentials remain private; no accounts or browser sessions are created. The final populated backend and final client build must be bound before the owner-authorized browser run.
+
+New evidence root: `_audit/RAD_MASTER_CONVERGENCE_20261031/`. The existing 47-gate records remain authoritative; local proof is never promoted to hosted operational acceptance.

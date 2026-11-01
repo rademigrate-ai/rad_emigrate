@@ -64,7 +64,7 @@ export async function loadGrounding(
       if (
         item.verification_state !== "verified" ||
         !uuid.test(text(item.claim_id)) || !uuid.test(text(item.snapshot_id)) ||
-        !isSafePublicHttpsUrl(url) || !excerpt || !claim ||
+        !isSafePublicHttpsUrl(url) || !excerpt || !claim || claim.length > 2000 ||
         !text(item.locator) || !Number.isFinite(verified) ||
         verified > Date.now() || !Number.isFinite(fresh) || fresh <= Date.now()
       ) continue;
@@ -73,7 +73,7 @@ export async function loadGrounding(
         url,
         authority: text(item.authority),
         excerpt: excerpt.slice(0, 2000),
-        claim_label: claim.slice(0, 2000),
+        claim_label: claim,
         claim_id: text(item.claim_id),
         snapshot_id: text(item.snapshot_id),
         citation_id: text(item.citation_id),
@@ -81,7 +81,7 @@ export async function loadGrounding(
         fresh_until: new Date(fresh).toISOString(),
       });
       excerpts.push(
-        `[${sources.length}] ${claim.slice(0, 4000)}\nEvidence: ${
+        `[${sources.length}] ${claim}\nEvidence: ${
           excerpt.slice(0, 2000)
         }\nSource: ${url}`,
       );

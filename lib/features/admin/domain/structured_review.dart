@@ -1,5 +1,57 @@
 import 'dart:convert';
 
+/// Text at the exact reviewed leaf, alongside the complete rich block preview.
+/// Missing paths remain unavailable rather than comparing an unrelated leaf.
+String? originalStructuredPatchText(
+  Map<String, dynamic> block,
+  Map<String, dynamic> patch,
+) {
+  if (patch['operation'] == 'add_after') return '';
+  dynamic node = block['current_structure'] ?? block['original_structure'];
+  if (node is! Map) return null;
+  if (patch['operation'] == 'remove') {
+    final parts = <String>[];
+    void collect(dynamic value) {
+      if (value is String) {
+        parts.add(value);
+      } else if (value is List) {
+        for (final item in value) {
+          collect(item);
+        }
+      } else if (value is Map) {
+        for (final key in [
+          'caption',
+          'text',
+          'items',
+          'rows',
+          'cells',
+          'children',
+        ]) {
+          if (value.containsKey(key)) collect(value[key]);
+        }
+      }
+    }
+
+    collect(node);
+    return parts.join('\n');
+  }
+  final path = patch['path'];
+  if (path is! List || path.isEmpty) return null;
+  for (final key in path) {
+    if (key is! String) return null;
+    if (node is Map) {
+      node = node[key];
+    } else if (node is List) {
+      final index = int.tryParse(key);
+      if (index == null || index < 0 || index >= node.length) return null;
+      node = node[index];
+    } else {
+      return null;
+    }
+  }
+  return node is String ? node : null;
+}
+
 /// Preview only. The server independently validates immutable hashes/evidence.
 /// A deep copy keeps both source structures and the loaded baseline unchanged.
 Map<String, dynamic> previewRichBlock(
