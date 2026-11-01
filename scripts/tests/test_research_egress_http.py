@@ -109,8 +109,8 @@ gateway.serve()
 
     def test_valid_token_still_requires_safe_allowlisted_source(self):
         self.assertEqual(
-            self.request(b"Bearer " + TOKEN.encode("ascii")),
-            b"HTTP/1.0 422 Unprocessable Entity",
+            self.request(b"Bearer " + TOKEN.encode("ascii")).split(b" ", 2)[:2],
+            [b"HTTP/1.0", b"422"],
         )
 
 

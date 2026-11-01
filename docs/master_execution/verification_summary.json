@@ -1,6 +1,6 @@
 {
   "date": "2026-11-01",
-  "created_at": "2026-11-01T16:08:19.321536+00:00",
+  "created_at": "2026-11-01T16:14:41.023953+00:00",
   "release_verdict": "NO_GO",
   "scope": "Current local source checks; hosted writes and Production recovery remain blocked",
   "source_fingerprint": {
@@ -22,7 +22,7 @@
       ".ts"
     ],
     "files": 920,
-    "sha256": "486c0facd139b1879d17f89d27ca150ce52e7a1ed001b3922660bd03041c8a31"
+    "sha256": "638c92ac2edd77577c1135c414264482c6580540055322cfaf105dc3c97946c0"
   },
   "ci_workflow_sha256": "3a8ae4ecfdbb65cc2124841a4363fce186673357e295eba1af7e21be80a23786",
   "checks": {
@@ -42,7 +42,7 @@
       "status": "PASS",
       "count": 315,
       "log": "_audit\\RAD_MASTER_CONVERGENCE_20261031\\python-full-final.log",
-      "sha256": "bac7d76cb1aa5778ca7c390ee204c413f333deb5634f7561f7294dcb6577152f"
+      "sha256": "4a5ec3c1010cd4734421deffb57766f57979c032690f1a86d0757acafd83628f"
     },
     "dart_format": {
       "status": "PASS",
