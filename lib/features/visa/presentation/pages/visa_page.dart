@@ -20,7 +20,7 @@ import '../../../../core/widgets/reference_widgets.dart';
 import '../widgets/country_photography.dart';
 import '../widgets/country_visa_content.dart';
 import '../../data/editorial_repository.dart';
-import 'visa_content_countries_page.dart';
+import '../../domain/editorial_country_names.dart';
 
 part 'visa_page_countries.dart';
 part 'visa_page_country_detail.dart';
@@ -87,10 +87,15 @@ class _VisaPageState extends ConsumerState<VisaPage> {
     final publishedContentCountries = ref.watch(
       visaContentCountriesProvider(locale),
     );
-    if (widget.countryId == null &&
-        (publishedContentCountries.valueOrNull?.isNotEmpty ?? false)) {
-      return const VisaContentCountriesPage();
-    }
+    // Keep real destination photo cards as the primary Visa navigation.
+    // Published editorial countries extend the cards; drafts remain private.
+    final publishedCodes =
+        publishedContentCountries.valueOrNull
+            ?.map((row) => row['country_code'])
+            .whereType<String>()
+            .where((code) => RegExp(r'^[A-Z]{2}$').hasMatch(code))
+            .toSet() ??
+        <String>{};
     final catalog = ref.watch(visaCatalogProvider(locale));
     // Routed detail pages derive selection from the catalog instead of requiring
     // a preceding tap. Invalid/stale IDs offer a visible route back to Visa.
@@ -157,7 +162,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
                   actionLabel: l10n.visaPathways,
                   onAction: () => context.go('/visa'),
                 )
-              : value.countries.isEmpty
+              : value.countries.isEmpty && publishedCodes.isEmpty
               ? EmptyState(
                   icon: Icons.public_off_outlined,
                   title: AppLocalizations.of(context).noPublishedDestinations,
@@ -167,6 +172,7 @@ class _VisaPageState extends ConsumerState<VisaPage> {
               : switch (_stage) {
                   _VisaStage.countries => _CountriesStage(
                     catalog: value,
+                    publishedCountryCodes: publishedCodes,
                     l10n: l10n,
                     query: _query,
                     onQuery: (q) => setState(() => _query = q),

@@ -3,12 +3,14 @@ part of 'visa_page.dart';
 class _CountriesStage extends StatefulWidget {
   const _CountriesStage({
     required this.catalog,
+    required this.publishedCountryCodes,
     required this.l10n,
     required this.query,
     required this.onQuery,
     required this.onSelect,
   });
   final VisaCatalog catalog;
+  final Set<String> publishedCountryCodes;
   final AppLocalizations l10n;
   final String query;
   final ValueChanged<String> onQuery;
@@ -72,6 +74,29 @@ class _CountriesStageState extends State<_CountriesStage> {
               country.code.toLowerCase().contains(query) ||
               programs.any((p) => p.title.toLowerCase().contains(query)));
     }).toList();
+    // Only server-published countries may extend the catalog. Never invent a
+    // destination record and never use an admin preview RPC in public UI.
+    final existingCodes = catalog.countries
+        .map((country) => country.code.toUpperCase())
+        .toSet();
+    final locale = Localizations.localeOf(context).languageCode == 'fa'
+        ? 'fa'
+        : 'en';
+    final editorialOnlyCodes =
+        widget.publishedCountryCodes
+            .where((code) => !existingCodes.contains(code))
+            .where(
+              (code) =>
+                  _category == null &&
+                  (query.isEmpty ||
+                      code.toLowerCase().contains(query) ||
+                      editorialCountryName(
+                        code,
+                        locale,
+                      ).toLowerCase().contains(query)),
+            )
+            .toList()
+          ..sort();
     final colors = [
       const Color(0xFFD91F2B),
       const Color(0xFF345CFF),
@@ -141,7 +166,7 @@ class _CountriesStageState extends State<_CountriesStage> {
               action: _category != null ? l10n.allItems : null,
               onAction: () => setState(() => _category = null),
             ),
-            if (countries.isEmpty)
+            if (countries.isEmpty && editorialOnlyCodes.isEmpty)
               EmptyState(
                 icon: Icons.search_off_outlined,
                 title: l10n.emptyState,
@@ -168,7 +193,7 @@ class _CountriesStageState extends State<_CountriesStage> {
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: countries.length,
+                  itemCount: countries.length + editorialOnlyCodes.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: columns,
                     crossAxisSpacing: 12,
@@ -176,27 +201,50 @@ class _CountriesStageState extends State<_CountriesStage> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    final country = countries[index];
-                    final labels = catalog
-                        .categoriesForCountry(country.id)
-                        .map((c) => c.name)
-                        .toList();
+                    final country = index < countries.length
+                        ? countries[index]
+                        : null;
+                    final code =
+                        country?.code ??
+                        editorialOnlyCodes[index - countries.length];
+                    final title =
+                        country?.name ?? editorialCountryName(code, locale);
+                    final flag =
+                        country?.flagEmoji ??
+                        String.fromCharCodes(
+                          code.codeUnits.map((value) => value + 127397),
+                        );
+                    final labels = country == null
+                        ? <String>[]
+                        : catalog
+                              .categoriesForCountry(country.id)
+                              .map((c) => c.name)
+                              .toList();
                     return Semantics(
-                      key: ValueKey('destination-card-${country.id}'),
-                      label: country.name,
+                      key: ValueKey(
+                        country == null
+                            ? 'destination-card-editorial-$code'
+                            : 'destination-card-${country.id}',
+                      ),
+                      label: title,
                       button: true,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(18),
                         child: Material(
                           color: context.premium.surface,
                           child: InkWell(
-                            onTap: () => widget.onSelect(country),
+                            onTap: () => country == null
+                                ? context.push(
+                                    '/visa/content-countries/${Uri.encodeComponent(code)}',
+                                  )
+                                : widget.onSelect(country),
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
                                 CountryPhotography.image(
-                                  code: country.code,
-                                  destination: country.slug,
+                                  code: code,
+                                  destination:
+                                      country?.slug ?? code.toLowerCase(),
                                   fit: BoxFit.cover,
                                 ),
                                 Positioned.fill(
@@ -224,12 +272,12 @@ class _CountriesStageState extends State<_CountriesStage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        country.flagEmoji,
+                                        flag,
                                         style: const TextStyle(fontSize: 25),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        country.name,
+                                        title,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
