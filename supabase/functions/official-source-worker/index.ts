@@ -8,6 +8,10 @@ import { createOfficialDispatcher } from "./dispatcher.ts";
 // Protected source refresh still requires reviewed egress infrastructure.
 const enabled = Deno.env.get("RAD_OFFICIAL_SOURCE_WORKER_ENABLED") === "true";
 const token = Deno.env.get("RAD_OFFICIAL_SOURCE_WORKER_TOKEN") ?? "";
+const discover = createAuthorityDiscovery(
+  undefined,
+  Deno.env.get("RAD_OFFICIAL_SOURCE_DISCOVERY_ENABLED") === "true",
+);
 const database = workerDatabase(
   Deno.env.get("SUPABASE_URL") ?? "",
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -16,13 +20,13 @@ const legacyWorker = createOfficialSourceHandler({
   enabled,
   token,
   database,
-  discover: createAuthorityDiscovery(),
+  discover,
 });
 const worker = createOfficialSourceHandler({
   enabled,
   token,
   chunked: true,
-  discover: createAuthorityDiscovery(),
+  discover,
   refresh: createBoundOfficialRefresh(
     database,
     createResearchEgressFetch({

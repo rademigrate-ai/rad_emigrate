@@ -10,6 +10,65 @@ const result = (status: WebSearchResult["status"]): WebSearchResult => ({
   citations: [],
 });
 
+Deno.test("discovery makes no search request without separate explicit opt-in", async () => {
+  let calls = 0;
+  let refused = false;
+  try {
+    await createAuthorityDiscovery(() => {
+      calls++;
+      return Promise.resolve(result("empty"));
+    })(scope);
+  } catch {
+    refused = true;
+  }
+  if (calls !== 0 || !refused) {
+    throw new Error("refresh activation implicitly allowed search discovery");
+  }
+});
+
+Deno.test("refresh opt-in leaves discovery disabled and closes the claimed discovery lease", async () => {
+  const token = "synthetic-official-token-".repeat(3);
+  let searches = 0, finished = 0;
+  const handler = createOfficialSourceHandler({
+    enabled: true,
+    token,
+    discover: createAuthorityDiscovery(() => {
+      searches++;
+      return Promise.resolve(result("empty"));
+    }),
+    database: (path, init) => {
+      if (path.includes("get_official_research_job")) {
+        return Promise.resolve({ kind: "authority_discovery", request: scope });
+      }
+      const body = JSON.parse(String(init?.body));
+      if (
+        !path.includes("finish_official_research_job") ||
+        body.p_safe_code !== "discovery_unavailable" ||
+        body.p_candidates.length !== 0
+      ) throw Error("unsafe lease completion");
+      finished++;
+      return Promise.resolve(true);
+    },
+  });
+  const response = await handler(
+    new Request("https://worker.example.invalid", {
+      method: "POST",
+      headers: { "x-rad-official-source-token": token },
+      body: JSON.stringify({
+        job_id: crypto.randomUUID(),
+        lease_token: crypto.randomUUID(),
+      }),
+    }),
+  );
+  const body = await response.json();
+  if (
+    response.status !== 503 || finished !== 1 || searches ||
+    body.verified !== 0 || body.safe_error_code !== "discovery_unavailable"
+  ) {
+    throw Error("refresh implicitly enabled discovery or stranded a lease");
+  }
+});
+
 Deno.test("authority discovery searches bounded scope and retains only safe unverified candidates", async () => {
   let query = "";
   const discover = createAuthorityDiscovery((value) => {
@@ -33,7 +92,7 @@ Deno.test("authority discovery searches bounded scope and retains only safe unve
         },
       ],
     });
-  });
+  }, true);
   const candidates = await discover(scope);
   if (!query.includes("CA") || !query.includes("study") || query.length > 300) {
     throw new Error("scope not bounded");
@@ -51,7 +110,10 @@ Deno.test("unavailable or failed search cannot become successful zero-candidate 
   for (const status of ["unavailable", "error"] as const) {
     let rejected = false;
     try {
-      await createAuthorityDiscovery(() => Promise.resolve(result(status)))(
+      await createAuthorityDiscovery(
+        () => Promise.resolve(result(status)),
+        true,
+      )(
         scope,
       );
     } catch {
@@ -59,8 +121,9 @@ Deno.test("unavailable or failed search cannot become successful zero-candidate 
     }
     if (!rejected) throw new Error("provider failure hidden");
   }
-  const empty = await createAuthorityDiscovery(() =>
-    Promise.resolve(result("empty"))
+  const empty = await createAuthorityDiscovery(
+    () => Promise.resolve(result("empty")),
+    true,
   )(scope);
   if (empty.length) throw new Error("empty search invented candidates");
 });

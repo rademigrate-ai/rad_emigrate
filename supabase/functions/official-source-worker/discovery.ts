@@ -8,8 +8,12 @@ type Scope = { country_code: string; topic: string; profession: string | null };
 type Search = (query: string) => Promise<WebSearchResult>;
 
 /** Search is discovery only: it cannot establish authority or verify a claim. */
-export function createAuthorityDiscovery(search: Search = performWebSearch) {
+export function createAuthorityDiscovery(
+  search: Search = performWebSearch,
+  enabled = false,
+) {
   return async (scope: Scope): Promise<{ name: string; url: string }[]> => {
+    if (!enabled) throw new Error("discovery_disabled");
     // The lease supplies validated scope, never user messages or private files.
     const clean = (value: string) =>
       value.replace(/[^\p{L}\p{N} _-]/gu, " ").trim();

@@ -1,0 +1,44 @@
+{
+  "status": "OWNER_INPUTS_REQUIRED_NO_SCOPE_EXCLUSIONS_OR_FEATURE_ACCEPTANCE_INFERRED",
+  "historical_base_commit": "81f11ce176d9645ae0503e360e22ef6a414c355b",
+  "source_matrix": "docs/master_execution/product_dependencies.json",
+  "acceptance_matrix": "docs/master_execution/acceptance_gates.json",
+  "paid_calls_authorized": false,
+  "browser_e2e": "OWNER_DEFERRED",
+  "release_scope_decision": {
+    "release_a_features": null,
+    "release_b_features": null,
+    "actual_owner_approval_receipt": null,
+    "effect": "Freeze the intended release scope and corresponding remaining implementation/UAT obligations. No feature is silently removed. This does not authorize merge, deployment, publication or spending."
+  },
+  "interview_scheduling_contract": {
+    "state": "TWO_CURRENT_CLIENT_RPCS_HAVE_NO_BACKEND_IMPLEMENTATION",
+    "client": "lib/features/interview_scheduling/data/interview_repository.dart",
+    "rpc_requests": {
+      "list_interview_slots": {"locale": "existing client locale"},
+      "schedule_interview": {"slot_id": "selected slot UUID", "notes": "user text", "locale": "existing client locale"}
+    },
+    "required_booking_receipt": ["id", "slot_id", "start_utc", "created_at", "status"],
+    "accepted_statuses": ["submitted", "pending_confirmation", "confirmed"],
+    "existing_separate_appointment_api": ["list_rad_appointments", "submit_rad_appointment", "reschedule_rad_appointment", "cancel_rad_appointment"],
+    "do_not_assume_two_flows_are_equivalent": true,
+    "required_owner_policy": {
+      "slot_inventory_and_staff_owner": null,
+      "eligibility_and_role_visibility": null,
+      "capacity_and_atomic_allocation": null,
+      "hold_expiry_and_confirmation": null,
+      "cancellation_rescheduling_and_timezones": null,
+      "approved_existing_inventory_or_profile_reference": null
+    },
+    "effect": "Authorizes implementing the two existing client RPCs against the approved scheduling contract and real inventory. It does not authorize invented slots, silent mapping to another booking product, fake successful receipts, or hosted writes."
+  },
+  "external_product_choices": [
+    {"feature": "Email/SMS/push", "required": "Approved transport/account profile, sender/templates, consent and opt-in policy, and acceptance recipients; current dispatcher remains sandbox-only."},
+    {"feature": "Payments/billing", "required": "Merchant/provider, geography/store/tax and commercial approval, approved credentials by reference, and authorized test mode; current integration remains sandbox-only."},
+    {"feature": "OCR", "required": "Approved processor endpoint/profile and extraction/privacy policy; current adapter is not live processor acceptance."},
+    {"feature": "Voice AI", "required": "Approved STT/TTS transport, capture/consent/privacy and supported-device scope; the existing domain contract does not implement the complete feature."},
+    {"feature": "Native stores", "required": "Permanent application identities, signing/store authority, Mac/Xcode for iOS and physical-device acceptance."}
+  ],
+  "credential_rule": "Provide profile names or secure references only, never passwords, tokens or signing keys in this document.",
+  "what_is_not_approved": ["Provider spending", "New paid providers/resources", "Real financial transactions", "Notifications to real recipients", "Production mutations", "Public release", "Signing/store submission"]
+}

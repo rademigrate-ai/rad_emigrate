@@ -30,3 +30,16 @@ _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/assets/** -diff
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/reference-evidence/** -diff
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/prepared/source-url-inventory.csv whitespace=cr-at-eol
 scripts/tests/test_phase_source_evidence.py text eol=lf
+
+# Preserve exact producer/test bytes referenced by the Production package seal.
+scripts/production_reconciliation_package.py -text
+scripts/tests/test_production_reconciliation_package.py -text
+scripts/tests/test_production_reconciliation_sql.py -text
+tools/production_body_review.py text eol=lf
+scripts/recovery_checkpoint.py text eol=lf
+scripts/recovery_local_rehearsal.py text eol=lf
+scripts/research_activation_package.py text eol=lf
+scripts/tests/test_production_body_review.py text eol=lf
+scripts/tests/test_recovery_checkpoint.py text eol=lf
+scripts/tests/test_research_activation_package.py text eol=lf
+supabase/migrations/20261102101305_rad_cms_detached_revision_allocator.sql text eol=lf

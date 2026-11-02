@@ -1,5 +1,7 @@
 # Protected Research transport and queue operations
 
+Current operator instructions are in [Research activation procedure, 2 November](RESEARCH_ACTIVATION_PROCEDURE_20261102.md). That package keeps refresh and discovery separately disabled, retains the legacy daily jobs, and prepares a distinct bounded dispatcher job. The historical configuration examples below do not authorize activation or paid search.
+
 31 October 2026. Code and isolated acceptance evidence only; not hosted activation.
 
 The existing Research pipeline and human publication boundary are retained. `research-sync` uses `createResearchEgressFetch`; it returns HTTP 503 when secure transport is absent rather than fetching arbitrary sources directly. `official-source-worker?dispatch=1` claims one bounded chunk per invocation through the existing service-only lease RPC. Discovery uses configured Brave/Serper search and stores candidates only. A candidate is not a verified authority or approved evidence. Search failures close their lease as failed; an explicit new request is required. The exhausted-lease migration closes abandoned final attempts without blocking other queue workers.
