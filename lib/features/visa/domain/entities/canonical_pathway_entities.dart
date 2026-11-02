@@ -289,6 +289,7 @@ class IndependentArticleSummary {
 /// Canonical merged pathway article (Country × Pathway).
 @immutable
 class CanonicalPathwayArticle {
+  final String publicationBasis;
   final String id;
   final String slug;
   final String countryCode;
@@ -310,6 +311,7 @@ class CanonicalPathwayArticle {
   final DateTime? lastFactCheckedAt;
 
   const CanonicalPathwayArticle({
+    this.publicationBasis = 'standard_editorial',
     required this.id,
     required this.slug,
     required this.countryCode,
@@ -387,6 +389,9 @@ class CanonicalPathwayArticle {
     final eligRaw = payload['eligibility'] as Map<String, dynamic>?;
 
     return CanonicalPathwayArticle(
+      publicationBasis: payload['publication_basis'] == 'source_faithful'
+          ? 'source_faithful'
+          : 'standard_editorial',
       id: (payload['id'] ?? '').toString(),
       slug: (payload['slug'] ?? payload['pathway_slug'] ?? '').toString(),
       countryCode: (payload['country_code'] ?? payload['countryCode'] ?? '')

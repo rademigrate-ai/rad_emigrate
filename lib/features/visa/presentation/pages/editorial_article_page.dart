@@ -89,6 +89,16 @@ class EditorialArticlePage extends ConsumerWidget {
                             : 'Unverified draft — public publication is blocked',
                       ),
                     ),
+                  if (!preview &&
+                      data['publication_basis'] == 'source_faithful')
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        locale == 'fa'
+                            ? 'بازنشر محتوای وب‌سایت‌های راد با حفظ منابع اصلی. ادعاهای این مطلب مستقلاً تأیید نشده‌اند؛ پیش از اقدام، منابع معتبر و به‌روز را بررسی کنید.'
+                            : 'Reproduced from RAD websites with original sources preserved. Factual claims have not been independently verified. Check current authoritative sources before acting.',
+                      ),
+                    ),
                 ];
                 if (requestedLocale != null && requestedLocale != locale) {
                   children.insert(
@@ -254,6 +264,16 @@ class EditorialArticlePage extends ConsumerWidget {
                   );
                 }
                 final seenReferences = <String>{};
+                final unconfirmedReferenceUrls = <String>{};
+                for (final reference in references) {
+                  final evidence = reference['href_evidence'];
+                  final url = reference['original_url'] ?? reference['url'];
+                  if (url is String &&
+                      evidence is Map &&
+                      evidence['confirmed'] == false) {
+                    unconfirmedReferenceUrls.add(url);
+                  }
+                }
                 for (final reference in references) {
                   final url =
                       reference['original_url'] as String? ??
@@ -297,6 +317,7 @@ class EditorialArticlePage extends ConsumerWidget {
                   final label = (reference['label'] as String? ?? '').isEmpty
                       ? url
                       : reference['label'] as String;
+                  final unconfirmed = unconfirmedReferenceUrls.contains(url);
                   children.add(
                     TextButton(
                       onPressed: () {
@@ -317,6 +338,15 @@ class EditorialArticlePage extends ConsumerWidget {
                       ),
                     ),
                   );
+                  if (unconfirmed) {
+                    children.add(
+                      Text(
+                        locale == 'fa'
+                            ? 'شواهد ثبت این پیوند هنوز تأیید نشده‌اند؛ خراب بودن پیوند اثبات نشده است.'
+                            : 'Captured link evidence is unconfirmed; the link has not been shown to be broken.',
+                      ),
+                    );
+                  }
                   if (internalUri != null) {
                     children.add(
                       TextButton.icon(

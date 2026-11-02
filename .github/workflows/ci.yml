@@ -92,6 +92,8 @@ jobs:
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/production_forward_package.py scripts/research_worker_acceptance.py scripts/research_authority_lock_acceptance.py scripts/tests/test_production_forward_package.py scripts/tests/test_source_limitations_v42.py scripts/tests/test_targeted_recovery_v42.py
       - name: Check Production reconciliation and operator packages
         run: |
+          python3 -m ruff format --isolated --target-version py311 --check scripts/production_mechanical_decisions.py scripts/source_editorial_batches.py scripts/tests/test_mechanical_release_decisions.py scripts/tests/test_source_editorial_sql.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/production_mechanical_decisions.py scripts/source_editorial_batches.py scripts/tests/test_mechanical_release_decisions.py scripts/tests/test_source_editorial_sql.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/visa_release_audit.py scripts/tests/test_visa_release_audit.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/visa_release_audit.py scripts/tests/test_visa_release_audit.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/production_reconciliation_package.py scripts/recovery_checkpoint.py scripts/recovery_local_rehearsal.py scripts/research_activation_package.py tools/production_body_review.py scripts/tests/test_production_reconciliation_package.py scripts/tests/test_production_reconciliation_sql.py scripts/tests/test_recovery_checkpoint.py scripts/tests/test_research_activation_package.py scripts/tests/test_production_body_review.py scripts/tests/test_review_packets_v43.py
@@ -392,6 +394,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
+      - name: Verify source-faithful publication, factual status and protected draft boundaries
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/source_editorial_release.sql
       - name: Verify Visa country discovery includes published categories and linked titles
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/visa_country_discovery_coverage.sql
       - name: Verify quarantined Staging evidence archive integrity and ACLs

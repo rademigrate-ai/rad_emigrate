@@ -43,3 +43,11 @@ scripts/tests/test_production_body_review.py text eol=lf
 scripts/tests/test_recovery_checkpoint.py text eol=lf
 scripts/tests/test_research_activation_package.py text eol=lf
 supabase/migrations/20261102101305_rad_cms_detached_revision_allocator.sql text eol=lf
+
+# Mechanical decision and source-publication receipts bind portable code bytes.
+scripts/production_mechanical_decisions.py text eol=lf
+scripts/source_editorial_batches.py text eol=lf
+scripts/tests/test_mechanical_release_decisions.py text eol=lf
+scripts/tests/test_source_editorial_sql.py text eol=lf
+supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql text eol=lf
+supabase/tests/source_editorial_release.sql text eol=lf

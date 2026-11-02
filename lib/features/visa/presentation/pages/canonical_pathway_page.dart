@@ -13,6 +13,7 @@ import '../../data/canonical_pathway_repository.dart';
 import '../providers/canonical_pathway_controller.dart';
 import '../widgets/article_change_highlights_banner.dart';
 import '../widgets/currency_converter_modal.dart';
+import 'editorial_article_page.dart';
 
 class CanonicalPathwayPage extends ConsumerStatefulWidget {
   final String countrySlug;
@@ -217,6 +218,17 @@ class _CanonicalPathwayPageState extends ConsumerState<CanonicalPathwayPage> {
         (widget.resolvedLocale ??
             Localizations.localeOf(context).languageCode) ==
         'fa';
+
+    final publishedArticle = pathwayAsync.asData?.value;
+    if (publishedArticle != null &&
+        publishedArticle.publicationBasis == 'source_faithful') {
+      return EditorialArticlePage(
+        articleId: publishedArticle.id,
+        locale: isFa ? 'fa' : 'en',
+        requestedLocale: widget.requestedLocale,
+        initialSectionAnchor: widget.initialSectionAnchor,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
