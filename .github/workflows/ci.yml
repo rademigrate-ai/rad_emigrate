@@ -390,6 +390,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
+      - name: Verify Visa country discovery includes published categories and linked titles
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/visa_country_discovery_coverage.sql
       - name: Verify quarantined Staging evidence archive integrity and ACLs
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_evidence_archive_security.sql
       - name: Verify published-only legacy slug compatibility
