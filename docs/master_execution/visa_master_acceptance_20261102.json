@@ -1,0 +1,241 @@
+{
+  "anonymous_api": {
+    "authentication": "publishable_key_only_no_user_session",
+    "checks": [
+      {
+        "check": "draft_article_public_rpc",
+        "error_code": "PT404",
+        "http_status": 404,
+        "response_sha256": "4a400d1019245e645fc4ac40036d1062a3d3919135b8c7faa2aa80b72a8243ca",
+        "row_count": null
+      },
+      {
+        "check": "draft_revisions_table",
+        "error_code": "42501",
+        "http_status": 401,
+        "response_sha256": "9894c2451aee9a7b55e97677cdf2415e23f7b490861bacfa8eef76e806be04e2",
+        "row_count": null
+      },
+      {
+        "check": "missing_editorial_country_reader",
+        "error_code": "PGRST202",
+        "http_status": 404,
+        "response_sha256": "b9e2f2d644c2f0a15ae4b8f30957a539432d583664637cef4c9b4b53e97478d8",
+        "row_count": null
+      },
+      {
+        "check": "private_source_snapshots",
+        "error_code": null,
+        "http_status": 200,
+        "response_sha256": "ed9aeb29d82fc91c1294d64fe5955a2a983c44337d7587cacb77d0c470d2a4cb",
+        "row_count": 1
+      }
+    ],
+    "observed_at": "2026-11-02T18:34:16.113340+00:00",
+    "project_id": "inshddthftkhcdosoqcn"
+  },
+  "anonymous_source_boundary": {
+    "anonymous_snapshot_count": 5,
+    "approved_knowledge_snapshot_count": 5,
+    "check": "ANONYMOUS_SNAPSHOT_SET_EQUALS_APPROVED_KNOWLEDGE_EVIDENCE",
+    "interpretation": "Existing approved Knowledge evidence is public by policy; this is not a Visa draft publication.",
+    "observed_at": "2026-11-02T18:37:33.855325+00:00",
+    "project_id": "inshddthftkhcdosoqcn",
+    "snapshot_set_sha256": "99081b35cd71f5cc94a562102451d8ba7e5ecbde9cbb4b32c3d35a138ec7a0dd",
+    "status": "PASS",
+    "unexpected_snapshot_count": 0
+  },
+  "base_candidate_commit": "c4ea30e4f7f0cb6b07e422a5e38299434c20a2cf",
+  "blocking_dependencies": [
+    "Existing guarded Production transaction requires absent real recovery and endpoint/actor/callback evidence; new recovery work remains deferred.",
+    "Current CMS verification and revision-bound authenticated clearance requirements are unsatisfied.",
+    "Candidate and compatible database have not been deployed together; hosting deployment remains owner-operated."
+  ],
+  "branch_lineage": "integration/full-content-v4-on-main-20261029",
+  "checks": {
+    "android_device_acceptance": "NOT_PERFORMED",
+    "dart_format": "PASS_495_FILES_ZERO_CHANGES",
+    "flutter_analyze": "PASS_NO_ISSUES",
+    "flutter_tests": 1186,
+    "native_postgres_safety_tests": "PASS_INCLUDED",
+    "publication_acceptance": "NOT_SATISFIED",
+    "python_tests": 370
+  },
+  "code_sha256": {
+    ".github/workflows/ci.yml": "b52662e379989922927c545a64f0e6c1b8c961e81064cacdaf2313b07b7ff703",
+    "docs/master_execution/VISA_MASTER_RELEASE_ACCEPTANCE_20261102.md": "711aa323f826366fc05c2927f27ef4772afb4c9dc5ea567f991eaaf6aa68b344",
+    "scripts/tests/test_visa_release_audit.py": "c50411a1b81ac3ec47b5cddd13afd1dbe569e589c96b716542097e683e12f2ce",
+    "scripts/visa_release_audit.py": "3127381ef9f636f6196cde7eadf6a4808ec3e59453b0cb58d26d323f236302f9"
+  },
+  "deployed_web": {
+    "candidate_deployed": false,
+    "flutter": "3.47.6",
+    "git_sha": "ccf041a371baf029ba5a5bccc01cabf394628a43",
+    "published_corpus_ui_acceptance": "NOT_SATISFIED",
+    "read_only_paths": [
+      "/visa",
+      "/visa/c967cf80-3a4d-428e-864d-af412560f0ca",
+      "Germany program and browser Back",
+      "/visa/other-titles"
+    ],
+    "visual_acceptance": "INCONCLUSIVE"
+  },
+  "final_commit_and_ci": "Recorded after commit in private visa-master-final-delivery-20261102.json; do not substitute base CI.",
+  "hosted_writes": 0,
+  "latest_observed_migration": {
+    "name": "cms_reading_state_and_research_rls",
+    "version": "20261029172624"
+  },
+  "migrations_applied_by_continuation": [],
+  "observed_at": "2026-11-02T18:32:51.365573+00:00",
+  "package": {
+    "approved_by_audit": 0,
+    "claims": 28931,
+    "equivalent_source_segment_references": 19765,
+    "format": "RAD_VISA_RELEASE_AUDIT_V1",
+    "held_operations": 1100,
+    "imported_by_audit": 0,
+    "input_files_hash_verified": 20,
+    "media_references_to_keep_hidden": 3134,
+    "operations_file_sha256": "69ca7638c7a141efc354bfeb4cfb82d3c444381c7410f6c82b54c3a32f6c118c",
+    "package_sha256": "c9b4d7e84711a3fb478b639d724289a3f2694a298448d662d4637894d0318353",
+    "plan_file_sha256": "a50bf660b33638e1acc5c7143c111c7c3581a6758bfd41347e23dfc2a443fb09",
+    "planned_country_coverage": {
+      "AE": 8,
+      "AM": 5,
+      "AR": 1,
+      "AT": 27,
+      "AU": 52,
+      "BE": 24,
+      "BR": 6,
+      "BY": 4,
+      "CA": 65,
+      "CH": 16,
+      "CN": 9,
+      "CY": 7,
+      "CZ": 2,
+      "DE": 53,
+      "DK": 42,
+      "EC": 1,
+      "ES": 20,
+      "FI": 32,
+      "FR": 44,
+      "GB": 57,
+      "GE": 3,
+      "GR": 12,
+      "HR": 3,
+      "HU": 5,
+      "ID": 1,
+      "IE": 7,
+      "IN": 7,
+      "IR": 6,
+      "IS": 7,
+      "IT": 37,
+      "JP": 6,
+      "KR": 1,
+      "KW": 2,
+      "LK": 1,
+      "LU": 4,
+      "MX": 1,
+      "MY": 6,
+      "NL": 32,
+      "NO": 40,
+      "NZ": 16,
+      "OM": 9,
+      "PH": 2,
+      "PL": 7,
+      "PT": 9,
+      "QA": 5,
+      "RO": 5,
+      "RU": 9,
+      "SE": 55,
+      "SG": 5,
+      "SI": 2,
+      "SK": 5,
+      "TH": 2,
+      "TR": 13,
+      "UA": 3,
+      "US": 46,
+      "ZA": 11
+    },
+    "planned_distinct_articles": 1093,
+    "planned_distinct_revisions": 1100,
+    "planned_multi_country_operations": 17,
+    "planned_operation_count": 1100,
+    "planned_other_titles_operations": 262,
+    "production_head_comparison": {
+      "approved_revisions_observed": 0,
+      "baseline_heads_checked": 745,
+      "current_heads": 745,
+      "differences": [],
+      "fields_checked": [
+        "head_id",
+        "published_id",
+        "revision",
+        "body_md5",
+        "actor_id_md5",
+        "title_summary_md5",
+        "stored_content_hash",
+        "created_at"
+      ],
+      "limitation": "Supplied read-only observation; not a post-import success receipt.",
+      "new_head_keys": 0,
+      "observed_at": "2026-11-02T18:32:51.365573+00:00",
+      "published_heads_observed": 0,
+      "status": "PASS_PRESERVED_BASELINE_HEADS"
+    },
+    "production_readback_file_sha256": "f604a0375e2fbf0583b42fe53907fb988297ab89a2c4401fe2c4183d1ed21fb3",
+    "published_by_audit": 0,
+    "reconciliation_counts": {
+      "INSERT_DETACHED_UNVERIFIED_DRAFT": 443,
+      "INSERT_INITIAL_UNVERIFIED_DRAFT": 406,
+      "MECHANICALLY_PRESERVES_CURRENT_CONTENT_DETACHED_DRAFT_PROPOSAL": 249,
+      "SUBSTANTIVE_RECONCILIATION_HELD": 2
+    },
+    "recorded_conflicts": 17,
+    "retained_blocks": 42226,
+    "sealed_import_actions": {
+      "INSERT_DETACHED_UNVERIFIED_DRAFT": 443,
+      "INSERT_INITIAL_UNVERIFIED_DRAFT": 406,
+      "PENDING_HUMAN_RECONCILIATION": 251
+    },
+    "status": "HOLD_PRODUCTION_RELEASE",
+    "unconfirmed_links_not_proven_broken": 1335
+  },
+  "pr_number": 89,
+  "pr_state": "draft_open_unmerged",
+  "private_evidence_sha256": {
+    "master-visa-analyze-20261102.log": "79232cf28f5e69ecc9d7091deb2d3d011fc4192fdcaa2efe7c1a7e12a65a71fe",
+    "master-visa-flutter-20261102.log": "b46ca656295bbe62abe3482a4002fcb452ad73f9605680feb0b2729c41555e6b",
+    "visa-master-anonymous-api-20261102.json": "21ad3e07839695f615f0cdeab51d5805ee7229b4034af4c252af2bcc8925c351",
+    "visa-master-anonymous-source-boundary-20261102.json": "c66585cd89f39b02a5f955398a0327fcadf507e00dd0b3541a941c2c380d082f",
+    "visa-master-current-heads-20261102.json": "f604a0375e2fbf0583b42fe53907fb988297ab89a2c4401fe2c4183d1ed21fb3",
+    "visa-master-dart-format-20261102.log": "a85e34381d05eadd8249adf41c957c882e3f56cba79e5ccbd02bbd39d550eda2",
+    "visa-master-production-readback-20261102.json": "bee9337f5609a78d679782171ce76fe3f8a187072601d3e938a12c031106e26c",
+    "visa-master-python-final-20261102.log": "55e8dd35dcc626e1b9b1c7cb79d7964eb89e7ac5d96b5e5170ff4f059d9c8cbf",
+    "visa-master-release-with-readback-20261102.json": "1cd6d5c8fdcb2c40b1ae8240b36112ecd250419d8938d6b70e3004f64907d32d",
+    "visa-master-source-integrity-20261102.json": "2d90e50f73d48902bda291c12068f705ff0ee2f198f59ab261415186cc32fa77",
+    "visa-master-source-policies-20261102.json": "15a858ab7a80fa43d1eef7db3a152af8505d6684e9dbb4c1658118eea6c79e84",
+    "visa-master-title-readback-20261102.json": "ddb6a38b0f04074520282d4e82d67e99ad44def739c8ec54fd88d246af28383c"
+  },
+  "production": {
+    "approved_revisions": 0,
+    "articles": 738,
+    "heads": 745,
+    "migration_count": 72,
+    "published_heads": 0,
+    "revisions": 747
+  },
+  "project_id": "inshddthftkhcdosoqcn",
+  "source_integrity": {
+    "current_live_three_site_crawl": "NOT_PERFORMED",
+    "eligible_source_segments": 60576,
+    "historical_unresolved_original_urls": 419,
+    "missing_source_segments": 0,
+    "retained_blocks": 42226,
+    "source_segments_accounted": 60576,
+    "source_snapshot_variants": 2454,
+    "status": "PASS"
+  },
+  "status": "HOLD_NOT_DEPLOYMENT_READY"
+}
