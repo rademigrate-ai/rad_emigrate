@@ -51,3 +51,5 @@ scripts/tests/test_mechanical_release_decisions.py text eol=lf
 scripts/tests/test_source_editorial_sql.py text eol=lf
 supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql text eol=lf
 supabase/tests/source_editorial_release.sql text eol=lf
+tools/content_completion/source_delivery_forensics.py text eol=lf
+scripts/tests/test_source_delivery_forensics.py text eol=lf
