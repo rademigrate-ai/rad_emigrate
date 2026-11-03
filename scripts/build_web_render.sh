@@ -21,6 +21,7 @@ case "$APP_ENV_VALUE" in
     exit 1
     ;;
 esac
+python3 -m scripts.public_web_build --scope environment
 
 # A staging label alone must never build a client against production. Check
 # before downloading dependencies or invoking Flutter; do not print key values.
@@ -59,5 +60,6 @@ DEPLOYMENT
 
 # SPA fallback helpers for hosts that serve 404.html on unknown paths.
 cp -f build/web/index.html build/web/404.html
+python3 -m scripts.public_web_build --scope artifact
 
 echo "Web build complete: build/web (APP_ENV=${APP_ENV_VALUE})"

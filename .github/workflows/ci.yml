@@ -92,6 +92,10 @@ jobs:
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/production_forward_package.py scripts/research_worker_acceptance.py scripts/research_authority_lock_acceptance.py scripts/tests/test_production_forward_package.py scripts/tests/test_source_limitations_v42.py scripts/tests/test_targeted_recovery_v42.py
       - name: Check Production reconciliation and operator packages
         run: |
+          python3 -m ruff format --isolated --target-version py311 --check scripts/public_web_build.py scripts/tests/test_public_web_build.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/public_web_build.py scripts/tests/test_public_web_build.py
+          python3 -m ruff format --isolated --target-version py311 --check scripts/final_content_package.py scripts/tests/test_final_content_package.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/final_content_package.py scripts/tests/test_final_content_package.py
           python3 -m ruff format --isolated --target-version py311 --check tools/content_completion/source_delivery_forensics.py scripts/tests/test_source_delivery_forensics.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/content_completion/source_delivery_forensics.py scripts/tests/test_source_delivery_forensics.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/production_mechanical_decisions.py scripts/source_editorial_batches.py scripts/tests/test_mechanical_release_decisions.py scripts/tests/test_source_editorial_sql.py
@@ -257,10 +261,11 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Build web with non-production configuration
-        run: >-
-          flutter build web --no-pub
-          --dart-define=SUPABASE_URL=https://example.supabase.co
-          --dart-define=SUPABASE_ANON_KEY=sb_publishable_ci_placeholder
+        env:
+          APP_ENV: development
+          SUPABASE_URL: https://example.supabase.co
+          SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_placeholder_test_value
+        run: bash scripts/build_web_render.sh
 
   android-build:
     runs-on: ubuntu-latest
@@ -398,6 +403,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/editorial_content_security.sql
       - name: Verify source-faithful publication, factual status and protected draft boundaries
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/source_editorial_release.sql
+      - name: Reject held source versions and preserve private immutable hold evidence
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrected_source_editorial_holds.sql
       - name: Verify Visa country discovery includes published categories and linked titles
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/visa_country_discovery_coverage.sql
       - name: Verify quarantined Staging evidence archive integrity and ACLs

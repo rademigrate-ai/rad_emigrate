@@ -53,3 +53,9 @@ supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql tex
 supabase/tests/source_editorial_release.sql text eol=lf
 tools/content_completion/source_delivery_forensics.py text eol=lf
 scripts/tests/test_source_delivery_forensics.py text eol=lf
+scripts/final_content_package.py text eol=lf
+scripts/tests/test_final_content_package.py text eol=lf
+scripts/public_web_build.py text eol=lf
+scripts/tests/test_public_web_build.py text eol=lf
+supabase/migrations/20261103114340_rad_corrected_source_editorial_admission.sql text eol=lf
+supabase/tests/corrected_source_editorial_holds.sql text eol=lf
