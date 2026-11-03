@@ -29,7 +29,9 @@
     "reason_unfilled": "No endpoint URL, password, token, or browser/session value is stored in this package. The operator must verify these privately against provider-supported identity evidence."
   },
   "release_inputs": {
-    "candidate_commit": "22f2e51ddd078f3e9ff0beecbd17637d822b1221",
+    "sealed_content_baseline_commit": "22f2e51ddd078f3e9ff0beecbd17637d822b1221",
+    "final_release_commit_sha": null,
+    "requires_final_head_binding_before_authorization": true,
     "core_forward_sha256": "ec77fd4bba84b703a0d2994c3ce8da8112ca969a8f2a478de8061b500f675f69",
     "core_manifest_source_sha": "81f11ce176d9645ae0503e360e22ef6a414c355b",
     "allocator_sha256": "5f224ce6025ff43d02e078f51d147f0f9c7b63ce4cf7b42e0c383e6b3f6be4ca",
@@ -232,10 +234,10 @@
   ],
   "implemented_safety_capabilities": {
     "migration": "supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql",
-    "migration_sha256": "db0b0e84a3b0c6c74be9154afdb865c01fbfc214b2a458098916c5cca2cf3a5e",
+    "migration_sha256": "cce3d9dac0e821cf5ef3605d19fc84fb6c6b0ee6203067b2cfb46cfb013c083d",
     "tests": "scripts/tests/test_no_restore_safety_ops.py",
-    "tests_sha256": "6cf898c96977b56dfa56c134f38d2fe605f462924d23a0562a0acbb6ea3c68a9",
-    "local_receipt": "no-restore-safety-ops-local-test-receipt-v2-20261103.json",
+    "tests_sha256": "86d8267d595517c25b9782bfc8d1fcf4a085897f16e290eecd6c9c7d604c42ea",
+    "local_receipt": "no-restore-safety-ops-local-test-receipt-v3-20261103.json",
     "callback_evidence": "callback-local-evidence-20261103.json",
     "function_reversal": "Locally tested exact function-definition/config restoration; captures exact pg_proc ACLs and catalog dependents and refuses owner/ACL/dependency drift. Cannot reconstruct changed privilege state, nor serve as full committed-DDL/extension/callback inverse.",
     "source_unpublish": "Locally tested Admin-bound source-faithful unpublish restores NULL pointers through immutable events and search projection deletion; cross-transaction replay of stale publish/unpublish events is refused. Not installed or independently approved in Production.",

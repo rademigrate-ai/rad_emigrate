@@ -143,6 +143,44 @@ class NoRestoreSafetyOpsTest(unittest.TestCase):
             "select private.rad_capture_function_state('4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282','reviewed_forward',array['private.rad_page_position(jsonb,text)']);",
             error="function_state_receipt_conflict",
         )
+        # Leave the shared synthetic database unchanged for later regressions.
+        self.fixture.sql(
+            "set request.jwt.claims='" + self.claims(actor) + "';"
+            "select private.rad_restore_function_state("
+            + receipt
+            + ",'Restore the original function before later tests.');"
+        )
+
+    def test_standard_editorial_pointer_revocation_remains_supported(self):
+        # The source-specific pointer guard must not change existing standard
+        # editorial semantics. This disposable fixture rolls back entirely.
+        self.fixture.sql(
+            "begin;"
+            "select set_config('request.jwt.claims','{\"role\":\"service_role\"}',true);"
+            "insert into auth.users(id,email) values("
+            "'b6200000-0000-4000-8000-000000000001','standard-pointer@example.invalid');"
+            "insert into public.visa_articles(id,kind,country_code,pathway_slug,slug,created_by)"
+            " values('b6200000-0000-4000-8000-000000000010','related','ZZ',"
+            "'synthetic-standard','synthetic-standard',"
+            "'b6200000-0000-4000-8000-000000000001');"
+            "insert into public.visa_article_revisions(id,article_id,locale,revision,title,"
+            "summary,content_hash,body,created_by) values("
+            "'b6200000-0000-4000-8000-000000000011',"
+            "'b6200000-0000-4000-8000-000000000010','en',1,"
+            "'SYNTHETIC standard editorial','No immigration facts.',repeat('0',64),"
+            '\'{"sections":[],"related_article_ids":[]}\','
+            "'b6200000-0000-4000-8000-000000000001');"
+            "insert into public.visa_article_heads(article_id,locale,head_id,published_id)"
+            " values('b6200000-0000-4000-8000-000000000010','en',"
+            "'b6200000-0000-4000-8000-000000000011',"
+            "'b6200000-0000-4000-8000-000000000011');"
+            "update public.visa_article_heads set published_id=null"
+            " where article_id='b6200000-0000-4000-8000-000000000010';"
+            "do $$ begin if exists(select 1 from public.visa_article_heads where"
+            " article_id='b6200000-0000-4000-8000-000000000010' and published_id is not null)"
+            " then raise exception 'standard pointer was not revoked'; end if; end $$;"
+            "rollback;"
+        )
 
     def test_unpublish_restores_null_pointer_and_projection(self):
         self.fixture.sql(

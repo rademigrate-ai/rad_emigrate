@@ -209,7 +209,11 @@ revoke all on function private.rad_restore_function_state(bigint,text) from publ
 create or replace function private.rad_source_publication_pointer_guard() returns trigger
 language plpgsql set search_path='' as $$begin
  if new.published_id is null then
-  if tg_op='UPDATE' and old.published_id is not null then
+  -- Preserve existing standard-editorial pointer semantics. Only a previously
+  -- source-faithful published revision requires an explicit unpublish event.
+  if tg_op='UPDATE' and old.published_id is not null
+   and exists(select 1 from public.visa_article_revision_events e
+    where e.revision_id=old.published_id and e.publication_basis='source_faithful') then
    perform private.rad_require_admin();
    if not exists(select 1 from public.visa_article_revision_events e
     join private.rad_source_editorial_batches b on b.id=e.source_batch_id

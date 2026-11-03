@@ -6,7 +6,7 @@
 
 **PR:** [#89](https://github.com/rademigrate-ai/rad_emigrate/pull/89)
 
-**Candidate commit:** `22f2e51ddd078f3e9ff0beecbd17637d822b1221`
+**Sealed content baseline commit:** `22f2e51ddd078f3e9ff0beecbd17637d822b1221` (the exact final implementation HEAD must be rebound separately before independent authorization)
 
 **Owner constraint:** Restore, recovery-project creation, safety-control bypass, browser automation, credential/session-token access, and frontend deployment are not authorized.
 
@@ -25,7 +25,7 @@ A `GO` decision is valid only when all required attestations in section 8 are si
 | Binding | Required value |
 |---|---|
 | Production Supabase project | `inshddthftkhcdosoqcn` |
-| Candidate commit | `22f2e51ddd078f3e9ff0beecbd17637d822b1221` |
+| Sealed content baseline commit (not the final release HEAD) | `22f2e51ddd078f3e9ff0beecbd17637d822b1221` |
 | Core forward SQL SHA-256 | `ec77fd4bba84b703a0d2994c3ce8da8112ca969a8f2a478de8061b500f675f69` |
 | Core forward manifest | `_audit/.../db_forward_review/manifest.json` (`source_sha`: `81f11ce176d9645ae0503e360e22ef6a414c355b`) |
 | Allocator supplement SHA-256 | `5f224ce6025ff43d02e078f51d147f0f9c7b63ce4cf7b42e0c383e6b3f6be4ca` |
@@ -34,8 +34,8 @@ A `GO` decision is valid only when all required attestations in section 8 are si
 | Corrected admission/hold migration | `20261103114340_rad_corrected_source_editorial_admission.sql` |
 | Corrected admission migration SHA-256 | `577edecce2b0fe90bf2308c91add8a301976232b5a95d822374c7dae39c150b0` |
 | No-Restore safety candidate (NOT APPLIED) | `20261103120000_rad_no_restore_safety_ops.sql` |
-| Safety migration SHA-256 | `db0b0e84a3b0c6c74be9154afdb865c01fbfc214b2a458098916c5cca2cf3a5e` |
-| Safety regression tests SHA-256 | `6cf898c96977b56dfa56c134f38d2fe605f462924d23a0562a0acbb6ea3c68a9` |
+| Safety migration SHA-256 | `cce3d9dac0e821cf5ef3605d19fc84fb6c6b0ee6203067b2cfb46cfb013c083d` |
+| Safety regression tests SHA-256 | `86d8267d595517c25b9782bfc8d1fcf4a085897f16e290eecd6c9c7d604c42ea` |
 | Corrected package SHA-256 | `4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282` |
 | Corrected package scope | 1,100 operations; 44 batches; 1,077 publication candidates; 23 holds; 0 approvals; 0 publications |
 | Current observed Production state | 72 migration entries; 745 heads; 747 revisions; 0 publications |
