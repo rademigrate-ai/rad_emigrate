@@ -153,11 +153,28 @@ def classify_capture(capture, raw):
         r"در حال (?:بروز\s?رسانی|به روز\s?رسانی|تدوین)|در حال بروزرسانی|no faq found|under construction|coming soon",
         re.I,
     )
-    only_placeholder = bool(paragraphs) and all(
+    placeholder_nodes_only = bool(paragraphs) and all(
         not p or p == title or placeholder.search(p) for p in paragraphs
     )
+    placeholder_remainder = body
+    if placeholder_nodes_only:
+        for fragment in sorted(
+            [title]
+            + [p for p in paragraphs if len(p) <= 160 and placeholder.search(p)],
+            key=len,
+            reverse=True,
+        ):
+            if fragment:
+                placeholder_remainder = placeholder_remainder.replace(fragment, "")
+    only_placeholder = placeholder_nodes_only and not space(placeholder_remainder)
     if error:
         kind = "ERROR_RESPONSE_HISTORICAL_IDENTITY_UNDETERMINED"
+    elif (
+        region is not None
+        and region.select_one(".Paging") is not None
+        and len(region.select(".ProductShow .ItemAds .ItemTitle2")) >= 2
+    ):
+        kind = "CATEGORY_LIST_WITH_PARTIAL_EXCERPTS"
     elif region is None and soup.select_one(".blog,.category-list,.categories-list"):
         kind = "CATEGORY_LIST_WITH_PARTIAL_EXCERPTS"
     elif region is None and soup.select_one(".rsseo-sitemap-menu"):
@@ -176,6 +193,8 @@ def classify_capture(capture, raw):
         kind = "EMPTY_OWNED_CONTAINER"
     elif only_placeholder:
         kind = "EXPLICIT_PUBLISHER_PLACEHOLDER"
+    elif placeholder_nodes_only:
+        kind = "AUTHORED_TEXT_WITH_PUBLISHER_UPDATE_NOTICE"
     elif body and body == title:
         kind = "TITLE_ONLY_NO_ARTICLE_BODY"
     elif region is not None:
@@ -588,6 +607,7 @@ def build(args):
     bindings, package_hash = verify_package_articles(args.package, articles, sources)
     print("BOUND_PROPOSED_REVISIONS", len(bindings), flush=True)
     raw_proofs = {}
+    source_capture_kinds = []
     raw_cache = {}
     for source in sources:
         path = _raw_path(source["raw_html_asset"], args.asset_root)
@@ -596,6 +616,7 @@ def build(args):
         raw_proofs[(source["source_id"], source["snapshot_id"])] = raw_block_proof(
             source, raw_cache[path]
         )
+        source_capture_kinds.append(classify_capture(source, raw_cache[path]))
         if len(raw_proofs) % 250 == 0:
             print("RAW_SOURCE_VARIANTS_CHECKED", len(raw_proofs), flush=True)
     write_jsonl(
@@ -605,6 +626,7 @@ def build(args):
             for (sid, snap), proofs in sorted(raw_proofs.items())
         ],
     )
+    write_jsonl(args.output / "source-capture-kinds.jsonl.gz", source_capture_kinds)
     rows = list(source_crosswalk(sources, articles, bindings, raw_proofs))
     write_jsonl(args.output / "source-to-proposed-revision.jsonl.gz", rows)
     inventory = read_jsonl(args.source_input / "inventory.jsonl.gz")
@@ -630,6 +652,10 @@ def build(args):
             {(r["source_id"], r["snapshot_id"], r["source_block_index"]) for r in rows}
         ),
         "bound_article_locales": len(bindings),
+        "complete_corpus_capture_kinds": dict(
+            Counter(r["observed_content_kind"] for r in source_capture_kinds)
+        ),
+        "capture_kinds_are_not_editorial_clearance": True,
         "original_source_urls_in_composition": len({s["url"] for s in sources}),
         "sealed_discovery_frontier_urls": len(inventory),
         "known_url_register_rows": len(known_urls),

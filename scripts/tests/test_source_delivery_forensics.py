@@ -30,6 +30,44 @@ def capture(raw):
 
 
 class SourceDeliveryForensicsTest(unittest.TestCase):
+    def test_div_authored_text_survives_placeholder_paragraph_classification(self):
+        raw = (
+            '<title>Article</title><div itemprop="articleBody">'
+            "<div>A real authored introduction with unique qualifications.</div>"
+            "<p>این صفحه در حال بروزرسانی است</p></div>"
+        ).encode()
+        self.assertEqual(
+            classify_capture(capture(raw), raw)["observed_content_kind"],
+            "AUTHORED_TEXT_WITH_PUBLISHER_UPDATE_NOTICE",
+        )
+
+    def test_owned_box_can_be_a_paginated_teaser_index(self):
+        raw = (
+            b'<div class="Box"><h1>Articles</h1><div class="BoxCenter">'
+            b'<p>Introduction</p><div class="Paging">1 2</div>'
+            b'<div class="ProductShow"><div class="ItemAds">'
+            b'<span class="ItemTitle2">First shortened preview...</span></div>'
+            b'<div class="ItemAds"><span class="ItemTitle2">'
+            b"Second shortened preview...</span></div></div></div></div>"
+        )
+        self.assertEqual(
+            classify_capture(capture(raw), raw)["observed_content_kind"],
+            "CATEGORY_LIST_WITH_PARTIAL_EXCERPTS",
+        )
+
+    def test_article_with_related_cards_does_not_prove_a_category_index(self):
+        raw = (
+            b'<div class="Box"><h1>Article</h1><div class="BoxCenter">'
+            b'<p>The full authored article.</p><div class="ProductShow">'
+            b'<div class="ItemAds"><span class="ItemTitle2">Related one</span>'
+            b'</div><div class="ItemAds"><span class="ItemTitle2">Related two'
+            b"</span></div></div></div></div>"
+        )
+        self.assertEqual(
+            classify_capture(capture(raw), raw)["observed_content_kind"],
+            "AUTHORED_TEXT_REQUIRES_COMPLETE_BODY_PROOF",
+        )
+
     def test_crosswalk_preserves_legitimate_multiple_destination_occurrences(self):
         raw = b'<div itemprop="articleBody">Original</div>'
         source = capture(raw) | {"blocks": [{"type": "paragraph", "text": "Original"}]}

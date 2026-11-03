@@ -9,19 +9,19 @@ publication, Feed writes, project creation or frontend deployment.
 | Gate | Independently observed or prepared | Actual delivery |
 | --- | --- | --- |
 | URL inventory | 38,231 frozen discovery-frontier URLs; 38,269 unique URLs after union with source and gap ledgers | Historical website completeness unproved; old crawler labels are not editorial exclusions |
-| Complete captured bodies | 2,454 source identities: DigiVisa 1,160, RADVisa 847, RadMohajer 447 | Original captures checked; no newly recovered body in this continuation |
+| Frozen captured source records | 2,454 identities: DigiVisa 1,160, RADVisa 847, RadMohajer 447 | Raw text preserved; this is not 2,454 proved complete authored articles: 8 indexes and 1 article with an update notice require separate treatment |
 | Original 421 gaps | All identities retained: 2 previous full recoveries, 64 capture classifications, 355 without complete-body proof | 419 remain outside the complete-body corpus; classifications do not imply missing historical articles |
 | Raw passage integrity | 60,576 unique source blocks match owned original DOM; tables/lists checked structurally; zero unaccounted blocks | Offline evidence only |
 | Source-to-revision mapping | 61,991 destination occurrences, 1,100 sealed proposed article/locale revisions, 1,093 articles | No proposed revision imported here |
 | Consolidation | 42,226 retained destination blocks; 19,761 exact and 4 semantic duplicate representations; V4.1 preserved | Both alternative numeric values retained |
 | Placement | Frozen corpus: 56 country codes, 262 country-neutral article/locales; 427 independent RadMohajer article/locales | Four Dubai country corrections prepared; placement acceptance remains HOLD |
 | Import | 406 initial + 443 detached + 249 mechanically reconciled = 1,098 prepared; 2 substantive cases held | 0 imported articles/revisions here |
-| Publication | Original 1,084 proposals, 44 rehashed batches, 16 held; proposed 56 countries and 261 Other Titles | 0 approved / 0 published; four routing corrections require rebinding before approval |
+| Publication | Original 1,084 proposals, 44 rehashed batches, 16 held; proposed 56 countries and 261 Other Titles | 0 approved / 0 published; 27 total held after 7 source-kind and 4 routing exceptions; 1,073 remain unaffected by these specific holds, not approved |
 | Production preservation | 745/745 head, body, section, title, actor, hash, revision, time and publication bindings unchanged from previous readback | 745 heads / 747 revisions / 0 published at 10:17 UTC |
 | Production migrations | 72 historical entries; required closure, detached allocator and source-faithful publication contract absent | 0 migration versions applied here |
 | CMS actor/receipts | Two existing super_admin accounts; management access confirmed | No authenticated editorial session or operation-specific callback attestation established; no approval receipt fabricated |
 | Anonymous Production APIs | Draft RPC 404/PT404; direct revisions 401/42501 | Country, Other Titles and source approval RPCs 404/PGRST202; public content acceptance blocked |
-| Verification | 392 Python tests passed, including native SQL/migration/RLS/retry/publication regressions; new tool lint/format passed | Final commit CI must pass; its exact SHA/run is recorded in the private final receipt and PR checks |
+| Verification | 395 Python regressions cover native SQL/migration/RLS/retry/publication and raw capture classification; new tool lint/format gates included | Final commit test outcomes and CI SHA/run are recorded in the private final receipt and PR checks |
 | Merge / deployment | Conditional acceptance unsatisfied | PR #89 remains Draft and unmerged; no deployment commit |
 
 The larger URL inventory is a discovery frontier, not a count of authored
@@ -41,13 +41,31 @@ article/locale is rejected. DOM offsets are normalized-text positions, not raw b
 positions. Undated captures remain undated. Invalid UTF-8 outside the owned body
 is preserved with evidence-only surrogate decoding; damaged body text cannot pass.
 
-Original captures for all 64 classification candidates were inspected. Across
-those 64 and the two already recovered sources, observed kinds are: 25 error
-responses, 13 publisher placeholders, 10 listings with partial excerpts, 8 media
-pages without authored transcripts, 2 empty containers, 2 service forms, 1 sitemap,
-1 unrecognized/navigation container and 4 authored-text candidates. Two of the
-last four are the previous full recoveries; thin or mismatched text does not
-become a reconstructed article. Error responses never prove historical absence.
+Original captures for all 64 classification candidates were inspected. The
+classification register separates error responses, publisher placeholders,
+mixed authored text/update notices, listings with partial excerpts, media pages
+without authored transcripts, empty containers, service forms, sitemap/navigation
+and authored-text candidates. The two previous full recoveries remain separately
+identified; thin or mismatched text does not become a reconstructed article.
+Error responses never prove historical absence.
+
+The raw link investigation exposed eight paginated article/news indexes inside
+the supposedly complete frozen corpus. Their owned `.BoxCenter` containers have
+pagination and repeated teaser cards: an owned container alone does not prove an
+authored article. A ninth source retains an actual authored introduction plus a
+publisher update notice; it is not an empty placeholder. All 489 affected blocks
+remain preserved, while the seven destination article/locales are held. The other
+2,445 captures are authored-text candidates; raw matching alone does not certify
+that each is a historically complete article. Final capture-kind evidence is
+separate from the original frozen completeness flags and seals.
+
+All 6,135 recorded body links have literal capture evidence. The recheck matched
+10,320 previously recorded anchor occurrences without a fragment/hash mismatch,
+then recovered supplementary anchor evidence for 118 records. Seven required
+byte-offset proofs because unrelated attributes contain invalid UTF-8; their
+literal hrefs/labels and source bytes were preserved. The 1,332 records with
+multiple original targets retain that ambiguity. Neither liveness, broken-link
+status nor public media rights were certified.
 
 The bounded exact-421 recheck recorded 40 fetch outcomes, 379 host-circuit skips
 and 2 independently reproved local recoveries. It recovered zero new bodies.
@@ -87,8 +105,11 @@ representations attached. Every declared numeric token was found. The detector
 compares section-level value sets, including phone numbers, years and FAQ ordinals;
 an empty/nonempty difference is not proof of contradictory claims. No fact was
 invented or conflicting alternative discarded. Existing 16 publication holds and
-the two substantive alternatives remain, with four additional routing exceptions
-requiring rebinding. These are overlapping constraints, not additive import totals.
+the two substantive alternatives remain. Seven source-kind destination exceptions
+and four routing exceptions increase the publication hold union to 27. These 11
+are disjoint from the original 16. The original batches cannot be approved as-is;
+corrected eligibility, source receipts and exact publication bindings must be
+prepared before execution. Hold counts are not completed imports.
 
 ## Production route investigation
 
@@ -130,6 +151,10 @@ root. No source network request or hosted write occurs in that tool.
 - `forensics-v5/manifest.json`: seals the complete 38,269-URL register,
   421-URL capture classifications, 2,454 raw-source proofs and 61,991-row revision
   crosswalk. Earlier failed audit attempts remain retained, superseded by this pass.
+- `capture-kind-audit-v2/manifest.json`: final capture classifications supersede
+  earlier completeness assumptions and the preliminary placeholder classification;
+  source and operation holds remain explicit. `supplementary-link-*-evidence` files
+  supply the newly recovered link evidence without editing original seals.
 - `numeric-original-context-crosswalk.jsonl.gz`,
   `substantive-global-source-crosscheck.json` and
   `dubai-country-correction-receipt.json`: unresolved alternatives and corrections.
