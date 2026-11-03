@@ -174,3 +174,13 @@ That directory also holds the corrected package, independent crosswalk,
 `package-independent-verification.json`, and `NO_RESTORE_TECHNICAL_REVIEW_V2.json`.
 The preliminary no-Restore review's false support-flag statement is explicitly
 superseded by V2; guarded import compensation is supported within its stated scope.
+
+## Continued safety engineering after the sealed content baseline
+
+The existing no-Restore approval package now binds two reviewed candidates: the pre-core function-state bootstrap (`20261103120000`) and the post-import/publication-contract source-withdrawal followup (`20261103180754`). Capture must precede the core forward; the sealed source-faithful publication migration remains AFTER guarded import. The corrected content package and all 23 publication holds are unchanged.
+
+Regression coverage now includes seven-function scope, stable capture retries, expected-current-state and independent operator authorization, owner/ACL/OID/dependency drift, quoted settings, partial-failure atomicity and concurrent DDL refusal. Withdrawal tests cover multiple articles/locales, immutable per-member receipts, original head/body/author preservation, newly held public content, full transaction identity, concurrent retry, stale replay and search invalidation. Portable clean-schema and normal local Auth checks distinguish authorized metadata access from permission to perform an inverse.
+
+Actual read-only Production inspection confirms a further technical prerequisite: managed `postgres` lacks the catalog lock authority required by the protected inverse. The candidate explicitly refuses rather than dropping that concurrency guard or granting catalog privileges. A provider-approved protected executor and independently accepted full committed-DDL/callback failure procedure remain required. Synthetic extension callbacks demonstrate that DROP can leave callback-created grants behind; this cannot be represented as actual provider acceptance.
+
+All independent attestations remain pending. Neither safety migration is installed in Production. Final-commit CI, build and test results are recorded separately in the existing private readiness register; successful local/CI results do not authorize Production writes or merge.

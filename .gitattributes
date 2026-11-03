@@ -59,3 +59,7 @@ scripts/public_web_build.py text eol=lf
 scripts/tests/test_public_web_build.py text eol=lf
 supabase/migrations/20261103114340_rad_corrected_source_editorial_admission.sql text eol=lf
 supabase/tests/corrected_source_editorial_holds.sql text eol=lf
+scripts/tests/test_no_restore_safety_ops.py text eol=lf
+supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql text eol=lf
+supabase/migrations/20261103180754_rad_source_unpublish_safety.sql text eol=lf
+supabase/tests/no_restore_safety_ops.sql text eol=lf

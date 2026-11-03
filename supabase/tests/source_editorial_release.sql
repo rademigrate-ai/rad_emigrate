@@ -167,4 +167,8 @@ do $$declare result jsonb;begin
  begin perform public.get_editorial_article('a4100000-0000-4000-8000-000000000010','en',true);raise exception 'FAIL anonymous preview';exception when sqlstate 'PT403' then null;end;
 end $$;
 reset role;
+\if :{?rad_keep_source_fixture}
+-- The caller owns this same transaction and must roll it back.
+\else
 rollback;
+\endif

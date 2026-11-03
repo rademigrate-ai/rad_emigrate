@@ -1,5 +1,6 @@
--- No-Restore safety operations. Prepared for independent review; this migration
--- performs no Production content import, approval, publication or reversal.
+-- Function-state bootstrap: install and capture BEFORE the reviewed core forward.
+-- Uses only the existing CMS Admin/immutability foundation. No database Restore,
+-- content import, approval, publication, or inverse is performed by this migration.
 begin;
 set local lock_timeout='5s';
 set local statement_timeout='60s';
@@ -22,6 +23,7 @@ create trigger rad_function_state_receipts_immutable before update or delete
 create table if not exists private.rad_function_state_members(
  receipt_id bigint not null references private.rad_function_state_receipts(id),
  identity text not null,
+ function_oid oid not null,
  definition text not null,
  owner_name text not null,
  language_name text not null,
@@ -38,13 +40,31 @@ revoke all on private.rad_function_state_members from public,anon,authenticated,
 create trigger rad_function_state_members_immutable before update or delete
  on private.rad_function_state_members for each row execute function private.rad_immutable();
 
+create table private.rad_function_reversal_authorizations(
+ id bigint generated always as identity primary key,
+ source_receipt_id bigint not null unique references private.rad_function_state_receipts(id),
+ actor_id uuid not null references auth.users(id),
+ expected_current_state_sha256 text not null check(expected_current_state_sha256~'^[a-f0-9]{64}$'),
+ request_sha256 text not null check(request_sha256~'^[a-f0-9]{64}$'),
+ independent_reviewer_ref text not null check(length(btrim(independent_reviewer_ref))>=5),
+ approval_evidence_sha256 text not null check(approval_evidence_sha256~'^[a-f0-9]{64}$'),
+ expires_at timestamptz not null,created_at timestamptz not null default now()
+);
+alter table private.rad_function_reversal_authorizations enable row level security;
+revoke all on private.rad_function_reversal_authorizations from public,anon,authenticated,service_role;
+create trigger rad_function_reversal_authorizations_immutable before update or delete
+ on private.rad_function_reversal_authorizations for each row execute function private.rad_immutable();
+
 create table if not exists private.rad_function_reversal_receipts(
  receipt_id bigint generated always as identity primary key,
- source_receipt_id bigint not null references private.rad_function_state_receipts(id),
+ source_receipt_id bigint not null unique references private.rad_function_state_receipts(id),
+ authorization_id bigint not null references private.rad_function_reversal_authorizations(id),
  actor_id uuid not null references auth.users(id),
  action text not null check(action='reviewed_function_state_restore'),
  note text not null check(length(btrim(note))>=20),
  restored_count integer not null check(restored_count>=0),
+ definition_changes integer not null check(definition_changes>=0),
+ request_sha256 text not null check(request_sha256~'^[a-f0-9]{64}$'),
  created_at timestamptz not null default now()
 );
 alter table private.rad_function_reversal_receipts enable row level security;
@@ -52,245 +72,201 @@ revoke all on private.rad_function_reversal_receipts from public,anon,authentica
 create trigger rad_function_reversal_receipts_immutable before update or delete
  on private.rad_function_reversal_receipts for each row execute function private.rad_immutable();
 
-create table if not exists private.rad_source_unpublish_receipts(
- id bigint generated always as identity primary key,
- batch_id uuid not null references private.rad_source_editorial_batches(id),
- actor_id uuid not null references auth.users(id),
- operation text not null check(operation='unpublish_source_editorial_batch'),
- manifest_sha256 text not null check(manifest_sha256~'^[a-f0-9]{64}$'),
- reversed_count integer not null check(reversed_count>=0),
- created_at timestamptz not null default now(),
- unique(batch_id)
-);
-alter table private.rad_source_unpublish_receipts enable row level security;
-revoke all on private.rad_source_unpublish_receipts from public,anon,authenticated,service_role;
-create trigger rad_source_unpublish_receipts_immutable before update or delete
- on private.rad_source_unpublish_receipts for each row execute function private.rad_immutable();
-
-alter table public.visa_article_revision_events
- drop constraint visa_article_revision_events_state_check,
- add constraint visa_article_revision_events_state_check check(state in('draft','review','approved','rejected','published','archived','unpublished')),
- drop constraint rad_source_event_basis_check,
- add constraint rad_source_event_basis_check check(
-  (publication_basis='standard_editorial' and source_batch_id is null)
-  or (publication_basis='source_faithful' and source_batch_id is not null and state in('approved','published','unpublished')));
-
--- Capture exact current function runtime state. The caller supplies the release
 -- package hash and a reviewed scope; the function never invents a reviewer or
 -- executes a restore by itself.
+create function private.rad_reviewed_function_signatures() returns text[]
+language sql immutable set search_path='' as $$select array[
+ 'private.is_safe_public_https_url(text)','private.prevent_profile_role_escalation()',
+ 'private.rad_article_verification(uuid)','private.rad_claim_eligible(uuid)',
+ 'private.rad_evidence(jsonb,uuid)','private.rad_page_position(jsonb,text)','public.get_visa_article(jsonb)']::text[]$$;
+revoke all on function private.rad_reviewed_function_signatures() from public,anon,authenticated,service_role;
+
+create function private.rad_release_function_frame(p_signatures text[]) returns jsonb
+language plpgsql set search_path='' as $$declare members jsonb;begin
+ if p_signatures is null or
+ (select array_agg(x order by x)from unnest(p_signatures)x) is distinct from
+ (select array_agg(x order by x)from unnest(private.rad_reviewed_function_signatures())x)
+ then raise exception 'exact_seven_function_scope_required' using errcode='PT422';end if;
+ select jsonb_agg(jsonb_build_object(
+  'identity',p.oid::regprocedure::text,'function_oid',p.oid,
+  'definition',pg_get_functiondef(p.oid),'owner_name',pg_get_userbyid(p.proowner),
+  'language_name',l.lanname,'security_definer',p.prosecdef,'volatile_code',p.provolatile,
+  'config',coalesce(p.proconfig,'{}'::text[]),'grants',coalesce(to_jsonb(p.proacl),'null'::jsonb),
+  'dependencies',coalesce((select jsonb_agg(v order by v::text)from(
+   select distinct jsonb_build_object('class',d.classid::regclass::text,'object',d.objid,
+    'subobject',d.objsubid,'type',d.deptype,'description',pg_describe_object(d.classid,d.objid,d.objsubid))v
+   from pg_depend d where d.refclassid='pg_proc'::regclass and d.refobjid=p.oid)deps),'[]'::jsonb),
+  'definition_sha256',encode(extensions.digest(pg_get_functiondef(p.oid),'sha256'),'hex'))
+  order by p.oid::regprocedure::text)into members
+ from pg_proc p join pg_language l on l.oid=p.prolang
+ where p.oid::regprocedure::text=any(p_signatures)and p.prokind='f';
+ if jsonb_array_length(coalesce(members,'[]'::jsonb))<>7 then
+  raise exception 'function_state_member_missing' using errcode='PT404';end if;
+ return members;
+end $$;
+revoke all on function private.rad_release_function_frame(text[]) from public,anon,authenticated,service_role;
+
 create or replace function private.rad_capture_function_state(
- p_package_sha256 text,p_scope text,p_function_signatures text[]
-) returns bigint language plpgsql security definer set search_path='' as $$
-declare actor uuid:=private.rad_require_admin();rid bigint;state jsonb;members jsonb;
- fn record;grant_record record;deps jsonb;existing_sha text;begin
+ p_package_sha256 text,p_scope text,p_function_signatures text[],p_expected_state_sha256 text,p_note text
+) returns bigint language plpgsql security definer set search_path='' set lock_timeout='2s' as $$
+declare actor uuid:=private.rad_require_admin();rid bigint;state jsonb;members jsonb;existing private.rad_function_state_receipts;
+ baseline jsonb:='{
+ "private.is_safe_public_https_url(text)":"a5aa08d5d750691c351335c2e2313c0e91a16ad7c3f90abbde507f9110b515ec",
+ "private.prevent_profile_role_escalation()":"954cc67ddd74f23b0840d07618a8af66b19f32073e3098bc4cf9890718e4b529",
+ "private.rad_article_verification(uuid)":"4c0dc1acff287d90a3af18a2c2b03ed30f961180d36596675ba580000438ab8a",
+ "private.rad_claim_eligible(uuid)":"0e44eca646f7c634018206aea2b1505741dc58ebee5e16d754635950aabb23e0",
+ "private.rad_evidence(jsonb,uuid)":"e7405584ffbc2d06b89c468f7ee1c57e754c84f9b0570051cc0e74f5eeb424b5",
+ "private.rad_page_position(jsonb,text)":"f983903947d87c12e03f52c7183e0c07c53da10436104fe59937f3730268cc55",
+ "public.get_visa_article(jsonb)":"85de52ee2fb230a1d194eb23dbfce4eff1444a45c597a9898453b6f1d5e7a196"}'::jsonb;
+begin
  if p_package_sha256 is null or p_package_sha256!~'^[a-f0-9]{64}$'
- or p_scope not in('reviewed_forward','manual_review')
- or p_function_signatures is null or cardinality(p_function_signatures)=0
- or cardinality(p_function_signatures)<>(select count(distinct x) from unnest(p_function_signatures)x)
- then raise exception 'function_state_scope_required' using errcode='PT422';end if;
- members:='[]'::jsonb;
- for fn in select p.oid,p.proname,n.nspname schema_name,pg_get_userbyid(p.proowner) owner_name,
-  l.lanname language_name,p.prosecdef security_definer,p.provolatile volatile_code,
-  coalesce(p.proconfig,'{}'::text[]) config,p.proacl acl_items,pg_get_functiondef(p.oid) definition,
-  p.oid::regprocedure::text identity
-  from pg_proc p join pg_namespace n on n.oid=p.pronamespace join pg_language l on l.oid=p.prolang
-  where p.oid::regprocedure::text=any(p_function_signatures) order by identity loop
-  members:=members||jsonb_build_array(jsonb_build_object(
-   'identity',fn.identity,'definition',fn.definition,'owner_name',fn.owner_name,'language_name',fn.language_name,
-   'security_definer',fn.security_definer,'volatile_code',fn.volatile_code,'config',fn.config,
-   -- Preserve the exact pg_proc ACL, including PUBLIC/default ACL semantics.
-   -- information_schema.routine_privileges can conflate overloaded functions.
-   'grants',coalesce(to_jsonb(fn.acl_items),'null'::jsonb),
-   'dependencies',coalesce((select jsonb_agg(distinct dep order by dep) from (
-    select pg_describe_object(d.classid,d.objid,d.objsubid) dep
-    from pg_depend d where d.refclassid='pg_proc'::regclass and d.refobjid=fn.oid
-      and d.classid in('pg_rewrite'::regclass,'pg_trigger'::regclass)
-      and d.deptype in('n','a')
-   )d),'[]'::jsonb),
-   'definition_sha256',encode(extensions.digest(fn.definition,'sha256'),'hex')));
- end loop;
- if (select count(*)from jsonb_array_elements(members))<>cardinality(p_function_signatures)
-  then raise exception 'function_state_member_missing' using errcode='PT404';end if;
- state:=jsonb_build_object('schema_version',1,'scope',p_scope,'package_sha256',p_package_sha256,'members',members,'captured_at',now(),'actor_id',actor);
- insert into private.rad_function_state_receipts(package_sha256,scope,actor_id,state,state_sha256)
- values(p_package_sha256,p_scope,actor,state,encode(extensions.digest(state::text,'sha256'),'hex'))
- on conflict(package_sha256,scope) do nothing returning id into rid;
- if rid is null then
-  select r.id,r.state_sha256 into rid,existing_sha from private.rad_function_state_receipts r
-   where r.package_sha256=p_package_sha256 and r.scope=p_scope;
-  if existing_sha<>encode(extensions.digest(state::text,'sha256'),'hex')
-   then raise exception 'function_state_receipt_conflict' using errcode='PT409';end if;
-  return rid;
+ or p_scope is null or p_scope not in('reviewed_forward','manual_review')
+ or p_expected_state_sha256 is null or p_expected_state_sha256!~'^[a-f0-9]{64}$'
+ or length(btrim(coalesce(p_note,'')))<20 then
+  raise exception 'function_state_scope_required' using errcode='PT422';end if;
+ perform pg_advisory_xact_lock(hashtextextended('rad-function-state-catalog',0));
+ if not(has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
+  or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
+  or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'))then
+  raise exception 'provider_approved_catalog_lock_executor_required'using errcode='PT403';end if;
+ lock table pg_catalog.pg_proc in share mode;
+ members:=private.rad_release_function_frame(p_function_signatures);
+ if encode(extensions.digest(members::text,'sha256'),'hex')<>p_expected_state_sha256 then
+  raise exception 'function_capture_state_changed' using errcode='PT409';end if;
+ select * into existing from private.rad_function_state_receipts where package_sha256=p_package_sha256 and scope=p_scope;
+ if existing.id is not null then
+  if existing.actor_id<>actor or existing.state->>'note' is distinct from p_note
+   or existing.state->'members' is distinct from members
+   or existing.state_sha256<>encode(extensions.digest(existing.state::text,'sha256'),'hex')
+   or existing.state->>'package_sha256' is distinct from existing.package_sha256
+   or existing.state->>'scope' is distinct from existing.scope
+   or existing.state->>'actor_id' is distinct from existing.actor_id::text
+   or existing.state->>'schema_version' is distinct from '2'
+   or existing.state->'members' is distinct from(select jsonb_agg(to_jsonb(m)-'receipt_id'order by m.identity)
+    from private.rad_function_state_members m where m.receipt_id=existing.id)then
+   raise exception 'function_state_receipt_conflict' using errcode='PT409';end if;
+  return existing.id;
  end if;
- insert into private.rad_function_state_members(receipt_id,identity,definition,owner_name,language_name,
+ if p_scope='reviewed_forward'and exists(select 1 from jsonb_array_elements(members)m
+  where baseline->>(m->>'identity')is distinct from m->>'definition_sha256')then
+  raise exception 'pre_forward_function_baseline_required' using errcode='PT409';end if;
+ state:=jsonb_build_object('schema_version',2,'scope',p_scope,'package_sha256',p_package_sha256,
+  'members',members,'captured_at',clock_timestamp(),'actor_id',actor,'note',p_note);
+ insert into private.rad_function_state_receipts(package_sha256,scope,actor_id,state,state_sha256)
+ values(p_package_sha256,p_scope,actor,state,encode(extensions.digest(state::text,'sha256'),'hex'))returning id into rid;
+ insert into private.rad_function_state_members(receipt_id,identity,function_oid,definition,owner_name,language_name,
   security_definer,volatile_code,config,grants,dependencies,definition_sha256)
- select rid,m->>'identity',m->>'definition',m->>'owner_name',m->>'language_name',(m->>'security_definer')::boolean,
-  m->>'volatile_code',(select array_agg(x)from jsonb_array_elements_text(m->'config')x),m->'grants',m->'dependencies',m->>'definition_sha256'
- from jsonb_array_elements(members)m;
+ select rid,m->>'identity',(m->>'function_oid')::oid,m->>'definition',m->>'owner_name',m->>'language_name',
+  (m->>'security_definer')::boolean,m->>'volatile_code',
+  coalesce((select array_agg(x order by position)from jsonb_array_elements_text(m->'config')with ordinality v(x,position)),'{}'::text[]),
+  m->'grants',m->'dependencies',m->>'definition_sha256'from jsonb_array_elements(members)m;
  return rid;
 end $$;
-revoke all on function private.rad_capture_function_state(text,text,text[]) from public,anon,authenticated,service_role;
+revoke all on function private.rad_capture_function_state(text,text,text[],text,text)from public,anon,authenticated,service_role;
 
--- Restore the exact captured function definitions. This is a reviewed
--- post-commit inversion for function body/owner/ACL/settings only; it refuses
--- drift instead of deleting dependent objects or weakening existing triggers.
-create or replace function private.rad_restore_function_state(p_source_receipt_id bigint,p_note text)
- returns jsonb language plpgsql security definer set search_path='' as $$
-declare actor uuid:=private.rad_require_admin();r private.rad_function_state_receipts;m private.rad_function_state_members;
- current record;restored integer:=0;detail jsonb:='[]';begin
- if p_source_receipt_id is null or length(btrim(coalesce(p_note,'')))<20
- then raise exception 'function_restore_review_required' using errcode='PT422';end if;
+create or replace function private.rad_restore_function_state(
+ p_source_receipt_id bigint,p_expected_current_state_sha256 text,p_note text
+)returns jsonb language plpgsql security definer set search_path='' set lock_timeout='2s' as $$
+declare actor uuid:=private.rad_require_admin();r private.rad_function_state_receipts;
+ approval private.rad_function_reversal_authorizations;prior private.rad_function_reversal_receipts;
+ source_members jsonb;members jsonb;frame jsonb;m jsonb;request_sha text;changes integer:=0;rid bigint;done_at timestamptz;
+begin
+ if p_source_receipt_id is null or p_expected_current_state_sha256 is null
+ or p_expected_current_state_sha256!~'^[a-f0-9]{64}$'or length(btrim(coalesce(p_note,'')))<20 then
+  raise exception 'function_restore_review_required' using errcode='PT422';end if;
+ perform pg_advisory_xact_lock(hashtextextended('rad-function-state-catalog',0));
+ if not(has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
+  or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
+  or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'))then
+  raise exception 'provider_approved_catalog_lock_executor_required'using errcode='PT403';end if;
+ lock table pg_catalog.pg_proc in share mode;
  select * into r from private.rad_function_state_receipts where id=p_source_receipt_id;
- if r.id is null or encode(extensions.digest(r.state::text,'sha256'),'hex')<>r.state_sha256
- then raise exception 'function_state_receipt_not_found' using errcode='PT404';end if;
- perform pg_advisory_xact_lock(hashtextextended('function-state:'||r.id::text,0));
- for m in select * from private.rad_function_state_members where receipt_id=r.id order by identity loop
-  select p.oid,pg_get_userbyid(p.proowner) owner_name,l.lanname language_name,p.prosecdef security_definer,p.provolatile volatile_code,
-   coalesce(p.proconfig,'{}'::text[]) config,p.proacl acl_items,pg_get_functiondef(p.oid) definition,p.oid::regprocedure::text identity into current
-   from pg_proc p join pg_namespace n on n.oid=p.pronamespace join pg_language l on l.oid=p.prolang
-   where p.oid::regprocedure::text=m.identity;
-  if current.oid is null then raise exception 'function_state_missing_target: %',m.identity using errcode='PT409';end if;
-  -- A changed owner or ACL is not safely reversible by replaying GRANTs.
-  -- Refuse rather than changing privileges or silently dropping inherited grants.
-  if current.owner_name is distinct from m.owner_name
-   or coalesce(to_jsonb(current.acl_items),'null'::jsonb) is distinct from m.grants
-   then raise exception 'function_acl_or_owner_drift: %',m.identity using errcode='PT409';end if;
-  if coalesce((select jsonb_agg(distinct dep order by dep) from (
-    select pg_describe_object(d.classid,d.objid,d.objsubid) dep
-    from pg_depend d where d.refclassid='pg_proc'::regclass
-      and d.refobjid=current.oid and d.classid in('pg_rewrite'::regclass,'pg_trigger'::regclass)
-      and d.deptype in('n','a')
-   ) deps),'[]'::jsonb) is distinct from m.dependencies
-   then raise exception 'function_dependent_catalog_drift: %',m.identity using errcode='PT409';end if;
-  if encode(extensions.digest(current.definition,'sha256'),'hex')<>m.definition_sha256 then
-   execute m.definition;
-  end if;
-  -- The captured definition already carries SECURITY DEFINER and volatility.
-  -- Altering these attributes can modify the generated definition text;
-  -- verify every attribute only after restoring the original body.
-  execute format('alter function %s %s',m.identity,case when m.security_definer then 'security definer' else 'security invoker' end);
-  execute format('alter function %s %s',m.identity,case m.volatile_code when 'i' then 'immutable' when 's' then 'stable' else 'volatile' end);
-  execute format('alter function %s reset all',m.identity);
-  if cardinality(m.config)>0 then
-   for current in select c from unnest(m.config)c loop
-    if current.c like '%="%' then
-     execute format('alter function %s set %s to %s',m.identity,
-      split_part(current.c,'=',1),quote_literal(replace(substring(current.c from position('=' in current.c)+2),'"','')));
-    else
-     execute format('alter function %s set %s to %s',m.identity,
-      split_part(current.c,'=',1),quote_literal(substring(current.c from position('=' in current.c)+1)));
-    end if;
-   end loop;
-  end if;
-  select p.oid,pg_get_userbyid(p.proowner) owner_name,l.lanname language_name,p.prosecdef security_definer,p.provolatile volatile_code,
-   coalesce(p.proconfig,'{}'::text[]) config,p.proacl acl_items,pg_get_functiondef(p.oid) definition into current
-   from pg_proc p join pg_namespace n on n.oid=p.pronamespace join pg_language l on l.oid=p.prolang
-   where p.oid::regprocedure::text=m.identity;
-  if encode(extensions.digest(current.definition,'sha256'),'hex')<>m.definition_sha256
-   or current.owner_name<>m.owner_name or current.language_name<>m.language_name or current.security_definer<>m.security_definer
-   or current.volatile_code<>m.volatile_code or current.config is distinct from m.config
-   or coalesce(to_jsonb(current.acl_items),'null'::jsonb) is distinct from m.grants
-   then raise exception 'function_state_restore_mismatch: % hash=% expected=% owner=%/% lang=%/% sec=%/% vol=%/% config=%/%',
-    m.identity,encode(extensions.digest(current.definition,'sha256'),'hex'),m.definition_sha256,
-    current.owner_name,m.owner_name,current.language_name,m.language_name,current.security_definer,m.security_definer,
-    current.volatile_code,m.volatile_code,current.config,m.config using errcode='PT409';end if;
-  restored:=restored+1;
-  detail:=detail||jsonb_build_object('identity',m.identity,'definition_sha256',m.definition_sha256);
- end loop;
- insert into private.rad_function_reversal_receipts(source_receipt_id,actor_id,action,note,restored_count)
- values(r.id,actor,'reviewed_function_state_restore',p_note,restored);
- return jsonb_build_object('source_receipt_id',r.id,'restored_count',restored,'members',detail,'actor_id',actor,'restored_at',now());
-end $$;
-revoke all on function private.rad_restore_function_state(bigint,text) from public,anon,authenticated,service_role;
-
--- Source-faithful reversal: only a currently published revision from the exact
--- approved batch can be unpublished, and only through an immutable unpublish
--- event. The head pointer guard checks this event before allowing NULL.
-create or replace function private.rad_source_publication_pointer_guard() returns trigger
-language plpgsql set search_path='' as $$begin
- if new.published_id is null then
-  -- Preserve existing standard-editorial pointer semantics. Only a previously
-  -- source-faithful published revision requires an explicit unpublish event.
-  if tg_op='UPDATE' and old.published_id is not null
-   and exists(select 1 from public.visa_article_revision_events e
-    where e.revision_id=old.published_id and e.publication_basis='source_faithful') then
-   perform private.rad_require_admin();
-   if not exists(select 1 from public.visa_article_revision_events e
-    join private.rad_source_editorial_batches b on b.id=e.source_batch_id
-    join public.visa_article_revisions r on r.id=e.revision_id
-    where e.revision_id=old.published_id and e.state='unpublished' and e.publication_basis='source_faithful'
-    and e.actor_id=auth.uid() and b.approved_by=auth.uid() and r.article_id=new.article_id and r.locale=new.locale
-    and e.note like '%'||r.content_hash||'%'
-    -- Only the event inserted by this same transaction authorizes reversal.
-    and e.xmin::text=((pg_current_xact_id()::text::numeric % 4294967296)::bigint)::text)
-   then raise exception 'explicit_source_unpublish_operation_required' using errcode='PT422';end if;
-  end if;
-  return new;
+ if r.id is null or encode(extensions.digest(r.state::text,'sha256'),'hex')<>r.state_sha256 then
+  raise exception 'function_state_receipt_not_found' using errcode='PT404';end if;
+ if r.actor_id<>actor then raise exception 'function_state_actor_conflict' using errcode='PT403';end if;
+ if r.state->>'package_sha256' is distinct from r.package_sha256
+ or r.state->>'scope' is distinct from r.scope
+ or r.state->>'actor_id' is distinct from r.actor_id::text
+ or r.state->>'schema_version' is distinct from '2'then
+  raise exception 'function_state_root_integrity_failed' using errcode='PT409';end if;
+ select jsonb_agg(to_jsonb(member)-'receipt_id'order by member.identity)into source_members
+ from private.rad_function_state_members member where member.receipt_id=r.id;
+ if source_members is distinct from r.state->'members'or jsonb_array_length(source_members)<>7
+ or exists(select 1 from jsonb_array_elements(source_members)captured
+  where encode(extensions.digest(captured->>'definition','sha256'),'hex')<>captured->>'definition_sha256')then
+  raise exception 'function_state_member_integrity_failed' using errcode='PT409';end if;
+ request_sha:=encode(extensions.digest(jsonb_build_object('source_receipt_id',r.id,'actor_id',actor,
+  'expected_current_state_sha256',p_expected_current_state_sha256,'note',p_note)::text,'sha256'),'hex');
+ select * into approval from private.rad_function_reversal_authorizations where source_receipt_id=r.id;
+ if approval.id is null or approval.actor_id<>actor or approval.expires_at<=clock_timestamp()
+ or approval.expected_current_state_sha256<>p_expected_current_state_sha256 or approval.request_sha256<>request_sha then
+  raise exception 'independent_function_reversal_authorization_required' using errcode='PT403';end if;
+ members:=private.rad_release_function_frame(private.rad_reviewed_function_signatures());
+ select * into prior from private.rad_function_reversal_receipts where source_receipt_id=r.id;
+ if prior.receipt_id is not null then
+  if prior.actor_id<>actor or prior.request_sha256<>request_sha or prior.authorization_id<>approval.id
+   or members is distinct from source_members then raise exception 'function_restore_retry_conflict' using errcode='PT409';end if;
+  rid:=prior.receipt_id;changes:=prior.definition_changes;done_at:=prior.created_at;
+ else
+  if encode(extensions.digest(members::text,'sha256'),'hex')<>p_expected_current_state_sha256 then
+   raise exception 'function_current_state_changed' using errcode='PT409';end if;
+  -- Refuse every owner/ACL/OID/dependent change before executing any definition.
+  for m in select value from jsonb_array_elements(source_members)loop
+   select value into frame from jsonb_array_elements(members)where value->>'identity'=m->>'identity';
+   if frame->'function_oid'is distinct from m->'function_oid'then
+    raise exception 'function_identity_oid_drift' using errcode='PT409';end if;
+   if frame->'owner_name'is distinct from m->'owner_name'or frame->'grants'is distinct from m->'grants'then
+    raise exception 'function_acl_or_owner_drift' using errcode='PT409';end if;
+   if frame->'dependencies'is distinct from m->'dependencies'then
+    raise exception 'function_dependent_catalog_drift' using errcode='PT409';end if;
+  end loop;
+  for m in select value from jsonb_array_elements(source_members)loop
+   select value into frame from jsonb_array_elements(members)where value->>'identity'=m->>'identity';
+   if frame->>'definition_sha256'<>m->>'definition_sha256'then
+    -- pg_get_functiondef preserves language, volatility, security mode and all
+    -- SET clauses, including quoted/multiple GUC values. Do not reparse them.
+    execute m->>'definition';changes:=changes+1;
+   end if;
+  end loop;
+  if private.rad_release_function_frame(private.rad_reviewed_function_signatures())is distinct from source_members then
+   raise exception 'function_state_restore_mismatch' using errcode='PT409';end if;
+  insert into private.rad_function_reversal_receipts(source_receipt_id,authorization_id,actor_id,action,note,
+   restored_count,definition_changes,request_sha256)values(r.id,approval.id,actor,'reviewed_function_state_restore',p_note,7,changes,request_sha)
+   returning receipt_id,created_at into rid,done_at;
  end if;
- if tg_op='UPDATE' and new.published_id is not distinct from old.published_id then return new;end if;
- if exists(select 1 from public.visa_article_revision_events where revision_id=new.published_id and publication_basis='source_faithful') then
-  perform private.rad_require_admin();
-  if not exists(select 1 from public.visa_article_revision_events e join private.rad_source_editorial_batches b on b.id=e.source_batch_id
-   join public.visa_article_revisions r on r.id=e.revision_id
-   where e.revision_id=new.published_id and e.state='published' and e.publication_basis='source_faithful'
-   and e.actor_id=auth.uid() and b.approved_by=auth.uid() and r.article_id=new.article_id and r.locale=new.locale
-   and e.xmin::text=((pg_current_xact_id()::text::numeric % 4294967296)::bigint)::text)
-  then raise exception 'explicit_source_publication_operation_required' using errcode='PT422';end if;
- end if;
- return new;
+ return jsonb_build_object('source_receipt_id',r.id,'reversal_receipt_id',rid,'restored_count',7,
+  'definition_changes',changes,'actor_id',actor,'restored_at',done_at,'state_sha256',encode(extensions.digest(source_members::text,'sha256'),'hex'));
 end $$;
-revoke all on function private.rad_source_publication_pointer_guard() from public,anon,authenticated,service_role;
+revoke all on function private.rad_restore_function_state(bigint,text,text)from public,anon,authenticated,service_role;
 
-create or replace function public.unpublish_source_editorial_batch(p_batch_id uuid,p_manifest_sha256 text,p_note text)
- returns jsonb language plpgsql security definer set search_path='' as $$
-declare actor uuid:=private.rad_require_admin();batch private.rad_source_editorial_batches;entry jsonb;r public.visa_article_revisions;
- event public.visa_article_revision_events;head public.visa_article_heads;receipts jsonb:='[]';n integer:=0;u bigint;existing_count integer;begin
- if p_batch_id is null or p_manifest_sha256 is null or p_manifest_sha256!~'^[a-f0-9]{64}$'
- or length(btrim(coalesce(p_note,'')))<20 then raise exception 'source_unpublish_review_required' using errcode='PT422';end if;
- select * into batch from private.rad_source_editorial_batches where id=p_batch_id;
- if batch.id is null then raise exception 'source_batch_not_found' using errcode='PT404';end if;
- if batch.approved_by<>actor or p_manifest_sha256<>batch.manifest_sha256 then raise exception 'source_batch_actor_or_hash_conflict' using errcode='PT409';end if;
- perform pg_advisory_xact_lock(hashtextextended('source-batch:'||p_batch_id::text,0));
- perform 1 from public.visa_article_heads h join public.visa_article_revisions v on v.article_id=h.article_id and v.locale=h.locale
- where v.id in(select (value->>'revision_id')::uuid from jsonb_array_elements(batch.manifest_text::jsonb)) order by h.article_id,h.locale for update of h;
- for entry in select value from jsonb_array_elements(batch.manifest_text::jsonb) order by value->>'revision_id' loop
-  -- Publication changes catalog.active, while a later reversal must still bind
-  -- the same revision/body/source. Validate all fields except that state flag.
-  entry:=entry||jsonb_build_object('expected_catalog_active',true);
-  select * into r from public.visa_article_revisions where id=private.rad_source_editorial_entry(entry);
-  select * into head from public.visa_article_heads where article_id=r.article_id and locale=r.locale;
-  select * into event from public.visa_article_revision_events e where e.revision_id=r.id and e.state='unpublished' and e.publication_basis='source_faithful' and e.source_batch_id=batch.id order by e.id desc limit 1;
-  if event.id is not null then
-   if head.published_id is not null or head.head_id is distinct from (entry->>'expected_head_id')::uuid
-    then raise exception 'source_unpublish_retry_conflict' using errcode='PT409';end if;
-  else
-   if private.rad_article_state(r.id)<>'published' or head.published_id is distinct from r.id
-    or head.head_id is distinct from (entry->>'expected_head_id')::uuid then raise exception 'source_publication_state_changed' using errcode='PT409';end if;
-
-   if exists(select 1 from private.rad_source_publication_holds h join private.rad_production_reconciliation_journal j on j.package_sha256=h.package_sha256
-    and j.operation_id=h.operation_id and j.payload_sha256=h.payload_sha256 where j.revision_id=r.id)
-    then raise exception 'source_publication_hold_requires_evidence_reconciliation' using errcode='PT422';end if;
-   insert into public.visa_article_revision_events(revision_id,state,actor_id,note,publication_basis,source_batch_id)
-    values(r.id,'unpublished',actor,'unpublish source-faithful revision; content_hash='||r.content_hash||'; previous_published_id='||r.id::text||'; '||p_note,
-     'source_faithful',batch.id) returning * into event;
-   update public.visa_article_heads set published_id=null where article_id=r.article_id and locale=r.locale;
-  end if;
-  n:=n+1;
-  receipts:=receipts||jsonb_build_array(jsonb_build_object('article_id',r.article_id,'locale',r.locale,'revision_id',r.id,
-   'content_hash',r.content_hash,'unpublish_event_id',event.id,'actor_id',event.actor_id,'unpublished_at',event.created_at,'published_id',null));
- end loop;
- insert into private.rad_source_unpublish_receipts(batch_id,actor_id,operation,manifest_sha256,reversed_count)
- values(batch.id,actor,'unpublish_source_editorial_batch',p_manifest_sha256,n)
- on conflict(batch_id) do nothing returning id into u;
- if u is null then
-  select u.id,u.reversed_count into u,n from private.rad_source_unpublish_receipts u where u.batch_id=batch.id;
-  select count(*)into existing_count from public.visa_article_revision_events e where e.source_batch_id=batch.id and e.state='unpublished';
-  if existing_count<>n then raise exception 'source_unpublish_receipt_conflict' using errcode='PT409';end if;
- end if;
- return private.rad_envelope(jsonb_build_object('batch_id',batch.id,'manifest_sha256',batch.manifest_sha256,'receipt_id',u,
-  'receipts',receipts,'unpublished_count',n,'factual_verification_changed',false,'feed_publications',0));
+create function public.get_release_function_state(p_package_sha256 text)returns jsonb
+language plpgsql security definer set search_path=''as $$declare actor uuid:=private.rad_require_admin();frame jsonb;begin
+ if p_package_sha256 is distinct from '4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282'then
+  raise exception 'reviewed_release_package_required'using errcode='PT422';end if;
+ frame:=private.rad_release_function_frame(private.rad_reviewed_function_signatures());
+ return jsonb_build_object('package_sha256',p_package_sha256,'actor_id',actor,
+  'catalog_lock_executor_available',has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
+   or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
+   or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'),
+  'state_sha256',encode(extensions.digest(frame::text,'sha256'),'hex'),
+  'members',(select jsonb_agg(m-'definition'order by m->>'identity')from jsonb_array_elements(frame)m));
 end $$;
-revoke all on function public.unpublish_source_editorial_batch(uuid,text,text) from public,anon,authenticated,service_role;
-grant execute on function public.unpublish_source_editorial_batch(uuid,text,text) to authenticated;
+create function public.capture_release_function_state(p_package_sha256 text,p_expected_state_sha256 text,p_note text)returns jsonb
+language plpgsql security definer set search_path=''as $$declare actor uuid:=private.rad_require_admin();rid bigint;begin
+ if p_package_sha256 is distinct from '4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282'then
+  raise exception 'reviewed_release_package_required'using errcode='PT422';end if;
+ rid:=private.rad_capture_function_state(p_package_sha256,'reviewed_forward',private.rad_reviewed_function_signatures(),p_expected_state_sha256,p_note);
+ return jsonb_build_object('receipt_id',rid,'actor_id',actor,'state_sha256',p_expected_state_sha256);
+end $$;
+create function public.reverse_release_function_state(p_source_receipt_id bigint,p_expected_current_state_sha256 text,p_note text)returns jsonb
+language plpgsql security definer set search_path=''as $$begin
+ perform private.rad_require_admin();
+ return private.rad_restore_function_state(p_source_receipt_id,p_expected_current_state_sha256,p_note);
+end $$;
+revoke all on function public.get_release_function_state(text),public.capture_release_function_state(text,text,text),
+ public.reverse_release_function_state(bigint,text,text)from public,anon,authenticated,service_role;
+grant execute on function public.get_release_function_state(text),public.capture_release_function_state(text,text,text),
+ public.reverse_release_function_state(bigint,text,text)to authenticated;
+
 notify pgrst,'reload schema';
 commit;

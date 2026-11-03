@@ -407,6 +407,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/source_editorial_release.sql
       - name: Reject held source versions and preserve private immutable hold evidence
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrected_source_editorial_holds.sql
+      - name: Verify no-Restore safety authorization, withdrawal and immutable receipts
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/no_restore_safety_ops.sql
       - name: Verify Visa country discovery includes published categories and linked titles
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/visa_country_discovery_coverage.sql
       - name: Verify quarantined Staging evidence archive integrity and ACLs

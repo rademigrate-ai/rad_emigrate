@@ -1,6 +1,6 @@
 {
   "package": "RAD_NO_RESTORE_OPERATIONAL_APPROVAL",
-  "version": "2026-11-03",
+  "version": "2026-11-03-safety-hardening",
   "status": "PENDING_INDEPENDENT_REVIEW",
   "execution_allowed": false,
   "owner_constraints": {
@@ -15,7 +15,7 @@
     "project_ref": "inshddthftkhcdosoqcn",
     "database": "postgres",
     "observed_postgresql_version": "17.11",
-    "observed_at": "2026-11-03T11:50:53.591214Z",
+    "observed_at": "2026-11-03T18:23:16.58815+00:00",
     "observed_state": {
       "migration_entries": 72,
       "heads": 745,
@@ -26,7 +26,10 @@
     "endpoint_url": null,
     "current_user": null,
     "system_identifier": null,
-    "reason_unfilled": "No endpoint URL, password, token, or browser/session value is stored in this package. The operator must verify these privately against provider-supported identity evidence."
+    "reason_unfilled": "Endpoint/operator attestation and real authenticated editorial actor remain pending; management postgres access is not an editorial session.",
+    "observed_management_user": "postgres",
+    "observed_system_identifier": "7690937582311211359",
+    "editorial_actor_verified": false
   },
   "release_inputs": {
     "sealed_content_baseline_commit": "22f2e51ddd078f3e9ff0beecbd17637d822b1221",
@@ -125,7 +128,7 @@
         "event": "ddl_command_end",
         "owner": "supabase_admin",
         "function": "extensions.grant_pg_graphql_access",
-        "definition_sha256": "9ec845adab4ba00bb77f4cff4e2e0f7adc693b373e2ea54f68",
+        "definition_sha256": "9ec845adab4ba00bbf7740458b6c4461094697023f0f7adc693b373e2ea54f68",
         "attestation": "PENDING"
       },
       {
@@ -158,7 +161,7 @@
     "pre_commit_failure": "Prove transaction rollback leaves catalog, extensions, function definitions/ACLs, callback-visible state, migration history, rowsets and public API unchanged.",
     "post_commit_ddl_failure": "Accepted inverse for all seven functions, new DDL, pg_trgm, callbacks, schema-cache effects and migration state; currently absent.",
     "import_failure": "Bounded transaction and exact readback; limited package-owned-row compensation only after all refusal checks and separate authorization.",
-    "publication_prior_null": "A tested, provider-supported source-specific unpublish operation is required; no supported RPC currently exists and rollback_visa_article advances a head.",
+    "publication_prior_null": "Prepared supported authenticated source-specific batch withdrawal is locally tested; Production installation, provider review and genuine editorial receipts remain pending.",
     "guard_bypass": "Never authorized. No direct table update, trigger disable shortcut, synthetic approval, or guard weakening is included."
   },
   "required_attestations": [
@@ -218,7 +221,9 @@
     "A real authenticated editorial Admin must supply the actual operation receipt; no local fixture supplies that actor.",
     "Release owner must authorize the exact project/commit/hashes/maintenance window after independent technical acceptance.",
     "No universal committed-DDL inverse is claimed for every new table/index/policy/extension effect beyond the tested seven-function and source-publication scopes.",
-    "The private function-state capture/restore functions have no approved authenticated Production operator invocation path; local privileged SQL fixture is not a deployed CMS Admin session."
+    "Authenticated Admin RPCs are prepared, not installed. The actual Production actor and operation receipts remain unverified; independent reversal authorization cannot be self-issued through those RPCs.",
+    "The existing guarded release mechanism still requires verified recovery evidence. The proposed no-Restore policy has not been independently accepted or integrated as an authorized alternative; no proof or receipt is fabricated.",
+    "Read-only Production verification confirms postgres is not superuser and lacks UPDATE/DELETE/TRUNCATE on pg_catalog.pg_proc (owner supabase_admin). The protected catalog-lock executor required for capture/inverse is unavailable. No catalog grants, owner changes, or lock removal are authorized."
   ],
   "evidence": [
     "NO_RESTORE_TECHNICAL_REVIEW_V2.json",
@@ -234,13 +239,57 @@
   ],
   "implemented_safety_capabilities": {
     "migration": "supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql",
-    "migration_sha256": "cce3d9dac0e821cf5ef3605d19fc84fb6c6b0ee6203067b2cfb46cfb013c083d",
+    "migration_sha256": "cc90c18a5d4a63e27435e9517e220e0189efe0716caa44062c5caa0e332cb090",
     "tests": "scripts/tests/test_no_restore_safety_ops.py",
-    "tests_sha256": "86d8267d595517c25b9782bfc8d1fcf4a085897f16e290eecd6c9c7d604c42ea",
-    "local_receipt": "no-restore-safety-ops-local-test-receipt-v3-20261103.json",
+    "tests_sha256": "f43dd32bd95c6cbc37e1b0814e060675bb3a63dbbfe4ee75913302066cd378d4",
+    "local_receipt": "no-restore-safety-ops-local-test-receipt-v4-20261103.json",
     "callback_evidence": "callback-local-evidence-20261103.json",
-    "function_reversal": "Locally tested exact function-definition/config restoration; captures exact pg_proc ACLs and catalog dependents and refuses owner/ACL/dependency drift. Cannot reconstruct changed privilege state, nor serve as full committed-DDL/extension/callback inverse.",
-    "source_unpublish": "Locally tested Admin-bound source-faithful unpublish restores NULL pointers through immutable events and search projection deletion; cross-transaction replay of stale publish/unpublish events is refused. Not installed or independently approved in Production.",
-    "pg_trgm_and_callbacks": "Local PostgreSQL can create and reverse pg_trgm objects, but Supabase-managed extension/callback source and provider side effects remain unavailable locally; all six callbacks still require provider/operator attestation."
-  }
+    "function_reversal": "Seven fixed functions only; pre-core authenticated Admin capture binds definitions, full ordered GUCs, language, security mode, volatility, OIDs, owners, raw ACLs and catalog-visible dependents. An independently accepted private operator record must bind actor, source receipt, expected current state, exact request and expiry. Exact retries reuse immutable receipts. Global catalog/advisory locking bounds concurrent DDL; owner/ACL/dependent/OID or unreviewed state drift is refused before any definition change. No universal DDL inverse is claimed.",
+    "source_unpublish": "Authenticated original batch approver only; exact manifest/payload/source/head/revision/hash/prior-NULL binding, bounded batch lock and ordered row locks, immutable member/event/root receipts, top-level xid8 binding supporting savepoints, exact retry, same/cross-transaction stale-event denial, preserved head/body/author/verification/Feed, transactional search invalidation. A newly imposed publication hold does not prevent safe withdrawal. Not installed or independently approved in Production.",
+    "pg_trgm_and_callbacks": "Owned empty local PostgreSQL tests exercise extension creation rollback, dependent-object DROP refusal, committed DROP and synthetic ddl_command_end/sql_drop callbacks. A synthetic callback grant persists after DROP, proving extension deletion is not a universal callback inverse. The six actual managed callbacks and PostgREST/provider effects remain unproved and require independent operator attestation.",
+    "followup_migration": "supabase/migrations/20261103180754_rad_source_unpublish_safety.sql",
+    "followup_migration_sha256": "0cde295bbcbda93cad57230b2f637112fdcba2301305aa65af7b1378bcd0013a",
+    "portable_tests": "supabase/tests/no_restore_safety_ops.sql",
+    "portable_tests_sha256": "f994c22e8ec7084b1653435549de127e8e02c3c16d8906b02ad7d58d6b0d0bde",
+    "authenticated_operator_api": [
+      "public.get_release_function_state(text)",
+      "public.capture_release_function_state(text,text,text)",
+      "public.reverse_release_function_state(bigint,text,text)"
+    ],
+    "production_installed": false,
+    "independent_review_accepted": false,
+    "remaining_limits": [
+      "Function reversal covers only seven definitions, not all newly created schema objects, grants, columns, extensions, callback effects or migration history.",
+      "pg_depend describes catalog-visible dependencies and cannot prove every dynamic SQL or application dependency.",
+      "Source withdrawal restores NULL publication pointers and search visibility, but intentionally leaves catalog activation and immutable source/review history intact.",
+      "Source revisions with a non-NULL prior publication pointer are outside the withdrawal contract.",
+      "The bootstrap, its managed callback effects and short pg_proc SHARE lock also require acceptance before the first hosted write.",
+      "No approved no-Restore branch exists in the guarded release mechanism; it remains fail-closed until independently accepted policy and authorized implementation exist.",
+      "Actual managed postgres lacks pg_proc SHARE-lock authority. Positive native inverse tests use an owned local superuser fixture; Supabase tests prove explicit refusal and no new receipt, not successful managed inversion."
+    ],
+    "catalog_lock_executor": {
+      "production_readonly_evidence": {
+        "executor": "postgres",
+        "superuser": false,
+        "checked_at": "2026-11-03T18:32:40.703496+00:00",
+        "pg_proc_owner": "supabase_admin",
+        "pg_proc_delete": false,
+        "pg_proc_update": false,
+        "pg_proc_truncate": false
+      },
+      "production_available": false,
+      "isolated_managed_supabase": "REFUSED_AND_RECORDED_no_privileges_granted",
+      "requirement": "Provider must independently approve a narrowly protected executor capable of the required catalog lock. The present postgres-owned SECURITY DEFINER functions cannot capture or reverse in Production; neither caller role changes nor removing the lock is an accepted substitute."
+    }
+  },
+  "validated_dependency_order": [
+    "Independent equivalence/provider/operator acceptance and exact release-owner authorization before ANY hosted write.",
+    "Install function-state bootstrap on the original CMS foundation; verify its own callback/ACL effects.",
+    "Real authenticated editorial Admin inspects and captures the fixed seven pre-core functions; retain immutable receipt and exact hashes.",
+    "Apply reviewed core closure and allocator, with pre/post-commit safety acceptance.",
+    "Execute guarded corrected draft import and exact provenance/head/actor/anonymous-denial readback.",
+    "Only AFTER import, apply the source-faithful publication migration, corrected admission/holds, then source-unpublish followup; verify schema/ACLs.",
+    "Real Admin source review, approval and publication of eligible bounded batches only; record actual receipts.",
+    "Production acceptance, all final-HEAD CI and repository gates before merge; owner alone deploys frontend."
+  ]
 }
