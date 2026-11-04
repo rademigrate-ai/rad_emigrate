@@ -30,7 +30,7 @@ FORWARD_MIGRATIONS = [
     ("20261019211908_rad_feed_delivery_contracts.sql", "55f2560b4e46c342c306782c1246c6fb310814d1e384c070c40e72cc478babcc"),
     ("20261019212615_rad_source_jobs_merge_enforcement.sql", "d417e2b35b4a05190fd22d8da22c2179be44370fb9a0a246e864394fad88b160"),
     ("20261019213129_rad_contract_finalization.sql", "e21c565f2f377f2f3b2201b33031b2fa7a7f140b65f8b449e4e2eb85a83cc5fb"),
-    ("20261019214411_rad_legacy_quota_budget_compatibility.sql", "7d65098001f2dbecc52ad74ff46f262d69efb9638e217346e16c20225a0834ad"),
+    ("20261019214411_rad_legacy_quota_budget_compatibility.sql", "a0c750f672fd95b24f31eec990196c81195acd259cfec83c52b25fb0ca78f4c4"),
     ("20261020103648_rad_backend_integrity_completion.sql", "ac86171d4aa63e27c113efa811035be00c383be855b80a3e539bfdfd5767fd47"),
     ("20261020105854_rad_search_aliases_currency_history.sql", "1f6440f176a1333da2bebc3b5ae1ecdc84af4e378040552467edfa0c0046b985"),
     ("20261020111217_rad_restore_legacy_publish_privileges.sql", "8cd83db51feb86bbe40b2ea5e325a93ddaf642b534f056eda0fa39139870d981"),
