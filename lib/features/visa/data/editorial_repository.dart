@@ -186,16 +186,18 @@ Future<List<Map<String, dynamic>>> loadVisaContentCountries(
     return frozenVisaContent.countries(locale);
   }
   try {
-    return editorialRows(
-      editorialData(
-        await service.client
-            .rpc(
-              'list_visa_content_countries',
-              params: {'p_locale': locale, 'p_preview': preview},
-            )
-            .timeout(const Duration(seconds: 20)),
-      )['items'],
+    final data = editorialData(
+      await service.client
+          .rpc(
+            'list_visa_content_countries',
+            params: {'p_locale': locale, 'p_preview': preview},
+          )
+          .timeout(const Duration(seconds: 20)),
     );
+    if (data['items'] is! List) {
+      throw const FormatException('invalid_country_discovery_shape');
+    }
+    return editorialRows(data['items']);
   } on PostgrestException catch (error) {
     if (preview || !{'PGRST202', '42883'}.contains(error.code)) rethrow;
     return frozenVisaContent.countries(locale);
