@@ -4,19 +4,24 @@
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import json
-from pathlib import Path
 import re
+from collections import Counter
+from pathlib import Path
 
-MANAGED_URL = re.compile(r"https?://[a-z0-9-]+\.supabase\.co(?:/|\b)", re.I)
+MANAGED_URL = re.compile(r"https?://[a-z0-9-]+\.supabase\.co(?:/|\b)", re.IGNORECASE)
 EXCLUDED_DIRS = {"tests", "test", "fixtures", "generated", ".git"}
 
 
 def inspect(root: Path) -> dict:
     root = root.resolve()
-    if not (root / "pubspec.yaml").is_file() or not (root / "supabase/config.toml").is_file():
-        raise ValueError("Expected RAD repository root with pubspec.yaml and supabase/config.toml")
+    if (
+        not (root / "pubspec.yaml").is_file()
+        or not (root / "supabase/config.toml").is_file()
+    ):
+        raise ValueError(
+            "Expected RAD repository root with pubspec.yaml and supabase/config.toml"
+        )
 
     migrations = sorted((root / "supabase/migrations").glob("*.sql"))
     functions_root = root / "supabase/functions"
@@ -27,7 +32,11 @@ def inspect(root: Path) -> dict:
     duplicates = sorted(v for v, n in Counter(all_versions).items() if n > 1)
 
     managed_url_paths: set[str] = set()
-    for base, extension in ((root / "lib", "*.dart"), (functions_root, "*.ts"), (root / "web", "*.js")):
+    for base, extension in (
+        (root / "lib", "*.dart"),
+        (functions_root, "*.ts"),
+        (root / "web", "*.js"),
+    ):
         if not base.exists():
             continue
         for path in base.rglob(extension):
@@ -46,17 +55,22 @@ def inspect(root: Path) -> dict:
             "status": "HISTORICAL_ACCEPTANCE_LEDGER_NOT_CURRENT_PROOF",
             "recorded_date": payload.get("date"),
             "count": len(gates),
-            "by_status": dict(sorted(Counter(g.get("status", "UNKNOWN") for g in gates).items())),
+            "by_status": dict(
+                sorted(Counter(g.get("status", "UNKNOWN") for g in gates).items())
+            ),
         }
 
     deploy = root / "deploy/self-hosted"
     return {
         "classification": "READ_ONLY_STATIC_INVENTORY_NOT_RELEASE_CERTIFICATION",
-        "postgres17_local_configured": 'major_version = 17' in (root / "supabase/config.toml").read_text(encoding="utf-8"),
+        "postgres17_local_configured": "major_version = 17"
+        in (root / "supabase/config.toml").read_text(encoding="utf-8"),
         "migration_count": len(migrations),
         "duplicate_migration_versions": duplicates,
         "edge_functions": edge_functions,
-        "runtime_source_paths_with_literal_managed_supabase_urls": sorted(managed_url_paths),
+        "runtime_source_paths_with_literal_managed_supabase_urls": sorted(
+            managed_url_paths
+        ),
         "self_hosted_deployment_manifest_exists": any(
             (deploy / name).is_file() for name in ("compose.yaml", "docker-compose.yml")
         ),
@@ -74,7 +88,9 @@ def inspect(root: Path) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument(
+        "--root", type=Path, default=Path(__file__).resolve().parents[1]
+    )
     args = parser.parse_args()
     try:
         result = inspect(args.root)

@@ -1,9 +1,9 @@
 """Tests for the read-only, non-certifying portability inventory."""
 
 import json
+import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import unittest
 
 from scripts.self_host_portability_inventory import inspect
 
@@ -15,11 +15,14 @@ class SelfHostPortabilityInventoryTest(unittest.TestCase):
             (root / "pubspec.yaml").write_text("name: rad_emigrate\n", encoding="utf-8")
             (root / "supabase").mkdir()
             (root / "supabase/config.toml").write_text(
-                'project_id = "rad_emigrate"\n[db]\nmajor_version = 17\n', encoding="utf-8"
+                'project_id = "rad_emigrate"\n[db]\nmajor_version = 17\n',
+                encoding="utf-8",
             )
             migration = root / "supabase/migrations"
             migration.mkdir()
-            (migration / "20261104000000_test.sql").write_text("select 1;", encoding="utf-8")
+            (migration / "20261104000000_test.sql").write_text(
+                "select 1;", encoding="utf-8"
+            )
             functions = root / "supabase/functions/research-sync"
             functions.mkdir(parents=True)
             (functions / "index.ts").write_text("export default {};", encoding="utf-8")
@@ -34,9 +37,16 @@ class SelfHostPortabilityInventoryTest(unittest.TestCase):
             gates_path = root / "docs/master_execution/acceptance_gates.json"
             gates_path.parent.mkdir(parents=True)
             gates_path.write_text(
-                json.dumps({"date": "2026-10-31", "gates": [
-                    {"status": "VERIFIED_PASS"}, {"status": "BLOCKED_EXTERNAL"}
-                ]}), encoding="utf-8"
+                json.dumps(
+                    {
+                        "date": "2026-10-31",
+                        "gates": [
+                            {"status": "VERIFIED_PASS"},
+                            {"status": "BLOCKED_EXTERNAL"},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
             )
 
             report = inspect(root)
@@ -54,9 +64,8 @@ class SelfHostPortabilityInventoryTest(unittest.TestCase):
             self.assertNotIn("sample-ref.supabase.co", json.dumps(report))
 
     def test_rejects_wrong_root(self):
-        with TemporaryDirectory() as temp:
-            with self.assertRaises(ValueError):
-                inspect(Path(temp))
+        with TemporaryDirectory() as temp, self.assertRaises(ValueError):
+            inspect(Path(temp))
 
 
 if __name__ == "__main__":

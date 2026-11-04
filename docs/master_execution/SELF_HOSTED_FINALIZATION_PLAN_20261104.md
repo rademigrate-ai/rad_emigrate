@@ -70,3 +70,9 @@ Reference: https://supabase.com/docs/guides/self-hosting/docker and https://supa
 - Local Docker allocation was 8 CPUs and 8.27 GB RAM with 11 local Supabase developer containers already present. Do not launch a second full stack blindly or disrupt that existing developer stack.
 - Static preflight command: `py scripts/self_host_portability_inventory.py`; current result shows 118 migration SQL files, eight Edge Function entries, zero duplicate migration versions and zero obvious hardcoded `*.supabase.co` runtime URLs in scanned file classes. Static findings do not rule out hidden managed dependencies or prove migrations run.
 - New preflight unit tests: `py -m unittest scripts.tests.test_self_host_portability_inventory -v` => 2/2 PASS. The full PR CI on this new documentation/tooling change is a separate remote check.
+
+## First portable offline staging bundle (2026-11-04)
+- `scripts/build_self_host_bundle.py` builds an **offline source bundle** only from pinned official Docker source and Git-tracked RAD migrations/functions, refusing output overwrite, upstream SHA drift, source symlink escape and live `.env` files.
+- Validated staging artifact: `D:\RAD - Emigrate\_audit\RAD_SELF_HOSTED_STAGE_20261104`. It includes all 118 tracked migration sources in `rad_migrations/` (not auto-executable) and eight Edge Function directories in `volumes/functions/`, plus upstream Docker Compose and a hash manifest. No real `.env` file was produced.
+- `docker compose --env-file .env.example -f docker-compose.yml config -q` passed on the generated offline staging bundle. **No containers were started, SQL applied, cloud database touched, or customer data migrated.**
+- Use this bundle only for isolated install testing. Rebuild it from the final code HEAD before any accepted release. The full migration/extension/RLS/Auth/Storage/worker parity gate remains OPEN.
