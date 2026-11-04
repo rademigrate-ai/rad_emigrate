@@ -47,9 +47,7 @@ select set_config('request.jwt.claims','{"role":"authenticated","sub":"a4100000-
 do $$declare rid bigint;expected text;before_frame jsonb;result jsonb;retry jsonb;begin
  before_frame:=private.rad_release_function_frame(private.rad_reviewed_function_signatures());
  expected:=encode(extensions.digest(before_frame::text,'sha256'),'hex');
- if not(has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'))then
+ if not private.rad_catalog_lock_executor_available()then
   begin perform private.rad_capture_function_state(repeat('6',64),'manual_review',private.rad_reviewed_function_signatures(),expected,
    'SYNTHETIC managed operator lock denial must fail closed.');
    raise exception 'FAIL managed catalog-lock safety bypass';exception when sqlstate 'PT403'then

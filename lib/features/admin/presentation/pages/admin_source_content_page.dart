@@ -19,6 +19,26 @@ final adminFrozenSourceProposalsProvider =
       return ref.watch(adminCmsRepositoryProvider).listProposals();
     });
 
+final adminSourceReviewAccessProvider = FutureProvider.autoDispose<bool>((
+  ref,
+) async {
+  final actor = ref.watch(supabaseAuthUserIdProvider).valueOrNull;
+  final service = ref.watch(supabaseClientServiceProvider);
+  if (actor == null ||
+      !service.isInitialized ||
+      service.client.auth.currentUser?.id != actor) {
+    return false;
+  }
+  final profile = await service.client
+      .from('profiles')
+      .select('id,role')
+      .eq('id', actor)
+      .maybeSingle();
+  return service.client.auth.currentUser?.id == actor &&
+      profile?['id'] == actor &&
+      {'admin', 'super_admin'}.contains(profile?['role']);
+});
+
 class AdminSourceContentPage extends ConsumerStatefulWidget {
   const AdminSourceContentPage({super.key});
 
@@ -86,6 +106,38 @@ class _AdminSourceContentPageState
                 ? 'برای بازبینی، ورود با حساب مدیر لازم است.'
                 : 'Sign in with an authorized administrator account.',
           ),
+        ),
+      );
+    }
+    final access = ref.watch(adminSourceReviewAccessProvider);
+    if (access.isLoading || access.hasError || access.valueOrNull != true) {
+      return Scaffold(
+        appBar: AppBar(title: Text(isFa ? 'بازبینی منابع' : 'Source Review')),
+        body: Center(
+          child: access.isLoading
+              ? const RadLoadingIndicator(
+                  label: 'Checking administrator access',
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      access.hasError
+                          ? (isFa
+                                ? 'تأیید دسترسی مدیر ممکن نیست.'
+                                : 'Administrator access could not be verified.')
+                          : (isFa
+                                ? 'دسترسی مدیر لازم است.'
+                                : 'Administrator access required.'),
+                    ),
+                    if (access.hasError)
+                      TextButton(
+                        onPressed: () =>
+                            ref.invalidate(adminSourceReviewAccessProvider),
+                        child: Text(isFa ? 'تلاش مجدد' : 'Retry access check'),
+                      ),
+                  ],
+                ),
         ),
       );
     }

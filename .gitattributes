@@ -63,3 +63,7 @@ scripts/tests/test_no_restore_safety_ops.py text eol=lf
 supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql text eol=lf
 supabase/migrations/20261103180754_rad_source_unpublish_safety.sql text eol=lf
 supabase/tests/no_restore_safety_ops.sql text eol=lf
+scripts/employer_activation_inventory.py text eol=lf
+scripts/verify_research_cms_persistence.py text eol=lf
+scripts/tests/test_employer_activation_inventory.py text eol=lf
+supabase/verification/employer_activation_preflight.sql text eol=lf

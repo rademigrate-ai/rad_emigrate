@@ -1,6 +1,6 @@
 {
   "package": "RAD_NO_RESTORE_OPERATIONAL_APPROVAL",
-  "version": "2026-11-03-safety-hardening",
+  "version": "2026-11-04-postgresql17-capability-review",
   "status": "PENDING_INDEPENDENT_REVIEW",
   "execution_allowed": false,
   "owner_constraints": {
@@ -9,7 +9,8 @@
     "safety_control_bypass": false,
     "browser_automation": false,
     "credential_or_session_token_access": false,
-    "frontend_deployment": false
+    "frontend_deployment": false,
+    "automatic_merge": false
   },
   "production_binding": {
     "project_ref": "inshddthftkhcdosoqcn",
@@ -223,7 +224,7 @@
     "No universal committed-DDL inverse is claimed for every new table/index/policy/extension effect beyond the tested seven-function and source-publication scopes.",
     "Authenticated Admin RPCs are prepared, not installed. The actual Production actor and operation receipts remain unverified; independent reversal authorization cannot be self-issued through those RPCs.",
     "The existing guarded release mechanism still requires verified recovery evidence. The proposed no-Restore policy has not been independently accepted or integrated as an authorized alternative; no proof or receipt is fabricated.",
-    "Read-only Production verification confirms postgres is not superuser and lacks UPDATE/DELETE/TRUNCATE on pg_catalog.pg_proc (owner supabase_admin). The protected catalog-lock executor required for capture/inverse is unavailable. No catalog grants, owner changes, or lock removal are authorized."
+    "Live 2026-11-04 management postgres is not superuser and lacks MAINTAIN, UPDATE, DELETE and TRUNCATE on pg_catalog.pg_proc (owner supabase_admin). The required protected SHARE-lock executor remains unavailable. No catalog grant, owner change or lock removal is authorized."
   ],
   "evidence": [
     "NO_RESTORE_TECHNICAL_REVIEW_V2.json",
@@ -239,10 +240,10 @@
   ],
   "implemented_safety_capabilities": {
     "migration": "supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql",
-    "migration_sha256": "cc90c18a5d4a63e27435e9517e220e0189efe0716caa44062c5caa0e332cb090",
+    "migration_sha256": "2aea67c25903623ce98a76bf2f86dbf1d637adc91c701b86474cb7b94536de44",
     "tests": "scripts/tests/test_no_restore_safety_ops.py",
-    "tests_sha256": "f43dd32bd95c6cbc37e1b0814e060675bb3a63dbbfe4ee75913302066cd378d4",
-    "local_receipt": "no-restore-safety-ops-local-test-receipt-v4-20261103.json",
+    "tests_sha256": "9eff3c16e348c019d096007b0bf6282c683beba7e363aeeee0353a137186ba88",
+    "local_receipt": "employer-deploy-readiness-20261104/catalog-safety-tests.log (20 passing native tests)",
     "callback_evidence": "callback-local-evidence-20261103.json",
     "function_reversal": "Seven fixed functions only; pre-core authenticated Admin capture binds definitions, full ordered GUCs, language, security mode, volatility, OIDs, owners, raw ACLs and catalog-visible dependents. An independently accepted private operator record must bind actor, source receipt, expected current state, exact request and expiry. Exact retries reuse immutable receipts. Global catalog/advisory locking bounds concurrent DDL; owner/ACL/dependent/OID or unreviewed state drift is refused before any definition change. No universal DDL inverse is claimed.",
     "source_unpublish": "Authenticated original batch approver only; exact manifest/payload/source/head/revision/hash/prior-NULL binding, bounded batch lock and ordered row locks, immutable member/event/root receipts, top-level xid8 binding supporting savepoints, exact retry, same/cross-transaction stale-event denial, preserved head/body/author/verification/Feed, transactional search invalidation. A newly imposed publication hold does not prevent safe withdrawal. Not installed or independently approved in Production.",
@@ -250,7 +251,7 @@
     "followup_migration": "supabase/migrations/20261103180754_rad_source_unpublish_safety.sql",
     "followup_migration_sha256": "0cde295bbcbda93cad57230b2f637112fdcba2301305aa65af7b1378bcd0013a",
     "portable_tests": "supabase/tests/no_restore_safety_ops.sql",
-    "portable_tests_sha256": "f994c22e8ec7084b1653435549de127e8e02c3c16d8906b02ad7d58d6b0d0bde",
+    "portable_tests_sha256": "7276184ba6085a2e43ff2f7ef10a32aa5328a7237c9b293b143e2520bde8dec5",
     "authenticated_operator_api": [
       "public.get_release_function_state(text)",
       "public.capture_release_function_state(text,text,text)",
@@ -265,17 +266,18 @@
       "Source revisions with a non-NULL prior publication pointer are outside the withdrawal contract.",
       "The bootstrap, its managed callback effects and short pg_proc SHARE lock also require acceptance before the first hosted write.",
       "No approved no-Restore branch exists in the guarded release mechanism; it remains fail-closed until independently accepted policy and authorized implementation exist.",
-      "Actual managed postgres lacks pg_proc SHARE-lock authority. Positive native inverse tests use an owned local superuser fixture; Supabase tests prove explicit refusal and no new receipt, not successful managed inversion."
+      "Actual managed postgres lacks pg_proc SHARE-lock authority. Owned PostgreSQL 17 tests additionally prove MAINTAIN alone permits the real lock without UPDATE/DELETE/TRUNCATE. That local grant is not a Production grant or provider approval. Managed acceptance remains a refusal, not a successful capture/inverse."
     ],
     "catalog_lock_executor": {
       "production_readonly_evidence": {
         "executor": "postgres",
         "superuser": false,
-        "checked_at": "2026-11-03T18:32:40.703496+00:00",
+        "checked_at": "2026-11-04T13:33:51.548388+00:00",
         "pg_proc_owner": "supabase_admin",
         "pg_proc_delete": false,
         "pg_proc_update": false,
-        "pg_proc_truncate": false
+        "pg_proc_truncate": false,
+        "pg_proc_maintain": false
       },
       "production_available": false,
       "isolated_managed_supabase": "REFUSED_AND_RECORDED_no_privileges_granted",
@@ -290,6 +292,6 @@
     "Execute guarded corrected draft import and exact provenance/head/actor/anonymous-denial readback.",
     "Only AFTER import, apply the source-faithful publication migration, corrected admission/holds, then source-unpublish followup; verify schema/ACLs.",
     "Real Admin source review, approval and publication of eligible bounded batches only; record actual receipts.",
-    "Production acceptance, all final-HEAD CI and repository gates before merge; owner alone deploys frontend."
+    "Production acceptance and final-HEAD CI before readiness; owner alone authorizes and performs merge and frontend deployment."
   ]
 }

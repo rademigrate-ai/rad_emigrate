@@ -106,6 +106,16 @@ language plpgsql set search_path='' as $$declare members jsonb;begin
 end $$;
 revoke all on function private.rad_release_function_frame(text[]) from public,anon,authenticated,service_role;
 
+-- PostgreSQL 17 permits MAINTAIN as well as write privileges for SHARE locks.
+-- Observe existing authority only; never grant catalog privileges here.
+create function private.rad_catalog_lock_executor_available()returns boolean
+language sql stable set search_path=''as $$select
+ has_table_privilege(current_user,'pg_catalog.pg_proc','MAINTAIN')
+ or has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
+ or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
+ or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE')$$;
+revoke all on function private.rad_catalog_lock_executor_available()from public,anon,authenticated,service_role;
+
 create or replace function private.rad_capture_function_state(
  p_package_sha256 text,p_scope text,p_function_signatures text[],p_expected_state_sha256 text,p_note text
 ) returns bigint language plpgsql security definer set search_path='' set lock_timeout='2s' as $$
@@ -125,9 +135,7 @@ begin
  or length(btrim(coalesce(p_note,'')))<20 then
   raise exception 'function_state_scope_required' using errcode='PT422';end if;
  perform pg_advisory_xact_lock(hashtextextended('rad-function-state-catalog',0));
- if not(has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'))then
+ if not private.rad_catalog_lock_executor_available()then
   raise exception 'provider_approved_catalog_lock_executor_required'using errcode='PT403';end if;
  lock table pg_catalog.pg_proc in share mode;
  members:=private.rad_release_function_frame(p_function_signatures);
@@ -175,9 +183,7 @@ begin
  or p_expected_current_state_sha256!~'^[a-f0-9]{64}$'or length(btrim(coalesce(p_note,'')))<20 then
   raise exception 'function_restore_review_required' using errcode='PT422';end if;
  perform pg_advisory_xact_lock(hashtextextended('rad-function-state-catalog',0));
- if not(has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
-  or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'))then
+ if not private.rad_catalog_lock_executor_available()then
   raise exception 'provider_approved_catalog_lock_executor_required'using errcode='PT403';end if;
  lock table pg_catalog.pg_proc in share mode;
  select * into r from private.rad_function_state_receipts where id=p_source_receipt_id;
@@ -245,9 +251,7 @@ language plpgsql security definer set search_path=''as $$declare actor uuid:=pri
   raise exception 'reviewed_release_package_required'using errcode='PT422';end if;
  frame:=private.rad_release_function_frame(private.rad_reviewed_function_signatures());
  return jsonb_build_object('package_sha256',p_package_sha256,'actor_id',actor,
-  'catalog_lock_executor_available',has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
-   or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
-   or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE'),
+  'catalog_lock_executor_available',private.rad_catalog_lock_executor_available(),
   'state_sha256',encode(extensions.digest(frame::text,'sha256'),'hex'),
   'members',(select jsonb_agg(m-'definition'order by m->>'identity')from jsonb_array_elements(frame)m));
 end $$;

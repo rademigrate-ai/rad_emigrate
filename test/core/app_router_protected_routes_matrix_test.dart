@@ -92,6 +92,7 @@ void main() {
       '/admin/ai-config',
       '/admin/operations',
       '/admin/ai-research',
+      '/admin/source-content',
       '/admin/consultations',
       '/admin/custom-sub-path',
     ];

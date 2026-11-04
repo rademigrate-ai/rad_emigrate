@@ -108,6 +108,8 @@ jobs:
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/production_reconciliation_package.py scripts/recovery_checkpoint.py scripts/recovery_local_rehearsal.py scripts/research_activation_package.py tools/production_body_review.py scripts/tests/test_production_reconciliation_package.py scripts/tests/test_production_reconciliation_sql.py scripts/tests/test_recovery_checkpoint.py scripts/tests/test_research_activation_package.py scripts/tests/test_production_body_review.py scripts/tests/test_review_packets_v43.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/tests/test_no_restore_safety_ops.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/tests/test_no_restore_safety_ops.py
+          python3 -m ruff format --isolated --target-version py311 --check scripts/employer_activation_inventory.py scripts/verify_research_cms_persistence.py scripts/tests/test_employer_activation_inventory.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/employer_activation_inventory.py scripts/verify_research_cms_persistence.py scripts/tests/test_employer_activation_inventory.py
 
   plan3-content:
     runs-on: ubuntu-latest
@@ -378,6 +380,8 @@ jobs:
         run: KEEP_SUPABASE_RUNNING=1 bash scripts/verify_clean_schema.sh
       - name: Test local Auth, RLS, and Storage with two JWTs
         run: python3 scripts/verify_local_auth_isolation.py
+      - name: Persist and reopen a research-reviewed CMS draft with normal local Auth
+        run: python3 scripts/verify_research_cms_persistence.py
       - name: Verify no authenticated cross-user entitlement RPC access
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/ai_entitlement_rpc_privacy.sql
       - name: Rehearse complete Plan 3 draft package against owned CMS with rollback

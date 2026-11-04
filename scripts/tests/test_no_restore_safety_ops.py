@@ -110,6 +110,25 @@ class NoRestoreSafetyOpsTest(unittest.TestCase):
             error=error,
         )
 
+    def test_postgres17_maintain_allows_lock_without_catalog_write_grants(self):
+        # Owned native fixture only. No hosted privilege is changed, and the
+        # capability check never grants a privilege to its caller.
+        self.fixture.sql("""begin;create role rad_maintain_fixture;
+         grant usage on schema private to rad_maintain_fixture;
+         grant execute on function private.rad_catalog_lock_executor_available()to rad_maintain_fixture;
+         set local role rad_maintain_fixture;
+         do $$begin if private.rad_catalog_lock_executor_available()then raise exception 'FAIL unprivileged capability';end if;end$$;
+         reset role;grant maintain on table pg_catalog.pg_proc to rad_maintain_fixture;
+         set local role rad_maintain_fixture;
+         do $$begin
+          if not private.rad_catalog_lock_executor_available()
+           or has_table_privilege(current_user,'pg_catalog.pg_proc','UPDATE')
+           or has_table_privilege(current_user,'pg_catalog.pg_proc','DELETE')
+           or has_table_privilege(current_user,'pg_catalog.pg_proc','TRUNCATE')then raise exception 'FAIL MAINTAIN capability';end if;
+         end$$;
+         lock table pg_catalog.pg_proc in share mode;
+         rollback;""")
+
     def test_capture_is_idempotent_across_transactions(self):
         # The original bug included a new timestamp in each retry comparison.
         package = hashlib.sha256(self.id().encode()).hexdigest()

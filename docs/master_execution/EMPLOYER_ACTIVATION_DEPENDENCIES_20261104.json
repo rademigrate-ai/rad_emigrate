@@ -1,0 +1,3852 @@
+{
+  "production_project": "inshddthftkhcdosoqcn",
+  "execution_allowed": false,
+  "source_manifest_sha256": "12c5fc0ee2b87569310bdf45653174798a8fdfa2a81e04f7ad0e675140081e35",
+  "core_forward_sha256": "ec77fd4bba84b703a0d2994c3ce8da8112ca969a8f2a478de8061b500f675f69",
+  "roots": [
+    "get_editorial_article",
+    "list_editorial_library",
+    "list_editorial_articles",
+    "list_editorial_relations",
+    "list_country_visa_content",
+    "list_visa_content_countries",
+    "list_editorial_review_queue",
+    "review_country_other_title",
+    "list_related_visa_articles",
+    "resolve_editorial_article_slug",
+    "get_editorial_reference_links",
+    "get_editorial_link_review",
+    "get_editorial_source_snapshot",
+    "get_visa_article",
+    "search_visa_articles",
+    "list_cms_articles",
+    "get_cms_article_draft",
+    "create_visa_article",
+    "save_visa_article_draft",
+    "submit_visa_article_review",
+    "approve_visa_article_revision",
+    "reject_visa_article_revision",
+    "publish_visa_article_revision",
+    "rollback_visa_article",
+    "list_visa_article_revisions",
+    "approve_visa_source_inventory",
+    "propose_editorial_relations",
+    "review_editorial_relation",
+    "clear_editorial_revision",
+    "list_official_authorities",
+    "discover_official_authorities",
+    "enqueue_research_refresh",
+    "list_research_proposals",
+    "get_research_proposal",
+    "get_research_review_context",
+    "get_research_review_context_v2",
+    "review_research_proposal",
+    "save_research_review",
+    "save_structured_research_review",
+    "propose_structured_research",
+    "get_structured_article_context",
+    "upsert_editorial_research_source",
+    "create_official_refresh_binding",
+    "get_bound_official_refresh_targets",
+    "renew_bound_official_refresh_lease",
+    "yield_bound_official_refresh",
+    "ingest_bound_official_refresh",
+    "claim_official_research_job",
+    "get_official_research_job",
+    "finish_official_research_job",
+    "get_research_article_base",
+    "record_official_source_change",
+    "attach_editorial_reference_map"
+  ],
+  "selected_functions": [
+    "private.audit_content_change()",
+    "private.enforce_claim_citation_integrity()",
+    "private.guard_profile_write_metadata()",
+    "private.has_role(required_roles text[])",
+    "private.is_safe_public_https_url(p_url text)",
+    "private.prevent_profile_role_escalation()",
+    "private.rad_apply_rich_patches(base jsonb, patches jsonb, decisions jsonb, require_all boolean)",
+    "private.rad_article_mutate(operation text, body jsonb)",
+    "private.rad_article_state(revision uuid)",
+    "private.rad_article_verification(revision uuid)",
+    "private.rad_assert_request(operation text, body jsonb)",
+    "private.rad_authority_json(a private.authority_entities)",
+    "private.rad_begin_mutation(operation text, body jsonb)",
+    "private.rad_blocks_text(blocks jsonb)",
+    "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+    "private.rad_bound_fragment(value text, start_marker text, end_marker text)",
+    "private.rad_bound_path_allowed(source_url text, allowed_host text, path_prefix text)",
+    "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+    "private.rad_check_ancestry(snapshots uuid[], seen uuid[])",
+    "private.rad_check_main_publication()",
+    "private.rad_claim_eligible(claim uuid)",
+    "private.rad_classify_snapshot(snapshot uuid)",
+    "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+    "private.rad_editorial_approval_guard()",
+    "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+    "private.rad_editorial_carry_reference_map()",
+    "private.rad_editorial_carry_rich_revision()",
+    "private.rad_editorial_other_titles(article uuid, revision uuid, loc text, preview boolean)",
+    "private.rad_editorial_require_import()",
+    "private.rad_editorial_sources(revision uuid)",
+    "private.rad_enqueue_research(operation text, body jsonb)",
+    "private.rad_envelope(data jsonb, locale text, page jsonb)",
+    "private.rad_evidence(ref jsonb, section uuid)",
+    "private.rad_finish_mutation(operation text, body jsonb, result jsonb)",
+    "private.rad_guard_factual_verification()",
+    "private.rad_immutable()",
+    "private.rad_index_article()",
+    "private.rad_job_json(j private.rad_research_jobs)",
+    "private.rad_legacy_get_visa_article(p_request jsonb)",
+    "private.rad_legacy_list_cms_articles(p_request jsonb)",
+    "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+    "private.rad_page(body jsonb, version text, cursor_position jsonb, has_more boolean)",
+    "private.rad_page_position(body jsonb, version text)",
+    "private.rad_project_rich(sections jsonb, base_sections jsonb, old_body jsonb)",
+    "private.rad_proposal_json(p visa_research_proposals)",
+    "private.rad_related(revision uuid, locale text)",
+    "private.rad_remove_article_search()",
+    "private.rad_require_admin(human boolean)",
+    "private.rad_require_owner()",
+    "private.rad_revision_result(revision uuid)",
+    "private.rad_rich_text(node jsonb)",
+    "private.rad_save_article(body jsonb)",
+    "private.rad_schema_valid(s jsonb, v jsonb, depth integer)",
+    "private.rad_search_metadata(article uuid, locale text)",
+    "private.rad_search_normalize(value text)",
+    "private.rad_snippet(original text, query text)",
+    "private.rad_structured_accept_guard()",
+    "private.set_updated_at()",
+    "public.approve_visa_article_revision(p_request jsonb)",
+    "public.approve_visa_source_inventory(p_request jsonb)",
+    "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+    "public.claim_official_research_job()",
+    "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+    "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+    "public.create_visa_article(p_request jsonb)",
+    "public.discover_official_authorities(p_request jsonb)",
+    "public.enqueue_research_refresh(p_request jsonb)",
+    "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+    "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+    "public.get_cms_article_draft(p_request jsonb)",
+    "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+    "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+    "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+    "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+    "public.get_official_research_job(p_job_id uuid, p_lease_token uuid)",
+    "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+    "public.get_research_proposal(p_request jsonb)",
+    "public.get_research_review_context(p_proposal_id uuid)",
+    "public.get_research_review_context_v2(p_proposal_id uuid)",
+    "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+    "public.get_visa_article(p_request jsonb)",
+    "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+    "public.list_cms_articles(p_request jsonb)",
+    "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+    "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+    "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+    "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+    "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+    "public.list_official_authorities(p_request jsonb)",
+    "public.list_related_visa_articles(p_request jsonb)",
+    "public.list_research_proposals(p_request jsonb)",
+    "public.list_visa_article_revisions(p_request jsonb)",
+    "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+    "public.propose_editorial_relations(p_relations jsonb)",
+    "public.propose_structured_research(p_request jsonb)",
+    "public.publish_visa_article_revision(p_request jsonb)",
+    "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+    "public.reject_visa_article_revision(p_request jsonb)",
+    "public.renew_bound_official_refresh_lease(p_job_id uuid, p_lease_token uuid)",
+    "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+    "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+    "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+    "public.review_research_proposal(p_request jsonb)",
+    "public.rollback_visa_article(p_request jsonb)",
+    "public.save_research_review(p_request jsonb)",
+    "public.save_structured_research_review(p_request jsonb)",
+    "public.save_visa_article_draft(p_request jsonb)",
+    "public.search_visa_articles(p_request jsonb)",
+    "public.submit_visa_article_review(p_request jsonb)",
+    "public.upsert_editorial_research_source(p_request jsonb)",
+    "public.upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)",
+    "public.yield_bound_official_refresh(p_job_id uuid, p_lease_token uuid)"
+  ],
+  "selected_tables": [
+    "private.authority_domains",
+    "private.authority_entities",
+    "private.authority_proofs",
+    "private.authority_trust_roots",
+    "private.claim_official_evidence",
+    "private.rad_bound_proposal_evidence",
+    "private.rad_bound_raw_captures",
+    "private.rad_bound_refresh_job_targets",
+    "private.rad_bound_refresh_receipts",
+    "private.rad_contract_schemas",
+    "private.rad_editorial_catalog",
+    "private.rad_editorial_clearances",
+    "private.rad_editorial_country_titles",
+    "private.rad_editorial_import_target",
+    "private.rad_editorial_reference_maps",
+    "private.rad_editorial_relations",
+    "private.rad_editorial_review_receipts",
+    "private.rad_editorial_rich_revisions",
+    "private.rad_idempotency",
+    "private.rad_official_refresh_bindings",
+    "private.rad_page_tokens",
+    "private.rad_research_jobs",
+    "private.rad_research_review_versions",
+    "private.rad_search_aliases",
+    "private.rad_search_version",
+    "private.rad_structured_proposals",
+    "private.rad_structured_revision_ancestry",
+    "private.visa_source_inventories",
+    "private.visa_source_origins",
+    "public.admin_audit_logs",
+    "public.destination_localizations",
+    "public.destinations",
+    "public.knowledge_citations",
+    "public.knowledge_claims",
+    "public.profiles",
+    "public.research_sources",
+    "public.source_documents",
+    "public.source_snapshots",
+    "public.visa_article_heads",
+    "public.visa_article_revision_events",
+    "public.visa_article_revisions",
+    "public.visa_article_search_documents",
+    "public.visa_article_sections",
+    "public.visa_articles",
+    "public.visa_merge_manifests",
+    "public.visa_research_proposals"
+  ],
+  "dependency_edges": [
+    [
+      "private.audit_content_change()",
+      "public.admin_audit_logs"
+    ],
+    [
+      "private.authority_proofs",
+      "private.rad_immutable"
+    ],
+    [
+      "private.enforce_claim_citation_integrity()",
+      "public.knowledge_citations"
+    ],
+    [
+      "private.has_role(required_roles text[])",
+      "public.profiles"
+    ],
+    [
+      "private.prevent_profile_role_escalation()",
+      "private.has_role"
+    ],
+    [
+      "private.prevent_profile_role_escalation()",
+      "public.admin_audit_logs"
+    ],
+    [
+      "private.rad_apply_rich_patches(base jsonb, patches jsonb, decisions jsonb, require_all boolean)",
+      "private.rad_rich_text"
+    ],
+    [
+      "private.rad_apply_rich_patches(base jsonb, patches jsonb, decisions jsonb, require_all boolean)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_article_state"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_check_ancestry"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_revision_result"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.rad_save_article"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "private.visa_source_origins"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.destinations"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.visa_article_revision_events"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_article_mutate(operation text, body jsonb)",
+      "public.visa_merge_manifests"
+    ],
+    [
+      "private.rad_article_state(revision uuid)",
+      "public.visa_article_revision_events"
+    ],
+    [
+      "private.rad_article_verification(revision uuid)",
+      "private.claim_official_evidence"
+    ],
+    [
+      "private.rad_article_verification(revision uuid)",
+      "private.rad_claim_eligible"
+    ],
+    [
+      "private.rad_article_verification(revision uuid)",
+      "public.knowledge_claims"
+    ],
+    [
+      "private.rad_article_verification(revision uuid)",
+      "public.visa_article_sections"
+    ],
+    [
+      "private.rad_assert_request(operation text, body jsonb)",
+      "private.rad_contract_schemas"
+    ],
+    [
+      "private.rad_assert_request(operation text, body jsonb)",
+      "private.rad_schema_valid"
+    ],
+    [
+      "private.rad_authority_json(a private.authority_entities)",
+      "private.authority_domains"
+    ],
+    [
+      "private.rad_authority_json(a private.authority_entities)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_begin_mutation(operation text, body jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "private.rad_begin_mutation(operation text, body jsonb)",
+      "private.rad_idempotency"
+    ],
+    [
+      "private.rad_begin_mutation(operation text, body jsonb)",
+      "private.rad_require_owner"
+    ],
+    [
+      "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.is_safe_public_https_url"
+    ],
+    [
+      "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.rad_bound_path_allowed"
+    ],
+    [
+      "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.rad_bound_verified_prefixes"
+    ],
+    [
+      "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_bound_proposal_evidence",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_bound_proposal_evidence",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_proposal_evidence",
+      "public.visa_research_proposals"
+    ],
+    [
+      "private.rad_bound_raw_captures",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_bound_raw_captures",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_raw_captures",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_bound_refresh_job_targets",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_refresh_job_targets",
+      "private.rad_research_jobs"
+    ],
+    [
+      "private.rad_bound_refresh_job_targets",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_bound_refresh_job_targets",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_bound_refresh_receipts",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_bound_refresh_receipts",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_refresh_receipts",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_bound_refresh_receipts",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "private.authority_domains"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "private.authority_proofs"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "private.authority_trust_roots"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_check_ancestry(snapshots uuid[], seen uuid[])",
+      "private.visa_source_origins"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "private.rad_blocks_text"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "private.rad_check_ancestry"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "private.visa_source_inventories"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "public.visa_article_sections"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_check_main_publication()",
+      "public.visa_merge_manifests"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "private.authority_domains"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "private.authority_proofs"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "private.authority_trust_roots"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "private.claim_official_evidence"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "public.knowledge_citations"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "public.knowledge_claims"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_claim_eligible(claim uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_classify_snapshot(snapshot uuid)",
+      "private.visa_source_origins"
+    ],
+    [
+      "private.rad_classify_snapshot(snapshot uuid)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_classify_snapshot(snapshot uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "private.rad_bound_raw_captures"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "private.rad_bound_refresh_job_targets"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "private.rad_lock_bound_refresh_authority"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_editorial_approval_guard()",
+      "private.rad_article_verification"
+    ],
+    [
+      "private.rad_editorial_approval_guard()",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "private.rad_editorial_approval_guard()",
+      "private.rad_editorial_clearances"
+    ],
+    [
+      "private.rad_editorial_approval_guard()",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "private.rad_editorial_approval_guard()",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "private.rad_article_state"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "private.rad_article_verification"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_editorial_carry_reference_map()",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "private.rad_editorial_carry_reference_map()",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "private.rad_editorial_carry_reference_map()",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_editorial_carry_rich_revision()",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "private.rad_editorial_carry_rich_revision()",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_editorial_carry_rich_revision()",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_catalog",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_editorial_clearances",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_country_titles",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_editorial_other_titles(article uuid, revision uuid, loc text, preview boolean)",
+      "private.rad_related"
+    ],
+    [
+      "private.rad_editorial_other_titles(article uuid, revision uuid, loc text, preview boolean)",
+      "public.list_editorial_relations"
+    ],
+    [
+      "private.rad_editorial_reference_maps",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_relations",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_editorial_require_import()",
+      "private.rad_editorial_import_target"
+    ],
+    [
+      "private.rad_editorial_rich_revisions",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_editorial_sources(revision uuid)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "private.rad_editorial_sources(revision uuid)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_editorial_sources(revision uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_job_json"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "private.rad_enqueue_research(operation text, body jsonb)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.authority_domains"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.authority_proofs"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.authority_trust_roots"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.claim_official_evidence"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.rad_claim_eligible"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "private.visa_source_origins"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "public.knowledge_citations"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_evidence(ref jsonb, section uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_finish_mutation(operation text, body jsonb, result jsonb)",
+      "private.rad_idempotency"
+    ],
+    [
+      "private.rad_guard_factual_verification()",
+      "private.rad_claim_eligible"
+    ],
+    [
+      "private.rad_index_article()",
+      "private.rad_blocks_text"
+    ],
+    [
+      "private.rad_index_article()",
+      "private.rad_search_metadata"
+    ],
+    [
+      "private.rad_index_article()",
+      "private.rad_search_normalize"
+    ],
+    [
+      "private.rad_index_article()",
+      "private.rad_search_version"
+    ],
+    [
+      "private.rad_index_article()",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_index_article()",
+      "public.visa_article_search_documents"
+    ],
+    [
+      "private.rad_index_article()",
+      "public.visa_article_sections"
+    ],
+    [
+      "private.rad_job_json(j private.rad_research_jobs)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "private.rad_article_verification"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "private.rad_evidence"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "private.rad_related"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "public.visa_article_revision_events"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "public.visa_article_sections"
+    ],
+    [
+      "private.rad_legacy_get_visa_article(p_request jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_article_state"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_article_verification"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_legacy_list_cms_articles(p_request jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.authority_domains"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.authority_proofs"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.authority_trust_roots"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.is_safe_public_https_url"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.rad_bound_path_allowed"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_official_refresh_bindings",
+      "private.authority_entities"
+    ],
+    [
+      "private.rad_official_refresh_bindings",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_official_refresh_bindings",
+      "public.source_documents"
+    ],
+    [
+      "private.rad_official_refresh_bindings",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_official_refresh_bindings",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_page(body jsonb, version text, cursor_position jsonb, has_more boolean)",
+      "private.rad_page_tokens"
+    ],
+    [
+      "private.rad_page_position(body jsonb, version text)",
+      "private.rad_page_tokens"
+    ],
+    [
+      "private.rad_project_rich(sections jsonb, base_sections jsonb, old_body jsonb)",
+      "private.rad_rich_text"
+    ],
+    [
+      "private.rad_project_rich(sections jsonb, base_sections jsonb, old_body jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_proposal_json(p visa_research_proposals)",
+      "private.rad_evidence"
+    ],
+    [
+      "private.rad_related(revision uuid, locale text)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_related(revision uuid, locale text)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_related(revision uuid, locale text)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_remove_article_search()",
+      "private.rad_search_version"
+    ],
+    [
+      "private.rad_remove_article_search()",
+      "public.visa_article_search_documents"
+    ],
+    [
+      "private.rad_require_admin(human boolean)",
+      "private.has_role"
+    ],
+    [
+      "private.rad_research_review_versions",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_research_review_versions",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_research_review_versions",
+      "public.visa_research_proposals"
+    ],
+    [
+      "private.rad_revision_result(revision uuid)",
+      "private.rad_article_state"
+    ],
+    [
+      "private.rad_revision_result(revision uuid)",
+      "private.rad_article_verification"
+    ],
+    [
+      "private.rad_revision_result(revision uuid)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.knowledge_citations"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_article_revision_events"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_article_sections"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_save_article(body jsonb)",
+      "public.visa_merge_manifests"
+    ],
+    [
+      "private.rad_schema_valid(s jsonb, v jsonb, depth integer)",
+      "private.rad_contract_schemas"
+    ],
+    [
+      "private.rad_search_metadata(article uuid, locale text)",
+      "public.destination_localizations"
+    ],
+    [
+      "private.rad_search_metadata(article uuid, locale text)",
+      "public.destinations"
+    ],
+    [
+      "private.rad_search_metadata(article uuid, locale text)",
+      "public.visa_articles"
+    ],
+    [
+      "private.rad_snippet(original text, query text)",
+      "private.rad_search_normalize"
+    ],
+    [
+      "private.rad_structured_accept_guard()",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "private.rad_structured_accept_guard()",
+      "private.rad_structured_proposals"
+    ],
+    [
+      "private.rad_structured_accept_guard()",
+      "private.rad_structured_revision_ancestry"
+    ],
+    [
+      "private.rad_structured_accept_guard()",
+      "public.visa_article_heads"
+    ],
+    [
+      "private.rad_structured_proposals",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_structured_proposals",
+      "public.research_sources"
+    ],
+    [
+      "private.rad_structured_proposals",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_structured_proposals",
+      "public.visa_research_proposals"
+    ],
+    [
+      "private.rad_structured_revision_ancestry",
+      "private.rad_immutable"
+    ],
+    [
+      "private.rad_structured_revision_ancestry",
+      "public.visa_article_revisions"
+    ],
+    [
+      "private.rad_structured_revision_ancestry",
+      "public.visa_research_proposals"
+    ],
+    [
+      "private.visa_source_inventories",
+      "private.rad_immutable"
+    ],
+    [
+      "private.visa_source_inventories",
+      "public.visa_articles"
+    ],
+    [
+      "private.visa_source_origins",
+      "private.rad_immutable"
+    ],
+    [
+      "public.admin_audit_logs",
+      "private.has_role"
+    ],
+    [
+      "public.approve_visa_article_revision(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_check_ancestry"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_classify_snapshot"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "private.visa_source_inventories"
+    ],
+    [
+      "public.approve_visa_source_inventory(p_request jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_article_state"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_editorial_clearances"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_editorial_require_import"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.claim_official_research_job()",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_article_verification"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_editorial_clearances"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "private.rad_bound_authorized"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "private.rad_bound_fragment"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "public.source_documents"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.create_visa_article(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.destination_localizations",
+      "private.has_role"
+    ],
+    [
+      "public.destinations",
+      "private.audit_content_change"
+    ],
+    [
+      "public.destinations",
+      "private.has_role"
+    ],
+    [
+      "public.destinations",
+      "private.set_updated_at"
+    ],
+    [
+      "public.discover_official_authorities(p_request jsonb)",
+      "private.rad_enqueue_research"
+    ],
+    [
+      "public.enqueue_research_refresh(p_request jsonb)",
+      "private.rad_enqueue_research"
+    ],
+    [
+      "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+      "private.authority_domains"
+    ],
+    [
+      "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+      "private.authority_entities"
+    ],
+    [
+      "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+      "private.rad_bound_refresh_job_targets"
+    ],
+    [
+      "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_bound_authorized"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_bound_path_allowed"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_bound_refresh_job_targets"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_bound_verified_prefixes"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "public.research_sources"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "public.source_documents"
+    ],
+    [
+      "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "private.rad_article_state"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "private.rad_article_verification"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_cms_article_draft(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_other_titles"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_sources"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_evidence"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+      "public.visa_article_sections"
+    ],
+    [
+      "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+      "private.rad_editorial_country_titles"
+    ],
+    [
+      "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+      "private.rad_editorial_relations"
+    ],
+    [
+      "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "public.source_documents"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+      "public.visa_article_sections"
+    ],
+    [
+      "public.get_official_research_job(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+      "private.authority_entities"
+    ],
+    [
+      "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+      "public.visa_articles"
+    ],
+    [
+      "public.get_research_proposal(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.get_research_proposal(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_research_proposal(p_request jsonb)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.get_research_proposal(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_research_proposal(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "private.rad_research_review_versions"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.get_research_review_context(p_proposal_id uuid)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "private.authority_entities"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "private.rad_bound_proposal_evidence"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "private.rad_structured_proposals"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "public.get_research_review_context"
+    ],
+    [
+      "public.get_research_review_context_v2(p_proposal_id uuid)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.get_visa_article(p_request jsonb)",
+      "private.rad_legacy_get_visa_article"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_apply_rich_patches"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_authorized"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_fragment"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_path_allowed"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_proposal_evidence"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_refresh_job_targets"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_bound_refresh_receipts"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_complete_bound_target"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_lock_bound_refresh_authority"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_official_refresh_bindings"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "private.rad_structured_proposals"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.research_sources"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.source_documents"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.knowledge_citations",
+      "private.has_role"
+    ],
+    [
+      "public.knowledge_claims",
+      "private.enforce_claim_citation_integrity"
+    ],
+    [
+      "public.knowledge_claims",
+      "private.has_role"
+    ],
+    [
+      "public.knowledge_claims",
+      "private.rad_guard_factual_verification"
+    ],
+    [
+      "public.list_cms_articles(p_request jsonb)",
+      "private.rad_legacy_list_cms_articles"
+    ],
+    [
+      "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+      "private.rad_editorial_country_titles"
+    ],
+    [
+      "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_page"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_search_normalize"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "private.rad_search_version"
+    ],
+    [
+      "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+      "public.visa_article_search_documents"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_editorial_relations"
+    ],
+    [
+      "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.authority_entities"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_authority_json"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.list_official_authorities(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_related_visa_articles(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.list_related_visa_articles(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_related_visa_articles(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "public.list_related_visa_articles(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.list_related_visa_articles(p_request jsonb)",
+      "public.get_visa_article"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_research_proposals(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_article_state"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_article_verification"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "public.visa_article_revision_events"
+    ],
+    [
+      "public.list_visa_article_revisions(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.profiles",
+      "private.guard_profile_write_metadata"
+    ],
+    [
+      "public.profiles",
+      "private.prevent_profile_role_escalation"
+    ],
+    [
+      "public.propose_editorial_relations(p_relations jsonb)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.propose_editorial_relations(p_relations jsonb)",
+      "private.rad_editorial_relations"
+    ],
+    [
+      "public.propose_editorial_relations(p_relations jsonb)",
+      "private.rad_editorial_require_import"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.authority_domains"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.authority_entities"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_apply_rich_patches"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "private.rad_structured_proposals"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.research_sources"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.source_documents"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "public.propose_structured_research(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.publish_visa_article_revision(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.authority_domains"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.authority_entities"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.authority_proofs"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.authority_trust_roots"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.rad_contract_schemas"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "private.rad_schema_valid"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "public.source_documents"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.reject_visa_article_revision(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.renew_bound_official_refresh_lease(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_research_jobs"
+    ],
+    [
+      "public.research_sources",
+      "private.has_role"
+    ],
+    [
+      "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+      "private.rad_editorial_card"
+    ],
+    [
+      "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+      "private.rad_editorial_catalog"
+    ],
+    [
+      "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+      "public.destinations"
+    ],
+    [
+      "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+      "public.visa_articles"
+    ],
+    [
+      "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_editorial_country_titles"
+    ],
+    [
+      "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_editorial_review_receipts"
+    ],
+    [
+      "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_editorial_relations"
+    ],
+    [
+      "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_editorial_review_receipts"
+    ],
+    [
+      "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_revision_result"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "private.rad_save_article"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.review_research_proposal(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.rollback_visa_article(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_research_review_versions"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_revision_result"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "private.rad_save_article"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "public.source_snapshots"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.save_research_review(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_apply_rich_patches"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_editorial_reference_maps"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_editorial_rich_revisions"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_project_rich"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_proposal_json"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_research_review_versions"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_revision_result"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_save_article"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_structured_proposals"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "private.rad_structured_revision_ancestry"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.save_structured_research_review(p_request jsonb)",
+      "public.visa_research_proposals"
+    ],
+    [
+      "public.save_visa_article_draft(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_article_verification"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_assert_request"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_page"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_page_position"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_search_aliases"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_search_normalize"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_search_version"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "private.rad_snippet"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "public.visa_article_heads"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "public.visa_article_search_documents"
+    ],
+    [
+      "public.search_visa_articles(p_request jsonb)",
+      "public.visa_articles"
+    ],
+    [
+      "public.source_documents",
+      "private.has_role"
+    ],
+    [
+      "public.source_snapshots",
+      "private.has_role"
+    ],
+    [
+      "public.source_snapshots",
+      "private.rad_immutable"
+    ],
+    [
+      "public.submit_visa_article_review(p_request jsonb)",
+      "private.rad_article_mutate"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "private.is_safe_public_https_url"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "private.rad_begin_mutation"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "private.rad_envelope"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "private.rad_finish_mutation"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "private.rad_require_admin"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "public.research_sources"
+    ],
+    [
+      "public.upsert_editorial_research_source(p_request jsonb)",
+      "public.upsert_research_source"
+    ],
+    [
+      "public.upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)",
+      "private.has_role"
+    ],
+    [
+      "public.upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)",
+      "private.is_safe_public_https_url"
+    ],
+    [
+      "public.upsert_research_source(p_source_id uuid, p_display_name text, p_base_url text, p_source_type text, p_trust_class text, p_runtime_scope text, p_enabled boolean, p_country_code text, p_topic text)",
+      "public.research_sources"
+    ],
+    [
+      "public.visa_article_heads",
+      "private.rad_check_main_publication"
+    ],
+    [
+      "public.visa_article_heads",
+      "private.rad_index_article"
+    ],
+    [
+      "public.visa_article_heads",
+      "private.rad_remove_article_search"
+    ],
+    [
+      "public.visa_article_revision_events",
+      "private.rad_editorial_approval_guard"
+    ],
+    [
+      "public.visa_article_revision_events",
+      "private.rad_immutable"
+    ],
+    [
+      "public.visa_article_revisions",
+      "private.rad_editorial_carry_reference_map"
+    ],
+    [
+      "public.visa_article_revisions",
+      "private.rad_editorial_carry_rich_revision"
+    ],
+    [
+      "public.visa_article_revisions",
+      "private.rad_immutable"
+    ],
+    [
+      "public.visa_article_search_documents",
+      "private.rad_search_normalize"
+    ],
+    [
+      "public.visa_article_search_documents",
+      "public.visa_article_revisions"
+    ],
+    [
+      "public.visa_article_search_documents",
+      "public.visa_articles"
+    ],
+    [
+      "public.visa_article_sections",
+      "private.rad_immutable"
+    ],
+    [
+      "public.visa_merge_manifests",
+      "private.rad_immutable"
+    ],
+    [
+      "public.visa_research_proposals",
+      "private.rad_structured_accept_guard"
+    ],
+    [
+      "public.yield_bound_official_refresh(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_bound_refresh_job_targets"
+    ],
+    [
+      "public.yield_bound_official_refresh(p_job_id uuid, p_lease_token uuid)",
+      "private.rad_research_jobs"
+    ]
+  ],
+  "changes": {
+    "extensions": [
+      "pg_trgm"
+    ],
+    "new_tables": [
+      "private.rad_bound_proposal_evidence",
+      "private.rad_bound_raw_captures",
+      "private.rad_bound_refresh_job_targets",
+      "private.rad_bound_refresh_receipts",
+      "private.rad_editorial_catalog",
+      "private.rad_editorial_clearances",
+      "private.rad_editorial_country_titles",
+      "private.rad_editorial_import_target",
+      "private.rad_editorial_reference_maps",
+      "private.rad_editorial_relations",
+      "private.rad_editorial_review_receipts",
+      "private.rad_editorial_rich_revisions",
+      "private.rad_official_refresh_bindings",
+      "private.rad_research_review_versions",
+      "private.rad_search_aliases",
+      "private.rad_search_version",
+      "private.rad_structured_proposals",
+      "private.rad_structured_revision_ancestry",
+      "private.visa_source_inventories",
+      "public.visa_article_search_documents"
+    ],
+    "new_functions": [
+      {
+        "key": "private.guard_profile_write_metadata()",
+        "old_body_md5": null,
+        "new_body_md5": "7508620358e0bb6d63ceb184d30ea850"
+      },
+      {
+        "key": "private.rad_apply_rich_patches(base jsonb, patches jsonb, decisions jsonb, require_all boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "ed9b9cdc06edcdb2f342d2dbd4e77217"
+      },
+      {
+        "key": "private.rad_authority_json(a private.authority_entities)",
+        "old_body_md5": null,
+        "new_body_md5": "abf2e9e192eb935619b2b2205aac45e9"
+      },
+      {
+        "key": "private.rad_blocks_text(blocks jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "17c7f8be51c6db7ce8c770048aae3795"
+      },
+      {
+        "key": "private.rad_bound_authorized(binding private.rad_official_refresh_bindings, source_url text)",
+        "old_body_md5": null,
+        "new_body_md5": "c6612a3a6d92fd2245f3cdae39ce32e7"
+      },
+      {
+        "key": "private.rad_bound_fragment(value text, start_marker text, end_marker text)",
+        "old_body_md5": null,
+        "new_body_md5": "5a645ebe652e1783aa72b2efd76b95f7"
+      },
+      {
+        "key": "private.rad_bound_path_allowed(source_url text, allowed_host text, path_prefix text)",
+        "old_body_md5": null,
+        "new_body_md5": "ce6a6f6979472e3814515a7e6d807f29"
+      },
+      {
+        "key": "private.rad_bound_verified_prefixes(binding private.rad_official_refresh_bindings)",
+        "old_body_md5": null,
+        "new_body_md5": "28b4da6a7ba57ab03b1d3677e381ea9b"
+      },
+      {
+        "key": "private.rad_check_main_publication()",
+        "old_body_md5": null,
+        "new_body_md5": "91cba0182c3bc1a8da4cbd6ac86656e2"
+      },
+      {
+        "key": "private.rad_classify_snapshot(snapshot uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "e741511167693e464053bc94a45cbd98"
+      },
+      {
+        "key": "private.rad_complete_bound_target(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_snapshot_id uuid, p_result jsonb, p_raw bytea, p_final_url text)",
+        "old_body_md5": null,
+        "new_body_md5": "dc146b61aa91f91a9b76d8a33d802098"
+      },
+      {
+        "key": "private.rad_editorial_approval_guard()",
+        "old_body_md5": null,
+        "new_body_md5": "19f61fa0712fbbd3067f8d1a01cede18"
+      },
+      {
+        "key": "private.rad_editorial_card(article uuid, loc text, preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "8b8cd7824c584b6581b455f2e33cdfb4"
+      },
+      {
+        "key": "private.rad_editorial_carry_reference_map()",
+        "old_body_md5": null,
+        "new_body_md5": "f369aaaf4e8cc5a17e7ff5a1c0b879d2"
+      },
+      {
+        "key": "private.rad_editorial_carry_rich_revision()",
+        "old_body_md5": null,
+        "new_body_md5": "da2d742891ddefe1f418c916bb7d044d"
+      },
+      {
+        "key": "private.rad_editorial_other_titles(article uuid, revision uuid, loc text, preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "d7f81b882b764dd1c3881fde288b809f"
+      },
+      {
+        "key": "private.rad_editorial_require_import()",
+        "old_body_md5": null,
+        "new_body_md5": "06cbe555545ee6f300f21a87bfc2ee88"
+      },
+      {
+        "key": "private.rad_editorial_sources(revision uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "964d91b1ab5e6474d2539063af2dd5b5"
+      },
+      {
+        "key": "private.rad_enqueue_research(operation text, body jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "5fd53f0129ef8e245eccad6f3a4811c9"
+      },
+      {
+        "key": "private.rad_index_article()",
+        "old_body_md5": null,
+        "new_body_md5": "695ca93aa91c538be56ae8fd0289d394"
+      },
+      {
+        "key": "private.rad_job_json(j private.rad_research_jobs)",
+        "old_body_md5": null,
+        "new_body_md5": "76a0cbcb4fe318f4cf84acebeacfb533"
+      },
+      {
+        "key": "private.rad_legacy_get_visa_article(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "ed75a17ef15e1d593eba17df29517943"
+      },
+      {
+        "key": "private.rad_legacy_list_cms_articles(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "dee3050c41af4ad42c3a228cb81ca4a8"
+      },
+      {
+        "key": "private.rad_lock_bound_refresh_authority(binding private.rad_official_refresh_bindings, source_url text)",
+        "old_body_md5": null,
+        "new_body_md5": "6d16946f298140c6bee902750d30153c"
+      },
+      {
+        "key": "private.rad_project_rich(sections jsonb, base_sections jsonb, old_body jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "4edada6e7a7fc1076443b277da41872c"
+      },
+      {
+        "key": "private.rad_proposal_json(p visa_research_proposals)",
+        "old_body_md5": null,
+        "new_body_md5": "47f075d18647325a319882af264bf458"
+      },
+      {
+        "key": "private.rad_remove_article_search()",
+        "old_body_md5": null,
+        "new_body_md5": "06620eab842202f9833c97381d872fdb"
+      },
+      {
+        "key": "private.rad_rich_text(node jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "ea2a17a707ee08ae8d053de29cfb4688"
+      },
+      {
+        "key": "private.rad_search_metadata(article uuid, locale text)",
+        "old_body_md5": null,
+        "new_body_md5": "62a566ab97409571d5a302b4f8616435"
+      },
+      {
+        "key": "private.rad_search_normalize(value text)",
+        "old_body_md5": null,
+        "new_body_md5": "1379bc300f098a4ef0ea4bbd64da899a"
+      },
+      {
+        "key": "private.rad_snippet(original text, query text)",
+        "old_body_md5": null,
+        "new_body_md5": "d76da686e146ad93462d311379f01eec"
+      },
+      {
+        "key": "private.rad_structured_accept_guard()",
+        "old_body_md5": null,
+        "new_body_md5": "6605606d9a428e461acc59dfcbe67d12"
+      },
+      {
+        "key": "public.approve_visa_source_inventory(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "17c7dc57b4f92a6cb1f05e1759eb6fde"
+      },
+      {
+        "key": "public.attach_editorial_reference_map(p_article_id uuid, p_locale text, p_expected_revision integer, p_manifest_hash text, p_map jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "865dffb55cee7ddb6615529a22808a67"
+      },
+      {
+        "key": "public.claim_official_research_job()",
+        "old_body_md5": null,
+        "new_body_md5": "619ccb532d8f1a6ede528b31613cadce"
+      },
+      {
+        "key": "public.clear_editorial_revision(p_revision_id uuid, p_note text)",
+        "old_body_md5": null,
+        "new_body_md5": "2cee617417fa5882d37e597e527b43d2"
+      },
+      {
+        "key": "public.create_official_refresh_binding(p_binding_id uuid, p_source_id uuid, p_document_id uuid, p_authority_id uuid, p_article_id uuid, p_locale text, p_section_id uuid, p_block_id uuid, p_start_marker text, p_end_marker text, p_snapshot_id uuid, p_expected_revision_id uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "cb8097b151b51c746776cf4f075e4fe3"
+      },
+      {
+        "key": "public.discover_official_authorities(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "5abe86112f8189d53985985eccf89b4b"
+      },
+      {
+        "key": "public.enqueue_research_refresh(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "42dfbbacd08a8cc03360f3fda5aacd91"
+      },
+      {
+        "key": "public.finish_official_research_job(p_job_id uuid, p_lease_token uuid, p_candidates jsonb, p_safe_code text)",
+        "old_body_md5": null,
+        "new_body_md5": "1985945c12537f6b6fd0ed89b03dc734"
+      },
+      {
+        "key": "public.get_bound_official_refresh_targets(p_job_id uuid, p_lease_token uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "246457334c99e1962cdd448c290b7dfd"
+      },
+      {
+        "key": "public.get_cms_article_draft(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "650d79e4b6f6ef674b2d0ff82bf7beb9"
+      },
+      {
+        "key": "public.get_editorial_article(p_article_id uuid, p_locale text, p_preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "dd3b42df4e8cdf3a14cdef5044ba3b87"
+      },
+      {
+        "key": "public.get_editorial_link_review(p_article_id uuid, p_locale text)",
+        "old_body_md5": null,
+        "new_body_md5": "19a362ae79c8071f09fd8f2fbd2bc43a"
+      },
+      {
+        "key": "public.get_editorial_reference_links(p_article_id uuid, p_locale text, p_preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "93815343558bf76560c37285fe66eb3a"
+      },
+      {
+        "key": "public.get_editorial_source_snapshot(p_article_id uuid, p_snapshot_id uuid, p_revision_id uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "7f1b48b7fa434105d08f781065e5f1cc"
+      },
+      {
+        "key": "public.get_official_research_job(p_job_id uuid, p_lease_token uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "17f864724a076b4541f9efb2e12c66af"
+      },
+      {
+        "key": "public.get_research_article_base(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text)",
+        "old_body_md5": null,
+        "new_body_md5": "4e14832fe313c0b5c3f5cea26e30d1ac"
+      },
+      {
+        "key": "public.get_research_proposal(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "22a9039fd6fa383abc12590441d18e9b"
+      },
+      {
+        "key": "public.get_research_review_context(p_proposal_id uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "cbb4f7e865d0c4a7e8d23a2bc9bdfa0b"
+      },
+      {
+        "key": "public.get_research_review_context_v2(p_proposal_id uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "01d00dde4e5f3829d2b8eda749ead18a"
+      },
+      {
+        "key": "public.get_structured_article_context(p_article_id uuid, p_locale text)",
+        "old_body_md5": null,
+        "new_body_md5": "0eb1d643a14e7577063712243b763af1"
+      },
+      {
+        "key": "public.ingest_bound_official_refresh(p_job_id uuid, p_lease_token uuid, p_binding_id uuid, p_expected_revision_id uuid, p_expected_snapshot_id uuid, p_normalized_text text, p_raw_base64 text, p_final_url text, p_http_status integer)",
+        "old_body_md5": null,
+        "new_body_md5": "eea54586d5314ee9dd63328998d57646"
+      },
+      {
+        "key": "public.list_cms_articles(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "fcff9be1651dea88a49f50fa13142435"
+      },
+      {
+        "key": "public.list_country_visa_content(p_country_code text, p_locale text, p_preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "5d3fd4867401ebe6193bba4363e9b4a6"
+      },
+      {
+        "key": "public.list_editorial_articles(p_locale text, p_category text, p_country_code text, p_query text, p_cursor text, p_limit integer, p_content_class text)",
+        "old_body_md5": null,
+        "new_body_md5": "883897a0ff0769f2432dc2ea5fa9e9e9"
+      },
+      {
+        "key": "public.list_editorial_library(p_locale text, p_preview boolean, p_offset integer, p_limit integer)",
+        "old_body_md5": null,
+        "new_body_md5": "25015d49d8ff5c7738a3051755ca97a1"
+      },
+      {
+        "key": "public.list_editorial_relations(p_article_id uuid, p_locale text, p_preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "7f010d464d76ac23d5ed4d3665ab75d2"
+      },
+      {
+        "key": "public.list_editorial_review_queue(p_locale text, p_offset integer, p_limit integer)",
+        "old_body_md5": null,
+        "new_body_md5": "cf2bb29b78efab76f7d40e4a8ba12de4"
+      },
+      {
+        "key": "public.list_official_authorities(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "64b76f1f30be57ca0c24f8fe2afb9311"
+      },
+      {
+        "key": "public.list_research_proposals(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "87b7318224dafd55b25db945ebfd74a2"
+      },
+      {
+        "key": "public.list_visa_article_revisions(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "f27da42cff69af8a579d6e28ddb461c9"
+      },
+      {
+        "key": "public.list_visa_content_countries(p_locale text, p_preview boolean)",
+        "old_body_md5": null,
+        "new_body_md5": "f9fda3a9004d0e2a8f508a67e17c3bec"
+      },
+      {
+        "key": "public.propose_editorial_relations(p_relations jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "a0b70009fe7b5e93f2aa4df169de32b6"
+      },
+      {
+        "key": "public.propose_structured_research(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "f9ff3a94b598dad6ef2872717bea1e04"
+      },
+      {
+        "key": "public.record_official_source_change(p_job_id uuid, p_lease_token uuid, p_article_id uuid, p_locale text, p_old_snapshot_id uuid, p_new_snapshot_id uuid, p_new_sections jsonb, p_changes jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "253b2a258404aa781a391e173cd57c73"
+      },
+      {
+        "key": "public.renew_bound_official_refresh_lease(p_job_id uuid, p_lease_token uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "00ad0e78972271a122849beaa04385df"
+      },
+      {
+        "key": "public.resolve_editorial_article_slug(p_country_code text, p_slug text, p_locale text)",
+        "old_body_md5": null,
+        "new_body_md5": "802c20bd2c27ac1a0eb6b755b1a1f5e8"
+      },
+      {
+        "key": "public.review_country_other_title(p_country_code text, p_article_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "19a7a13c77c49535184498792d6d4138"
+      },
+      {
+        "key": "public.review_editorial_relation(p_parent_id uuid, p_related_id uuid, p_expected_revision integer, p_decision text, p_rank integer, p_request_key uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "7d2cc005615d465c0a3ffa3de702241d"
+      },
+      {
+        "key": "public.review_research_proposal(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "37a34e7ac5e88add4626be52bb3c4d5c"
+      },
+      {
+        "key": "public.save_research_review(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "995747f0a7d43e45d1ab0fe6cb7f6b68"
+      },
+      {
+        "key": "public.save_structured_research_review(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "f78cf34591006f6f439d5d025aedeaa1"
+      },
+      {
+        "key": "public.search_visa_articles(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "02eb05df34c268df22047a5a7307c9f9"
+      },
+      {
+        "key": "public.upsert_editorial_research_source(p_request jsonb)",
+        "old_body_md5": null,
+        "new_body_md5": "f8c9a31ff855f6ebb1df8866018375a6"
+      },
+      {
+        "key": "public.yield_bound_official_refresh(p_job_id uuid, p_lease_token uuid)",
+        "old_body_md5": null,
+        "new_body_md5": "3eee05c7ccd34d844c0bb7540ee005da"
+      }
+    ],
+    "replaced_functions": [
+      {
+        "key": "private.audit_content_change()",
+        "old_body_md5": "b6976ae9cc3d67304311bf39ff28ff11",
+        "new_body_md5": "b6976ae9cc3d67304311bf39ff28ff11"
+      },
+      {
+        "key": "private.enforce_claim_citation_integrity()",
+        "old_body_md5": "cf2a603cf2bb391b59dd6ed25c454199",
+        "new_body_md5": "cf2a603cf2bb391b59dd6ed25c454199"
+      },
+      {
+        "key": "private.has_role(required_roles text[])",
+        "old_body_md5": "64325c0eca6e70e11b209f363df5b661",
+        "new_body_md5": "64325c0eca6e70e11b209f363df5b661"
+      },
+      {
+        "key": "private.is_safe_public_https_url(p_url text)",
+        "old_body_md5": "ea489f4c302dcd48767722e9f25bf2aa",
+        "new_body_md5": "d62a81e4331437cec0676184efac17b7"
+      },
+      {
+        "key": "private.prevent_profile_role_escalation()",
+        "old_body_md5": "b0b0c5898730f5bc8071a18777834418",
+        "new_body_md5": "8415037ca9cad54c1f2df3708043cc7b"
+      },
+      {
+        "key": "private.rad_article_verification(revision uuid)",
+        "old_body_md5": "840d3141c6e429b8efe2cd61d2d6f986",
+        "new_body_md5": "f2d21c5ec7df3e2172a15edf00f71da9"
+      },
+      {
+        "key": "private.rad_claim_eligible(claim uuid)",
+        "old_body_md5": "81f7548b20cfb94d513c55c6b90bf41f",
+        "new_body_md5": "dd9b5fe39036f35a96e72e1200fb4b74"
+      },
+      {
+        "key": "private.rad_evidence(ref jsonb, section uuid)",
+        "old_body_md5": "e610cfbcdd718cb0a810fa667bde7e1e",
+        "new_body_md5": "277af28fec38a13fcff73c0289800b14"
+      },
+      {
+        "key": "private.rad_page_position(body jsonb, version text)",
+        "old_body_md5": "29c1c05c10764ade44f47e4c7947f99b",
+        "new_body_md5": "16f6b5ab81b2e9a189e727a50b141590"
+      },
+      {
+        "key": "private.set_updated_at()",
+        "old_body_md5": "9b1889f56258bf9d6554213c05019c76",
+        "new_body_md5": "9b1889f56258bf9d6554213c05019c76"
+      },
+      {
+        "key": "public.get_visa_article(p_request jsonb)",
+        "old_body_md5": "ed75a17ef15e1d593eba17df29517943",
+        "new_body_md5": "fc112c9fc548509ca19301cbc1a60d01"
+      },
+      {
+        "key": "public.list_related_visa_articles(p_request jsonb)",
+        "old_body_md5": "b77d10c98ba8d6cb592dcf3468cf12cd",
+        "new_body_md5": "b77d10c98ba8d6cb592dcf3468cf12cd"
+      }
+    ],
+    "added_columns": [
+      "private.rad_research_jobs.lease_token",
+      "private.rad_research_jobs.lease_until",
+      "private.rad_research_jobs.attempts"
+    ],
+    "constraints": [
+      "private.rad_bound_proposal_evidence.rad_bound_proposal_evidence_binding_id_fkey",
+      "private.rad_bound_proposal_evidence.rad_bound_proposal_evidence_pkey",
+      "private.rad_bound_proposal_evidence.rad_bound_proposal_evidence_proposal_id_fkey",
+      "private.rad_bound_raw_captures.rad_bound_raw_captures_binding_id_fkey",
+      "private.rad_bound_raw_captures.rad_bound_raw_captures_check",
+      "private.rad_bound_raw_captures.rad_bound_raw_captures_pkey",
+      "private.rad_bound_raw_captures.rad_bound_raw_captures_snapshot_id_fkey",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_binding_id_fkey",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_check",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_expected_revision_id_fkey",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_expected_snapshot_id_fkey",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_job_id_fkey",
+      "private.rad_bound_refresh_job_targets.rad_bound_refresh_job_targets_pkey",
+      "private.rad_bound_refresh_receipts.rad_bound_refresh_receipts_base_revision_id_fkey",
+      "private.rad_bound_refresh_receipts.rad_bound_refresh_receipts_binding_id_fkey",
+      "private.rad_bound_refresh_receipts.rad_bound_refresh_receipts_pkey",
+      "private.rad_bound_refresh_receipts.rad_bound_refresh_receipts_prior_snapshot_id_fkey",
+      "private.rad_bound_refresh_receipts.rad_bound_refresh_receipts_snapshot_id_fkey",
+      "private.rad_editorial_catalog.rad_editorial_catalog_article_id_fkey",
+      "private.rad_editorial_catalog.rad_editorial_catalog_category_check",
+      "private.rad_editorial_catalog.rad_editorial_catalog_content_class_check",
+      "private.rad_editorial_catalog.rad_editorial_catalog_pkey",
+      "private.rad_editorial_clearances.rad_editorial_clearances_note_check",
+      "private.rad_editorial_clearances.rad_editorial_clearances_pkey",
+      "private.rad_editorial_clearances.rad_editorial_clearances_reviewed_by_fkey",
+      "private.rad_editorial_clearances.rad_editorial_clearances_revision_id_fkey",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_article_id_fkey",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_country_code_check",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_pkey",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_rank_check",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_reviewed_by_fkey",
+      "private.rad_editorial_country_titles.rad_editorial_country_titles_state_check",
+      "private.rad_editorial_import_target.rad_editorial_import_target_pkey",
+      "private.rad_editorial_import_target.rad_editorial_import_target_project_ref_check",
+      "private.rad_editorial_reference_maps.rad_editorial_reference_maps_pkey",
+      "private.rad_editorial_reference_maps.rad_editorial_reference_maps_revision_id_fkey",
+      "private.rad_editorial_reference_maps.rad_editorial_reference_maps_source_manifest_hash_check",
+      "private.rad_editorial_relations.rad_editorial_relations_check",
+      "private.rad_editorial_relations.rad_editorial_relations_parent_id_fkey",
+      "private.rad_editorial_relations.rad_editorial_relations_pkey",
+      "private.rad_editorial_relations.rad_editorial_relations_rank_check",
+      "private.rad_editorial_relations.rad_editorial_relations_related_id_fkey",
+      "private.rad_editorial_relations.rad_editorial_relations_reviewed_by_fkey",
+      "private.rad_editorial_relations.rad_editorial_relations_state_check",
+      "private.rad_editorial_review_receipts.rad_editorial_review_receipts_actor_id_fkey",
+      "private.rad_editorial_review_receipts.rad_editorial_review_receipts_pkey",
+      "private.rad_editorial_rich_revisions.rad_editorial_rich_revisions_pkey",
+      "private.rad_editorial_rich_revisions.rad_editorial_rich_revisions_revision_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_article_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_authority_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_created_by_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_document_id_article_id_locale_key",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_document_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_initial_snapshot_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_last_snapshot_id_fkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_locale_check",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_pkey",
+      "private.rad_official_refresh_bindings.rad_official_refresh_bindings_source_id_fkey",
+      "private.rad_research_review_versions.rad_research_review_versions_actor_id_fkey",
+      "private.rad_research_review_versions.rad_research_review_versions_base_revision_id_fkey",
+      "private.rad_research_review_versions.rad_research_review_versions_pkey",
+      "private.rad_research_review_versions.rad_research_review_versions_proposal_id_fkey",
+      "private.rad_search_aliases.rad_search_aliases_approved_by_fkey",
+      "private.rad_search_aliases.rad_search_aliases_locale_check",
+      "private.rad_search_aliases.rad_search_aliases_pkey",
+      "private.rad_search_version.rad_search_version_id_check",
+      "private.rad_search_version.rad_search_version_pkey",
+      "private.rad_structured_proposals.rad_structured_proposals_base_revision_id_fkey",
+      "private.rad_structured_proposals.rad_structured_proposals_pkey",
+      "private.rad_structured_proposals.rad_structured_proposals_proposal_id_fkey",
+      "private.rad_structured_proposals.rad_structured_proposals_source_id_fkey",
+      "private.rad_structured_revision_ancestry.rad_structured_revision_ancestry_parent_revision_id_fkey",
+      "private.rad_structured_revision_ancestry.rad_structured_revision_ancestry_pkey",
+      "private.rad_structured_revision_ancestry.rad_structured_revision_ancestry_proposal_id_fkey",
+      "private.rad_structured_revision_ancestry.rad_structured_revision_ancestry_proposal_id_key",
+      "private.rad_structured_revision_ancestry.rad_structured_revision_ancestry_revision_id_fkey",
+      "private.visa_source_inventories.visa_source_inventories_approved_by_fkey",
+      "private.visa_source_inventories.visa_source_inventories_article_id_fkey",
+      "private.visa_source_inventories.visa_source_inventories_pkey",
+      "public.visa_article_search_documents.visa_article_search_documents_article_id_fkey",
+      "public.visa_article_search_documents.visa_article_search_documents_pkey",
+      "public.visa_article_search_documents.visa_article_search_documents_revision_id_fkey"
+    ],
+    "indexes": [
+      "private.rad_editorial_catalog.rad_editorial_country_category_unique",
+      "private.rad_editorial_catalog.rad_editorial_country_idx",
+      "private.rad_editorial_reference_maps.rad_editorial_reference_map_active",
+      "private.rad_research_review_versions.rad_research_review_actor_idx",
+      "private.rad_research_review_versions.rad_research_review_base_idx",
+      "private.rad_structured_proposals.rad_structured_base_idx",
+      "private.rad_structured_proposals.rad_structured_source_idx",
+      "private.rad_structured_revision_ancestry.rad_structured_parent_idx",
+      "public.knowledge_claims.knowledge_claims_superseded_by_idx",
+      "public.visa_article_search_documents.visa_search_article_locale_idx",
+      "public.visa_article_search_documents.visa_search_fts_idx",
+      "public.visa_article_search_documents.visa_search_trgm_idx"
+    ],
+    "triggers": [
+      "private.rad_bound_proposal_evidence.rad_bound_evidence_immutable",
+      "private.rad_bound_raw_captures.rad_bound_raw_capture_immutable",
+      "private.rad_bound_refresh_receipts.rad_bound_receipt_immutable",
+      "private.rad_research_review_versions.rad_research_review_immutable",
+      "private.rad_structured_proposals.rad_structured_proposals_immutable",
+      "private.rad_structured_revision_ancestry.rad_structured_ancestry_immutable",
+      "private.visa_source_inventories.visa_source_inventory_immutable",
+      "public.profiles.rad_profile_insert_role_guard",
+      "public.profiles.rad_profile_write_metadata_guard",
+      "public.source_snapshots.rad_snapshot_immutable",
+      "public.visa_article_heads.rad_article_deletion_search",
+      "public.visa_article_heads.rad_article_publication_search",
+      "public.visa_article_heads.rad_main_publication_manifest",
+      "public.visa_article_revision_events.rad_editorial_approval_guard",
+      "public.visa_article_revisions.rad_editorial_carry_rich_revision",
+      "public.visa_article_revisions.rad_editorial_reference_map_copy",
+      "public.visa_research_proposals.rad_structured_accept_guard"
+    ],
+    "policies": [
+      "public.profiles.profiles insert own"
+    ],
+    "acl_review": [
+      {
+        "table": "private.rad_bound_proposal_evidence",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_bound_raw_captures",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_bound_refresh_job_targets",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_bound_refresh_receipts",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_catalog",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_clearances",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_country_titles",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_import_target",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_reference_maps",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_relations",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_review_receipts",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_editorial_rich_revisions",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_official_refresh_bindings",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_research_review_versions",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_search_aliases",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_search_version",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_structured_proposals",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.rad_structured_revision_ancestry",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "private.visa_source_inventories",
+        "old": [],
+        "candidate": []
+      },
+      {
+        "table": "public.knowledge_citations",
+        "old": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "DELETE"
+          }
+        ],
+        "candidate": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ]
+      },
+      {
+        "table": "public.knowledge_claims",
+        "old": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "DELETE"
+          }
+        ],
+        "candidate": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ]
+      },
+      {
+        "table": "public.profiles",
+        "old": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ],
+        "candidate": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ]
+      },
+      {
+        "table": "public.source_documents",
+        "old": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "DELETE"
+          }
+        ],
+        "candidate": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ]
+      },
+      {
+        "table": "public.source_snapshots",
+        "old": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "DELETE"
+          }
+        ],
+        "candidate": [
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "INSERT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "UPDATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "DELETE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRUNCATE"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "REFERENCES"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "TRIGGER"
+          },
+          {
+            "role": "service_role",
+            "grantable": false,
+            "privilege": "MAINTAIN"
+          },
+          {
+            "role": "anon",
+            "grantable": false,
+            "privilege": "SELECT"
+          },
+          {
+            "role": "authenticated",
+            "grantable": false,
+            "privilege": "SELECT"
+          }
+        ]
+      },
+      {
+        "table": "public.visa_article_search_documents",
+        "old": [],
+        "candidate": []
+      }
+    ],
+    "retained_drift": [
+      {
+        "column": "public.source_documents.validation_status",
+        "production": {
+          "name": "validation_status",
+          "type": "text",
+          "default": null,
+          "identity": "",
+          "not_null": false,
+          "generated": "",
+          "type_kind": "b",
+          "type_name": "text",
+          "type_schema": "pg_catalog"
+        },
+        "candidate": {
+          "name": "validation_status",
+          "type": "text",
+          "default": "'candidate'::text",
+          "identity": "",
+          "not_null": true,
+          "generated": "",
+          "type_kind": "b",
+          "type_name": "text",
+          "type_schema": "pg_catalog"
+        },
+        "action": "retain existing definition; independent data disposition required before tightening"
+      },
+      {
+        "constraint": "public.visa_articles.visa_articles_country_code_check",
+        "production": {
+          "name": "visa_articles_country_code_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (country_code IS NULL OR country_code ~ '^[A-Z]{2}$'::text)",
+          "references": null
+        },
+        "candidate": {
+          "name": "visa_articles_country_code_check",
+          "type": "c",
+          "validated": true,
+          "definition": "CHECK (country_code ~ '^[A-Z]{2}$'::text)",
+          "references": null
+        },
+        "action": "retain existing constraint; semantic/data review required"
+      }
+    ]
+  },
+  "limitations": [
+    "Static lexical closure supplements catalog dependencies, not proof of every dynamic SQL branch.",
+    "Only application roles PUBLIC/anon/authenticated/service_role are reconciled; managed-role grants are preserved.",
+    "Existing data/nullability/name-collision drift retained explicitly; no invented validation classifications.",
+    "Synthetic catalog reconstruction is not a Production backup/restore or existing-data compatibility proof.",
+    "rad.expected_project is a required operator assertion, not independently verified endpoint identity; review wrapper always refuses execution.",
+    "Function guards check captured body hashes and new-object absence; fresh full catalog/ACL/data comparison remains required before any hosted execution.",
+    "Legacy column-level grants are preserved; table-level ACL review does not certify column-level authorization."
+  ]
+}

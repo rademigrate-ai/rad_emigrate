@@ -34,11 +34,11 @@ A `GO` decision is valid only when all required attestations in section 8 are si
 | Corrected admission/hold migration | `20261103114340_rad_corrected_source_editorial_admission.sql` |
 | Corrected admission migration SHA-256 | `577edecce2b0fe90bf2308c91add8a301976232b5a95d822374c7dae39c150b0` |
 | No-Restore safety candidate (NOT APPLIED) | `20261103120000_rad_no_restore_safety_ops.sql` |
-| Pre-core bootstrap SHA-256 | `cc90c18a5d4a63e27435e9517e220e0189efe0716caa44062c5caa0e332cb090` |
-| Safety regression tests SHA-256 | `f43dd32bd95c6cbc37e1b0814e060675bb3a63dbbfe4ee75913302066cd378d4` |
+| Pre-core bootstrap SHA-256 | `2aea67c25903623ce98a76bf2f86dbf1d637adc91c701b86474cb7b94536de44` |
+| Safety regression tests SHA-256 | `9eff3c16e348c019d096007b0bf6282c683beba7e363aeeee0353a137186ba88` |
 | Post-publication-contract withdrawal candidate (NOT APPLIED) | `20261103180754_rad_source_unpublish_safety.sql` |
 | Withdrawal migration SHA-256 | `0cde295bbcbda93cad57230b2f637112fdcba2301305aa65af7b1378bcd0013a` |
-| Portable clean-schema SQL regression SHA-256 | `f994c22e8ec7084b1653435549de127e8e02c3c16d8906b02ad7d58d6b0d0bde` |
+| Portable clean-schema SQL regression SHA-256 | `7276184ba6085a2e43ff2f7ef10a32aa5328a7237c9b293b143e2520bde8dec5` |
 | Corrected package SHA-256 | `4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282` |
 | Corrected package scope | 1,100 operations; 44 batches; 1,077 publication candidates; 23 holds; 0 approvals; 0 publications |
 | Current observed Production state | 72 migration entries; 745 heads; 747 revisions; 0 publications |
@@ -202,3 +202,9 @@ The current evidence establishes the package and the limits of the existing comp
 - `_audit/.../final-publication-readiness-20261103/no-restore-preflight-fingerprint.json`
 - `_audit/.../final-publication-readiness-20261103/initial-callbacks.json`
 - `_audit/.../final-publication-readiness-20261103/package-independent-verification.json`
+
+## 2026-11-04 capability correction and owner boundary
+
+PostgreSQL 17 also permits MAINTAIN for a SHARE table lock. The candidate now observes that existing privilege in a private invoker helper, alongside UPDATE/DELETE/TRUNCATE. It retains the actual `LOCK TABLE pg_catalog.pg_proc IN SHARE MODE`, timeout, Admin checks, independently accepted request binding, current-state checks and immutable receipts. It grants no catalog privilege. Twenty native tests pass, including an owned local role with MAINTAIN only taking the actual lock. Production postgres has none of the four privileges; provider acceptance remains pending.
+
+The current implementation inventory and provider request are in [FINAL_EMPLOYER_DEPLOY_READINESS.md](FINAL_EMPLOYER_DEPLOY_READINESS.md) and [PROVIDER_CATALOG_LOCK_REQUEST_20261104.md](PROVIDER_CATALOG_LOCK_REQUEST_20261104.md). Historical evidence above retains its original date; current evidence is separately labeled there. A passing local test does not fill any independent approval field. The owner will perform both final merge and frontend deployment. Employer acceptance testing occurs after deployment.
