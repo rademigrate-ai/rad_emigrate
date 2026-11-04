@@ -70,6 +70,9 @@ class EditorialArticlePage extends ConsumerWidget {
                 final sections = editorialRows(
                   data['rich_sections'] ?? data['sections'],
                 );
+                final frozen =
+                    data['delivery_mode'] == 'frozen_source_readonly';
+                final articleLocale = data['locale'] == 'fa' ? 'fa' : locale;
                 final bodyController = EditorialBodyController();
                 final blockPositions = <String, int>{};
                 final children = <Widget>[
@@ -80,6 +83,15 @@ class EditorialArticlePage extends ConsumerWidget {
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
+                  if (frozen)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        articleLocale == 'fa'
+                            ? 'نسخهٔ فقط‌خواندنی از منابع اصلی؛ هنوز تأیید سردبیری یا راستی‌آزمایی مستقل ندارد. به‌روزرسانی این نسخه تنها پس از فعال‌سازی فرآیند رسمی تأیید محتوا امکان‌پذیر است.'
+                            : 'Read-only source snapshot. It has not received editorial approval or independent factual verification. Updates require the authorized editorial workflow.',
+                      ),
+                    ),
                   if (preview)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -100,7 +112,9 @@ class EditorialArticlePage extends ConsumerWidget {
                       ),
                     ),
                 ];
-                if (requestedLocale != null && requestedLocale != locale) {
+                if ((requestedLocale != null &&
+                        requestedLocale != articleLocale) ||
+                    data['requested_locale_fallback'] != null) {
                   children.insert(
                     0,
                     Text(
@@ -290,7 +304,9 @@ class EditorialArticlePage extends ConsumerWidget {
                   final target = blockPositions[reference['target_block_id']];
                   final appId = reference['app_article_id'];
                   final internal =
-                      preview &&
+                      (preview ||
+                          (frozen &&
+                              reference['frozen_target_verified'] == true)) &&
                       appId is String &&
                       RegExp(
                         r'^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
@@ -305,7 +321,7 @@ class EditorialArticlePage extends ConsumerWidget {
                           path: '/visa/content/$appId',
                           queryParameters: {
                             'locale': targetLocale,
-                            'preview': 'true',
+                            if (preview) 'preview': 'true',
                             if (targetLocale != locale)
                               'requested_locale': locale,
                           },
@@ -384,16 +400,21 @@ class EditorialArticlePage extends ConsumerWidget {
                     preview: preview,
                   ),
                 );
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1000),
-                    child: EditorialScrollBody(
-                      bodyController: bodyController,
-                      key: ValueKey(
-                        '${data['revision_id'] ?? articleId}:$locale:$initialSectionAnchor',
+                return Directionality(
+                  textDirection: articleLocale == 'fa'
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1000),
+                      child: EditorialScrollBody(
+                        bodyController: bodyController,
+                        key: ValueKey(
+                          '${data['revision_id'] ?? articleId}:$locale:$initialSectionAnchor',
+                        ),
+                        targetIndex: targetIndex,
+                        children: children,
                       ),
-                      targetIndex: targetIndex,
-                      children: children,
                     ),
                   ),
                 );

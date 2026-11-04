@@ -140,7 +140,11 @@ class _LibraryState extends ConsumerState<OtherTitlesLibraryPage> {
                               ),
                               trailing: const Icon(Icons.menu_book_outlined),
                               onTap: () => context.push(
-                                '/visa/content/${item['id']}?locale=$locale${widget.preview ? '&preview=true' : ''}',
+                                editorialCardRoute(
+                                  item,
+                                  requestedLocale: locale,
+                                  preview: widget.preview,
+                                ),
                               ),
                             ),
                           ),

@@ -96,6 +96,8 @@ jobs:
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/public_web_build.py scripts/tests/test_public_web_build.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/final_content_package.py scripts/tests/test_final_content_package.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/final_content_package.py scripts/tests/test_final_content_package.py
+          python3 -m ruff format --isolated --target-version py311 --check scripts/frozen_visa_delivery.py scripts/tests/test_frozen_visa_delivery.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/frozen_visa_delivery.py scripts/tests/test_frozen_visa_delivery.py
           python3 -m ruff format --isolated --target-version py311 --check tools/content_completion/source_delivery_forensics.py scripts/tests/test_source_delivery_forensics.py
           python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 tools/content_completion/source_delivery_forensics.py scripts/tests/test_source_delivery_forensics.py
           python3 -m ruff format --isolated --target-version py311 --check scripts/production_mechanical_decisions.py scripts/source_editorial_batches.py scripts/tests/test_mechanical_release_decisions.py scripts/tests/test_source_editorial_sql.py
@@ -268,6 +270,21 @@ jobs:
           SUPABASE_URL: https://example.supabase.co
           SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_placeholder_test_value
         run: bash scripts/build_web_render.sh
+      - name: Verify real frozen source delivery in compiled Web assets
+        run: |
+          set -euo pipefail
+          test -f build/web/assets/assets/visa_frozen_content/index.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('build/web/assets/assets/visa_frozen_content')
+          index=json.loads((root/'index.json').read_text(encoding='utf-8'))
+          assets=list((root/'articles').glob('*.json.gz'))
+          assert index['total_candidates']==1077 and index['held_excluded']==23
+          assert index['countries_count']==56 and index['independent_other_titles']==251
+          assert len(assets)==1077
+          print('PASS: 1077 source-faithful article assets present in compiled Web build')
+          PY
 
   android-build:
     runs-on: ubuntu-latest

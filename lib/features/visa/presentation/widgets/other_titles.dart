@@ -4,6 +4,8 @@ import '../../../../core/widgets/directional_icons.dart';
 
 import 'package:go_router/go_router.dart';
 
+import '../../data/editorial_repository.dart';
+
 /// One collection shared by country and continuous article pages. Links are
 /// deduplicated by identity, never by potentially ambiguous display title.
 class OtherTitles extends StatelessWidget {
@@ -38,7 +40,11 @@ class OtherTitles extends StatelessWidget {
               title: Text(item['title'] as String? ?? ''),
               trailing: Icon(directionalForward(context)),
               onTap: () => context.push(
-                '/visa/content/${item['id']}?locale=$locale${preview ? '&preview=true' : ''}',
+                editorialCardRoute(
+                  item,
+                  requestedLocale: locale,
+                  preview: preview,
+                ),
               ),
             ),
           ),

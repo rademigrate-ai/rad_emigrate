@@ -24,6 +24,9 @@ flutter:
     - assets/images/destinations/
     - assets/icons/
     - assets/flags/
+    # Immutable, source-faithful display snapshot. This is NOT an editorial CMS.
+    - assets/visa_frozen_content/
+    - assets/visa_frozen_content/articles/
     # Timezone Boundary Builder polygons for Flutter Web (ODbL).
     # Native platforms use the index embedded in timezone_finder.
     - packages/timezone_finder/data/boundaries_2026c.bin
@@ -38,6 +41,8 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   intl: any
+  archive: 4.3.0
+  crypto: 3.0.7
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
   go_router: ^15.1.2
