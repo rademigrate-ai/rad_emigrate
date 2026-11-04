@@ -10,7 +10,8 @@
     "browser_automation": false,
     "credential_or_session_token_access": false,
     "frontend_deployment": false,
-    "automatic_merge": false
+    "automatic_merge": false,
+    "agent_conditional_merge_after_all_gates": true
   },
   "production_binding": {
     "project_ref": "inshddthftkhcdosoqcn",
@@ -292,6 +293,6 @@
     "Execute guarded corrected draft import and exact provenance/head/actor/anonymous-denial readback.",
     "Only AFTER import, apply the source-faithful publication migration, corrected admission/holds, then source-unpublish followup; verify schema/ACLs.",
     "Real Admin source review, approval and publication of eligible bounded batches only; record actual receipts.",
-    "Production acceptance and final-HEAD CI before readiness; owner alone authorizes and performs merge and frontend deployment."
+    "After actual Production acceptance, independent safety/provider decisions and exact final-HEAD CI/repository approval gates, Codex may merge PR #89 and verify resulting main/CI. Owner alone deploys the frontend."
   ]
 }

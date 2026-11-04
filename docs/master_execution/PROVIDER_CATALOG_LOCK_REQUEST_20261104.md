@@ -1,6 +1,6 @@
 # Provider request: protected catalog locking for RAD Production
 
-**Prepared for the owner to submit; NOT SENT, NOT APPROVED.** Project `inshddthftkhcdosoqcn`, PostgreSQL 17.11, existing database only. No Restore, extra project, paid service, catalog DML, superuser grant or ownership bypass is requested.
+**OWNER-CONFIRMED SUBMITTED; ticket reference and technical provider response PENDING. NOT APPROVED.** Project `inshddthftkhcdosoqcn`, PostgreSQL 17.11, existing database only. No Restore, extra project, paid service, catalog DML, superuser grant or ownership bypass is requested.
 
 The proposed safety bootstrap `supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql` requires a short transaction-scoped `LOCK TABLE pg_catalog.pg_proc IN SHARE MODE` during a fixed seven-function pre-core capture and, separately, an independently authorized definition inverse. Both use `lock_timeout='2s'` and the existing advisory lock. Current management executor `postgres` is not superuser; the catalog belongs to `supabase_admin`, and postgres has no MAINTAIN/UPDATE/DELETE/TRUNCATE privileges. Caller login alone does not confer a SECURITY DEFINER owner's catalog authority. The guarded release cannot advance without its pre-core safety capture; the inverse is blocked too. Ordinary CMS read/save RPCs are not all catalog-lock operations.
 
@@ -46,3 +46,11 @@ The inverse covers definitions only. It does not reverse the complete core closu
 An advisory lock coordinates cooperative callers only. A post-write hash cannot prevent overwriting concurrent DDL; application-table locks do not isolate pg_proc; SERIALIZABLE alone is not complete DDL failure handling. Any alternative must prove equivalent guarantees independently before implementation or use.
 
 References: [PostgreSQL 17 LOCK](https://www.postgresql.org/docs/17/sql-lock.html), [Supabase role restrictions](https://supabase.com/docs/guides/database/postgres/roles-superuser). The published docs do not establish an approved RAD executor.
+
+## Submission status in the resumed execution
+
+**OWNER-CONFIRMED SUBMITTED.** The owner reports Supabase confirmed “Your ticket has been logged for RAD.” No ticket reference or actual technical provider response is available yet. This is submission evidence, not approval. The agent did not submit: connected tools have no Supabase ticket API, supported Firefox control ended at URL-policy enforcement, and a launch request was rejected as “blocked by policy.” The owner submitted through the legitimate manual channel. No alternate browser/session/token access, plan upgrade or charge occurred through this task.
+
+Fresh read-only inspection confirms PostgreSQL 17.11, the same role/catalog restriction and retained 72 migrations/745 heads/747 revisions/zero publications. The release remains blocked. Follow the response-incorporation checklist in [FINAL_EMPLOYER_DEPLOY_READINESS.md](FINAL_EMPLOYER_DEPLOY_READINESS.md): authenticate the actual ticket/response reference, classify its decision, bind the exact supported role/lock/function scope, obtain separate complete no-Restore acceptance, rehearse managed restrictions/failures, then refresh exact release authorization and fingerprints. Neither submission nor provider lock guidance supplies the independent full no-Restore decision.
+
+Final candidate commit/hashes must be rebound from the new private `backend-activation-resolution-20261104/FINAL_EMPLOYER_DEPLOY_READINESS.json` receipt before actual acceptance. Official support process: https://supabase.com/support-policy. Do not incur charges or upgrade a plan without explicit authorization.

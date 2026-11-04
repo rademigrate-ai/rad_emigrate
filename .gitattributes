@@ -67,3 +67,5 @@ scripts/employer_activation_inventory.py text eol=lf
 scripts/verify_research_cms_persistence.py text eol=lf
 scripts/tests/test_employer_activation_inventory.py text eol=lf
 supabase/verification/employer_activation_preflight.sql text eol=lf
+scripts/reconciliation_package_adapter.py text eol=lf
+scripts/tests/test_reconciliation_package_seals.py text eol=lf
