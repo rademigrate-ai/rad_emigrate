@@ -122,3 +122,43 @@ After a *separately authorized* frontend deployment, use the public routes:
 
 **No Restore, Production write, CMS merge, browser credential capture or
 frontend deployment was undertaken for this phase-1 delivery work.**
+
+## Employer Admin bridge — wired after Phase 1
+
+The following **code-level integration is implemented and tested**:
+
+- `/admin/source-content` is a protected, searchable, paginated inventory
+  of exactly the immutable 1,077 candidate article/locale deliveries.
+- Existing authenticated `list_research_proposals` output is matched by
+  `target_article_id` to a frozen article's identity, without invented
+  cross-article associations or automatic promotion of source text.
+- Only actual **pending** server-provided research proposals expose a review
+  action. Previously decided proposals have disabled review buttons. An
+  unavailable CMS clearly disables approval, rather than pretending to save.
+- The review action opens the established `AdminFullPageDiffPage`, which
+  displays source evidence, the full original article, changes, per-block
+  accept/reject/edit controls, and human review notes.
+- A human approval calls the existing authenticated, revision/hash-bound
+  `save_structured_research_review` (or its already-supported legacy
+  `save_research_review` counterpart) with `mode=create_draft`.
+- The client refuses a stale baseline, unexpected response, a draft for a
+  different article, or a response indicating publication. It then opens the
+  existing CMS article list to continue the separate editorial workflow.
+- The **actual CMS** remains authoritative for `submit_visa_article_review`,
+  `approve_visa_article_revision` and `publish_visa_article_revision`; the
+  AI assistant never invokes those publication actions automatically.
+- Independent source-capture comparisons in
+  `SourceUpdateReviewContract` remain local review candidates only until a
+  real server research proposal and current imported CMS revision exist.
+
+### Critical deployment distinction
+
+The app's frozen content is accessible via a manually deployed frontend even
+when these new public CMS endpoints are not installed. In that state, browsing
+works, but **the employer cannot yet persist updates to the frozen articles
+inside the real CMS**. New research proposals must first be bound to actual
+imported source article identities and verified by an authorized server actor.
+Do not claim that this client-side bridge solves Supabase Production migration
+or actor/callback approvals. Do not bypass the existing no-Restore release
+policy. The guarded CMS closure, content import and authentic operator/Admin
+acceptance remain a separate Production launch dependency.

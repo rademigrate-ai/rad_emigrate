@@ -59,6 +59,13 @@ class AdminHubPage extends StatelessWidget {
         subtitle: 'بررسی تغییرات خط‌به‌خط و تأیید انطباق',
         route: '/admin/sources',
       ),
+      _AdminDestination(
+        icon: Icons.fact_check_outlined,
+        index: '07',
+        title: 'بازبینی محتوای سه سایت',
+        subtitle: 'جست‌وجوی مقاله‌ها و بررسی پیشنهادهای واقعی پژوهش در CMS',
+        route: '/admin/source-content',
+      ),
     ];
     return Scaffold(
       appBar: AppBar(

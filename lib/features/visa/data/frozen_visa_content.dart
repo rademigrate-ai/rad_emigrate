@@ -129,6 +129,58 @@ class FrozenVisaContent {
     };
   }
 
+  /// Admin-facing read-only discovery of the same public snapshot. These
+  /// rows do NOT become CMS drafts or editable state merely by appearing here.
+  Future<Map<String, dynamic>> reviewCatalog(
+    String locale, {
+    String countryCode = '',
+    String search = '',
+    String? cursor,
+    int limit = 24,
+  }) async {
+    if (!{'fa', 'en'}.contains(locale) ||
+        (countryCode.isNotEmpty &&
+            !RegExp(r'^[A-Z]{2}$').hasMatch(countryCode))) {
+      throw const FormatException('invalid_frozen_review_filter');
+    }
+    final offset = int.tryParse(cursor ?? '0');
+    if (offset == null ||
+        offset < 0 ||
+        offset > 1000000 ||
+        limit < 1 ||
+        limit > 100) {
+      throw const FormatException('invalid_frozen_review_cursor');
+    }
+    final term = search.trim().toLowerCase();
+    final candidates =
+        _preferred(
+            (await _rows).where((row) {
+              if (countryCode.isNotEmpty &&
+                  !(row['country_codes'] as List).contains(countryCode)) {
+                return false;
+              }
+              return term.isEmpty ||
+                  (row['title'] as String).toLowerCase().contains(term) ||
+                  (row['id'] as String).contains(term) ||
+                  (row['source_publishers'] as List).any(
+                    (publisher) => '$publisher'.toLowerCase().contains(term),
+                  );
+            }),
+            locale,
+          ).toList()
+          ..sort((a, b) => (a['id'] as String).compareTo(b['id'] as String));
+    final page = candidates.skip(offset).take(limit).map(_card).toList();
+    final more = offset + page.length < candidates.length;
+    return {
+      'items': page,
+      'total': candidates.length,
+      'has_more': more,
+      'next_cursor': more ? '${offset + page.length}' : null,
+      'editorial_approved': false,
+      'read_only': true,
+    };
+  }
+
   Future<Map<String, dynamic>> library(
     String locale,
     String? cursor, {

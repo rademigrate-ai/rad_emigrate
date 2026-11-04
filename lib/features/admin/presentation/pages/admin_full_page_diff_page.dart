@@ -220,7 +220,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
           result['published'] == false &&
           (decision != SourceProposalReviewStatus.approved ||
               (result['draft_revision'] is Map &&
-                  result['draft_revision']['editorial_state'] == 'draft'));
+                  result['draft_revision']['editorial_state'] == 'draft' &&
+                  result['draft_revision']['article_id'] ==
+                      prop.targetArticleId));
       if (!mounted) return;
 
       if (!ok) throw const CmsException('malformed');
@@ -238,7 +240,13 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       );
 
       setState(() => _isDirty = false);
-      context.go('/admin/sources');
+      // Creating a CMS draft is not publication. Let the employer inspect
+      // it in the existing CMS lifecycle; rejection returns to research.
+      context.go(
+        decision == SourceProposalReviewStatus.approved
+            ? '/admin/cms'
+            : '/admin/sources',
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

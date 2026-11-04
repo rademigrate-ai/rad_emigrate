@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/supabase/rad_contract.dart';
 import '../../../core/supabase/supabase_client.dart';
 import '../../../core/supabase/supabase_providers.dart';
+import '../../visa/data/frozen_visa_content.dart';
+import '../../knowledge/domain/source_update_review_contract.dart';
 import 'admin_cms_repository.dart';
 
 /// Additive review contract. The server reconstructs from the immutable base;
@@ -55,6 +57,35 @@ class ResearchReviewRepository {
     return Map<String, dynamic>.from(response['data'] as Map);
   }
 
+  /// Prepare an evidence-bound comparison, never write to the shipped snapshot.
+  /// The real CMS must independently validate the latest base revision and
+  /// require a human Admin decision before any persisted article update.
+  Future<Map<String, dynamic>> prepareFrozenSourceUpdate({
+    required String articleId,
+    required String locale,
+    required String blockId,
+    required String expectedOldText,
+    required String sourceUrl,
+    required String newCapturedBody,
+    required String capturedBodySha256,
+    required String literalReplacement,
+    required String capturedAt,
+  }) async {
+    _checkOwner();
+    final baseline = await frozenVisaContent.article(articleId, locale);
+    _checkOwner();
+    return SourceUpdateReviewContract.prepare(
+      immutableBaseline: baseline,
+      blockId: blockId,
+      expectedOldText: expectedOldText,
+      sourceUrl: sourceUrl,
+      newCapturedBody: newCapturedBody,
+      capturedBodySha256: capturedBodySha256,
+      literalReplacement: literalReplacement,
+      capturedAt: capturedAt,
+    );
+  }
+
   Future<Map<String, dynamic>> context(String proposalId) async {
     final data = await _call('get_research_review_context_v2', {
       'p_proposal_id': proposalId,
@@ -88,7 +119,11 @@ class ResearchReviewRepository {
     required Map<String, String> decisions,
     required Map<String, String> edits,
     required String note,
-  }) {
+  }) async {
+    if (!{'save_review', 'create_draft', 'reject_proposal'}.contains(mode) ||
+        context['stale'] != false) {
+      throw const CmsException('conflict');
+    }
     final base = context['base'] as Map;
     final proposal = context['proposal'] as Map;
     final ids = decisions.keys.toList()..sort();
@@ -113,12 +148,24 @@ class ResearchReviewRepository {
     };
     final fingerprint = jsonEncode(request);
     request['request_key'] = _keys.putIfAbsent(fingerprint, newRadRequestKey);
-    return _call(
+    final result = await _call(
       context['structured_patches'] is List
           ? 'save_structured_research_review'
           : 'save_research_review',
       {'p_request': request},
     );
+    if (result['published'] != false ||
+        (mode == 'create_draft' &&
+            (result['draft_revision'] is! Map ||
+                (result['draft_revision'] as Map)['editorial_state'] !=
+                    'draft' ||
+                (proposal['target_article_id'] is String &&
+                    (result['draft_revision'] as Map)['article_id'] !=
+                        proposal['target_article_id']))) ||
+        (mode != 'create_draft' && result['draft_revision'] != null)) {
+      throw const CmsException('malformed');
+    }
+    return result;
   }
 }
 

@@ -29,6 +29,15 @@ void main() {
       };
       final service = await mockSupabaseService((r) async {
         paths.add(r.url.path);
+        if (r.url.path.endsWith('/save_structured_research_review')) {
+          return rpcJson({
+            'data': {
+              'published': false,
+              'draft_revision': null,
+              'review_revision': 1,
+            },
+          });
+        }
         return rpcJson({'data': context});
       });
       final repository = ResearchReviewRepository(service);
@@ -137,6 +146,117 @@ void main() {
       throwsA(isA<CmsException>().having((e) => e.code, 'code', 'malformed')),
     );
   });
+  test(
+    'employer approval creates only a server-bound unpublished CMS draft',
+    () async {
+      final calls = <String>[];
+      final requests = <Map<String, dynamic>>[];
+      final service = await mockSupabaseService((r) async {
+        calls.add(r.url.path);
+        requests.add(
+          (jsonDecode(r.body) as Map)['p_request'] as Map<String, dynamic>,
+        );
+        return rpcJson({
+          'data': {
+            'published': false,
+            'draft_revision': {
+              'article_id': 'target-article',
+              'editorial_state': 'draft',
+            },
+          },
+        });
+      });
+      final repo = ResearchReviewRepository(service);
+      final review = {
+        'proposal': {
+          'id': 'proposal',
+          'revision': 7,
+          'target_article_id': 'target-article',
+        },
+        'base': {
+          'revision_id': 'current-base-revision',
+          'content_hash': 'current-base-hash',
+        },
+        'review_revision': 5,
+        'stale': false,
+        'structured_patches': [
+          {'id': 'changed-block'},
+        ],
+      };
+      final result = await repo.save(
+        context: review,
+        mode: 'create_draft',
+        decisions: {'changed-block': 'accepted'},
+        edits: {'changed-block': 'Evidence-supported edit'},
+        note: 'Human-reviewed source evidence',
+      );
+      expect(result['published'], false);
+      expect(result['draft_revision']['article_id'], 'target-article');
+      expect(calls, [endsWith('/save_structured_research_review')]);
+      expect(requests.single['mode'], 'create_draft');
+      expect(requests.single['base_revision_id'], 'current-base-revision');
+      expect(requests.single['base_content_hash'], 'current-base-hash');
+      expect(requests.single['decisions'], [
+        {
+          'section_id': 'changed-block',
+          'decision': 'edit',
+          'edited_text': 'Evidence-supported edit',
+        },
+      ]);
+      expect(calls.any((path) => path.contains('publish')), isFalse);
+      expect(calls.any((path) => path.contains('feed')), isFalse);
+    },
+  );
+
+  test(
+    'conflicting CMS target or stale base cannot be called approved',
+    () async {
+      final service = await mockSupabaseService(
+        (r) async => rpcJson({
+          'data': {
+            'published': false,
+            'draft_revision': {
+              'article_id': 'different-article',
+              'editorial_state': 'draft',
+            },
+          },
+        }),
+      );
+      final repo = ResearchReviewRepository(service);
+      final review = {
+        'proposal': {
+          'id': 'proposal',
+          'revision': 2,
+          'target_article_id': 'expected-article',
+        },
+        'base': {'revision_id': 'base', 'content_hash': 'hash'},
+        'review_revision': 1,
+        'stale': false,
+        'structured_patches': [],
+      };
+      await expectLater(
+        repo.save(
+          context: review,
+          mode: 'create_draft',
+          decisions: {},
+          edits: {},
+          note: '',
+        ),
+        throwsA(isA<CmsException>().having((e) => e.code, 'code', 'malformed')),
+      );
+      await expectLater(
+        repo.save(
+          context: {...review, 'stale': true},
+          mode: 'create_draft',
+          decisions: {},
+          edits: {},
+          note: '',
+        ),
+        throwsA(isA<CmsException>().having((e) => e.code, 'code', 'conflict')),
+      );
+    },
+  );
+
   test('server details are mapped to safe review conflict', () async {
     final service = await mockSupabaseService(
       (r) async =>

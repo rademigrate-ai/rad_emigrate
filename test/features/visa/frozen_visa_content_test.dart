@@ -74,4 +74,45 @@ void main() {
       await expectLater(snapshot.library('fa', '-1'), throwsFormatException);
     },
   );
+
+  test(
+    'employer review catalog searches the same immutable snapshot',
+    () async {
+      final snapshot = FrozenVisaContent();
+      final all = await snapshot.reviewCatalog('fa');
+      expect(all['read_only'], true);
+      expect(all['editorial_approved'], false);
+      expect(all['total'], greaterThan(1000));
+      expect((all['items'] as List).length, 24);
+      final next = await snapshot.reviewCatalog(
+        'fa',
+        cursor: all['next_cursor'] as String,
+      );
+      expect(
+        (all['items'] as List).first['id'],
+        isNot((next['items'] as List).first['id']),
+      );
+
+      final ae = await snapshot.reviewCatalog('fa', countryCode: 'AE');
+      expect(ae['total'], greaterThan(0));
+      for (final row in (ae['items'] as List).whereType<Map>()) {
+        expect((row['country_codes'] as List), contains('AE'));
+      }
+      final first = (all['items'] as List).first as Map;
+      final found = await snapshot.reviewCatalog(
+        'fa',
+        search: first['id'] as String,
+      );
+      expect(found['total'], 1);
+      expect((found['items'] as List).first['id'], first['id']);
+      await expectLater(
+        snapshot.reviewCatalog('fa', countryCode: '../'),
+        throwsFormatException,
+      );
+      await expectLater(
+        snapshot.reviewCatalog('fa', cursor: '-1'),
+        throwsFormatException,
+      );
+    },
+  );
 }

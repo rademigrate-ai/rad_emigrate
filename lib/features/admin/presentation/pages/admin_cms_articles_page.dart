@@ -94,6 +94,11 @@ class _AdminCmsArticlesPageState extends ConsumerState<AdminCmsArticlesPage> {
             onPressed: () => context.go('/admin/cms/reconciliation'),
           ),
           IconButton(
+            tooltip: 'بازبینی محتوای سه سایت',
+            icon: const Icon(Icons.fact_check_outlined),
+            onPressed: () => context.go('/admin/source-content'),
+          ),
+          IconButton(
             tooltip: 'پایش منابع رسمی',
             icon: const Icon(Icons.source_outlined),
             onPressed: () => context.go('/admin/sources'),
