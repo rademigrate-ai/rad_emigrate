@@ -62,3 +62,11 @@ Repository: rademigrate-ai/rad_emigrate, PR #89, inspected HEAD f7b9dd48b68e5298
 - A release decision is GO only after P0–P3 have current, independent acceptance evidence and the owner has approved in-scope exclusions. Otherwise state the precise blockers and continue non-blocked work.
 
 Reference: https://supabase.com/docs/guides/self-hosting/docker and https://supabase.com/docs/guides/self-hosting/restore-from-platform
+
+## Independent stack baseline inspection (2026-11-04)
+- Inspected official Supabase self-hosting release tag `self-hosted/v0.8.3`, source commit `bc27d2661edd09a5d0b8d76ce33da6d4071a756e`; the annotated tag object is a different SHA by design. The source was cloned read-only to `D:\RAD - Emigrate\_audit\supabase_selfhost_v083` (outside repository).
+- That release's `docker/docker-compose.yml` defaults to `supabase/postgres:17.6.1.136`, with explicit PostgreSQL 17 override available. This is not yet a verified match to RAD's previously managed PostgreSQL 17.11 catalog/extensions.
+- The untouched upstream Compose parses successfully using `docker compose --env-file .env.example -f docker-compose.yml config -q` (exit 0). This checks YAML interpolation/configuration ONLY; it does not start services, authenticate users, execute migrations, or certify production readiness.
+- Local Docker allocation was 8 CPUs and 8.27 GB RAM with 11 local Supabase developer containers already present. Do not launch a second full stack blindly or disrupt that existing developer stack.
+- Static preflight command: `py scripts/self_host_portability_inventory.py`; current result shows 118 migration SQL files, eight Edge Function entries, zero duplicate migration versions and zero obvious hardcoded `*.supabase.co` runtime URLs in scanned file classes. Static findings do not rule out hidden managed dependencies or prove migrations run.
+- New preflight unit tests: `py -m unittest scripts.tests.test_self_host_portability_inventory -v` => 2/2 PASS. The full PR CI on this new documentation/tooling change is a separate remote check.
