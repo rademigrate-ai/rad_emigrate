@@ -54,3 +54,15 @@ References: [PostgreSQL 17 LOCK](https://www.postgresql.org/docs/17/sql-lock.htm
 Fresh read-only inspection confirms PostgreSQL 17.11, the same role/catalog restriction and retained 72 migrations/745 heads/747 revisions/zero publications. The release remains blocked. Follow the response-incorporation checklist in [FINAL_EMPLOYER_DEPLOY_READINESS.md](FINAL_EMPLOYER_DEPLOY_READINESS.md): authenticate the actual ticket/response reference, classify its decision, bind the exact supported role/lock/function scope, obtain separate complete no-Restore acceptance, rehearse managed restrictions/failures, then refresh exact release authorization and fingerprints. Neither submission nor provider lock guidance supplies the independent full no-Restore decision.
 
 Final candidate commit/hashes must be rebound from the new private `backend-activation-resolution-20261104/FINAL_EMPLOYER_DEPLOY_READINESS.json` receipt before actual acceptance. Official support process: https://supabase.com/support-policy. Do not incur charges or upgrade a plan without explicit authorization.
+
+## Prepared supplement after submission — NOT SENT
+
+The closing read-only fingerprint found three newly visible triggers on `storage.buckets`, increasing the captured public/private/auth/storage trigger inventory from 39 to 42. The other 27 captured metadata dimensions remain unchanged. At `2026-11-04T15:05:33Z`, the bucket and trigger functions are owned by `supabase_storage_admin`; all three triggers are enabled. No attribution, approval or harmlessness is inferred from ownership alone. Please reconcile this managed-state change and its implications for the complete no-Restore failure procedure before any release acceptance. No trigger or Storage security was modified by this task.
+
+| Added trigger | Function | Function definition SHA-256 |
+|---|---|---|
+| `protect_active_lifecycle_states` | `storage.protect_active_lifecycle_states()` | `4fac38099dbf93ff30f9221abe6cb65aa40559fd529142eea567fbeb17333d82` |
+| `wake_lifecycle_on_policy_write` | `storage.wake_lifecycle_state()` | `f3833a33d3a145ae4adeb51ac688fcebd58fe060b95f536d1e88b498628e5a96` |
+| `wake_lifecycle_on_versioning_enable` | `storage.wake_lifecycle_state()` | `f3833a33d3a145ae4adeb51ac688fcebd58fe060b95f536d1e88b498628e5a96` |
+
+Both functions are SECURITY DEFINER with `search_path=pg_catalog`. Only metadata/hashes were captured, not provider function source. Preserve both pre-change and closing fingerprints; do not edit prior receipts to conceal drift. This supplement was prepared after the owner-confirmed original submission and awaits the real ticket reference for a legitimate follow-up.
