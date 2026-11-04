@@ -38,7 +38,7 @@ FORWARD_MIGRATIONS = [
     ("20261020114612_rad_transport_contract_registry_alignment.sql", "8ae61793f441ade43a7bfc9fb37f22ff1817a2fd6014c9c8d0a1e152cd1b81f4"),
     ("20261020115539_rad_leased_research_base_contract.sql", "8c13fa85d06a6f57d28c90bc676a5cab57ad6da3e7f19fcad50c054973238129"),
     ("20261020123523_rad_explicit_service_profile_bootstrap.sql", "569ac10dc29dc1cec17b45b3ab885f4d728fc202c99b165f394aaa228d4344d4"),
-    ("20261020192732_rad_revoke_client_nonrow_table_privileges.sql", "5d7dfc6f38181431ed4203c1529fbb9b8764d0f89234891c5ab41e5c05e510f3"),
+    ("20261020192732_rad_revoke_client_nonrow_table_privileges.sql", "68dd3188f8bc998e7af906da0f909493fad9e884b40a00df54833957f63a7470"),
     ("20261021210337_rad_cms_admin_draft_reads.sql", "63bb109c7b7d1ae57a4fdcf2c8394828601644004d94fe032705a33d3cc2b021"),
 ]
 
