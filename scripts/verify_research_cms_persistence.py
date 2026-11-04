@@ -23,6 +23,15 @@ import verify_local_auth_isolation as auth
 
 
 def sql(statement: str) -> str:
+    if os.environ.get("RAD_SELF_HOST_TEST_ROOT"):
+        from self_host_stack import sql as stack_sql
+        from self_host_test_target import target_root
+
+        return (
+            stack_sql(target_root(), statement.encode("utf8"))
+            .stdout.decode("utf8")
+            .strip()
+        )
     command = ["supabase", "status", "--output", "json"]
     if os.name == "nt":
         command = ["cmd.exe", "/d", "/s", "/c", *command]

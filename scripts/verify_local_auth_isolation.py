@@ -31,6 +31,10 @@ def require(condition: bool, label: str) -> None:
 
 
 def load_local_keys() -> tuple[str, str, str]:
+    if os.environ.get("RAD_SELF_HOST_TEST_ROOT"):
+        from self_host_test_target import load_target
+
+        return load_target()
     supabase_command = ["supabase"]
     if os.name == "nt":
         # Windows CreateProcess cannot execute .cmd shims directly. Resolve

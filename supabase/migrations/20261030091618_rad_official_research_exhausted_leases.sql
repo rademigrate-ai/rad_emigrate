@@ -26,4 +26,7 @@ end $$;
 alter function public.claim_official_research_job() owner to postgres;
 revoke all on function public.claim_official_research_job() from public,anon,authenticated;
 grant execute on function public.claim_official_research_job() to service_role;
+-- SECURITY DEFINER runs as the function owner (postgres), who otherwise has no
+-- row access here. Grant exactly what the body uses: no INSERT/DELETE/TRUNCATE.
+grant select,update on private.rad_research_jobs to postgres;
 commit;

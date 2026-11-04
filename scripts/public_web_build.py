@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from scripts.staging_environment import legacy_public_claims
+from scripts.staging_environment import PRIVATE_BUILD_VARIABLES, legacy_public_claims
 
 PRODUCTION = "inshddthftkhcdosoqcn"
 SECRET = re.compile(
@@ -21,6 +21,8 @@ JWT = re.compile(rb"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,
 
 
 def validate_environment(values):
+    if values.get("BACKEND_KIND") == "self_hosted":
+        return validate_self_hosted_environment(values)
     environment = values.get("APP_ENV", "production")
     parsed = urlsplit(values.get("SUPABASE_URL", ""))
     if (
@@ -58,6 +60,48 @@ def validate_environment(values):
     }
 
 
+def validate_self_hosted_environment(values):
+    """Explicit owner-selected origin binding; never silently replace a cloud target."""
+    origin = values.get("SUPABASE_URL", "")
+    parsed = urlsplit(origin)
+    environment = values.get("APP_ENV", "production")
+    local = environment == "development" and parsed.hostname in (
+        "127.0.0.1",
+        "localhost",
+        "::1",
+    )
+    if (
+        environment not in ("production", "staging", "development")
+        or not parsed.hostname
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.query
+        or parsed.fragment
+        or parsed.path
+        or (parsed.scheme != "https" and not (local and parsed.scheme == "http"))
+        or origin != values.get("EXPECTED_SELF_HOST_ORIGIN")
+        or parsed.hostname.endswith(".supabase.co")
+    ):
+        raise ValueError("explicit_canonical_self_host_origin_required")
+    if any(values.get(name) for name in PRIVATE_BUILD_VARIABLES):
+        raise ValueError("backend_secret_not_allowed_in_web_build_environment")
+    key = values.get("SUPABASE_PUBLISHABLE_KEY") or values.get("SUPABASE_ANON_KEY", "")
+    if re.fullmatch(r"sb_publishable_[A-Za-z0-9_-]{20,200}", key):
+        kind = "publishable"
+    else:
+        claims = legacy_public_claims(key)
+        if claims.get("role") != "anon" or claims.get("ref"):
+            raise ValueError("self_host_public_anon_key_required")
+        kind = "legacy_anon"
+    return {
+        "environment": environment,
+        "project": "self_hosted",
+        "origin": origin,
+        "public_key_kind": kind,
+        "backend_kind": "self_hosted",
+    }
+
+
 def verify_artifact(directory, values, expected_commit):
     config = validate_environment(values)
     if not re.fullmatch(r"[a-f0-9]{40}", expected_commit):
@@ -72,7 +116,12 @@ def verify_artifact(directory, values, expected_commit):
     if config["origin"].encode() not in main or key.encode() not in main:
         raise ValueError("compiled_public_configuration_not_found")
     origins = set(re.findall(rb"https://[a-z0-9-]+\.supabase\.co", main))
-    if origins != {config["origin"].encode()}:
+    expected_origins = (
+        set()
+        if config.get("backend_kind") == "self_hosted"
+        else {config["origin"].encode()}
+    )
+    if origins != expected_origins:
         raise ValueError("unexpected_supabase_origin_in_bundle")
     files = {}
     for path in sorted(directory.rglob("*")):
@@ -83,7 +132,12 @@ def verify_artifact(directory, values, expected_commit):
             raise ValueError("credential_pattern_in_artifact:" + path.name)
         for match in JWT.finditer(data):
             claims = legacy_public_claims(match.group().decode())
-            if claims.get("role") != "anon" or claims.get("ref") != config["project"]:
+            wrong_target = (
+                match.group().decode() != key
+                if config.get("backend_kind") == "self_hosted"
+                else claims.get("ref") != config["project"]
+            )
+            if claims.get("role") != "anon" or wrong_target:
                 raise ValueError(
                     "nonpublic_or_wrong_project_jwt_in_artifact:" + path.name
                 )

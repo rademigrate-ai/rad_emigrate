@@ -19,6 +19,64 @@ def token(role="anon", project=PRODUCTION):
 
 
 class PublicWebBuildTest(unittest.TestCase):
+    def test_self_host_requires_explicit_origin_and_only_public_keys(self):
+        settings = self.values() | {
+            "BACKEND_KIND": "self_hosted",
+            "SUPABASE_URL": "https://api.rad.example",
+            "EXPECTED_SELF_HOST_ORIGIN": "https://api.rad.example",
+        }
+        self.assertEqual(validate_environment(settings)["project"], "self_hosted")
+        for change in (
+            {"EXPECTED_SELF_HOST_ORIGIN": "https://different.example"},
+            {"SUPABASE_URL": "http://api.rad.example"},
+            {"SUPABASE_URL": "https://u@api.rad.example"},
+            {"SUPABASE_URL": f"https://{PRODUCTION}.supabase.co"},
+            {"OPENAI_API_KEY": "fixture-server-only"},
+            {"SUPABASE_PUBLISHABLE_KEY": token("service_role", None)},
+            {"SUPABASE_PUBLISHABLE_KEY": token()},
+        ):
+            with self.subTest(change=list(change)), self.assertRaises(ValueError):
+                validate_environment(settings | change)
+        local = settings | {
+            "APP_ENV": "development",
+            "SUPABASE_URL": "http://127.0.0.1:58000",
+            "EXPECTED_SELF_HOST_ORIGIN": "http://127.0.0.1:58000",
+            "SUPABASE_PUBLISHABLE_KEY": token(project=None),
+        }
+        self.assertEqual(validate_environment(local)["public_key_kind"], "legacy_anon")
+        with self.assertRaises(ValueError):
+            validate_environment(local | {"APP_ENV": "production"})
+
+    def test_self_host_artifact_refuses_cloud_dependency_or_extra_jwt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.fixture(root)
+            settings = self.values() | {
+                "BACKEND_KIND": "self_hosted",
+                "SUPABASE_URL": "https://api.rad.example",
+                "EXPECTED_SELF_HOST_ORIGIN": "https://api.rad.example",
+            }
+            main = root / "main.dart.js"
+            main.write_text(
+                settings["SUPABASE_URL"] + " " + settings["SUPABASE_PUBLISHABLE_KEY"],
+                encoding="utf8",
+            )
+            self.assertEqual(
+                verify_artifact(root, settings, "a" * 40)["privileged_key_scan"], "PASS"
+            )
+            main.write_text(
+                main.read_text("utf8") + " https://other.supabase.co", encoding="utf8"
+            )
+            with self.assertRaisesRegex(ValueError, "unexpected_supabase_origin"):
+                verify_artifact(root, settings, "a" * 40)
+            main.write_text(
+                settings["SUPABASE_URL"] + " " + settings["SUPABASE_PUBLISHABLE_KEY"],
+                encoding="utf8",
+            )
+            (root / "extra.json").write_text(token(project=None), encoding="utf8")
+            with self.assertRaisesRegex(ValueError, "nonpublic_or_wrong_project_jwt"):
+                verify_artifact(root, settings, "a" * 40)
+
     def values(self):
         return {
             "APP_ENV": "production",
