@@ -1,0 +1,32 @@
+{
+  "artifact": "RAD self-hosted encrypted snapshot and fresh-target restore drill",
+  "captured_utc": "2026-11-05T02:58:11.526500+00:00",
+  "status": "RESTORE_DRILL_PASSED_ON_SEPARATE_TARGET",
+  "repo_commit": "15c721d0a66e89e10b480ff546f47d0adb3b8e4d",
+  "scope_limitation": "Disposable loopback stacks only. Proves the snapshot/restore mechanism and that data plus authenticated behaviour survive a restore onto a separate target with the identical PostgreSQL image digest. NOT a production backup policy: no scheduling, no rotation, no offsite copy, no restore onto different hardware or a different image, and no PITR.",
+  "source_stack": "rad-selfhost-acceptance-f-20261105",
+  "target_stack": "rad-selfhost-restore-r-20261105",
+  "postgres_image_digest": "supabase/postgres@sha256:f371b5f3f2ac0a05703f33d6e6134515fb2498cab708fb948a0aeb7481467c00",
+  "encryption": "GPG symmetric AES256, passphrase file stored outside both the install and snapshot directories",
+  "snapshot_file_sha256": {
+    "configuration.tar.gpg": "598cdb33600db07319f68748662b25f94d589084eb8608558ace6091be8ece3e",
+    "db-config.tar.gpg": "9a5ef01368c7284c254b7fab60b379c467fe7be44074eb77ffb61586f2892ef1",
+    "db-data.tar.gpg": "bdf095582b70dba00a67ec2d899d48ee191e148478fe4fedd92fc6034dc16423",
+    "storage-data.tar.gpg": "05bb92343007c62a39a16d0326faf150ead0d1f1e27e5907f5a181f55dedaabc"
+  },
+  "verified_identical_after_restore": {
+    "migration_count": "118",
+    "migration_ledger_md5_over_version_and_hash": "e01df3bbeea7cbe2913b0a2da218c3ad",
+    "auth_users": "10",
+    "seeded_marker_user_survived": "restore-drill-20261105@example.invalid",
+    "public_tables": "85",
+    "private_tables": "53"
+  },
+  "suites_passed_against_restored_instance": [
+    "scripts/verify_local_auth_isolation.py (two-user Auth, login/logout, RLS, Storage ownership, atomic AI quota 16/50, human Feed publication)",
+    "scripts/verify_self_host_storage_gates.py (signed-URL expiry/replay, MIME and size refusals, anonymous denial)",
+    "scripts/verify_self_host_password_recovery.py (mailbox-verified credential change)"
+  ],
+  "defect_found_and_fixed": "self_host_snapshot.py passed Windows-style paths to a POSIX gpg build (Git for Windows), which treated them as relative and failed to create its homedir or read the passphrase file. The tool correctly refused the resulting incomplete archive rather than accepting it. Fixed by rendering paths per gpg build (gpg_path).",
+  "source_stack_intact_after_snapshot": true
+}

@@ -98,13 +98,19 @@ Those were application-level decisions, not managed-platform workarounds.
 
 ---
 
-## 5. Backup and restore — the blocking gap
+## 5. Backup and restore — drill passed, policy still missing
 
-`scripts/self_host_snapshot.py` exists and supports GPG-encrypted snapshot/restore with an
-independently stored key, and its guard tests pass. **But no verified restore drill has been
-performed**, and ledger item 09 remains BLOCKED on exactly this.
+**A restore drill has now passed** — see
+`SELF_HOSTED_RESTORE_DRILL_20261105.json`. An encrypted cold snapshot of a populated stack was
+restored onto a *separate* empty target; the migration ledger md5, table and user counts and a
+deliberately seeded marker row all came back identical, and all three verification suites
+(Auth/RLS/Storage, Storage gates, mailbox recovery) pass against the restored instance. The
+drill also surfaced and fixed a real defect: the tool handed Windows-style paths to a POSIX gpg
+build, which failed — and the tool correctly refused the incomplete archive rather than
+accepting it.
 
-Two constraints from the tool's own contract, both load-bearing for production planning:
+That materially de-risks recovery, but it is **not yet a production backup policy**. Two
+constraints from the tool's own contract remain load-bearing for production planning:
 
 - Snapshots are **physical** PostgreSQL copies, so a restore requires the *exact same image
   digest and CPU architecture*. Pin and record the image digest alongside every snapshot, or
@@ -113,16 +119,22 @@ Two constraints from the tool's own contract, both load-bearing for production p
   separately reviewed operator wrapper — a snapshot command that only ever runs by hand is not
   a backup policy.
 
-Before any production deploy is accepted:
+Still required before a production deploy is accepted, none of which the drill covered:
 
-1. Take a snapshot of a populated stack.
-2. Restore it into a **separate, empty** stack — never over the source.
-3. Verify the restored database matches: migration ledger count and hashes, row counts on key
-   tables, and a working authenticated journey against the restored instance.
-4. Record the result, with the snapshot's hash and the restore's duration.
+1. **An operator wrapper** providing scheduling, retention/rotation and an encrypted offsite
+   copy, with the passphrase stored separately from the snapshots (the drill kept it outside
+   both the install and snapshot directories; production needs a secret manager).
+2. **A restore rehearsal on the production host itself**, since the drill ran on one machine —
+   cross-hardware restore is untested.
+3. **A decision on PITR.** Physical snapshots give recovery to the snapshot instant only. If
+   the release needs point-in-time recovery, that is WAL archiving and a separate design, not
+   this tool.
+4. **Repeat the drill against the production image digest** whenever it changes; a snapshot is
+   only restorable onto the same digest.
 
-Until that drill is done and recorded, treat the deployment as having **no proven recovery
-path**, and do not migrate real user data onto it.
+Until an operator wrapper and an on-host rehearsal exist, treat the deployment as having a
+**proven mechanism but no operational recovery guarantee**, and do not migrate real user data
+onto it.
 
 ---
 
@@ -144,7 +156,8 @@ path**, and do not migrate real user data onto it.
 9. Run the verification suites against the deployed instance (they take
    `RAD_SELF_HOST_TEST_ROOT`; adapt for a remote target — **they currently assume a loopback
    install and will need work for a remote host**).
-10. Perform the §5 restore drill **before** any real data is loaded.
+10. Rehearse snapshot and restore **on this host**, against its own image digest, **before** any
+    real data is loaded — the §5 drill proves the mechanism, not this machine.
 11. Configure the AI provider per `AI_PROVIDER_RECOMMENDATION_20261105.md`, with its hard
     spending cap set first.
 

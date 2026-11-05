@@ -7,8 +7,29 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.self_host_snapshot import backup, restore
+from scripts.self_host_snapshot import backup, gpg_path, restore
 from scripts.self_host_stack import MARKER, compose, migrate, prepare
+
+
+class GpgPathTests(unittest.TestCase):
+    """A POSIX gpg build cannot parse a Windows drive path as an argument.
+
+    It treats `D:\\...` as relative, prepends the cwd, then fails to create its
+    homedir or read the passphrase file -- which silently broke every snapshot
+    on Windows until the path was rendered per build.
+    """
+
+    def test_posix_gpg_receives_a_posix_path(self):
+        rendered = gpg_path("/usr/bin/gpg", Path("D:/RAD/key.pass"))
+        if Path("D:/RAD/key.pass").resolve().drive:
+            self.assertTrue(rendered.startswith("/d/"), rendered)
+            self.assertNotIn("\\", rendered)
+            self.assertNotIn(":", rendered)
+
+    def test_native_gpg_keeps_the_platform_path(self):
+        target = Path("D:/RAD/key.pass")
+        rendered = gpg_path(r"C:\Program Files\GnuPG\bin\gpg.exe", target)
+        self.assertEqual(rendered, str(target.resolve()))
 
 
 class SelfHostStackTests(unittest.TestCase):

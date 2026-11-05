@@ -33,6 +33,23 @@ def digest(path: Path) -> str:
     return h.hexdigest()
 
 
+def gpg_path(binary: str, path: Path) -> str:
+    """Render a path the way the selected gpg build will actually parse it.
+
+    A POSIX gpg (MSYS2/Git for Windows) cannot read a `D:\\...` argument: it
+    treats it as relative, prepends the cwd and fails to create its homedir or
+    read the passphrase file. Hand such builds an `/d/...` path instead.
+    """
+    resolved = path.resolve()
+    posix_build = Path(binary).as_posix().lower().startswith(("/usr/", "/bin/")) or (
+        "/usr/bin/" in Path(binary).as_posix().lower()
+    )
+    if posix_build and resolved.drive:
+        drive = resolved.drive.rstrip(":").lower()
+        return "/" + drive + resolved.as_posix()[len(resolved.drive) :]
+    return str(resolved)
+
+
 def gpg_command(binary: str, key_file: Path, decrypt: bool = False) -> list[str]:
     if not key_file.is_file() or key_file.stat().st_size < 32:
         raise ValueError("private high-entropy snapshot passphrase reference required")
@@ -42,14 +59,14 @@ def gpg_command(binary: str, key_file: Path, decrypt: bool = False) -> list[str]
         binary,
         "--no-options",
         "--homedir",
-        str(state),
+        gpg_path(binary, state),
         "--batch",
         "--yes",
         "--no-tty",
         "--pinentry-mode",
         "loopback",
         "--passphrase-file",
-        str(key_file.resolve()),
+        gpg_path(binary, key_file),
         *(
             ["--decrypt"]
             if decrypt
@@ -194,7 +211,7 @@ def restore(root: Path, snapshot: Path, key_file: Path, binary: str) -> dict:
     # Authenticate every ciphertext before creating even one target volume.
     for name in names:
         checked = subprocess.run(
-            [*decrypt, str(snapshot / name)],
+            [*decrypt, gpg_path(binary, snapshot / name)],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
@@ -214,7 +231,7 @@ def restore(root: Path, snapshot: Path, key_file: Path, binary: str) -> dict:
             ]
         )
         producer = subprocess.Popen(
-            [*decrypt, str(snapshot / (volume + ".tar.gpg"))],
+            [*decrypt, gpg_path(binary, snapshot / (volume + ".tar.gpg"))],
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
         )
@@ -232,7 +249,7 @@ def restore(root: Path, snapshot: Path, key_file: Path, binary: str) -> dict:
             )
     # DB role passwords/JWT/Vault keys must match the captured cluster. Preserve
     # new loopback URL/port routing but restore its original service credentials.
-    plain = run([*decrypt, str(snapshot / "configuration.tar.gpg")]).stdout
+    plain = run([*decrypt, gpg_path(binary, snapshot / "configuration.tar.gpg")]).stdout
     with tarfile.open(fileobj=io.BytesIO(plain)) as archive:
         source_env = archive.extractfile(".env").read().decode("utf8")
     current = dict(
