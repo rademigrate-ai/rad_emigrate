@@ -47,9 +47,26 @@ begin
           where oid='public.document_deletion_receipts'::regclass),
     'receipts must have RLS enabled';
 
-  -- A non-owner cannot request deletion of someone else's document.
+  -- RLS on public.documents must not make a registered object invisible
+  -- to the Storage deletion guard. A non-owner can never bypass registration.
   perform set_config('request.jwt.claims',
     '{"sub":"7a000000-0000-4000-8000-000000000002","role":"authenticated"}', true);
+  assert public.rad_document_storage_registered(
+    '7a000000-0000-4000-8000-000000000001/f.pdf'),
+    'Storage registration check must work even when the row is hidden by RLS';
+  assert not public.rad_document_storage_registered(
+    '7a000000-0000-4000-8000-000000000001/never-uploaded.pdf');
+  assert has_function_privilege('authenticated',
+    'public.rad_document_storage_registered(text)', 'EXECUTE');
+  assert not has_function_privilege('anon',
+    'public.rad_document_storage_registered(text)', 'EXECUTE');
+  assert (select pg_catalog.pg_get_expr(polqual, polrelid) like
+    '%rad_document_storage_registered%' from pg_policy
+    where polrelid='storage.objects'::regclass
+      and polname='documents storage delete own'),
+    'direct Storage delete must check all registered document references';
+
+  -- A non-owner cannot request deletion of someone else's document.
   begin
     perform public.request_document_deletion('7a000000-0000-4000-8000-0000000000a1');
     raise exception 'FAIL non-owner deletion request accepted';

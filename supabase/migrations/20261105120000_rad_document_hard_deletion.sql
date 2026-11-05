@@ -336,18 +336,27 @@ alter policy "documents storage update own" on storage.objects
   );
 
 -- A registered document must use the audited two-phase delete API, not a
--- direct Storage DELETE that leaves a dangling documents row. Unregistered
--- uploads may still be discarded by their uploader.
+-- direct Storage DELETE that leaves a dangling documents row. An ordinary
+-- subquery on public.documents would be RLS-filtered and could miss a record
+-- that the current Storage owner no longer has permission to view.
+create or replace function public.rad_document_storage_registered(p_object_path text)
+returns boolean language sql stable security definer set search_path='' as $$
+  select exists (
+    select 1 from public.documents d where d.file_path = p_object_path
+  )
+$$;
+alter function public.rad_document_storage_registered(text) owner to postgres;
+revoke all on function public.rad_document_storage_registered(text) from public, anon;
+grant execute on function public.rad_document_storage_registered(text)
+  to authenticated, service_role;
+
+-- Unregistered uploads may still be discarded by their uploader; registered
+-- objects are always subject to the audited service-only cleanup path.
 alter policy "documents storage delete own" on storage.objects
   using (
     bucket_id = 'documents'
     and (storage.foldername(name))[1] = (select auth.uid())::text
     and not public.rad_document_storage_pending(name)
-    and not exists (
-      -- Qualified outer reference is essential: an unqualified name resolves
-      -- to public.documents.name, not storage.objects.name.
-      select 1 from public.documents d
-      where d.file_path = storage.objects.name
-    )
+    and not public.rad_document_storage_registered(name)
   );
 commit;
