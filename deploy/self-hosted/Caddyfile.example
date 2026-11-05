@@ -7,6 +7,8 @@ api.rad.example {
         Referrer-Policy "no-referrer"
         X-Content-Type-Options "nosniff"
     }
+    @storage path /storage/v1/*
+    header @storage Cache-Control "private, no-store, max-age=0"
     reverse_proxy 127.0.0.1:58900
 }
 

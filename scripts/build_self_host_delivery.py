@@ -31,6 +31,8 @@ OPERATOR_FILES = (
     "verify_research_cms_persistence.py",
     "verify_self_host_web_e2e.py",
     "measure_self_host_acceptance.py",
+    "verify_self_host_token_expiry.py",
+    "verify_pr82_appointment_e2e.py",
 )
 
 

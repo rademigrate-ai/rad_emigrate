@@ -36,14 +36,19 @@ python scripts/self_host_stack.py migrate --root <new-root>
 python scripts/self_host_stack.py status --root <new-root>
 ```
 
-Require 119 applied migration entries with matching file hashes, healthy services,
+Require 120 applied migration entries (the original 119 plus owner conversation history) with matching file hashes, healthy services,
 private `documents` bucket (10 MiB; PDF/JPEG/PNG), RLS and the real API suites.
 Auth and Storage initialize their official schemas before RAD migrations run.
+Preparation also applies the reviewed Storage response no-store header and writes
+`STORAGE_GATEWAY_PRIVACY.json`. Confirm its template hash and the real signed-GET
+header; upload metadata alone was insufficient on the pinned release. This policy
+currently covers every Storage response. Review any future public-media caching
+exception separately; keep private document responses no-store.
 Do not substitute an empty PostgreSQL instance without those foundations.
 Execute all `supabase/tests/*.sql` before adding runtime fixtures. Tests roll back;
 several assert clean fixture counts. Then set `RAD_SELF_HOST_TEST_ROOT` privately
 and run Auth isolation, document deletion (with `RAD_SELF_HOST_TEST_DISPATCHER=1`),
-Storage gates, mailbox recovery, OTP sessions and Research/CMS persistence scripts.
+Storage gates, mailbox recovery, OTP sessions, natural token expiry, named appointment RPC acceptance and Research/CMS persistence scripts.
 These scripts intentionally refuse hosted targets. Do not relax their checks to
 test a deployed Production service.
 
@@ -82,6 +87,9 @@ Create the named initial administrator through normal Auth signup/confirmation.
 Verify that identity out of band, then use a restricted database operator session
 to promote only that exact profile UUID. Check `current_user`, UUID/email and role
 before the transaction; record an approval and audit receipt without credentials.
+The existing audited role trigger requires the trusted service bootstrap role;
+an ordinary client or an unclassified SQL session cannot promote a profile. Use
+the approved restricted server bootstrap path, then verify normal admin login.
 Never promote all users, infer privilege from editable Auth metadata or ship a
 bootstrap account/password. Verify an ordinary user cannot open `/admin` or invoke
 admin RPCs, then log in normally as the administrator.

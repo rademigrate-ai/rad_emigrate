@@ -73,6 +73,12 @@ New client uploads request `max-age=0` to require cache revalidation instead of
 the SDK's one-hour default. This does not rewrite older objects' metadata or
 erase a previously downloaded response. Verify the actual response headers in
 the release browser test and again through the eventual proxy.
+The pinned self-hosted Storage route did not emit a Cache-Control header for a
+signed GET even when object metadata contained `max-age=0`. The installer now
+adds `Cache-Control: private, no-store, max-age=0` on all Storage gateway responses,
+preserving the existing route rewrite and authentication filters. Preparation
+records the original/installed template hashes and refuses an unknown upstream
+route. The operator Caddy template keeps the same private no-store policy.
 Downloaded files and browser memory cannot be remotely erased. Loopback HTTP
 tests do not certify a future CDN or proxy cache; test its headers and purge
 behavior before making stronger deployment guarantees.

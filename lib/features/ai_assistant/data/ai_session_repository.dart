@@ -6,12 +6,14 @@ class AiSession {
     required this.userId,
     required this.questionCount,
     required this.createdAt,
+    this.title,
   });
 
   final String id;
   final String userId;
   final int questionCount;
   final DateTime createdAt;
+  final String? title;
 }
 
 class AiSessionMessage {
@@ -37,6 +39,59 @@ class AiSessionRepository {
 
   static const int _sessionPageSize = 40;
   static const int _messagePageSize = 200;
+
+  void _requireOwner(String userId) {
+    if (!_service.isInitialized ||
+        _service.client.auth.currentUser?.id != userId) {
+      throw StateError('Private conversation session required');
+    }
+  }
+
+  Future<AiSession> renameSession({
+    required String sessionId,
+    required String userId,
+    required String title,
+    String scope = 'user',
+  }) async {
+    _requireOwner(userId);
+    final value = title.trim();
+    if (value.isEmpty ||
+        value.runes.length > 120 ||
+        !{'user', 'admin'}.contains(scope)) {
+      throw ArgumentError('Invalid conversation title or scope');
+    }
+    final row = await _service.client
+        .from('ai_sessions')
+        .update({'title': value})
+        .eq('id', sessionId)
+        .eq('user_id', userId)
+        .eq('scope', scope)
+        .select()
+        .single();
+    _requireOwner(userId);
+    return _sessionFromRow(row);
+  }
+
+  Future<void> deleteSession({
+    required String sessionId,
+    required String userId,
+    String scope = 'user',
+  }) async {
+    _requireOwner(userId);
+    if (!{'user', 'admin'}.contains(scope))
+      throw ArgumentError('Invalid conversation scope');
+    final rows = await _service.client
+        .from('ai_sessions')
+        .delete()
+        .eq('id', sessionId)
+        .eq('user_id', userId)
+        .eq('scope', scope)
+        .select('id');
+    _requireOwner(userId);
+    if (rows.length != 1 || rows.single['id'] != sessionId) {
+      throw StateError('Conversation deletion was not acknowledged');
+    }
+  }
 
   Future<AiSession> createSession(
     String userId, {
@@ -119,6 +174,7 @@ class AiSessionRepository {
     userId: row['user_id'] as String,
     questionCount: row['question_count'] as int? ?? 0,
     createdAt: DateTime.parse(row['created_at'].toString()),
+    title: row['title'] as String?,
   );
 
   AiSessionMessage _messageFromRow(Map<String, dynamic> row) =>

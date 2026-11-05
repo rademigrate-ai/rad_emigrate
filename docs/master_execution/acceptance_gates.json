@@ -1,7 +1,7 @@
 {
-  "date": "2026-10-31",
+  "date": "2026-11-05",
   "source": "docs/RAD_47_TASK_MASTER_LEDGER.md",
-  "scope": "All original 47 gates retained; historical evidence explicitly separated from current verification.",
+  "scope": "All47 original gates retained. Fresh independent backend and local release browser evidence do not certify managed Production, employer acceptance or scope exclusion.",
   "objectives": {
     "A": {
       "status": "IN_PROGRESS",
@@ -24,9 +24,21 @@
       "current_evidence": [
         "docs/master_execution/live_baseline.json",
         "docs/master_execution/live_refresh_20261030.json",
-        "docs/master_execution/integrity_and_lineage.json"
+        "docs/master_execution/integrity_and_lineage.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Documentary acceptance only; does not certify feature or release readiness."
+      "remaining": "No new runtime claim; existing dated read-only inventory is retained.",
+      "original_requirement": "Inventory baseline captured, source and read-only Production counts traceable (documentary acceptance).",
+      "missing_implementation_or_decision": "No new runtime claim; existing dated read-only inventory is retained.",
+      "missing_tests": "None for the documentary inventory criterion.",
+      "required_backend": "Dated metadata inventory; no Production mutation.",
+      "required_ui": "None: documentary gate.",
+      "required_authorization": "Read-only inventory access.",
+      "actual_acceptance_result": "Documentary/isolated-source criterion verified only.",
+      "existing_tests": [
+        "scripts/tests/test_audit_migration_ledger_readonly.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 2,
@@ -36,8 +48,22 @@
       "acceptance": "Test every registered route/control in web/mobile/admin, language, errors, keyboard, protected routes and regression cases against a deployed release SHA.",
       "implementation": "`lib/core/routing/app_router.dart`; `test/core/app_router_protected_routes_matrix_test.dart`",
       "historical_evidence": "PR #68 (14 tests) + route audit matrix (20 tests) PASS locally (546 Flutter tests total); deployed web release E2E outstanding.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Admin shell now fails closed for every /admin path; full route/control coverage still needs execution.",
+      "original_requirement": "Test every registered route/control in web/mobile/admin, language, errors, keyboard, protected routes and regression cases against a deployed release SHA.",
+      "missing_implementation_or_decision": "Admin shell now fails closed for every /admin path; full route/control coverage still needs execution.",
+      "missing_tests": "All registered routes, slow/expired sessions and physical-device input against one reviewed release.",
+      "required_backend": "Auth/RLS and role-scoped RPCs.",
+      "required_ui": "All web/mobile/admin routes and controls.",
+      "required_authorization": "Normal user, consultant, admin, super-admin and anonymous matrices.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Admin shell now fails closed for every /admin path; full route/control coverage still needs execution.",
+      "existing_tests": [
+        "test/core/app_router_protected_routes_matrix_test.dart",
+        "scripts/verify_self_host_web_e2e.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 3,
@@ -49,9 +75,21 @@
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
         "docs/master_execution/acceptance_gates.json",
-        "docs/RAD_MASTER_EXECUTION_LEDGER.md"
+        "docs/RAD_MASTER_EXECUTION_LEDGER.md",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Documentary acceptance only; does not certify feature or release readiness."
+      "remaining": "All 47 original requirements retained with separate implementation, test and decision fields.",
+      "original_requirement": "Map all 47 original gates to implementation files and acceptance evidence without claiming their runtime completion.",
+      "missing_implementation_or_decision": "All 47 original requirements retained with separate implementation, test and decision fields.",
+      "missing_tests": "None for documentary traceability; feature acceptance stays separate.",
+      "required_backend": "Per-row backend mapping below.",
+      "required_ui": "Per-row UI mapping below.",
+      "required_authorization": "No scope exclusions or sign-offs invented.",
+      "actual_acceptance_result": "Documentary/isolated-source criterion verified only.",
+      "existing_tests": [
+        "scripts/tests/test_master_47_delivery_ledger.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 4,
@@ -61,21 +99,46 @@
       "acceptance": "Owner-approved Release A/B written scope and feature freeze with named sign-off.",
       "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Owner-approved Release A/B scope and named sign-off remain unavailable; no scope exclusions invented."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Named owner must approve Release A/B scope and freeze.",
+      "original_requirement": "Owner-approved Release A/B written scope and feature freeze with named sign-off.",
+      "missing_implementation_or_decision": "Named owner must approve Release A/B scope and freeze.",
+      "missing_tests": "Review the concrete release matrix and record named sign-off.",
+      "required_backend": "Approved backend release inventory.",
+      "required_ui": "Approved client/admin scope.",
+      "required_authorization": "Owner scope authorization.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Named owner must approve Release A/B scope and freeze.",
+      "existing_tests": [],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 5,
       "gate": "E1-01 reconcile PR #48/#56 with main (review/integration PASS; production release NO-GO)",
       "historical_status": "VERIFIED_PASS",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED_PASS",
       "acceptance": "Review/integrate Stage 1 PR #48/#56 in isolated replay with clean-schema and negative guards; does not include Production rollout.",
       "implementation": "`supabase/reconciliation/security_regression.sql`; `scripts/verify_clean_schema.sh`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/native/acceptance.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/native/acceptance.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Isolated source integration/reconstruction evidence exists; final exact-SHA CI and hosted rollout remain separate."
+      "remaining": "Isolated integration and migration reconstruction pass; Production rollout is not part of this PASS.",
+      "original_requirement": "Review/integrate Stage 1 PR #48/#56 in isolated replay with clean-schema and negative guards; does not include Production rollout.",
+      "missing_implementation_or_decision": "Isolated integration and migration reconstruction pass; Production rollout is not part of this PASS.",
+      "missing_tests": "No remaining isolated source-integration test; final CI must remain green.",
+      "required_backend": "clean-schema and migration-reconstruction CI.",
+      "required_ui": "Not a UI delivery gate.",
+      "required_authorization": "No merge or Production authority inferred.",
+      "actual_acceptance_result": "Documentary/isolated-source criterion verified only.",
+      "existing_tests": [
+        "scripts/tests/test_phase_a_security.py",
+        "scripts/verify_clean_schema.sh",
+        "scripts/verify_migration_reconstruction.sh"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 6,
@@ -85,58 +148,126 @@
       "acceptance": "Prove all 47 live historical migrations' original SQL/catalog/DML effects, reconcile 16 timestamp aliases and 4 live-only with repo-only; rehearse forward-only rollout with verified restore.",
       "implementation": "`docs/SUPABASE_MIGRATION_LINEAGE_RECONCILIATION.md`; `scripts/verify_migration_reconstruction.sh`",
       "historical_evidence": "PR #65 + #66: 47 live / 52 repo; 27 exact, 16 timestamp aliases, 4 live-only and 9 repo-only; SQL fingerprint differences unresolved.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "original_requirement": "Prove all 47 live historical migrations' original SQL/catalog/DML effects, reconcile 16 timestamp aliases and 4 live-only with repo-only; rehearse forward-only rollout with verified restore.",
+      "missing_implementation_or_decision": "Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "missing_tests": "Environment-matched managed forward rehearsal and independently accepted recovery procedure.",
+      "required_backend": "Historical catalog/DML lineage plus current migration ledger.",
+      "required_ui": "Operator inventory/reconciliation review.",
+      "required_authorization": "Provider/operator protected execution and explicit managed mutation approval.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "existing_tests": [
+        "scripts/tests/test_live_migration_sql_fingerprints.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 7,
       "gate": "E1-03 RLS cross-role/adversarial tests",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Exercise two-user/anon/admin/service JWTs for table, RPC and Storage access, including malicious cross-owner writes on production-equivalent clone.",
       "implementation": "`scripts/verify_local_auth_isolation.py`; `supabase/reconciliation/security_regression.sql`",
       "historical_evidence": "PR #48 + #67 isolated Postgres tests 7/7 CI; live Stage 1 migration not applied.",
       "current_evidence": [
         "_audit/RAD_MASTER_EXECUTION_20261029/native/test_rad_privacy_security.log",
-        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-populated-reader-receipt.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-populated-reader-receipt.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Local negative-role/catalog evidence only; Production-equivalent restore and deployed permissions still unverified."
+      "remaining": "Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "original_requirement": "Exercise two-user/anon/admin/service JWTs for table, RPC and Storage access, including malicious cross-owner writes on production-equivalent clone.",
+      "missing_implementation_or_decision": "Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "missing_tests": "Repeat environment-specific grants/policies on the eventual approved target.",
+      "required_backend": "RLS, role-scoped RPCs and private Storage.",
+      "required_ui": "Owner-bound client and restricted admin pages.",
+      "required_authorization": "Anonymous, two ordinary identities, admin/super-admin/service boundaries.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "existing_tests": [
+        "scripts/verify_local_auth_isolation.py",
+        "supabase/tests/rad_privacy_security.sql",
+        "supabase/tests/ai_entitlement_rpc_privacy.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 8,
       "gate": "E1-04 SECURITY DEFINER privilege audit",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Inventory each SECURITY DEFINER function, grants, safe search_path and role spoofing; verify on deployed schema.",
       "implementation": "`docs/SECURITY_DEFINER_PRIVILEGE_AUDIT_20261018.md`; `scripts/tests/test_security_definer_audit.py`",
       "historical_evidence": "64/64 functions audited; 100% have search_path pinned; public execute revoked in stage9/stage1 migrations; live production rollout pending.",
       "current_evidence": [
         "scripts/master_preflight.sql",
-        "docs/master_execution/live_baseline.json"
+        "docs/master_execution/live_baseline.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Local negative-role/catalog evidence only; Production-equivalent restore and deployed permissions still unverified."
+      "remaining": "Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "original_requirement": "Inventory each SECURITY DEFINER function, grants, safe search_path and role spoofing; verify on deployed schema.",
+      "missing_implementation_or_decision": "Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "missing_tests": "Final operator-owned target inventory and full effective privilege review.",
+      "required_backend": "SECURITY DEFINER ownership, execute ACLs and fixed search paths.",
+      "required_ui": "Admin privileged controls gated by trusted server role.",
+      "required_authorization": "Client spoofing denied; service/bootstrap grants kept server-side.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "existing_tests": [
+        "supabase/tests/local47_definer_acl.sql",
+        "supabase/tests/pr82_function_defaults.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 9,
       "gate": "E1-05 Auth/storage/abuse/backup security hardening",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
       "implementation": "`docs/AUTH_ARCHITECTURE.md`; `docs/ANDROID_RELEASE.md`",
       "historical_evidence": "PR #58 recovery path, #61 private documents; no mailbox or live two-user verification, PITR evidence missing.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "original_requirement": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
+      "missing_implementation_or_decision": "Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "missing_tests": "Container finding reachability/remediation; PITR/offsite/RPO-RTO and production edge abuse tests.",
+      "required_backend": "Auth, private Storage, recovery, image security and encrypted backup.",
+      "required_ui": "Recovery errors and document lifecycle UI.",
+      "required_authorization": "Owner/operator recovery policy and secret handling.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "existing_tests": [
+        "scripts/verify_self_host_password_recovery.py",
+        "scripts/verify_self_host_storage_gates.py",
+        "scripts/tests/test_self_host_stack.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 10,
       "gate": "E1-06 FK/query performance remediation",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Resolve true uncovered FK indexes using measured EXPLAIN/workload; verify performance without speculative regressions.",
       "implementation": "`supabase/migrations/20261018210000_stage10_covering_fk_indexes_completion.sql`; `scripts/tests/test_stage10_fk_indexes.py`",
       "historical_evidence": "Covering partial B-tree indexes staged for knowledge_claims.superseded_by, consultation_requests.assigned_to, and consultation_requests.related_application_id.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Targeted index/query regressions pass; small fixture timing is not a representative production workload.",
+      "original_requirement": "Resolve true uncovered FK indexes using measured EXPLAIN/workload; verify performance without speculative regressions.",
+      "missing_implementation_or_decision": "Targeted index/query regressions pass; small fixture timing is not a representative production workload.",
+      "missing_tests": "EXPLAIN and sustained workload at realistic case/content volume.",
+      "required_backend": "FK/index and search-query remediation.",
+      "required_ui": "Search/dashboard latency and errors.",
+      "required_authorization": "Queries must retain RLS and least privilege.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Targeted index/query regressions pass; small fixture timing is not a representative production workload.",
+      "existing_tests": [
+        "supabase/tests/rad_search_performance.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 11,
@@ -146,30 +277,72 @@
       "acceptance": "Validate real configured provider credentials/routing in approved non-production environment and successful user/admin calls.",
       "implementation": "`lib/features/admin/data/admin_ai_config_repository.dart`; `supabase/functions/ai-orchestrator/handler.ts`",
       "historical_evidence": "Production AI 10 succeeded / 49 total; 27 no_eligible_model; two providers credential_rejected, one degraded.",
-      "current_evidence": [],
-      "remaining": "Production search-provider registry was empty and deployed AI v11 bundle lacked Web Search; stale provider health is not fresh acceptance. No paid calls authorized."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "No approved live AI credential, provider privacy approval or spend cap. Existing server adapters remain fail closed.",
+      "original_requirement": "Validate real configured provider credentials/routing in approved non-production environment and successful user/admin calls.",
+      "missing_implementation_or_decision": "No approved live AI credential, provider privacy approval or spend cap. Existing server adapters remain fail closed.",
+      "missing_tests": "Approved real provider health and normal user/admin success; no fabricated responses.",
+      "required_backend": "Server provider adapters and Vault configuration.",
+      "required_ui": "AI configuration and user/admin assistants.",
+      "required_authorization": "Named provider/budget/privacy authorization; no paid call performed.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: No approved live AI credential, provider privacy approval or spend cap. Existing server adapters remain fail closed.",
+      "existing_tests": [
+        "supabase/functions/tests"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 12,
       "gate": "E2-02 AI models eligibility & discovery",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Prove candidate model eligibility, discovery, scopes, cooldown and failure recovery via stable provider fixtures and operational observations.",
       "implementation": "`lib/features/admin/presentation/pages/admin_ai_config_page.dart`; `docs/AI_ENTITLEMENT_CONTRACT.md`",
       "historical_evidence": "721 models (641 nominal available chat); 83 chat models at degraded Kiraai; operational request success not established.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Discovery, eligibility, scope/cooldown and provider parser fixtures pass.",
+      "original_requirement": "Prove candidate model eligibility, discovery, scopes, cooldown and failure recovery via stable provider fixtures and operational observations.",
+      "missing_implementation_or_decision": "Discovery, eligibility, scope/cooldown and provider parser fixtures pass.",
+      "missing_tests": "Operational discovery/recovery against an approved live provider.",
+      "required_backend": "Model catalog/discovery and routing eligibility.",
+      "required_ui": "Admin model selection/health.",
+      "required_authorization": "Admin-only configuration; client never receives provider keys.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Discovery, eligibility, scope/cooldown and provider parser fixtures pass.",
+      "existing_tests": [
+        "test/acceptance/stage1_ai_research_completion_test.dart",
+        "supabase/functions/tests"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 13,
       "gate": "E2-03 atomic quotas and concurrency",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Race-test five-question limit and atomic quota reservation under concurrent requests, then verify live deployment compatibility.",
       "implementation": "`supabase/functions/ai-orchestrator/handler.ts`; `docs/AI_ENTITLEMENT_CONTRACT.md`",
       "historical_evidence": "Phase A atomic quota SQL staged in main, not deployed; concurrency regression only on disposable database.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "original_requirement": "Race-test five-question limit and atomic quota reservation under concurrent requests, then verify live deployment compatibility.",
+      "missing_implementation_or_decision": "Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "missing_tests": "Eventual target compatibility and approved charged completion/settlement.",
+      "required_backend": "Atomic entitlement/quota reservation and settlement.",
+      "required_ui": "Honest quota and failure states.",
+      "required_authorization": "Server-owned limits; ordinary users cannot write entitlements.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "existing_tests": [
+        "scripts/verify_local_auth_isolation.py",
+        "supabase/tests/rad_quota_security.sql",
+        "test/acceptance/admin_ai_quota_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 14,
@@ -179,32 +352,72 @@
       "acceptance": "Evaluate immigration answers against approved RAD/official citations, stale/missing/conflicting evidence, localization and prompt-injection negatives.",
       "implementation": "`supabase/functions/ai-orchestrator/knowledge_grounding.ts`; `supabase/functions/tests/knowledge_grounding_test.ts`",
       "historical_evidence": "Grounded evaluation implemented: open conflict detection, fail-closed insufficient evidence without unapproved items, URL sanitization, and 12 unit tests PASS.",
-      "current_evidence": [],
-      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Grounding, missing/conflicting evidence and prompt boundary regressions pass; approved current answer evaluation is incomplete.",
+      "original_requirement": "Evaluate immigration answers against approved RAD/official citations, stale/missing/conflicting evidence, localization and prompt-injection negatives.",
+      "missing_implementation_or_decision": "Grounding, missing/conflicting evidence and prompt boundary regressions pass; approved current answer evaluation is incomplete.",
+      "missing_tests": "Independent bilingual factual/citation review with approved current sources and provider.",
+      "required_backend": "Evidence retrieval, grounding and source integrity.",
+      "required_ui": "Sources, refusals and uncertainty in assistant answers.",
+      "required_authorization": "No synthetic evidence promoted to immigration authority.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Grounding, missing/conflicting evidence and prompt boundary regressions pass; approved current answer evaluation is incomplete.",
+      "existing_tests": [
+        "test/acceptance/ai_safety_grounding_test.dart",
+        "supabase/functions/tests/knowledge_grounding_test.ts"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 15,
       "gate": "E2-05 AI observability/security/cost",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Prove request logs, redaction, latency, provider error taxonomy, cost accounting and admin security visibility.",
       "implementation": "`docs/FINAL_SECURITY_ACCEPTANCE.md`; `docs/RELEASE_READINESS_MATRIX.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "No paid provider calls authorized; offline fixtures and stale operational records cannot prove fresh live provider acceptance."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "original_requirement": "Prove request logs, redaction, latency, provider error taxonomy, cost accounting and admin security visibility.",
+      "missing_implementation_or_decision": "Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "missing_tests": "Real provider billing reconciliation, operational incident alerts and cost accuracy.",
+      "required_backend": "Privacy-safe AI request accounting/health.",
+      "required_ui": "Admin diagnostics and safe client failures.",
+      "required_authorization": "Admin visibility, budget owner and telemetry retention approval.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "existing_tests": [
+        "supabase/tests/local47_observability.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 16,
       "gate": "E3-01 RAD source ingestion and snapshots",
       "historical_status": "IN_PROGRESS",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Evidence current RAD three-site ingestion and snapshots with source URI/provenance, freshness, deduplication and safe retrieval.",
       "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `supabase/functions/research-sync/index.ts`",
       "historical_evidence": "research-sync Edge source exists; actual three-site inventory and source freshness not accepted.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/content/FINAL_CONTENT_VERDICT.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/FINAL_CONTENT_VERDICT.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "All captured blocks locally preserved and 1,098 destinations reconciled;421 URLs unresolved and hosted/application receipts incomplete."
+      "remaining": "Existing sealed three-site corpus and provenance retained; no crawling restarted or source material invented.",
+      "original_requirement": "Evidence current RAD three-site ingestion and snapshots with source URI/provenance, freshness, deduplication and safe retrieval.",
+      "missing_implementation_or_decision": "Existing sealed three-site corpus and provenance retained; no crawling restarted or source material invented.",
+      "missing_tests": "Current three-site completeness/freshness and source-owner/editorial acceptance.",
+      "required_backend": "Tracked RAD source capture/composition and provenance.",
+      "required_ui": "Source review and draft readers.",
+      "required_authorization": "RADMohajer remains standalone; protected archival/source rules retained.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Existing sealed three-site corpus and provenance retained; no crawling restarted or source material invented.",
+      "existing_tests": [
+        "tools/content_consolidation",
+        "tools/content_completion"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 17,
@@ -215,20 +428,48 @@
       "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `docs/KNOWLEDGE_RETRIEVAL_CONTRACT.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/research-live/receipt.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/research-live/receipt.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Authority binding, snapshot hashes and conflict/review contracts exist.",
+      "original_requirement": "Verify authoritative institutional/government sources, conflicts, revisions, currency and independent human assessment.",
+      "missing_implementation_or_decision": "Authority binding, snapshot hashes and conflict/review contracts exist.",
+      "missing_tests": "Genuine verified authority records and independent current-content assessment.",
+      "required_backend": "Official source bindings, evidence, revisions and conflict records.",
+      "required_ui": "Evidence/conflict review UI.",
+      "required_authorization": "Human authority verification; no URL-only trust inference.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Authority binding, snapshot hashes and conflict/review contracts exist.",
+      "existing_tests": [
+        "supabase/tests/rad_official_evidence.sql",
+        "supabase/tests/rad_bound_authority_lock.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 18,
-      "gate": "E3-03 finding→draft→human approval→Feed",
+      "gate": "E3-03 finding\u2192draft\u2192human approval\u2192Feed",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
-      "acceptance": "Execute finding → review draft → approval → publication with no direct AI/Research Feed write, audits and negative role tests.",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
+      "acceptance": "Execute finding \u2192 review draft \u2192 approval \u2192 publication with no direct AI/Research Feed write, audits and negative role tests.",
       "implementation": "`lib/features/feed`; `supabase/functions/research-sync/index.ts`",
       "historical_evidence": "Live read-only JOIN: all 16 findings map 1:1 to 16 distinct drafts, all in review, zero duplicates and zero Feed. Merged #67 tests human publishing in isolated DB; live human guard remains absent.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Real authenticated source-bound proposal/review/unpublished CMS draft and re-login recovery pass; explicit synthetic Feed publication passes separately.",
+      "original_requirement": "Execute finding \u2192 review draft \u2192 approval \u2192 publication with no direct AI/Research Feed write, audits and negative role tests.",
+      "missing_implementation_or_decision": "Real authenticated source-bound proposal/review/unpublished CMS draft and re-login recovery pass; explicit synthetic Feed publication passes separately.",
+      "missing_tests": "Single complete browser finding-to-review-to-explicit-publication journey on synthetic data.",
+      "required_backend": "Research proposals, reviews, revision ancestry and human publication RPCs.",
+      "required_ui": "Research comparison/editor and explicit publication controls.",
+      "required_authorization": "No AI/service automatic publication; separate human editorial action.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real authenticated source-bound proposal/review/unpublished CMS draft and re-login recovery pass; explicit synthetic Feed publication passes separately.",
+      "existing_tests": [
+        "scripts/verify_research_cms_persistence.py",
+        "test/acceptance/no_ai_research_auto_publish_test.dart",
+        "supabase/tests/stage7_research_review.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 19,
@@ -238,19 +479,44 @@
       "acceptance": "Have authorized human editor review all actual Production draft candidates with verified sources and disposition; no auto-approval.",
       "implementation": "`lib/features/admin`; `lib/features/feed`",
       "historical_evidence": "All 16 Production drafts have linked distinct research findings and status=review; no draft published. Each still requires independent authoritative human editorial disposition.",
-      "current_evidence": [],
-      "remaining": "Actual Production drafts require authorized human source review and disposition; no automated approval or publication."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Actual managed editorial candidates require authorized human source/disposition review; historical count16 is not asserted current.",
+      "original_requirement": "Have authorized human editor review all actual Production draft candidates with verified sources and disposition; no auto-approval.",
+      "missing_implementation_or_decision": "Actual managed editorial candidates require authorized human source/disposition review; historical count16 is not asserted current.",
+      "missing_tests": "Named editor dispositions for the real candidate inventory.",
+      "required_backend": "Existing real findings/drafts and audit history.",
+      "required_ui": "Admin source/editorial review.",
+      "required_authorization": "Human editorial approval; no live content published.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Actual managed editorial candidates require authorized human source/disposition review; historical count16 is not asserted current.",
+      "existing_tests": [],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 20,
       "gate": "E3-05 bilingual Visa catalog evidence-backed completion",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Populate bilingual Visa program/step/requirements only from verified RAD/official evidence and human editorial approval.",
       "implementation": "`lib/features/visa`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
       "historical_evidence": "22 destinations, 10 programs and 18 steps; regulatory sources/approval outstanding.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Draft corpus/composition is preserved; current facts, media rights and unresolved versions are not cleared.",
+      "original_requirement": "Populate bilingual Visa program/step/requirements only from verified RAD/official evidence and human editorial approval.",
+      "missing_implementation_or_decision": "Draft corpus/composition is preserved; current facts, media rights and unresolved versions are not cleared.",
+      "missing_tests": "Bilingual source-by-source editorial/rights acceptance and actual target readback.",
+      "required_backend": "Visa revisions, translations, source ancestry and publication heads.",
+      "required_ui": "Bilingual program/step/requirement readers.",
+      "required_authorization": "No invented translations/facts; no bulk publication authorization.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Draft corpus/composition is preserved; current facts, media rights and unresolved versions are not cleared.",
+      "existing_tests": [
+        "supabase/tests/visa_country_discovery_coverage.sql",
+        "supabase/tests/stage5_visa_integrity.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 21,
@@ -260,36 +526,79 @@
       "acceptance": "Verify localized search, FAQ, Feed bookmarks, filters, retries and empty states across real browser/viewport matrix.",
       "implementation": "`lib/features/visa`; `lib/features/feed`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Published-only discovery/search and per-user interaction regressions pass.",
+      "original_requirement": "Verify localized search, FAQ, Feed bookmarks, filters, retries and empty states across real browser/viewport matrix.",
+      "missing_implementation_or_decision": "Published-only discovery/search and per-user interaction regressions pass.",
+      "missing_tests": "Real browser bilingual search/FAQ/bookmark/filter/retry matrix.",
+      "required_backend": "Published catalog/search/feed and owner saved/read rows.",
+      "required_ui": "Visa/Feed search, filters, FAQ and bookmarks.",
+      "required_authorization": "Draft privacy and owner-scoped writes.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Published-only discovery/search and per-user interaction regressions pass.",
+      "existing_tests": [
+        "supabase/tests/rad_interactions.sql",
+        "test/core/reference_fidelity_flow_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 22,
       "gate": "E4-01 Auth/OTP/recovery/deep-links E2E",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Verify signup, login, OTP, recovery email/deep-link, password change, expiration/session persistence in controlled test mailbox.",
       "implementation": "`lib/features/auth`; `docs/AUTH_ARCHITECTURE.md`",
       "historical_evidence": "#58 and #68 auth UI/widget tests; no verified mailbox or live password recovery credential change.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
+      "original_requirement": "Verify signup, login, OTP, recovery email/deep-link, password change, expiration/session persistence in controlled test mailbox.",
+      "missing_implementation_or_decision": "J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
+      "missing_tests": "Actual Flutter emailed recovery deep-link and phone OTP; natural3600-second access expiry not waited out.",
+      "required_backend": "Official Auth with real disposable SMTP mailbox.",
+      "required_ui": "Register/login/OTP/recovery/deep-link screens.",
+      "required_authorization": "Synthetic accounts only; phone provider requires external setup.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
+      "existing_tests": [
+        "scripts/verify_self_host_otp_sessions.py",
+        "scripts/verify_self_host_password_recovery.py",
+        "test/acceptance/auth_redirect_acceptance_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 23,
       "gate": "E4-02 consultation intake/admin E2E",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Verify complete consultation intake, admin role matrix and status/history with isolated two-user and negative access checks.",
       "implementation": "`lib/features/consultation`; `lib/features/admin`",
       "historical_evidence": "#64 consultation client compatibility and #68 widget tests; current Production Stage1 consultation RPCs absent.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Real browser consultation creation and database persistence pass; real API role/status tests pass.",
+      "original_requirement": "Verify complete consultation intake, admin role matrix and status/history with isolated two-user and negative access checks.",
+      "missing_implementation_or_decision": "Real browser consultation creation and database persistence pass; real API role/status tests pass.",
+      "missing_tests": "Finish browser admin visibility/status-history journey and complete input/error matrix.",
+      "required_backend": "Consultation intake/list/update RPCs and audits.",
+      "required_ui": "Client request and admin consultation queue.",
+      "required_authorization": "Two-user isolation; admin/super-admin allowed, ordinary update denied.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real browser consultation creation and database persistence pass; real API role/status tests pass.",
+      "existing_tests": [
+        "scripts/verify_local_auth_isolation.py",
+        "scripts/verify_self_host_web_e2e.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 24,
       "gate": "E4-03 applications/documents/private storage E2E",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "BLOCKED_OWNER_APPROVAL",
       "acceptance": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
       "implementation": "`lib/features/applications`; `lib/features/documents`",
       "historical_evidence": "#61 owner-bound preview and URL cache tests; real 2-user Storage/E2E outstanding.",
@@ -298,9 +607,25 @@
         "supabase/tests/rad_document_hard_deletion.sql",
         "scripts/verify_self_host_document_deletion.py",
         "supabase/functions/tests/document_deletion_test.ts",
-        "scripts/reconcile_self_host_storage_orphans.py"
+        "scripts/reconcile_self_host_storage_orphans.py",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Two-user independent Storage deletion and immutable receipt verified on owned disposable Stack F; signed URL expiry/replay, full document UI E2E, lawful retention period/holds and final release deployment remain unverified. Do not mark gate PASS."
+      "remaining": "Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
+      "original_requirement": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
+      "missing_implementation_or_decision": "Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
+      "missing_tests": "Owner acceptance of bearer replay window, lawful duration/clock/holds precedence, backup erasure and eventual proxy cache behavior.",
+      "required_backend": "Private documents/Storage, deletion queue/Edge worker, receipts and retention report.",
+      "required_ui": "Applications and upload/preview/pending/retrying/completed document states.",
+      "required_authorization": "Owner/admin individual erasure; no timed purge or Production worker activation.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
+      "existing_tests": [
+        "scripts/verify_self_host_document_deletion.py",
+        "scripts/verify_self_host_storage_gates.py",
+        "supabase/tests/rad_document_deletion_operations.sql",
+        "supabase/tests/rad_document_hard_deletion.sql",
+        "scripts/tests/test_document_retention_policy.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 25,
@@ -311,9 +636,23 @@
       "implementation": "`lib/features/admin`; `docs/FINAL_SECURITY_ACCEPTANCE.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/native/test_stage71_rich_review.log"
+        "_audit/RAD_MASTER_EXECUTION_20261029/native/test_stage71_rich_review.log",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "All admin routes now gate mounting on trusted server role; real-router user/consultant/admin/super tests pass.",
+      "original_requirement": "Validate admin bootstrap, assign roles, privilege escalation denial, all audited admin RPCs and actual UI actions.",
+      "missing_implementation_or_decision": "All admin routes now gate mounting on trusted server role; real-router user/consultant/admin/super tests pass.",
+      "missing_tests": "Actual UI bootstrap/role assignment/audit for every privileged operation and nested loading/error case.",
+      "required_backend": "Audited role changes and admin-only RPCs.",
+      "required_ui": "Admin shell, user/case/content/provider administration.",
+      "required_authorization": "No privilege from editable Auth metadata; service bootstrap only for named synthetic fixtures.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: All admin routes now gate mounting on trusted server role; real-router user/consultant/admin/super tests pass.",
+      "existing_tests": [
+        "test/core/app_router_protected_routes_matrix_test.dart",
+        "test/acceptance/admin_role_authorization_test.dart",
+        "supabase/tests/pr82_profile_bootstrap.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 26,
@@ -324,105 +663,223 @@
       "implementation": "`lib/core/theme`; `lib/core/l10n`",
       "historical_evidence": "#68 dedicated Antigravity UI/UX PR, separate worktree, tested own HEAD but not integrated/deployed.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log"
+        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
+      "original_requirement": "Verify RTL/LTR icons, theme/locale persistence, accessible focus/announcements, reduced motion, keyboard across viewports.",
+      "missing_implementation_or_decision": "Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
+      "missing_tests": "Whole-app focus/announcements, contrast, reduced motion, themes and touch-device acceptance.",
+      "required_backend": "Persisted locale/theme and Auth-bound state.",
+      "required_ui": "RTL/LTR layouts, themes, keyboard and assistive technology.",
+      "required_authorization": "No data or session retained across unauthorized identity changes.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
+      "existing_tests": [
+        "test/visual_qa_smoke_test.dart",
+        "scripts/verify_self_host_web_e2e.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 27,
       "gate": "E5-01 CRM lifecycle",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Persist consultation CRM lifecycle, ownership handoff and statuses, retries, audit and failure states.",
       "implementation": "`lib/features/consultation`; `lib/features/admin`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Consultation/CRM lifecycle and audit SQL contracts pass.",
+      "original_requirement": "Persist consultation CRM lifecycle, ownership handoff and statuses, retries, audit and failure states.",
+      "missing_implementation_or_decision": "Consultation/CRM lifecycle and audit SQL contracts pass.",
+      "missing_tests": "Full staff handoff/status/retry browser journey and notification delivery.",
+      "required_backend": "CRM ownership/status/audit persistence.",
+      "required_ui": "Client/admin lifecycle and failure states.",
+      "required_authorization": "Authorized staff handoff; owner-scope client reads.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Consultation/CRM lifecycle and audit SQL contracts pass.",
+      "existing_tests": [
+        "supabase/tests/local47_crm_notifications.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 28,
       "gate": "E5-02 notifications email/SMS/push preferences",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Confirm notification opt-in preferences, sandbox email/SMS/push transports, retries, failures and privacy.",
       "implementation": "`lib/features/notifications`; `lib/features/profile`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Existing dispatch creates sandbox receipts only; real email/SMS/push transports and delivery acceptance are not certified."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "original_requirement": "Confirm notification opt-in preferences, sandbox email/SMS/push transports, retries, failures and privacy.",
+      "missing_implementation_or_decision": "Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "missing_tests": "Approved sandbox transports, retry/failure delivery, opt-in and privacy E2E.",
+      "required_backend": "Notifications/preferences and dispatch queue.",
+      "required_ui": "Inbox/read state and channel preferences.",
+      "required_authorization": "Explicit opt-in, approved provider credentials and no live messaging.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "existing_tests": [
+        "supabase/tests/local47_crm_notifications.sql",
+        "test/features/notifications/notifications_page_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 29,
       "gate": "E5-03 saved/read/user activity",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Validate bookmarks/read marks and user activity persistence, per-user isolation, undo/duplicate resilience.",
       "implementation": "`lib/features/feed`; `lib/features/dashboard`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Saved/read owner isolation and duplicate resilience are covered by SQL/Flutter regressions.",
+      "original_requirement": "Validate bookmarks/read marks and user activity persistence, per-user isolation, undo/duplicate resilience.",
+      "missing_implementation_or_decision": "Saved/read owner isolation and duplicate resilience are covered by SQL/Flutter regressions.",
+      "missing_tests": "Normal two-user browser save/read/undo and re-login persistence.",
+      "required_backend": "Saved Feed/read/activity rows and RLS.",
+      "required_ui": "Feed bookmarks/read state/activity.",
+      "required_authorization": "Verified current actor before and after private reads.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Saved/read owner isolation and duplicate resilience are covered by SQL/Flutter regressions.",
+      "existing_tests": [
+        "supabase/tests/rad_interactions.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 30,
       "gate": "E5-04 business/AI/research dashboards",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Verify live business/AI/research dashboards, honest counts, accessible charts, least privilege and stale/error states.",
       "implementation": "`lib/features/dashboard`; `docs/RELEASE_READINESS_MATRIX.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log"
+        "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Dashboard widgets and safe diagnostic/state tests pass; browser client dashboard is rendered.",
+      "original_requirement": "Verify live business/AI/research dashboards, honest counts, accessible charts, least privilege and stale/error states.",
+      "missing_implementation_or_decision": "Dashboard widgets and safe diagnostic/state tests pass; browser client dashboard is rendered.",
+      "missing_tests": "All admin dashboards with real counts, stale/error states and accessible charts.",
+      "required_backend": "Business/AI/research aggregates and least-privilege RPCs.",
+      "required_ui": "Client/admin dashboards and honest counts.",
+      "required_authorization": "Role-scoped aggregates; no secret diagnostic fields.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Dashboard widgets and safe diagnostic/state tests pass; browser client dashboard is rendered.",
+      "existing_tests": [
+        "supabase/tests/local47_observability.sql",
+        "scripts/verify_self_host_web_e2e.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 31,
       "gate": "E6-01 immutable release SHA & rollback",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Pin immutable Git SHA in deployed web release, retrieve/verify release artifact and rehearse rollback.",
       "implementation": "`docs/WEB_RELEASE.md`; `docs/ANDROID_RELEASE.md`",
       "historical_evidence": "Live Render deploy SHA 449cd3b6cb0a0b53e852015ad4a3648bd817ad65 differs from main; autoDeploy OFF.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "original_requirement": "Pin immutable Git SHA in deployed web release, retrieve/verify release artifact and rehearse rollback.",
+      "missing_implementation_or_decision": "Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "missing_tests": "Deployed immutable release/rollback receipt on approved host.",
+      "required_backend": "Reproducible source/image manifest and release artifacts.",
+      "required_ui": "version.json/SPA fallback and cache policy.",
+      "required_authorization": "Owner deployment and rollback authorization.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "existing_tests": [
+        "scripts/tests/test_public_web_build.py",
+        "scripts/tests/test_self_host_delivery.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 32,
       "gate": "E6-02 browser/viewport/language matrix",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_OWNER_APPROVAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Manual/automated real-browser EN/FA desktop/tablet/mobile matrix with viewport, input, contrast and navigation evidence.",
       "implementation": "`docs/UI_UX_ROUTE_ACCEPTANCE.md`; `docs/CORRECTIVE_FEATURE_ACCEPTANCE_MATRIX.md`",
       "historical_evidence": "#68 mocks/widget tests; no real-browser acceptance report for deployed current main.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/browser-existing-local/report.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/browser-existing-local/report.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Owner explicitly deferred browser E2E despite Docker recovery. Preparation and unit/native integration checks are not a browser PASS."
+      "remaining": "Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "original_requirement": "Manual/automated real-browser EN/FA desktop/tablet/mobile matrix with viewport, input, contrast and navigation evidence.",
+      "missing_implementation_or_decision": "Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "missing_tests": "Whole-app language/viewport/input/contrast/navigation matrix.",
+      "required_backend": "Live disposable backend with normal Auth.",
+      "required_ui": "EN/FA390/768/1440 browser matrix.",
+      "required_authorization": "Authorized synthetic sessions; no real user cookies/tokens extracted.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "existing_tests": [
+        "scripts/verify_self_host_web_e2e.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 33,
       "gate": "E6-03 native Android/iOS release & real devices",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_OWNER_APPROVAL",
+      "status": "BLOCKED_EXTERNAL",
       "acceptance": "Build/sign/release Android and iOS identities with authorized keystores/Xcode and real physical device acceptance.",
       "implementation": "`docs/ANDROID_RELEASE.md`; `docs/IOS_RELEASE.md`",
       "historical_evidence": "GitHub Android build CI success; iOS signing, stores and physical devices blocked.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/build-artifacts.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/build-artifacts.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Web release and Android debug builds PASS; permanent identities, owner signing, iOS Xcode/stores and real devices outstanding."
+      "remaining": "Android debug build passes CI; release identity guard correctly refuses placeholder packaging.",
+      "original_requirement": "Build/sign/release Android and iOS identities with authorized keystores/Xcode and real physical device acceptance.",
+      "missing_implementation_or_decision": "Android debug build passes CI; release identity guard correctly refuses placeholder packaging.",
+      "missing_tests": "Approved Android identity/keystore, Xcode/iOS signing and physical Android/iOS devices.",
+      "required_backend": "Approved platform identity/signing and runtime backend.",
+      "required_ui": "Native device input/accessibility/recovery.",
+      "required_authorization": "Owner store/signing accounts; no signing secrets created.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Android debug build passes CI; release identity guard correctly refuses placeholder packaging.",
+      "existing_tests": [
+        ".github/workflows/ci.yml"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 34,
       "gate": "E6-04 load/security/backup/SLO/UAT",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
       "implementation": "`docs/FINAL_RELEASE_MATRIX.md`; `docs/FINAL_SECURITY_ACCEPTANCE.md`",
       "historical_evidence": "Security isolated database CI success; no verified PITR restore, SLO/load or real-client UAT.",
       "current_evidence": [
-        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-rehearsal/rehearsal-receipt.json"
+        "_audit/RAD_MASTER_EXECUTION_20261029/content/native-rehearsal/rehearsal-receipt.json",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "original_requirement": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
+      "missing_implementation_or_decision": "Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "missing_tests": "Sustained Linux load/SLO/alerts, high/critical container triage, PITR/offsite recovery and client UAT.",
+      "required_backend": "Performance/security/recovery/monitoring stack.",
+      "required_ui": "Error/loading/retry journeys and UAT.",
+      "required_authorization": "Operator SLO/RPO-RTO and named employer acceptance.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "existing_tests": [
+        "scripts/measure_self_host_acceptance.py",
+        "scripts/tests/test_self_host_stack.py",
+        "scripts/tests/test_self_host_startup.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 35,
@@ -432,8 +889,21 @@
       "acceptance": "Owner and client sign Release A handover using immutable artefacts, documentation and support/rollback.",
       "implementation": "`docs/RELEASE_EXTERNAL_DEPENDENCIES.md`; `docs/FINAL_RELEASE_MATRIX.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Concrete operator runbook and reproducible package preparation exist.",
+      "original_requirement": "Owner and client sign Release A handover using immutable artefacts, documentation and support/rollback.",
+      "missing_implementation_or_decision": "Concrete operator runbook and reproducible package preparation exist.",
+      "missing_tests": "Named Release A handover, support/training and rollback acceptance.",
+      "required_backend": "Immutable operator delivery and supported recovery.",
+      "required_ui": "Employer UAT and release artifact review.",
+      "required_authorization": "Owner/client sign-off; no handover acceptance invented.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Concrete operator runbook and reproducible package preparation exist.",
+      "existing_tests": [
+        "scripts/tests/test_self_host_delivery.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 36,
@@ -443,41 +913,94 @@
       "acceptance": "Select licensed approved payment provider, merchant account, terms/tax/store compliance and supported geography.",
       "implementation": "`docs/PAYMENT_PRODUCTION_READINESS.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Merchant/provider/store contract absent from available evidence; no real charges authorized.",
-      "current_evidence": [],
-      "remaining": "Commercial provider, merchant approval and geography/store/tax terms require owner configuration; payment-sandbox is not live payment readiness."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Payment sandbox contract does not choose a merchant/provider, prices or geography.",
+      "original_requirement": "Select licensed approved payment provider, merchant account, terms/tax/store compliance and supported geography.",
+      "missing_implementation_or_decision": "Payment sandbox contract does not choose a merchant/provider, prices or geography.",
+      "missing_tests": "Approved provider/merchant/store/tax/legal decisions before live integration.",
+      "required_backend": "Licensed payment provider configuration.",
+      "required_ui": "Approved plans/checkout/terms.",
+      "required_authorization": "Owner/provider/legal approval; no payment charged.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Payment sandbox contract does not choose a merchant/provider, prices or geography.",
+      "existing_tests": [],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 37,
       "gate": "E7-02 subscriptions/billing/webhooks/taxes",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Sandbox recurring billing/payment webhook signature, replay/idempotence, cancellation/refund, audit with agreed prices/plans.",
       "implementation": "`docs/AI_ENTITLEMENT_CONTRACT.md`; `docs/PAYMENT_PRODUCTION_READINESS.md`",
       "historical_evidence": "Payment plans, billing credentials and sandbox webhook tests not independently established.",
-      "current_evidence": [],
-      "remaining": "Sandbox webhook/signature/idempotency paths exist; recurring billing, cancellation/refund and agreed live plans need actual provider acceptance."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Sandbox payment signature/idempotency primitives exist; full provider recurring billing/cancellation/refund/tax workflow is incomplete.",
+      "original_requirement": "Sandbox recurring billing/payment webhook signature, replay/idempotence, cancellation/refund, audit with agreed prices/plans.",
+      "missing_implementation_or_decision": "Sandbox payment signature/idempotency primitives exist; full provider recurring billing/cancellation/refund/tax workflow is incomplete.",
+      "missing_tests": "Agreed plans/prices and actual sandbox recurring lifecycle/replay/failure tests.",
+      "required_backend": "Recurring billing/webhook/refund/tax integration.",
+      "required_ui": "Subscription/cancellation/refund controls.",
+      "required_authorization": "Approved merchant sandbox; no financial authorization inferred.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Sandbox payment signature/idempotency primitives exist; full provider recurring billing/cancellation/refund/tax workflow is incomplete.",
+      "existing_tests": [
+        "supabase/tests/local47_payment_sandbox.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 38,
       "gate": "E7-03 entitlement financial integrity",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Prove payment-to-entitlement consistency under delayed/out-of-order webhooks, fraudulent callbacks, resets and refunds.",
       "implementation": "`docs/AI_ENTITLEMENT_CONTRACT.md`; `lib/features/ai_assistant`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Entitlement/RLS/quota and sandbox callbacks have regression coverage.",
+      "original_requirement": "Prove payment-to-entitlement consistency under delayed/out-of-order webhooks, fraudulent callbacks, resets and refunds.",
+      "missing_implementation_or_decision": "Entitlement/RLS/quota and sandbox callbacks have regression coverage.",
+      "missing_tests": "Provider-backed delayed/out-of-order/refund/reconciliation financial E2E.",
+      "required_backend": "Payment-to-entitlement settlement and audit.",
+      "required_ui": "Honest billing/entitlement state.",
+      "required_authorization": "Server-only financial grants; approved provider sandbox.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Entitlement/RLS/quota and sandbox callbacks have regression coverage.",
+      "existing_tests": [
+        "supabase/tests/local47_payment_sandbox.sql",
+        "supabase/tests/ai_entitlement_rpc_privacy.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 39,
       "gate": "E8-01 immigration profile/pathway assessment",
       "historical_status": "IN_PROGRESS",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Exercise immigration profile and pathway scoring with verified sources and no unauthorized legal guarantees.",
       "implementation": "`lib/features/profile`; `lib/features/visa`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Immigration profile validation/pathway domain/UI tests exist.",
+      "original_requirement": "Exercise immigration profile and pathway scoring with verified sources and no unauthorized legal guarantees.",
+      "missing_implementation_or_decision": "Immigration profile validation/pathway domain/UI tests exist.",
+      "missing_tests": "Normal browser persistence/error journey and independent source-backed scoring review.",
+      "required_backend": "Owner profile persistence and evidence-based assessment.",
+      "required_ui": "Immigration profile and pathway comparison.",
+      "required_authorization": "No eligibility guarantee; approved current criteria required.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Immigration profile validation/pathway domain/UI tests exist.",
+      "existing_tests": [
+        "test/profile/immigration_profile_validator_test.dart",
+        "test/profile/pathway_assessment_test.dart",
+        "test/features/profile/immigration_profile_page_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 40,
@@ -487,30 +1010,69 @@
       "acceptance": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
       "implementation": "`lib/features/applications`; `lib/features/notifications`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
+      "original_requirement": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
+      "missing_implementation_or_decision": "Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
+      "missing_tests": "Case history/checklist updates plus approved reminder transport and staff permissions.",
+      "required_backend": "Case/checklist/history and notification integration.",
+      "required_ui": "Case tracker/checklists/history/reminders.",
+      "required_authorization": "Owner/staff scope, notification consent and approved delivery.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
+      "existing_tests": [
+        "test/applications/case_checklist_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 41,
       "gate": "E8-03 OCR processing/review/privacy",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Perform OCR on synthetic files, verify minimization/retention/review/redaction and failure handling without third-party unapproved keys.",
       "implementation": "`lib/features/documents`; `supabase/functions/document-intelligence/index.ts`",
       "historical_evidence": "document-intelligence Edge source exists; Production processor disabled; synthetic file E2E pending.",
-      "current_evidence": [],
-      "remaining": "OCR transport and correction workflow exist; configured approved processor and privacy/extraction acceptance remain unverified. No paid calls performed."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Private document processing/OCR lease, stale-write and minimization regressions pass.",
+      "original_requirement": "Perform OCR on synthetic files, verify minimization/retention/review/redaction and failure handling without third-party unapproved keys.",
+      "missing_implementation_or_decision": "Private document processing/OCR lease, stale-write and minimization regressions pass.",
+      "missing_tests": "Actual approved OCR provider processing/review and human accuracy/privacy evaluation.",
+      "required_backend": "Document-intelligence worker/leases/extraction/review.",
+      "required_ui": "Processing/errors/correction and review controls.",
+      "required_authorization": "No unapproved third-party document transmission.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Private document processing/OCR lease, stale-write and minimization regressions pass.",
+      "existing_tests": [
+        "supabase/tests/local47_document_processing.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 42,
       "gate": "E8-04 CV/SOP/document generator",
       "historical_status": "IMPLEMENTED",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
       "acceptance": "Prove actual CV/SOP document generation, editable export, human review, accessibility and safe data handling.",
       "implementation": "[PR #70](https://github.com/rademigrate-ai/rad_emigrate/pull/70); `lib/features/documents/domain/document_draft_generator.dart`; `lib/features/documents/presentation/pages/document_draft_page.dart`; `test/documents/`",
       "historical_evidence": "Deterministic bilingual CV/SOP editable plain-text + explicit UTF-8 TXT export implemented; 27 focused and 512 complete Flutter tests PASS locally; zero analyzer issues. PR #70 is DRAFT/not deployed. PDF/DOCX export, physical-device UAT and user/client acceptance remain open.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Deterministic CV/SOP draft generation from user facts and editable UI exist.",
+      "original_requirement": "Prove actual CV/SOP document generation, editable export, human review, accessibility and safe data handling.",
+      "missing_implementation_or_decision": "Deterministic CV/SOP draft generation from user facts and editable UI exist.",
+      "missing_tests": "Actual browser generation/edit/export, accessibility and persistence expectations.",
+      "required_backend": "Offline deterministic draft generator; no external AI required.",
+      "required_ui": "CV/SOP editor and export.",
+      "required_authorization": "User-supplied facts and human review; no fabricated history.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Deterministic CV/SOP draft generation from user facts and editable UI exist.",
+      "existing_tests": [
+        "test/documents/document_draft_generator_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 43,
@@ -521,31 +1083,72 @@
       "implementation": "`docs/KNOWLEDGE_INGESTION_CONTRACT.md`; `docs/KNOWLEDGE_RETRIEVAL_CONTRACT.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "docs/master_execution/RESEARCH_TRANSPORT_RUNBOOK.md"
+        "docs/master_execution/RESEARCH_TRANSPORT_RUNBOOK.md",
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "remaining": "Bound authority/lease/review mechanisms exist; external research transport remains fail closed without reviewed protected egress.",
+      "original_requirement": "Verify scheduled policy changes, evidence provenance, conflict resolution/review without auto-publication.",
+      "missing_implementation_or_decision": "Bound authority/lease/review mechanisms exist; external research transport remains fail closed without reviewed protected egress.",
+      "missing_tests": "Protected egress integration, genuine bindings, scheduler failure/recovery and conflict monitor acceptance.",
+      "required_backend": "Official research worker, queue, authority bindings and egress adapter.",
+      "required_ui": "Research/conflict review and job visibility.",
+      "required_authorization": "Verified authority proofs and operator activation; never auto-publish.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Bound authority/lease/review mechanisms exist; external research transport remains fail closed without reviewed protected egress.",
+      "existing_tests": [
+        "scripts/tests/test_research_egress.py",
+        "scripts/tests/test_research_egress_http.py",
+        "supabase/tests/rad_bound_official_refresh.sql"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 44,
       "gate": "E9-02 university/scholarship/calculators",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "IN_PROGRESS",
       "acceptance": "Test verified university/scholarship discovery/calculators for valid eligibility and date/currency freshness.",
       "implementation": "`lib/features/visa`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "University comparison and cost-calculator UI/domain exist; current authoritative scholarship/eligibility dataset and freshness acceptance are incomplete.",
+      "original_requirement": "Test verified university/scholarship discovery/calculators for valid eligibility and date/currency freshness.",
+      "missing_implementation_or_decision": "University comparison and cost-calculator UI/domain exist; current authoritative scholarship/eligibility dataset and freshness acceptance are incomplete.",
+      "missing_tests": "Verified institution/date/currency data and actual calculator/discovery E2E.",
+      "required_backend": "Approved institution/scholarship/currency evidence.",
+      "required_ui": "University/scholarship comparison and calculators.",
+      "required_authorization": "No invented fees, conditions, guarantees or university claims.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: University comparison and cost-calculator UI/domain exist; current authoritative scholarship/eligibility dataset and freshness acceptance are incomplete.",
+      "existing_tests": [
+        "test/visa/university_scholarship_test.dart",
+        "test/features/cost_calculator/cost_calculator_domain_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 45,
       "gate": "E9-03 voice/multilingual handling",
       "historical_status": "BLOCKED",
-      "status": "BLOCKED_EXTERNAL",
+      "status": "NOT_IMPLEMENTED",
       "acceptance": "Validate Voice AI accessibility, language behavior, provider privacy/consent and spoken source/uncertainty representation.",
       "implementation": "`lib/features/ai_assistant`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Voice domain/state contract exists; operational STT/TTS transport, consent and device acceptance are not implemented/certified."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Only the provider-independent voice domain/state contract exists; operational STT/TTS transport and consent/device flow are missing.",
+      "original_requirement": "Validate Voice AI accessibility, language behavior, provider privacy/consent and spoken source/uncertainty representation.",
+      "missing_implementation_or_decision": "Only the provider-independent voice domain/state contract exists; operational STT/TTS transport and consent/device flow are missing.",
+      "missing_tests": "Implement approved transport/consent/privacy flow then test multilingual speech, failures and devices.",
+      "required_backend": "STT/TTS provider adapter and privacy controls.",
+      "required_ui": "Microphone consent/listening/transcript/speech and accessible alternatives.",
+      "required_authorization": "Provider/privacy/budget and user microphone consent required.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Only the provider-independent voice domain/state contract exists; operational STT/TTS transport and consent/device flow are missing.",
+      "existing_tests": [
+        "test/ai_assistant/voice_ai_contract_test.dart"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 46,
@@ -555,8 +1158,22 @@
       "acceptance": "Prove recommendations/analytics quality, measurable latency, error handling and consent/privacy boundaries.",
       "implementation": "`lib/features/dashboard`; `docs/REMAINING_PRODUCT_ROADMAP.md`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "original_requirement": "Prove recommendations/analytics quality, measurable latency, error handling and consent/privacy boundaries.",
+      "missing_implementation_or_decision": "Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "missing_tests": "Quality/consent/privacy evaluation, representative analytics and sustained performance acceptance.",
+      "required_backend": "Recommendation/analytics data and privacy-safe metrics.",
+      "required_ui": "Recommendation/dashboard charts and failure states.",
+      "required_authorization": "Named analytics purpose/consent/retention and approved evidence.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "existing_tests": [
+        "test/profile/recommendation_engine_test.dart",
+        "scripts/measure_self_host_acceptance.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
     {
       "id": 47,
@@ -566,27 +1183,51 @@
       "acceptance": "Client acceptance sign-off across all original long-tail scope, deployment, support, training and no high-severity defects.",
       "implementation": "`docs/REMAINING_PRODUCT_ROADMAP.md`; `docs/RELEASE_EXTERNAL_DEPENDENCIES.md`",
       "historical_evidence": "Full client sign-off not present; 3/47 source documentary checks accepted.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+      ],
+      "remaining": "Every original requirement remains in this ledger; mandatory implementation and acceptance gaps are not relabeled external.",
+      "original_requirement": "Client acceptance sign-off across all original long-tail scope, deployment, support, training and no high-severity defects.",
+      "missing_implementation_or_decision": "Every original requirement remains in this ledger; mandatory implementation and acceptance gaps are not relabeled external.",
+      "missing_tests": "Close engineering/security gaps and obtain actual client long-tail/UAT/support sign-off.",
+      "required_backend": "All backend/operational integrations in the approved scope.",
+      "required_ui": "All client/admin/native acceptance flows.",
+      "required_authorization": "Named owner/client acceptance; no scope exclusions invented.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Every original requirement remains in this ledger; mandatory implementation and acceptance gaps are not relabeled external.",
+      "existing_tests": [
+        "scripts/tests/test_master_47_delivery_ledger.py"
+      ],
+      "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     }
   ],
   "owner_constraints": {
     "paid_calls": false,
-    "browser_e2e": "BLOCKED_OWNER_DEFERRED; Docker recovery does not revoke the explicit hold",
+    "browser_e2e": "AUTHORIZED for owned disposable synthetic sessions by the current continuous-finalization request; historical deferral superseded.",
     "Render_deployment": "owner_only",
     "publication": "separate_human_editorial_authorization"
   },
-  "browser_e2e": "BLOCKED_OWNER_DEFERRED",
+  "browser_e2e": "IN_PROGRESS: real core journeys and EN390/768/1440 verified; final FA/admin receipt pending.",
   "production_mutation_gate": {
-    "status": "BLOCKED_EXTERNAL",
-    "reason": "Owner confirms no current approved recovery-ready Production backup/profile; historical 20261017 preservation is not current proof."
+    "status": "BLOCKED_OWNER_APPROVAL",
+    "reason": "The current task explicitly prohibits Production mutations, merge and deployment. No such action performed."
   },
   "allowed_current_statuses": [
-    "NOT_STARTED",
-    "IN_PROGRESS",
     "VERIFIED_PASS",
+    "IMPLEMENTED_NOT_E2E_VERIFIED",
+    "IN_PROGRESS",
+    "NOT_IMPLEMENTED",
     "BLOCKED_EXTERNAL",
     "BLOCKED_OWNER_APPROVAL",
-    "FAILED"
-  ]
+    "NOT_IN_APPROVED_RELEASE_SCOPE"
+  ],
+  "status_counts": {
+    "BLOCKED_EXTERNAL": 2,
+    "BLOCKED_OWNER_APPROVAL": 7,
+    "IMPLEMENTED_NOT_E2E_VERIFIED": 15,
+    "IN_PROGRESS": 19,
+    "NOT_IMPLEMENTED": 1,
+    "VERIFIED_PASS": 3
+  },
+  "overall_verdict": "NO-GO: mandatory voice/long-tail integration, security and complete release acceptance gaps remain.",
+  "canonical_ledger_handling": "The older RAD_47_TASK_MASTER_LEDGER.md retains its original historical three documentary PASS rows; this JSON is the current per-gate continuation."
 }

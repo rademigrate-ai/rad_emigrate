@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import re
 import secrets
@@ -25,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from self_host_stack import compose, run, sql
 from self_host_test_target import load_target, target_root
-from verify_self_host_document_deletion import PDF, call, require
+from verify_self_host_document_deletion import PDF, call, make_user, require
 
 
 def wait_for(check, timeout=40):
@@ -48,6 +49,7 @@ def main():
     parser.add_argument("--build-mode", choices=("debug", "release"), default="debug")
     parser.add_argument("--matrix-only", action="store_true")
     parser.add_argument("--require-cache-revalidation", action="store_true")
+    parser.add_argument("--recovery-flow", action="store_true")
     args = parser.parse_args()
     if args.matrix_only:
         args.only_documents = True
@@ -63,6 +65,13 @@ def main():
     output.mkdir(parents=True, exist_ok=False)
     root = target_root()
     api, anon, service = load_target()
+    status, health_body = call(
+        api + "/rest/v1/rpc/document_deletion_queue_health", "POST", {}, apikey=service
+    )
+    require(
+        status == 200 and json.loads(health_body).get("pending") == 0,
+        "browser worker test requires an empty queue; recover existing authorized jobs first",
+    )
     seed = secrets.token_hex(6)
     email = "browser-" + seed + "@example.invalid"
     password = secrets.token_urlsafe(32)
@@ -162,7 +171,15 @@ def main():
                     # require() labels below are fixed strings, never input
                     # values or Playwright assertion messages.
                     result["failed_check"] = str(error)[:200]
-                if "/login" not in page.url and "/register" not in page.url:
+                if not any(
+                    path in page.url
+                    for path in (
+                        "/login",
+                        "/register",
+                        "/reset-password",
+                        "/forgot-password",
+                    )
+                ):
                     shot("failed-" + name)
                 if name.startswith(
                     ("documents-en-", "documents-fa-", "switch-language")
@@ -256,6 +273,133 @@ def main():
         if not args.only_documents:
             step("application-creation-persistence", application)
 
+        def conversation_history():
+            status, body = call(
+                api + "/auth/v1/token?grant_type=password",
+                "POST",
+                {"email": email, "password": password},
+                apikey=anon,
+            )
+            require(status == 200, "normal conversation owner login")
+            owner_token = json.loads(body)["access_token"]
+            status, body = call(
+                api + "/rest/v1/ai_sessions?select=id",
+                "POST",
+                {
+                    "user_id": actor,
+                    "scope": "user",
+                    "title": "SYNTHETIC history " + seed,
+                },
+                token=owner_token,
+                apikey=anon,
+            )
+            require(
+                status == 201, "normal owner creates persisted synthetic conversation"
+            )
+            # PostgREST insert defaults to minimal response; obtain the owner's
+            # exact fixture through their own JWT, never privileged reads.
+            status, body = call(
+                api + "/rest/v1/ai_sessions?select=id&user_id=eq." + actor,
+                token=owner_token,
+                apikey=anon,
+            )
+            require(
+                status == 200 and len(json.loads(body)) == 1,
+                "owner sees their conversation",
+            )
+            session = str(UUID(json.loads(body)[0]["id"]))
+            message = "SYNTHETIC persisted question " + seed
+            status, _ = call(
+                api + "/rest/v1/ai_session_messages",
+                "POST",
+                {
+                    "session_id": session,
+                    "user_id": actor,
+                    "role": "user",
+                    "content": message,
+                },
+                token=owner_token,
+                apikey=anon,
+            )
+            require(
+                status == 201, "owner saves a synthetic message without a provider call"
+            )
+            other, other_token = make_user(api, service, anon, "history-other-" + seed)
+            try:
+                for method, payload in (
+                    ("PATCH", {"title": "foreign"}),
+                    ("DELETE", None),
+                ):
+                    status, _ = call(
+                        api + "/rest/v1/ai_sessions?id=eq." + session,
+                        method,
+                        payload,
+                        token=other_token,
+                        apikey=anon,
+                    )
+                    require(
+                        status in (200, 204),
+                        "foreign history operation returns no authorized rows",
+                    )
+                    require(
+                        scalar(
+                            f"select title from public.ai_sessions where id='{session}';"
+                        )
+                        == "SYNTHETIC history " + seed,
+                        "foreign history mutation denied by RLS",
+                    )
+                visit("/ai-assistant")
+                page.get_by_text(message, exact=True).wait_for()
+                page.get_by_role("button", name="Show menu", exact=True).first.click()
+                page.get_by_role("menuitem", name="تغییر نام", exact=True).click()
+                renamed = "SYNTHETIC renamed " + seed
+                enter("عنوان جدید", renamed, clear=True)
+                page.get_by_role("button", name="ذخیره", exact=True).click()
+                wait_for(
+                    lambda: (
+                        scalar(
+                            f"select title from public.ai_sessions where id='{session}';"
+                        )
+                        == renamed
+                    )
+                )
+                visit("/ai-assistant")
+                page.get_by_text(renamed, exact=False).first.wait_for()
+                page.get_by_text(message, exact=True).wait_for()
+                shot("conversation-renamed-after-refresh")
+                page.get_by_role("button", name="Show menu", exact=True).first.click()
+                page.get_by_role("menuitem", name="حذف", exact=True).click()
+                page.get_by_role("button", name="حذف", exact=True).click()
+                wait_for(
+                    lambda: (
+                        scalar(
+                            f"select count(*) from public.ai_sessions where id='{session}';"
+                        )
+                        == "0"
+                    )
+                )
+                require(
+                    scalar(
+                        f"select count(*) from public.ai_session_messages where session_id='{session}';"
+                    )
+                    == "0",
+                    "owner deletion cascades only their conversation messages",
+                )
+                visit("/ai-assistant")
+                page.get_by_text("هنوز گفتگویی ثبت نشده است.", exact=True).wait_for()
+                require(
+                    page.get_by_text(message, exact=True).count() == 0,
+                    "deleted history remains absent after refresh",
+                )
+                shot("conversation-deleted-after-refresh")
+            finally:
+                call(api + "/auth/v1/admin/users/" + other, "DELETE", apikey=service)
+
+        if not args.only_documents:
+            step(
+                "conversation-owner-history-rename-delete-refresh", conversation_history
+            )
+
         def upload():
             visit("/documents")
             page.get_by_role("button", name="Add type", exact=True).click()
@@ -308,6 +452,7 @@ def main():
                 with opener.open(popup.url, timeout=30) as response:
                     status, content = response.status, response.read()
                     cache = response.headers.get("Cache-Control", "").lower()
+                report["preview_cache_control"] = cache
                 require(
                     status == 200
                     and hashlib.sha256(content).digest()
@@ -366,15 +511,31 @@ def main():
                         "File removal failed. The server will retry.", exact=False
                     ).wait_for(timeout=20000)
                     shot("document-deletion-retrying-en-desktop")
+                    run(compose(root, "restart", "functions"))
+                    require(
+                        scalar(
+                            f"select count(*) from private.rad_document_deletions q join public.documents d on d.id=q.document_id where d.user_id='{actor}' and q.state='pending_storage' and q.attempts=1 and q.last_error_code is not null and q.object_path<>'[erased]';"
+                        )
+                        == "1",
+                        "pending authorized work survives an actual worker restart",
+                    )
                 finally:
                     run(compose(root, "up", "-d", "storage"))
                 wait_for(
                     lambda: call(api + "/storage/v1/status", apikey=service)[0] == 200,
                     timeout=120,
                 )
-                status, body = call(
-                    api + "/functions/v1/document-deletion", "POST", {}, apikey=service
-                )
+                for attempt in range(3):
+                    status, body = call(
+                        api + "/functions/v1/document-deletion",
+                        "POST",
+                        {},
+                        apikey=service,
+                    )
+                    if status == 200:
+                        break
+                    if attempt < 2:
+                        time.sleep(2)
                 require(
                     status == 200 and json.loads(body).get("state") == "finalized",
                     "real worker retry finalizes",
@@ -480,10 +641,12 @@ def main():
                 page.get_by_role("button", name=re.compile(r"^Language\b")).wait_for()
 
         if args.admin_flow:
+            admin_state = {}
 
             def admin_visibility():
                 admin_email = "browser-admin-" + seed + "@example.invalid"
                 admin_password = secrets.token_urlsafe(32)
+                admin_state.update(email=admin_email, password=admin_password)
                 status, body = call(
                     api + "/auth/v1/admin/users",
                     "POST",
@@ -512,10 +675,11 @@ def main():
                 page.get_by_role("button", name="Sign in", exact=True).wait_for()
                 if "/login" not in page.url:
                     page.get_by_role("button", name="Sign in", exact=True).click()
-                enter("Email", admin_email)
-                enter("Password", admin_password)
+                enter("Email", admin_email, clear=True)
+                enter("Password", admin_password, clear=True)
                 page.get_by_role("button", name="Sign in", exact=True).click()
                 page.wait_for_url(lambda address: "/login" not in address)
+                page.get_by_role("button", name="Edit profile", exact=True).wait_for()
                 report["last_action"] = "admin-consultation-list"
                 visit("/admin/consultations")
                 page.get_by_role(
@@ -537,7 +701,164 @@ def main():
                 shot("admin-research-workspace")
 
             if not args.only_documents:
-                step("admin-login-and-consultation-visibility", admin_visibility)
+                admin_ready = step(
+                    "admin-login-and-consultation-visibility", admin_visibility
+                )
+
+                def cms_edit_and_recover():
+                    # Only the prior API suite's explicitly synthetic ZZ article
+                    # may be edited. No employer/source-library article qualifies.
+                    article = scalar("""select a.id from public.visa_articles a
+                      join public.visa_article_heads h on h.article_id=a.id and h.locale='en'
+                      join public.visa_article_revisions r on r.id=h.head_id
+                      join auth.users u on u.id=a.created_by
+                      where a.country_code='ZZ' and h.published_id is null
+                        and r.title like 'SYNTHETIC%'
+                        and u.email like 'research-cms-admin-%@example.test'
+                      order by a.created_at desc limit 1;""")
+                    article = str(UUID(article))
+                    feed_before = scalar("select count(*) from public.feed_items;")
+                    count_before = int(
+                        scalar(
+                            f"select count(*) from public.visa_article_revisions where article_id='{article}';"
+                        )
+                    )
+                    route = "/admin/cms/canonical/" + article + "?locale=en"
+                    visit(route)
+                    edited_title = "SYNTHETIC browser human edit " + seed
+                    edited_summary = (
+                        "SYNTHETIC unpublished draft; no immigration advice."
+                    )
+                    enter("عنوان", edited_title, clear=True)
+                    enter("خلاصه", edited_summary, clear=True)
+                    page.get_by_role("button", name="ذخیره پیش‌نویس", exact=True).click()
+                    wait_for(
+                        lambda: (
+                            scalar(
+                                f"select count(*) from public.visa_article_revisions where article_id='{article}' and title='{edited_title}' and summary='{edited_summary}';"
+                            )
+                            == "1"
+                        )
+                    )
+                    require(
+                        int(
+                            scalar(
+                                f"select count(*) from public.visa_article_revisions where article_id='{article}';"
+                            )
+                        )
+                        == count_before + 1,
+                        "one browser-authored immutable draft revision",
+                    )
+                    require(
+                        scalar(
+                            f"select count(*) from public.visa_article_heads where article_id='{article}' and published_id is not null;"
+                        )
+                        == "0",
+                        "saving a CMS draft never publishes",
+                    )
+                    require(
+                        scalar("select count(*) from public.feed_items;")
+                        == feed_before,
+                        "CMS draft edit leaves Feed unchanged",
+                    )
+                    shot("cms-human-edit-saved-unpublished")
+                    visit("/profile")
+                    page.get_by_role("button", name="Log out", exact=True).first.click()
+                    page.get_by_role("button", name="Sign in", exact=True).wait_for()
+                    if "/login" not in page.url:
+                        page.get_by_role("button", name="Sign in", exact=True).click()
+                    enter("Email", admin_state["email"], clear=True)
+                    enter("Password", admin_state["password"], clear=True)
+                    page.get_by_role("button", name="Sign in", exact=True).click()
+                    page.wait_for_url(lambda address: "/login" not in address)
+                    visit(route)
+                    title_field = page.get_by_role("textbox", name="عنوان", exact=True)
+                    title_field.click()
+                    require(
+                        page.evaluate("document.activeElement.value") == edited_title,
+                        "browser re-login recovers the persisted draft title",
+                    )
+                    shot("cms-draft-recovered-after-relogin")
+
+                if admin_ready:
+                    step(
+                        "cms-human-edit-save-and-relogin-recovery", cms_edit_and_recover
+                    )
+        if args.recovery_flow:
+
+            def browser_recovery():
+                from verify_self_host_password_recovery import mailbox_url, request
+
+                visit("/profile")
+                page.get_by_role("button", name="Log out", exact=True).first.click()
+                page.get_by_role("button", name="Sign in", exact=True).wait_for()
+                visit("/forgot-password")
+                enter("Email", email, clear=True)
+                page.get_by_role("button", name="Send reset link", exact=True).click()
+                mailbox = mailbox_url(root)
+                verify_url = None
+                deadline = time.monotonic() + 60
+                query = urllib.parse.quote("to:" + email)
+                while time.monotonic() < deadline and verify_url is None:
+                    status, raw, _ = request(mailbox + "/api/v1/search?query=" + query)
+                    if status == 200:
+                        for message in json.loads(raw).get("messages", []):
+                            status, raw, _ = request(
+                                mailbox + "/api/v1/message/" + message["ID"]
+                            )
+                            if status != 200:
+                                continue
+                            content = json.loads(raw)
+                            text = html.unescape(
+                                (content.get("HTML") or "")
+                                + (content.get("Text") or "")
+                            )
+                            for link in re.findall(r"""https?://[^\s<>"']+""", text):
+                                parsed = urllib.parse.urlsplit(link)
+                                if (
+                                    parsed.netloc == urllib.parse.urlsplit(api).netloc
+                                    and parsed.path == "/auth/v1/verify"
+                                    and urllib.parse.parse_qs(parsed.query).get("type")
+                                    == ["recovery"]
+                                ):
+                                    verify_url = link
+                                    break
+                    if verify_url is None:
+                        time.sleep(2)
+                require(
+                    verify_url is not None,
+                    "real browser recovery email delivered to owned mailbox",
+                )
+                report["last_action"] = "open-owned-recovery-email-link"
+                page.goto(verify_url, wait_until="domcontentloaded")
+                enable_semantics()
+                replacement = secrets.token_urlsafe(32)
+                enter("New password", replacement, clear=True)
+                enter("Confirm password", replacement, clear=True)
+                page.get_by_role("button", name="Save", exact=True).click()
+                page.get_by_role("button", name="Sign in", exact=True).wait_for()
+                old_status, _ = call(
+                    api + "/auth/v1/token?grant_type=password",
+                    "POST",
+                    {"email": email, "password": password},
+                    apikey=anon,
+                )
+                require(
+                    old_status >= 400, "browser recovery rejects the original password"
+                )
+                status, body = call(
+                    api + "/auth/v1/token?grant_type=password",
+                    "POST",
+                    {"email": email, "password": replacement},
+                    apikey=anon,
+                )
+                require(
+                    status == 200 and json.loads(body)["user"]["id"] == actor,
+                    "browser recovery persisted the replacement credential for the owner",
+                )
+                report["recovery_link_logged"] = False
+
+            step("real-mailbox-browser-recovery-deep-link", browser_recovery)
         report["fixtures_retained_on_owned_stack"] = True
         browser.close()
     report["passed"] = sum(r["status"] == "PASS" for r in report["results"])

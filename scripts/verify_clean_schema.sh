@@ -71,14 +71,14 @@ BEGIN
   SELECT count(*) INTO trigger_count FROM information_schema.triggers WHERE (event_object_schema='auth' AND event_object_table='users' AND trigger_name='on_auth_user_created') OR (event_object_schema='public' AND event_object_table IN ('content_sources','destinations','program_categories','visa_programs'));
   SELECT count(*) INTO bucket_count FROM storage.buckets WHERE id='documents' AND public=false AND file_size_limit=10485760 AND allowed_mime_types=ARRAY['application/pdf','image/jpeg','image/png']::text[];
   IF table_count <> 15 THEN RAISE EXCEPTION 'Expected 15 public RAD tables, got %',table_count; END IF;
-  IF column_count <> 114 THEN RAISE EXCEPTION 'Expected 114 public RAD columns, got %',column_count; END IF;
+  IF column_count <> 115 THEN RAISE EXCEPTION 'Expected 115 public RAD columns, got %',column_count; END IF;
   IF primary_key_count <> 15 THEN RAISE EXCEPTION 'Expected 15 primary keys, got %',primary_key_count; END IF;
   IF foreign_key_count <> 22 THEN RAISE EXCEPTION 'Expected 22 foreign keys, got %',foreign_key_count; END IF;
   -- Stage 3 added 9 justified FK covering indexes on these tables (37 â†’ 46).
   IF index_count <> 46 THEN RAISE EXCEPTION 'Expected 46 public RAD indexes, got %',index_count; END IF;
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened',function_count,hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %',rls_count; END IF;
-  IF app_policy_count <> 40 THEN RAISE EXCEPTION 'Expected 40 public policies, got %',app_policy_count; END IF;
+  IF app_policy_count <> 41 THEN RAISE EXCEPTION 'Expected 41 public policies, got %',app_policy_count; END IF;
   IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 owner-scoped documents Storage policies, got %',storage_policy_count; END IF;
   IF trigger_count <> 17 THEN RAISE EXCEPTION 'Expected auth, update, and audit trigger events, got %',trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %',bucket_count; END IF;
@@ -126,7 +126,7 @@ psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regress
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrective_routing_research.sql
-for regression in stage2_knowledge_completion stage3_content_migration stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability rad_client_table_privileges rad_content_security rad_feed_currency_security rad_interactions rad_merge_provenance rad_official_evidence rad_research_lease_exhaustion rad_bound_official_refresh rad_bound_authority_lock rad_bound_review_metadata rad_privacy_security rad_quota_security rad_search_performance; do
+for regression in stage2_knowledge_completion stage3_content_migration stage4_user_ai rad_ai_history_lifecycle local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability rad_client_table_privileges rad_content_security rad_feed_currency_security rad_interactions rad_merge_provenance rad_official_evidence rad_research_lease_exhaustion rad_bound_official_refresh rad_bound_authority_lock rad_bound_review_metadata rad_privacy_security rad_quota_security rad_search_performance; do
   psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "supabase/tests/${regression}.sql"
 done
 python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py

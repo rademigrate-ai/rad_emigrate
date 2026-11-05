@@ -22,6 +22,28 @@ from pathlib import Path
 MARKER = "RAD_DISPOSABLE_SELF_HOST_V1"
 
 
+def storage_response_privacy(template: str) -> str:
+    """Keep the pinned Storage route/auth unchanged; disable response caching."""
+    anchor = "                          prefix: /storage/v1/\n                        route:\n"
+    replacement = (
+        "                          prefix: /storage/v1/\n"
+        "                        # RAD_PRIVATE_STORAGE_NO_STORE\n"
+        "                        response_headers_to_add:\n"
+        "                          - header:\n"
+        "                              key: cache-control\n"
+        "                              value: private, no-store, max-age=0\n"
+        "                            append_action: OVERWRITE_IF_EXISTS_OR_ADD\n"
+        "                        route:\n"
+    )
+    if template.count(replacement) == 1:
+        return template
+    if template.count(anchor) != 1 or "RAD_PRIVATE_STORAGE_NO_STORE" in template:
+        raise ValueError(
+            "pinned Storage gateway route differs; review before preparing"
+        )
+    return template.replace(anchor, replacement, 1)
+
+
 def run(args: list[str], **kwargs) -> subprocess.CompletedProcess:
     result = subprocess.run(args, capture_output=True, **kwargs)
     if result.returncode:
@@ -223,6 +245,20 @@ def prepare(bundle: Path, output: Path, project: str, port: int) -> dict:
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(bundle, output)
+    gateway = output / "volumes/api/envoy/lds.template.yaml"
+    original_gateway_sha = hashlib.sha256(gateway.read_bytes()).hexdigest()
+    gateway.write_bytes(storage_response_privacy(gateway.read_text("utf8")).encode())
+    save(
+        output / "STORAGE_GATEWAY_PRIVACY.json",
+        {
+            "scope": "ALL_STORAGE_RESPONSES_PRIVATE_NO_STORE",
+            "original_template_sha256": original_gateway_sha,
+            "installed_template_sha256": hashlib.sha256(
+                gateway.read_bytes()
+            ).hexdigest(),
+            "authorization_and_prefix_rewrite": "UNCHANGED",
+        },
+    )
     (output / ".env").write_text(
         "".join(f"{key}={value}\n" for key, value in env.items()), encoding="utf8"
     )
