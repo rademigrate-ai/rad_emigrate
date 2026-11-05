@@ -1,3 +1,5 @@
+> Current instruction, 2026-11-05: PR #89 must remain open and Draft. Merge, external deployment, Production mutations and live employer publication are prohibited by the current continuous engineering task. Any conditional merge authorization quoted in this historical report is superseded. See FINAL_ENGINEERING_ACCEPTANCE_20261105.md and acceptance_gates.json for current engineering evidence and NO-GO gaps.
+
 # Final employer deploy readiness — 2026-11-04
 
 **Decision: BLOCKED for full Production activation. PR #89 remains Draft. The current owner instruction authorizes Codex to merge only after every Production, safety, CI and repository gate passes. Frontend/application deployment remains owner-only.** Employer acceptance is AFTER deployment, not a pre-deployment engineering gate. The infrastructure needed for that test must first be activated safely.

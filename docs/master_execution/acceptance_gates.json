@@ -151,14 +151,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "remaining": "Fresh independent Q applied all120 migrations with matching hashes; the original119 remain intact. Managed historical SQL/drift and protected forward execution remain unresolved.",
       "original_requirement": "Prove all 47 live historical migrations' original SQL/catalog/DML effects, reconcile 16 timestamp aliases and 4 live-only with repo-only; rehearse forward-only rollout with verified restore.",
-      "missing_implementation_or_decision": "Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "missing_implementation_or_decision": "Fresh independent Q applied all120 migrations with matching hashes; the original119 remain intact. Managed historical SQL/drift and protected forward execution remain unresolved.",
       "missing_tests": "Environment-matched managed forward rehearsal and independently accepted recovery procedure.",
       "required_backend": "Historical catalog/DML lineage plus current migration ledger.",
       "required_ui": "Operator inventory/reconciliation review.",
       "required_authorization": "Provider/operator protected execution and explicit managed mutation approval.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Independent119 reconstruction is proven; managed historical SQL/drift and protected forward execution remain unresolved.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh independent Q applied all120 migrations with matching hashes; the original119 remain intact. Managed historical SQL/drift and protected forward execution remain unresolved.",
       "existing_tests": [
         "scripts/tests/test_live_migration_sql_fingerprints.py"
       ],
@@ -177,14 +177,14 @@
         "_audit/RAD_MASTER_EXECUTION_20261029/content/native-populated-reader-receipt.json",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "remaining": "Fresh independent Q negative normal-JWT/RLS/Storage tests pass; the self-host target is not a populated managed Production-equivalent clone.",
       "original_requirement": "Exercise two-user/anon/admin/service JWTs for table, RPC and Storage access, including malicious cross-owner writes on production-equivalent clone.",
-      "missing_implementation_or_decision": "Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "missing_implementation_or_decision": "Fresh independent Q negative normal-JWT/RLS/Storage tests pass; the self-host target is not a populated managed Production-equivalent clone.",
       "missing_tests": "Repeat environment-specific grants/policies on the eventual approved target.",
       "required_backend": "RLS, role-scoped RPCs and private Storage.",
       "required_ui": "Owner-bound client and restricted admin pages.",
       "required_authorization": "Anonymous, two ordinary identities, admin/super-admin/service boundaries.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh J negative JWT/RLS/Storage tests pass; independent self-host is not a managed Production-equivalent clone.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh independent Q negative normal-JWT/RLS/Storage tests pass; the self-host target is not a populated managed Production-equivalent clone.",
       "existing_tests": [
         "scripts/verify_local_auth_isolation.py",
         "supabase/tests/rad_privacy_security.sql",
@@ -205,14 +205,14 @@
         "docs/master_execution/live_baseline.json",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "remaining": "Fresh independent Q has RLS on every public application table, zero application definers without fixed search_path, and53 passing SQL security suites.",
       "original_requirement": "Inventory each SECURITY DEFINER function, grants, safe search_path and role spoofing; verify on deployed schema.",
-      "missing_implementation_or_decision": "Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "missing_implementation_or_decision": "Fresh independent Q has RLS on every public application table, zero application definers without fixed search_path, and53 passing SQL security suites.",
       "missing_tests": "Final operator-owned target inventory and full effective privilege review.",
       "required_backend": "SECURITY DEFINER ownership, execute ACLs and fixed search paths.",
       "required_ui": "Admin privileged controls gated by trusted server role.",
       "required_authorization": "Client spoofing denied; service/bootstrap grants kept server-side.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh J reports zero application definers without fixed search_path and passes definer/ACL SQL regressions.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh independent Q has RLS on every public application table, zero application definers without fixed search_path, and53 passing SQL security suites.",
       "existing_tests": [
         "supabase/tests/local47_definer_acl.sql",
         "supabase/tests/pr82_function_defaults.sql"
@@ -230,14 +230,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "remaining": "Fresh Q real Auth/Storage/abuse tests and encrypted120 cold restore pass. Request-log leakage is fixed and tested. Known high/critical image findings plus production recovery/abuse acceptance remain open.",
       "original_requirement": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
-      "missing_implementation_or_decision": "Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "missing_implementation_or_decision": "Fresh Q real Auth/Storage/abuse tests and encrypted120 cold restore pass. Request-log leakage is fixed and tested. Known high/critical image findings plus production recovery/abuse acceptance remain open.",
       "missing_tests": "Container finding reachability/remediation; PITR/offsite/RPO-RTO and production edge abuse tests.",
       "required_backend": "Auth, private Storage, recovery, image security and encrypted backup.",
       "required_ui": "Recovery errors and document lifecycle UI.",
       "required_authorization": "Owner/operator recovery policy and secret handling.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Auth/Storage and encrypted cold-restore mechanisms exist; pinned-image high/critical findings and production recovery/abuse controls need closure.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh Q real Auth/Storage/abuse tests and encrypted120 cold restore pass. Request-log leakage is fixed and tested. Known high/critical image findings plus production recovery/abuse acceptance remain open.",
       "existing_tests": [
         "scripts/verify_self_host_password_recovery.py",
         "scripts/verify_self_host_storage_gates.py",
@@ -329,14 +329,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "remaining": "Real JWT concurrency reservation passes on fresh Q (16 accepted /50 rejected); no live provider charge was made.",
       "original_requirement": "Race-test five-question limit and atomic quota reservation under concurrent requests, then verify live deployment compatibility.",
-      "missing_implementation_or_decision": "Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "missing_implementation_or_decision": "Real JWT concurrency reservation passes on fresh Q (16 accepted /50 rejected); no live provider charge was made.",
       "missing_tests": "Eventual target compatibility and approved charged completion/settlement.",
       "required_backend": "Atomic entitlement/quota reservation and settlement.",
       "required_ui": "Honest quota and failure states.",
       "required_authorization": "Server-owned limits; ordinary users cannot write entitlements.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real JWT concurrency reservation test passes on J (16 accepted / 50 rejected); no live provider charge was made.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real JWT concurrency reservation passes on fresh Q (16 accepted /50 rejected); no live provider charge was made.",
       "existing_tests": [
         "scripts/verify_local_auth_isolation.py",
         "supabase/tests/rad_quota_security.sql",
@@ -380,16 +380,19 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "remaining": "Safe errors, redaction and quota diagnostics are tested. Owner-scoped conversation title/deletion now persist through real browser refresh and reject cross-owner mutations; no provider was invoked.",
       "original_requirement": "Prove request logs, redaction, latency, provider error taxonomy, cost accounting and admin security visibility.",
-      "missing_implementation_or_decision": "Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "missing_implementation_or_decision": "Safe errors, redaction and quota diagnostics are tested. Owner-scoped conversation title/deletion now persist through real browser refresh and reject cross-owner mutations; no provider was invoked.",
       "missing_tests": "Real provider billing reconciliation, operational incident alerts and cost accuracy.",
       "required_backend": "Privacy-safe AI request accounting/health.",
       "required_ui": "Admin diagnostics and safe client failures.",
       "required_authorization": "Admin visibility, budget owner and telemetry retention approval.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Safe errors/redaction, quota logs and diagnostic contracts are tested.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Safe errors, redaction and quota diagnostics are tested. Owner-scoped conversation title/deletion now persist through real browser refresh and reject cross-owner mutations; no provider was invoked.",
       "existing_tests": [
-        "supabase/tests/local47_observability.sql"
+        "supabase/tests/local47_observability.sql",
+        "test/ai_assistant/ai_session_lifecycle_test.dart",
+        "supabase/tests/rad_ai_history_lifecycle.sql",
+        "scripts/verify_self_host_log_privacy.py"
       ],
       "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
@@ -447,17 +450,17 @@
     },
     {
       "id": 18,
-      "gate": "E3-03 finding\u2192draft\u2192human approval\u2192Feed",
+      "gate": "E3-03 finding→draft→human approval→Feed",
       "historical_status": "IMPLEMENTED",
       "status": "IMPLEMENTED_NOT_E2E_VERIFIED",
-      "acceptance": "Execute finding \u2192 review draft \u2192 approval \u2192 publication with no direct AI/Research Feed write, audits and negative role tests.",
+      "acceptance": "Execute finding → review draft → approval → publication with no direct AI/Research Feed write, audits and negative role tests.",
       "implementation": "`lib/features/feed`; `supabase/functions/research-sync/index.ts`",
       "historical_evidence": "Live read-only JOIN: all 16 findings map 1:1 to 16 distinct drafts, all in review, zero duplicates and zero Feed. Merged #67 tests human publishing in isolated DB; live human guard remains absent.",
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
       "remaining": "Real authenticated source-bound proposal/review/unpublished CMS draft and re-login recovery pass; explicit synthetic Feed publication passes separately.",
-      "original_requirement": "Execute finding \u2192 review draft \u2192 approval \u2192 publication with no direct AI/Research Feed write, audits and negative role tests.",
+      "original_requirement": "Execute finding → review draft → approval → publication with no direct AI/Research Feed write, audits and negative role tests.",
       "missing_implementation_or_decision": "Real authenticated source-bound proposal/review/unpublished CMS draft and re-login recovery pass; explicit synthetic Feed publication passes separately.",
       "missing_tests": "Single complete browser finding-to-review-to-explicit-publication journey on synthetic data.",
       "required_backend": "Research proposals, reviews, revision ancestry and human publication RPCs.",
@@ -554,14 +557,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
+      "remaining": "Real signup/confirmation/login, email OTP, browser emailed recovery deep-link, session restoration, refresh rotation and logout pass. A real60-second token expires and refresh recovers; original Auth config is restored exactly.",
       "original_requirement": "Verify signup, login, OTP, recovery email/deep-link, password change, expiration/session persistence in controlled test mailbox.",
-      "missing_implementation_or_decision": "J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
-      "missing_tests": "Actual Flutter emailed recovery deep-link and phone OTP; natural3600-second access expiry not waited out.",
+      "missing_implementation_or_decision": "Real signup/confirmation/login, email OTP, browser emailed recovery deep-link, session restoration, refresh rotation and logout pass. A real60-second token expires and refresh recovers; original Auth config is restored exactly.",
+      "missing_tests": "Phone OTP transport and physical mobile deep links remain unverified; default3600-second expiry was not waited out (real60-second TTL was tested).",
       "required_backend": "Official Auth with real disposable SMTP mailbox.",
       "required_ui": "Register/login/OTP/recovery/deep-link screens.",
       "required_authorization": "Synthetic accounts only; phone provider requires external setup.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: J real signup/confirmation/login, email OTP, recovery credential change, refresh rotation and logout pass. Browser session restoration passes.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real signup/confirmation/login, email OTP, browser emailed recovery deep-link, session restoration, refresh rotation and logout pass. A real60-second token expires and refresh recovers; original Auth config is restored exactly.",
       "existing_tests": [
         "scripts/verify_self_host_otp_sessions.py",
         "scripts/verify_self_host_password_recovery.py",
@@ -580,14 +583,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Real browser consultation creation and database persistence pass; real API role/status tests pass.",
+      "remaining": "Real browser consultation creation, administrator visibility and database persistence pass; actual API role/status tests pass. The complete staff status/history and input/error browser matrix remains incomplete.",
       "original_requirement": "Verify complete consultation intake, admin role matrix and status/history with isolated two-user and negative access checks.",
-      "missing_implementation_or_decision": "Real browser consultation creation and database persistence pass; real API role/status tests pass.",
-      "missing_tests": "Finish browser admin visibility/status-history journey and complete input/error matrix.",
+      "missing_implementation_or_decision": "Real browser consultation creation, administrator visibility and database persistence pass; actual API role/status tests pass. The complete staff status/history and input/error browser matrix remains incomplete.",
+      "missing_tests": "Complete staff status-history and input/error browser matrix.",
       "required_backend": "Consultation intake/list/update RPCs and audits.",
       "required_ui": "Client request and admin consultation queue.",
       "required_authorization": "Two-user isolation; admin/super-admin allowed, ordinary update denied.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real browser consultation creation and database persistence pass; real API role/status tests pass.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real browser consultation creation, administrator visibility and database persistence pass; actual API role/status tests pass. The complete staff status/history and input/error browser matrix remains incomplete.",
       "existing_tests": [
         "scripts/verify_local_auth_isolation.py",
         "scripts/verify_self_host_web_e2e.py"
@@ -610,14 +613,14 @@
         "scripts/reconcile_self_host_storage_orphans.py",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
+      "remaining": "Fresh Q real worker deletion, signed expiry/replay, restart retry, holds, path scrub and immutable receipts pass. Release browser verifies pending/failure/completion, private no-store preview and EN/FA390/768/1440; actual request-log probes show no synthetic bearer or private path. Owner policy/proxy acceptance remains outstanding.",
       "original_requirement": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
-      "missing_implementation_or_decision": "Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
-      "missing_tests": "Owner acceptance of bearer replay window, lawful duration/clock/holds precedence, backup erasure and eventual proxy cache behavior.",
+      "missing_implementation_or_decision": "Fresh Q real worker deletion, signed expiry/replay, restart retry, holds, path scrub and immutable receipts pass. Release browser verifies pending/failure/completion, private no-store preview and EN/FA390/768/1440; actual request-log probes show no synthetic bearer or private path. Owner policy/proxy acceptance remains outstanding.",
+      "missing_tests": "Owner acceptance of signed bearer replay window, lawful duration/clock/holds precedence and backup erasure; final destination proxy/CDN acceptance.",
       "required_backend": "Private documents/Storage, deletion queue/Edge worker, receipts and retention report.",
       "required_ui": "Applications and upload/preview/pending/retrying/completed document states.",
       "required_authorization": "Owner/admin individual erasure; no timed purge or Production worker activation.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Hard-delete lifecycle, signed expiry/replay, leases, holds, path scrub, receipts and disabled retention report are implemented and tested locally.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh Q real worker deletion, signed expiry/replay, restart retry, holds, path scrub and immutable receipts pass. Release browser verifies pending/failure/completion, private no-store preview and EN/FA390/768/1440; actual request-log probes show no synthetic bearer or private path. Owner policy/proxy acceptance remains outstanding.",
       "existing_tests": [
         "scripts/verify_self_host_document_deletion.py",
         "scripts/verify_self_host_storage_gates.py",
@@ -666,14 +669,14 @@
         "_audit/RAD_MASTER_EXECUTION_20261029_flutter_tests.log",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
+      "remaining": "Real release document EN/FA at390/768/1440, keyboard focus and overflow checks pass on Q and screenshots were inspected. Whole-app accessibility, theme, localization and physical-touch acceptance remain incomplete.",
       "original_requirement": "Verify RTL/LTR icons, theme/locale persistence, accessible focus/announcements, reduced motion, keyboard across viewports.",
-      "missing_implementation_or_decision": "Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
-      "missing_tests": "Whole-app focus/announcements, contrast, reduced motion, themes and touch-device acceptance.",
+      "missing_implementation_or_decision": "Real release document EN/FA at390/768/1440, keyboard focus and overflow checks pass on Q and screenshots were inspected. Whole-app accessibility, theme, localization and physical-touch acceptance remain incomplete.",
+      "missing_tests": "Whole-app focus/announcements, contrast, reduced motion, themes and physical touch acceptance.",
       "required_backend": "Persisted locale/theme and Auth-bound state.",
       "required_ui": "RTL/LTR layouts, themes, keyboard and assistive technology.",
       "required_authorization": "No data or session retained across unauthorized identity changes.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Localized document status widgets cover EN/FA at390/768/1440; real rendered matrix is being reconciled.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real release document EN/FA at390/768/1440, keyboard focus and overflow checks pass on Q and screenshots were inspected. Whole-app accessibility, theme, localization and physical-touch acceptance remain incomplete.",
       "existing_tests": [
         "test/visual_qa_smoke_test.dart",
         "scripts/verify_self_host_web_e2e.py"
@@ -715,14 +718,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "remaining": "Normal browser notification read state persists after refresh and another JWT sees no owner inbox rows. External email/SMS/push adapters, preferences and delivery/retry are not operationally accepted.",
       "original_requirement": "Confirm notification opt-in preferences, sandbox email/SMS/push transports, retries, failures and privacy.",
-      "missing_implementation_or_decision": "Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "missing_implementation_or_decision": "Normal browser notification read state persists after refresh and another JWT sees no owner inbox rows. External email/SMS/push adapters, preferences and delivery/retry are not operationally accepted.",
       "missing_tests": "Approved sandbox transports, retry/failure delivery, opt-in and privacy E2E.",
       "required_backend": "Notifications/preferences and dispatch queue.",
       "required_ui": "Inbox/read state and channel preferences.",
       "required_authorization": "Explicit opt-in, approved provider credentials and no live messaging.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Notification inbox/reader and server preference/dispatch contracts exist. External email/SMS/push delivery is not operationally verified.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Normal browser notification read state persists after refresh and another JWT sees no owner inbox rows. External email/SMS/push adapters, preferences and delivery/retry are not operationally accepted.",
       "existing_tests": [
         "supabase/tests/local47_crm_notifications.sql",
         "test/features/notifications/notifications_page_test.dart"
@@ -790,14 +793,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "remaining": "The corrected commit-bound315-file review bundle was assembled, hash-verified and used for a fresh120 installation and restore. Final package rebuilding and exact final CI follow the report freeze; no external release/rollback was performed.",
       "original_requirement": "Pin immutable Git SHA in deployed web release, retrieve/verify release artifact and rehearse rollback.",
-      "missing_implementation_or_decision": "Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "missing_implementation_or_decision": "The corrected commit-bound315-file review bundle was assembled, hash-verified and used for a fresh120 installation and restore. Final package rebuilding and exact final CI follow the report freeze; no external release/rollback was performed.",
       "missing_tests": "Deployed immutable release/rollback receipt on approved host.",
       "required_backend": "Reproducible source/image manifest and release artifacts.",
       "required_ui": "version.json/SPA fallback and cache policy.",
       "required_authorization": "Owner deployment and rollback authorization.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Commit-bound web artifact verifier and pinned source bundle exist. No external deployment was performed.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: The corrected commit-bound315-file review bundle was assembled, hash-verified and used for a fresh120 installation and restore. Final package rebuilding and exact final CI follow the report freeze; no external release/rollback was performed.",
       "existing_tests": [
         "scripts/tests/test_public_web_build.py",
         "scripts/tests/test_self_host_delivery.py"
@@ -816,14 +819,14 @@
         "_audit/RAD_MASTER_EXECUTION_20261029/browser-existing-local/report.json",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "remaining": "Real release EN/FA document mobile/tablet/desktop renders pass on Q. Whole-application language/input/contrast/navigation and real-device acceptance remain incomplete.",
       "original_requirement": "Manual/automated real-browser EN/FA desktop/tablet/mobile matrix with viewport, input, contrast and navigation evidence.",
-      "missing_implementation_or_decision": "Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "missing_implementation_or_decision": "Real release EN/FA document mobile/tablet/desktop renders pass on Q. Whole-application language/input/contrast/navigation and real-device acceptance remain incomplete.",
       "missing_tests": "Whole-app language/viewport/input/contrast/navigation matrix.",
       "required_backend": "Live disposable backend with normal Auth.",
       "required_ui": "EN/FA390/768/1440 browser matrix.",
       "required_authorization": "Authorized synthetic sessions; no real user cookies/tokens extracted.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real EN document desktop/tablet/mobile renders pass; complete current FA matrix receipt is pending.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Real release EN/FA document mobile/tablet/desktop renders pass on Q. Whole-application language/input/contrast/navigation and real-device acceptance remain incomplete.",
       "existing_tests": [
         "scripts/verify_self_host_web_e2e.py"
       ],
@@ -866,14 +869,14 @@
         "_audit/RAD_MASTER_EXECUTION_20261029/content/native-rehearsal/rehearsal-receipt.json",
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "remaining": "Fresh120 reconstruction, nine real API suites and encrypted120 restore with full restart pass; actual bounded API/Storage/worker/owner-RLS-query/CPU/RAM/disk measurements exist. Sustained Linux load, security remediation, PITR/offsite recovery and UAT remain open.",
       "original_requirement": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
-      "missing_implementation_or_decision": "Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "missing_implementation_or_decision": "Fresh120 reconstruction, nine real API suites and encrypted120 restore with full restart pass; actual bounded API/Storage/worker/owner-RLS-query/CPU/RAM/disk measurements exist. Sustained Linux load, security remediation, PITR/offsite recovery and UAT remain open.",
       "missing_tests": "Sustained Linux load/SLO/alerts, high/critical container triage, PITR/offsite recovery and client UAT.",
       "required_backend": "Performance/security/recovery/monitoring stack.",
       "required_ui": "Error/loading/retry journeys and UAT.",
       "required_authorization": "Operator SLO/RPO-RTO and named employer acceptance.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Small bounded Auth/API/Storage/worker/resource samples exist; encrypted119 restore rehearsal is in progress.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Fresh120 reconstruction, nine real API suites and encrypted120 restore with full restart pass; actual bounded API/Storage/worker/owner-RLS-query/CPU/RAM/disk measurements exist. Sustained Linux load, security remediation, PITR/offsite recovery and UAT remain open.",
       "existing_tests": [
         "scripts/measure_self_host_acceptance.py",
         "scripts/tests/test_self_host_stack.py",
@@ -1161,14 +1164,14 @@
       "current_evidence": [
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
       ],
-      "remaining": "Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "remaining": "Profile/dashboard recommendation domains, actual browser navigation timing, bounded API/resource and owner-RLS EXPLAIN ANALYZE measurements exist. Quality/consent/privacy and representative workload acceptance remain incomplete.",
       "original_requirement": "Prove recommendations/analytics quality, measurable latency, error handling and consent/privacy boundaries.",
-      "missing_implementation_or_decision": "Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "missing_implementation_or_decision": "Profile/dashboard recommendation domains, actual browser navigation timing, bounded API/resource and owner-RLS EXPLAIN ANALYZE measurements exist. Quality/consent/privacy and representative workload acceptance remain incomplete.",
       "missing_tests": "Quality/consent/privacy evaluation, representative analytics and sustained performance acceptance.",
       "required_backend": "Recommendation/analytics data and privacy-safe metrics.",
       "required_ui": "Recommendation/dashboard charts and failure states.",
       "required_authorization": "Named analytics purpose/consent/retention and approved evidence.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Profile/dashboard recommendation domains and bounded API measurements exist.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: Profile/dashboard recommendation domains, actual browser navigation timing, bounded API/resource and owner-RLS EXPLAIN ANALYZE measurements exist. Quality/consent/privacy and representative workload acceptance remain incomplete.",
       "existing_tests": [
         "test/profile/recommendation_engine_test.dart",
         "scripts/measure_self_host_acceptance.py"
@@ -1206,7 +1209,7 @@
     "Render_deployment": "owner_only",
     "publication": "separate_human_editorial_authorization"
   },
-  "browser_e2e": "IN_PROGRESS: real core journeys and EN390/768/1440 verified; final FA/admin receipt pending.",
+  "browser_e2e": "Q release20/21 checkpoint PASS; the failing inbox locator was corrected and its focused normal-UI/profile/read/refresh/isolation run passes4/4. Final complete exact-head run follows source freeze. Core history, documents, EN/FA viewports, admin/CMS and actual recovery deep-link are real service/browser evidence.",
   "production_mutation_gate": {
     "status": "BLOCKED_OWNER_APPROVAL",
     "reason": "The current task explicitly prohibits Production mutations, merge and deployment. No such action performed."

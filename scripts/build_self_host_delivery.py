@@ -73,6 +73,18 @@ def assemble(repo: Path, upstream: Path, output: Path) -> dict:
         lock = json.loads(
             (repo / "deploy/self-hosted/images.lock.json").read_text("utf8")
         )
+        review = json.loads(
+            (repo / "deploy/self-hosted/image-security-review.json").read_text("utf8")
+        )
+        if (
+            review["image_lock_sha256"]
+            != hashlib.sha256(
+                (repo / "deploy/self-hosted/images.lock.json").read_bytes()
+            ).hexdigest()
+        ):
+            raise ValueError(
+                "image security review does not bind the current image lock"
+            )
         for service in model["services"].values():
             reference = service["image"]
             pinned = lock.get(reference)
@@ -105,6 +117,9 @@ def assemble(repo: Path, upstream: Path, output: Path) -> dict:
             "SELF_HOSTED_OPERATOR_RUNBOOK.md",
             "DOCUMENT_WORKER_OPERATIONS.md",
             "DOCUMENT_RETENTION_OPTIONS.md",
+            "FINAL_ENGINEERING_ACCEPTANCE_20261105.md",
+            "acceptance_gates.json",
+            "MARAL_HOST_DEPLOYMENT_PACKAGE_20261105.md",
         ):
             shutil.copyfile(repo / "docs/master_execution" / filename, docs / filename)
         for file in output.rglob("*"):
@@ -124,6 +139,8 @@ def assemble(repo: Path, upstream: Path, output: Path) -> dict:
             "files": files,
             "web_build": "Build separately with the approved public hostname and anon key; see runbook.",
             "production_actions_performed": False,
+            "security_gate": review["verdict"],
+            "employer_acceptance": "NOT_GRANTED",
         }
         (output / "DELIVERY_MANIFEST.json").write_bytes(
             json.dumps(result, indent=2).encode()

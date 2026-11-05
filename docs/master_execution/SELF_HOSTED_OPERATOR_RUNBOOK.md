@@ -60,6 +60,16 @@ Storage gates, mailbox recovery, OTP sessions, natural token expiry, named appoi
 These scripts intentionally refuse hosted targets. Do not relax their checks to
 test a deployed Production service.
 
+The migrated schema also preserves four existing cron jobs: daily research enqueue
+(03:17 UTC), its worker dispatch (03:27), observability retention (02:41), and AI
+catalogue queue ticks (00:00/08:00/16:00). These are distinct from the opt-in document
+deletion dispatcher. Catalogue ticks only enqueue; research HTTP requires configured
+Vault/worker inputs. Do not provision provider or dispatch secrets without approval.
+The historical observability job purges health/events after90/30/365 days; those
+are existing log rules, not an approved document-retention period. Review the
+operational/legal policy before any actual deployment. Document purging remains
+disabled. Inspect job names/schedules and hash commands rather than logging secrets.
+
 ## Production configuration review, before any deployment authorization
 
 Choose the API and web hostnames, release scope, signup policy, operator, capacity,

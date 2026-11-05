@@ -45,6 +45,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--only-documents", action="store_true")
     parser.add_argument("--history-only", action="store_true")
+    parser.add_argument("--inbox-only", action="store_true")
     parser.add_argument("--ui-matrix", action="store_true")
     parser.add_argument("--admin-flow", action="store_true")
     parser.add_argument("--build-mode", choices=("debug", "release"), default="debug")
@@ -188,6 +189,7 @@ def main():
                         "documents-fa-",
                         "switch-language",
                         "conversation-owner-",
+                        "in-app-notification-",
                     )
                 ):
                     (output / (name + ".aria.txt")).write_text(
@@ -261,7 +263,7 @@ def main():
             )
             shot("consultation-persisted-en-desktop")
 
-        if not args.only_documents and not args.history_only:
+        if not args.only_documents and not (args.history_only or args.inbox_only):
             step("consultation-persistence", consultation)
 
         def application():
@@ -277,7 +279,7 @@ def main():
             )
             shot("application-persisted-en-desktop")
 
-        if not args.only_documents and not args.history_only:
+        if not args.only_documents and not (args.history_only or args.inbox_only):
             step("application-creation-persistence", application)
 
         def notification_inbox():
@@ -295,7 +297,7 @@ def main():
             )
             require(status == 201, "owned synthetic notification fixture")
             visit("/notifications")
-            semantic_label(title).click()
+            page.get_by_role("button", name=re.compile(re.escape(title))).click()
             wait_for(
                 lambda: (
                     scalar(
@@ -305,7 +307,7 @@ def main():
                 )
             )
             visit("/notifications")
-            semantic_label(title).wait_for()
+            page.get_by_role("button", name=re.compile(re.escape(title))).wait_for()
             shot("notification-read-after-refresh")
             other, other_token = make_user(api, service, anon, "inbox-other-" + seed)
             try:
@@ -323,6 +325,14 @@ def main():
 
         if not args.only_documents and not args.history_only:
             step("in-app-notification-read-refresh-and-isolation", notification_inbox)
+        if args.inbox_only:
+            report["passed"] = sum(r["status"] == "PASS" for r in report["results"])
+            report["total"] = len(report["results"])
+            (output / "web_results.json").write_bytes(
+                json.dumps(report, indent=2).encode()
+            )
+            browser.close()
+            raise SystemExit(0 if report["passed"] == report["total"] else 1)
 
         def conversation_history():
             status, body = call(
@@ -579,7 +589,7 @@ def main():
                         "pending authorized work survives an actual worker restart",
                     )
                 finally:
-                    run(compose(root, "up", "-d", "storage"))
+                    run(compose(root, "up", "-d", "--no-deps", "storage"))
                 wait_for(
                     lambda: call(api + "/storage/v1/status", apikey=service)[0] == 200,
                     timeout=120,

@@ -28,6 +28,8 @@ def main():
     )
     root = target_root()
     api, anon, service = load_target()
+    database_container = run(compose(root, "ps", "-q", "db")).stdout.strip()
+    require(bool(database_container), "owned database container must exist")
     env_file = root / ".env"
     original = env_file.read_bytes()
     lines = original.decode("utf8").splitlines()
@@ -58,7 +60,7 @@ def main():
     actor = None
     try:
         env_file.write_bytes(changed.encode())
-        run(compose(root, "up", "-d", "--force-recreate", "auth"))
+        run(compose(root, "up", "-d", "--no-deps", "--force-recreate", "auth"))
         auth_ready()
         address = "expiry-" + secrets.token_hex(6) + "@example.invalid"
         password = secrets.token_urlsafe(32)
@@ -87,8 +89,15 @@ def main():
             claims["exp"] - claims["iat"] == 60, "actual issued token uses60-second TTL"
         )
         profile = api + f"/rest/v1/profiles?id=eq.{actor}&select=id"
+        initial_status, initial_body = call(profile, token=token, apikey=anon)
+        report["initial_verifier_status"] = initial_status
+        report["initial_token_seconds_remaining"] = round(
+            claims["exp"] - time.time(), 3
+        )
+        report["initial_response_mentions_expiry"] = b"expir" in initial_body.lower()
+        output.write_bytes(json.dumps(report, indent=2).encode())
         require(
-            call(profile, token=token, apikey=anon)[0] == 200,
+            initial_status == 200,
             "real verifier accepts unexpired bearer",
         )
         print(
@@ -124,11 +133,15 @@ def main():
         report.update(expired_bearer_denied=True, refresh_recovery=True)
     finally:
         env_file.write_bytes(original)
-        run(compose(root, "up", "-d", "--force-recreate", "auth"))
+        run(compose(root, "up", "-d", "--no-deps", "--force-recreate", "auth"))
         auth_ready()
         require(
             env_file.read_bytes() == original,
             "original private Auth configuration restored byte-for-byte",
+        )
+        require(
+            run(compose(root, "ps", "-q", "db")).stdout.strip() == database_container,
+            "Auth expiry test must never recreate the database dependency",
         )
         if actor:
             status, _ = call(
@@ -136,6 +149,7 @@ def main():
             )
             require(200 <= status < 300, "synthetic expiry identity cleanup")
     report["original_auth_configuration_restored"] = True
+    report["database_container_preserved"] = True
     output.write_bytes(json.dumps(report, indent=2).encode())
     print(
         "PASS real expiry, explicit verifier refusal, refresh and exact Auth configuration recovery"

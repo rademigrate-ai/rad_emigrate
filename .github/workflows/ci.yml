@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [main, integration/stage7-unified-20261026]
     paths:
+      - 'docs/master_execution/**'
       - '.github/workflows/**'
       - 'lib/**'
       - 'web/**'
@@ -33,6 +34,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'docs/master_execution/**'
       - '.github/workflows/**'
       - 'lib/**'
       - 'web/**'

@@ -2,7 +2,7 @@
 
 Current procedure: [SELF_HOSTED_OPERATOR_RUNBOOK.md](SELF_HOSTED_OPERATOR_RUNBOOK.md).
 Build the commit-bound operator review package with `scripts/build_self_host_delivery.py`.
-It contains pinned official Compose sources, all 119 RAD migrations, nine Edge Functions,
+It contains pinned official Compose sources, all 120 RAD migrations (the original 119 plus conversation history), nine Edge Functions,
 operator scripts, configuration/proxy templates and a file-hash manifest. No deployment,
 hosting purchase, DNS change, merge or Production action is performed.
 
@@ -10,7 +10,17 @@ The [official FR-VPS-M2 plan page](https://maralhost.com/vps/ovh), checked 2026-
 lists 6 CPU cores, 12 GiB RAM and 60 GiB NVMe storage, with customizable resources.
 This is a published specification, not a reserved quote or a capacity guarantee.
 
-Fresh Stack J applied 119/119 migrations with matching hashes and passed 52/52 SQL
+Current package-based Stack Q independently installed 120/120 migrations and passed
+53/53 SQL and 9/9 real API suites. Its encrypted 120-migration restore to an empty
+independent target passed normal Auth, private-byte/CMS/receipt integrity and full
+restart checks (backup90.002s; restore/start82.233s; ciphertext133,408,477 bytes).
+The later resource snapshot measured935,558,382 bytes across11 containers, summed
+reported CPU30.29%, database130,642,292 bytes, configuration66,968 and Storage41,099.
+These are bounded synthetic Windows-host samples, not Linux capacity certification.
+See FINAL_ENGINEERING_ACCEPTANCE_20261105.md and the final attestation for exact
+source/CI/package binding and current NO-GO security/acceptance gates.
+
+The historical current-task baseline on Stack J applied 119/119 migrations with matching hashes and passed 52/52 SQL
 suites and all six real Auth/Storage/worker/Research-CMS API suites. It runs official
 self-hosted/v0.8.3, revision `bc27d2661edd09a5d0b8d76ce33da6d4071a756e`,
 with PostgreSQL 17.6 and digest-pinned amd64 images. Its small synthetic workload
@@ -38,7 +48,7 @@ Read the current operator runbook for secret setup, SMTP, TLS/DNS/firewall revie
 first-admin bootstrap, dispatcher activation, backup/restore and employer UAT.
 A snapshot drill is distinct from PITR, offsite delivery, an RPO/RTO commitment and
 production-host restore acceptance. The final evidence report records the current
-119-migration drill separately from the earlier 118-migration drill below.
+120-migration final drill separately from the earlier 118-migration drill below.
 
 ---
 

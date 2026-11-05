@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import secrets
 import statistics
 import time
@@ -12,9 +13,20 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from uuid import UUID
 
-from self_host_stack import compose, run, sql
-from self_host_test_target import load_target, target_root
-from verify_self_host_document_deletion import PDF, call, require
+try:
+    from .self_host_stack import compose, run, sql
+    from .self_host_test_target import load_target, target_root
+    from .verify_self_host_document_deletion import PDF, call, require
+except ImportError:
+    from self_host_stack import compose, run, sql
+    from self_host_test_target import load_target, target_root
+    from verify_self_host_document_deletion import PDF, call, require
+
+
+def percentile95(values: list[float]) -> float:
+    if not values:
+        raise ValueError("percentile requires measured observations")
+    return sorted(values)[math.ceil(len(values) * 0.95) - 1]
 
 
 def main():
@@ -146,7 +158,7 @@ def main():
             label: {
                 "samples": len(values),
                 "p50": round(statistics.median(values), 3),
-                "p95": round(sorted(values)[max(0, int(len(values) * 0.95) - 1)], 3),
+                "p95": round(percentile95(values), 3),
                 "maximum": round(max(values), 3),
             }
             for label, values in samples.items()

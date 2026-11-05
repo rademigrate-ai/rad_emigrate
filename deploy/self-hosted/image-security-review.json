@@ -1,0 +1,119 @@
+{
+  "scope": "PUBLIC_PINNED_IMAGE_HIGH_CRITICAL_SCAN_NOT_REACHABILITY_ACCEPTANCE",
+  "reports": [
+    {
+      "report": "edge-runtime_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "4dfc59343a0231309ce788bcdba650ce4ac9b50efcee0b7859830fa7c1a8c2f4",
+      "package_advisory_matches": 24,
+      "unique_advisories": 24,
+      "severity": {
+        "CRITICAL": 6,
+        "HIGH": 18
+      }
+    },
+    {
+      "report": "gateway_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "58e0c26a3096ee38ee0ba5bbad2a09aec858970b7e4ab36917ad28c2e9a409a1",
+      "package_advisory_matches": 2,
+      "unique_advisories": 2,
+      "severity": {
+        "CRITICAL": 0,
+        "HIGH": 2
+      }
+    },
+    {
+      "report": "gotrue_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "1e3a3da5d72617225b8783b48c629fb8503025e05d14119444fa031af3c0de32",
+      "package_advisory_matches": 33,
+      "unique_advisories": 28,
+      "severity": {
+        "CRITICAL": 5,
+        "HIGH": 28
+      }
+    },
+    {
+      "report": "mailpit@sha256_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "7d1b1a77f58e163efbe3c2dd9d0831c2346c4a02497e7983f2fc5c12cbdd1734",
+      "package_advisory_matches": 19,
+      "unique_advisories": 14,
+      "severity": {
+        "CRITICAL": 3,
+        "HIGH": 16
+      }
+    },
+    {
+      "report": "postgres-meta_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "753cf800eb8d4ed950287117ba33e73922b06a7a62611b7344e0353c5db5ff2f",
+      "package_advisory_matches": 55,
+      "unique_advisories": 46,
+      "severity": {
+        "CRITICAL": 9,
+        "HIGH": 46
+      }
+    },
+    {
+      "report": "postgres_cves.sarif.json",
+      "status": "REPORT_AVAILABLE_AFTER_PARENT_TIMEOUT",
+      "sha256": "f337bfc6efdcd84c6a4ebf402101459677cd6fcade7e1bb548c30ddc2c505232",
+      "package_advisory_matches": 101,
+      "unique_advisories": 101,
+      "severity": {
+        "CRITICAL": 24,
+        "HIGH": 77
+      }
+    },
+    {
+      "report": "postgrest_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "0f54fb6e71bb540f14ba92bfcbf6b8a1ee4103cacfb2aaf20324efac107c9fe5",
+      "package_advisory_matches": 0,
+      "unique_advisories": 0,
+      "severity": {
+        "CRITICAL": 0,
+        "HIGH": 0
+      }
+    },
+    {
+      "report": "studio_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "b38f52a4150cf7e9230b6daedfbb5a4de3821f9264e042f92b419b0c3e41ea29",
+      "package_advisory_matches": 52,
+      "unique_advisories": 49,
+      "severity": {
+        "CRITICAL": 6,
+        "HIGH": 46
+      }
+    },
+    {
+      "report": "supavisor_cves.sarif.json",
+      "status": "REPORT_AVAILABLE",
+      "sha256": "4f67e8d630af4f5b409a5b406e1d234836c741113242ffa4607f9f14f4a10adf",
+      "package_advisory_matches": 89,
+      "unique_advisories": 89,
+      "severity": {
+        "CRITICAL": 11,
+        "HIGH": 78
+      }
+    }
+  ],
+  "total_package_advisory_matches": 375,
+  "unique_advisories_across_reports": 244,
+  "missing_reports": [
+    "imgproxy",
+    "realtime",
+    "storage-api"
+  ],
+  "verdict": "NO_GO_PENDING_REMEDIATION_OR_APPROVED_REACHABILITY_REVIEW",
+  "suppression_or_allowlist_changed": false,
+  "date": "2026-11-05",
+  "image_lock": "deploy/self-hosted/images.lock.json",
+  "scanner": "Docker Scout1.27.0; public digest-pinned images only",
+  "operator_restriction": "Review package only. No external deployment until compatible remediation or approved reachability evidence and acceptance.",
+  "upstream_candidate": "self-hosted/v0.8.4 was inspected; Auth/Postgres/meta/pooler unchanged, so it does not close the existing findings.",
+  "image_lock_sha256": "2ff33161af86c6f4b59d3c67ac43d555cf4a659377b0ac27d7aaf44ab035ea32"
+}
