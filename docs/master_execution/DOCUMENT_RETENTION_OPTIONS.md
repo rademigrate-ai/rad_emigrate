@@ -6,16 +6,20 @@ tombstone. A transient `pending_deletion` state is permitted only while Storage 
 is in progress. This decision supersedes the pre-decision soft-delete recommendation
 in section 2 below.
 
-**Engineering status:** the additive two-phase deletion migration, service-role
-Storage worker, ACL tests and isolated real-Storage E2E exist in PR #89's working
-branch. Stack F's synthetic two-user test verified Storage becomes unreadable
-at request time and the final object/row deletion leaves an immutable receipt.
-These results do not establish Production rollout, signed-URL revocation, legal
-retention policy, or employer acceptance. The orphan reconciler defaults to
-report-only, with explicit per-object approval for any destructive action.
+**Engineering status (current continuation):** the two-phase migration, real Edge
+worker, owner status UI and bounded dispatcher pass disposable acceptance on fresh
+Stack J. Authenticated reads and new signed URLs are denied at request time;
+an already issued signed URL remained readable during pending deletion (HTTP 200),
+then failed after physical removal. Finalization deletes the row, scrubs the queue
+path to `[erased]` and retains a minimal immutable receipt. Preservation holds
+block requests/cascades and fail if requested after erasure was accepted. The
+retention report is configurable but cannot enqueue or delete anything; its
+destructive flag is always refused. The orphan tool remains report-only by default.
+See `DOCUMENT_WORKER_OPERATIONS.md` and the final acceptance evidence for limits.
+None of these results establishes Production rollout or employer acceptance.
 
 **Still undecided:** lawful retention period, terminal application statuses,
-document holds, signed-URL expiry/replay acceptance, backup erasure obligations,
+legal preservation precedence, signed-URL expiry/replay acceptance, backup erasure obligations,
 and authorization to enable any scheduled automatic deletion. No retention
 scheduler or period has been approved or activated.
 

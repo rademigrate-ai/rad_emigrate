@@ -75,6 +75,7 @@ class SupabaseStorageService {
           path,
           bytes,
           fileOptions: FileOptions(
+            cacheControl: '0',
             contentType: resolvedContentType,
             upsert: true,
           ),

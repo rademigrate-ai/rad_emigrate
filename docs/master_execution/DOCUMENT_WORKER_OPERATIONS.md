@@ -69,6 +69,10 @@ The client creates a fresh, owner-authorized 300-second URL only when opening a
 preview; cached document models carry no preview token. A request denies new
 authenticated object reads and new signed URLs. Previously issued URLs are bearer
 capabilities: replay may remain possible until expiry or physical removal.
+New client uploads request `max-age=0` to require cache revalidation instead of
+the SDK's one-hour default. This does not rewrite older objects' metadata or
+erase a previously downloaded response. Verify the actual response headers in
+the release browser test and again through the eventual proxy.
 Downloaded files and browser memory cannot be remotely erased. Loopback HTTP
 tests do not certify a future CDN or proxy cache; test its headers and purge
 behavior before making stronger deployment guarantees.

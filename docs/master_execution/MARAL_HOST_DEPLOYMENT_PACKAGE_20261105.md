@@ -1,3 +1,52 @@
+# Maral Host sizing and independent delivery update - 2026-11-05
+
+Current procedure: [SELF_HOSTED_OPERATOR_RUNBOOK.md](SELF_HOSTED_OPERATOR_RUNBOOK.md).
+Build the commit-bound operator review package with `scripts/build_self_host_delivery.py`.
+It contains pinned official Compose sources, all 119 RAD migrations, nine Edge Functions,
+operator scripts, configuration/proxy templates and a file-hash manifest. No deployment,
+hosting purchase, DNS change, merge or Production action is performed.
+
+The [official FR-VPS-M2 plan page](https://maralhost.com/vps/ovh), checked 2026-11-05,
+lists 6 CPU cores, 12 GiB RAM and 60 GiB NVMe storage, with customizable resources.
+This is a published specification, not a reserved quote or a capacity guarantee.
+
+Fresh Stack J applied 119/119 migrations with matching hashes and passed 52/52 SQL
+suites and all six real Auth/Storage/worker/Research-CMS API suites. It runs official
+self-hosted/v0.8.3, revision `bc27d2661edd09a5d0b8d76ce33da6d4071a756e`,
+with PostgreSQL 17.6 and digest-pinned amd64 images. Its small synthetic workload
+sample measured 1,085,569,761 bytes of container memory (about 1.01 GiB), a summed
+8.76% container CPU at the sample instant, 130,390,332 bytes in database data,
+66,968 bytes in database configuration and 36,968 bytes in Storage data. These are
+fixture footprints on a shared Windows Docker host; Linux production load is unmeasured.
+
+Five password logins had median 263.379 ms and maximum 309.201 ms. Twenty owner-profile
+reads with concurrency four had median 204.136 ms and p95 388.865 ms. Single tiny-PDF
+upload/download samples were 141.389/77.739 ms; one actual Edge deletion/finalization
+was 602.657 ms. Samples do not establish sustained throughput, an SLO or AI latency.
+The private measurement receipts are `RAD_FINAL_ACCEPTANCE_J_20261105/performance.json`
+and `resource_summary.json` outside Git.
+
+**Provisional recommendation:** M2's memory/CPU specification is reasonable for an
+operator UAT starting point, conditional on a Linux load test and an agreed SLO.
+Prefer 100 GiB disk (80 GiB minimum planning allowance) and separate encrypted offsite
+backups. The 60 GiB base disk must cover OS, images, WAL, growth and maintenance
+headroom, not just the tiny fixture data measured here. The recommendation is a planning
+judgment, not a measured production capacity requirement. Do not purchase a larger plan
+without owner authorization.
+
+Read the current operator runbook for secret setup, SMTP, TLS/DNS/firewall review,
+first-admin bootstrap, dispatcher activation, backup/restore and employer UAT.
+A snapshot drill is distinct from PITR, offsite delivery, an RPO/RTO commitment and
+production-host restore acceptance. The final evidence report records the current
+119-migration drill separately from the earlier 118-migration drill below.
+
+---
+
+## Historical 118-migration baseline (superseded instructions)
+
+The original report is retained below for provenance. Its counts, missing-feature
+statements and source SHA are historical; use the update and current runbook above.
+
 # RAD — Maral Host FR-VPS-M2 deployment package (DRAFT)
 
 **Status: DOCUMENTATION ONLY. Hosting is NOT purchased. Nothing is deployed. No DNS, TLS,
