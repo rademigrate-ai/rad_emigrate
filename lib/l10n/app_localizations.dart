@@ -242,6 +242,12 @@ abstract class AppLocalizations {
   String get deleteDocument;
   String get deleteDocumentTitle;
   String get deleteDocumentBody;
+  String get documentDeletionPending;
+  String get documentDeletionRetrying;
+  String get documentDeletionFailed;
+  String get documentDeletionComplete;
+  String get documentDeletionReference;
+  String get documentDeletionStatusUnavailable;
   String get close;
   String get acceptedFormats;
   String get couldNotReadFile;

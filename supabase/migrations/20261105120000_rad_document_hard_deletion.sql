@@ -36,6 +36,16 @@ create index if not exists rad_document_deletions_state_idx
   on private.rad_document_deletions (state, requested_at)
   where state in ('pending_storage','failed');
 
+-- Explicit preservation controls; no retention period or automatic purge is
+-- selected here. A hold must be placed before deletion has been accepted.
+create table private.rad_document_preservation_holds (
+  document_id uuid primary key,
+  held_by uuid not null,
+  held_at timestamptz not null default now()
+);
+alter table private.rad_document_preservation_holds enable row level security;
+grant select, insert, delete on private.rad_document_preservation_holds to postgres;
+
 -- Immutable receipt. Deliberately holds no document contents, no credentials,
 -- no file name and no application linkage -- only what an audit needs.
 create table if not exists public.document_deletion_receipts (
@@ -79,7 +89,13 @@ begin
   if v_actor is null then raise exception 'authentication required' using errcode='42501'; end if;
   v_admin := private.has_role(array['admin','super_admin']);
   select * into d from public.documents where id = p_document_id for update;
-  if not found then raise exception 'document not found' using errcode='P0002'; end if;
+  if not found then
+    if exists(select 1 from public.document_deletion_receipts receipt
+      where receipt.document_id=p_document_id and (receipt.owner_id=v_actor or v_admin)) then
+      return jsonb_build_object('state','finalized','already_requested',true);
+    end if;
+    raise exception 'document not found' using errcode='P0002';
+  end if;
   -- Owner scope mirrors the existing documents RLS predicate exactly.
   if not v_admin and not (
     d.user_id = v_actor and (
@@ -90,6 +106,13 @@ begin
     )
   ) then
     raise exception 'not authorized for this document' using errcode='42501';
+  end if;
+  if exists(select 1 from private.rad_document_preservation_holds h where h.document_id=d.id) then
+    raise exception 'document preservation hold' using errcode='55000';
+  end if;
+  if d.file_path is not null and btrim(d.file_path) <> ''
+     and split_part(d.file_path,'/',1) is distinct from d.user_id::text then
+    raise exception 'document Storage owner mismatch' using errcode='42501';
   end if;
   if d.file_path is null or btrim(d.file_path) = '' then
     -- Some UI document-type placeholders have no uploaded file. They can be
@@ -147,7 +170,8 @@ begin
   end if;
   update private.rad_document_deletions set state='failed', last_error_code='attempts_exhausted',
     lease_token=null, lease_until=null, updated_at=now()
-  where state='pending_storage' and attempts >= 5;
+  where state='pending_storage' and attempts >= 5
+    and (lease_until is null or lease_until < now());
 
   select * into r from private.rad_document_deletions
   where state in ('pending_storage','failed') and attempts < 5
@@ -281,6 +305,9 @@ grant execute on function public.get_document_deletion_receipt(uuid) to authenti
 create or replace function private.rad_guard_stored_document_delete()
 returns trigger language plpgsql security definer set search_path='' as $$
 begin
+  if exists(select 1 from private.rad_document_preservation_holds h where h.document_id=old.id) then
+    raise exception 'document preservation hold' using errcode='55000';
+  end if;
   if old.file_path is not null and btrim(old.file_path) <> '' then
     if old.status <> 'pending_deletion' or not exists (
       select 1 from private.rad_document_deletions r
@@ -298,6 +325,100 @@ revoke all on function private.rad_guard_stored_document_delete() from public, a
 create trigger rad_stored_document_delete_guard
 before delete on public.documents for each row
 execute function private.rad_guard_stored_document_delete();
+
+-- Prevent clearing a registered path before deleting a placeholder, changing
+-- its owner, or replacing its path and orphaning the previous object. A stored
+-- document is replaced by completing deletion and uploading a new document.
+create function private.rad_guard_stored_document_reference()
+returns trigger language plpgsql security definer set search_path='' as $$
+begin
+  if new.file_path is not null and btrim(new.file_path) <> ''
+     and split_part(new.file_path,'/',1) is distinct from new.user_id::text then
+    raise exception 'document Storage owner mismatch' using errcode='42501';
+  end if;
+  if tg_op='UPDATE' and old.file_path is not null and btrim(old.file_path) <> ''
+    and (new.file_path is distinct from old.file_path or new.user_id is distinct from old.user_id) then
+    raise exception 'stored document reference requires audited deletion' using errcode='42501';
+  end if;
+  return new;
+end $$;
+alter function private.rad_guard_stored_document_reference() owner to postgres;
+revoke all on function private.rad_guard_stored_document_reference() from public, anon, authenticated;
+create trigger rad_stored_document_reference_guard
+before insert or update of file_path,user_id on public.documents for each row
+execute function private.rad_guard_stored_document_reference();
+
+create function public.set_document_preservation_hold(p_document_id uuid,p_held boolean)
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare actor uuid:=auth.uid();
+begin
+  if actor is null or not private.has_role(array['admin','super_admin']) then
+    raise exception 'admin required' using errcode='42501';
+  end if;
+  if p_held is null then raise exception 'explicit hold decision required' using errcode='22023'; end if;
+  -- Serialize with request_document_deletion. Never promise preservation once
+  -- an accepted worker may already be deleting the physical object.
+  perform 1 from public.documents where id=p_document_id for update;
+  if not found then raise exception 'document not found' using errcode='P0002'; end if;
+  if exists(select 1 from private.rad_document_deletions where document_id=p_document_id) then
+    raise exception 'deletion already accepted; preservation cannot be guaranteed' using errcode='55000';
+  end if;
+  if p_held then
+    insert into private.rad_document_preservation_holds(document_id,held_by)
+      values(p_document_id,actor) on conflict do nothing;
+  else
+    delete from private.rad_document_preservation_holds where document_id=p_document_id;
+  end if;
+  insert into public.admin_audit_logs(actor_id,action,resource_type,resource_id,safe_metadata)
+    values(actor,'document_preservation_hold','document',p_document_id::text,jsonb_build_object('held',p_held));
+  return jsonb_build_object('held',p_held);
+end $$;
+alter function public.set_document_preservation_hold(uuid,boolean) owner to postgres;
+revoke all on function public.set_document_preservation_hold(uuid,boolean) from public,anon;
+grant execute on function public.set_document_preservation_hold(uuid,boolean) to authenticated;
+
+-- Minimal lifecycle metadata remains visible without reopening the private
+-- document row or issuing a signed URL. Completed receipts carry no file name.
+create function public.list_document_deletions()
+returns jsonb language plpgsql security definer set search_path='' as $$
+declare actor uuid:=auth.uid();
+begin
+  if actor is null then raise exception 'authentication required' using errcode='42501'; end if;
+  return coalesce((select jsonb_agg(to_jsonb(s) order by s.requested_at desc) from (
+    select r.document_id,d.user_id as owner_id,
+      case when r.attempts>=5 and (r.lease_until is null or r.lease_until<now()) then 'failed'
+        when r.last_error_code is not null then 'retrying' else 'pending_storage' end as state,
+      r.attempts,r.requested_at,null::timestamptz as confirmed_at
+    from private.rad_document_deletions r join public.documents d on d.id=r.document_id
+    where d.user_id=actor and r.state<>'finalized'
+    union all
+    select document_id,owner_id,'finalized',attempts,requested_at,confirmed_at
+    from public.document_deletion_receipts where owner_id=actor
+    order by requested_at desc limit 100
+  ) s),'[]'::jsonb);
+end $$;
+alter function public.list_document_deletions() owner to postgres;
+revoke all on function public.list_document_deletions() from public,anon;
+grant execute on function public.list_document_deletions() to authenticated;
+
+create function public.document_deletion_queue_health()
+returns jsonb language plpgsql security definer set search_path='' as $$
+begin
+  if coalesce(auth.jwt()->>'role','')<>'service_role' then
+    raise exception 'forbidden' using errcode='PT403';
+  end if;
+  return (select jsonb_build_object(
+    'pending',count(*) filter(where state<>'finalized'),
+    'exhausted',count(*) filter(where state<>'finalized' and attempts>=5
+      and (lease_until is null or lease_until<now())),
+    'leased',count(*) filter(where state<>'finalized' and lease_until>now()),
+    'oldest_pending_seconds',coalesce(extract(epoch from now()-min(requested_at)
+      filter(where state<>'finalized')),0)::bigint)
+    from private.rad_document_deletions);
+end $$;
+alter function public.document_deletion_queue_health() owner to postgres;
+revoke all on function public.document_deletion_queue_health() from public,anon,authenticated;
+grant execute on function public.document_deletion_queue_health() to service_role;
 
 -- Requirement 1: deny client access the moment a request is accepted. Replace
 -- the owner read/update/delete predicates so a pending_deletion document is

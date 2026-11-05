@@ -197,6 +197,24 @@ void main() {
     expect(find.text('No documents uploaded yet'), findsOneWidget);
   });
 
+  testWidgets('a rejected stored file must be deleted before replacement', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final prefs = await SharedPreferences.getInstance();
+    final repo = _FakeDocRepo([
+      testDoc1.copyWith(status: DocumentVerificationStatus.rejected),
+    ]);
+    await tester.pumpWidget(createSubject(prefs: prefs, repo: repo));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('National Passport'));
+    await tester.pumpAndSettle();
+    expect(find.text('Choose file and upload'), findsNothing);
+    expect(find.text('Delete document'), findsOneWidget);
+  });
+
   testWidgets('Add type button invokes addDocumentType on controller', (
     tester,
   ) async {

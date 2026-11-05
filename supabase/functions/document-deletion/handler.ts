@@ -157,8 +157,14 @@ export function createDocumentDeletionHandler(options: Options) {
       if (stillPresent) throw new Error("storage_object_still_readable");
       if (!confirmedAbsent) throw new Error("storage_absence_not_confirmed");
     } catch (error) {
-      const code = text((error as Error)?.message).replace(/[^a-z0-9_]/gi, "_")
-        .toLowerCase().slice(0, 64) || "storage_delete_failed";
+      const message = text((error as Error)?.message);
+      // Fetch errors can contain object paths and URLs. Only our fixed
+      // classifications may be persisted or returned to an operator.
+      const code =
+        /^(storage_status_[1-5][0-9]{2}|storage_object_still_readable|storage_absence_not_confirmed)$/
+            .test(message)
+          ? message
+          : "storage_network_error";
       await rpc("fail_document_deletion", {
         p_request_id: requestId,
         p_lease_token: leaseToken,

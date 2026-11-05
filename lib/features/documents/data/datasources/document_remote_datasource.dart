@@ -98,6 +98,12 @@ class DocumentRemoteDataSource {
       );
     }
     try {
+      if (document.storagePath?.isNotEmpty == true) {
+        throw const ApiException(
+          message: 'Delete the stored document before uploading a replacement.',
+          code: 'document_replacement_requires_deletion',
+        );
+      }
       final userId = document.userId ?? _service.client.auth.currentUser?.id;
       if (userId == null || userId.isEmpty) {
         throw const ApiException(

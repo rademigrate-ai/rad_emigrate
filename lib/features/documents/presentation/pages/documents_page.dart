@@ -21,6 +21,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/document.dart';
 import '../../domain/entities/document_type.dart';
 import '../providers/document_controller.dart';
+import '../widgets/document_deletion_status.dart';
 
 class DocumentsPage extends ConsumerStatefulWidget {
   const DocumentsPage({super.key});
@@ -92,8 +93,10 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
           IconButton(
             tooltip: l10n.refresh,
             icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                ref.read(documentControllerProvider.notifier).load(),
+            onPressed: () {
+              ref.invalidate(documentDeletionStatusProvider);
+              ref.read(documentControllerProvider.notifier).load();
+            },
           ),
         ],
       ),
@@ -115,86 +118,100 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
           ),
         ),
       ),
-      body: PremiumCanvas(
-        child: state.when(
-          loading: () => LoadingState.section(message: l10n.loadingDocuments),
-          error: (e, _) => ErrorState(
-            message: localizedDataError(e, l10n),
-            onRetry: () => ref.read(documentControllerProvider.notifier).load(),
-          ),
-          data: (docs) {
-            if (docs.isEmpty) {
-              return EmptyState(
-                title: l10n.noDocuments,
-                subtitle: l10n.noDocumentsSubtitle,
-                icon: Icons.folder_outlined,
-              );
-            }
+      body: Column(
+        children: [
+          const DocumentDeletionStatusPanel(),
+          Expanded(
+            child: PremiumCanvas(
+              child: state.when(
+                loading: () =>
+                    LoadingState.section(message: l10n.loadingDocuments),
+                error: (e, _) => ErrorState(
+                  message: localizedDataError(e, l10n),
+                  onRetry: () =>
+                      ref.read(documentControllerProvider.notifier).load(),
+                ),
+                data: (docs) {
+                  if (docs.isEmpty) {
+                    return EmptyState(
+                      title: l10n.noDocuments,
+                      subtitle: l10n.noDocumentsSubtitle,
+                      icon: Icons.folder_outlined,
+                    );
+                  }
 
-            final filtered = docs
-                .where((doc) => _filter == null || doc.kind == _filter)
-                .toList();
-            final kinds = docs.map((doc) => doc.kind).toSet();
-            return Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 880),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
+                  final filtered = docs
+                      .where((doc) => _filter == null || doc.kind == _filter)
+                      .toList();
+                  final kinds = docs.map((doc) => doc.kind).toSet();
+                  return Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 880),
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
                         children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(end: 6),
-                            child: ChoiceChip(
-                              label: Text(l10n.allItems),
-                              selected: _filter == null,
-                              selectedColor: context.premium.accent,
-                              showCheckmark: false,
-                              labelStyle: TextStyle(
-                                color: _filter == null
-                                    ? Colors.white
-                                    : context.premium.mutedText,
-                              ),
-                              onSelected: (_) => setState(() => _filter = null),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    end: 6,
+                                  ),
+                                  child: ChoiceChip(
+                                    label: Text(l10n.allItems),
+                                    selected: _filter == null,
+                                    selectedColor: context.premium.accent,
+                                    showCheckmark: false,
+                                    labelStyle: TextStyle(
+                                      color: _filter == null
+                                          ? Colors.white
+                                          : context.premium.mutedText,
+                                    ),
+                                    onSelected: (_) =>
+                                        setState(() => _filter = null),
+                                  ),
+                                ),
+                                for (final kind in kinds)
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      end: 6,
+                                    ),
+                                    child: ChoiceChip(
+                                      label: Text(_kindLabel(kind, l10n)),
+                                      selected: _filter == kind,
+                                      selectedColor: context.premium.accent,
+                                      showCheckmark: false,
+                                      labelStyle: TextStyle(
+                                        color: _filter == kind
+                                            ? Colors.white
+                                            : context.premium.mutedText,
+                                      ),
+                                      onSelected: (_) =>
+                                          setState(() => _filter = kind),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                          for (final kind in kinds)
-                            Padding(
-                              padding: const EdgeInsetsDirectional.only(end: 6),
-                              child: ChoiceChip(
-                                label: Text(_kindLabel(kind, l10n)),
-                                selected: _filter == kind,
-                                selectedColor: context.premium.accent,
-                                showCheckmark: false,
-                                labelStyle: TextStyle(
-                                  color: _filter == kind
-                                      ? Colors.white
-                                      : context.premium.mutedText,
-                                ),
-                                onSelected: (_) =>
-                                    setState(() => _filter = kind),
-                              ),
+                          const SizedBox(height: 12),
+                          for (final doc in filtered)
+                            _DocTile(
+                              doc: doc,
+                              tone: _tone(doc.status),
+                              kindLabel: _kindLabel(doc.kind, l10n),
+                              statusLabel: _statusLabel(doc.status, l10n),
+                              onTap: () => _openSheet(context, ref, doc),
                             ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    for (final doc in filtered)
-                      _DocTile(
-                        doc: doc,
-                        tone: _tone(doc.status),
-                        kindLabel: _kindLabel(doc.kind, l10n),
-                        statusLabel: _statusLabel(doc.status, l10n),
-                        onTap: () => _openSheet(context, ref, doc),
-                      ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -249,8 +266,9 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
                     RadInlineLoading(label: sheetL10n.loading),
                   ],
                   const SizedBox(height: 20),
-                  if (doc.status == DocumentVerificationStatus.missing ||
-                      doc.status == DocumentVerificationStatus.rejected)
+                  if ((doc.storagePath == null || doc.storagePath!.isEmpty) &&
+                      (doc.status == DocumentVerificationStatus.missing ||
+                          doc.status == DocumentVerificationStatus.rejected))
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primaryRed,
@@ -394,6 +412,7 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
                         await ref
                             .read(documentControllerProvider.notifier)
                             .deleteDocument(doc.id);
+                        ref.invalidate(documentDeletionStatusProvider);
                         if (ctx.mounted) Navigator.pop(ctx);
                       } catch (_) {
                         if (ctx.mounted) {

@@ -22,6 +22,7 @@ type Options = {
   claim?: unknown;
   deleteStatus?: number;
   deleteThrows?: boolean;
+  deleteError?: string;
   stillReadable?: boolean;
   probeStatus?: number;
   probeBody?: unknown;
@@ -65,7 +66,9 @@ async function exercise(options: Options = {}, authorized = true) {
     if (path.startsWith("/storage/v1/object/")) {
       if (method === "DELETE") {
         if (options.deleteThrows) {
-          return Promise.reject(new Error("network down"));
+          return Promise.reject(
+            new Error(options.deleteError ?? "network down"),
+          );
         }
         return Promise.resolve(
           new Response(null, { status: options.deleteStatus ?? 200 }),
@@ -153,6 +156,20 @@ Deno.test("a network error records a safe error code", async () => {
       `error code must be safe for the RPC contract, got ${code}`,
     );
   }
+});
+
+Deno.test("network exception details never enter responses or queue errors", async () => {
+  const { body, calls } = await exercise({
+    deleteThrows: true,
+    deleteError:
+      "failed https://stack.invalid/private/passport.pdf?token=secret",
+  });
+  equal(body.code, "storage_network_error");
+  const failure = calls.find((c) => c.path.endsWith("fail_document_deletion"));
+  equal(
+    (failure?.body as Record<string, string>).p_error_code,
+    "storage_network_error",
+  );
 });
 
 Deno.test("an object still readable after delete is treated as a failure", async () => {
