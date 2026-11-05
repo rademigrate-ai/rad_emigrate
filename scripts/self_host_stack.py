@@ -22,6 +22,19 @@ from pathlib import Path
 MARKER = "RAD_DISPOSABLE_SELF_HOST_V1"
 
 
+def gateway_log_privacy(template: str) -> str:
+    """Retain gateway status/timing without URLs, headers or remote identity."""
+    safe = 'inline_string: "[%START_TIME%] %REQ(:METHOD)% %PROTOCOL% %RESPONSE_CODE% %BYTES_SENT% %DURATION%\\n"'
+    if template.count(safe) == 1 and template.count("inline_string:") == 1:
+        return template
+    pattern = (
+        r'^([ \t]*)inline_string: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%[^\r\n]*"'
+    )
+    if len(re.findall(pattern, template, re.MULTILINE)) != 1:
+        raise ValueError("pinned gateway access log differs; review before preparing")
+    return re.sub(pattern, lambda match: match[1] + safe, template, flags=re.MULTILINE)
+
+
 def storage_response_privacy(template: str) -> str:
     """Keep the pinned Storage route/auth unchanged; disable response caching."""
     anchor = "                          prefix: /storage/v1/\n                        route:\n"
@@ -155,6 +168,13 @@ def prepare(bundle: Path, output: Path, project: str, port: int) -> dict:
             "options": {"max-size": "10m", "max-file": "3"},
         }
         service["security_opt"] = ["no-new-privileges:true"]
+        if name == "storage":
+            # This pinned logger includes signed URLs even on error responses.
+            # Keep status/timing at the sanitized gateway and persistent worker
+            # errors in the queue instead of retaining raw Storage request logs.
+            service["environment"].update(
+                LOG_LEVEL="silent", LOGFLARE_ENABLED="false", TRACING_ENABLED="false"
+            )
         for mount in service.get("volumes", []):
             target = mount["target"]
             volume = {
@@ -247,7 +267,11 @@ def prepare(bundle: Path, output: Path, project: str, port: int) -> dict:
     shutil.copytree(bundle, output)
     gateway = output / "volumes/api/envoy/lds.template.yaml"
     original_gateway_sha = hashlib.sha256(gateway.read_bytes()).hexdigest()
-    gateway.write_bytes(storage_response_privacy(gateway.read_text("utf8")).encode())
+    gateway.write_bytes(
+        gateway_log_privacy(
+            storage_response_privacy(gateway.read_text("utf8"))
+        ).encode()
+    )
     save(
         output / "STORAGE_GATEWAY_PRIVACY.json",
         {
@@ -257,6 +281,8 @@ def prepare(bundle: Path, output: Path, project: str, port: int) -> dict:
                 gateway.read_bytes()
             ).hexdigest(),
             "authorization_and_prefix_rewrite": "UNCHANGED",
+            "gateway_access_log": "STATUS_TIMING_ONLY_NO_REQUEST_URL_OR_HEADERS",
+            "storage_request_logging": "SILENT_NO_EXTERNAL_TRACING",
         },
     )
     (output / ".env").write_text(

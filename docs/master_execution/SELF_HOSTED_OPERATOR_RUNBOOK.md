@@ -42,7 +42,15 @@ Auth and Storage initialize their official schemas before RAD migrations run.
 Preparation also applies the reviewed Storage response no-store header and writes
 `STORAGE_GATEWAY_PRIVACY.json`. Confirm its template hash and the real signed-GET
 header; upload metadata alone was insufficient on the pinned release. This policy
-currently covers every Storage response. Review any future public-media caching
+currently covers every Storage response. Gateway access logs retain status/timing
+only, with no URLs, query strings, client addresses or freeform request headers.
+The pinned Storage logger exposes private paths and signed query tokens even on
+errors, so preparation sets its LOG_LEVEL=silent and disables external Logflare
+and tracing. This sacrifices raw Storage request diagnostics; retain the sanitized
+gateway counters, service health and persistent classified worker queue instead.
+Do not re-enable raw request logging for real private traffic. Run
+verify_self_host_log_privacy.py for actual success/error log evidence.
+Review any future public-media caching
 exception separately; keep private document responses no-store.
 Do not substitute an empty PostgreSQL instance without those foundations.
 Execute all `supabase/tests/*.sql` before adding runtime fixtures. Tests roll back;

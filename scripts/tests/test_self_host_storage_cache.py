@@ -1,9 +1,21 @@
 import unittest
 
-from scripts.self_host_stack import storage_response_privacy
+from scripts.self_host_stack import gateway_log_privacy, storage_response_privacy
 
 
 class StorageGatewayPrivacy(unittest.TestCase):
+    def test_access_log_keeps_status_without_private_request_fields(self):
+        original = '                        inline_string: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %REQ(REFERER)%\\n"\n'
+        result = gateway_log_privacy(original)
+        self.assertNotIn("PATH", result)
+        self.assertNotIn("REFERER", result)
+        self.assertIn("%RESPONSE_CODE%", result)
+        self.assertIn("%DURATION%", result)
+        self.assertEqual(gateway_log_privacy(result), result)
+        for unknown in ("unexpected format", original + original):
+            with self.assertRaises(ValueError):
+                gateway_log_privacy(unknown)
+
     def setUp(self):
         self.route = (
             "                      - match:\n"

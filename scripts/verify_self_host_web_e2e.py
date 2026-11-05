@@ -44,6 +44,7 @@ def main():
     parser.add_argument("--browser", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--only-documents", action="store_true")
+    parser.add_argument("--history-only", action="store_true")
     parser.add_argument("--ui-matrix", action="store_true")
     parser.add_argument("--admin-flow", action="store_true")
     parser.add_argument("--build-mode", choices=("debug", "release"), default="debug")
@@ -182,7 +183,12 @@ def main():
                 ):
                     shot("failed-" + name)
                 if name.startswith(
-                    ("documents-en-", "documents-fa-", "switch-language")
+                    (
+                        "documents-en-",
+                        "documents-fa-",
+                        "switch-language",
+                        "conversation-owner-",
+                    )
                 ):
                     (output / (name + ".aria.txt")).write_text(
                         page.locator("flt-semantics-host").aria_snapshot(),
@@ -237,7 +243,8 @@ def main():
             )
             shot("profile-saved-en-desktop")
 
-        step("profile-edit-persistence", profile)
+        if not args.history_only:
+            step("profile-edit-persistence", profile)
 
         def consultation():
             visit("/consultation")
@@ -254,7 +261,7 @@ def main():
             )
             shot("consultation-persisted-en-desktop")
 
-        if not args.only_documents:
+        if not args.only_documents and not args.history_only:
             step("consultation-persistence", consultation)
 
         def application():
@@ -270,8 +277,52 @@ def main():
             )
             shot("application-persisted-en-desktop")
 
-        if not args.only_documents:
+        if not args.only_documents and not args.history_only:
             step("application-creation-persistence", application)
+
+        def notification_inbox():
+            title = "SYNTHETIC inbox " + seed
+            status, _ = call(
+                api + "/rest/v1/notifications",
+                "POST",
+                {
+                    "user_id": actor,
+                    "type": "system",
+                    "title": title,
+                    "body": "Synthetic in-app delivery only; no external transport.",
+                },
+                apikey=service,
+            )
+            require(status == 201, "owned synthetic notification fixture")
+            visit("/notifications")
+            semantic_label(title).click()
+            wait_for(
+                lambda: (
+                    scalar(
+                        f"select count(*) from public.notifications where user_id='{actor}' and title='SYNTHETIC inbox {seed}' and read_at is not null;"
+                    )
+                    == "1"
+                )
+            )
+            visit("/notifications")
+            semantic_label(title).wait_for()
+            shot("notification-read-after-refresh")
+            other, other_token = make_user(api, service, anon, "inbox-other-" + seed)
+            try:
+                status, body = call(
+                    api + "/rest/v1/notifications?user_id=eq." + actor,
+                    token=other_token,
+                    apikey=anon,
+                )
+                require(
+                    status == 200 and json.loads(body) == [],
+                    "cross-owner inbox is private",
+                )
+            finally:
+                call(api + "/auth/v1/admin/users/" + other, "DELETE", apikey=service)
+
+        if not args.only_documents and not args.history_only:
+            step("in-app-notification-read-refresh-and-isolation", notification_inbox)
 
         def conversation_history():
             status, body = call(
@@ -364,7 +415,7 @@ def main():
                     )
                 )
                 visit("/ai-assistant")
-                page.get_by_text(renamed, exact=False).first.wait_for()
+                semantic_label(renamed).wait_for()
                 page.get_by_text(message, exact=True).wait_for()
                 shot("conversation-renamed-after-refresh")
                 page.get_by_role("button", name="Show menu", exact=True).first.click()
@@ -399,6 +450,14 @@ def main():
             step(
                 "conversation-owner-history-rename-delete-refresh", conversation_history
             )
+        if args.history_only:
+            report["passed"] = sum(r["status"] == "PASS" for r in report["results"])
+            report["total"] = len(report["results"])
+            (output / "web_results.json").write_bytes(
+                json.dumps(report, indent=2).encode()
+            )
+            browser.close()
+            raise SystemExit(0 if report["passed"] == report["total"] else 1)
 
         def upload():
             visit("/documents")

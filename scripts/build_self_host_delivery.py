@@ -12,8 +12,10 @@ from pathlib import Path
 
 try:
     from .build_self_host_bundle import build_bundle, git
+    from .self_host_stack import gateway_log_privacy, storage_response_privacy
 except ImportError:
     from build_self_host_bundle import build_bundle, git
+    from self_host_stack import gateway_log_privacy, storage_response_privacy
 
 OPERATOR_FILES = (
     "self_host_stack.py",
@@ -32,6 +34,7 @@ OPERATOR_FILES = (
     "verify_self_host_web_e2e.py",
     "measure_self_host_acceptance.py",
     "verify_self_host_token_expiry.py",
+    "verify_self_host_log_privacy.py",
     "verify_pr82_appointment_e2e.py",
 )
 
@@ -76,6 +79,15 @@ def assemble(repo: Path, upstream: Path, output: Path) -> dict:
             if not pinned or pinned.get("architecture") != "amd64":
                 raise ValueError("unreviewed image in upstream Compose")
             service["image"] = pinned["digest"]
+        model["services"]["storage"]["environment"].update(
+            LOG_LEVEL="silent", LOGFLARE_ENABLED="false", TRACING_ENABLED="false"
+        )
+        gateway = bundle / "volumes/api/envoy/lds.template.yaml"
+        gateway.write_bytes(
+            gateway_log_privacy(
+                storage_response_privacy(gateway.read_text("utf8"))
+            ).encode()
+        )
         (bundle / "docker-compose.pinned.json").write_bytes(
             json.dumps(model, indent=2).encode()
         )
