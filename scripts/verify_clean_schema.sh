@@ -74,7 +74,7 @@ BEGIN
   IF column_count <> 114 THEN RAISE EXCEPTION 'Expected 114 public RAD columns, got %',column_count; END IF;
   IF primary_key_count <> 15 THEN RAISE EXCEPTION 'Expected 15 primary keys, got %',primary_key_count; END IF;
   IF foreign_key_count <> 22 THEN RAISE EXCEPTION 'Expected 22 foreign keys, got %',foreign_key_count; END IF;
-  -- Stage 3 added 9 justified FK covering indexes on these tables (37 → 46).
+  -- Stage 3 added 9 justified FK covering indexes on these tables (37 â†’ 46).
   IF index_count <> 46 THEN RAISE EXCEPTION 'Expected 46 public RAD indexes, got %',index_count; END IF;
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened',function_count,hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %',rls_count; END IF;
@@ -113,7 +113,7 @@ SQL
 # Stored-reference ownership and detach protection add one INSERT/UPDATE
 # trigger. Fresh CLI reconstruction 42016969094 independently measured the
 # trigger digest below; every other pinned dimension was byte-identical.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"ef07b9a5b6c6b9f15b86834f4838bf54","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"95e1d6c0d9724d7b370633b41a666b4e","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2

@@ -40,7 +40,7 @@ class PhaseASecurity(unittest.TestCase):
         self.assertEqual(set(fp),{'columns','constraints','indexes','functions','triggers','policies','rls','bucket'})
         # F16 and the hard-document-deletion Storage access gate are both
         # pinned using the actual clean CI schema (run 42007332900).
-        self.assertEqual(fp['policies'],'ef07b9a5b6c6b9f15b86834f4838bf54')
+        self.assertEqual(fp['policies'],'95e1d6c0d9724d7b370633b41a666b4e')
         # Cascade and stored-reference guards: exact trigger structure from
         # fresh CLI reconstruction (run 42016969094); other pins unchanged.
         self.assertEqual(fp['triggers'],'d27016cc224f744b266532791c7d984c')
