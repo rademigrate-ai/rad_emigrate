@@ -142,26 +142,17 @@ void main() {
           find.text('Case Milestones & Document Checklist'),
           findsOneWidget,
         );
-        expect(find.text('Total: 5'), findsOneWidget);
-        expect(find.text('In Progress: 1'), findsOneWidget);
+        expect(find.text('Total: 3'), findsOneWidget);
+        expect(find.text('In Progress: 0'), findsOneWidget);
 
-        // Verify baseline milestones
+        // No jurisdiction-specific visa rules or invented deadlines may be
+        // presented as default obligations without authoritative evidence.
         expect(
-          find.text('Valid Passport & Identity Documents'),
+          find.text('Verify official program requirements'),
           findsOneWidget,
         );
-        expect(find.text('Language Proficiency Certificate'), findsOneWidget);
-        expect(
-          find.text('Educational Credential Assessment (ECA)'),
-          findsOneWidget,
-        );
-        expect(
-          find.text('Proof of Financial Sufficiency & Bank Statement'),
-          findsOneWidget,
-        );
-
-        // Verify status pills
-        expect(find.text('In Progress'), findsWidgets);
+        expect(find.text('Organize case documents'), findsOneWidget);
+        expect(find.text('Track verified case milestones'), findsOneWidget);
         expect(find.text('Not Started'), findsWidgets);
       },
     );
@@ -347,17 +338,17 @@ void main() {
         expect(find.text('No checklist items yet'), findsOneWidget);
 
         // Tap action to create default milestones
-        final createBtn = find.text('Create Default Milestones');
+        final createBtn = find.text('Create General Planning Steps');
         expect(createBtn, findsOneWidget);
         await tester.tap(createBtn);
         await tester.pumpAndSettle();
 
         // Milestones populated
         expect(
-          find.text('Valid Passport & Identity Documents'),
+          find.text('Verify official program requirements'),
           findsOneWidget,
         );
-        expect(find.text('Total: 5'), findsOneWidget);
+        expect(find.text('Total: 3'), findsOneWidget);
       },
     );
 
@@ -416,7 +407,7 @@ void main() {
           await tester.pumpAndSettle();
 
           expect(find.text('چک‌لیست مراحل و مدارک پرونده'), findsOneWidget);
-          expect(find.text('کل مراحل: 5'), findsOneWidget);
+          expect(find.text('کل مراحل: 3'), findsOneWidget);
           expect(tester.takeException(), isNull);
 
           // Tap back button

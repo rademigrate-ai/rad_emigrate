@@ -228,7 +228,10 @@
       "implementation": "`docs/AUTH_ARCHITECTURE.md`; `docs/ANDROID_RELEASE.md`",
       "historical_evidence": "PR #58 recovery path, #61 private documents; no mailbox or live two-user verification, PITR evidence missing.",
       "current_evidence": [
-        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md",
+        "docs/master_execution/IMAGE_SECURITY_TRIAGE_20261105.md",
+        "scripts/triage_image_security.py",
+        "scripts/tests/test_image_security_triage.py"
       ],
       "remaining": "Fresh Q real Auth/Storage/abuse tests and encrypted120 cold restore pass. Request-log leakage is fixed and tested. Known high/critical image findings plus production recovery/abuse acceptance remain open.",
       "original_requirement": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
@@ -1014,18 +1017,26 @@
       "implementation": "`lib/features/applications`; `lib/features/notifications`",
       "historical_evidence": "Existing source/tests do not yet constitute complete acceptance evidence.",
       "current_evidence": [
-        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md",
+        "supabase/migrations/20261105200001_application_case_checklist_persistence.sql",
+        "supabase/tests/rad_application_case_checklist_persistence.sql",
+        "lib/features/applications/data/datasources/case_checklist_gateway.dart",
+        "test/applications/case_checklist_server_persistence_test.dart",
+        "test/applications/case_default_milestones_source_safety_test.dart"
       ],
-      "remaining": "Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
+      "remaining": "Owner-scoped, versioned checklist persistence now has rollback-only SQL and Flutter regression evidence. Full fresh 121-migration Auth/PostgREST browser E2E, staff milestones/history and approved reminder delivery remain unverified.",
       "original_requirement": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
-      "missing_implementation_or_decision": "Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
-      "missing_tests": "Case history/checklist updates plus approved reminder transport and staff permissions.",
+      "missing_implementation_or_decision": "Owner-scoped versioned case checklist RPCs and Flutter gateway implemented; final user-journey acceptance still requires an independent live API/browser E2E plus staff history and consented reminder delivery.",
+      "missing_tests": "Fresh 121-migration Auth/PostgREST checklist save/relogin/reload and cross-owner denial, staff status-history, and approved reminder transport.",
       "required_backend": "Case/checklist/history and notification integration.",
       "required_ui": "Case tracker/checklists/history/reminders.",
       "required_authorization": "Owner/staff scope, notification consent and approved delivery.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: Application creation/tracking models and checklist domain exist; end-to-end persisted milestones/reminder delivery is incomplete.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: secure versioned checklist backend migration and Flutter integration have passed targeted local tests, but full case history, real browser and reminder-delivery acceptance remain open.",
       "existing_tests": [
-        "test/applications/case_checklist_test.dart"
+        "test/applications/case_checklist_test.dart",
+        "test/applications/case_checklist_server_persistence_test.dart",
+        "test/applications/case_default_milestones_source_safety_test.dart",
+        "supabase/tests/rad_application_case_checklist_persistence.sql"
       ],
       "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },
