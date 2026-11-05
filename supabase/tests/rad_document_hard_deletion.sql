@@ -54,8 +54,16 @@ begin
   assert public.rad_document_storage_registered(
     '7a000000-0000-4000-8000-000000000001/f.pdf'),
     'Storage registration check must work even when the row is hidden by RLS';
+  assert public.rad_document_storage_registered(
+    '7a000000-0000-4000-8000-000000000001/never-uploaded.pdf'),
+    'foreign path existence must not be disclosed by public RPC';
+  perform set_config('request.jwt.claims',
+    '{"sub":"7a000000-0000-4000-8000-000000000001","role":"authenticated"}', true);
   assert not public.rad_document_storage_registered(
-    '7a000000-0000-4000-8000-000000000001/never-uploaded.pdf');
+    '7a000000-0000-4000-8000-000000000001/never-uploaded.pdf'),
+    'own unregistered Storage object remains deletable';
+  perform set_config('request.jwt.claims',
+    '{"sub":"7a000000-0000-4000-8000-000000000002","role":"authenticated"}', true);
   assert has_function_privilege('authenticated',
     'public.rad_document_storage_registered(text)', 'EXECUTE');
   assert not has_function_privilege('anon',

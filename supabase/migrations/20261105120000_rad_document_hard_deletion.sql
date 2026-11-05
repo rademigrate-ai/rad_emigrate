@@ -374,9 +374,17 @@ alter policy "documents storage update own" on storage.objects
 -- that the current Storage owner no longer has permission to view.
 create or replace function public.rad_document_storage_registered(p_object_path text)
 returns boolean language sql stable security definer set search_path='' as $$
-  select exists (
-    select 1 from public.documents d where d.file_path = p_object_path
-  )
+  -- Fail closed for all foreign prefixes. This helper is invoked by an RLS
+  -- predicate but is also an RPC-callable function: it must not disclose
+  -- whether another user's path has a registered document.
+  select case
+    when (select auth.uid()) is null
+      or split_part(p_object_path, '/', 1) is distinct from (select auth.uid())::text
+    then true
+    else exists (
+      select 1 from public.documents d where d.file_path = p_object_path
+    )
+  end
 $$;
 alter function public.rad_document_storage_registered(text) owner to postgres;
 revoke all on function public.rad_document_storage_registered(text) from public, anon;

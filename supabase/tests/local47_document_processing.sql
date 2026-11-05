@@ -139,6 +139,18 @@ do $$ declare claim jsonb; begin
   '47100000-0000-4000-8000-000000000001/rate.pdf');
  assert claim->>'status'='rate_limited','user could bypass the hourly cap with a new document';
 end $$;
+-- This rollback-only fixture checks that the authorized document hard delete
+-- still cascades into processing/extractions. The real Storage removal and
+-- verification happen in the isolated HTTP/Edge E2E test, not in SQL.
+-- Model the leased worker's confirmed-storage phase explicitly so the
+-- BEFORE DELETE guard can never be bypassed by an ordinary direct DELETE.
+insert into private.rad_document_deletions
+ (document_id, bucket_id, object_path, requested_by, state, lease_token, lease_until)
+select id, 'documents', file_path, user_id, 'storage_deleted',
+       gen_random_uuid(), now() + interval '60 seconds'
+from public.documents where id='47100000-0000-4000-8000-000000000003';
+update public.documents set status='pending_deletion'
+where id='47100000-0000-4000-8000-000000000003';
 delete from public.documents where id='47100000-0000-4000-8000-000000000003';
 do $$ begin
  assert (select count(*) from public.document_extractions where user_id='47100000-0000-4000-8000-000000000001')=0;
