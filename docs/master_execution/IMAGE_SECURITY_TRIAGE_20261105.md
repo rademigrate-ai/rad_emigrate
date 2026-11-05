@@ -52,10 +52,37 @@ Trivy schema, dated JSON evidence and individual findings, writing
 | Storage API | 1 | 69 |
 | **Supplemental totals** | **5** | **263** |
 
+The five new Critical package matches requiring urgent upstream/vendor review
+(no reachability or compatible fix verified):
+
+| Image | Advisory | Reported component | Upstream package fix hint |
+| --- | --- | --- | --- |
+| Realtime | CVE-2026-111497 | libbrotli1 1.1.0-2+b7 | 1.1.0-2+deb13u1 |
+| Realtime | CVE-2026-13221 | perl-base 5.40.1-6 | 5.40.1-6+deb13u1 |
+| Realtime | CVE-2026-42496 | perl-base 5.40.1-6 | 5.40.1-6+deb13u1 |
+| Realtime | CVE-2026-8376 | perl-base 5.40.1-6 | 5.40.1-6+deb13u1 |
+| Storage API | CVE-2026-59873 | tar 7.5.11 | 7.5.19 |
+
 These are a different scanner's package findings and **must not be summed
 with the 375 Docker Scout matches**. All 12 pinned images now have at least
 one validated local scanner receipt, but they were not all scanned using the
-same engine. Critical/High remediation, live reachability and compatible
+same engine.
+
+**Additional same-engine sweep:** All **11 locally cached pinned images** were
+scanned and their exact immutable digests, Trivy JSON reports and file hashes
+verified on the same Trivy 0.76.1 vulnerability database. Those 11 reports
+contain **29 Critical** and **784 High** package-advisory matches. The
+verification receipt is
+`D:/RAD - Emigrate/_audit/RAD_TRIVY_11_DIGEST_RECEIPT_20261105.json`.
+Supavisor 2.9.13 was not present locally, and an attempt to retrieve its
+precisely pinned digest did not complete. The download was stopped without
+changing running containers. Supavisor **is covered by the original Docker
+Scout report**, but is missing from the uniform Trivy sweep. The 11-image
+Trivy counts are not additive to the earlier nine-image Docker Scout counts,
+nor directly representative of exploitable vulnerabilities. A uniform 12/12
+comparison remains an explicit gap.
+
+Critical/High remediation, live reachability and compatible
 image upgrade verification remain incomplete. **NO-GO remains unchanged.**
 
 ## Required remediation in order

@@ -1028,14 +1028,14 @@
         "test/applications/case_default_milestones_source_safety_test.dart",
         "scripts/verify_case_checklist_http_e2e.py"
       ],
-      "remaining": "Owner-scoped, versioned checklist persistence now has rollback-only SQL and Flutter regression evidence. Full fresh 121-migration Auth/PostgREST browser E2E, staff milestones/history and approved reminder delivery remain unverified.",
+      "remaining": "Fresh 121-migration CI run 42103556982 passed real Auth/PostgREST checklist save, stale-write rejection, cross-user/anonymous denial and re-login recovery. Full browser UI E2E, staff milestones/history and approved reminder delivery remain unverified.",
       "original_requirement": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
-      "missing_implementation_or_decision": "Owner-scoped versioned case checklist RPCs and Flutter gateway implemented; final user-journey acceptance still requires an independent live API/browser E2E plus staff history and consented reminder delivery.",
-      "missing_tests": "Fresh 121-migration Auth/PostgREST checklist save/relogin/reload and cross-owner denial, staff status-history, and approved reminder transport.",
+      "missing_implementation_or_decision": "Owner-scoped checklist RPC and Flutter gateway now pass real independent CLI Auth/PostgREST E2E; staff case history, consented reminder transport and browser-level case acceptance remain incomplete.",
+      "missing_tests": "Full browser case checklist UI with real backend, staff status-history and approved/consented reminder transport.",
       "required_backend": "Case/checklist/history and notification integration.",
       "required_ui": "Case tracker/checklists/history/reminders.",
       "required_authorization": "Owner/staff scope, notification consent and approved delivery.",
-      "actual_acceptance_result": "NOT FULLY ACCEPTED: secure versioned checklist backend migration and Flutter integration have passed targeted local tests, but full case history, real browser and reminder-delivery acceptance remain open.",
+      "actual_acceptance_result": "NOT FULLY ACCEPTED: fresh 121-migration real Auth/PostgREST checklist integration and Flutter widget regressions pass; full browser case flow, staff history and reminder-delivery acceptance remain open.",
       "existing_tests": [
         "test/applications/case_checklist_test.dart",
         "test/applications/case_checklist_server_persistence_test.dart",

@@ -23,10 +23,18 @@ GAP = {
 }
 
 
-def verify_missing_images(lock_bytes: bytes, reports_dir: Path) -> dict:
+def verify_missing_images(
+    lock_bytes: bytes,
+    reports_dir: Path,
+    *,
+    image_files: dict[str, str] | None = None,
+) -> dict:
     lock = json.loads(lock_bytes)
+    expected = image_files if image_files is not None else GAP
+    if not expected or any(image not in lock for image in expected):
+        raise ValueError("image inventory does not match the pinned lock")
     details = []
-    for image, name in GAP.items():
+    for image, name in expected.items():
         reference = lock.get(image, {}).get("digest")
         if not isinstance(reference, str) or "@sha256:" not in reference:
             raise ValueError("missing approved immutable digest: " + image)
@@ -45,7 +53,9 @@ def verify_missing_images(lock_bytes: bytes, reports_dir: Path) -> dict:
             raise ValueError("missing valid scan timestamp: " + name) from exc
         if created.tzinfo is None:
             raise ValueError("timestamp missing time zone: " + name)
-        sections = record.get("Results")
+        # Trivy omits Results for a completed scan finding no vulnerabilities.
+        # A present Results value must still be a valid array, never null/text.
+        sections = record.get("Results", [])
         if not isinstance(sections, list):
             raise ValueError("Trivy scan results must be a list: " + name)
         counts = {"CRITICAL": 0, "HIGH": 0}
@@ -91,7 +101,9 @@ def verify_missing_images(lock_bytes: bytes, reports_dir: Path) -> dict:
     return {
         "verdict": "NO_GO_UNREMEDIATED_FINDINGS",
         "image_lock_sha256": hashlib.sha256(lock_bytes).hexdigest(),
-        "scanner_coverage_gap_closed": sorted(GAP),
+        "scanner_coverage_gap_closed": sorted(set(GAP) & set(expected)),
+        "verified_pinned_image_names": sorted(expected),
+        "same_engine_full_lock_coverage": set(expected) == set(lock),
         "original_docker_scout_reports_remain_missing": True,
         "reachability_verified": False,
         "images": details,
@@ -101,11 +113,22 @@ def verify_missing_images(lock_bytes: bytes, reports_dir: Path) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reports-dir", type=Path, required=True)
+    parser.add_argument(
+        "--full-lock",
+        action="store_true",
+        help="require one digest-verified Trivy JSON scan for all pinned images",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+    lock_bytes = (ROOT / "deploy/self-hosted/images.lock.json").read_bytes()
+    images = json.loads(lock_bytes)
+    all_files = {
+        image: image.replace("/", "_").replace(":", "_") + ".json" for image in images
+    }
     result = verify_missing_images(
-        (ROOT / "deploy/self-hosted/images.lock.json").read_bytes(),
+        lock_bytes,
         args.reports_dir,
+        image_files=all_files if args.full_lock else None,
     )
     out = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:

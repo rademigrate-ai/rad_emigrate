@@ -84,6 +84,16 @@ class TrivyGapTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected vulnerability severity"):
             self.verify()
 
+    def test_empty_scan_result_is_a_valid_zero_finding_report(self):
+        first = next(iter(GAP.values()))
+        record = self._read(first)
+        record.pop("Results")
+        self._write(first, record)
+        summary = self.verify()
+        self.assertEqual(
+            next(x for x in summary["images"] if x["scan"] == first)["critical"], 0
+        )
+
     def test_invalid_created_at_rejected(self):
         first = next(iter(GAP.values()))
         record = self._read(first)
