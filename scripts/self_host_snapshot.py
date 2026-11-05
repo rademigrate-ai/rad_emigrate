@@ -34,8 +34,13 @@ def digest(path: Path) -> str:
 
 
 def is_posix_gpg(binary: str) -> bool:
-    """True for an MSYS2/Git-for-Windows gpg, which parses POSIX paths only."""
-    location = Path(binary).as_posix().lower()
+    """True for an MSYS2/Git-for-Windows gpg, which parses POSIX paths only.
+
+    Normalise separators directly rather than via Path: a PurePosixPath keeps
+    `C:\\...\\Git\\usr\\bin\\gpg.exe` as one component, so the `/usr/bin/`
+    marker would never be found when this runs on Linux.
+    """
+    location = binary.replace("\\", "/").lower()
     return location.startswith(("/usr/", "/bin/")) or "/usr/bin/" in location
 
 

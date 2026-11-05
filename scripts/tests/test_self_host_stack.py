@@ -43,12 +43,21 @@ class GpgPathTests(unittest.TestCase):
         self.assertTrue(is_posix_gpg(r"C:\Program Files\Git\usr\bin\gpg.EXE"))
         self.assertFalse(is_posix_gpg(r"C:\Program Files\GnuPG\bin\gpg.exe"))
 
-    def test_native_gpg_keeps_the_platform_path(self):
+    def test_each_build_renders_the_path_for_itself(self):
+        """Compare the two builds against each other, not against resolve().
+
+        Path("D:/...").resolve() is a Windows drive path on Windows and a
+        cwd-relative one on Linux, so asserting either shape directly makes the
+        test platform-specific. What must hold on both is that a native build
+        gets the platform path unchanged and a POSIX build gets it rewritten
+        only when there is a drive letter to rewrite.
+        """
         target = Path("D:/RAD/key.pass")
-        self.assertEqual(
-            gpg_path(r"C:\Program Files\GnuPG\bin\gpg.exe", target),
-            str(target.resolve()),
-        )
+        native = gpg_path(r"C:\Program Files\GnuPG\bin\gpg.exe", target)
+        posix = gpg_path("/usr/bin/gpg", target)
+        self.assertEqual(native, str(target.resolve()))
+        self.assertEqual(posix, to_posix_drive_path(str(target.resolve())))
+        self.assertNotIn("\\", posix)
 
 
 class SelfHostStackTests(unittest.TestCase):
