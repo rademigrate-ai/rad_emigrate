@@ -33,6 +33,24 @@ def digest(path: Path) -> str:
     return h.hexdigest()
 
 
+def is_posix_gpg(binary: str) -> bool:
+    """True for an MSYS2/Git-for-Windows gpg, which parses POSIX paths only."""
+    location = Path(binary).as_posix().lower()
+    return location.startswith(("/usr/", "/bin/")) or "/usr/bin/" in location
+
+
+def to_posix_drive_path(path: str) -> str:
+    """Rewrite `D:\\dir\\file` as `/d/dir/file`; leave a POSIX path untouched.
+
+    Pure string logic so it is testable on any platform, independent of the
+    host's own path semantics.
+    """
+    drive, _, remainder = path.partition(":")
+    if len(drive) != 1 or not drive.isalpha() or not remainder:
+        return path
+    return "/" + drive.lower() + remainder.replace("\\", "/")
+
+
 def gpg_path(binary: str, path: Path) -> str:
     """Render a path the way the selected gpg build will actually parse it.
 
@@ -40,14 +58,8 @@ def gpg_path(binary: str, path: Path) -> str:
     treats it as relative, prepends the cwd and fails to create its homedir or
     read the passphrase file. Hand such builds an `/d/...` path instead.
     """
-    resolved = path.resolve()
-    posix_build = Path(binary).as_posix().lower().startswith(("/usr/", "/bin/")) or (
-        "/usr/bin/" in Path(binary).as_posix().lower()
-    )
-    if posix_build and resolved.drive:
-        drive = resolved.drive.rstrip(":").lower()
-        return "/" + drive + resolved.as_posix()[len(resolved.drive) :]
-    return str(resolved)
+    resolved = str(path.resolve())
+    return to_posix_drive_path(resolved) if is_posix_gpg(binary) else resolved
 
 
 def gpg_command(binary: str, key_file: Path, decrypt: bool = False) -> list[str]:

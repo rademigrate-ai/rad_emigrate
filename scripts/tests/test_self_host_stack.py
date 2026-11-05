@@ -7,7 +7,13 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.self_host_snapshot import backup, gpg_path, restore
+from scripts.self_host_snapshot import (
+    backup,
+    gpg_path,
+    is_posix_gpg,
+    restore,
+    to_posix_drive_path,
+)
 from scripts.self_host_stack import MARKER, compose, migrate, prepare
 
 
@@ -16,20 +22,33 @@ class GpgPathTests(unittest.TestCase):
 
     It treats `D:\\...` as relative, prepends the cwd, then fails to create its
     homedir or read the passphrase file -- which silently broke every snapshot
-    on Windows until the path was rendered per build.
+    on Windows until the path was rendered per build. The conversion is pure
+    string logic so these assertions run on every platform rather than
+    no-opping wherever the host has no drive letters.
     """
 
-    def test_posix_gpg_receives_a_posix_path(self):
-        rendered = gpg_path("/usr/bin/gpg", Path("D:/RAD/key.pass"))
-        if Path("D:/RAD/key.pass").resolve().drive:
-            self.assertTrue(rendered.startswith("/d/"), rendered)
-            self.assertNotIn("\\", rendered)
-            self.assertNotIn(":", rendered)
+    def test_drive_path_becomes_a_posix_path(self):
+        self.assertEqual(
+            to_posix_drive_path(r"D:\RAD - Emigrate\_audit\key.pass"),
+            "/d/RAD - Emigrate/_audit/key.pass",
+        )
+        self.assertEqual(to_posix_drive_path("C:/Users/x/key"), "/c/Users/x/key")
+
+    def test_posix_path_is_left_alone(self):
+        for untouched in ("/home/runner/key.pass", "/d/already/posix", "relative/key"):
+            self.assertEqual(to_posix_drive_path(untouched), untouched)
+
+    def test_posix_build_detection(self):
+        self.assertTrue(is_posix_gpg("/usr/bin/gpg"))
+        self.assertTrue(is_posix_gpg(r"C:\Program Files\Git\usr\bin\gpg.EXE"))
+        self.assertFalse(is_posix_gpg(r"C:\Program Files\GnuPG\bin\gpg.exe"))
 
     def test_native_gpg_keeps_the_platform_path(self):
         target = Path("D:/RAD/key.pass")
-        rendered = gpg_path(r"C:\Program Files\GnuPG\bin\gpg.exe", target)
-        self.assertEqual(rendered, str(target.resolve()))
+        self.assertEqual(
+            gpg_path(r"C:\Program Files\GnuPG\bin\gpg.exe", target),
+            str(target.resolve()),
+        )
 
 
 class SelfHostStackTests(unittest.TestCase):
