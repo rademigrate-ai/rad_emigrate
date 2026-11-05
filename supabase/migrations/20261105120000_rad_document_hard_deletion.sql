@@ -194,6 +194,14 @@ begin
   -- Hashed so the receipt carries a verifiable reference, not a live path.
   v_reference := r.bucket_id || '/' || encode(extensions.digest(r.object_path, 'sha256'), 'hex');
 
+  -- Mark confirmed only within this same transaction; if the row/receipt
+  -- operation fails the temporary state rolls back with the transaction.
+  -- The BEFORE DELETE guard rejects direct deletes and cascading deletes
+  -- unless this leased, service-authenticated finalizer reached this point.
+  update private.rad_document_deletions
+  set state = 'storage_deleted', storage_deleted_at = now(), updated_at = now()
+  where id = r.id;
+
   delete from public.documents where id = r.document_id;
 
   insert into public.document_deletion_receipts
@@ -261,6 +269,31 @@ end $$;
 alter function public.get_document_deletion_receipt(uuid) owner to postgres;
 revoke all on function public.get_document_deletion_receipt(uuid) from public, anon;
 grant execute on function public.get_document_deletion_receipt(uuid) to authenticated, service_role;
+
+-- A document row may also be removed by an applications/auth.users FK
+-- cascade, even after client DELETE is denied by RLS. Block that orphaning
+-- route for any document with a stored object. The authorized leased finalizer
+-- alone transitions the queue into storage_deleted within its transaction.
+create or replace function private.rad_guard_stored_document_delete()
+returns trigger language plpgsql security definer set search_path='' as $$
+begin
+  if old.file_path is not null and btrim(old.file_path) <> '' then
+    if old.status <> 'pending_deletion' or not exists (
+      select 1 from private.rad_document_deletions r
+      where r.document_id = old.id and r.state = 'storage_deleted'
+        and r.lease_token is not null and r.lease_until > now()
+    ) then
+      raise exception 'stored document requires audited Storage deletion'
+        using errcode='42501';
+    end if;
+  end if;
+  return old;
+end $$;
+alter function private.rad_guard_stored_document_delete() owner to postgres;
+revoke all on function private.rad_guard_stored_document_delete() from public, anon, authenticated;
+create trigger rad_stored_document_delete_guard
+before delete on public.documents for each row
+execute function private.rad_guard_stored_document_delete();
 
 -- Requirement 1: deny client access the moment a request is accepted. Replace
 -- the owner read/update/delete predicates so a pending_deletion document is

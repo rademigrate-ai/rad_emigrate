@@ -104,7 +104,11 @@ SQL
 # digest is independently reproduced and every other dimension is retained.
 # F16 adds role=user to profiles INSERT WITH CHECK. Only the policies digest
 # changes; independently reproduced with the old predicate inside a rollback.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"55e8a4ebace6d08cdf6581783d56ed8c","triggers":"9be9b50fb51f41c9e9dacb7e0ef56509","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# RAD document deletion adds pending-Storage access denial and an RLS-bypass
+# registration check for Storage DELETE. Policy digest was measured from the
+# genuine fresh GitHub CI Supabase-CLI reconstruction (run 42007332900);
+# the other fingerprint dimensions were identical on that exact revision.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"ef07b9a5b6c6b9f15b86834f4838bf54","triggers":"9be9b50fb51f41c9e9dacb7e0ef56509","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2

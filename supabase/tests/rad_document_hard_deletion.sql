@@ -72,6 +72,28 @@ begin
     raise exception 'FAIL non-owner deletion request accepted';
   exception when sqlstate '42501' then null; end;
 
+  -- SECURITY DEFINER trigger must also block direct SQL/service-side
+  -- document deletion and ON DELETE CASCADE from Auth user deletion.
+  begin
+    delete from public.documents
+    where id='7a000000-0000-4000-8000-0000000000a1';
+    raise exception 'FAIL stored document row deleted outside worker';
+  exception when sqlstate '42501' then null; end;
+  assert exists(select 1 from public.documents
+    where id='7a000000-0000-4000-8000-0000000000a1'),
+    'direct delete must preserve stored document';
+  begin
+    delete from auth.users where id='7a000000-0000-4000-8000-000000000001';
+    raise exception 'FAIL auth account cascade bypassed Storage guard';
+  exception when sqlstate '42501' then null; end;
+  assert exists(select 1 from public.documents
+    where id='7a000000-0000-4000-8000-0000000000a1'),
+    'failed user cascade must preserve stored document';
+  assert exists(select 1 from pg_trigger
+    where tgrelid='public.documents'::regclass
+      and tgname='rad_stored_document_delete_guard' and not tgisinternal),
+    'document hard-delete guard must cover cascades';
+
   -- The owner's request flips the document to the transient state.
   perform set_config('request.jwt.claims',
     '{"sub":"7a000000-0000-4000-8000-000000000001","role":"authenticated"}', true);
