@@ -149,8 +149,18 @@ def run_worker(root: Path, api: str, service_key: str) -> tuple[int, dict]:
         return 0, {}
     encoded_path = urllib.parse.quote(claimed["object_path"], safe="/")
     target = f"{api}/storage/v1/object/{claimed['bucket_id']}/{encoded_path}"
-    removed, _ = call(target, "DELETE", apikey=service_key)
-    require(removed in (200, 204, 404), f"storage object deleted (got {removed})")
+    removed, removed_body = call(target, "DELETE", apikey=service_key)
+    removed_error = json.loads(removed_body) if removed == 400 else {}
+    missing_delete = (
+        removed == 400
+        and removed_error.get("statusCode") == "404"
+        and removed_error.get("error") == "not_found"
+        and removed_error.get("code") == "NoSuchKey"
+    )
+    require(
+        removed in (200, 204, 404) or missing_delete,
+        f"storage object deleted (got {removed})",
+    )
     probe, probe_body = call(target, apikey=service_key)
     error = json.loads(probe_body) if probe == 400 else {}
     absent = probe == 404 or (
@@ -174,6 +184,86 @@ def run_worker(root: Path, api: str, service_key: str) -> tuple[int, dict]:
     )
     require(200 <= status < 300, "deletion finalized after storage confirmation")
     return 1, json.loads(body)
+
+
+def verify_absent_object_retry(
+    root, api, anon_key, service_key, owner_id, owner_token, seed
+):
+    """Exercise the real absent-object retry and recreation race after authorization."""
+    path = f"{owner_id}/{seed}/already-absent.pdf"
+    target = f"{api}/storage/v1/object/{BUCKET}/{path}"
+    status, _ = call(
+        target,
+        "POST",
+        raw=PDF,
+        token=owner_token,
+        apikey=anon_key,
+        content_type="application/pdf",
+    )
+    require(status == 200, "absence retry fixture uploaded")
+    status, _ = call(
+        f"{api}/rest/v1/documents",
+        "POST",
+        [
+            {
+                "user_id": owner_id,
+                "name": "absent retry fixture",
+                "status": "uploaded",
+                "file_path": path,
+            }
+        ],
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(status == 201, "absence retry document registered")
+    document_id = (
+        sql(root, f"select id from public.documents where file_path='{path}';".encode())
+        .stdout.decode()
+        .strip()
+    )
+    status, _ = call(
+        f"{api}/rest/v1/rpc/request_document_deletion",
+        "POST",
+        {"p_document_id": document_id},
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(status == 200, "individual absence retry deletion authorized")
+    status, _ = call(target, "DELETE", apikey=service_key)
+    require(
+        status in (200, 204),
+        "authorized fixture object physically removed before retry",
+    )
+    status, _ = call(
+        target,
+        "POST",
+        raw=PDF,
+        token=owner_token,
+        apikey=anon_key,
+        content_type="application/pdf",
+    )
+    require(status >= 400, "owner cannot resurrect an absent pending-deletion path")
+    for _ in range(20):
+        if (
+            sql(
+                root,
+                f"select count(*) from public.documents where id='{document_id}';".encode(),
+            ).stdout.strip()
+            == b"0"
+        ):
+            break
+        processed, _ = run_worker(root, api, service_key)
+        require(processed == 1, "worker progresses the already-absent retry")
+    else:
+        fail("already-absent retry did not finalize")
+    require(
+        sql(
+            root,
+            f"select object_path from private.rad_document_deletions where document_id='{document_id}';".encode(),
+        ).stdout.strip()
+        == b"[erased]",
+        "already-absent completion scrubs operational path",
+    )
 
 
 def main() -> None:
@@ -581,6 +671,10 @@ def main() -> None:
     )
     require(persisted == "1", "objectless placeholder has an immutable receipt")
 
+    verify_absent_object_retry(
+        root, api, anon_key, service_key, owner_id, owner_token, seed
+    )
+
     # Receipts remain immutable; the synthetic Auth users must still be
     # removable after hard deletion, or the queue has accidentally installed
     # a cross-service FK that blocks legitimate account lifecycle operations.
@@ -600,6 +694,9 @@ def main() -> None:
         "Storage object is deleted and unreadable even to service_role; the row is gone; and a "
         "minimal immutable receipt remains that stores a hashed reference, rejects UPDATE and "
         "DELETE, and is readable only by its owner. SYNTHETIC DISPOSABLE FIXTURES ONLY."
+    )
+    print(
+        "PASS: absent-object retry finalized through the selected worker; pending path recreation denied."
     )
     print(
         f"Signed preview replay during pending deletion: HTTP {pending_signed_status}; "

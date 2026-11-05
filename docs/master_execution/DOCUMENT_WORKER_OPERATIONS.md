@@ -3,7 +3,7 @@
 Individually authorized erasure and a timed retention purge are separate operations.
 No timed purge, retention duration or legal precedence has been approved or enabled.
 
-`deploy/self_host/document_retention_policy.example.json` leaves duration, clock,
+`deploy/self-hosted/document-retention-policy.example.json` leaves duration, clock,
 terminal statuses and approval reference unset. Inspect it with
 `python scripts/document_retention_report.py --policy <policy.json>`. The report
 refuses any enabled destruction flag and cannot enqueue or delete documents.
@@ -22,6 +22,11 @@ Network diagnostics are classified into fixed codes; exception URLs are not save
 Stored references cannot be detached, reassigned or replaced through row updates.
 Delete an existing stored document and create a new document to replace it. Both
 registration and request authorization enforce the document owner's Storage prefix.
+Pending object paths also reject new uploads, including attempts to recreate an
+object after physical removal but before finalization. The worker recognizes the
+verified Storage `400 NoSuchKey` absence response on DELETE and on its independent
+read probe; generic 400, authorization failures and server errors remain failures.
+Finalization must return the claimed request ID and an explicit finalized state.
 The client shows pending, retrying, staff-attention and completed states separately,
 using the path-free, owner-scoped `list_document_deletions` RPC. Active requests
 refresh every five seconds while the page is open. Exhausted work is not presented

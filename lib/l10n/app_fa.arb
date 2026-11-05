@@ -332,5 +332,6 @@
   "documentDeletionFailed": "حذف فایل به بررسی کارشناس نیاز دارد. با پشتیبانی تماس بگیرید.",
   "documentDeletionComplete": "فایل حذف شد و رسید حذف ذخیره شد.",
   "documentDeletionReference": "شناسه پیگیری",
-  "documentDeletionStatusUnavailable": "وضعیت حذف در دسترس نیست. برای بررسی دوباره، تازه‌سازی کنید."
+  "documentDeletionStatusUnavailable": "وضعیت حذف در دسترس نیست. برای بررسی دوباره، تازه‌سازی کنید.",
+  "adminAccessRequired": "دسترسی مدیر لازم است."
 }

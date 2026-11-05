@@ -18,9 +18,9 @@ import tarfile
 from pathlib import Path
 
 try:
-    from .self_host_stack import compose, run, save
+    from .self_host_stack import compose, run, save, start
 except ImportError:
-    from self_host_stack import compose, run, save
+    from self_host_stack import compose, run, save, start
 
 VOLUMES = ("db-data", "db-config", "storage-data")
 
@@ -187,7 +187,7 @@ def backup(root: Path, output: Path, key_file: Path, binary: str) -> dict:
         }
         save(output / "SNAPSHOT.json", receipt)
     finally:
-        run(compose(root, "up", "-d", "--wait", "--wait-timeout", "240"))
+        start(root)
     return receipt
 
 

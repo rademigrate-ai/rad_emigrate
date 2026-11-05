@@ -475,6 +475,15 @@ revoke all on function public.rad_document_storage_pending(text) from public, an
 grant execute on function public.rad_document_storage_pending(text)
   to authenticated, service_role;
 
+-- A missing object must not be recreated between the worker's physical delete
+-- and database finalization. The original INSERT policy checked ownership only.
+alter policy "documents storage upload own" on storage.objects
+  with check (
+    bucket_id = 'documents'
+    and (storage.foldername(name))[1] = (select auth.uid())::text
+    and not public.rad_document_storage_pending(name)
+  );
+
 alter policy "documents storage read own" on storage.objects
   using (
     bucket_id = 'documents'

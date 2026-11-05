@@ -2,6 +2,8 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get adminAccessRequired => 'دسترسی مدیر لازم است.';
+  @override
   String get documentDeletionPending =>
       'درخواست حذف ثبت شد. حذف فایل در انتظار اجراست.';
   @override

@@ -248,6 +248,7 @@ abstract class AppLocalizations {
   String get documentDeletionComplete;
   String get documentDeletionReference;
   String get documentDeletionStatusUnavailable;
+  String get adminAccessRequired;
   String get close;
   String get acceptedFormats;
   String get couldNotReadFile;

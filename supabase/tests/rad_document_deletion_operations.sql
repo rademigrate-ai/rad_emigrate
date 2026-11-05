@@ -11,6 +11,13 @@ begin
   perform set_config('request.jwt.claims',
     '{"sub":"7b000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
   r := public.request_document_deletion('7b000000-0000-4000-8000-0000000000a1');
+  begin
+    execute 'set local role authenticated';
+    insert into storage.objects(bucket_id,name,owner_id) values
+      ('documents','7b000000-0000-4000-8000-000000000001/lease.pdf','7b000000-0000-4000-8000-000000000001');
+    execute 'reset role';
+    raise exception 'FAIL pending-deletion path can be recreated after physical removal';
+  exception when insufficient_privilege then execute 'reset role'; end;
   update private.rad_document_deletions set attempts=4, requested_at='2000-01-01'
     where id=(r->>'request_id')::uuid;
   perform set_config('request.jwt.claims','{"role":"service_role"}',true);
@@ -116,5 +123,30 @@ begin
   perform set_config('request.jwt.claims',
     '{"sub":"7b000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
   assert public.list_document_deletions()='[]'::jsonb,'other users must see no lifecycle metadata';
+end $$;
+
+insert into auth.users(id,email,raw_user_meta_data) values
+ ('7b000000-0000-4000-8000-000000000003','deletion-admin-boundary@example.invalid','{}');
+insert into public.documents(id,user_id,name,status,file_path) values
+ ('7b000000-0000-4000-8000-0000000000a5','7b000000-0000-4000-8000-000000000003','admin boundary','uploaded',
+  '7b000000-0000-4000-8000-000000000003/admin.pdf'),
+ ('7b000000-0000-4000-8000-0000000000a6','7b000000-0000-4000-8000-000000000003','super admin boundary','uploaded',
+  '7b000000-0000-4000-8000-000000000003/super.pdf');
+do $$
+declare result jsonb;
+begin
+  perform set_config('request.jwt.claims','{"sub":"7b000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+  begin
+    perform public.request_document_deletion('7b000000-0000-4000-8000-0000000000a5');
+    raise exception 'FAIL ordinary caller obtained admin deletion rights';
+  exception when insufficient_privilege then null; end;
+  perform set_config('request.jwt.claims','{"sub":"7b000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+  result:=public.request_document_deletion('7b000000-0000-4000-8000-0000000000a5');
+  assert result->>'state'='pending_storage','admin must queue an authorized cross-owner deletion';
+  perform set_config('request.jwt.claims','{"role":"service_role"}',true);
+  update public.profiles set role='super_admin' where id='7b000000-0000-4000-8000-000000000001';
+  perform set_config('request.jwt.claims','{"sub":"7b000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+  result:=public.request_document_deletion('7b000000-0000-4000-8000-0000000000a6');
+  assert result->>'state'='pending_storage','super_admin must retain the existing authorization boundary';
 end $$;
 rollback;

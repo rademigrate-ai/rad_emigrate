@@ -42,6 +42,15 @@ function safeBucket(value: unknown): string | null {
   return /^[a-z0-9][a-z0-9_-]{0,62}$/.test(bucket) ? bucket : null;
 }
 
+async function confirmedAbsent(response: Response): Promise<boolean> {
+  if (response.status === 404) return true;
+  if (response.status !== 400) return false;
+  const error = object(await response.json().catch(() => null));
+  return text(error.statusCode) === "404" &&
+    text(error.error) === "not_found" &&
+    text(error.code) === "NoSuchKey";
+}
+
 export function createDocumentDeletionHandler(options: Options) {
   const serviceHeaders = {
     apikey: options.serviceKey,
@@ -126,13 +135,13 @@ export function createDocumentDeletionHandler(options: Options) {
         redirect: "error",
         signal: AbortSignal.timeout(20000),
       });
-      // 404 is success for an idempotent delete: a previous attempt already
-      // removed it, or it never existed. Anything else is a real failure.
-      if (!removed.ok && removed.status !== 404) {
-        await removed.body?.cancel();
+      // 404 or the verified self-hosted NoSuchKey response can mean an earlier
+      // attempt already removed it. Still probe independently before finalizing.
+      if (!removed.ok && !(await confirmedAbsent(removed))) {
+        if (!removed.bodyUsed) await removed.body?.cancel();
         throw new Error(`storage_status_${removed.status}`);
       }
-      await removed.body?.cancel();
+      if (!removed.bodyUsed) await removed.body?.cancel();
 
       // Verify rather than trust the delete response.
       const probe = await options.fetch(target, {
@@ -142,20 +151,10 @@ export function createDocumentDeletionHandler(options: Options) {
         signal: AbortSignal.timeout(15000),
       });
       const stillPresent = probe.ok;
-      let confirmedAbsent = probe.status === 404;
-      if (probe.status === 400) {
-        // Real self-hosted Storage returns HTTP 400 with NoSuchKey for an
-        // absent private object. A generic 4xx/5xx (including auth failures)
-        // must NEVER certify deletion.
-        const error = object(await probe.json().catch(() => null));
-        confirmedAbsent = text(error.statusCode) === "404" &&
-          text(error.error) === "not_found" &&
-          text(error.code) === "NoSuchKey";
-      } else {
-        await probe.body?.cancel();
-      }
+      const absent = await confirmedAbsent(probe);
+      if (!probe.bodyUsed) await probe.body?.cancel();
       if (stillPresent) throw new Error("storage_object_still_readable");
-      if (!confirmedAbsent) throw new Error("storage_absence_not_confirmed");
+      if (!absent) throw new Error("storage_absence_not_confirmed");
     } catch (error) {
       const message = text((error as Error)?.message);
       // Fetch errors can contain object paths and URLs. Only our fixed
@@ -181,10 +180,15 @@ export function createDocumentDeletionHandler(options: Options) {
           p_lease_token: leaseToken,
         }),
       );
+      if (
+        finalized.state !== "finalized" || finalized.request_id !== requestId
+      ) {
+        throw new Error("finalization_not_confirmed");
+      }
       return json(200, {
         processed: 1,
         request_id: requestId,
-        state: text(finalized.state) || "finalized",
+        state: "finalized",
       });
     } catch {
       // Storage is gone but the row is not. The item keeps its stored reference

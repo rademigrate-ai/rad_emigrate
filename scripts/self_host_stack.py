@@ -352,6 +352,43 @@ def migrate(root: Path) -> dict:
     return result
 
 
+def start(root: Path, wait_seconds: int = 240) -> None:
+    """Allow transient health failures during a bounded, non-destructive boot."""
+    run(compose(root, "up", "-d"))
+    model = json.loads((root / "compose.rad.json").read_text("utf8"))
+    expected = {
+        name
+        for name, service in model["services"].items()
+        if not service.get("profiles")
+    }
+    deadline = time.monotonic() + wait_seconds
+    unready = expected
+    while time.monotonic() < deadline:
+        result = run(compose(root, "ps", "--all", "--format", "json"))
+        services = [
+            json.loads(line) for line in result.stdout.decode().splitlines() if line
+        ]
+        ready = {
+            item["Service"]
+            for item in services
+            if item["State"] == "running" and item.get("Health", "") in ("", "healthy")
+        }
+        unready = expected - ready
+        if not unready:
+            return
+        if any(
+            item["Service"] in unready and item["State"] in ("exited", "dead")
+            for item in services
+        ):
+            raise RuntimeError(
+                "self-host service exited; inspect private operator logs"
+            )
+        time.sleep(2)
+    raise RuntimeError(
+        "self-host health deadline exceeded: " + ",".join(sorted(unready))
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -362,6 +399,7 @@ def main() -> None:
     parser.add_argument("--project", default="rad-selfhost-acceptance-20261104")
     parser.add_argument("--port", type=int, default=58000)
     parser.add_argument("--image-lock", type=Path)
+    parser.add_argument("--wait-seconds", type=int, default=240)
     args = parser.parse_args()
     root = args.root.resolve()
     if args.command == "prepare":
@@ -369,7 +407,9 @@ def main() -> None:
     elif args.command == "pin":
         pin(root, args.image_lock)
     elif args.command == "start":
-        run(compose(root, "up", "-d", "--wait", "--wait-timeout", "240"))
+        if not 1 <= args.wait_seconds <= 900:
+            parser.error("--wait-seconds must be between 1 and 900")
+        start(root, args.wait_seconds)
         print("Owned isolated stack started; runtime acceptance pending")
     elif args.command == "migrate":
         print("Applied migrations:", len(migrate(root)["applied"]))

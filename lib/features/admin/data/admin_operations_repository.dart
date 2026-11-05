@@ -645,10 +645,14 @@ final adminOperationsRepositoryProvider = Provider<AdminOperationsRepository>(
   (ref) => AdminOperationsRepository(ref.watch(supabaseClientServiceProvider)),
 );
 
-final adminSnapshotProvider = FutureProvider.autoDispose<AdminSnapshot>(
-  (ref) => ref.watch(adminOperationsRepositoryProvider).load(),
-);
+final adminSnapshotProvider = FutureProvider.autoDispose<AdminSnapshot>((ref) {
+  ref.watch(supabaseAuthUserIdProvider);
+  return ref.watch(adminOperationsRepositoryProvider).load();
+});
 
-final adminConsoleProvider = FutureProvider.autoDispose<AdminConsoleData>(
-  (ref) => ref.watch(adminOperationsRepositoryProvider).loadConsole(),
-);
+final adminConsoleProvider = FutureProvider.autoDispose<AdminConsoleData>((
+  ref,
+) {
+  ref.watch(supabaseAuthUserIdProvider);
+  return ref.watch(adminOperationsRepositoryProvider).loadConsole();
+});

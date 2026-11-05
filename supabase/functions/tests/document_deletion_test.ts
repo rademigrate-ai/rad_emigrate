@@ -21,12 +21,14 @@ function equal(actual: unknown, expected: unknown, label = "") {
 type Options = {
   claim?: unknown;
   deleteStatus?: number;
+  deleteBody?: unknown;
   deleteThrows?: boolean;
   deleteError?: string;
   stillReadable?: boolean;
   probeStatus?: number;
   probeBody?: unknown;
   finalizeFails?: boolean;
+  finalizeResult?: unknown;
 };
 
 async function exercise(options: Options = {}, authorized = true) {
@@ -59,9 +61,12 @@ async function exercise(options: Options = {}, authorized = true) {
       return Promise.resolve(json({ state: "pending_storage" }));
     }
     if (path === "/rest/v1/rpc/finalize_document_deletion") {
+      if ("finalizeResult" in options) {
+        return Promise.resolve(json(options.finalizeResult));
+      }
       return options.finalizeFails
         ? Promise.resolve(json({ error: "boom" }, 500))
-        : Promise.resolve(json({ state: "finalized" }));
+        : Promise.resolve(json({ request_id: requestId, state: "finalized" }));
     }
     if (path.startsWith("/storage/v1/object/")) {
       if (method === "DELETE") {
@@ -69,6 +74,9 @@ async function exercise(options: Options = {}, authorized = true) {
           return Promise.reject(
             new Error(options.deleteError ?? "network down"),
           );
+        }
+        if (options.deleteStatus === 400) {
+          return Promise.resolve(json(options.deleteBody ?? {}, 400));
         }
         return Promise.resolve(
           new Response(null, { status: options.deleteStatus ?? 200 }),
@@ -187,6 +195,33 @@ Deno.test("a 404 from storage is an idempotent success", async () => {
   equal(body.state, "finalized", "state");
 });
 
+Deno.test("self-hosted already-absent DELETE still requires a positive verification probe", async () => {
+  const { response, body, calls } = await exercise({
+    deleteStatus: 400,
+    deleteBody: { statusCode: "404", error: "not_found", code: "NoSuchKey" },
+    probeStatus: 400,
+  });
+  equal(response.status, 200);
+  equal(body.state, "finalized");
+  equal(
+    calls.filter((call) => call.path.startsWith("/storage/v1/object/")).map((
+      call,
+    ) => call.method),
+    ["DELETE", "GET"],
+  );
+});
+
+Deno.test("generic or unauthorized DELETE errors cannot imply absence", async () => {
+  for (const deleteStatus of [400, 401, 403, 500]) {
+    const { response, calls } = await exercise({ deleteStatus });
+    equal(response.status, 502);
+    equal(
+      calls.some((call) => call.path.endsWith("finalize_document_deletion")),
+      false,
+    );
+  }
+});
+
 Deno.test("an empty queue is a no-op, not an error", async () => {
   const { response, body } = await exercise({ claim: null });
   equal(response.status, 200, "status");
@@ -216,6 +251,20 @@ Deno.test("a finalize failure reports failure even though storage is gone", asyn
   equal(response.status, 500, "status");
   equal(body.error, "finalize_failed", "error");
   equal(body.storage_deleted, true, "storage_deleted");
+});
+
+Deno.test("a malformed or mismatched finalization result cannot report completion", async () => {
+  for (
+    const finalizeResult of [null, {}, { state: "pending_storage" }, {
+      state: "finalized",
+      request_id: "wrong-request",
+    }]
+  ) {
+    const { response, body } = await exercise({ finalizeResult });
+    equal(response.status, 500);
+    equal(body.error, "finalize_failed");
+    equal(body.storage_deleted, true);
+  }
 });
 
 Deno.test("real self-hosted NoSuchKey probe confirms absence", async () => {

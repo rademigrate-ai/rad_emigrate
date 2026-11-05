@@ -2,6 +2,8 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsEnA on AppLocalizations {
   @override
+  String get adminAccessRequired => 'Administrator access is required.';
+  @override
   String get documentDeletionPending =>
       'Deletion requested. File removal is pending.';
   @override

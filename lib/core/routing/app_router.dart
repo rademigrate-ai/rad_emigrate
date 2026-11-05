@@ -6,6 +6,7 @@ import '../../app/dependencies.dart';
 import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
 import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
+import '../../features/admin/presentation/widgets/admin_route_gate.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/admin/presentation/pages/admin_consultations_page.dart';
 import '../../features/admin/presentation/pages/admin_cms_articles_page.dart';
@@ -126,7 +127,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       ShellRoute(
-        builder: (_, _, child) => AppShell(child: child),
+        builder: (_, state, child) => AppShell(
+          child:
+              state.uri.path == '/admin' || state.uri.path.startsWith('/admin/')
+              ? AdminRouteGate(child: child)
+              : child,
+        ),
         routes: [
           GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
           visaRoute(),
