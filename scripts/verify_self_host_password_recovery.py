@@ -63,9 +63,9 @@ def request(
         req.add_header("apikey", apikey)
     req.add_header("Authorization", f"Bearer {token or apikey or ''}")
     opener = (
-        urllib.request.build_opener()
+        urllib.request.build_opener(urllib.request.ProxyHandler({}))
         if follow_redirects
-        else urllib.request.build_opener(_NoRedirect)
+        else urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect)
     )
     # The gateway lowercases header names; normalise so lookups are case-safe.
     try:

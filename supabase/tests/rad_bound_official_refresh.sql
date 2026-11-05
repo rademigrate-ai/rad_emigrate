@@ -74,8 +74,9 @@ declare target jsonb;job_id uuid;token uuid;stored jsonb;begin
  coalesce(revision,(target->>'expected_revision_id')::uuid),coalesce(prior_snapshot,(target->>'expected_snapshot_id')::uuid),value,encode(convert_to(value,'UTF8'),'base64'),'https://bound-refresh.example.org/info',200);
 end $$;
 
-do $$declare result jsonb;retry jsonb;prior uuid;snapshots integer;begin
+do $$declare result jsonb;retry jsonb;prior uuid;snapshots integer;proposals integer;begin
  select count(*) into snapshots from public.source_snapshots;
+ select count(*) into proposals from public.visa_research_proposals;
  result:=pg_temp.refresh_text('NAV CHANGED BEGIN_SOURCE baseline original language END_SOURCE FOOTER');
  assert (result->>'changed')::boolean=false and result->>'proposal_id' is null,'page navigation must not create legal-change noise';
  assert (select count(*) from public.source_snapshots)=snapshots+1,'complete changed normalized snapshot must be retained';
@@ -84,7 +85,7 @@ do $$declare result jsonb;retry jsonb;prior uuid;snapshots integer;begin
  assert (result->>'changed')::boolean and result->>'proposal_id' is not null,'bound changed source fragment must create review proposal';
  retry:=pg_temp.refresh_text('NAV CHANGED BEGIN_SOURCE exact new source wording END_SOURCE FOOTER',prior);
  assert retry=result,'ambiguous network-result exact retry must return same proposal';
- assert (select count(*) from public.visa_research_proposals)=1,'retry cannot duplicate proposal';
+ assert (select count(*) from public.visa_research_proposals)=proposals+1,'retry cannot duplicate proposal';
  insert into rich_test_state values('proposal',result),('prior',to_jsonb(prior));
  begin perform pg_temp.refresh_text('BEGIN_SOURCE ambiguous BEGIN_SOURCE second END_SOURCE');raise exception 'FAIL ambiguous markers';exception when sqlstate 'PT422' then null;end;
  begin perform pg_temp.refresh_text('missing source markers');raise exception 'FAIL missing markers';exception when sqlstate 'PT422' then null;end;

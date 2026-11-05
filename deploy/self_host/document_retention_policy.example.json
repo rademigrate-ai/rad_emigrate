@@ -1,0 +1,7 @@
+{
+  "automatic_purge_enabled": false,
+  "retention_days": null,
+  "clock_anchor": null,
+  "terminal_application_statuses": [],
+  "policy_approval_reference": null
+}

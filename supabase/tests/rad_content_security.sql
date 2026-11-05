@@ -6,7 +6,7 @@ insert into auth.users(id,email) values
  ('a0000000-0000-4000-8000-000000000002','rad-user@example.invalid'),
  ('a0000000-0000-4000-8000-000000000003','rad-other@example.invalid');
 update public.profiles set role='admin' where id='a0000000-0000-4000-8000-000000000001';
-insert into public.destinations(code,slug) values('ZZ','synthetic-test-only');
+insert into public.destinations(code,slug) values('ZZ','synthetic-test-only') on conflict(code) do nothing;
 
 set local role authenticated;
 select set_config('request.jwt.claims','{"role":"authenticated","sub":"a0000000-0000-4000-8000-000000000002","user_metadata":{"role":"super_admin"}}',true);

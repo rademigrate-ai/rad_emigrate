@@ -1,5 +1,9 @@
 -- Rollback-only authorization and complete-body projection checks.
 begin;
+select set_config('request.jwt.claims','{"role":"service_role"}',true);
+create temporary table v4_reader_admin as select gen_random_uuid() as id;
+insert into auth.users(id,email) select id,id::text||'@reader.example.invalid' from v4_reader_admin;
+update public.profiles set role='admin' where id=(select id from v4_reader_admin);
 -- This suite opens every complete corpus reader in one rollback-only query.
 -- Per-request timings are recorded separately by the browser/RPC runner.
 set local statement_timeout='600s';
@@ -26,7 +30,7 @@ do $$begin
  begin perform public.list_editorial_library('fa',true,0,20);raise exception 'v4_ordinary_user_preview_allowed';exception when sqlstate 'PT403' then null;end;
 end $$;
 reset role;
-select set_config('request.jwt.claims','{"role":"authenticated","sub":"0166163b-582b-4d2e-82dc-f9942c2f80b5"}',true);
+select set_config('request.jwt.claims',jsonb_build_object('role','authenticated','sub',(select id from v4_reader_admin))::text,true);
 do $$declare r jsonb;entry record;all_items integer:=0;pos integer:=0;begin
  loop
   r:=public.list_editorial_library('fa',true,pos,100);

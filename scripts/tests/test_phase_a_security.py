@@ -41,9 +41,9 @@ class PhaseASecurity(unittest.TestCase):
         # F16 and the hard-document-deletion Storage access gate are both
         # pinned using the actual clean CI schema (run 42007332900).
         self.assertEqual(fp['policies'],'ef07b9a5b6c6b9f15b86834f4838bf54')
-        # The parent-delete/cascade guard adds one vetted document trigger,
-        # measured from a fresh CI reconstruction (run 42008247724).
-        self.assertEqual(fp['triggers'],'bc1b87061aeca262dd21bd9be04323e1')
+        # Cascade and stored-reference guards: exact trigger structure from
+        # fresh CLI reconstruction (run 42016969094); other pins unchanged.
+        self.assertEqual(fp['triggers'],'d27016cc224f744b266532791c7d984c')
         self.assertIn('phase_a_security.sql',script)
         self.assertIn('refuse non-loopback',script)
 

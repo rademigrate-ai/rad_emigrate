@@ -62,7 +62,8 @@ def call(
     if token or apikey:
         req.add_header("Authorization", f"Bearer {token or apikey}")
     try:
-        with urllib.request.urlopen(req, timeout=60) as response:
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(req, timeout=60) as response:
             return response.status, response.read()
     except urllib.error.HTTPError as error:
         return error.code, error.read()

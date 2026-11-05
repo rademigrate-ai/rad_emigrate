@@ -25,7 +25,9 @@ do $$ declare p jsonb;r jsonb;a jsonb; begin
  begin perform public.record_fx_observation('{}');raise exception 'client rate write admitted';exception when insufficient_privilege then null; end;
 end $$;
 select set_config('request.jwt.claims','{"role":"authenticated","sub":"a1000000-0000-4000-8000-000000000001"}',true);
-do $$ declare r jsonb;request jsonb;draft jsonb;item uuid; begin
+do $$ declare r jsonb;request jsonb;draft jsonb;item uuid;prior_items integer; begin
+ r:=public.list_feed('{"locale":"en","category":null,"saved_only":false,"cursor":null,"limit":20}');
+ prior_items:=jsonb_array_length(r->'data'->'items');
  request:='{"item_id":null,"expected_revision":0,"locale":"en","title":"Synthetic Feed","summary":"Synthetic review test","body":[{"id":"e1000000-0000-4000-8000-000000000001","type":"paragraph","text":"Synthetic full Feed body.","items":[]}],"category":"announcement","article_id":null,"expires_at":null,"request_key":"c1000000-0000-4000-8000-000000000004"}';
  draft:=public.save_feed_draft(request)->'data';item:=(draft->>'item_id')::uuid;
  begin perform public.get_feed_item(jsonb_build_object('item_id',item,'locale','en'));raise exception 'draft Feed leaked';exception when sqlstate 'PT404' then null;end;
@@ -35,7 +37,9 @@ do $$ declare r jsonb;request jsonb;draft jsonb;item uuid; begin
  r:=public.get_feed_item(jsonb_build_object('item_id',item,'locale','en'));
  if r->'data'->'body'->0->>'text'<>'Synthetic full Feed body.' then raise exception 'full body missing'; end if;
  r:=public.list_feed('{"locale":"en","category":null,"saved_only":false,"cursor":null,"limit":20}');
- if jsonb_array_length(r->'data'->'items')<>1 then raise exception 'Feed list mismatch'; end if;
+ if jsonb_array_length(r->'data'->'items')<>least(20,prior_items+1)
+    or (select count(*) from jsonb_array_elements(r->'data'->'items') x where x->>'id'=item::text)<>1
+ then raise exception 'Feed list mismatch'; end if;
 end $$;
 select set_config('request.jwt.claims','{"role":"authenticated","sub":"a1000000-0000-4000-8000-000000000002"}',true);
 do $$ declare r jsonb;n uuid; begin

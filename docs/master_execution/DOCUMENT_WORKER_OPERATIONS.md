@@ -3,6 +3,16 @@
 Individually authorized erasure and a timed retention purge are separate operations.
 No timed purge, retention duration or legal precedence has been approved or enabled.
 
+`deploy/self_host/document_retention_policy.example.json` leaves duration, clock,
+terminal statuses and approval reference unset. Inspect it with
+`python scripts/document_retention_report.py --policy <policy.json>`. The report
+refuses any enabled destruction flag and cannot enqueue or delete documents.
+An explicitly configured report currently supports only the document creation
+clock, requires named terminal application statuses, excludes preservation holds
+and existing deletion requests, and returns counts without object paths. It does
+not authenticate an approval reference or establish a lawful policy. A closure
+clock needs an approved definition and corresponding schema before implementation.
+
 The server accepts owner/admin requests, restricts access, and leases a persistent
 queue entry to `document-deletion`. Only a confirmed Storage absence allows the
 worker to finalize the row, remove derivatives, erase the operational path and

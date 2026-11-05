@@ -110,7 +110,10 @@ SQL
 # A stored-document BEFORE DELETE trigger now blocks cascading orphan creation;
 # its precise trigger digest was measured in another genuinely fresh CI
 # reconstruction (run 42008247724). The other six dimensions stayed identical.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"ef07b9a5b6c6b9f15b86834f4838bf54","triggers":"bc1b87061aeca262dd21bd9be04323e1","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# Stored-reference ownership and detach protection add one INSERT/UPDATE
+# trigger. Fresh CLI reconstruction 42016969094 independently measured the
+# trigger digest below; every other pinned dimension was byte-identical.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"ef07b9a5b6c6b9f15b86834f4838bf54","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2

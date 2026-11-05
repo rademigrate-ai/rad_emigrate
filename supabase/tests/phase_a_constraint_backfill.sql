@@ -6,6 +6,19 @@
 \else
 \set phase_a_migration ../migrations/20261012230000_ai_models_check_constraints_alignment.sql
 \endif
+-- The independent installer records real applied hashes in rad_install rather
+-- than the CLI-owned schema. Keep the same before/after history invariant.
+create function pg_temp.migration_ledger_count() returns bigint language plpgsql as $$
+declare result bigint;
+begin
+ if to_regclass('supabase_migrations.schema_migrations') is not null then
+  execute 'select count(*) from supabase_migrations.schema_migrations' into result;
+ elsif to_regclass('rad_install.migrations') is not null then
+  execute 'select count(*) from rad_install.migrations' into result;
+ else raise exception 'verified migration history is required';
+ end if;
+ return result;
+end $$;
 create temporary table phase_a_checks_before as
   select conname,pg_get_constraintdef(oid,true) as definition
   from pg_constraint where conrelid='public.ai_models'::regclass
@@ -13,7 +26,7 @@ create temporary table phase_a_checks_before as
       'ai_models_measured_latency_ms_check','ai_models_recent_success_rate_check');
 create temporary table phase_a_counts_before as
   select (select count(*) from public.ai_models) as models,
-         (select count(*) from supabase_migrations.schema_migrations) as ledger;
+         pg_temp.migration_ledger_count() as ledger;
 do $$ begin
   if (select count(*) from phase_a_checks_before)<>3 then raise exception 'Expected three baseline CHECKs'; end if;
 end $$;
@@ -32,7 +45,7 @@ begin
       select conname,pg_get_constraintdef(oid,true) from pg_constraint where conrelid='public.ai_models'::regclass)
     then raise exception 'Backfilled CHECK definition differs'; end if;
   if (select count(*) from public.ai_models)<>(select models from phase_a_counts_before)
-     or (select count(*) from supabase_migrations.schema_migrations)<>(select ledger from phase_a_counts_before)
+     or pg_temp.migration_ledger_count()<>(select ledger from phase_a_counts_before)
     then raise exception 'Backfill changed rows or migration history'; end if;
 end $$;
 drop table phase_a_checks_before,phase_a_counts_before;

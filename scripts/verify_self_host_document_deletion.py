@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import os
 import secrets
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -104,6 +105,24 @@ def run_worker(root: Path, api: str, service_key: str) -> tuple[int, dict]:
     document-deletion Edge Function on this owned disposable self-host stack.
     The default verifies the SQL/Storage workflow without assuming deployment.
     """
+    if os.environ.get("RAD_SELF_HOST_TEST_DISPATCHER") == "1":
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(Path(__file__).with_name("document_deletion_dispatcher.py")),
+                "--execute",
+                "--max-jobs",
+                "1",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        require(
+            result.returncode == 0, "controlled dispatcher reports healthy execution"
+        )
+        report = json.loads(result.stdout)
+        return report["finalized"], report
     if os.environ.get("RAD_SELF_HOST_TEST_EDGE_FUNCTION") == "1":
         status, body = call(
             f"{api}/functions/v1/document-deletion",
@@ -165,7 +184,7 @@ def main() -> None:
     owner_id, owner_token = make_user(api, service_key, anon_key, f"del-owner-{seed}")
     other_id, other_token = make_user(api, service_key, anon_key, f"del-other-{seed}")
 
-    object_path = f"{owner_id}/doc-{seed}.pdf"
+    object_path = f"{owner_id}/{seed}/document.pdf"
     status, _ = call(
         f"{api}/storage/v1/object/{BUCKET}/{object_path}",
         "POST",
@@ -201,6 +220,61 @@ def main() -> None:
         .strip()
     )
     require(bool(document_id), "document row is present before deletion")
+
+    status, _ = call(
+        f"{api}/rest/v1/documents",
+        "POST",
+        [
+            {
+                "user_id": owner_id,
+                "name": "forged path",
+                "status": "uploaded",
+                "file_path": f"{other_id}/foreign.pdf",
+            }
+        ],
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(
+        status >= 400,
+        "forged foreign Storage reference must be rejected at registration",
+    )
+    status, _ = call(
+        f"{api}/rest/v1/documents?id=eq.{document_id}",
+        "PATCH",
+        {"file_path": None, "status": "missing"},
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(
+        status >= 400, "stored reference cannot be detached before audited deletion"
+    )
+
+    signing = f"{api}/storage/v1/object/sign/{BUCKET}/{object_path}"
+    status, _ = call(
+        signing, "POST", {"expiresIn": 300}, token=other_token, apikey=anon_key
+    )
+    require(status >= 400, "another user cannot obtain a signed preview")
+    status, body = call(
+        signing, "POST", {"expiresIn": 300}, token=owner_token, apikey=anon_key
+    )
+    require(200 <= status < 300, "owner obtains a five-minute signed preview")
+    signed = json.loads(body)["signedURL"]
+    signed_url = (
+        signed
+        if signed.startswith("http")
+        else f"{api}/storage/v1/" + signed.lstrip("/")
+    )
+    require(
+        urllib.parse.urlsplit(signed_url).netloc == urllib.parse.urlsplit(api).netloc,
+        "signed preview remains on the disposable API",
+    )
+    for _ in range(2):
+        status, fetched = call(signed_url, apikey=anon_key)
+        require(
+            status == 200 and fetched == PDF,
+            "signed preview can be replayed before expiry",
+        )
 
     # --- authorization: a non-owner cannot request deletion -----------------
     status, _ = call(
@@ -289,6 +363,15 @@ def main() -> None:
         status >= 400,
         "owner must immediately lose direct Storage read access during deletion",
     )
+    status, _ = call(
+        signing, "POST", {"expiresIn": 300}, token=owner_token, apikey=anon_key
+    )
+    require(status >= 400, "pending deletion denies new signed previews")
+    pending_signed_status, _ = call(signed_url, apikey=anon_key)
+    require(
+        pending_signed_status == 200 or pending_signed_status in (400, 401, 403, 404),
+        "previously issued preview has an explicit observed pending state",
+    )
     status, _ = call(storage_url, "DELETE", token=owner_token, apikey=anon_key)
     require(
         status >= 400,
@@ -341,10 +424,25 @@ def main() -> None:
     )
     require(row == "0", "document row is gone after deletion")
 
-    status, _ = call(
+    status, absent_body = call(
         f"{api}/storage/v1/object/{BUCKET}/{object_path}", apikey=service_key
     )
-    require(status >= 400, "storage object is no longer readable, even to service role")
+    error = json.loads(absent_body) if status == 400 else {}
+    require(
+        status == 404
+        or (
+            status == 400
+            and error.get("statusCode") == "404"
+            and error.get("code") == "NoSuchKey"
+            and error.get("error") == "not_found"
+        ),
+        "service-role probe positively confirms physical absence",
+    )
+    status, _ = call(signed_url, apikey=anon_key)
+    require(
+        status in (400, 401, 403, 404),
+        "issued signed preview fails after physical removal",
+    )
 
     receipt = (
         sql(
@@ -374,6 +472,43 @@ def main() -> None:
     require(
         finalized_path == "[erased]",
         "finalized operational queue must not retain the original Storage path",
+    )
+    status, body = call(
+        f"{api}/rest/v1/rpc/request_document_deletion",
+        "POST",
+        {"p_document_id": document_id},
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(
+        200 <= status < 300 and json.loads(body).get("already_requested") is True,
+        "completed deletion remains idempotent",
+    )
+    status, body = call(
+        f"{api}/rest/v1/rpc/list_document_deletions",
+        "POST",
+        {},
+        token=owner_token,
+        apikey=anon_key,
+    )
+    require(
+        200 <= status < 300
+        and any(
+            r["document_id"] == document_id and r["state"] == "finalized"
+            for r in json.loads(body)
+        ),
+        "owner sees completed lifecycle status",
+    )
+    status, body = call(
+        f"{api}/rest/v1/rpc/list_document_deletions",
+        "POST",
+        {},
+        token=other_token,
+        apikey=anon_key,
+    )
+    require(
+        200 <= status < 300 and json.loads(body) == [],
+        "stranger sees no lifecycle metadata",
     )
 
     # --- the receipt is immutable ------------------------------------------
@@ -465,6 +600,10 @@ def main() -> None:
         "Storage object is deleted and unreadable even to service_role; the row is gone; and a "
         "minimal immutable receipt remains that stores a hashed reference, rejects UPDATE and "
         "DELETE, and is readable only by its owner. SYNTHETIC DISPOSABLE FIXTURES ONLY."
+    )
+    print(
+        f"Signed preview replay during pending deletion: HTTP {pending_signed_status}; "
+        "after physical deletion: denied. No immediate bearer-token revocation claimed."
     )
 
 
