@@ -458,6 +458,8 @@ jobs:
           psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/stage71_rich_review.sql
       - name: Verify appointment receipts through real Auth and PostgREST
         run: python3 scripts/verify_pr82_appointment_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
+      - name: Verify case checklist save, stale-write, isolation and relogin with real Auth/PostgREST
+        run: python3 scripts/verify_case_checklist_http_e2e.py --allow-disposable-write --runtime-marker "$RUNNER_TEMP/plan3-runtime.json"
       - name: Stop disposable Supabase stack
         if: always()
         run: supabase stop --no-backup >/dev/null 2>&1 || true

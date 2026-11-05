@@ -231,7 +231,9 @@
         "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md",
         "docs/master_execution/IMAGE_SECURITY_TRIAGE_20261105.md",
         "scripts/triage_image_security.py",
-        "scripts/tests/test_image_security_triage.py"
+        "scripts/tests/test_image_security_triage.py",
+        "scripts/verify_trivy_image_gap.py",
+        "scripts/tests/test_verify_trivy_image_gap.py"
       ],
       "remaining": "Fresh Q real Auth/Storage/abuse tests and encrypted120 cold restore pass. Request-log leakage is fixed and tested. Known high/critical image findings plus production recovery/abuse acceptance remain open.",
       "original_requirement": "End-to-end reset, storage isolation, abuse limits and owner-verified backup inventory/PITR restore, with negative tests.",
@@ -870,7 +872,8 @@
       "historical_evidence": "Security isolated database CI success; no verified PITR restore, SLO/load or real-client UAT.",
       "current_evidence": [
         "_audit/RAD_MASTER_EXECUTION_20261029/content/native-rehearsal/rehearsal-receipt.json",
-        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md"
+        "docs/master_execution/FINAL_ENGINEERING_ACCEPTANCE_20261105.md",
+        "docs/master_execution/IMAGE_SECURITY_TRIAGE_20261105.md"
       ],
       "remaining": "Fresh120 reconstruction, nine real API suites and encrypted120 restore with full restart pass; actual bounded API/Storage/worker/owner-RLS-query/CPU/RAM/disk measurements exist. Sustained Linux load, security remediation, PITR/offsite recovery and UAT remain open.",
       "original_requirement": "Prove load, security, PITR restore, SLO alerting and documented UAT outcomes under production-like conditions.",
@@ -1022,7 +1025,8 @@
         "supabase/tests/rad_application_case_checklist_persistence.sql",
         "lib/features/applications/data/datasources/case_checklist_gateway.dart",
         "test/applications/case_checklist_server_persistence_test.dart",
-        "test/applications/case_default_milestones_source_safety_test.dart"
+        "test/applications/case_default_milestones_source_safety_test.dart",
+        "scripts/verify_case_checklist_http_e2e.py"
       ],
       "remaining": "Owner-scoped, versioned checklist persistence now has rollback-only SQL and Flutter regression evidence. Full fresh 121-migration Auth/PostgREST browser E2E, staff milestones/history and approved reminder delivery remain unverified.",
       "original_requirement": "Exercise case milestone checklist/reminders, permissions, histories and notification delivery in authorized test transport.",
@@ -1036,7 +1040,8 @@
         "test/applications/case_checklist_test.dart",
         "test/applications/case_checklist_server_persistence_test.dart",
         "test/applications/case_default_milestones_source_safety_test.dart",
-        "supabase/tests/rad_application_case_checklist_persistence.sql"
+        "supabase/tests/rad_application_case_checklist_persistence.sql",
+        "scripts/verify_case_checklist_http_e2e.py"
       ],
       "evidence_scope": "Local/disposable synthetic source/API/browser evidence only unless this row explicitly says documentary. No employer or Production acceptance inferred."
     },

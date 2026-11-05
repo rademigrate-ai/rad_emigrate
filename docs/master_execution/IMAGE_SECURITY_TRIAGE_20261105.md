@@ -36,17 +36,35 @@ compatible, patched and tested Docker image. No CVE is automatically waived
 based only on a package being internal or the fix hint. Unknown reachability
 remains **NOT_ASSESSED**.
 
-**Incomplete:** imgproxy, Realtime and Storage API have no accepted image
-scan report. Attempting Docker Scout against their locally cached immutable
-images returned authentication/SSO-required without a SARIF report, not a
-clean result. A second independent scanner with verified advisory database,
-or authorized Docker Scout authentication, is needed before release.
+**Original Docker Scout gap (supplemented):** Docker Scout could not
+scan imgproxy, Realtime or Storage API because of authentication/SSO; this
+historical limitation is retained. On the same locked local image digests,
+portable **Trivy 0.76.1** (official Windows release SHA256 verified before
+execution) downloaded its vulnerability DB and completed all three scans.
+`scripts/verify_trivy_image_gap.py` verified all three source digests,
+Trivy schema, dated JSON evidence and individual findings, writing
+`D:/RAD - Emigrate/_audit/RAD_INDEPENDENT_TRIVY_GAP_RECEIPT_20261105.json`.
+
+| Supplemental image (independent Trivy scanner) | Critical | High |
+| --- | ---: | ---: |
+| imgproxy | 0 | 33 |
+| Realtime | 4 | 161 |
+| Storage API | 1 | 69 |
+| **Supplemental totals** | **5** | **263** |
+
+These are a different scanner's package findings and **must not be summed
+with the 375 Docker Scout matches**. All 12 pinned images now have at least
+one validated local scanner receipt, but they were not all scanned using the
+same engine. Critical/High remediation, live reachability and compatible
+image upgrade verification remain incomplete. **NO-GO remains unchanged.**
 
 ## Required remediation in order
 
-1. Obtain complete digest-specific scans for all 12 images, including the
-   three missing ones. Record scanner version, advisory DB timestamp, source
-   image digest, the exact findings and immutable result hashes.
+1. Retain the digest-specific receipts now present for all 12 images
+   (nine Docker Scout, three independent Trivy). Preserve scanner version,
+   advisory DB provenance/timestamp, digest, full findings and report hashes.
+   Obtain a same-engine rescan of all 12 before making quantitative comparisons
+   or clearing the release gate.
 2. For Critical and High findings, determine actual component exposure and
    vulnerable-code reachability using vendor advisories, package use, exploit
    prerequisites, deployment configuration and tested mitigations. Record a
