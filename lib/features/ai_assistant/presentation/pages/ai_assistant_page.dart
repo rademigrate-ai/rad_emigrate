@@ -321,8 +321,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _deleteSession(String sessionId) async {
     final userId = ref.read(authenticatedUserIdProvider);
-    if (userId == null || userId.isEmpty || !_sessionMutations.add(sessionId))
+    if (userId == null || userId.isEmpty || !_sessionMutations.add(sessionId)) {
       return;
+    }
     final epoch = _identityEpoch;
     setState(() {});
     try {
@@ -341,14 +342,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         }
       });
     } catch (_) {
-      if (_sameIdentity(userId, epoch)) {
+      if (mounted && _sameIdentity(userId, epoch)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context).errorGeneric)),
         );
       }
     } finally {
-      if (_sameIdentity(userId, epoch))
+      if (_sameIdentity(userId, epoch)) {
         setState(() => _sessionMutations.remove(sessionId));
+      }
     }
   }
 
@@ -374,14 +376,15 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         if (index >= 0) _sessions[index] = renamed;
       });
     } catch (_) {
-      if (_sameIdentity(userId, epoch)) {
+      if (mounted && _sameIdentity(userId, epoch)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context).errorGeneric)),
         );
       }
     } finally {
-      if (_sameIdentity(userId, epoch))
+      if (_sameIdentity(userId, epoch)) {
         setState(() => _sessionMutations.remove(sessionId));
+      }
     }
   }
 

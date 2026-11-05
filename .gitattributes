@@ -71,3 +71,4 @@ scripts/reconciliation_package_adapter.py text eol=lf
 scripts/tests/test_reconciliation_package_seals.py text eol=lf
 scripts/verify_self_host_otp_sessions.py whitespace=cr-at-eol
 supabase/tests/rad_bound_official_refresh.sql whitespace=cr-at-eol
+test/ai_assistant/ai_assistant_chat_e2e_test.dart whitespace=cr-at-eol

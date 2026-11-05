@@ -113,7 +113,10 @@ SQL
 # Stored-reference ownership and detach protection add one INSERT/UPDATE
 # trigger. Fresh CLI reconstruction 42016969094 independently measured the
 # trigger digest below; every other pinned dimension was byte-identical.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"95e1d6c0d9724d7b370633b41a666b4e","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# Owner conversation history adds title, its validation constraint and an owner
+# DELETE policy. Fresh CLI CI 42077411143 measured exactly these three changes;
+# the other five dimensions are unchanged. No guard is removed.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"9df32071c927fbbb2a3750e7a84aede7","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"64a6e4446da2083eb351fcfd3190707c","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"fa795cf331320ab8e89244135da3b204"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2

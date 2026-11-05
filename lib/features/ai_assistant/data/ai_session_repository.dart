@@ -78,8 +78,9 @@ class AiSessionRepository {
     String scope = 'user',
   }) async {
     _requireOwner(userId);
-    if (!{'user', 'admin'}.contains(scope))
+    if (!{'user', 'admin'}.contains(scope)) {
       throw ArgumentError('Invalid conversation scope');
+    }
     final rows = await _service.client
         .from('ai_sessions')
         .delete()
