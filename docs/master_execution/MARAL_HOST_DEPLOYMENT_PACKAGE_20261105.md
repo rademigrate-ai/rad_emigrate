@@ -1,0 +1,158 @@
+# RAD — Maral Host FR-VPS-M2 deployment package (DRAFT)
+
+**Status: DOCUMENTATION ONLY. Hosting is NOT purchased. Nothing is deployed. No DNS, TLS,
+account, or payment action has been taken. PR #89 remains unmerged.**
+
+Prepared 2026-11-05 at repo commit `03b2067`. Target host FR-VPS-M2 is **provisional** per the
+owner's own constraint and is not accepted as a final quote.
+
+This package exists so that a deploy, when authorized, is a reviewed procedure rather than an
+improvisation. It is deliberately not a one-click script.
+
+---
+
+## 1. What is actually proven to work
+
+Established on a disposable, loopback-only self-hosted stack built from the pinned official
+bundle (Stack F, repo commit `f881734` onward):
+
+| Verified | Evidence |
+| --- | --- |
+| All 118 migrations apply to an empty PostgreSQL 17 database | `MIGRATION_RECEIPT.json`, ledger byte-identical to repo |
+| Two-user Auth, login/logout, RLS across profile/application/document/OCR/consultation/entitlement | `scripts/verify_local_auth_isolation.py` |
+| Storage ownership, cross-owner denial, failed cross-user delete | same |
+| Atomic AI quota reservation under concurrency (16 accepted / 50 rejected) | same |
+| Mailbox-verified password recovery with a real credential change | `scripts/verify_self_host_password_recovery.py` |
+| Signed-URL expiry, no replay after expiry, MIME and size gate refusals, anonymous read denial | `scripts/verify_self_host_storage_gates.py` |
+| Research proposal → persisted review → CMS draft → logout/login/reopen recovery | `scripts/verify_research_cms_persistence.py` |
+| Vault credential encrypt/decrypt round-trip as the function owner | probe recorded in `AI_PROVIDER_RECOMMENDATION_20261105.md` |
+
+**Not proven, and therefore not deployable as "done":** live AI provider integration (no paid
+call authorized), Flutter client journeys against a self-hosted backend, OTP and deep-links,
+document retention (the feature does not exist), PITR restore, load/SLO, iOS signing, payments.
+See `docs/RAD_47_TASK_MASTER_LEDGER.md` — 19 of 47 items remain BLOCKED.
+
+---
+
+## 2. Sizing, from measurement rather than estimate
+
+Measured on the migrated Stack F with 11 services running idle:
+
+| | Measured | Configured limit |
+| --- | --- | --- |
+| Total resident memory | **~1.03 GiB** | ~5.2 GiB |
+| Largest single service | realtime, 245 MiB | 512 MiB |
+| PostgreSQL | 189 MiB | 1.17 GiB |
+
+Reading this honestly: **idle footprint is ~1 GiB, but idle is not the number to size on.**
+Concurrent users, Edge Function execution, Storage transfer, and PostgreSQL cache under real
+query load all scale above this, and the configured limits (~5.2 GiB) reflect what the services
+may legitimately claim under pressure.
+
+- **FR-VPS-M2 at 12 GiB RAM is adequate** with meaningful headroom. RAM is not the risk.
+- **Disk is the risk.** The earlier 60 GiB NVMe figure is tight once PostgreSQL data, WAL,
+  Storage objects (documents bucket allows 10 MiB/file), container images (~15 GiB observed
+  locally), and backups coexist. Carry forward the existing recommendation: **at least 80 GiB,
+  prefer 100 GiB.** Verify at checkout; do not assume the quote.
+- Studio (214 MiB) and the Mailpit test sink are **development conveniences**. Both should be
+  omitted or firewalled in production — see §4.
+
+---
+
+## 3. Deployment prerequisites (owner actions, none performed)
+
+1. **Decide and purchase hosting** — owner only. Confirm the disk size above before checkout.
+2. **Domain and DNS** — a dedicated hostname for the API. Not yet chosen or registered.
+3. **TLS** — the pinned bundle terminates HTTP on the gateway. Production needs real TLS in
+   front of it (the bundle ships a Caddy compose overlay; a reverse proxy with automatic
+   certificates is the lower-risk option). **Not configured.**
+4. **Secrets** — generated per install, outside Git. `self_host_stack.py` refuses a bundle
+   containing a live `.env` by design. Production secrets must be newly generated, never the
+   disposable test values from any Stack A–F.
+5. **SMTP** — a real transactional provider. The Mailpit sink is a test fixture and must not
+   receive production mail.
+6. **Backups** — see §5. This is the largest unresolved gap and gates the release.
+
+---
+
+## 4. Production hardening deltas from the test stack
+
+The test stacks are deliberately *not* production-shaped. These differences are required, not
+optional:
+
+| Test stack | Production requirement |
+| --- | --- |
+| API bound to `127.0.0.1:<port>` | Bind behind a TLS reverse proxy; never expose the gateway port directly |
+| `SITE_URL` / redirects on loopback | Real hostnames; `ADDITIONAL_REDIRECT_URLS` tightened to real client origins only |
+| Studio exposed | Remove, or restrict to an administrative network/VPN — it is a full database UI |
+| Mailpit sink | Replaced by real SMTP; sink removed entirely |
+| `DISABLE_SIGNUP=false` | Reassess against the release's intended enrolment policy |
+| `ENABLE_EMAIL_AUTOCONFIRM=false` | Keep false — recovery and confirmation flows depend on real mail |
+| Disposable generated secrets | Freshly generated production secrets, stored in a secret manager |
+| `supavisor` under a `pooler` profile | Enable connection pooling before real concurrency |
+| No TLS, no WAF, no fail2ban | Add transport security and abuse controls at the edge |
+
+Carry forward, do **not** remove when self-hosting: RLS, SECURITY DEFINER authorization, audit
+logging, immutable content holds, human-only publication, and the no-Restore safety policy.
+Those were application-level decisions, not managed-platform workarounds.
+
+---
+
+## 5. Backup and restore — the blocking gap
+
+`scripts/self_host_snapshot.py` exists and supports GPG-encrypted snapshot/restore with an
+independently stored key, and its guard tests pass. **But no verified restore drill has been
+performed**, and ledger item 09 remains BLOCKED on exactly this.
+
+Two constraints from the tool's own contract, both load-bearing for production planning:
+
+- Snapshots are **physical** PostgreSQL copies, so a restore requires the *exact same image
+  digest and CPU architecture*. Pin and record the image digest alongside every snapshot, or
+  the backup may be unrestorable on a rebuilt host.
+- The tool deliberately implements no scheduling, rotation, or offsite copy. Those need a
+  separately reviewed operator wrapper — a snapshot command that only ever runs by hand is not
+  a backup policy.
+
+Before any production deploy is accepted:
+
+1. Take a snapshot of a populated stack.
+2. Restore it into a **separate, empty** stack — never over the source.
+3. Verify the restored database matches: migration ledger count and hashes, row counts on key
+   tables, and a working authenticated journey against the restored instance.
+4. Record the result, with the snapshot's hash and the restore's duration.
+
+Until that drill is done and recorded, treat the deployment as having **no proven recovery
+path**, and do not migrate real user data onto it.
+
+---
+
+## 6. Suggested deploy sequence (for review, not execution)
+
+1. Provision the VPS; patch the OS; create a non-root deploy user; enable a host firewall
+   allowing only SSH and 80/443.
+2. Install Docker; do **not** run the stack as root.
+3. Transfer the pinned bundle and `deploy/self-hosted/images.lock.json`; pin every image by
+   digest (`self_host_stack.py pin --image-lock`). Digest pinning is why the stack is
+   reproducible — keep it.
+4. Generate production secrets; store them in a secret manager; set file permissions to `600`.
+5. Start PostgreSQL, Auth and Storage **first** — `migrate` refuses to run before Auth and
+   Storage schemas exist, by design.
+6. Apply the 118 migrations; confirm the receipt reports `118` and the ledger hashes match the
+   release commit byte-for-byte.
+7. Bring up the remaining services; remove Studio and the mail sink.
+8. Front with TLS; verify certificates and that the raw gateway port is unreachable externally.
+9. Run the verification suites against the deployed instance (they take
+   `RAD_SELF_HOST_TEST_ROOT`; adapt for a remote target — **they currently assume a loopback
+   install and will need work for a remote host**).
+10. Perform the §5 restore drill **before** any real data is loaded.
+11. Configure the AI provider per `AI_PROVIDER_RECOMMENDATION_20261105.md`, with its hard
+    spending cap set first.
+
+---
+
+## 7. Explicit non-goals of this document
+
+- It does not authorize a purchase, a deploy, a DNS change, or a merge.
+- It does not certify the application as release-ready; 19 ledger items are still BLOCKED.
+- It does not replace the restore drill, the live AI verification, or client UAT.
+- Sizing figures are measured on an idle stack and are a floor, not a capacity plan.
