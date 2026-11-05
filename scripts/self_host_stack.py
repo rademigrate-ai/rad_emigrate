@@ -25,11 +25,13 @@ MARKER = "RAD_DISPOSABLE_SELF_HOST_V1"
 def gateway_log_privacy(template: str) -> str:
     """Retain gateway status/timing without URLs, headers or remote identity."""
     safe = 'inline_string: "[%START_TIME%] %REQ(:METHOD)% %PROTOCOL% %RESPONSE_CODE% %BYTES_SENT% %DURATION%\\n"'
-    if template.count(safe) == 1 and template.count("inline_string:") == 1:
-        return template
     pattern = (
         r'^([ \t]*)inline_string: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%[^\r\n]*"'
     )
+    if template.count("text_format_source:") > 1:
+        raise ValueError("ambiguous gateway access log format")
+    if template.count(safe) == 1 and not re.search(pattern, template, re.MULTILINE):
+        return template
     if len(re.findall(pattern, template, re.MULTILINE)) != 1:
         raise ValueError("pinned gateway access log differs; review before preparing")
     return re.sub(pattern, lambda match: match[1] + safe, template, flags=re.MULTILINE)

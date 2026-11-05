@@ -12,6 +12,11 @@ class StorageGatewayPrivacy(unittest.TestCase):
         self.assertIn("%RESPONSE_CODE%", result)
         self.assertIn("%DURATION%", result)
         self.assertEqual(gateway_log_privacy(result), result)
+        # The official template also contains a non-log inline secret matcher.
+        with_auth = (
+            result + "                      inline_string: '${DASHBOARD_BASIC_AUTH}'\n"
+        )
+        self.assertEqual(gateway_log_privacy(with_auth), with_auth)
         for unknown in ("unexpected format", original + original):
             with self.assertRaises(ValueError):
                 gateway_log_privacy(unknown)
