@@ -81,6 +81,11 @@ jobs:
       - run: deno test --allow-env --allow-read=. supabase/functions/tests
       - name: Lint Edge Functions without rule suppressions
         run: deno lint supabase/functions
+      - name: Check document deletion and orphan-report tooling
+        run: |
+          python3 -m pip install ruff==0.13.2
+          python3 -m ruff format --isolated --target-version py311 --check scripts/verify_self_host_document_deletion.py scripts/reconcile_self_host_storage_orphans.py
+          python3 -m ruff check --isolated --select E4,E7,E9,F,I,UP,B --target-version py311 scripts/verify_self_host_document_deletion.py scripts/reconcile_self_host_storage_orphans.py
       - name: Run Python security, migration and preflight regressions
         # Plan 3 tests use the same pinned parser/schema validators as ingestion.
         run: |
@@ -422,6 +427,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_function_defaults.sql
       - name: Verify research-lease claim owner holds only its required explicit grants
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_research_job_owner_privileges.sql
+      - name: Verify hard document deletion ACLs, Storage access gates and immutable receipts
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_document_hard_deletion.sql
       - name: Verify publication-head deletion invalidates only its search projection
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries

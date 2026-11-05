@@ -179,22 +179,35 @@ class DocumentRemoteDataSource {
       return;
     }
     try {
-      final userId = document.userId ?? _service.client.auth.currentUser?.id;
-      if (userId == null || userId.isEmpty) {
+      final userId = _service.client.auth.currentUser?.id;
+      if (userId == null || userId.isEmpty || document.userId != userId) {
         throw const ApiException(
-          message: 'No authenticated user.',
-          code: 'not_authenticated',
+          message: 'An authenticated document owner is required.',
+          code: 'document_access_denied',
         );
       }
-      final path = document.storagePath;
-      if (path != null && path.startsWith('$userId/')) {
-        await _storage?.delete(path);
+      if (!_isUuid(document.id)) {
+        throw const ApiException(
+          message: 'The document must have a persisted identifier.',
+          code: 'invalid_document_id',
+        );
       }
-      await _service.client
-          .from('documents')
-          .delete()
-          .eq('id', document.id)
-          .eq('user_id', userId);
+      // Deletion is intentionally server-owned: a client-side Storage remove
+      // followed by a table DELETE can orphan private content when either
+      // request fails. The RPC atomically hides the row and enqueues the
+      // authorized worker's physical removal and immutable audit receipt.
+      final receipt = await _service.client.rpc(
+        'request_document_deletion',
+        params: {'p_document_id': document.id},
+      );
+      if (receipt is! Map<String, dynamic> ||
+          (receipt['state'] != 'pending_storage' &&
+              receipt['state'] != 'finalized')) {
+        throw const ApiException(
+          message: 'The server did not accept the document deletion.',
+          code: 'document_delete_unconfirmed',
+        );
+      }
     } catch (error) {
       throw _toApiException(error);
     }

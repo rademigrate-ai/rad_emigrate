@@ -293,8 +293,14 @@
       "acceptance": "Exercise owner-bound case/document upload, download, URL expiry/replay, MIME/size gates, cross-owner denial, retention.",
       "implementation": "`lib/features/applications`; `lib/features/documents`",
       "historical_evidence": "#61 owner-bound preview and URL cache tests; real 2-user Storage/E2E outstanding.",
-      "current_evidence": [],
-      "remaining": "Current candidate and live end-to-end acceptance not yet independently verified; historical status is not a current PASS."
+      "current_evidence": [
+        "supabase/migrations/20261105120000_rad_document_hard_deletion.sql",
+        "supabase/tests/rad_document_hard_deletion.sql",
+        "scripts/verify_self_host_document_deletion.py",
+        "supabase/functions/tests/document_deletion_test.ts",
+        "scripts/reconcile_self_host_storage_orphans.py"
+      ],
+      "remaining": "Two-user independent Storage deletion and immutable receipt verified on owned disposable Stack F; signed URL expiry/replay, full document UI E2E, lawful retention period/holds and final release deployment remain unverified. Do not mark gate PASS."
     },
     {
       "id": 25,

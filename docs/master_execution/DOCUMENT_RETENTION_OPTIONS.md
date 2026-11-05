@@ -1,11 +1,27 @@
-# Document retention and purge — options for owner decision
+# Document retention and purge — decision and remaining owner inputs
 
-**Status: DECISION REQUESTED. No retention code has been written.** This document exists so the
-scope is chosen before implementation, because most of it is a product and legal call rather
-than an engineering one.
+**Owner decision (2026-11-05):** use **hard deletion of the Storage object and the
+documents row with a separate immutable audit receipt**, not a retained document-row
+tombstone. A transient `pending_deletion` state is permitted only while Storage cleanup
+is in progress. This decision supersedes the pre-decision soft-delete recommendation
+in section 2 below.
 
-Prepared 2026-11-05 against repo commit `4d7fc00`, verified against the pristine self-hosted
-clean install (Stack F).
+**Engineering status:** the additive two-phase deletion migration, service-role
+Storage worker, ACL tests and isolated real-Storage E2E exist in PR #89's working
+branch. Stack F's synthetic two-user test verified Storage becomes unreadable
+at request time and the final object/row deletion leaves an immutable receipt.
+These results do not establish Production rollout, signed-URL revocation, legal
+retention policy, or employer acceptance. The orphan reconciler defaults to
+report-only, with explicit per-object approval for any destructive action.
+
+**Still undecided:** lawful retention period, terminal application statuses,
+document holds, signed-URL expiry/replay acceptance, backup erasure obligations,
+and authorization to enable any scheduled automatic deletion. No retention
+scheduler or period has been approved or activated.
+
+The original options below were prepared 2026-11-05 against commit `4d7fc00`;
+they remain as historical rationale, **not instructions to implement the
+superseded soft-delete recommendation**.
 
 ---
 
