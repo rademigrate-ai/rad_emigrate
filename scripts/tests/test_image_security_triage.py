@@ -77,6 +77,15 @@ class ImageSecurityTriageTest(unittest.TestCase):
         self.assertEqual(result["reports"][0]["fix_version_advertised"]["CRITICAL"], 1)
         self.assertEqual(result["missing_image_scans"], ["not-scanned"])
         self.assertEqual(result["reports"][0]["reachability"], "NOT_ASSESSED")
+        self.assertEqual(
+            result["reports"][0]["advisories"][0]["advisory_id"], "CVE-SYNTHETIC"
+        )
+        self.assertEqual(
+            result["reports"][0]["advisories"][0]["reachability"], "NOT_ASSESSED"
+        )
+        self.assertFalse(
+            result["reports"][0]["advisories"][0]["compatible_image_fix_verified"]
+        )
 
     def test_changed_lock_is_rejected(self):
         self.review["image_lock_sha256"] = "0" * 64

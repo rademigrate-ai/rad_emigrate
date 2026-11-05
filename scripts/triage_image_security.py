@@ -52,6 +52,7 @@ def parse_triage(*, image_lock: bytes, review: bytes, evidence_zip: Path) -> dic
                 raise ValueError("advisory count mismatch: " + name)
             severity = {"CRITICAL": 0, "HIGH": 0}
             fixed = {"CRITICAL": 0, "HIGH": 0}
+            individual = []
             for finding in findings:
                 key = finding["ruleId"]
                 rule = rules.get(key)
@@ -66,6 +67,18 @@ def parse_triage(*, image_lock: bytes, review: bytes, evidence_zip: Path) -> dic
                 if version and version != "not fixed":
                     fixed[rank] += 1
                 unique_ids.add(key)
+                individual.append(
+                    {
+                        "advisory_id": key,
+                        "severity": rank,
+                        "affected_package_urls": props.get("purls", []),
+                        "affected_version_range": props.get("affected_version"),
+                        "upstream_fixed_version_hint": version,
+                        "reachability": "NOT_ASSESSED",
+                        "compatible_image_fix_verified": False,
+                        "security_acceptance": "NOT_GRANTED",
+                    }
+                )
             if severity != entry["severity"]:
                 raise ValueError("severity mismatch: " + name)
             matched += len(findings)
@@ -77,6 +90,14 @@ def parse_triage(*, image_lock: bytes, review: bytes, evidence_zip: Path) -> dic
                     "advisory_matches": len(findings),
                     "status": entry["status"],
                     "reachability": "NOT_ASSESSED",
+                    "advisories": sorted(
+                        individual,
+                        key=lambda item: (
+                            item["severity"] != "CRITICAL",
+                            item["advisory_id"],
+                            str(item["affected_package_urls"]),
+                        ),
+                    ),
                 }
             )
     if (

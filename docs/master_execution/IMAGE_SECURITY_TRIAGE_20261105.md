@@ -9,6 +9,12 @@ determination or production rollout approval.
 
 `scripts/triage_image_security.py` verifies the lock digest, every included
 SARIF file hash, per-image severity totals and unique advisory totals.
+It also emits **one unresolved record per advisory/package match**, including
+the affected package URL and advertised fixed-version hint; all records
+explicitly remain reachability NOT_ASSESSED and security acceptance NOT_GRANTED.
+The generated local review receipt is
+`D:/RAD - Emigrate/_audit/RAD_IMAGE_SECURITY_TRIAGE_375_DETAIL_20261105.json`
+(375 individual records, not a code or image upgrade).
 A tampered scan or lock fails closed; it does not silently discard findings.
 
 | Image | Critical | High | Critical matches with a fixed-version hint | High with hint |
