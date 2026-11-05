@@ -179,6 +179,10 @@ begin
   assert exists(select 1 from public.document_deletion_receipts
     where document_id='7a000000-0000-4000-8000-0000000000a1' and result='deleted'),
     'an immutable receipt must remain';
+  assert (select object_path='[erased]' and last_error_code is null
+          from private.rad_document_deletions
+          where document_id='7a000000-0000-4000-8000-0000000000a1'),
+    'finalized queue must scrub unnecessary path and error metadata';
 
   -- The receipt holds no file name or path, only a hashed reference.
   assert (select storage_reference not like '%f.pdf%'

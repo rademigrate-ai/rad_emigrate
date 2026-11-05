@@ -614,19 +614,41 @@ def main() -> None:
         {"x-upsert": "false"},
         "Storage object above 10 MiB rejected",
     )
+    # A registered document now requires the audited hard-delete queue and
+    # server-owned Storage worker. Unregistered uploads can still be discarded
+    # by their owner without creating a dangling document row.
     status, _, _ = request(
         "DELETE",
         "/storage/v1/object/documents",
         token_a,
-        {"prefixes": [object_pdf, object_jpg, object_png]},
+        {"prefixes": [object_jpg, object_png]},
     )
-    require(200 <= status < 300, "owner Storage delete")
-    status, _, _ = request(
+    require(200 <= status < 300, "owner deletes only unregistered Storage uploads")
+    for unregistered in (object_jpg, object_png):
+        status, _, _ = request(
+            "GET",
+            "/storage/v1/object/authenticated/documents/" + encoded(unregistered),
+            token_a,
+        )
+        require(status >= 400, "unregistered owner Storage cleanup took effect")
+
+    # The bulk-delete API may report success for a partial/no-op operation.
+    # Verify the registered PDF actually survives direct owner removal.
+    request(
+        "DELETE",
+        "/storage/v1/object/documents",
+        token_a,
+        {"prefixes": [object_pdf]},
+    )
+    status, downloaded, _ = request(
         "GET",
         "/storage/v1/object/authenticated/documents/" + encoded(object_pdf),
         token_a,
     )
-    require(status >= 400, "owner Storage delete took effect")
+    require(
+        200 <= status < 300 and downloaded == pdf,
+        "registered document Storage object must survive unaudited owner delete",
+    )
 
     # SECURITY DEFINER identity tests: authenticated callers are bound to self,
     # while the trusted Edge service may evaluate the requested owner.

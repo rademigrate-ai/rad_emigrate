@@ -213,6 +213,10 @@ begin
 
   update private.rad_document_deletions
   set state='finalized', storage_deleted_at = coalesce(storage_deleted_at, now()),
+      -- After successful finalization the original file path is no longer
+      -- necessary for retries. Keep only the sanitized queue marker and the
+      -- separate hashed, immutable audit receipt.
+      object_path='[erased]', last_error_code=null,
       finalized_at = now(), lease_token=null, lease_until=null, updated_at=now()
   where id = r.id;
 

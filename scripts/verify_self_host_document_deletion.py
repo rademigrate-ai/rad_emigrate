@@ -362,6 +362,19 @@ def main() -> None:
         object_path not in reference and reference.startswith(BUCKET + "/"),
         "receipt stores a non-sensitive hashed storage reference, not the live path",
     )
+    finalized_path = (
+        sql(
+            root,
+            f"select object_path from private.rad_document_deletions "
+            f"where document_id='{document_id}';".encode(),
+        )
+        .stdout.decode()
+        .strip()
+    )
+    require(
+        finalized_path == "[erased]",
+        "finalized operational queue must not retain the original Storage path",
+    )
 
     # --- the receipt is immutable ------------------------------------------
     for statement in (
