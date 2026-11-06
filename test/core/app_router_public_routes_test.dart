@@ -86,22 +86,24 @@ void main() {
       },
     );
   }
-  testWidgets('/signup renders the register form as a /register alias', (
+  testWidgets('/signup opens the unified mobile-first auth form', (
     tester,
   ) async {
     await _pumpApp(tester);
     await _go(tester, '/signup');
 
-    expect(find.byType(RegisterPage), findsOneWidget);
-    expect(find.byType(TextFormField), findsNWidgets(3));
+    expect(find.byType(LoginPage), findsOneWidget);
+    expect(find.byType(RegisterPage), findsNothing);
+    expect(find.byType(TextFormField), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('/register keeps rendering the register form', (tester) async {
+  testWidgets('/register opens the same unified auth form', (tester) async {
     await _pumpApp(tester);
     await _go(tester, '/register');
 
-    expect(find.byType(RegisterPage), findsOneWidget);
+    expect(find.byType(LoginPage), findsOneWidget);
+    expect(find.byType(RegisterPage), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
