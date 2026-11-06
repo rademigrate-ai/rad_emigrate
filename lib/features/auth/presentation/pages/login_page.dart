@@ -85,7 +85,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ? AuthRemoteDataSource.normalizeE164(raw)
         : raw;
     if (_submitting) return;
-    if (identifier == null || identifier.isEmpty ||
+    if (identifier == null ||
+        identifier.isEmpty ||
         (!_usePhone && !identifier.contains('@'))) {
       setState(() => _error = _usePhone ? l10n.required : l10n.invalidEmail);
       return;
@@ -241,8 +242,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               AppTextField(
                 controller: _identifierCtrl,
                 label: _usePhone ? l10n.phone : l10n.email,
-                prefixIcon: _usePhone ? Icons.phone_outlined : Icons.alternate_email_rounded,
-                keyboardType: _usePhone ? TextInputType.phone : TextInputType.emailAddress,
+                prefixIcon: _usePhone
+                    ? Icons.phone_outlined
+                    : Icons.alternate_email_rounded,
+                keyboardType: _usePhone
+                    ? TextInputType.phone
+                    : TextInputType.emailAddress,
                 textDirection: TextDirection.ltr,
                 autofillHints: _usePhone
                     ? const [AutofillHints.telephoneNumber]
@@ -263,45 +268,46 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 const SizedBox(height: 14),
                 AppTextField(
                   controller: _passwordCtrl,
-                label: l10n.password,
-                prefixIcon: Icons.lock_outline_rounded,
-                obscureText: _obscure,
-                autofillHints: const [AutofillHints.password],
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _submit(),
-                validator: (value) =>
-                    value == null || value.isEmpty ? l10n.required : null,
-                suffixIcon: IconButton(
-                  tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
-                  icon: Icon(
-                    _obscure
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
+                  label: l10n.password,
+                  prefixIcon: Icons.lock_outline_rounded,
+                  obscureText: _obscure,
+                  autofillHints: const [AutofillHints.password],
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (_) => _submit(),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? l10n.required : null,
+                  suffixIcon: IconButton(
+                    tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
+                    icon: Icon(
+                      _obscure
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                    ),
+                    onPressed: () => setState(() => _obscure = !_obscure),
                   ),
-                  onPressed: () => setState(() => _obscure = !_obscure),
                 ),
-              ),
               ],
               if (_error case final error?) ...[
                 const SizedBox(height: 14),
                 InlineAlert(message: error),
               ],
               const SizedBox(height: 6),
-              if (_usePassword && !_usePhone) Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: TextButton(
-                  onPressed: () => context.go(
-                    Uri(
-                      path: '/forgot-password',
-                      queryParameters: {
-                        if (widget.destination != null)
-                          'from': widget.destination!,
-                      },
-                    ).toString(),
+              if (_usePassword && !_usePhone)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: TextButton(
+                    onPressed: () => context.go(
+                      Uri(
+                        path: '/forgot-password',
+                        queryParameters: {
+                          if (widget.destination != null)
+                            'from': widget.destination!,
+                        },
+                      ).toString(),
+                    ),
+                    child: Text(l10n.forgotPassword),
                   ),
-                  child: Text(l10n.forgotPassword),
                 ),
-              ),
               const SizedBox(height: 8),
               AppButton(
                 label: _usePassword ? l10n.signIn : l10n.continueWithOtp,
