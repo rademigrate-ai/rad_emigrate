@@ -17,6 +17,7 @@ import '../../../../core/widgets/premium_visuals.dart';
 import '../../../../core/widgets/rad_earth_bird_scene.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/auth_controller.dart';
+import '../../data/datasources/auth_remote_datasource.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key, this.destination});
@@ -32,6 +33,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _identifierCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscure = true;
+  bool _usePhone = true;
+  bool _usePassword = false;
   bool _submitting = false;
   String? _error;
 
@@ -56,7 +59,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             identifier: _identifierCtrl.text.trim(),
             password: _passwordCtrl.text,
           );
-      if (mounted) context.go(restoredProtectedDestination(widget.destination));
+      if (mounted) {
+        final destination = restoredProtectedDestination(widget.destination);
+        final session = ref.read(authControllerProvider).valueOrNull;
+        context.go(
+          session?.profileComplete == true
+              ? destination
+              : Uri(
+                  path: '/profile-completion',
+                  queryParameters: {'from': destination},
+                ).toString(),
+        );
+      }
     } catch (e) {
       if (mounted) setState(() => _error = localizedAuthError(e, l10n));
     } finally {
@@ -66,10 +80,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> _continueWithOtp() async {
     final l10n = AppLocalizations.of(context);
-    final email = _identifierCtrl.text.trim();
+    final raw = _identifierCtrl.text.trim();
+    final identifier = _usePhone
+        ? AuthRemoteDataSource.normalizeE164(raw)
+        : raw;
     if (_submitting) return;
-    if (email.isEmpty || !email.contains('@')) {
-      setState(() => _error = l10n.invalidEmail);
+    if (identifier == null || identifier.isEmpty ||
+        (!_usePhone && !identifier.contains('@'))) {
+      setState(() => _error = _usePhone ? l10n.required : l10n.invalidEmail);
       return;
     }
     setState(() {
@@ -79,12 +97,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     try {
       await ref
           .read(authControllerProvider.notifier)
-          .resendOtp(identifier: email);
+          .resendOtp(identifier: identifier);
       if (mounted) {
         final uri = Uri(
           path: '/otp',
           queryParameters: {
-            'identifier': email,
+            'identifier': identifier,
             if (widget.destination != null) 'from': widget.destination!,
           },
         );
@@ -164,7 +182,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                l10n.signIn,
+                '${l10n.signIn} / ${l10n.signUp}',
                 style: theme.textTheme.headlineLarge?.copyWith(
                   color: theme.colorScheme.onSurface,
                   fontSize: 34,
@@ -173,24 +191,78 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 10),
               Text(l10n.signInSubtitle, style: theme.textTheme.bodyMedium),
-              const SizedBox(height: 30),
+              const SizedBox(height: 22),
+              Wrap(
+                spacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: Text(l10n.phone),
+                    selected: _usePhone,
+                    onSelected: (_) => setState(() {
+                      _usePhone = true;
+                      _identifierCtrl.clear();
+                      _error = null;
+                    }),
+                  ),
+                  ChoiceChip(
+                    label: Text(l10n.email),
+                    selected: !_usePhone,
+                    onSelected: (_) => setState(() {
+                      _usePhone = false;
+                      _identifierCtrl.clear();
+                      _error = null;
+                    }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: Text(l10n.continueWithOtp),
+                    selected: !_usePassword,
+                    onSelected: (_) => setState(() {
+                      _usePassword = false;
+                      _error = null;
+                    }),
+                  ),
+                  ChoiceChip(
+                    label: Text(l10n.password),
+                    selected: _usePassword,
+                    onSelected: (_) => setState(() {
+                      _usePassword = true;
+                      _error = null;
+                    }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
               AppTextField(
                 controller: _identifierCtrl,
-                label: l10n.email,
-                prefixIcon: Icons.alternate_email_rounded,
-                keyboardType: TextInputType.emailAddress,
+                label: _usePhone ? l10n.phone : l10n.email,
+                prefixIcon: _usePhone ? Icons.phone_outlined : Icons.alternate_email_rounded,
+                keyboardType: _usePhone ? TextInputType.phone : TextInputType.emailAddress,
                 textDirection: TextDirection.ltr,
-                autofillHints: const [AutofillHints.email],
+                autofillHints: _usePhone
+                    ? const [AutofillHints.telephoneNumber]
+                    : const [AutofillHints.email],
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  final email = value?.trim() ?? '';
-                  if (email.isEmpty) return l10n.required;
-                  return email.contains('@') ? null : l10n.invalidEmail;
+                  final valueText = value?.trim() ?? '';
+                  if (valueText.isEmpty) return l10n.required;
+                  if (_usePhone) {
+                    return AuthRemoteDataSource.normalizeE164(valueText) != null
+                        ? null
+                        : l10n.required;
+                  }
+                  return valueText.contains('@') ? null : l10n.invalidEmail;
                 },
               ),
-              const SizedBox(height: 14),
-              AppTextField(
-                controller: _passwordCtrl,
+              if (_usePassword) ...[
+                const SizedBox(height: 14),
+                AppTextField(
+                  controller: _passwordCtrl,
                 label: l10n.password,
                 prefixIcon: Icons.lock_outline_rounded,
                 obscureText: _obscure,
@@ -209,12 +281,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   onPressed: () => setState(() => _obscure = !_obscure),
                 ),
               ),
+              ],
               if (_error case final error?) ...[
                 const SizedBox(height: 14),
                 InlineAlert(message: error),
               ],
               const SizedBox(height: 6),
-              Align(
+              if (_usePassword && !_usePhone) Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
                   onPressed: () => context.go(
@@ -231,28 +304,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 8),
               AppButton(
-                label: l10n.signIn,
+                label: _usePassword ? l10n.signIn : l10n.continueWithOtp,
                 icon: directionalForward(context),
                 loading: loading,
-                onPressed: loading ? null : _submit,
+                onPressed: loading
+                    ? null
+                    : (_usePassword ? _submit : _continueWithOtp),
               ),
               const SizedBox(height: 12),
-              AppButton(
-                label: l10n.createAccount,
-                variant: AppButtonVariant.secondary,
-                onPressed: () => context.go(
-                  widget.destination != null
-                      ? Uri(
-                          path: '/register',
-                          queryParameters: {'from': widget.destination!},
-                        ).toString()
-                      : '/register',
-                ),
-              ),
-              TextButton(
-                onPressed: loading ? null : _continueWithOtp,
-                child: Text(l10n.continueWithOtp),
-              ),
+              Text(l10n.signUpSubtitle, style: theme.textTheme.bodySmall),
             ],
           ),
         ),

@@ -135,7 +135,7 @@ void main() {
     );
 
     testWidgets(
-      'LoginPage handles empty email/password validation gracefully',
+      'LoginPage defaults to mobile OTP and rejects empty identifier',
       (tester) async {
         tester.view.physicalSize = const Size(1000, 1200);
         tester.view.devicePixelRatio = 1;
@@ -160,9 +160,9 @@ void main() {
         await tester.pump(const Duration(milliseconds: 300));
 
         expect(find.byType(AppBackButton), findsOneWidget);
-        final signInBtn = find.widgetWithText(AppButton, 'Sign in');
-        expect(signInBtn, findsOneWidget);
-        await tester.tap(signInBtn);
+        final otpBtn = find.widgetWithText(AppButton, 'Continue with OTP');
+        expect(otpBtn, findsOneWidget);
+        await tester.tap(otpBtn);
         await tester.pump(const Duration(milliseconds: 300));
 
         expect(find.text('Required'), findsAtLeastNWidgets(1));
