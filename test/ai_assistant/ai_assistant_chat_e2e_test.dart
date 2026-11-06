@@ -116,6 +116,26 @@ class _FakeAiSessionRepository implements AiSessionRepository {
       ),
     );
   }
+
+  @override
+  Future<void> deleteSession({
+    required String sessionId,
+    required String userId,
+    String scope = 'user',
+  }) async {}
+  @override
+  Future<AiSession> renameSession({
+    required String sessionId,
+    required String userId,
+    required String title,
+    String scope = 'user',
+  }) async => AiSession(
+    id: sessionId,
+    userId: userId,
+    questionCount: 0,
+    createdAt: DateTime(2026),
+    title: title,
+  );
 }
 
 Widget _buildTestApp({

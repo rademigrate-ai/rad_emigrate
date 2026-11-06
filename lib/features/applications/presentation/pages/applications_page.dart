@@ -266,18 +266,32 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             child: Text(isFa ? 'انصراف' : 'Cancel'),
           ),
           FilledButton(
-            onPressed: () {
-              final t = titleCtrl.text.trim();
-              if (t.isNotEmpty) {
-                caseCtrl.addChecklistItem(
-                  title: t,
+            onPressed: () async {
+              final title = titleCtrl.text.trim();
+              if (title.isEmpty) return;
+              try {
+                // Never claim save success before persistence acknowledges it.
+                // The user chooses deadlines explicitly; do not invent +14d.
+                await caseCtrl.addChecklistItem(
+                  title: title,
                   description: descCtrl.text.trim().isEmpty
                       ? null
                       : descCtrl.text.trim(),
-                  dueDate: DateTime.now().toUtc().add(const Duration(days: 14)),
                 );
+                if (ctx.mounted) Navigator.pop(ctx);
+              } catch (_) {
+                if (ctx.mounted) {
+                  ScaffoldMessenger.of(ctx).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        isFa
+                            ? 'ذخیره مرحله ناموفق بود'
+                            : 'Could not save milestone',
+                      ),
+                    ),
+                  );
+                }
               }
-              Navigator.pop(ctx);
             },
             child: Text(isFa ? 'افزودن' : 'Add'),
           ),
@@ -310,9 +324,23 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
             child: Text(isFa ? 'انصراف' : 'Cancel'),
           ),
           FilledButton(
-            onPressed: () {
-              caseCtrl.updateItemNote(item.id, noteCtrl.text.trim());
-              Navigator.pop(ctx);
+            onPressed: () async {
+              try {
+                await caseCtrl.updateItemNote(item.id, noteCtrl.text.trim());
+                if (ctx.mounted) Navigator.pop(ctx);
+              } catch (_) {
+                if (ctx.mounted) {
+                  ScaffoldMessenger.of(ctx).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        isFa
+                            ? 'ذخیره یادداشت ناموفق بود'
+                            : 'Could not save note',
+                      ),
+                    ),
+                  );
+                }
+              }
             },
             child: Text(isFa ? 'ذخیره' : 'Save'),
           ),
@@ -553,20 +581,16 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     setState(() => _updatingStatus = true);
     try {
       final caseCtrl = ref.read(caseTrackerControllerProvider(app).notifier);
-      await caseCtrl.transitionApplicationStatus(status);
-      await ref
-          .read(applicationControllerProvider.notifier)
-          .updateStatus(app.id, status);
-      final list = ref.read(applicationControllerProvider).valueOrNull ?? [];
-      VisaApplication? updated;
-      for (final item in list) {
-        if (item.id == app.id) {
-          updated = item;
-          break;
-        }
+      final accepted = await caseCtrl.transitionApplicationStatus(status);
+      if (!accepted) {
+        throw StateError('Application transition was not acknowledged.');
       }
+      await ref.read(applicationControllerProvider.notifier).load();
       if (mounted) {
-        setState(() => _selected = updated ?? app.copyWith(status: status));
+        final updated = ref
+            .read(caseTrackerControllerProvider(app))
+            .application;
+        setState(() => _selected = updated);
       }
     } catch (_) {
       if (mounted) {
@@ -999,15 +1023,31 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
                                 ? 'چک‌لیستی برای این پرونده ثبت نشده است'
                                 : 'No checklist items yet',
                             subtitle: isFa
-                                ? 'می‌توانید مراحل پیش‌فرض را ایجاد کرده یا مرحله جدید اضافه نمایید.'
-                                : 'You can create default milestones or add custom checklist items.',
+                                ? 'مراحل عمومی صرفاً برای برنامه‌ریزی هستند؛ الزامات رسمی را جداگانه بررسی کنید.'
+                                : 'General planning steps are not official visa requirements.',
                             icon: Icons.checklist_outlined,
                             actionLabel: isFa
-                                ? 'ایجاد مراحل استاندارد'
-                                : 'Create Default Milestones',
-                            onAction: () => caseCtrl.setCustomChecklist(
-                              defaultMilestoneItems(app),
-                            ),
+                                ? 'ایجاد مراحل عمومی'
+                                : 'Create General Planning Steps',
+                            onAction: () async {
+                              try {
+                                await caseCtrl.setCustomChecklist(
+                                  defaultMilestoneItems(app),
+                                );
+                              } catch (_) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        isFa
+                                            ? 'ذخیره مراحل ناموفق بود'
+                                            : 'Could not save checklist',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
                           )
                         else ...[
                           for (final item in checklist.sortedByOrder()) ...[

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/editorial_repository.dart';
 
@@ -16,6 +17,49 @@ class EditorialRichBlock extends StatelessWidget {
         ? Map<String, dynamic>.from(block['original_structure'] as Map)
         : block;
     final type = original['type'];
+    if ([
+      'image',
+      'img',
+      'video',
+      'audio',
+      'media',
+      'attachment',
+      'source',
+      'iframe',
+    ].contains(type)) {
+      final url = original['url'] ?? original['src'];
+      final uri = url is String ? Uri.tryParse(url) : null;
+      final safe =
+          uri != null &&
+          {'http', 'https'}.contains(uri.scheme) &&
+          uri.host.isNotEmpty &&
+          uri.userInfo.isEmpty;
+      final caption =
+          '${original['caption'] ?? original['alt'] ?? original['text'] ?? ''}';
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (safe &&
+              {'image', 'img'}.contains(type) &&
+              original['public_render_allowed'] == true)
+            Image.network(
+              url as String,
+              semanticLabel: caption,
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) =>
+                  const Icon(Icons.broken_image_outlined),
+            ),
+          if (caption.isNotEmpty) SelectableText(caption),
+          if (safe)
+            TextButton.icon(
+              icon: const Icon(Icons.open_in_new),
+              onPressed: () =>
+                  launchUrl(uri, mode: LaunchMode.externalApplication),
+              label: Text(url as String, textDirection: TextDirection.ltr),
+            ),
+        ],
+      );
+    }
     if (type == 'table') return _RichTable(table: original);
     if (type == 'bullet_list' || type == 'numbered_list') {
       final values = original['items'];
@@ -42,14 +86,31 @@ class EditorialRichBlock extends StatelessWidget {
       );
     }
     final value = original['text'] as String? ?? '';
+    final capturedLevel = int.tryParse(
+      '${original['level'] ?? block['heading_level'] ?? 2}',
+    );
+    final headingLevel =
+        capturedLevel != null && capturedLevel >= 1 && capturedLevel <= 6
+        ? capturedLevel
+        : 2;
+    final theme = Theme.of(context).textTheme;
+    final headingStyle = switch (headingLevel) {
+      1 => theme.headlineMedium,
+      2 => theme.headlineSmall,
+      3 => theme.titleLarge,
+      4 => theme.titleMedium,
+      5 => theme.titleSmall,
+      _ => theme.labelLarge,
+    };
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Semantics(
         header: type == 'heading',
+        headingLevel: type == 'heading' ? headingLevel : null,
         child: SelectableText(
           value,
           style: type == 'heading'
-              ? Theme.of(context).textTheme.titleLarge
+              ? headingStyle
               : Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.9),
         ),
       ),
@@ -193,7 +254,13 @@ class _RichTable extends StatelessWidget {
                             ),
                           ),
                           child: Semantics(
+                            container: true,
                             header: cell.data['header'] == true,
+                            label:
+                                Localizations.localeOf(context).languageCode ==
+                                    'fa'
+                                ? 'ردیف ${cell.row + 1}، ستون ${cell.col + 1}، گستره ${cell.rows} ردیف و ${cell.cols} ستون'
+                                : 'Row ${cell.row + 1}, column ${cell.col + 1}, spans ${cell.rows} rows and ${cell.cols} columns',
                             child: SelectableText(
                               '${cell.data['text'] ?? ''}',
                               style: cell.data['header'] == true

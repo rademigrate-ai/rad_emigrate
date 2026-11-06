@@ -1,0 +1,375 @@
+{
+  "artifacts_relative_to_project_root": {
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/decisions-template.json": {
+      "bytes": 78930,
+      "sha256": "54c9293d60ebb5a129fd93a4d38669a6c61928311cc041500825b69ff88990eb"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/index.html": {
+      "bytes": 240682,
+      "sha256": "48fca676f863dda8eaf4eb1ce2919ee6bfd2652bb5b7f7699324a7c3e38e024f"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/manifest.json": {
+      "bytes": 109714,
+      "sha256": "0d35326ee492d14546a2f4711add4846237ca06414dfa3cf7720c06460efb823"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/owner-batches-template.json": {
+      "bytes": 1541,
+      "sha256": "86e081820e6f0265588e9a32ddd23a1727f5e77ddb21e63411c57eb609f9d1c8"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/verification.json": {
+      "bytes": 973,
+      "sha256": "ee90b76cbccdf1b09b29aaa9be1bf07bbced83bf5b8baad8b44ae43f7d28d3ed"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/LINK_ANCHOR_GAPS.html": {
+      "bytes": 457934,
+      "sha256": "e881d218d1b8ab5b4ca0149b712cbf272924ae4a1fc94769706c38de4f65b1f0"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/REVIEW_GUIDE.html": {
+      "bytes": 57203,
+      "sha256": "49639fae2878933579a528decea78d54f1f82e8065aec8c193e506ca574efb8e"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/link-anchor-gap-crosswalk.json": {
+      "bytes": 370895,
+      "sha256": "c4f0b7c40ea730fe48e3040829e0cbeddf7b48640a41133d29d2b6a0564ca5c6"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/link-anchor-gap-decisions.template.json": {
+      "bytes": 28862,
+      "sha256": "de0696b6686839530e15c8fb55d7d05aaba4181048cb02753aa6613bacb3965d"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/receipt.json": {
+      "bytes": 90714,
+      "sha256": "5797af43ab7d3cf7fdc4e28b11072cedac21e53c50422e05dcc85ef7c0efb500"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/review-cases.jsonl.gz": {
+      "bytes": 1002911,
+      "sha256": "b6fa68ad0675f1e0185decd3c7df6a48e45c91b02a35df4280c5f0dc5685d354"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/source-capture-integrity.json": {
+      "bytes": 1796976,
+      "sha256": "ab3d20d23ffca30c19b3852863d673fa2b894b41f2790f16e897ebbb2512ecd4"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/specific-content-choices.json": {
+      "bytes": 49239,
+      "sha256": "17c99111136d0113193f30282ed240eba008b8feb1aa8485afc532862df4fd85"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/verification.json": {
+      "bytes": 1423,
+      "sha256": "d3c0b69872512856a24ffe44cd7e2e4ca26da0f0ffe9ed11df1df1b9819c6eb2"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/forward_body.sql": {
+      "bytes": 252485,
+      "sha256": "ec77fd4bba84b703a0d2994c3ce8da8112ca969a8f2a478de8061b500f675f69"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production-event-callback-metadata-20261102.json": {
+      "bytes": 3509,
+      "sha256": "e6080a3180ab37764261f1ebed5e8ab5d7a5fa91c1a0c5fad9675d42dba6673e"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production-legacy-fullrow-hashes-20261102.json": {
+      "bytes": 4374,
+      "sha256": "83f4c262d0845407efbd3f071a2247354109f3ab7627cafb132bd61c6b4f4a41"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/PRODUCTION_REVIEW_ONLY.sql.gz": {
+      "bytes": 23156085,
+      "sha256": "1e3cb43131d9bb6c4871bc267bedf34b2ebce846a7d0581a4f72674a24833c4d"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/README.md": {
+      "bytes": 5070,
+      "sha256": "305daf5b014300fb33ef588a456d82d45d492403d32241b716b09a2e83bf0435"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/REVIEW_ONLY.sql": {
+      "bytes": 116,
+      "sha256": "6e7e11539f6397042498bb8c49398d68eef1b4693d5f3fa7ca8921ffe639904c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/artifact-seals.json": {
+      "bytes": 1223,
+      "sha256": "038bdfa0f586951c1a6c438523ad06c8cacdaa7a512324985f4677ce291b92a2"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/compensating-rollback-authorization.template.json": {
+      "bytes": 1102,
+      "sha256": "f345a27297d44b87b527b169ccd498071c1c89cb4f75d07d472c2fead57cea1c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/ddl-event-callback-review.template.json": {
+      "bytes": 378,
+      "sha256": "8e90dde8c2651f97a223625eaf51dfcd0472a5d57fde52a8a15f92c81889ff01"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/human-decisions.template.jsonl.gz": {
+      "bytes": 58373,
+      "sha256": "4584aeac4bd72dc714377e274428e54b2444df0353f53b5fd45a3443bfdee194"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/operations.jsonl.gz": {
+      "bytes": 46990202,
+      "sha256": "69ca7638c7a141efc354bfeb4cfb82d3c444381c7410f6c82b54c3a32f6c118c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/plan.json": {
+      "bytes": 8382267,
+      "sha256": "a50bf660b33638e1acc5c7143c111c7c3581a6758bfd41347e23dfc2a443fb09"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/production-authorization.template.json": {
+      "bytes": 1599,
+      "sha256": "46fab14c683b228ac6a319d4f46930f312275ef631e63347f6668c6fca4427a3"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/reproducibility.json": {
+      "bytes": 5216,
+      "sha256": "7a02c2fa0c9c7d973b890a419e9868f628768adad5af5567fd215fd568915e59"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/restore-authorization.template.json": {
+      "bytes": 996,
+      "sha256": "e68b486c4e0d32f39d989407371c07363800557abd5a48c3537b4f2ec6bdc157"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release/review-sql-receipt.json": {
+      "bytes": 543,
+      "sha256": "6a48d7b7e67f0ebf7a0ffb1256ec41a26b5093f7195f3fcbacfb53df9c6f2a92"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/admin-save-detached-red.json": {
+      "bytes": 594,
+      "sha256": "384917b0f1ac7d283de436e5f42d4bdea90ed70bbbf1acbd793cda1026a7ea58"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/admin-save-rollback-green.json": {
+      "bytes": 413,
+      "sha256": "829015da015ae3600dd74bae504092fce190cdd03411cb1725fe4dac2f843685"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/core-forward-negative-guard.json": {
+      "bytes": 418,
+      "sha256": "87e339b31700f96a31014cf19477c046d4e76a021d9da0e7db666d496c43f407"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/ownership.json": {
+      "bytes": 274,
+      "sha256": "53e150bd7bf9ea2f3435bd0c1fabbacc568f718e9a52dd285e402b0f3bb6ea69"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/research-scheduler-negative-guard.json": {
+      "bytes": 415,
+      "sha256": "bb3b7274e55a30516478e9d5b6c8f27065a9a8fa9d2b7f25c59e820cbf734646"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/safety-cases.json": {
+      "bytes": 1396,
+      "sha256": "8e9c52bc447a45f032ba85594dd194e9a0e8a37fd58fb55c574211f61d3677cb"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/shutdown-receipt.json": {
+      "bytes": 290,
+      "sha256": "17591afb6c21e9b6b2c2290d96c1e15971d6a07a30c8d2804c7331a41911f31b"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/synthetic-callback-policy-positive.json": {
+      "bytes": 381,
+      "sha256": "fe5ee0aee9b0b0f353be5debd47a04290acd9828e29bae8fb42fa04cba36b544"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/synthetic_callback_apply_unverified_drafts.json": {
+      "bytes": 489,
+      "sha256": "102f3137a3fbe00811ee49c00512f393862833d86b3bb80806ebe02972a9eb61"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_sql_rehearsal_20261102T150240Z_aa0de157/synthetic_callback_compensating_rollback.json": {
+      "bytes": 487,
+      "sha256": "6c291b3d5e7103f1d58137086c31ebdb78bbef8539ee711bac9f0fe8ca511b2c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/release_gate_manifest.json": {
+      "bytes": 10033,
+      "sha256": "442db97cb05b8adff3f94988f6ec3ec7796a517aacbc3013cea786afc8a5a135"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-all745-freshness-20261102.json": {
+      "bytes": 780,
+      "sha256": "465c9e03d80ec1872132a4a77e101b984606aa9bc85089fb5da48a38c2a08cce"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-current-counts-20261102.json": {
+      "bytes": 1016,
+      "sha256": "caea12925d1268e07529f2257165b863fb6f423c434157a91d254c90d41f4747"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-final-drift-details-20261102.json": {
+      "bytes": 2817,
+      "sha256": "4f96d0ffdeea8a3c2b3d6287c541cfcf9b43c8e002b785a9226f69271702e96c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-final-legacy-diff-20261102.json": {
+      "bytes": 365,
+      "sha256": "051fc90f6477591dbf81b9effd2561389c9fdc3958f2b7a8afe821af9e64f748"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-final-readonly-20261102.json": {
+      "bytes": 5242,
+      "sha256": "b5a9a789e93c58c4bf54cf12c838700855701fb97d7ab6c27647dc60d8e60993"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-freshness-20261102.json": {
+      "bytes": 572,
+      "sha256": "aa75d1a9da979322e59c5134f3adbe9b3e4b58345faa89441b37be980a0d1761"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/production-release-readonly-20261102.json": {
+      "bytes": 5244,
+      "sha256": "9b1ee3c61a11f84eaeb87ce3dff19e22977b71e47346848f2c2f9d089c1428bc"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/recovery-final/RECOVERY_OPERATOR_PROCEDURE.md": {
+      "bytes": 13374,
+      "sha256": "b0ef7c532b9326eb1ed6370ddc5d7d04da23fb2260847755ef928551dbe1f410"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/recovery-final/profile.template.json": {
+      "bytes": 692,
+      "sha256": "44fe8082823efb882c22d7ca16a22cf2e61143689525376a67b07577358ceb13"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/recovery-final/synthetic-encrypted-restore-final-v4/rehearsal-receipt.json": {
+      "bytes": 2354,
+      "sha256": "93d778e6972146c606ac44bbee980f0ed37cc58cb6b3758da58bf80bf096b342"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/release-final-20261102/CORE_FORWARD_REVIEW_ONLY.sql": {
+      "bytes": 252693,
+      "sha256": "5d35504b3d494114b812cb39d666207e342edf9f4fce78bf63037b55d37ea961"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/release-final-20261102/current-forward-manifest.json": {
+      "bytes": 860,
+      "sha256": "ee53d1938056b8f98e75b9652c07b2f5e0b4b058f28aed8ba144007c4836041c"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/release-final-20261102/current-forward-with-compat-manifest.json": {
+      "bytes": 1206,
+      "sha256": "d83892554b738aebbec754e76c2627e1c913d7b13cb5605b325cd47570379891"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/release-final-20261102/release_preflight_current.sql": {
+      "bytes": 2499,
+      "sha256": "0a15d3f5dff6846fc1bcfda7e61bf868b95f2958746d8fa427c729d79c125835"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/ACTIVATION_OPERATOR_PROCEDURE.md": {
+      "bytes": 6812,
+      "sha256": "049e4bcd3f9a897ceb43fce5662857d9e8fd5a3513c20a445c10a8e9ce7b1da6"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/authority-binding-review.template.json": {
+      "bytes": 1893,
+      "sha256": "d0271508ca2b9252759c3b856aaf44b2e6c959ec61c6f94434359607a8e1a3d4"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/deno-final.log": {
+      "bytes": 20631,
+      "sha256": "970a89e820e62c9c260d97f50379e71c6f9e0a9a70688403740d86e4ef9d834e"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/egress-acceptance.template.json": {
+      "bytes": 741,
+      "sha256": "41c03d7fa75188b8172a38b9316b0c7be7523d79420e34967a63a0136470b2ca"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/sealed-final/SCHEDULER_REVIEW_ONLY.sql": {
+      "bytes": 1478,
+      "sha256": "3c24b652ec4b5ecbd3d7a164370dabd6a0200a753f29e67cd0a84415f67b0ad4"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/sealed-final/STOP_REVIEW_ONLY.sql": {
+      "bytes": 794,
+      "sha256": "6c9d058fbdb132c1cfda2f4a20347b8a7c82d2b60ee103a1482ab7d6939396af"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/sealed-final/activation-package.json": {
+      "bytes": 11853,
+      "sha256": "df86a7f9a17c99237a26f7d8f00d102aa684df9c36a13e2b28073dd8fd800fd7"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/research-activation-final/sealed-final/disabled-flags.env.example": {
+      "bytes": 87,
+      "sha256": "9d9c20323a28a5bb6423d67fae62616915077af9deceb39c0a82590349032192"
+    },
+    "_audit/RAD_MASTER_CONVERGENCE_20261031/review-packages-focused-final-v3.log": {
+      "bytes": 7915,
+      "sha256": "1ec75ad3854838204dae2ec085284466c82af450b96162cc032fb76c4809567d"
+    }
+  },
+  "body_review": {
+    "additional_link_evidence_gaps": 109,
+    "exact_additive": 207,
+    "existing": 251,
+    "focused_reconciliation": 2,
+    "new": 406,
+    "reordered_additive": 42
+  },
+  "browser_e2e": "OWNER_DEFERRED",
+  "code_sha256": {
+    ".gitattributes": "d2af3e2e42499b752b8e0515a4ffb3c79a3fa57cdb35b9909c89115dcb599a35",
+    ".github/workflows/ci.yml": "a35f52c417a220b3c33cf8fad67237a59b331df6326d54a5adc84435fa9d80b6",
+    "scripts/production_reconciliation_package.py": "a963af990bac2fde63568835c71a583f73bf06b39e3679362fbb6e52a1b1a243",
+    "scripts/recovery_checkpoint.py": "f243f072347934b1d22c85031aac6eced9a1c3bb20a3fb9918cc8ab07eb1042b",
+    "scripts/recovery_local_rehearsal.py": "7d41693ceab403779a2805f52a4100241f95d3f8bb426f4c5852bbc6a6d54060",
+    "scripts/research_activation_package.py": "074e012ac84dda0dadffe02c16714b0d913b42036a00b8f7741b7112d52fcf05",
+    "scripts/tests/test_production_body_review.py": "d5a907c994c0e79ed6421ece027e33491508dc07c541142343dcc7d7b2616f19",
+    "scripts/tests/test_production_reconciliation_package.py": "31a3f8de4ebd3683ba6f6619d729efb336c292056d715edb56f686b800558743",
+    "scripts/tests/test_production_reconciliation_sql.py": "d6512c7537cd15280b14770043343fc66d92a58cf1b052083c09be72faea4fc2",
+    "scripts/tests/test_recovery_checkpoint.py": "1bc29171e0ec0c74f0e956e976a974bfcdc3117180f0282f671ef21714cd1870",
+    "scripts/tests/test_research_activation_package.py": "71054fb7e925697d51f192d7a7d42efc509813bb367b801b48fadf345f06cae8",
+    "scripts/tests/test_review_packets_v43.py": "8ff1aa8b529321d46aa51f41438b9fe9770a4d8de6f45acdbd87c89be0d80e3e",
+    "supabase/config.toml": "c671e414105c9db356c6a3a93104b451a6247ad6e08cae9e398815d066ca8423",
+    "supabase/functions/official-source-worker/discovery.ts": "2cc0acd88ac7b16590427bc8ad855d97004bcbcd004804d90a0a7df78129940b",
+    "supabase/functions/official-source-worker/index.ts": "d225815c283ab159ccd6cce0bfab6b1f554cac39de75a2c19a9f8f1758bd357b",
+    "supabase/functions/tests/official_activation_entrypoint_test.ts": "9c944cb9132fce6fbfa4a8d0a82c6a434dd6f63a47aa75ffa45e506b0b9d9bbd",
+    "supabase/functions/tests/official_discovery_test.ts": "092ab42f5747b4d489fff0b0d394161d004dfc6390921f54653e138ecef9a2ae",
+    "supabase/migrations/20261102101305_rad_cms_detached_revision_allocator.sql": "5f224ce6025ff43d02e078f51d147f0f9c7b63ce4cf7b42e0c383e6b3f6be4ca",
+    "tools/content_completion/review_packets_v43.py": "b6c1794aa4b90e04dda8a47ae0a9852adc331b80a91758ae1323526b005310b1",
+    "tools/production_body_review.py": "40a2162571afc27d1e6af815c6fada41bcce2b8e6620029eb91e31cec547b129"
+  },
+  "created_at": "2026-11-02T15:09:33.627578+00:00",
+  "draft_required": true,
+  "existing_heads_preserved": 745,
+  "final_git_commit_binding": "external GitHub delivery receipt; historical base is not the new tested commit",
+  "historical_base_commit": "81f11ce176d9645ae0503e360e22ef6a414c355b",
+  "hosted_mutations": 0,
+  "limits": [
+    "No current real Production backup/restore proof was fabricated or established.",
+    "Offline rendering never connects or executes SQL; valid-looking receipt files and session assertions still require independently authenticated owner/operator review.",
+    "Mechanical integrity does not establish factual/legal correctness, asset rights, editorial approval or publication acceptance.",
+    "Browser E2E stays owner-deferred; no deploy/publish/merge performed."
+  ],
+  "original_editorial_cases": {
+    "encoding": 1,
+    "heading": 103,
+    "link": 215,
+    "optional_batches": 8,
+    "source": 64
+  },
+  "outside_desired_heads_preserved": 51,
+  "paid_calls": 0,
+  "pr": 89,
+  "production_package_sha256": "c9b4d7e84711a3fb478b639d724289a3f2694a298448d662d4637894d0318353",
+  "project_id": "inshddthftkhcdosoqcn",
+  "project_root": "D:/RAD - Emigrate",
+  "remaining_owner_decisions": [
+    {
+      "artifact": "docs/master_execution/PRODUCTION_RECOVERY_PROCEDURE_20261102.md",
+      "authorizes": "Source profile/read export, approved maintenance checkpoint, encrypted DB/roles/Storage/settings capture and restore to the named empty isolated destination; actual existing-account Auth/API acceptance.",
+      "decision": "Approve one current coordinated backup and real isolated restore",
+      "does_not_authorize": "Production DDL/import, paid resource creation, deployment or publication",
+      "id": "B1",
+      "required_owner_inputs": [
+        "source profile name/path",
+        "independent empty destination identity",
+        "key custodian/public fingerprint/encrypted storage/retention",
+        "loss and restore objectives",
+        "approved existing test-account handling"
+      ]
+    },
+    {
+      "artifacts": [
+        "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/REVIEW_GUIDE.html",
+        "_audit/RAD_MASTER_CONVERGENCE_20261031/content-recovery/decision-packages/owner-batches-template.json",
+        "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/body-review/link-anchor-gap-decisions.template.json"
+      ],
+      "authorizes": "Offline recorded choices only:251 existing differences,406 new candidates,383 original source/heading/link/encoding cases in8 optional batches, and109 additional raw-link evidence gaps.",
+      "decision": "Make or defer the hash-bound editorial/source choices",
+      "does_not_authorize": "Head adoption, factual/legal verification, hosted writes or publication",
+      "focused_cases": [
+        "RAD-BODY-0151 French study/fa",
+        "RAD-BODY-0232 UAE study/fa"
+      ],
+      "id": "E1"
+    },
+    {
+      "artifact": "_audit/RAD_MASTER_CONVERGENCE_20261031/db_forward_review/production_reconciliation_package_v3_final_release",
+      "authorizes": "Only the selected sealed forward/reconciliation SHA, current checkpoint, endpoint, actual Admin actor and exact decision-set hash.849 nondivergent draft operations are reviewable;251 differing rows stay omitted unless explicitly chosen. All745 existing heads including51 outside desired stay fixed.",
+      "compensation": "A distinct explicit rollback authorization is required. Refuse any later write/reference/publication or changed owned row; never erase later human work.",
+      "decision": "AfterB1, authorize the exact schema/additive draft transaction or separately authorize its compensation",
+      "does_not_authorize": "Blanket hosted execution, replacing existingheads, publication, merge or deployment",
+      "id": "P1",
+      "managed_callback_review": "Before any hosted schema/import/undo DDL, review exact event-callback descriptors and provide the separate hash-bound policy receipt. Current enabled extensions.pgrst_ddl_watch() has source MD5 7f27b8118fea5c88b0164331292859e3; no callback is approved by this task. Hash-only evidence is prepared. Automatic approval review rejected full callback-source export as potentially sensitive code.",
+      "package_sha256": "c9b4d7e84711a3fb478b639d724289a3f2694a298448d662d4637894d0318353"
+    },
+    {
+      "artifact": "docs/master_execution/RESEARCH_ACTIVATION_PROCEDURE_20261102.md",
+      "authorizes": "R1 disabled sealed deployment and negative checks;R2 approved registry/source bindings and bounded refresh only;R3 choose15min/30min/hourly dispatcher cadence;R4 exact recorded-job stop. Each stage is separate, not a bundled approval.",
+      "decision": "Authorize Research operations separately, after recovery/schema and authority/egress gates",
+      "discovery_enabled": false,
+      "does_not_authorize": "Invented authority approvals, provider spending, public release, or replacement of legacy daily jobs",
+      "id": "R1-R4",
+      "package_sha256": "f220cedfba811522f06ffbc31cdc3509d324a41f5540cc588a2f7cab91df43ed",
+      "paid_calls_authorized": false
+    },
+    {
+      "artifact": "docs/master_execution/PRODUCT_OWNER_DECISIONS_20261102.json",
+      "authorizes": "Release A/B scope freeze and concrete scheduling inventory/ownership/capacity/confirmation contract for the two existing unimplemented interview RPCs; approved provider/device/signing scope for dependent integration and UAT.",
+      "decision": "Confirm existing release scope and external-product contracts",
+      "does_not_authorize": "Feature acceptance, silent exclusions, new paid providers, provider spending, real notifications/transactions, Production writes or release.",
+      "id": "S1"
+    }
+  ],
+  "status": "LOCAL_PACKAGES_COMPLETE_OWNER_GATES_REMAIN"
+}

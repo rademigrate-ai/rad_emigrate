@@ -11,6 +11,7 @@ import '../../data/research_review_repository.dart';
 import '../../../../core/supabase/supabase_providers.dart';
 import '../../domain/entities/admin_cms_entities.dart';
 import '../widgets/full_page_comparison_viewer.dart';
+import '../widgets/bound_source_evidence_panel.dart';
 import '../widgets/structured_review_viewer.dart';
 import '../../../visa/presentation/widgets/editorial_rich_block.dart';
 
@@ -71,6 +72,10 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       final context = await ref
           .read(researchReviewRepositoryProvider)
           .context(widget.sourceId);
+      if (context.containsKey('bound_source_change') &&
+          !BoundSourceEvidencePanel.isValid(context['bound_source_change'])) {
+        throw const CmsException('malformed');
+      }
       final proposal = AdminSourceChangeProposal.fromJson(
         Map<String, dynamic>.from(context['proposal'] as Map),
       );
@@ -215,7 +220,9 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
           result['published'] == false &&
           (decision != SourceProposalReviewStatus.approved ||
               (result['draft_revision'] is Map &&
-                  result['draft_revision']['editorial_state'] == 'draft'));
+                  result['draft_revision']['editorial_state'] == 'draft' &&
+                  result['draft_revision']['article_id'] ==
+                      prop.targetArticleId));
       if (!mounted) return;
 
       if (!ok) throw const CmsException('malformed');
@@ -233,7 +240,13 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
       );
 
       setState(() => _isDirty = false);
-      context.go('/admin/sources');
+      // Creating a CMS draft is not publication. Let the employer inspect
+      // it in the existing CMS lifecycle; rejection returns to research.
+      context.go(
+        decision == SourceProposalReviewStatus.approved
+            ? '/admin/cms'
+            : '/admin/sources',
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -251,11 +264,15 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
     }
   }
 
-  Future<void> _saveReview() async {
-    if (_reviewContext == null || _isSubmitting) return;
+  Future<void> _saveReview({bool deferDecision = false}) async {
+    if (_reviewContext == null ||
+        _isSubmitting ||
+        _reviewContext?['stale'] == true) {
+      return;
+    }
     setState(() => _isSubmitting = true);
     try {
-      await ref
+      final result = await ref
           .read(researchReviewRepositoryProvider)
           .save(
             context: _reviewContext!,
@@ -265,8 +282,25 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             note: _reviewerNotesController.text.trim(),
           );
       if (!mounted) return;
+      if (result['published'] != false ||
+          result['draft_revision'] != null ||
+          result['review_revision'] is! int) {
+        throw const CmsException('malformed');
+      }
       setState(() => _isDirty = false);
       await _loadData();
+      if (deferDecision && mounted && _error == null) {
+        final isFa = Localizations.localeOf(context).languageCode == 'fa';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isFa
+                  ? 'بازبینی برای بعد ذخیره شد. پیشنهاد در انتظار تصمیم می‌ماند.'
+                  : 'Review saved for later. The proposal remains pending.',
+            ),
+          ),
+        );
+      }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -401,6 +435,13 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  if (_reviewContext?['bound_source_change'] is Map)
+                    BoundSourceEvidencePanel(
+                      evidence: Map<String, dynamic>.from(
+                        _reviewContext!['bound_source_change'] as Map,
+                      ),
+                      isPersian: isFa,
+                    ),
                   if (_reviewContext?['structured_patches'] == null &&
                       (_reviewContext?['base'] as Map?)?['rich_sections']
                           is List)
@@ -486,6 +527,15 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
                     icon: const Icon(Icons.save_outlined),
                     label: Text(
                       isFa ? 'ذخیره پیش‌نویس بازبینی' : 'Save review draft',
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: _isSubmitting || _reviewContext?['stale'] == true
+                        ? null
+                        : () => _saveReview(deferDecision: true),
+                    icon: const Icon(Icons.schedule),
+                    label: Text(
+                      isFa ? 'تصمیم‌گیری در فرصتی دیگر' : 'Defer decision',
                     ),
                   ),
                   _buildReviewerControls(isFa),
@@ -592,14 +642,16 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             children: [
               const Icon(Icons.fact_check, color: AppColors.navy, size: 20),
               const SizedBox(width: 8),
-              Text(
-                isFa
-                    ? 'تصمیم‌گیری نهایی بازبین سردبیری'
-                    : 'Editorial Review Decision',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.navy,
+              Expanded(
+                child: Text(
+                  isFa
+                      ? 'تصمیم‌گیری نهایی بازبین سردبیری'
+                      : 'Editorial Review Decision',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.navy,
+                  ),
                 ),
               ),
             ],
@@ -647,6 +699,7 @@ class _AdminFullPageDiffPageState extends ConsumerState<AdminFullPageDiffPage> {
             controller: _reviewerNotesController,
             onChanged: (_) => setState(() => _isDirty = true),
             maxLines: 3,
+            maxLength: 2000,
             decoration: InputDecoration(
               labelText: isFa
                   ? 'یادداشت بازبین سردبیری (اختیاری)'

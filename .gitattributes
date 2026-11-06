@@ -30,3 +30,45 @@ _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/assets/** -diff
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/reference-evidence/** -diff
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/prepared/source-url-inventory.csv whitespace=cr-at-eol
 scripts/tests/test_phase_source_evidence.py text eol=lf
+
+# Preserve exact producer/test bytes referenced by the Production package seal.
+scripts/production_reconciliation_package.py -text
+scripts/tests/test_production_reconciliation_package.py -text
+scripts/tests/test_production_reconciliation_sql.py -text
+tools/production_body_review.py text eol=lf
+scripts/recovery_checkpoint.py text eol=lf
+scripts/recovery_local_rehearsal.py text eol=lf
+scripts/research_activation_package.py text eol=lf
+scripts/tests/test_production_body_review.py text eol=lf
+scripts/tests/test_recovery_checkpoint.py text eol=lf
+scripts/tests/test_research_activation_package.py text eol=lf
+supabase/migrations/20261102101305_rad_cms_detached_revision_allocator.sql text eol=lf
+
+# Mechanical decision and source-publication receipts bind portable code bytes.
+scripts/production_mechanical_decisions.py text eol=lf
+scripts/source_editorial_batches.py text eol=lf
+scripts/tests/test_mechanical_release_decisions.py text eol=lf
+scripts/tests/test_source_editorial_sql.py text eol=lf
+supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql text eol=lf
+supabase/tests/source_editorial_release.sql text eol=lf
+tools/content_completion/source_delivery_forensics.py text eol=lf
+scripts/tests/test_source_delivery_forensics.py text eol=lf
+scripts/final_content_package.py text eol=lf
+scripts/tests/test_final_content_package.py text eol=lf
+scripts/public_web_build.py text eol=lf
+scripts/tests/test_public_web_build.py text eol=lf
+supabase/migrations/20261103114340_rad_corrected_source_editorial_admission.sql text eol=lf
+supabase/tests/corrected_source_editorial_holds.sql text eol=lf
+scripts/tests/test_no_restore_safety_ops.py text eol=lf
+supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql text eol=lf
+supabase/migrations/20261103180754_rad_source_unpublish_safety.sql text eol=lf
+supabase/tests/no_restore_safety_ops.sql text eol=lf
+scripts/employer_activation_inventory.py text eol=lf
+scripts/verify_research_cms_persistence.py text eol=lf
+scripts/tests/test_employer_activation_inventory.py text eol=lf
+supabase/verification/employer_activation_preflight.sql text eol=lf
+scripts/reconciliation_package_adapter.py text eol=lf
+scripts/tests/test_reconciliation_package_seals.py text eol=lf
+scripts/verify_self_host_otp_sessions.py whitespace=cr-at-eol
+supabase/tests/rad_bound_official_refresh.sql whitespace=cr-at-eol
+test/ai_assistant/ai_assistant_chat_e2e_test.dart whitespace=cr-at-eol

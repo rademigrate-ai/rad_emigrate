@@ -175,10 +175,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // 1. Verify 8 Key Metric Stat Cards
-        expect(find.text('کشورهای تحت پایش'), findsOneWidget);
-        expect(find.text('مراجع رسمی فعال'), findsOneWidget);
+        expect(find.text('کشورهای مراجع ثبت‌شده'), findsOneWidget);
+        expect(find.text('مراجع تأییدشده ثبت‌شده'), findsOneWidget);
         expect(find.text('منابع افزوده‌شده کارفرما'), findsOneWidget);
-        expect(find.text('دانشگاه‌های تحت رصد'), findsOneWidget);
+        expect(find.text('دانشگاه‌های تأییدشده'), findsOneWidget);
         expect(find.text('تغییرات محتوایی مکشوفه'), findsOneWidget);
         expect(find.text('پیشنهادهای در انتظار بررسی'), findsOneWidget);
         expect(find.text('خطاهای پایش و اتصال'), findsOneWidget);
@@ -209,14 +209,12 @@ void main() {
         await tester.pumpAndSettle();
         expect(crawlTriggered, isTrue);
 
-        // 5. Verify Monitored Countries Spotlight (scroll into view)
-        final canadaFinder = find.text('کانادا (Canada)');
-        await tester.ensureVisible(canadaFinder);
-        await tester.pumpAndSettle();
-        expect(canadaFinder, findsOneWidget);
-        expect(find.text('آلمان (Germany)'), findsOneWidget);
-        expect(find.text('استرالیا (Australia)'), findsOneWidget);
-        expect(find.text('انگلستان (United Kingdom)'), findsOneWidget);
+        // Country monitoring claims require server telemetry.
+        final unavailable = find.text(
+          'جزئیات پایش کشورها تا دریافت گزارش معتبر سرور نامشخص است.',
+        );
+        await tester.ensureVisible(unavailable);
+        expect(unavailable, findsOneWidget);
 
         // 6. Verify Human in the Loop Security Assurance Notice (scroll to bottom)
         await tester.drag(find.byType(ListView), const Offset(0, -800));
@@ -604,8 +602,8 @@ void main() {
         // Switch to Tab 1: Dashboard (Screen 1)
         await tester.tap(find.text('داشبورد پایش'));
         await tester.pumpAndSettle();
-        expect(find.text('کشورهای تحت پایش'), findsOneWidget);
-        expect(find.text('مراجع رسمی فعال'), findsOneWidget);
+        expect(find.text('کشورهای مراجع ثبت‌شده'), findsOneWidget);
+        expect(find.text('مراجع تأییدشده ثبت‌شده'), findsOneWidget);
 
         // Switch to Tab 2: Sources Management (Screen 2)
         await tester.tap(find.text('مراجع رسمی و معتبر'));
@@ -647,7 +645,7 @@ void main() {
         // Tab 1: Dashboard with honest 0 counts
         await tester.tap(find.text('داشبورد پایش'));
         await tester.pumpAndSettle();
-        expect(find.text('کشورهای تحت پایش'), findsOneWidget);
+        expect(find.text('کشورهای مراجع ثبت‌شده'), findsOneWidget);
         expect(find.text('0'), findsWidgets);
 
         // Tab 2: Sources Management with honest empty state (NOT mock IRCC or Auswaertiges Amt)
@@ -666,7 +664,7 @@ void main() {
         await tester.tap(find.text('تاریخچه و کپسول‌ها'));
         await tester.pumpAndSettle();
         expect(
-          find.text('هیچ دوره پویشی در سرور ثبت نشده است.'),
+          find.text('تاریخچه پایش و کپسول‌های منبع در دسترس نیست.'),
           findsOneWidget,
         );
       },

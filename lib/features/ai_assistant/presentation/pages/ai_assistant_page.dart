@@ -104,6 +104,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   List<AiSession> _sessions = [];
   late Future<void> _historyRestore;
   int _identityEpoch = 0;
+  final Set<String> _sessionMutations = {};
   ProviderSubscription<String?>? _identitySubscription;
 
   // Web search mode: auto | on | off
@@ -172,6 +173,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     ) {
       if (previous == next || previous == null || !mounted) return;
       _identityEpoch++;
+      _sessionMutations.clear();
       _birdTimer?.cancel();
       _controller.removeListener(_onPromptChanged);
       _controller.clear();
@@ -276,6 +278,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
   Future<void> _loadSession(String sessionId) async {
     final userId = ref.read(authenticatedUserIdProvider);
     if (userId == null || userId.isEmpty) return;
+    final epoch = _identityEpoch;
     setState(() {
       _loading = true;
       _sessionId = sessionId;
@@ -283,7 +286,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
       final history = await repository.history(sessionId);
-      if (!mounted) return;
+      if (!_sameIdentity(userId, epoch) || _sessionId != sessionId) return;
       setState(() {
         _messages
           ..clear()
@@ -299,7 +302,9 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
       });
       _scrollToEnd();
     } catch (_) {
-      if (mounted) setState(() => _loading = false);
+      if (_sameIdentity(userId, epoch) && _sessionId == sessionId) {
+        setState(() => _loading = false);
+      }
     }
   }
 
@@ -316,27 +321,71 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
 
   Future<void> _deleteSession(String sessionId) async {
     final userId = ref.read(authenticatedUserIdProvider);
-    if (userId == null || userId.isEmpty) return;
-    setState(() {
-      _sessions.removeWhere((s) => s.id == sessionId);
-      if (_sessionId == sessionId) {
-        _sessionId = null;
-        _messages.clear();
-      }
-    });
+    if (userId == null || userId.isEmpty || !_sessionMutations.add(sessionId)) {
+      return;
+    }
+    final epoch = _identityEpoch;
+    setState(() {});
     try {
       final repository = ref.read(aiSessionRepositoryProvider);
-      // Delete session records where supported
-      await repository.history(sessionId); // placeholder check
-    } catch (_) {}
+      await repository.deleteSession(
+        sessionId: sessionId,
+        userId: userId,
+        scope: widget.adminMode ? 'admin' : 'user',
+      );
+      if (!_sameIdentity(userId, epoch)) return;
+      setState(() {
+        _sessions.removeWhere((s) => s.id == sessionId);
+        if (_sessionId == sessionId) {
+          _sessionId = null;
+          _messages.clear();
+        }
+      });
+    } catch (_) {
+      if (mounted && _sameIdentity(userId, epoch)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).errorGeneric)),
+        );
+      }
+    } finally {
+      if (_sameIdentity(userId, epoch)) {
+        setState(() => _sessionMutations.remove(sessionId));
+      }
+    }
   }
 
-  void _renameSession(String sessionId, String newTitle) {
-    // In-memory rename for UI responsiveness
+  Future<void> _renameSession(String sessionId, String newTitle) async {
+    final userId = ref.read(authenticatedUserIdProvider);
+    if (userId == null || !_sessionMutations.add(sessionId)) return;
+    final epoch = _identityEpoch;
     setState(() {});
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('عنوان گفتگو به‌روزرسانی شد.')),
-    );
+    try {
+      final renamed = await ref
+          .read(aiSessionRepositoryProvider)
+          .renameSession(
+            sessionId: sessionId,
+            userId: userId,
+            title: newTitle,
+            scope: widget.adminMode ? 'admin' : 'user',
+          );
+      if (!_sameIdentity(userId, epoch)) return;
+      setState(() {
+        final index = _sessions.indexWhere(
+          (session) => session.id == sessionId,
+        );
+        if (index >= 0) _sessions[index] = renamed;
+      });
+    } catch (_) {
+      if (mounted && _sameIdentity(userId, epoch)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).errorGeneric)),
+        );
+      }
+    } finally {
+      if (_sameIdentity(userId, epoch)) {
+        setState(() => _sessionMutations.remove(sessionId));
+      }
+    }
   }
 
   Future<void> _pickDocument() async {
@@ -821,6 +870,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
         onNewChat: _newChat,
         onDeleteSession: _deleteSession,
         onRenameSession: _renameSession,
+        pendingSessionIds: _sessionMutations,
         isAuthenticated: isAuthenticated,
       ),
       appBar: widget.embedded
@@ -881,6 +931,7 @@ class _AiAssistantPageState extends ConsumerState<AiAssistantPage> {
                     onNewChat: _newChat,
                     onDeleteSession: _deleteSession,
                     onRenameSession: _renameSession,
+                    pendingSessionIds: _sessionMutations,
                     isAuthenticated: isAuthenticated,
                   ),
                 ),

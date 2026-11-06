@@ -12,7 +12,9 @@ CREATE TABLE private.rad_evidence_import_archive (
   payload_sha256 text NOT NULL
     CHECK (
       payload_sha256 ~ '^[0-9a-f]{64}$'
-      AND payload_sha256 = encode(digest(payload::text, 'sha256'), 'hex')
+      -- Bind the extension schema explicitly during clean reconstruction.
+      -- Existing hosted CHECK expressions already retain their function OID.
+      AND payload_sha256 = encode(extensions.digest(payload::text, 'sha256'), 'hex')
     ),
   archived_at timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (source_project_ref, source_table, source_key)

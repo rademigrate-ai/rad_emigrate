@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import secrets
 import urllib.parse
 import uuid
@@ -23,15 +24,26 @@ def main() -> None:
     args = parser.parse_args()
     marker = json.loads(args.runtime_marker.read_text(encoding="utf8"))
     root = Path(__file__).resolve().parents[1]
-    if (
-        Path(marker["owner_checkout"]).resolve() != root
-        or marker.get("project") != "rad_emigrate"
-    ):
-        parser.error("runtime marker does not belong to this checkout/project")
+    if os.environ.get("RAD_SELF_HOST_TEST_ROOT"):
+        from self_host_test_target import target_root
+
+        owned = target_root()
+        if args.runtime_marker.resolve() != owned / "RAD_ISOLATED_INSTALL.json":
+            parser.error(
+                "self-host marker must be the validated owned install identity"
+            )
+        expected_api_port = marker["api_port"]
+    else:
+        if (
+            Path(marker["owner_checkout"]).resolve() != root
+            or marker.get("project") != "rad_emigrate"
+        ):
+            parser.error("runtime marker does not belong to this checkout/project")
+        expected_api_port = int(marker["port"]) - 1
     # Existing loader obtains keys from local CLI status and refuses non-loopback.
     import verify_local_auth_isolation as api
 
-    if urllib.parse.urlsplit(api.API_URL).port != int(marker["port"]) - 1:
+    if urllib.parse.urlsplit(api.API_URL).port != expected_api_port:
         parser.error("API port does not match the owned runtime marker")
 
     users: list[str] = []

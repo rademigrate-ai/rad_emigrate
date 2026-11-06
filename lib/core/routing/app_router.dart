@@ -6,12 +6,14 @@ import '../../app/dependencies.dart';
 import '../../features/admin/presentation/pages/admin_ai_config_page.dart';
 import '../../features/admin/presentation/pages/admin_ai_workspace_page.dart';
 import '../../features/admin/presentation/pages/admin_hub_page.dart';
+import '../../features/admin/presentation/widgets/admin_route_gate.dart';
 import '../../features/admin/presentation/pages/admin_operations_page.dart';
 import '../../features/admin/presentation/pages/admin_consultations_page.dart';
 import '../../features/admin/presentation/pages/admin_cms_articles_page.dart';
 import '../../features/admin/presentation/pages/admin_content_reconciliation_page.dart';
 import '../../features/admin/presentation/pages/admin_cms_canonical_editor_page.dart';
 import '../../features/admin/presentation/pages/admin_source_monitor_page.dart';
+import '../../features/admin/presentation/pages/admin_source_content_page.dart';
 import '../../features/admin/presentation/pages/admin_source_diff_page.dart';
 import '../../features/admin/presentation/pages/admin_full_page_diff_page.dart';
 import '../../features/ai_assistant/presentation/pages/ai_assistant_page.dart';
@@ -125,7 +127,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       ShellRoute(
-        builder: (_, _, child) => AppShell(child: child),
+        builder: (_, state, child) => AppShell(
+          child:
+              state.uri.path == '/admin' || state.uri.path.startsWith('/admin/')
+              ? AdminRouteGate(child: child)
+              : child,
+        ),
         routes: [
           GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
           visaRoute(),
@@ -238,6 +245,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               articleId: state.pathParameters['id'] ?? '',
               locale: state.uri.queryParameters['locale'] == 'en' ? 'en' : 'fa',
             ),
+          ),
+          GoRoute(
+            path: '/admin/source-content',
+            builder: (_, _) => const AdminSourceContentPage(),
           ),
           GoRoute(
             path: '/admin/sources',

@@ -7,7 +7,7 @@ set local lock_timeout='5s';
 set local statement_timeout='30s';
 do $guard$
 begin
- if (select relowner from pg_class where oid='public.profiles'::regclass)<>'postgres'::regrole then
+ if (select relowner from pg_class where oid='public.profiles'::regclass)<>current_user::regrole then
   raise exception 'unexpected profile owner';end if;
  if not (select relrowsecurity from pg_class where oid='public.profiles'::regclass) then
   raise exception 'profile RLS must already be enabled';end if;

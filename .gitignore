@@ -61,6 +61,10 @@ android/key.properties
 # Generated analysis cache (gitleaks noise)
 graphify-out/
 
+# Isolated local databases, generated QA credentials and transient rehearsals.
+_scratch/
+**/transport/.gnupg/
+
 # Reproducible phase handoff excludes transient network/runtime working files.
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/.network-cache/
 _audit/RAD_CODEX_PHASES_1_TO_4_FINAL_20261028/verification/

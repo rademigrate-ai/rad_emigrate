@@ -97,6 +97,11 @@ BEGIN
 END $$;
 REVOKE ALL ON FUNCTION public.consume_ai_daily_quota(uuid,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.consume_ai_daily_quota(uuid,text) TO service_role;
+-- SECURITY DEFINER runs as this function's owner (postgres), who has no write
+-- access to this supabase_admin-owned table on a clean self-hosted install.
+-- The row is INSERTed by supabase_admin-owned reserve_rad_ai_request; only the
+-- protocol UPDATE above needs the owner's own grant. No INSERT/DELETE.
+GRANT UPDATE ON private.rad_ai_invocations TO postgres;
 CREATE FUNCTION private.rad_legacy_quota_terminal() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
 BEGIN
  IF new.status IN ('succeeded','failed') THEN

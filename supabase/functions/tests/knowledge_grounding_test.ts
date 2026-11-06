@@ -123,6 +123,18 @@ Deno.test("exact official claim and snapshot provenance are retained", async () 
   equal(value.sources[0].excerpt, e.excerpt);
   equal(value.sources[0].verified_at, e.verified_at);
 });
+Deno.test("grounding rejects oversized claims without dropping a later legal qualifier", async () => {
+  const longClaim = "A visa is available. ".repeat(110) + "Except applicants without official approval.";
+  equal(longClaim.length > 2000, true);
+  const oversized = { ...evidence(), claim_text: longClaim };
+  equal((await ground([oversized])).value.hasApprovedEvidence, false);
+  equal((await ground([oversized])).value.sources, []);
+  const exact = { ...evidence(), claim_text: "x".repeat(2000) };
+  const { value } = await ground([oversized, exact]);
+  equal(value.hasApprovedEvidence, true);
+  equal(value.sources.length, 1);
+  equal(value.sources[0].claim_label, exact.claim_text);
+});
 Deno.test("retrieved instructions cannot close the content delimiter", async () => {
   const { value } = await ground([{
     ...evidence(),

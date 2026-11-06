@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +8,7 @@ import '../../../../core/widgets/rad_loading.dart';
 import '../../../visa/data/editorial_repository.dart';
 import '../widgets/editorial_source_review.dart';
 import '../widgets/editorial_link_review.dart';
+import '../widgets/editorial_composition_review.dart';
 
 typedef ReconciliationKey = ({String locale, int offset});
 final contentReconciliationProvider = FutureProvider.autoDispose
@@ -95,6 +94,16 @@ class _State extends ConsumerState<AdminContentReconciliationPage> {
                         ? 'ورود داده، تأیید حقوقی یا اجازه انتشار نیست.'
                         : 'Import is not legal verification or publication approval.',
                   ),
+                  TextButton.icon(
+                    onPressed: () =>
+                        context.push('/visa/other-titles?preview=true'),
+                    icon: const Icon(Icons.library_books_outlined),
+                    label: Text(
+                      locale == 'fa'
+                          ? 'پیش‌نمایش دیگر عناوین، مقالات عمومی و چندکشوری'
+                          : 'Preview Other Titles, general and multi-country articles',
+                    ),
+                  ),
                   for (final item in items)
                     Card(
                       child: ExpansionTile(
@@ -128,12 +137,13 @@ class _State extends ConsumerState<AdminContentReconciliationPage> {
                                   : 'Editorial workflow',
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: SelectableText(
-                              const JsonEncoder.withIndent('  ')
-                                  .convert(item['composition']),
-                            ),
+                          EditorialCompositionReview(
+                            composition: item['composition'] is Map
+                                ? Map<String, dynamic>.from(
+                                    item['composition'] as Map,
+                                  )
+                                : const {},
+                            locale: locale,
                           ),
                         ],
                       ),

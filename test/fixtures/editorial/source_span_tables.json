@@ -1,0 +1,192 @@
+[
+  {
+    "source_url": "https://radvisa.com/article/%D8%A2%D8%B2%D9%85%D9%88%D9%86-ucat",
+    "snapshot_id": "01bc82e6-d9e5-5e63-ae01-26b3463f5658",
+    "source_id": "3f712871-681e-58a5-8a98-01dea6a85f31",
+    "block_index": 43,
+    "structure_sha256": "027492bedc43d48b9216d74810a263f7d2f3f6cd4f48f55897fe66425fba55b4",
+    "has_rowspan": true,
+    "has_colspan": false,
+    "table": {
+      "caption": null,
+      "rows": [
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "کشور"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "نوع داوطلب"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "هزینه آزمون"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "2",
+            "text": "UCAT بریتانیا"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "داوطلبان داخل بریتانیا"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "70 پوند"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "داوطلبان خارج از بریتانیا"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "115 پوند"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "3",
+            "text": "UCAT Anz استرالیا و نیوزلند"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "آزمون در استرالیا یا نیوزیلند"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "325 دلار استرالیا"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "آزمون خارج از استرالیا و نیوزیلند"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "395 دلار استرالیا"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "داوطلبان دارای تخفیف (استرالیا فقط)"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "240 دلار استرالیا"
+          }
+        ]
+      ],
+      "text": "کشور نوع داوطلب هزینه آزمون UCAT بریتانیا داوطلبان داخل بریتانیا 70 پوند داوطلبان خارج از بریتانیا 115 پوند UCAT Anz استرالیا و نیوزلند آزمون در استرالیا یا نیوزیلند 325 دلار استرالیا آزمون خارج از استرالیا و نیوزیلند 395 دلار استرالیا داوطلبان دارای تخفیف (استرالیا فقط) 240 دلار استرالیا",
+      "type": "table"
+    }
+  },
+  {
+    "source_url": "https://digivisa.ir/article/%D8%AA%D8%AD%D8%B5%DB%8C%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86-%D8%AF%D8%B1-%D8%A7%D8%B1%D9%88%D9%BE%D8%A7",
+    "snapshot_id": "04081c11-3c50-54a4-94d9-b64997234bd3",
+    "source_id": "f3b5cafd-4764-52b0-8b7e-5a6cc4923362",
+    "block_index": 2,
+    "structure_sha256": "4321b213dd2fcb0d5e94aace052c7dcb656cc69be8328972b896c8e111f65b0b",
+    "has_rowspan": false,
+    "has_colspan": true,
+    "table": {
+      "caption": null,
+      "rows": [
+        [
+          {
+            "colspan": "3",
+            "header": false,
+            "rowspan": "1",
+            "text": "لینک اطلاعات و شرایط تحصیل رایگان در کشورها"
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در آلمان"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در اتریش"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در ایسلند"
+          }
+        ],
+        [
+          {
+            "colspan": "3",
+            "header": false,
+            "rowspan": "1",
+            "text": ""
+          }
+        ],
+        [
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در فرانسه"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در لوکزامبورگ"
+          },
+          {
+            "colspan": "1",
+            "header": false,
+            "rowspan": "1",
+            "text": "تحصیل در ایتالیا"
+          }
+        ]
+      ],
+      "text": "لینک اطلاعات و شرایط تحصیل رایگان در کشورها تحصیل در آلمان تحصیل در اتریش تحصیل در ایسلند تحصیل در فرانسه تحصیل در لوکزامبورگ تحصیل در ایتالیا",
+      "type": "table"
+    }
+  }
+]

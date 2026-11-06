@@ -5,6 +5,7 @@ import 'pages/visa_page.dart';
 import 'pages/visa_search_page.dart';
 import 'pages/editorial_article_page.dart';
 import 'pages/visa_content_countries_page.dart';
+import 'pages/other_titles_library_page.dart';
 
 /// Real route entries keep browser/system Back aligned with visible detail
 /// controls, and preserve the catalog page (including its scroll position).
@@ -12,6 +13,12 @@ GoRoute visaRoute() => GoRoute(
   path: '/visa',
   builder: (_, _) => const VisaPage(),
   routes: [
+    GoRoute(
+      path: 'other-titles',
+      builder: (_, state) => OtherTitlesLibraryPage(
+        preview: state.uri.queryParameters['preview'] == 'true',
+      ),
+    ),
     GoRoute(
       path: 'content-countries',
       builder: (_, state) => VisaContentCountriesPage(

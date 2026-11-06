@@ -2,9 +2,57 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/supabase/supabase_providers.dart';
+import 'frozen_visa_content.dart';
 
 typedef EditorialArticleKey = ({String id, String locale, bool preview});
 typedef CountryContentKey = ({String country, String locale, bool preview});
+
+typedef OtherTitlesKey = ({String locale, bool preview, String? cursor});
+
+/// Public discovery uses published cards only. The preview RPC independently
+/// requires an admin, including when this route is opened from a deep link.
+final otherTitlesLibraryProvider = FutureProvider.autoDispose
+    .family<Map<String, dynamic>, OtherTitlesKey>((ref, key) async {
+      ref.watch(supabaseAuthUserIdProvider);
+      final service = ref.watch(supabaseClientServiceProvider);
+      if (!service.isInitialized && key.preview) {
+        throw StateError('backend_unavailable');
+      }
+      final offset = int.tryParse(key.cursor ?? '0');
+      if (offset == null || offset < 0) {
+        throw const FormatException('invalid_library_position');
+      }
+      if (!service.isInitialized) {
+        return frozenVisaContent.library(key.locale, key.cursor);
+      }
+      dynamic response;
+      try {
+        response = await service.client
+            .rpc(
+              'list_editorial_library',
+              params: {
+                'p_locale': key.locale,
+                'p_preview': key.preview,
+                'p_offset': offset,
+                'p_limit': 20,
+              },
+            )
+            .timeout(const Duration(seconds: 20));
+      } on PostgrestException catch (error) {
+        if (key.preview || !{'PGRST202', '42883'}.contains(error.code)) rethrow;
+        return frozenVisaContent.library(key.locale, key.cursor);
+      }
+      final data = editorialData(response);
+      if (data['has_more'] is! bool ||
+          (data['has_more'] == true && data['next_cursor'] is! String)) {
+        throw const FormatException('invalid_editorial_page');
+      }
+      return {
+        'items': editorialRows(data['items']),
+        'has_more': data['has_more'],
+        'next_cursor': data['next_cursor'],
+      };
+    });
 
 Map<String, dynamic> editorialData(dynamic response) {
   if (response is! Map || response['data'] is! Map) {
@@ -61,7 +109,10 @@ final editorialArticleProvider = FutureProvider.autoDispose
       // persistent cache or fallback from a public request to a private RPC.
       ref.watch(supabaseAuthUserIdProvider);
       final service = ref.watch(supabaseClientServiceProvider);
-      if (!service.isInitialized) throw StateError('backend_unavailable');
+      if (!service.isInitialized) {
+        if (key.preview) throw StateError('backend_unavailable');
+        return frozenVisaContent.article(key.id, key.locale);
+      }
       try {
         final response = await service.client
             .rpc(
@@ -80,22 +131,9 @@ final editorialArticleProvider = FutureProvider.autoDispose
         );
       } on PostgrestException catch (error) {
         if (key.preview || !{'PGRST202', '42883'}.contains(error.code)) rethrow;
-        final response = await service.client
-            .rpc(
-              'get_visa_article',
-              params: {
-                'p_request': {
-                  'selector': {'article_id': key.id},
-                  'locale': key.locale,
-                },
-              },
-            )
-            .timeout(const Duration(seconds: 20));
-        return await _withReferences(
-          service.client,
-          editorialData(response),
-          key,
-        );
+        // Missing reader RPC is the only public fallback condition.
+        // A real CMS rejection (including 401/403/404) must not be bypassed.
+        return frozenVisaContent.article(key.id, key.locale);
       }
     });
 
@@ -103,19 +141,27 @@ final countryVisaContentProvider = FutureProvider.autoDispose
     .family<Map<String, dynamic>, CountryContentKey>((ref, key) async {
       ref.watch(supabaseAuthUserIdProvider);
       final service = ref.watch(supabaseClientServiceProvider);
-      if (!service.isInitialized) throw StateError('backend_unavailable');
-      return editorialData(
-        await service.client
-            .rpc(
-              'list_country_visa_content',
-              params: {
-                'p_country_code': key.country,
-                'p_locale': key.locale,
-                'p_preview': key.preview,
-              },
-            )
-            .timeout(const Duration(seconds: 20)),
-      );
+      if (!service.isInitialized) {
+        if (key.preview) throw StateError('backend_unavailable');
+        return frozenVisaContent.country(key.country, key.locale);
+      }
+      try {
+        return editorialData(
+          await service.client
+              .rpc(
+                'list_country_visa_content',
+                params: {
+                  'p_country_code': key.country,
+                  'p_locale': key.locale,
+                  'p_preview': key.preview,
+                },
+              )
+              .timeout(const Duration(seconds: 20)),
+        );
+      } on PostgrestException catch (error) {
+        if (key.preview || !{'PGRST202', '42883'}.contains(error.code)) rethrow;
+        return frozenVisaContent.country(key.country, key.locale);
+      }
     });
 
 final visaContentCountriesProvider = FutureProvider.autoDispose
@@ -135,17 +181,46 @@ Future<List<Map<String, dynamic>>> loadVisaContentCountries(
 ) async {
   ref.watch(supabaseAuthUserIdProvider);
   final service = ref.watch(supabaseClientServiceProvider);
-  if (!service.isInitialized) throw StateError('backend_unavailable');
-  return editorialRows(
-    editorialData(
+  if (!service.isInitialized) {
+    if (preview) throw StateError('backend_unavailable');
+    return frozenVisaContent.countries(locale);
+  }
+  try {
+    final data = editorialData(
       await service.client
           .rpc(
             'list_visa_content_countries',
             params: {'p_locale': locale, 'p_preview': preview},
           )
           .timeout(const Duration(seconds: 20)),
-    )['items'],
-  );
+    );
+    if (data['items'] is! List) {
+      throw const FormatException('invalid_country_discovery_shape');
+    }
+    return editorialRows(data['items']);
+  } on PostgrestException catch (error) {
+    if (preview || !{'PGRST202', '42883'}.contains(error.code)) rethrow;
+    return frozenVisaContent.countries(locale);
+  }
+}
+
+/// Route to the *actual* original language; never invent a translation.
+String editorialCardRoute(
+  Map<String, dynamic> card, {
+  required String requestedLocale,
+  bool preview = false,
+}) {
+  final sourceLocale = {'fa', 'en'}.contains(card['locale'])
+      ? card['locale'] as String
+      : requestedLocale;
+  return Uri(
+    path: '/visa/content/${card['id']}',
+    queryParameters: {
+      'locale': sourceLocale,
+      if (sourceLocale != requestedLocale) 'requested_locale': requestedLocale,
+      if (preview) 'preview': 'true',
+    },
+  ).toString();
 }
 
 typedef EditorialSlugKey = ({String country, String slug, String locale});

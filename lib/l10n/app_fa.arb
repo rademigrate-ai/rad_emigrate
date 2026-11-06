@@ -326,5 +326,12 @@
   "continentMiddleEast": "خاورمیانه",
   "continentOther": "سایر مقصدها",
   "consultationContacted": "تماس گرفته شده",
-  "consultationClosed": "بسته شده"
+  "consultationClosed": "بسته شده",
+  "documentDeletionPending": "درخواست حذف ثبت شد. حذف فایل در انتظار اجراست.",
+  "documentDeletionRetrying": "حذف فایل ناموفق بود. سرور دوباره تلاش می‌کند.",
+  "documentDeletionFailed": "حذف فایل به بررسی کارشناس نیاز دارد. با پشتیبانی تماس بگیرید.",
+  "documentDeletionComplete": "فایل حذف شد و رسید حذف ذخیره شد.",
+  "documentDeletionReference": "شناسه پیگیری",
+  "documentDeletionStatusUnavailable": "وضعیت حذف در دسترس نیست. برای بررسی دوباره، تازه‌سازی کنید.",
+  "adminAccessRequired": "دسترسی مدیر لازم است."
 }

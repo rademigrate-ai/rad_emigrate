@@ -2,7 +2,7 @@ begin;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
 insert into auth.users(id,email) values('a3000000-0000-4000-8000-000000000001','rad-merge-admin@example.invalid');
 update public.profiles set role='admin' where id='a3000000-0000-4000-8000-000000000001';
-insert into public.destinations(code,slug) values('ZZ','synthetic-merge-only');
+insert into public.destinations(code,slug) values('ZZ','synthetic-merge-only') on conflict(code) do nothing;
 insert into public.source_documents(id,canonical_url,source_authority,title,language_code) values
  ('d3000000-0000-4000-8000-000000000001','https://radvisa.com/synthetic-test-only','rad_official','Synthetic alpha','en'),
  ('d3000000-0000-4000-8000-000000000002','https://digivisa.ir/synthetic-test-only','rad_official','Synthetic bravo','en'),

@@ -8,6 +8,11 @@ major_version = 17
 [functions.research-sync]
 verify_jwt = false
 
+# Server-to-server cron uses the independently checked dedicated purpose token.
+# The handler is disabled by default and rejects invalid tokens before DB access.
+[functions.official-source-worker]
+verify_jwt = false
+
 # Gateway authentication and the dedicated worker token are both required.
 [functions.notification-dispatch]
 verify_jwt = true

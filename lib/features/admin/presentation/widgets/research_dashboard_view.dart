@@ -9,6 +9,7 @@ import '../../domain/entities/admin_research_models.dart';
 class ResearchDashboardView extends StatefulWidget {
   final ResearchDashboardMetrics metrics;
   final List<CrawlRunHistoryItem> recentRuns;
+  final bool monitoringHistoryAvailable;
   final VoidCallback? onJumpToProposals;
   final VoidCallback? onJumpToSources;
   final VoidCallback? onAddNewSource;
@@ -19,6 +20,7 @@ class ResearchDashboardView extends StatefulWidget {
     super.key,
     required this.metrics,
     required this.recentRuns,
+    this.monitoringHistoryAvailable = true,
     this.onJumpToProposals,
     this.onJumpToSources,
     this.onAddNewSource,
@@ -35,14 +37,10 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
   bool _isRetryingFailures = false;
 
   Future<void> _handleManualCrawl() async {
-    if (_isCrawling) return;
+    if (_isCrawling || widget.onTriggerManualCrawl == null) return;
     setState(() => _isCrawling = true);
     try {
-      if (widget.onTriggerManualCrawl != null) {
-        await widget.onTriggerManualCrawl!();
-      } else {
-        await Future.delayed(const Duration(milliseconds: 900));
-      }
+      await widget.onTriggerManualCrawl!();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -53,28 +51,36 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
           ),
         );
       }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('ثبت درخواست پویش انجام نشد. دوباره تلاش کنید.'),
+          ),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isCrawling = false);
     }
   }
 
   Future<void> _handleRetryFailures() async {
-    if (_isRetryingFailures) return;
+    if (_isRetryingFailures || widget.onRetryFailedSources == null) return;
     setState(() => _isRetryingFailures = true);
     try {
-      if (widget.onRetryFailedSources != null) {
-        await widget.onRetryFailedSources!();
-      } else {
-        await Future.delayed(const Duration(milliseconds: 800));
-      }
+      await widget.onRetryFailedSources!();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'درخواست اتصال مجدد به ۲ مرجع با خطای ارتباطی ارسال گردید.',
-            ),
+            content: Text('درخواست تلاش مجدد در صف پردازش قرار گرفت.'),
             backgroundColor: AppColors.navy,
           ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('ثبت درخواست تلاش مجدد انجام نشد.')),
         );
       }
     } finally {
@@ -99,8 +105,8 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
             const SizedBox(height: 20),
 
             // 2. Monitoring Failures & Overdue Alert Banner (if any)
-            if (widget.metrics.monitoringFailuresCount > 0 ||
-                widget.metrics.overdueSourceChecksCount > 0) ...[
+            if ((widget.metrics.monitoringFailuresCount ?? 0) > 0 ||
+                (widget.metrics.overdueSourceChecksCount ?? 0) > 0) ...[
               _buildAlertBanner(),
               const SizedBox(height: 20),
             ],
@@ -205,7 +211,9 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
                     vertical: 12,
                   ),
                 ),
-                onPressed: _isCrawling ? null : _handleManualCrawl,
+                onPressed: _isCrawling || widget.onTriggerManualCrawl == null
+                    ? null
+                    : _handleManualCrawl,
                 icon: _isCrawling
                     ? const SizedBox(
                         width: 14,
@@ -268,7 +276,10 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
           const SizedBox(width: 12),
           FilledButton.tonalIcon(
             style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
-            onPressed: _isRetryingFailures ? null : _handleRetryFailures,
+            onPressed:
+                _isRetryingFailures || widget.onRetryFailedSources == null
+                ? null
+                : _handleRetryFailures,
             icon: _isRetryingFailures
                 ? const SizedBox(
                     width: 12,
@@ -288,15 +299,16 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
 
     final cards = [
       _MetricCard(
-        title: 'کشورهای تحت پایش',
-        value: '${widget.metrics.monitoredCountriesCount}',
-        subtitle: 'کانادا، آلمان، استرالیا، انگلستان، ایتالیا',
+        title: 'کشورهای مراجع ثبت‌شده',
+        value: widget.metrics.monitoredCountriesCount?.toString() ?? 'نامشخص',
+        subtitle: 'بر پایه فهرست مراجع سرور',
         icon: Icons.public,
         color: AppColors.navy,
       ),
       _MetricCard(
-        title: 'مراجع رسمی فعال',
-        value: '${widget.metrics.activeOfficialSourcesCount}',
+        title: 'مراجع تأییدشده ثبت‌شده',
+        value:
+            widget.metrics.activeOfficialSourcesCount?.toString() ?? 'نامشخص',
         subtitle: 'ادارات دولتی مهاجرت و کنسولگری‌ها',
         icon: Icons.verified_user,
         color: AppColors.teal,
@@ -304,7 +316,7 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       ),
       _MetricCard(
         title: 'منابع افزوده‌شده کارفرما',
-        value: '${widget.metrics.employerAddedSourcesCount}',
+        value: widget.metrics.employerAddedSourcesCount?.toString() ?? 'نامشخص',
         subtitle: 'دارای نشان صریح تأییدنشده (Admin Defined)',
         icon: Icons.person_add_alt_1,
         color: AppColors.warning,
@@ -312,24 +324,24 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
         onTap: widget.onJumpToSources,
       ),
       _MetricCard(
-        title: 'دانشگاه‌های تحت رصد',
-        value: '${widget.metrics.monitoredUniversitiesCount}',
+        title: 'دانشگاه‌های تأییدشده',
+        value:
+            widget.metrics.monitoredUniversitiesCount?.toString() ?? 'نامشخص',
         subtitle: 'پورتال‌های رسمی ادمیشن بین‌المللی',
         icon: Icons.school,
         color: AppColors.navy,
       ),
       _MetricCard(
         title: 'تغییرات محتوایی مکشوفه',
-        value: '${widget.metrics.detectedChangesCount}',
+        value: widget.metrics.detectedChangesCount?.toString() ?? 'نامشخص',
         subtitle: 'تغییرات استخراج‌شده از منابع معتبر',
         icon: Icons.change_circle_outlined,
         color: AppColors.primaryRed,
-        badgeLabel: '۳ مورد بحرانی',
         onTap: widget.onJumpToProposals,
       ),
       _MetricCard(
         title: 'پیشنهادهای در انتظار بررسی',
-        value: '${widget.metrics.pendingAdminReviewsCount}',
+        value: widget.metrics.pendingAdminReviewsCount?.toString() ?? 'نامشخص',
         subtitle: 'نیازمند تصمیم و تأیید سردبیر',
         icon: Icons.pending_actions,
         color: AppColors.primaryRed,
@@ -339,7 +351,7 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       ),
       _MetricCard(
         title: 'خطاهای پایش و اتصال',
-        value: '${widget.metrics.monitoringFailuresCount}',
+        value: widget.metrics.monitoringFailuresCount?.toString() ?? 'نامشخص',
         subtitle: 'وقفه‌های زمانی و خطاهای HTTP',
         icon: Icons.error_outline,
         color: AppColors.error,
@@ -347,7 +359,7 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
       ),
       _MetricCard(
         title: 'بررسی‌های معوق (Overdue)',
-        value: '${widget.metrics.overdueSourceChecksCount}',
+        value: widget.metrics.overdueSourceChecksCount?.toString() ?? 'نامشخص',
         subtitle: 'عبور از فواصل پایش تعیین‌شده',
         icon: Icons.schedule,
         color: AppColors.warning,
@@ -366,143 +378,9 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
   }
 
   Widget _buildCountriesSpotlight(bool isWide) {
-    final countries = [
-      {
-        'code': 'CA',
-        'flag': '🇨🇦',
-        'name': 'کانادا (Canada)',
-        'sources': '۷ مرجع',
-        'unis': '۴ دانشگاه',
-        'status': 'تغییر تمکن و نمرات زبان',
-      },
-      {
-        'code': 'DE',
-        'flag': '🇩🇪',
-        'name': 'آلمان (Germany)',
-        'sources': '۵ مرجع',
-        'unis': '۳ دانشگاه',
-        'status': 'افزایش حساب مسدودشده',
-      },
-      {
-        'code': 'AU',
-        'flag': '🇦🇺',
-        'name': 'استرالیا (Australia)',
-        'sources': '۴ مرجع',
-        'unis': '۳ دانشگاه',
-        'status': 'مغایرت سقف سنی ساب‌کلاس ۴۸۵',
-      },
-      {
-        'code': 'UK',
-        'flag': '🇬🇧',
-        'name': 'انگلستان (United Kingdom)',
-        'sources': '۴ مرجع',
-        'unis': '۲ دانشگاه',
-        'status': 'بدون تغییر جدید',
-      },
-      {
-        'code': 'IT',
-        'flag': '🇮🇹',
-        'name': 'ایتالیا (Italy)',
-        'sources': '۲ مرجع',
-        'unis': '۱ دانشگاه',
-        'status': 'بدون تغییر جدید',
-      },
-    ];
-
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppRadii.lg),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.flag_outlined,
-                    color: AppColors.navy,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'وضعیت پوشش مراجع رسمی به تفکیک کشور',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.navy,
-                    ),
-                  ),
-                ],
-              ),
-              TextButton.icon(
-                onPressed: widget.onJumpToSources,
-                icon: const Icon(Icons.arrow_back, size: 14),
-                label: const Text('مدیریت مراجع'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: countries.map((c) {
-              return Container(
-                width: isWide ? 260 : double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceMuted,
-                  borderRadius: BorderRadius.circular(AppRadii.md),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  children: [
-                    Text(c['flag']!, style: const TextStyle(fontSize: 24)),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            c['name']!,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${c['sources']} • ${c['unis']}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            c['status']!,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: AppColors.primaryRed,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
+    return const Padding(
+      padding: EdgeInsets.all(18),
+      child: Text('جزئیات پایش کشورها تا دریافت گزارش معتبر سرور نامشخص است.'),
     );
   }
 
@@ -533,7 +411,11 @@ class _ResearchDashboardViewState extends State<ResearchDashboardView> {
           ),
           const SizedBox(height: 14),
           if (widget.recentRuns.isEmpty)
-            const Text('هیچ رویداد پویشی ثبت نشده است.')
+            Text(
+              widget.monitoringHistoryAvailable
+                  ? 'هیچ رویداد پویشی ثبت نشده است.'
+                  : 'تاریخچه پایش در دسترس نیست.',
+            )
           else
             ...widget.recentRuns.map((run) {
               final isSuccess = run.status == 'completed';

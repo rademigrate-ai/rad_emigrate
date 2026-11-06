@@ -1,0 +1,81 @@
+{
+  "scope": "Read-only fresh count/RPC checks; does not mutate or certify provider, storage bytes or backups.",
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "project_id": "inshddthftkhcdosoqcn",
+        "data": [
+          {
+            "inventory": {
+              "heads": 745,
+              "origins": 0,
+              "articles": 738,
+              "sections": 826,
+              "documents": 6,
+              "revisions": 747,
+              "snapshots": 17,
+              "migrations": 72,
+              "observed_at": "2026-10-30T09:16:48.751702+00:00",
+              "rpc_presence": {
+                "get_editorial_article": false,
+                "get_research_proposal": false,
+                "list_editorial_library": false,
+                "list_research_proposals": false,
+                "enqueue_research_refresh": false,
+                "review_research_proposal": false,
+                "list_official_authorities": false,
+                "get_research_review_context": false,
+                "approve_visa_source_inventory": false,
+                "discover_official_authorities": false
+              },
+              "visa_proposals": 0,
+              "merge_manifests": 0,
+              "published_heads": 0,
+              "verified_authorities": 0
+            }
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "project_id": "epolbumcfbohtmgvomki",
+        "data": [
+          {
+            "inventory": {
+              "heads": 745,
+              "origins": 1061,
+              "articles": 738,
+              "sections": 826,
+              "documents": 1064,
+              "revisions": 747,
+              "snapshots": 1061,
+              "migrations": 56,
+              "observed_at": "2026-10-30T09:16:51.939397+00:00",
+              "rpc_presence": {
+                "get_editorial_article": true,
+                "get_research_proposal": true,
+                "list_editorial_library": true,
+                "list_research_proposals": true,
+                "enqueue_research_refresh": true,
+                "review_research_proposal": true,
+                "list_official_authorities": true,
+                "get_research_review_context": true,
+                "approve_visa_source_inventory": true,
+                "discover_official_authorities": true
+              },
+              "visa_proposals": 0,
+              "merge_manifests": 0,
+              "published_heads": 1,
+              "verified_authorities": 0
+            }
+          }
+        ],
+        "isError": false
+      }
+    }
+  ]
+}

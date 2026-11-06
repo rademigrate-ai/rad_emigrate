@@ -12,6 +12,8 @@ import 'package:rad_emigrate/features/auth/presentation/pages/login_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/pages/profile_completion_page.dart';
 import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
+import 'package:rad_emigrate/features/admin/data/admin_operations_repository.dart';
+import 'package:rad_emigrate/features/admin/presentation/pages/admin_hub_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _MockAuthRepository implements AuthRepository {
@@ -42,6 +44,7 @@ Future<void> _pumpApp(
   WidgetTester tester, {
   bool isAuthenticated = false,
   bool profileComplete = false,
+  String adminRole = 'user',
 }) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
@@ -57,6 +60,18 @@ Future<void> _pumpApp(
           ),
         ),
         appBootstrapProvider.overrideWith((ref) async {}),
+        adminSnapshotProvider.overrideWith(
+          (ref) async => AdminSnapshot(
+            role: adminRole,
+            applications: 0,
+            documents: 0,
+            researchJobs: 0,
+            aiRequests: 0,
+            documentJobs: 0,
+            openTasks: 0,
+            auditEvents: 0,
+          ),
+        ),
       ],
       child: Consumer(
         builder: (context, ref, _) {
@@ -82,6 +97,26 @@ Future<void> _go(WidgetTester tester, String location) async {
 }
 
 void main() {
+  for (final role in ['user', 'consultant', 'admin', 'super_admin']) {
+    testWidgets('real router restricts Admin hub for role $role', (
+      tester,
+    ) async {
+      await _pumpApp(
+        tester,
+        isAuthenticated: true,
+        profileComplete: true,
+        adminRole: role,
+      );
+      await _go(tester, '/admin');
+      expect(
+        find.byType(AdminHubPage),
+        role == 'admin' || role == 'super_admin'
+            ? findsOneWidget
+            : findsNothing,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
   group('E0-02 App Router Protected & Control Audit Matrix', () {
     const protectedRoutes = [
       '/applications',
@@ -92,6 +127,7 @@ void main() {
       '/admin/ai-config',
       '/admin/operations',
       '/admin/ai-research',
+      '/admin/source-content',
       '/admin/consultations',
       '/admin/custom-sub-path',
     ];

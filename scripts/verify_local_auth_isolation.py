@@ -31,6 +31,10 @@ def require(condition: bool, label: str) -> None:
 
 
 def load_local_keys() -> tuple[str, str, str]:
+    if os.environ.get("RAD_SELF_HOST_TEST_ROOT"):
+        from self_host_test_target import load_target
+
+        return load_target()
     supabase_command = ["supabase"]
     if os.name == "nt":
         # Windows CreateProcess cannot execute .cmd shims directly. Resolve
@@ -73,6 +77,8 @@ def load_local_keys() -> tuple[str, str, str]:
 
 
 API_URL, ANON_KEY, SERVICE_ROLE_KEY = load_local_keys()
+# Loopback Auth credentials must never traverse an inherited HTTP proxy.
+LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
 
 def request(
@@ -104,7 +110,7 @@ def request(
         method=method,
     )
     try:
-        with urllib.request.urlopen(req, timeout=60) as response:
+        with LOCAL_HTTP.open(req, timeout=60) as response:
             return response.status, response.read(), dict(response.headers.items())
     except urllib.error.HTTPError as error:
         return error.code, error.read(), dict(error.headers.items())
@@ -115,9 +121,9 @@ def json_body(body: bytes) -> object:
         return None
     try:
         return json.loads(body)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as error:
         fail("expected JSON response")
-        raise AssertionError("unreachable")
+        raise AssertionError("unreachable") from error
 
 
 def expect_success(
@@ -236,6 +242,13 @@ def main() -> None:
     claims_b = jwt_claims(token_b)
     require(claims_a.get("sub") == user_a and claims_a.get("role") == "authenticated", "user A access-token claims")
     require(claims_b.get("sub") == user_b and claims_b.get("role") == "authenticated", "user B access-token claims")
+    release_package = "4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282"
+    for denied_token in (token_a, ANON_KEY, SERVICE_ROLE_KEY):
+        expect_denied(
+            "POST", "/rest/v1/rpc/get_release_function_state", denied_token,
+            {"p_package_sha256": release_package},
+            label="release state requires a real authorized editorial Admin",
+        )
     status, _, _ = request(
         "POST",
         "/auth/v1/token?grant_type=password",
@@ -533,8 +546,10 @@ def main() -> None:
         signed_url = API_URL + signed_path
     else:
         signed_url = API_URL + "/storage/v1/" + signed_path.lstrip("/")
+    require(urllib.parse.urlsplit(signed_url).netloc == urllib.parse.urlsplit(API_URL).netloc,
+            "signed Storage read remains on the owned loopback API")
     req = urllib.request.Request(signed_url, headers={"apikey": ANON_KEY})
-    with urllib.request.urlopen(req, timeout=30) as response:
+    with LOCAL_HTTP.open(req, timeout=30) as response:
         require(response.read() == pdf, "owner signed URL read")
 
     expect_denied(
@@ -599,19 +614,41 @@ def main() -> None:
         {"x-upsert": "false"},
         "Storage object above 10 MiB rejected",
     )
+    # A registered document now requires the audited hard-delete queue and
+    # server-owned Storage worker. Unregistered uploads can still be discarded
+    # by their owner without creating a dangling document row.
     status, _, _ = request(
         "DELETE",
         "/storage/v1/object/documents",
         token_a,
-        {"prefixes": [object_pdf, object_jpg, object_png]},
+        {"prefixes": [object_jpg, object_png]},
     )
-    require(200 <= status < 300, "owner Storage delete")
-    status, _, _ = request(
+    require(200 <= status < 300, "owner deletes only unregistered Storage uploads")
+    for unregistered in (object_jpg, object_png):
+        status, _, _ = request(
+            "GET",
+            "/storage/v1/object/authenticated/documents/" + encoded(unregistered),
+            token_a,
+        )
+        require(status >= 400, "unregistered owner Storage cleanup took effect")
+
+    # The bulk-delete API may report success for a partial/no-op operation.
+    # Verify the registered PDF actually survives direct owner removal.
+    request(
+        "DELETE",
+        "/storage/v1/object/documents",
+        token_a,
+        {"prefixes": [object_pdf]},
+    )
+    status, downloaded, _ = request(
         "GET",
         "/storage/v1/object/authenticated/documents/" + encoded(object_pdf),
         token_a,
     )
-    require(status >= 400, "owner Storage delete took effect")
+    require(
+        200 <= status < 300 and downloaded == pdf,
+        "registered document Storage object must survive unaudited owner delete",
+    )
 
     # SECURITY DEFINER identity tests: authenticated callers are bound to self,
     # while the trusted Edge service may evaluate the requested owner.
@@ -852,6 +889,29 @@ def main() -> None:
         f"/rest/v1/profiles?id=eq.{user_b}",
         SERVICE_ROLE_KEY,
         {"role": "super_admin"},
+    )
+    release_state, _ = expect_success(
+        "POST", "/rest/v1/rpc/get_release_function_state", token_b,
+        {"p_package_sha256": release_package},
+        label="normal local Auth Admin can inspect release state",
+    )
+    require(isinstance(release_state, dict) and release_state.get("actor_id") == user_b,
+            "release actor is bound to the normal Auth JWT")
+    require(len(release_state.get("members", [])) == 7
+            and all("definition" not in member for member in release_state["members"]),
+            "release state exposes seven metadata records without executable definitions")
+    expect_denied(
+        "POST", "/rest/v1/rpc/capture_release_function_state", token_b,
+        {"p_package_sha256": release_package,
+         "p_expected_state_sha256": release_state["state_sha256"],
+         "p_note": "SYNTHETIC late capture cannot impersonate a pre-forward receipt."},
+        label="capture refuses missing pre-forward state or approved catalog-lock executor",
+    )
+    expect_denied(
+        "POST", "/rest/v1/rpc/reverse_release_function_state", token_b,
+        {"p_source_receipt_id": 999999, "p_expected_current_state_sha256": release_state["state_sha256"],
+         "p_note": "SYNTHETIC Admin cannot invent inverse authorization."},
+        label="real local Admin cannot manufacture an inverse receipt",
     )
     expect_success(
         "POST",

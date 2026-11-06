@@ -6,7 +6,11 @@ type Candidate = { name: string; url: string };
 type Options = {
   enabled: boolean;
   token: string;
+  chunked?: boolean;
   database: WorkerDb;
+  refresh?: (
+    lease: { job_id: string; lease_token: string },
+  ) => Promise<void | { complete: boolean; processed: number }>;
   discover?: (
     scope: { country_code: string; topic: string; profession: string | null },
   ) => Promise<Candidate[]>;
@@ -60,7 +64,14 @@ export function createOfficialSourceHandler(options: Options) {
       const candidates: { name: string; host: string }[] = [];
       if (job.kind === "authority_discovery" && options.discover) {
         const seen = new Set<string>();
-        const found = await options.discover(job.request);
+        let found: Candidate[] = [];
+        try {
+          found = await options.discover(job.request);
+        } catch {
+          // Close the claimed lease even when search is unavailable. Provider
+          // response text must not enter the audit record or client response.
+          code = "discovery_unavailable";
+        }
         for (const item of found.slice(0, 20)) {
           if (
             !item.name.trim() || item.name.length > 300 ||
@@ -70,6 +81,33 @@ export function createOfficialSourceHandler(options: Options) {
           if (seen.has(host)) continue;
           seen.add(host);
           candidates.push({ name: item.name.trim(), host });
+        }
+      } else if (job.kind === "research_refresh" && options.refresh) {
+        try {
+          const progress = await options.refresh(body);
+          if (progress && !progress.complete) {
+            await options.database("rpc/yield_bound_official_refresh", {
+              method: "POST",
+              body: JSON.stringify({
+                p_job_id: body.job_id,
+                p_lease_token: body.lease_token,
+              }),
+            });
+            if (!options.chunked) {
+              return Response.json({ error: "refresh_continuation_required" }, {
+                status: 503,
+              });
+            }
+            return Response.json({
+              job_id: body.job_id,
+              status: "queued",
+              candidates: 0,
+              verified: 0,
+              safe_error_code: null,
+            }, { status: 202 });
+          }
+        } catch {
+          code = "source_unavailable";
         }
       } else {code = job.kind === "authority_discovery"
           ? "discovery_unavailable"

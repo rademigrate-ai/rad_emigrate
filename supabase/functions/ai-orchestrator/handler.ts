@@ -315,6 +315,10 @@ export async function handler(req: Request): Promise<Response> {
   if (intent === "immigration_or_rad" || requestedScope === "admin") {
     systemParts.push(
       `<UNTRUSTED_RETRIEVED_CONTENT>\n${grounding.text || "No approved evidence is currently available."}\n</UNTRUSTED_RETRIEVED_CONTENT>`,
+      'Select relevant approved evidence only. Output exactly JSON {"claim_ids":["existing UUID"]}, at most 8 IDs, or an empty array when evidence does not answer the question. No other fields, prose, URLs, or legal interpretation. The server renders the exact approved claims.',
+      JSON.stringify({ evidence: grounding.sources.map((source) => ({
+        claim_id: source.claim_id, claim: source.claim_label,
+      })) }),
     );
   }
 
@@ -415,18 +419,35 @@ export async function handler(req: Request): Promise<Response> {
           }),
         }).catch(() => undefined);
       }
-            const modelText = typeof result.text === "string" ? result.text.trim() : "";
-      const failedGeneration = Boolean(result.refused || result.truncated || !modelText);
+      const modelText = typeof result.text === "string" ? result.text.trim() : "";
+      let selectedClaimIds: string[] | null = null;
+      if (intent === "immigration_or_rad" && !result.refused && !result.truncated) {
+        // Generated text can select claims, but cannot acquire verified provenance
+        // by placing invented prose or links beside a real evidence anchor.
+        try {
+          const parsed: unknown = JSON.parse(modelText);
+          if (parsed !== null && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const selection = parsed as Record<string, unknown>;
+            if (Object.keys(selection).length === 1 && Array.isArray(selection.claim_ids)
+              && selection.claim_ids.length > 0 && selection.claim_ids.length <= 8
+              && selection.claim_ids.every((id) => typeof id === "string"
+                && grounding.sources.some((source) => source.claim_id === id))) {
+              selectedClaimIds = [...new Set(selection.claim_ids as string[])];
+            }
+          }
+        } catch { /* Malformed or free-form output cannot become official evidence. */ }
+      }
+      const failedGeneration = Boolean(result.refused || result.truncated || !modelText
+        || (intent === "immigration_or_rad" && !selectedClaimIds));
       let reply: string;
       if (failedGeneration) {
         reply = grounding.locale === "fa"
           ? "پاسخ قابل اتکایی تولید نشد. لطفاً دوباره تلاش کنید یا منبع رسمی را بررسی کنید."
           : "A reliable response was not completed. Please try again or consult the official source.";
-      } else if (intent === "immigration_or_rad" && grounding.sources.length > 0) {
-        const anchors = grounding.sources
-          .map((source, index) => `[${index + 1}] ${source.claim_label ?? source.title ?? source.authority ?? "source"}`)
-          .join("\n");
-        reply = `${modelText}\n\n---\n${anchors}`;
+      } else if (intent === "immigration_or_rad") {
+        reply = grounding.sources.filter((source) => selectedClaimIds!.includes(source.claim_id as string))
+          .map((source) => `${source.claim_label} [${grounding.sources.indexOf(source) + 1}]`)
+          .join("\n\n");
       } else {
         reply = modelText;
       }

@@ -2,6 +2,25 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsEnA on AppLocalizations {
   @override
+  String get adminAccessRequired => 'Administrator access is required.';
+  @override
+  String get documentDeletionPending =>
+      'Deletion requested. File removal is pending.';
+  @override
+  String get documentDeletionRetrying =>
+      'File removal failed. The server will retry.';
+  @override
+  String get documentDeletionFailed =>
+      'File removal needs staff attention. Contact support.';
+  @override
+  String get documentDeletionComplete =>
+      'File removed. Deletion receipt saved.';
+  @override
+  String get documentDeletionReference => 'Request reference';
+  @override
+  String get documentDeletionStatusUnavailable =>
+      'Deletion status is unavailable. Refresh to check again.';
+  @override
   String get viewDocumentFile => 'Open file';
 
   @override
@@ -540,7 +559,7 @@ mixin AppLocalizationsEnA on AppLocalizations {
 
   @override
   String get deleteDocumentBody =>
-      'This removes the document record and its private file.';
+      'Request permanent removal of this record and its private file? Access is restricted while the server removes the file. Already opened previews may work until removal or expiry.';
 
   @override
   String get close => 'Close';

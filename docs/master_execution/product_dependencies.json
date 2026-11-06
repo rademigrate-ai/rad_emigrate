@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-31",
+  "scope": "Existing product dependencies; no release scope exclusions or operational completion inferred from code presence.",
+  "browser_e2e": "BLOCKED_OWNER_DEFERRED",
+  "features": [
+    {
+      "feature": "AI and Web Search",
+      "state": "IMPLEMENTED_NOT_OPERATIONALLY_VERIFIED",
+      "evidence": ["supabase/functions/ai-orchestrator/knowledge_grounding.ts", "supabase/functions/ai-orchestrator/web_search.ts", "_audit/RAD_MASTER_CONVERGENCE_20261031/production-runtime-readonly.json", "_audit/RAD_MASTER_CONVERGENCE_20261031/production-ai-bundle-readonly.json"],
+      "remaining": "Production AI bundle v11 lacks the candidate Web Search module. Search registry was empty; provider telemetry is stale. No paid calls authorized. Real approved evidence/provider acceptance remains open."
+    },
+    {
+      "feature": "Email/SMS/push delivery",
+      "state": "SANDBOX_ONLY",
+      "evidence": ["supabase/functions/notification-dispatch/handler.ts", "supabase/functions/notification-dispatch/worker.ts"],
+      "remaining": "Existing dispatcher records sandbox receipts and invokes no external delivery provider. Real transports, approved credentials/templates, opt-in and delivery acceptance are required."
+    },
+    {
+      "feature": "Payments and billing",
+      "state": "SANDBOX_ONLY",
+      "evidence": ["supabase/functions/payment-sandbox/handler.ts", "supabase/functions/tests/payment_sandbox_test.ts"],
+      "remaining": "Mock checkout and signed sandbox events are not merchant or recurring billing readiness. Provider, commercial terms, geography/store/tax review and real authorized integration remain required."
+    },
+    {
+      "feature": "OCR processing",
+      "state": "IMPLEMENTED_EXTERNALLY_UNCONFIGURED_OR_UNVERIFIED",
+      "evidence": ["supabase/functions/document-intelligence/handler.ts", "docs/releases/LOCAL47_OCR_BACKEND.md"],
+      "remaining": "The bounded processing transport requires get_document_processor_runtime to supply an approved endpoint/key and policy. No approved live processor extraction/privacy acceptance was performed. Configuration absence is not an OCR success."
+    },
+    {
+      "feature": "Voice AI",
+      "state": "NOT_IMPLEMENTED_END_TO_END",
+      "evidence": ["lib/features/ai_assistant/domain/voice_ai_contract.dart"],
+      "remaining": "A provider-independent domain/state contract exists. Operational STT/TTS capture, consent, provider transport and real device acceptance are not present/certified. The voice contract does not establish a delivered voice feature."
+    },
+    {
+      "feature": "Native store releases",
+      "state": "BLOCKED_OWNER_APPROVAL",
+      "evidence": ["docs/ANDROID_RELEASE.md", "docs/master_execution/OWNER_RENDER_HANDOFF.md"],
+      "remaining": "Android debug is verified at the prior candidate. Permanent application identities, authorized signing/store accounts, Mac/Xcode for iOS and physical-device acceptance remain external."
+    },
+    {
+      "feature": "Editorial publication and official authority approval",
+      "state": "BLOCKED_OWNER_APPROVAL",
+      "evidence": ["docs/VISA_EDITORIAL_POLICY.md", "docs/master_execution/RESEARCH_TRANSPORT_RUNBOOK.md"],
+      "remaining": "No legal interpretation, official authority approval, source/article mapping or publication permission is fabricated. Recovered first-party content and machine-generated proposals stay unverified drafts pending real human review."
+    }
+  ],
+  "release_scope": "Owner-approved Release A/B freeze and final UAT sign-off remain pending; none of these features is silently declared out of scope."
+}

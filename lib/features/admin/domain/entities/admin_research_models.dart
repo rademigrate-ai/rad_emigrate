@@ -66,15 +66,15 @@ enum SourceVerificationTier {
 /// Comprehensive metrics for the Research Assistant Dashboard (Screen 1).
 @immutable
 class ResearchDashboardMetrics {
-  final int monitoredCountriesCount;
-  final int activeOfficialSourcesCount;
-  final int employerAddedSourcesCount;
-  final int monitoredUniversitiesCount;
-  final int detectedChangesCount;
-  final int pendingAdminReviewsCount;
-  final int monitoringFailuresCount;
-  final int overdueSourceChecksCount;
-  final DateTime lastCrawlCompletedAt;
+  final int? monitoredCountriesCount;
+  final int? activeOfficialSourcesCount;
+  final int? employerAddedSourcesCount;
+  final int? monitoredUniversitiesCount;
+  final int? detectedChangesCount;
+  final int? pendingAdminReviewsCount;
+  final int? monitoringFailuresCount;
+  final int? overdueSourceChecksCount;
+  final DateTime? lastCrawlCompletedAt;
 
   const ResearchDashboardMetrics({
     required this.monitoredCountriesCount,
@@ -100,10 +100,10 @@ class ManagedResearchSource {
   final String topic;
   final List<String> relevantArticles;
   final SourceVerificationTier verificationTier;
-  final bool isEnabled;
-  final MonitoringInterval interval;
-  final DateTime lastCheckedAt;
-  final DateTime nextScheduledCheckAt;
+  final bool? isEnabled;
+  final MonitoringInterval? interval;
+  final DateTime? lastCheckedAt;
+  final DateTime? nextScheduledCheckAt;
   final String connectionStatus; // 'ok_200', 'timeout', 'http_503', etc.
   final int retryAttempts;
   final String? lastErrorMessage;
@@ -126,8 +126,11 @@ class ManagedResearchSource {
     this.lastErrorMessage,
   });
 
-  bool get isOverdue => DateTime.now().isAfter(nextScheduledCheckAt);
-  bool get hasFailure => connectionStatus != 'ok_200';
+  bool get isOverdue =>
+      nextScheduledCheckAt != null &&
+      DateTime.now().isAfter(nextScheduledCheckAt!);
+  bool get hasFailure =>
+      connectionStatus != 'unknown' && connectionStatus != 'ok_200';
 }
 
 /// Individual crawl run record (Screen 5).

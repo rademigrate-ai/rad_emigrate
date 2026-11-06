@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rad-worker-2",
+  "description": "Additive bounded chunk response. The immutable RAD v1 registry and earlier values remain unchanged.",
+  "$defs": {
+    "official_source_worker_chunk_response": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "queued"
+          ]
+        },
+        "candidates": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "verified": {
+          "const": 0
+        },
+        "safe_error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "job_id",
+        "status",
+        "candidates",
+        "verified",
+        "safe_error_code"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

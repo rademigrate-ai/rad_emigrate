@@ -45,9 +45,7 @@ class _SourceManagementViewState extends State<SourceManagementView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'بررسی مجدد منبع با موفقیت انجام شد و وضعیت اتصال به‌روزرسانی گردید.',
-            ),
+            content: Text('درخواست بررسی مجدد منبع در صف پردازش قرار گرفت.'),
             backgroundColor: AppColors.teal,
           ),
         );
@@ -311,17 +309,21 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Switch.adaptive(
-                            value: source.isEnabled,
-                            activeTrackColor: AppColors.teal,
-                            onChanged: (val) =>
-                                widget.onToggleSource?.call(source.id),
-                          ),
+                          if (source.isEnabled != null)
+                            Switch.adaptive(
+                              value: source.isEnabled!,
+                              activeTrackColor: AppColors.teal,
+                              onChanged: widget.onToggleSource == null
+                                  ? null
+                                  : (val) => widget.onToggleSource!(source.id),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        source.baseUrl,
+                        source.baseUrl.isEmpty
+                            ? 'دامنه تأییدشده در دسترس نیست.'
+                            : source.baseUrl,
                         style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.textSecondary,
@@ -435,29 +437,37 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                       ),
                     ),
                     const SizedBox(width: 6),
-                    DropdownButton<MonitoringInterval>(
-                      value: source.interval,
-                      isDense: true,
-                      underline: const SizedBox.shrink(),
-                      items: MonitoringInterval.values.map((interval) {
-                        return DropdownMenuItem(
-                          value: interval,
-                          child: Text(
-                            interval.toPersian(),
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
+                    if (source.interval == null)
+                      const Text('نامشخص')
+                    else
+                      DropdownButton<MonitoringInterval>(
+                        value: source.interval,
+                        isDense: true,
+                        underline: const SizedBox.shrink(),
+                        items: MonitoringInterval.values.map((interval) {
+                          return DropdownMenuItem(
+                            value: interval,
+                            child: Text(
+                              interval.toPersian(),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.navy,
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (newInterval) {
-                        if (newInterval != null) {
-                          widget.onUpdateInterval?.call(source.id, newInterval);
-                        }
-                      },
-                    ),
+                          );
+                        }).toList(),
+                        onChanged: widget.onUpdateInterval == null
+                            ? null
+                            : (newInterval) {
+                                if (newInterval != null) {
+                                  widget.onUpdateInterval?.call(
+                                    source.id,
+                                    newInterval,
+                                  );
+                                }
+                              },
+                      ),
                   ],
                 ),
                 // Status and Action buttons
@@ -473,7 +483,9 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: source.hasFailure
+                        color: source.connectionStatus == 'unknown'
+                            ? AppColors.surfaceMuted
+                            : source.hasFailure
                             ? AppColors.error.withValues(alpha: 0.1)
                             : AppColors.success.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(AppRadii.pill),
@@ -482,23 +494,31 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            source.hasFailure
+                            source.connectionStatus == 'unknown'
+                                ? Icons.help_outline
+                                : source.hasFailure
                                 ? Icons.error_outline
                                 : Icons.check_circle_outline,
                             size: 12,
-                            color: source.hasFailure
+                            color: source.connectionStatus == 'unknown'
+                                ? AppColors.textSecondary
+                                : source.hasFailure
                                 ? AppColors.error
                                 : AppColors.success,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            source.hasFailure
+                            source.connectionStatus == 'unknown'
+                                ? 'وضعیت اتصال نامشخص'
+                                : source.hasFailure
                                 ? 'خطای اتصال (${source.connectionStatus})'
                                 : 'اتصال معتبر (۲۰۰ OK)',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: source.hasFailure
+                              color: source.connectionStatus == 'unknown'
+                                  ? AppColors.textSecondary
+                                  : source.hasFailure
                                   ? AppColors.error
                                   : AppColors.success,
                             ),
@@ -512,7 +532,7 @@ class _SourceManagementViewState extends State<SourceManagementView> {
                         visualDensity: VisualDensity.compact,
                         side: const BorderSide(color: AppColors.border),
                       ),
-                      onPressed: isRefreshing
+                      onPressed: isRefreshing || widget.onRefreshSource == null
                           ? null
                           : () => _handleRefresh(source.id),
                       icon: isRefreshing

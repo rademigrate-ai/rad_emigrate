@@ -1,0 +1,298 @@
+{
+  "package": "RAD_NO_RESTORE_OPERATIONAL_APPROVAL",
+  "version": "2026-11-04-postgresql17-capability-review",
+  "status": "PENDING_INDEPENDENT_REVIEW",
+  "execution_allowed": false,
+  "owner_constraints": {
+    "restore": false,
+    "recovery_project_creation": false,
+    "safety_control_bypass": false,
+    "browser_automation": false,
+    "credential_or_session_token_access": false,
+    "frontend_deployment": false,
+    "automatic_merge": false,
+    "agent_conditional_merge_after_all_gates": true
+  },
+  "production_binding": {
+    "project_ref": "inshddthftkhcdosoqcn",
+    "database": "postgres",
+    "observed_postgresql_version": "17.11",
+    "observed_at": "2026-11-03T18:23:16.58815+00:00",
+    "observed_state": {
+      "migration_entries": 72,
+      "heads": 745,
+      "revisions": 747,
+      "publications": 0
+    },
+    "endpoint_identity_attestation": "PENDING_INDEPENDENT_OPERATOR_ATTESTATION",
+    "endpoint_url": null,
+    "current_user": null,
+    "system_identifier": null,
+    "reason_unfilled": "Endpoint/operator attestation and real authenticated editorial actor remain pending; management postgres access is not an editorial session.",
+    "observed_management_user": "postgres",
+    "observed_system_identifier": "7690937582311211359",
+    "editorial_actor_verified": false
+  },
+  "release_inputs": {
+    "sealed_content_baseline_commit": "22f2e51ddd078f3e9ff0beecbd17637d822b1221",
+    "final_release_commit_sha": null,
+    "requires_final_head_binding_before_authorization": true,
+    "core_forward_sha256": "ec77fd4bba84b703a0d2994c3ce8da8112ca969a8f2a478de8061b500f675f69",
+    "core_manifest_source_sha": "81f11ce176d9645ae0503e360e22ef6a414c355b",
+    "allocator_sha256": "5f224ce6025ff43d02e078f51d147f0f9c7b63ce4cf7b42e0c383e6b3f6be4ca",
+    "source_faithful_migration": {
+      "file": "supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql",
+      "sha256": "0176bbb617c5075232e02197630ff0f6df0de492d4926a06b238475f054ef06e"
+    },
+    "corrected_admission_migration": {
+      "file": "supabase/migrations/20261103114340_rad_corrected_source_editorial_admission.sql",
+      "sha256": "577edecce2b0fe90bf2308c91add8a301976232b5a95d822374c7dae39c150b0"
+    },
+    "corrected_package_sha256": "4beb6ba711c5b0243d69be29b32a76c13f5ebcc47ce131e7ca406bcd67e6c282",
+    "corrected_package": {
+      "operations": 1100,
+      "batches": 44,
+      "publication_candidates": 1077,
+      "publication_holds": 23,
+      "human_approvals": 0,
+      "published": 0
+    }
+  },
+  "changed_function_bodies": [
+    {
+      "identity": "private.is_safe_public_https_url(p_url text)",
+      "current_definition_sha256": "a5aa08d5d750691c351335c2e2313c0e91a16ad7c3f90abbde507f9110b515ec",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "pre/post pg_get_functiondef, ACL, owner, settings, dependencies, committed-state inverse"
+    },
+    {
+      "identity": "private.prevent_profile_role_escalation()",
+      "current_definition_sha256": "954cc67ddd74f23b0840d07618a8af66b19f32073e3098bc4cf9890718e4b529",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "role-change denial/audit semantics, trigger binding, exact inverse"
+    },
+    {
+      "identity": "private.rad_article_verification(revision uuid)",
+      "current_definition_sha256": "4c0dc1acff287d90a3af18a2c2b03ed30f961180d36596675ba580000438ab8a",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "factual-state precedence/freshness behavior and exact inverse"
+    },
+    {
+      "identity": "private.rad_claim_eligible(claim uuid)",
+      "current_definition_sha256": "0e44eca646f7c634018206aea2b1505741dc58ebee5e16d754635950aabb23e0",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "authority/proof/freshness joins and exact inverse"
+    },
+    {
+      "identity": "private.rad_evidence(ref jsonb, section uuid)",
+      "current_definition_sha256": "e7405584ffbc2d06b89c468f7ee1c57e754c84f9b0570051cc0e74f5eeb424b5",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "source/evidence projection, ACL, dependencies, exact inverse"
+    },
+    {
+      "identity": "private.rad_page_position(body jsonb, version text)",
+      "current_definition_sha256": "f983903947d87c12e03f52c7183e0c07c53da10436104fe59937f3730268cc55",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "cursor actor/filter/version binding and exact inverse"
+    },
+    {
+      "identity": "public.get_visa_article(p_request jsonb)",
+      "current_definition_sha256": "85de52ee2fb230a1d194eb23dbfce4eff1444a45c597a9898453b6f1d5e7a196",
+      "proposed_source": "db_forward_review/forward_body.sql",
+      "review_required": "published-only routing, neutral-country behavior, ACL, exact inverse"
+    }
+  ],
+  "extension_and_callbacks": {
+    "pg_trgm": {
+      "currently_present": false,
+      "forward_operation": "CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions",
+      "review_required": "extension ownership/version/dependencies and committed-state inverse"
+    },
+    "callbacks": [
+      {
+        "name": "issue_graphql_placeholder",
+        "event": "sql_drop",
+        "owner": "supabase_admin",
+        "function": "extensions.set_graphql_placeholder",
+        "definition_sha256": "b0cadab880dc68f569b3e01057dc6f5acee9d05e122de6f4256130ae330bbcec",
+        "attestation": "PENDING"
+      },
+      {
+        "name": "issue_pg_cron_access",
+        "event": "ddl_command_end",
+        "owner": "supabase_admin",
+        "function": "extensions.grant_pg_cron_access",
+        "definition_sha256": "eb3fa2e82a0135bc04a6236f93331911861c91b45d72cba5d9c03c1be2c34b4c",
+        "attestation": "PENDING"
+      },
+      {
+        "name": "issue_pg_graphql_access",
+        "event": "ddl_command_end",
+        "owner": "supabase_admin",
+        "function": "extensions.grant_pg_graphql_access",
+        "definition_sha256": "9ec845adab4ba00bbf7740458b6c4461094697023f0f7adc693b373e2ea54f68",
+        "attestation": "PENDING"
+      },
+      {
+        "name": "issue_pg_net_access",
+        "event": "ddl_command_end",
+        "owner": "supabase_admin",
+        "function": "extensions.grant_pg_net_access",
+        "definition_sha256": "e38c4060751c9695123350596f1cb0d0c943015f3267a2a455d8efe02c711184",
+        "attestation": "PENDING"
+      },
+      {
+        "name": "pgrst_ddl_watch",
+        "event": "ddl_command_end",
+        "owner": "supabase_admin",
+        "function": "extensions.pgrst_ddl_watch",
+        "definition_sha256": "2b4b5d702ddf70fbd1a05c9825f9f9016d5c0ef97dd3df5f5b012ea23d9b94b1",
+        "attestation": "PENDING"
+      },
+      {
+        "name": "pgrst_drop_watch",
+        "event": "sql_drop",
+        "owner": "supabase_admin",
+        "function": "extensions.pgrst_drop_watch",
+        "definition_sha256": "3a2696133853e17a0456cbfbb233a03815f50895492143e84df983b558d76593",
+        "attestation": "PENDING"
+      }
+    ]
+  },
+  "reversal_requirements": {
+    "pre_commit_failure": "Prove transaction rollback leaves catalog, extensions, function definitions/ACLs, callback-visible state, migration history, rowsets and public API unchanged.",
+    "post_commit_ddl_failure": "Accepted inverse for all seven functions, new DDL, pg_trgm, callbacks, schema-cache effects and migration state; currently absent.",
+    "import_failure": "Bounded transaction and exact readback; limited package-owned-row compensation only after all refusal checks and separate authorization.",
+    "publication_prior_null": "Prepared supported authenticated source-specific batch withdrawal is locally tested; Production installation, provider review and genuine editorial receipts remain pending.",
+    "guard_bypass": "Never authorized. No direct table update, trigger disable shortcut, synthetic approval, or guard weakening is included."
+  },
+  "required_attestations": [
+    {
+      "name": "production_identity",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "seven_function_bodies",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "pg_trgm_and_six_callbacks",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "no_restore_equivalence",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "import_compensation_scope",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "publication_reversal_prior_null",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "editorial_admin_actor",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    },
+    {
+      "name": "release_owner",
+      "decision": "PENDING",
+      "reviewer": null,
+      "evidence_sha256": null
+    }
+  ],
+  "decision": "NO-GO_PENDING_INDEPENDENT_REVIEW_WITH_LOCAL_SAFETY_OPS",
+  "current_blockers": [
+    "Independent PostgreSQL/security reviewer must accept the exact function-state reversal implementation and remaining dependency limitation.",
+    "Independent Supabase/provider operator must attest the six managed callback side effects and PostgREST/schema-cache behavior.",
+    "A real authenticated editorial Admin must supply the actual operation receipt; no local fixture supplies that actor.",
+    "Release owner must authorize the exact project/commit/hashes/maintenance window after independent technical acceptance.",
+    "No universal committed-DDL inverse is claimed for every new table/index/policy/extension effect beyond the tested seven-function and source-publication scopes.",
+    "Authenticated Admin RPCs are prepared, not installed. The actual Production actor and operation receipts remain unverified; independent reversal authorization cannot be self-issued through those RPCs.",
+    "The existing guarded release mechanism still requires verified recovery evidence. The proposed no-Restore policy has not been independently accepted or integrated as an authorized alternative; no proof or receipt is fabricated.",
+    "Live 2026-11-04 management postgres is not superuser and lacks MAINTAIN, UPDATE, DELETE and TRUNCATE on pg_catalog.pg_proc (owner supabase_admin). The required protected SHARE-lock executor remains unavailable. No catalog grant, owner change or lock removal is authorized."
+  ],
+  "evidence": [
+    "NO_RESTORE_TECHNICAL_REVIEW_V2.json",
+    "FINAL_READINESS_REGISTER.json",
+    "PRODUCTION_RECOVERY_PROCEDURE_20261102.md",
+    "FINAL_PRODUCTION_CONTENT_EXECUTION_20261102.md",
+    "db_forward_review/forward_body.sql",
+    "db_forward_review/manifest.json",
+    "current-catalog-metadata.json",
+    "no-restore-preflight-fingerprint.json",
+    "initial-callbacks.json",
+    "package-independent-verification.json"
+  ],
+  "implemented_safety_capabilities": {
+    "migration": "supabase/migrations/20261103120000_rad_no_restore_safety_ops.sql",
+    "migration_sha256": "2aea67c25903623ce98a76bf2f86dbf1d637adc91c701b86474cb7b94536de44",
+    "tests": "scripts/tests/test_no_restore_safety_ops.py",
+    "tests_sha256": "9eff3c16e348c019d096007b0bf6282c683beba7e363aeeee0353a137186ba88",
+    "local_receipt": "employer-deploy-readiness-20261104/catalog-safety-tests.log (20 passing native tests)",
+    "callback_evidence": "callback-local-evidence-20261103.json",
+    "function_reversal": "Seven fixed functions only; pre-core authenticated Admin capture binds definitions, full ordered GUCs, language, security mode, volatility, OIDs, owners, raw ACLs and catalog-visible dependents. An independently accepted private operator record must bind actor, source receipt, expected current state, exact request and expiry. Exact retries reuse immutable receipts. Global catalog/advisory locking bounds concurrent DDL; owner/ACL/dependent/OID or unreviewed state drift is refused before any definition change. No universal DDL inverse is claimed.",
+    "source_unpublish": "Authenticated original batch approver only; exact manifest/payload/source/head/revision/hash/prior-NULL binding, bounded batch lock and ordered row locks, immutable member/event/root receipts, top-level xid8 binding supporting savepoints, exact retry, same/cross-transaction stale-event denial, preserved head/body/author/verification/Feed, transactional search invalidation. A newly imposed publication hold does not prevent safe withdrawal. Not installed or independently approved in Production.",
+    "pg_trgm_and_callbacks": "Owned empty local PostgreSQL tests exercise extension creation rollback, dependent-object DROP refusal, committed DROP and synthetic ddl_command_end/sql_drop callbacks. A synthetic callback grant persists after DROP, proving extension deletion is not a universal callback inverse. The six actual managed callbacks and PostgREST/provider effects remain unproved and require independent operator attestation.",
+    "followup_migration": "supabase/migrations/20261103180754_rad_source_unpublish_safety.sql",
+    "followup_migration_sha256": "0cde295bbcbda93cad57230b2f637112fdcba2301305aa65af7b1378bcd0013a",
+    "portable_tests": "supabase/tests/no_restore_safety_ops.sql",
+    "portable_tests_sha256": "7276184ba6085a2e43ff2f7ef10a32aa5328a7237c9b293b143e2520bde8dec5",
+    "authenticated_operator_api": [
+      "public.get_release_function_state(text)",
+      "public.capture_release_function_state(text,text,text)",
+      "public.reverse_release_function_state(bigint,text,text)"
+    ],
+    "production_installed": false,
+    "independent_review_accepted": false,
+    "remaining_limits": [
+      "Function reversal covers only seven definitions, not all newly created schema objects, grants, columns, extensions, callback effects or migration history.",
+      "pg_depend describes catalog-visible dependencies and cannot prove every dynamic SQL or application dependency.",
+      "Source withdrawal restores NULL publication pointers and search visibility, but intentionally leaves catalog activation and immutable source/review history intact.",
+      "Source revisions with a non-NULL prior publication pointer are outside the withdrawal contract.",
+      "The bootstrap, its managed callback effects and short pg_proc SHARE lock also require acceptance before the first hosted write.",
+      "No approved no-Restore branch exists in the guarded release mechanism; it remains fail-closed until independently accepted policy and authorized implementation exist.",
+      "Actual managed postgres lacks pg_proc SHARE-lock authority. Owned PostgreSQL 17 tests additionally prove MAINTAIN alone permits the real lock without UPDATE/DELETE/TRUNCATE. That local grant is not a Production grant or provider approval. Managed acceptance remains a refusal, not a successful capture/inverse."
+    ],
+    "catalog_lock_executor": {
+      "production_readonly_evidence": {
+        "executor": "postgres",
+        "superuser": false,
+        "checked_at": "2026-11-04T13:33:51.548388+00:00",
+        "pg_proc_owner": "supabase_admin",
+        "pg_proc_delete": false,
+        "pg_proc_update": false,
+        "pg_proc_truncate": false,
+        "pg_proc_maintain": false
+      },
+      "production_available": false,
+      "isolated_managed_supabase": "REFUSED_AND_RECORDED_no_privileges_granted",
+      "requirement": "Provider must independently approve a narrowly protected executor capable of the required catalog lock. The present postgres-owned SECURITY DEFINER functions cannot capture or reverse in Production; neither caller role changes nor removing the lock is an accepted substitute."
+    }
+  },
+  "validated_dependency_order": [
+    "Independent equivalence/provider/operator acceptance and exact release-owner authorization before ANY hosted write.",
+    "Install function-state bootstrap on the original CMS foundation; verify its own callback/ACL effects.",
+    "Real authenticated editorial Admin inspects and captures the fixed seven pre-core functions; retain immutable receipt and exact hashes.",
+    "Apply reviewed core closure and allocator, with pre/post-commit safety acceptance.",
+    "Execute guarded corrected draft import and exact provenance/head/actor/anonymous-denial readback.",
+    "Only AFTER import, apply the source-faithful publication migration, corrected admission/holds, then source-unpublish followup; verify schema/ACLs.",
+    "Real Admin source review, approval and publication of eligible bounded batches only; record actual receipts.",
+    "After actual Production acceptance, independent safety/provider decisions and exact final-HEAD CI/repository approval gates, Codex may merge PR #89 and verify resulting main/CI. Owner alone deploys the frontend."
+  ]
+}

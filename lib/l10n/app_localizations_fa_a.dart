@@ -2,6 +2,24 @@ import 'app_localizations.dart';
 
 mixin AppLocalizationsFaA on AppLocalizations {
   @override
+  String get adminAccessRequired => 'دسترسی مدیر لازم است.';
+  @override
+  String get documentDeletionPending =>
+      'درخواست حذف ثبت شد. حذف فایل در انتظار اجراست.';
+  @override
+  String get documentDeletionRetrying =>
+      'حذف فایل ناموفق بود. سرور دوباره تلاش می‌کند.';
+  @override
+  String get documentDeletionFailed =>
+      'حذف فایل به بررسی کارشناس نیاز دارد. با پشتیبانی تماس بگیرید.';
+  @override
+  String get documentDeletionComplete => 'فایل حذف شد و رسید حذف ذخیره شد.';
+  @override
+  String get documentDeletionReference => 'شناسه پیگیری';
+  @override
+  String get documentDeletionStatusUnavailable =>
+      'وضعیت حذف در دسترس نیست. برای بررسی دوباره، تازه‌سازی کنید.';
+  @override
   String get viewDocumentFile => 'مشاهده فایل';
 
   @override
@@ -364,7 +382,8 @@ mixin AppLocalizationsFaA on AppLocalizations {
   @override
   String get deleteDocumentTitle => 'حذف مدرک؟';
   @override
-  String get deleteDocumentBody => 'رکورد و فایل خصوصی حذف می‌شود.';
+  String get deleteDocumentBody =>
+      'درخواست حذف دائمی این رکورد و فایل خصوصی ثبت شود؟ هنگام حذف فایل، دسترسی محدود می‌شود. پیش‌نمایش‌های قبلی ممکن است تا حذف فایل یا انقضا در دسترس بمانند.';
   @override
   String get close => 'بستن';
   @override

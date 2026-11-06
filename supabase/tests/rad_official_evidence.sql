@@ -3,7 +3,7 @@ begin;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
 insert into auth.users(id,email) values('a5000000-0000-4000-8000-000000000001','synthetic-evidence-admin@example.invalid');
 update public.profiles set role='admin' where id='a5000000-0000-4000-8000-000000000001';
-insert into public.destinations(code,slug) values('ZZ','synthetic-official-only');
+insert into public.destinations(code,slug) values('ZZ','synthetic-official-only') on conflict(code) do nothing;
 insert into public.source_documents(id,canonical_url,source_authority,title,language_code,validation_status) values
  ('d5000000-0000-4000-8000-000000000001','https://authority.example.invalid/test/official','government','SYNTHETIC authority document','en','validated');
 insert into public.source_snapshots(id,document_id,normalized_text,content_hash,http_status,fetched_at) values

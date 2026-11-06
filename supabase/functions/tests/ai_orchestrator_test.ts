@@ -67,7 +67,10 @@ async function exercise(options: Options = {}, payload: Record<string, unknown> 
     const attempt = providerCalls++;
     if (options.timeout && attempt === 0) throw new DOMException("sensitive upstream URL", "TimeoutError");
     const status = options.status?.[attempt] ?? 200;
-    return status === 200 ? response(options.providerReplies?.[attempt] ?? { choices: [{ message: { content: "Accepted response" } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
+    const defaultReply = String(body?.messages?.[0]?.content).includes("intent=immigration_or_rad")
+      ? JSON.stringify({ claim_ids: ["a2000000-0000-4000-8000-000000000002"] })
+      : "Accepted response";
+    return status === 200 ? response(options.providerReplies?.[attempt] ?? { choices: [{ message: { content: defaultReply } }], usage: { completion_tokens: 4 } }) : response({ error: "private upstream diagnostic and credential" }, status);
   });
   try {
     const defaultMessages = payload.messages
@@ -86,8 +89,8 @@ function immigrationPayload(extra: Record<string, unknown> = {}) {
   return { messages: [{ role: "user", content: IMMIGRATION_Q }], ...extra };
 }
 
-/** Current immigration success contract: model text + numbered claim_label anchors. */
-const IMMIGRATION_SUCCESS_REPLY = "Accepted response\n\n---\n[1] Synthetic verified claim";
+/** Grounded success renders the exact selected approved claim and source index. */
+const IMMIGRATION_SUCCESS_REPLY = "Synthetic verified claim [1]";
 
 Deno.test("01 discovery normalizes multiple models and preserves a dynamic catalogue", async () => {
   const x = await exercise({}, { action: "discover_models", provider_id: "a" });
@@ -142,7 +145,7 @@ Deno.test("13 attempts are bounded even with a large catalogue", async () => {
   const x = await exercise({ chain: Array.from({ length: 50 }, (_, i) => runtime(String(i), String(i))), status: Array(50).fill(429) }); equal(x.providerCalls, 3);
 });
 Deno.test("14 persistence failure after successful inference never invokes another model", async () => {
-  // Immigration path with evidence: model answer + anchors; persistence failure must not re-call providers.
+  // Immigration path: selected approved claims; persistence failure must not re-call providers.
   const x = await exercise({ persistFails: true }, immigrationPayload());
   equal(x.providerCalls, 1); equal(x.status, 200);
   equal(x.body.reply, IMMIGRATION_SUCCESS_REPLY);
@@ -235,6 +238,85 @@ Deno.test("grounded response: approved current cited result retains certainty an
   equal(x.body.sources[0].url, "https://example.gov/policy");
   equal(x.body.reply, IMMIGRATION_SUCCESS_REPLY);
   equal(x.body.intent, "immigration_or_rad");
+});
+
+Deno.test("citation boundary: fabricated legal prose cannot inherit verified anchors", async () => {
+  for (const scope of ["user", "admin"]) {
+    const x = await exercise({ providerReplies: [{ choices: [{ message: {
+      content: "A student visa is guaranteed within 24 hours [1]. See https://fabricated.example.invalid/rule [99].",
+    } }] }] }, immigrationPayload({ scope }));
+    equal(x.status, 200);
+    equal(/guaranteed|fabricated|\[99\]/.test(x.body.reply), false);
+    equal(x.body.uncertain, true);
+    equal(x.providerCalls, 1);
+  }
+});
+
+Deno.test("citation boundary: only exact existing claim IDs render source-bound claims", async () => {
+  const claimId = "a2000000-0000-4000-8000-000000000002";
+  const x = await exercise({ providerReplies: [{ choices: [{ message: {
+    content: JSON.stringify({ claim_ids: [claimId, claimId] }),
+  } }] }] }, immigrationPayload());
+  equal(x.body.reply, "Synthetic verified claim [1]");
+  equal(x.body.uncertain, false);
+  equal(x.body.sources[0].claim_id, claimId);
+  equal(x.body.sources[0].snapshot_id, "a2000000-0000-4000-8000-000000000003");
+  equal(x.body.sources[0].citation_id, "a2000000-0000-4000-8000-000000000004");
+  equal(x.body.sources[0].url, "https://example.gov/policy");
+});
+
+Deno.test("citation boundary: unknown IDs empty selections and extra prose fail closed", async () => {
+  const claimId = "a2000000-0000-4000-8000-000000000002";
+  for (const selection of [
+    { claim_ids: ["a2000000-0000-4000-8000-000000000099"] },
+    { claim_ids: [claimId], prose: "Invented legal rule" },
+    { claim_ids: [] },
+    { claim_ids: [claimId, 4] },
+    { claim_ids: Array(9).fill(claimId) },
+  ]) {
+    const x = await exercise({ providerReplies: [{ choices: [{ message: {
+      content: JSON.stringify(selection),
+    } }] }] }, immigrationPayload());
+    equal(x.body.uncertain, true);
+    equal(x.body.reply.includes("Invented legal rule"), false);
+    equal(x.body.reply.includes("claim_ids"), false);
+    equal(x.providerCalls, 1);
+  }
+});
+
+Deno.test("citation boundary: Admin general-language prompts still require approved claim selection", async () => {
+  const x = await exercise({ role: "admin", providerReplies: [{ choices: [{ message: {
+    content: "A fabricated rule https://fabricated.example.invalid/rule [1]",
+  } }] }] }, { scope: "admin", messages: [{ role: "user", content: GENERAL_Q }] });
+  equal(x.status, 200);
+  equal(x.body.intent, "immigration_or_rad");
+  equal(x.body.uncertain, true);
+  equal(x.body.reply.includes("fabricated"), false);
+  equal(x.body.sources[0].claim_id, "a2000000-0000-4000-8000-000000000002");
+});
+
+Deno.test("citation boundary: oversized approved claims cannot lose qualifiers in certain answers", async () => {
+  const evidence = evidenceWithConflicts();
+  evidence[0].claim_text = "A visa is available. ".repeat(110) + "Except applicants without official approval.";
+  const x = await exercise({ knowledgeResults: evidence }, immigrationPayload());
+  equal(x.body.has_approved_evidence, false);
+  equal(x.body.sources, []);
+  equal(x.body.uncertain, true);
+  equal(x.providerCalls, 0);
+});
+
+Deno.test("citation boundary: selection preserves the original source number and exact bounded claim", async () => {
+  const secondId = "a2000000-0000-4000-8000-000000000005";
+  const evidence = evidenceWithConflicts();
+  const second = { ...evidence[0], claim_id: secondId,
+    claim_text: "Different approved claim", url: "https://example.gov/second-policy" };
+  const x = await exercise({ knowledgeResults: [...evidence, second], providerReplies: [{ choices: [{ message: {
+    content: JSON.stringify({ claim_ids: [secondId] }),
+  } }] }] }, immigrationPayload());
+  equal(x.body.reply, "Different approved claim [2]");
+  equal(x.body.uncertain, false);
+  equal(x.body.sources[1].claim_id, secondId);
+  equal(x.body.sources[1].url, "https://example.gov/second-policy");
 });
 
 Deno.test("grounded response: missing or unavailable search cannot claim verified evidence", async () => {

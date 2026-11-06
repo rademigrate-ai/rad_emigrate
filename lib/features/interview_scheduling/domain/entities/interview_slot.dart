@@ -35,22 +35,38 @@ class InterviewSlot {
   int get durationMinutes => endUtc.difference(startUtc).inMinutes;
 
   factory InterviewSlot.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp(String field) {
+      final value = json[field];
+      final parsed = value is String ? DateTime.tryParse(value) : null;
+      if (parsed == null || !parsed.isUtc) {
+        throw const FormatException('invalid_interview_slot');
+      }
+      return parsed.toUtc();
+    }
+
+    final start = timestamp('start_utc');
+    final end = timestamp('end_utc');
+    if (json['id'] is! String ||
+        (json['id'] as String).trim().isEmpty ||
+        json['title'] is! String ||
+        (json['title'] as String).trim().isEmpty ||
+        !end.isAfter(start) ||
+        json['is_available'] is! bool ||
+        !{'video', 'phone', 'in_person'}.contains(json['mode'])) {
+      throw const FormatException('invalid_interview_slot');
+    }
     return InterviewSlot(
-      id: json['id'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      startUtc:
-          DateTime.tryParse(json['start_utc'] as String? ?? '') ??
-          DateTime.now().toUtc(),
-      endUtc:
-          DateTime.tryParse(json['end_utc'] as String? ?? '') ??
-          DateTime.now().toUtc(),
+      id: json['id'] as String,
+      title: json['title'] as String,
+      startUtc: start,
+      endUtc: end,
       mode: switch (json['mode'] as String?) {
         'phone' => InterviewMode.phone,
         'in_person' => InterviewMode.inPerson,
         _ => InterviewMode.video,
       },
       advisorTitle: json['advisor_title'] as String?,
-      isAvailable: json['is_available'] as bool? ?? true,
+      isAvailable: json['is_available'] as bool,
     );
   }
 }

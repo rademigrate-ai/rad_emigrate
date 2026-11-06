@@ -100,14 +100,22 @@ select set_config('request.jwt.claims','{"role":"service_role"}',true);
 do $$ declare claim jsonb; begin
  claim:=public.begin_document_processing('47100000-0000-4000-8000-000000000003','47100000-0000-4000-8000-000000000001',
   '47100000-0000-4000-8000-000000000001/synthetic.pdf');
- update public.documents set file_path='47100000-0000-4000-8000-000000000001/replacement.pdf' where id='47100000-0000-4000-8000-000000000003';
+ begin
+  update public.documents set file_path='47100000-0000-4000-8000-000000000001/replacement.pdf' where id='47100000-0000-4000-8000-000000000003';
+  raise exception 'stored reference replaced outside audited deletion';
+ exception when insufficient_privilege then null; end;
+ -- Model a stale worker snapshot in this rollback-only private lease fixture;
+ -- the public document reference guard stays enabled throughout the test.
+ update private.document_processing_leases
+ set file_path='47100000-0000-4000-8000-000000000001/previous.pdf'
+ where job_id=(claim->>'job_id')::uuid;
  begin
   perform public.complete_document_processing((claim->>'job_id')::uuid,(claim->>'lease_token')::uuid,
    current_setting('rad.ocr_extraction')::jsonb,'[]');
   raise exception 'changed document accepted stale extraction';
  exception when serialization_failure then null; end;
  claim:=public.begin_document_processing('47100000-0000-4000-8000-000000000003','47100000-0000-4000-8000-000000000001',
-  '47100000-0000-4000-8000-000000000001/replacement.pdf');
+  '47100000-0000-4000-8000-000000000001/synthetic.pdf');
  update private.document_processing_leases set expires_at=now()-interval '1 second' where job_id=(claim->>'job_id')::uuid;
  begin
   perform public.complete_document_processing((claim->>'job_id')::uuid,(claim->>'lease_token')::uuid,
@@ -115,9 +123,9 @@ do $$ declare claim jsonb; begin
   raise exception 'expired lease completed';
  exception when serialization_failure then null; end;
  claim:=public.begin_document_processing('47100000-0000-4000-8000-000000000003','47100000-0000-4000-8000-000000000001',
-  '47100000-0000-4000-8000-000000000001/replacement.pdf');
+  '47100000-0000-4000-8000-000000000001/synthetic.pdf');
  -- A replacement at the SAME path changes Storage identity/version metadata.
- insert into storage.objects(bucket_id,name) values('documents','47100000-0000-4000-8000-000000000001/replacement.pdf');
+ insert into storage.objects(bucket_id,name) values('documents','47100000-0000-4000-8000-000000000001/synthetic.pdf');
  begin
   perform public.complete_document_processing((claim->>'job_id')::uuid,(claim->>'lease_token')::uuid,
    current_setting('rad.ocr_extraction')::jsonb,'[]');
@@ -126,10 +134,10 @@ do $$ declare claim jsonb; begin
  assert public.fail_document_processing((claim->>'job_id')::uuid,(claim->>'lease_token')::uuid,'private diagnostic should never persist');
  assert (select safe_error_code from public.document_processing_jobs where id=(claim->>'job_id')::uuid)='processing_unavailable';
  claim:=public.begin_document_processing('47100000-0000-4000-8000-000000000003','47100000-0000-4000-8000-000000000001',
-  '47100000-0000-4000-8000-000000000001/replacement.pdf');
+  '47100000-0000-4000-8000-000000000001/synthetic.pdf');
  assert public.fail_document_processing((claim->>'job_id')::uuid,(claim->>'lease_token')::uuid,'processing_unavailable');
  claim:=public.begin_document_processing('47100000-0000-4000-8000-000000000003','47100000-0000-4000-8000-000000000001',
-  '47100000-0000-4000-8000-000000000001/replacement.pdf');
+  '47100000-0000-4000-8000-000000000001/synthetic.pdf');
  assert claim->>'status'='rate_limited' and claim->>'claimed'='false';
  insert into public.documents(id,user_id,name,file_path) values('47100000-0000-4000-8000-000000000004',
   '47100000-0000-4000-8000-000000000001','Synthetic rate fixture','47100000-0000-4000-8000-000000000001/rate.pdf');
@@ -139,6 +147,18 @@ do $$ declare claim jsonb; begin
   '47100000-0000-4000-8000-000000000001/rate.pdf');
  assert claim->>'status'='rate_limited','user could bypass the hourly cap with a new document';
 end $$;
+-- This rollback-only fixture checks that the authorized document hard delete
+-- still cascades into processing/extractions. The real Storage removal and
+-- verification happen in the isolated HTTP/Edge E2E test, not in SQL.
+-- Model the leased worker's confirmed-storage phase explicitly so the
+-- BEFORE DELETE guard can never be bypassed by an ordinary direct DELETE.
+insert into private.rad_document_deletions
+ (document_id, bucket_id, object_path, requested_by, state, lease_token, lease_until)
+select id, 'documents', file_path, user_id, 'storage_deleted',
+       gen_random_uuid(), now() + interval '60 seconds'
+from public.documents where id='47100000-0000-4000-8000-000000000003';
+update public.documents set status='pending_deletion'
+where id='47100000-0000-4000-8000-000000000003';
 delete from public.documents where id='47100000-0000-4000-8000-000000000003';
 do $$ begin
  assert (select count(*) from public.document_extractions where user_id='47100000-0000-4000-8000-000000000001')=0;

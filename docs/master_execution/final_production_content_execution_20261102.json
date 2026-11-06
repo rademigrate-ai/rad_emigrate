@@ -1,0 +1,404 @@
+{
+  "approval_request_file_sha256": {
+    "batch-000.approval-request.json": "46a98d52a164088895817ff296413d6a8b696dad26b7c43c261e583303070b0c",
+    "batch-001.approval-request.json": "4209b7253a64729aa40882607eac7127a68a4e9d6e5c09b5b5f8470f6034fb97",
+    "batch-002.approval-request.json": "27ca06be24476928cc6d318284e1f376b5ef084dc36cf68e99fe02743d48d8aa",
+    "batch-003.approval-request.json": "9855ba8d63de2488a73358d566c4305d6e1181c903dcaf06a28059bf745d6f30",
+    "batch-004.approval-request.json": "98c7a63108d1389ed9dc8c7c799a86f721ff732913497c7c2c1f4136a0f15043",
+    "batch-005.approval-request.json": "f2b527d748ecc06b1cffc8171dc5b9c260b10f69e51ef28d76b767a316a2fecc",
+    "batch-006.approval-request.json": "389306a0c451b88cb98af9f8ec4d5d9e22ba97a5c7eddd5a5e5c006ca71409ed",
+    "batch-007.approval-request.json": "efca165568ec2ae4ad3f3d59c8c21580ddde5c2c40f6f2ae8acc7694fe438219",
+    "batch-008.approval-request.json": "f528c9736d46a1251237104745df8fa427fdc1e567a36b189e51e8bb0020f5ae",
+    "batch-009.approval-request.json": "eff7cd3e4aa6ef4084ca07f095497bb0dda1c92afcc479346986076a86a3a1e6",
+    "batch-010.approval-request.json": "b1e6b2d2651dc1ada709a9fe87bfc9a1ced057015612452571f9361157cbea79",
+    "batch-011.approval-request.json": "d09f6324bf83f1189ea385599c7516c376a7219bf4c63bfc22c2158cb896d27a",
+    "batch-012.approval-request.json": "bb7dc0b68413113ffe84eca32e5a806a300a8169372efb481c6b4a085bcd3ef1",
+    "batch-013.approval-request.json": "fed3f1e9a47d456ce40a4141a3ab939f6a6c32e1d1cb051a2fc169584f7da086",
+    "batch-014.approval-request.json": "da06a1d85fd1f987f3b36cc1a8fda7254d56d7a2a8dd3f5b2b027ba1c6053e13",
+    "batch-015.approval-request.json": "0c29bb591e14ec0ee820de2a405320224cae66d1528d76910fc92327d785a46f",
+    "batch-016.approval-request.json": "f5bef4ae8b348953618376fef53bb31d232720b66c7a124af614c86d81a6c69b",
+    "batch-017.approval-request.json": "f0c7e37aec917d5903fded72db6df299fbee1a18eeb957d50e8d6ea4139945e8",
+    "batch-018.approval-request.json": "93e7b8fe0941c8928e2b52c3fca287fffad89fb268c9cbb3588948bc80a03f53",
+    "batch-019.approval-request.json": "0937f2a581cf18bda1c5b62e845b1d855ad0ef116987f76564efa801f3a9803c",
+    "batch-020.approval-request.json": "fd79e4f350707ae857cb6257c26aecbd09ab598e5ec24816a48a9a599480644c",
+    "batch-021.approval-request.json": "f9fde130901406b7dbff3816a62c019500c1633ae81b84be8b73dac4a714e946",
+    "batch-022.approval-request.json": "52f77bf970809c6f31d5726f76a049ecce47894e8d35826f7ce38d1c453f1e04",
+    "batch-023.approval-request.json": "f7844d3acd600bbbca3c651c87e7333be28bd62eeadf9517802888578f4b5dec",
+    "batch-024.approval-request.json": "4edf3ee01f21f41c34ab5b6414e9c797a49fffef30afda043acd742d28d782bf",
+    "batch-025.approval-request.json": "fffa15a088d09f1898d55fbe906eeb016ead37c751452ef7655613118878076c",
+    "batch-026.approval-request.json": "40926b64ad11a959eb3a63606a57136a3ff71a1c97b17dafd7e9bfd1b475b36f",
+    "batch-027.approval-request.json": "586bc8c1098806e4802773ece3b43bc58fa52dde78424f196f65caa3102ac8df",
+    "batch-028.approval-request.json": "288e33909d11717df4a8902b70d11ad1a0cd10a73ae01cb7ad1b6cd587e5b454",
+    "batch-029.approval-request.json": "adca2e7ce8f9d5c004ff3a0faa94fa0aa22bbdd78438887388e2126f98c77094",
+    "batch-030.approval-request.json": "41e0d2760777f85ab1172c7d3c41623d74c86ea7f8e89eda86bc32808366f49c",
+    "batch-031.approval-request.json": "4e9e9e166b43428bf3321128bde51f66d2853e07a51be53d12c7ac8c2886a12b",
+    "batch-032.approval-request.json": "bdaa669ce073aab69e4c325986ea4b869b77b92558b02108f033ae1f94047edc",
+    "batch-033.approval-request.json": "e5af0fe1cc3a3375c0425663771b1665577ce58a8d7eb5ea8acd01a2d4182044",
+    "batch-034.approval-request.json": "23ff78bb2078813ee2be005babc09fb1b1aa8fae2837e1816cfd2b96fb6fdc00",
+    "batch-035.approval-request.json": "e1a54ea909cbe7f0e3a078a665ed05eac08439a375dda2ec5424f6d885b8d7a2",
+    "batch-036.approval-request.json": "10c5d70e300609e45050d848bfbc0b8d91ce9b53862aa7f2c48f794a6bec6ffa",
+    "batch-037.approval-request.json": "0dfa27f88c26d06dceb305ef94d43e6a53e98baa38a816664b9a04ee355c7d9a",
+    "batch-038.approval-request.json": "b70049602bd06e931739f9e6270d6c2ed0e390ef809dfb5904f759c496a2bd2a",
+    "batch-039.approval-request.json": "75a95dba5627f0c1f17a77f8832cc02bb847a8c8836c45bfc400a0b665fe4f3f",
+    "batch-040.approval-request.json": "56e68fc630efec0e7f9d9c32483cf225fbf913145b6e7fa7bc211ee8af8e02dc",
+    "batch-041.approval-request.json": "2a359a14b5b24b51eb925063db4a38c75c02813e58837ad1ff7a2eced80640ae",
+    "batch-042.approval-request.json": "d2e83fede6cb93944c4969683942bb3dcba3c6b53ed757e0df7dd87a12f8e291",
+    "batch-043.approval-request.json": "2dd4d40aa8478b99b36f9157f4ed945d5aee5c56691245506a57450925f63ccb"
+  },
+  "baseline_commit": "d2c6cb81428a9f48fbe8202edc608a7d1d42a5b3",
+  "blockers": [
+    "Existing guarded write procedure requires real coordinated recovery/isolated restore and endpoint/actor/callback/final-delivery evidence; absent and owner-deferred.",
+    "Real authenticated Admin approval/publication and exact source-to-CMS public readback follow the guarded import.",
+    "Owner alone performs merge/deployment and subsequent real published-corpus desktop/mobile/Android acceptance."
+  ],
+  "code_sha256": {
+    ".gitattributes": "0b2a9ae414f89c8d13ebfcaaf3c27c3f7815c14a64c71e4ed456262db2b52aaf",
+    ".github/workflows/ci.yml": "1071409d9a726ea0b5b6d3baf32cfc61d0d668ea638fc0fca244d09a713b9ef2",
+    "docs/master_execution/FINAL_PRODUCTION_CONTENT_EXECUTION_20261102.md": "56523c57bc288cb9ed4cf2f183fee8878b08e91508d05ca843898d033295a107",
+    "lib/features/visa/domain/entities/canonical_pathway_entities.dart": "38f981030a49c7165783922b4648dfe2a379f242afb9a4fd204d4aa98316c584",
+    "lib/features/visa/presentation/pages/canonical_pathway_page.dart": "d14bdcf805ae4c7a11c67ceab442bdc743558b2d79730ab943b3936a22e7f851",
+    "lib/features/visa/presentation/pages/editorial_article_page.dart": "ed9e3d56ecd72d4edf7c17d05dbdf422328bb53d3c9fbd6824fe8fe319d7aef1",
+    "scripts/production_mechanical_decisions.py": "0e268c8dafb8ebb41a20578be4e0e991dadba6a6eab254cdfad50a7b1c2902a2",
+    "scripts/source_editorial_batches.py": "ac800f9a824d83a6081b72fb4439eee0c2d759a2dd3ea01d44b38d5bff1adb3c",
+    "scripts/tests/test_mechanical_release_decisions.py": "9fc0e46a7b348215911a90b2e78dcac3f0641d0cbb15a5132f9b99148763a9c3",
+    "scripts/tests/test_source_editorial_sql.py": "a9f5aad9ed78e732c180d37e1e32f8ee8eb93c05bd20e6c8519d9b8e05ac6ee7",
+    "supabase/migrations/20261102192642_rad_source_faithful_editorial_release.sql": "0176bbb617c5075232e02197630ff0f6df0de492d4926a06b238475f054ef06e",
+    "supabase/tests/source_editorial_release.sql": "d8248a74b228c4fb6eea1b44204e2ee7f13a2047493356026219f9b6499a0a1e",
+    "test/features/visa/source_publication_label_test.dart": "502f23eb8c9554e0a49a6fd5025dbeee58e187d144fa4a0acadff37d662ada67"
+  },
+  "final_head_ci_receipt": "Private final-execution-delivery-20261102.json, generated after final commit/CI.",
+  "import": {
+    "applied_blocks": 0,
+    "applied_operations": 0,
+    "applied_sections": 0,
+    "detached_prepared": 443,
+    "initial_prepared": 406,
+    "mechanical_detached_prepared": 249,
+    "prepared_import_blocks": 41822,
+    "prepared_import_operations": 1098,
+    "prepared_import_sections": 14038,
+    "publication_proposal_blocks": 37543,
+    "substantive_deferred": 2
+  },
+  "mechanical_decision_package_sha256": "b630f222d9eaadac34a93e342bcb884dbb824a16f0250af0a470f6e6701edbad",
+  "original_package_sha256": "c9b4d7e84711a3fb478b639d724289a3f2694a298448d662d4637894d0318353",
+  "pr": 89,
+  "private_evidence_sha256": {
+    "FINAL_MECHANICAL_IMPORT_REVIEW_ONLY.sql.gz": "56c2fabe0f0cf611c33041a67a89d862fd60335e1dde3a134431352a6ef6796d",
+    "final-execution-anonymous-api-20261102.json": "b1ec323857a7a27f6228ed85177184635427313bcee0c2050fb5c5da45af146f",
+    "final-execution-current-heads-20261102.json": "f040812f977417fe36f6a2583317e134d40d9a934e0aab7db64ca1d114f5131c",
+    "final-execution-dart-format.log": "921735ea68cce0de2f143cedddd4f03aefd03f9208bddf5b5adbf45ddc07c746",
+    "final-execution-flutter-analyze-final.log": "90c58d2acaf0b06e6cc8a4aa6bc8fe2331789195efcc6f062eb298083e2923a7",
+    "final-execution-flutter-final.log": "80a63f4e7b5410608b01db8e0d50ff3555ceebc79a6ef02b5af357cedd1bb97a",
+    "final-execution-mechanical-decisions-v2-20261102.json": "8a79f29fd26d58521d664c34263e37139f8d78f7f55dbe651e124567f002450d",
+    "final-execution-native-final.log": "dd5a902abb9d1c48a8faf7cc08e4a9916f2342ad4f7d4cc8ff055165bd1bf2fd",
+    "final-execution-numeric-conflict-dispositions-20261102.json": "387c7a8e7e51c4c007d0b7abf5e94940a8421d13f747fc224135e46d66bfc0dc",
+    "final-execution-production-summary-20261102.json": "ebc28ee9a841aeb13235e90512de4156b7e7dad09d5d2a365d59facaf1993a7d",
+    "final-execution-python-full.log": "dc7a798fcb9760c230e7980791aededf13c7f719995c46a28db7418d5a986b5d",
+    "final-execution-source-batches-v2-20261102/release-plan.json": "04d8a42c74c50960f018fda5cc25e80490f6de6676fcb51275e4ed42b5916263"
+  },
+  "production": {
+    "approved_revisions": 0,
+    "articles": 738,
+    "editorial_reader_present": false,
+    "head_field_fingerprint": "d12ae3c102aad5a4f4ef4ee967456f82",
+    "heads": 745,
+    "latest_migration": {
+      "name": "cms_reading_state_and_research_rls",
+      "version": "20261029172624"
+    },
+    "migrations": 72,
+    "observed_at": "2026-11-02T20:07:01.071078+00:00",
+    "project_id": "inshddthftkhcdosoqcn",
+    "published_heads": 0,
+    "revisions": 747,
+    "source_release_rpc_present": false
+  },
+  "production_migrations_applied": [],
+  "production_writes": 0,
+  "publication": {
+    "approved_production": 0,
+    "batches": 44,
+    "country_coverage": {
+      "AE": {
+        "proposed": 7,
+        "published": 0
+      },
+      "AM": {
+        "proposed": 5,
+        "published": 0
+      },
+      "AR": {
+        "proposed": 1,
+        "published": 0
+      },
+      "AT": {
+        "proposed": 27,
+        "published": 0
+      },
+      "AU": {
+        "proposed": 51,
+        "published": 0
+      },
+      "BE": {
+        "proposed": 23,
+        "published": 0
+      },
+      "BR": {
+        "proposed": 6,
+        "published": 0
+      },
+      "BY": {
+        "proposed": 4,
+        "published": 0
+      },
+      "CA": {
+        "proposed": 64,
+        "published": 0
+      },
+      "CH": {
+        "proposed": 16,
+        "published": 0
+      },
+      "CN": {
+        "proposed": 9,
+        "published": 0
+      },
+      "CY": {
+        "proposed": 7,
+        "published": 0
+      },
+      "CZ": {
+        "proposed": 2,
+        "published": 0
+      },
+      "DE": {
+        "proposed": 53,
+        "published": 0
+      },
+      "DK": {
+        "proposed": 41,
+        "published": 0
+      },
+      "EC": {
+        "proposed": 1,
+        "published": 0
+      },
+      "ES": {
+        "proposed": 19,
+        "published": 0
+      },
+      "FI": {
+        "proposed": 32,
+        "published": 0
+      },
+      "FR": {
+        "proposed": 42,
+        "published": 0
+      },
+      "GB": {
+        "proposed": 56,
+        "published": 0
+      },
+      "GE": {
+        "proposed": 3,
+        "published": 0
+      },
+      "GR": {
+        "proposed": 12,
+        "published": 0
+      },
+      "HR": {
+        "proposed": 3,
+        "published": 0
+      },
+      "HU": {
+        "proposed": 5,
+        "published": 0
+      },
+      "ID": {
+        "proposed": 1,
+        "published": 0
+      },
+      "IE": {
+        "proposed": 7,
+        "published": 0
+      },
+      "IN": {
+        "proposed": 7,
+        "published": 0
+      },
+      "IR": {
+        "proposed": 6,
+        "published": 0
+      },
+      "IS": {
+        "proposed": 7,
+        "published": 0
+      },
+      "IT": {
+        "proposed": 36,
+        "published": 0
+      },
+      "JP": {
+        "proposed": 6,
+        "published": 0
+      },
+      "KR": {
+        "proposed": 1,
+        "published": 0
+      },
+      "KW": {
+        "proposed": 2,
+        "published": 0
+      },
+      "LK": {
+        "proposed": 1,
+        "published": 0
+      },
+      "LU": {
+        "proposed": 4,
+        "published": 0
+      },
+      "MX": {
+        "proposed": 1,
+        "published": 0
+      },
+      "MY": {
+        "proposed": 6,
+        "published": 0
+      },
+      "NL": {
+        "proposed": 32,
+        "published": 0
+      },
+      "NO": {
+        "proposed": 38,
+        "published": 0
+      },
+      "NZ": {
+        "proposed": 16,
+        "published": 0
+      },
+      "OM": {
+        "proposed": 9,
+        "published": 0
+      },
+      "PH": {
+        "proposed": 2,
+        "published": 0
+      },
+      "PL": {
+        "proposed": 7,
+        "published": 0
+      },
+      "PT": {
+        "proposed": 9,
+        "published": 0
+      },
+      "QA": {
+        "proposed": 5,
+        "published": 0
+      },
+      "RO": {
+        "proposed": 5,
+        "published": 0
+      },
+      "RU": {
+        "proposed": 9,
+        "published": 0
+      },
+      "SE": {
+        "proposed": 53,
+        "published": 0
+      },
+      "SG": {
+        "proposed": 5,
+        "published": 0
+      },
+      "SI": {
+        "proposed": 2,
+        "published": 0
+      },
+      "SK": {
+        "proposed": 5,
+        "published": 0
+      },
+      "TH": {
+        "proposed": 2,
+        "published": 0
+      },
+      "TR": {
+        "proposed": 12,
+        "published": 0
+      },
+      "UA": {
+        "proposed": 3,
+        "published": 0
+      },
+      "US": {
+        "proposed": 46,
+        "published": 0
+      },
+      "ZA": {
+        "proposed": 11,
+        "published": 0
+      }
+    },
+    "distinct_article_proposals": 1084,
+    "held_operations": 16,
+    "hosted_full_size_batch_acceptance": "NOT_PERFORMED",
+    "locales": {
+      "en": 11,
+      "fa": 1073
+    },
+    "max_manifest_bytes": 16696778,
+    "max_request_bytes": 18322068,
+    "mode": "source_faithful",
+    "multi_country_proposals": 17,
+    "numeric_conflict_operations": 15,
+    "numeric_disagreements": 17,
+    "other_titles_proposals": 261,
+    "other_titles_published": 0,
+    "proposals": 1084,
+    "publicly_accessible_production_corpus": 0,
+    "published_production": 0,
+    "source_integrity_receipt_sha256": "2d90e50f73d48902bda291c12068f705ff0ee2f198f59ab261415186cc32fa77",
+    "standard_fact_verification_preserved": true
+  },
+  "radmohajer_independence": {
+    "corpus_independent_radmohajer_operations": 427,
+    "source_publication_proposals": 427
+  },
+  "reconciliation": {
+    "heads_advanced": 0,
+    "human_reviewers_fabricated": 0,
+    "mechanical_proposals": 249,
+    "ordered_additions": 207,
+    "reorder_resection_additions": 42,
+    "substantive_holds": 2,
+    "total": 251
+  },
+  "repository": "rademigrate-ai/rad_emigrate",
+  "source_integrity": {
+    "accounted_segments": 60576,
+    "eligible_segments": 60576,
+    "equivalent_references": 19765,
+    "historical_unresolved_urls": 419,
+    "live_full_site_coverage_claimed": false,
+    "missing_segments": 0,
+    "retained_blocks": 42226
+  },
+  "staging_writes": 0,
+  "status": "HOLD_PRODUCTION_EXECUTION_AND_TARGET_ACCEPTANCE",
+  "validation": {
+    "android_device_uat": "NOT_PERFORMED",
+    "dart_format": "PASS_496_FILES_ZERO_CHANGES",
+    "flutter_analyze": "PASS",
+    "flutter_tests": 1189,
+    "native_latest_tests": 2,
+    "production_target": "BLOCKED_NO_INSTALLED_CONTRACT_OR_PUBLISHED_CORPUS",
+    "python_format_lint": "PASS",
+    "python_tests": 376
+  }
+}

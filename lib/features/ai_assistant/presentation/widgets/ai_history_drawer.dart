@@ -15,6 +15,7 @@ class AiHistoryDrawer extends StatelessWidget {
     required this.onDeleteSession,
     required this.onRenameSession,
     this.isAuthenticated = true,
+    this.pendingSessionIds = const {},
   });
 
   final List<AiSession> sessions;
@@ -24,10 +25,13 @@ class AiHistoryDrawer extends StatelessWidget {
   final ValueChanged<String> onDeleteSession;
   final void Function(String sessionId, String newTitle) onRenameSession;
   final bool isAuthenticated;
+  final Set<String> pendingSessionIds;
 
   void _showRenameDialog(BuildContext context, AiSession session) {
     final controller = TextEditingController(
-      text: 'گفتگوی ${session.createdAt.toLocal().toString().split('.').first}',
+      text:
+          session.title ??
+          'گفتگوی ${session.createdAt.toLocal().toString().split('.').first}',
     );
 
     showDialog<void>(
@@ -36,6 +40,7 @@ class AiHistoryDrawer extends StatelessWidget {
         title: const Text('تغییر نام گفتگو'),
         content: TextField(
           controller: controller,
+          maxLength: 120,
           autofocus: true,
           decoration: const InputDecoration(
             labelText: 'عنوان جدید',
@@ -224,7 +229,8 @@ class AiHistoryDrawer extends StatelessWidget {
                                     : context.premium.mutedText,
                               ),
                               title: Text(
-                                'گفتگوی ${_formatDate(session.createdAt)}',
+                                session.title ??
+                                    'گفتگوی ${_formatDate(session.createdAt)}',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: isSelected
@@ -243,6 +249,9 @@ class AiHistoryDrawer extends StatelessWidget {
                                 ),
                               ),
                               trailing: PopupMenuButton<String>(
+                                enabled: !pendingSessionIds.contains(
+                                  session.id,
+                                ),
                                 icon: const Icon(Icons.more_vert, size: 16),
                                 onSelected: (action) {
                                   if (action == 'rename') {

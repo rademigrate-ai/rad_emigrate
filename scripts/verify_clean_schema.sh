@@ -71,14 +71,14 @@ BEGIN
   SELECT count(*) INTO trigger_count FROM information_schema.triggers WHERE (event_object_schema='auth' AND event_object_table='users' AND trigger_name='on_auth_user_created') OR (event_object_schema='public' AND event_object_table IN ('content_sources','destinations','program_categories','visa_programs'));
   SELECT count(*) INTO bucket_count FROM storage.buckets WHERE id='documents' AND public=false AND file_size_limit=10485760 AND allowed_mime_types=ARRAY['application/pdf','image/jpeg','image/png']::text[];
   IF table_count <> 15 THEN RAISE EXCEPTION 'Expected 15 public RAD tables, got %',table_count; END IF;
-  IF column_count <> 114 THEN RAISE EXCEPTION 'Expected 114 public RAD columns, got %',column_count; END IF;
+  IF column_count <> 115 THEN RAISE EXCEPTION 'Expected 115 public RAD columns, got %',column_count; END IF;
   IF primary_key_count <> 15 THEN RAISE EXCEPTION 'Expected 15 primary keys, got %',primary_key_count; END IF;
   IF foreign_key_count <> 22 THEN RAISE EXCEPTION 'Expected 22 foreign keys, got %',foreign_key_count; END IF;
-  -- Stage 3 added 9 justified FK covering indexes on these tables (37 → 46).
+  -- Stage 3 added 9 justified FK covering indexes on these tables (37 â†’ 46).
   IF index_count <> 46 THEN RAISE EXCEPTION 'Expected 46 public RAD indexes, got %',index_count; END IF;
   IF function_count <> 4 OR hardened_function_count <> 2 THEN RAISE EXCEPTION 'Expected four trusted functions and two hardened definers, got % function(s), % hardened',function_count,hardened_function_count; END IF;
   IF rls_count <> 15 THEN RAISE EXCEPTION 'Expected RLS on all 15 public RAD tables, got %',rls_count; END IF;
-  IF app_policy_count <> 40 THEN RAISE EXCEPTION 'Expected 40 public policies, got %',app_policy_count; END IF;
+  IF app_policy_count <> 41 THEN RAISE EXCEPTION 'Expected 41 public policies, got %',app_policy_count; END IF;
   IF storage_policy_count <> 4 THEN RAISE EXCEPTION 'Expected 4 owner-scoped documents Storage policies, got %',storage_policy_count; END IF;
   IF trigger_count <> 17 THEN RAISE EXCEPTION 'Expected auth, update, and audit trigger events, got %',trigger_count; END IF;
   IF bucket_count <> 1 THEN RAISE EXCEPTION 'Expected private 10 MiB documents bucket with MIME allowlist, got %',bucket_count; END IF;
@@ -104,7 +104,19 @@ SQL
 # digest is independently reproduced and every other dimension is retained.
 # F16 adds role=user to profiles INSERT WITH CHECK. Only the policies digest
 # changes; independently reproduced with the old predicate inside a rollback.
-expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"2ba2195f7633063ea3f5c8b16ed77db8","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"55e8a4ebace6d08cdf6581783d56ed8c","triggers":"9be9b50fb51f41c9e9dacb7e0ef56509","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"d67f6384ff0ec977d106e5ada5bf711d"}'
+# RAD document deletion adds pending-Storage access denial and an RLS-bypass
+# registration check for Storage DELETE. Policy digest was measured from the
+# genuine fresh GitHub CI Supabase-CLI reconstruction (run 42007332900).
+# A stored-document BEFORE DELETE trigger now blocks cascading orphan creation;
+# its precise trigger digest was measured in another genuinely fresh CI
+# reconstruction (run 42008247724). The other six dimensions stayed identical.
+# Stored-reference ownership and detach protection add one INSERT/UPDATE
+# trigger. Fresh CLI reconstruction 42016969094 independently measured the
+# trigger digest below; every other pinned dimension was byte-identical.
+# Owner conversation history adds title, its validation constraint and an owner
+# DELETE policy. Fresh CLI CI 42077411143 measured exactly these three changes;
+# the other five dimensions are unchanged. No guard is removed.
+expected_fingerprint='{"rls":"f774d2521876438405d177897df727d3","bucket":"4082dda1bd1da983bda51a025c66ac93","columns":"9df32071c927fbbb2a3750e7a84aede7","indexes":"7acee1a5bf1766061fc151166d1ea00a","policies":"64a6e4446da2083eb351fcfd3190707c","triggers":"d27016cc224f744b266532791c7d984c","functions":"fc57d0f49dfab1be19b4469a05b19cf8","constraints":"fa795cf331320ab8e89244135da3b204"}'
 actual_fingerprint="$(psql "$DB_URL" -XAt -v ON_ERROR_STOP=1 -f supabase/bootstrap/schema_fingerprint.sql | tr -d '[:space:]')"
 if [[ "$actual_fingerprint" != "$expected_fingerprint" ]]; then
   echo "Canonical clean-schema fingerprint differs from the reconstructed RAD schema." >&2
@@ -117,7 +129,7 @@ psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/reconciliation/security_regress
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_constraint_backfill.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/phase_a_security.sql
 psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f supabase/tests/corrective_routing_research.sql
-for regression in stage2_knowledge_completion stage3_content_migration stage4_user_ai local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability rad_client_table_privileges rad_content_security rad_feed_currency_security rad_interactions rad_merge_provenance rad_official_evidence rad_privacy_security rad_quota_security rad_search_performance; do
+for regression in stage2_knowledge_completion stage3_content_migration stage4_user_ai rad_ai_history_lifecycle local47_crm_notifications local47_payment_sandbox local47_definer_acl local47_document_processing local47_observability rad_client_table_privileges rad_content_security rad_feed_currency_security rad_interactions rad_merge_provenance rad_official_evidence rad_research_lease_exhaustion rad_bound_official_refresh rad_bound_authority_lock rad_bound_review_metadata rad_privacy_security rad_quota_security rad_search_performance; do
   psql "$DB_URL" -X -v ON_ERROR_STOP=1 -f "supabase/tests/${regression}.sql"
 done
 python3 -m unittest discover -s scripts/tests -p test_phase_a_security.py

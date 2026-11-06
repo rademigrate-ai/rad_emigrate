@@ -1,0 +1,23 @@
+# Replace the reserved example hostnames after deployment authorization.
+api.rad.example {
+    log {
+        output discard
+    }
+    header {
+        Referrer-Policy "no-referrer"
+        X-Content-Type-Options "nosniff"
+    }
+    @storage path /storage/v1/*
+    header @storage Cache-Control "private, no-store, max-age=0"
+    reverse_proxy 127.0.0.1:58900
+}
+
+app.rad.example {
+    root * /srv/rad/web
+    encode zstd gzip
+    header Referrer-Policy "no-referrer"
+    @release path /version.json /index.html /flutter_bootstrap.js /flutter_service_worker.js
+    header @release Cache-Control "no-store"
+    try_files {path} /index.html
+    file_server
+}

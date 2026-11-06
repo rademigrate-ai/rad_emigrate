@@ -67,7 +67,11 @@ class CountryVisaContent extends ConsumerWidget {
                         title: Text(item['title'] as String? ?? ''),
                         trailing: Icon(directionalForward(context)),
                         onTap: () => context.push(
-                          '/visa/content/${item['id']}?locale=$locale${preview ? '&preview=true' : ''}',
+                          editorialCardRoute(
+                            item,
+                            requestedLocale: locale,
+                            preview: preview,
+                          ),
                         ),
                       ),
                     ),

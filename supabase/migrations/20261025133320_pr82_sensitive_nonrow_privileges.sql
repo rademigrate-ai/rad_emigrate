@@ -12,7 +12,7 @@ begin
    'ai_entitlements','application_status_history','consultation_requests'] loop
   if not exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace
     where n.nspname='public' and c.relname=t and c.relkind in ('r','p')
-      and c.relowner='postgres'::regrole
+      and c.relowner=current_user::regrole
       and not exists(select 1 from pg_depend d where d.classid='pg_class'::regclass
         and d.objid=c.oid and d.deptype='e')) then
    raise exception 'unexpected application table ownership/type: %',t;
@@ -30,10 +30,16 @@ begin
   end if;
  end loop;
 end $restrict$;
--- Existing all-table correction already limits postgres defaults. Reassert only
--- this application's creator defaults; do not change managed supabase_admin.
-alter default privileges for role postgres
- revoke truncate,references,trigger,maintain on tables from public,anon,authenticated;
-alter default privileges for role postgres in schema public
- revoke truncate,references,trigger,maintain on tables from public,anon,authenticated;
+-- Existing all-table correction already limits the migration role's defaults.
+-- Reassert only this application's creator defaults for whichever role ran
+-- this migration (postgres on managed, supabase_admin on self-hosted).
+do $defaults$
+begin
+ execute format(
+  'alter default privileges for role %I revoke truncate,references,trigger,maintain on tables from public,anon,authenticated',
+  current_user);
+ execute format(
+  'alter default privileges for role %I in schema public revoke truncate,references,trigger,maintain on tables from public,anon,authenticated',
+  current_user);
+end $defaults$;
 commit;

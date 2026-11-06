@@ -1,5 +1,7 @@
 -- Disposable-schema regression; transaction rolls back fixture rows.
 BEGIN;
+-- No extension on the session search_path: digest must resolve explicitly.
+SET LOCAL search_path = pg_catalog;
 DO $$
 DECLARE
   archive_oid oid := to_regclass('private.rad_evidence_import_archive');
@@ -39,7 +41,7 @@ BEGIN
     (source_project_ref, source_table, source_key, payload, payload_sha256)
   VALUES (
     'epolbumcfbohtmgvomki', 'content_sources', item_id,
-    body, encode(digest(body::text,'sha256'),'hex')
+    body, encode(extensions.digest(body::text,'sha256'),'hex')
   );
   IF NOT EXISTS (
     SELECT 1 FROM private.rad_evidence_import_archive

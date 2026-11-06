@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/widgets/app_back_button.dart';
@@ -69,6 +70,9 @@ class EditorialArticlePage extends ConsumerWidget {
                 final sections = editorialRows(
                   data['rich_sections'] ?? data['sections'],
                 );
+                final frozen =
+                    data['delivery_mode'] == 'frozen_source_readonly';
+                final articleLocale = data['locale'] == 'fa' ? 'fa' : locale;
                 final bodyController = EditorialBodyController();
                 final blockPositions = <String, int>{};
                 final children = <Widget>[
@@ -79,6 +83,15 @@ class EditorialArticlePage extends ConsumerWidget {
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
+                  if (frozen)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        articleLocale == 'fa'
+                            ? 'نسخهٔ فقط‌خواندنی از منابع اصلی؛ هنوز تأیید سردبیری یا راستی‌آزمایی مستقل ندارد. به‌روزرسانی این نسخه تنها پس از فعال‌سازی فرآیند رسمی تأیید محتوا امکان‌پذیر است.'
+                            : 'Read-only source snapshot. It has not received editorial approval or independent factual verification. Updates require the authorized editorial workflow.',
+                      ),
+                    ),
                   if (preview)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -88,8 +101,20 @@ class EditorialArticlePage extends ConsumerWidget {
                             : 'Unverified draft — public publication is blocked',
                       ),
                     ),
+                  if (!preview &&
+                      data['publication_basis'] == 'source_faithful')
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        locale == 'fa'
+                            ? 'بازنشر محتوای وب‌سایت‌های راد با حفظ منابع اصلی. ادعاهای این مطلب مستقلاً تأیید نشده‌اند؛ پیش از اقدام، منابع معتبر و به‌روز را بررسی کنید.'
+                            : 'Reproduced from RAD websites with original sources preserved. Factual claims have not been independently verified. Check current authoritative sources before acting.',
+                      ),
+                    ),
                 ];
-                if (requestedLocale != null && requestedLocale != locale) {
+                if ((requestedLocale != null &&
+                        requestedLocale != articleLocale) ||
+                    data['requested_locale_fallback'] != null) {
                   children.insert(
                     0,
                     Text(
@@ -157,7 +182,9 @@ class EditorialArticlePage extends ConsumerWidget {
                     );
                   }
                   for (final block in blocks) {
-                    if (targetBlock != null && block['id'] == targetBlock) {
+                    if ((targetBlock != null && block['id'] == targetBlock) ||
+                        (initialSectionAnchor != null &&
+                            block['id'] == initialSectionAnchor)) {
                       targetIndex = children.length;
                     }
                     if (block['id'] is String) {
@@ -167,7 +194,50 @@ class EditorialArticlePage extends ConsumerWidget {
                   }
                 }
                 final sources = editorialRows(data['sources']);
-                final references = editorialRows(data['reference_links']);
+                final composition = data['composition'] is Map
+                    ? data['composition'] as Map
+                    : const {};
+                final references = [
+                  ...editorialRows(data['reference_links']),
+                  ...editorialRows(
+                    data['source_links'] ??
+                        composition['source_links'] ??
+                        composition['body_links'],
+                  ),
+                ];
+                final assets = editorialRows(
+                  data['source_assets'] ?? composition['source_assets'],
+                );
+                if (assets.isNotEmpty) {
+                  children.add(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Text(
+                        locale == 'fa' ? 'رسانه‌های منبع' : 'Source media',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  );
+                  final seenAssets = <String>{};
+                  for (final asset in assets) {
+                    final url = asset['url'];
+                    // The same image may have distinct meaningful captions.
+                    // URL equality alone must not silently discard those.
+                    final identity =
+                        '$url\u0000${asset['kind']}\u0000${asset['alt']}\u0000${asset['caption']}';
+                    if (url is! String || !seenAssets.add(identity)) continue;
+                    children.add(
+                      EditorialRichBlock(
+                        block: {
+                          ...asset,
+                          'type': asset['kind'] == 'img'
+                              ? 'image'
+                              : asset['kind'] ?? 'media',
+                        },
+                      ),
+                    );
+                  }
+                }
                 if (sources.isNotEmpty || references.isNotEmpty) {
                   children.add(
                     Padding(
@@ -208,27 +278,105 @@ class EditorialArticlePage extends ConsumerWidget {
                   );
                 }
                 final seenReferences = <String>{};
+                final unconfirmedReferenceUrls = <String>{};
                 for (final reference in references) {
-                  final url = reference['url'] as String? ?? '';
+                  final evidence = reference['href_evidence'];
+                  final url = reference['original_url'] ?? reference['url'];
+                  if (url is String &&
+                      evidence is Map &&
+                      evidence['confirmed'] == false) {
+                    unconfirmedReferenceUrls.add(url);
+                  }
+                }
+                for (final reference in references) {
+                  final url =
+                      reference['original_url'] as String? ??
+                      reference['url'] as String? ??
+                      '';
                   final uri = Uri.tryParse(url);
                   if (uri == null ||
                       !{'http', 'https'}.contains(uri.scheme) ||
+                      uri.host.isEmpty ||
+                      uri.userInfo.isNotEmpty ||
                       !seenReferences.add(url)) {
                     continue;
                   }
                   final target = blockPositions[reference['target_block_id']];
+                  final appId = reference['app_article_id'];
+                  final internal =
+                      (preview ||
+                          (frozen &&
+                              reference['frozen_target_verified'] == true)) &&
+                      appId is String &&
+                      RegExp(
+                        r'^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
+                      ).hasMatch(appId);
+                  final targetLocale = reference['app_locale'] == 'en'
+                      ? 'en'
+                      : reference['app_locale'] == 'fa'
+                      ? 'fa'
+                      : locale;
+                  final internalUri = internal
+                      ? Uri(
+                          path: '/visa/content/$appId',
+                          queryParameters: {
+                            'locale': targetLocale,
+                            if (preview) 'preview': 'true',
+                            if (targetLocale != locale)
+                              'requested_locale': locale,
+                          },
+                          fragment: reference['app_fragment'] is String
+                              ? reference['app_fragment'] as String
+                              : null,
+                        )
+                      : null;
+                  final label = (reference['label'] as String? ?? '').isEmpty
+                      ? url
+                      : reference['label'] as String;
+                  final unconfirmed = unconfirmedReferenceUrls.contains(url);
                   children.add(
                     TextButton(
-                      onPressed: () => target == null
-                          ? launchUrl(uri, mode: LaunchMode.externalApplication)
-                          : bodyController.seekTo(target),
+                      onPressed: () {
+                        if (internalUri != null) {
+                          context.push(internalUri.toString());
+                        } else if (target != null) {
+                          bodyController.seekTo(target);
+                        } else {
+                          launchUrl(uri, mode: LaunchMode.externalApplication);
+                        }
+                      },
                       child: Text(
-                        (reference['label'] as String? ?? '').isEmpty
+                        internalUri != null
+                            ? '$label — ${locale == 'fa' ? 'خواندن در راد' : 'Read in RAD'}'
+                            : label == url
                             ? url
-                            : '${reference['label']} — $url',
+                            : '$label — $url',
                       ),
                     ),
                   );
+                  if (unconfirmed) {
+                    children.add(
+                      Text(
+                        locale == 'fa'
+                            ? 'شواهد ثبت این پیوند هنوز تأیید نشده‌اند؛ خراب بودن پیوند اثبات نشده است.'
+                            : 'Captured link evidence is unconfirmed; the link has not been shown to be broken.',
+                      ),
+                    );
+                  }
+                  if (internalUri != null) {
+                    children.add(
+                      TextButton.icon(
+                        onPressed: () => launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        ),
+                        icon: const Icon(Icons.open_in_new),
+                        label: Text(
+                          '${locale == 'fa' ? 'منبع اصلی' : 'Original source'} — $url',
+                        ),
+                      ),
+                    );
+                  }
                 }
                 if (data['references_capture_status'] == 'unavailable') {
                   children.add(
@@ -252,16 +400,21 @@ class EditorialArticlePage extends ConsumerWidget {
                     preview: preview,
                   ),
                 );
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1000),
-                    child: EditorialScrollBody(
-                      bodyController: bodyController,
-                      key: ValueKey(
-                        '${data['revision_id'] ?? articleId}:$locale:$initialSectionAnchor',
+                return Directionality(
+                  textDirection: articleLocale == 'fa'
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1000),
+                      child: EditorialScrollBody(
+                        bodyController: bodyController,
+                        key: ValueKey(
+                          '${data['revision_id'] ?? articleId}:$locale:$initialSectionAnchor',
+                        ),
+                        targetIndex: targetIndex,
+                        children: children,
                       ),
-                      targetIndex: targetIndex,
-                      children: children,
                     ),
                   ),
                 );

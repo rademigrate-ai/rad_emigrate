@@ -38,11 +38,14 @@ class PhaseASecurity(unittest.TestCase):
         script=(ROOT/'scripts/verify_clean_schema.sh').read_text()
         fp=json.loads(re.search(r"expected_fingerprint='([^']+)'",script)[1])
         self.assertEqual(set(fp),{'columns','constraints','indexes','functions','triggers','policies','rls','bucket'})
-        # F16 intentionally narrows the profile INSERT policy to role=user.
-        # Keep the exact full-policy fingerprint, including that forward guard.
-        self.assertEqual(fp['policies'],'55e8a4ebace6d08cdf6581783d56ed8c')
-        # F17 adds the invoker profile metadata guard; no other trigger changes.
-        self.assertEqual(fp['triggers'],'9be9b50fb51f41c9e9dacb7e0ef56509')
+        # F16 and the hard-document-deletion Storage access gate are both
+        # pinned using the actual clean CI schema (run 42007332900).
+        self.assertEqual(fp['policies'],'64a6e4446da2083eb351fcfd3190707c')
+        self.assertEqual(fp['columns'],'9df32071c927fbbb2a3750e7a84aede7')
+        self.assertEqual(fp['constraints'],'fa795cf331320ab8e89244135da3b204')
+        # Cascade and stored-reference guards: exact trigger structure from
+        # fresh CLI reconstruction (run 42016969094); other pins unchanged.
+        self.assertEqual(fp['triggers'],'d27016cc224f744b266532791c7d984c')
         self.assertIn('phase_a_security.sql',script)
         self.assertIn('refuse non-loopback',script)
 
