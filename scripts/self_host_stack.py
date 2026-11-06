@@ -326,12 +326,18 @@ def pin(root: Path, lock_file: Path | None = None) -> dict:
             raise ValueError("image lacks immutable repository digest")
         if lock is not None and reference not in digests:
             raise ValueError("downloaded image does not match locked digest")
+        if lock is not None:
+            if details.get("Architecture") != locked["architecture"]:
+                raise ValueError("downloaded image architecture differs from lock")
+            if details.get("Id") != locked.get("image_id"):
+                raise ValueError("downloaded image identity differs from lock")
+        selected = reference if lock is not None else digests[0]
         images[tag] = {
-            "digest": digests[0],
+            "digest": selected,
             "image_id": details["Id"],
             "architecture": details["Architecture"],
         }
-        service["image"] = digests[0]
+        service["image"] = selected
         save(root / "IMAGE_DIGESTS.json", images)
         print("Pinned " + tag, flush=True)
     save(root / "compose.rad.json", model)
@@ -418,17 +424,35 @@ def migrate(root: Path) -> dict:
 
 def start(root: Path, wait_seconds: int = 240) -> None:
     """Allow transient health failures during a bounded, non-destructive boot."""
-    run(compose(root, "up", "-d"))
+    deadline = time.monotonic() + wait_seconds
+
+    def bring_up(remaining: float) -> bool:
+        try:
+            run(compose(root, "up", "-d"), timeout=max(1, remaining))
+            return True
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("self-host compose startup deadline exceeded") from None
+        except RuntimeError:
+            # A fresh database may still be initializing when Compose reports
+            # an unhealthy dependency. Keep it intact and inspect its state.
+            return False
+
+    up_failed = not bring_up(wait_seconds)
     model = json.loads((root / "compose.rad.json").read_text("utf8"))
     expected = {
         name
         for name, service in model["services"].items()
         if not service.get("profiles")
     }
-    deadline = time.monotonic() + wait_seconds
     unready = expected
-    while time.monotonic() < deadline:
-        result = run(compose(root, "ps", "--all", "--format", "json"))
+    while (now := time.monotonic()) < deadline:
+        try:
+            result = run(
+                compose(root, "ps", "--all", "--format", "json"),
+                timeout=max(1, deadline - now),
+            )
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("self-host status deadline exceeded") from None
         services = [
             json.loads(line) for line in result.stdout.decode().splitlines() if line
         ]
@@ -438,7 +462,7 @@ def start(root: Path, wait_seconds: int = 240) -> None:
             if item["State"] == "running" and item.get("Health", "") in ("", "healthy")
         }
         unready = expected - ready
-        if not unready:
+        if not unready and not up_failed:
             return
         if any(
             item["Service"] in unready and item["State"] in ("exited", "dead")
@@ -447,6 +471,14 @@ def start(root: Path, wait_seconds: int = 240) -> None:
             raise RuntimeError(
                 "self-host service exited; inspect private operator logs"
             )
+        if up_failed:
+            if not services:
+                raise RuntimeError("self-host startup failed before owned services started")
+            if "db" in ready:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                up_failed = not bring_up(remaining)
         time.sleep(2)
     raise RuntimeError(
         "self-host health deadline exceeded: " + ",".join(sorted(unready))

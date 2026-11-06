@@ -377,7 +377,7 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
     if (!mounted || state.isTransitioning) return false;
     state = state.copyWith(isTransitioning: true, clearError: true);
     try {
-      final updatedCase = _service.transitionApplicationStatus(
+      var updatedCase = _service.transitionApplicationStatus(
         case_: state.case_,
         actorUserId: _userId,
         next: next,
@@ -386,9 +386,19 @@ class CaseTrackerController extends StateNotifier<CaseTrackerState> {
       await _persistChecklist(updatedCase.checklist);
       if (!mounted) return false;
       if (_appRepository != null) {
-        await _appRepository.updateApplication(updatedCase.application);
+        final persisted = await _appRepository.updateApplication(
+          updatedCase.application,
+        );
+        if (persisted.id != updatedCase.application.id ||
+            persisted.userId != _userId ||
+            persisted.status != next) {
+          throw StateError('Application transition was not acknowledged.');
+        }
+        updatedCase = updatedCase.copyWith(application: persisted);
+      } else if (_remoteRequired) {
+        throw StateError('Server application persistence is required.');
       }
-      if (!mounted) return false;
+      if (!mounted || !_isCurrent()) return false;
       state = state.copyWith(case_: updatedCase, isTransitioning: false);
       return true;
     } on CaseLifecycleException catch (e) {

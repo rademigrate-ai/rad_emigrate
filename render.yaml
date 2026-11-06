@@ -1,4 +1,4 @@
-# Render Blueprint — RAD Emigrate Flutter Web (production-ready template)
+# Render Blueprint — RAD Emigrate Flutter Web (owner-controlled template)
 #
 # Set these environment variables on the service (Dashboard or here under envVars):
 #   SUPABASE_URL              = https://inshddthftkhcdosoqcn.supabase.co  (normal)
@@ -13,6 +13,7 @@ services:
     runtime: static
     repo: https://github.com/rademigrate-ai/rad_emigrate
     branch: main
+    autoDeployTrigger: off
     buildCommand: bash scripts/build_web_render.sh
     staticPublishPath: build/web
     routes:

@@ -29,6 +29,7 @@ class _FakeAppRepo implements ApplicationRepository {
   List<VisaApplication> apps;
   int updateCalls = 0;
   int createCalls = 0;
+  bool acknowledgeUpdates = true;
 
   @override
   Future<List<VisaApplication>> listApplications({String? userId}) async =>
@@ -53,6 +54,7 @@ class _FakeAppRepo implements ApplicationRepository {
   @override
   Future<VisaApplication> updateApplication(VisaApplication application) async {
     updateCalls++;
+    if (!acknowledgeUpdates) return apps.single;
     apps = apps.map((a) => a.id == application.id ? application : a).toList();
     return application;
   }
@@ -118,6 +120,78 @@ void main() {
   }
 
   group('E8-02 Case Tracker & Checklist UI Tests', () {
+    for (final acknowledge in [true, false]) {
+      testWidgets(
+        'case transition requires one acknowledged server write: $acknowledge',
+        (tester) async {
+          tester.view.physicalSize = const Size(1200, 2600);
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.reset);
+          final prefs = await SharedPreferences.getInstance();
+          final repo = _FakeAppRepo([sampleApp])
+            ..acknowledgeUpdates = acknowledge;
+          final controller = CaseTrackerController(
+            initialApp: sampleApp,
+            userId: 'user-001',
+            prefs: prefs,
+            appRepository: repo,
+          );
+          await tester.pumpWidget(
+            buildSubject(
+              prefs: prefs,
+              repo: repo,
+              customTrackerCtrl: controller,
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(sampleApp.title));
+          await tester.pumpAndSettle();
+          await tester.tap(find.widgetWithText(FilterChip, 'Under review'));
+          await tester.pumpAndSettle();
+          expect(repo.updateCalls, 1);
+          if (!acknowledge) {
+            expect(controller.state.application.status, sampleApp.status);
+            expect(find.textContaining('Could not update'), findsOneWidget);
+          } else {
+            expect(repo.apps.single.status, ApplicationStatus.reviewing);
+          }
+        },
+      );
+    }
+
+    testWidgets(
+      'failed case transition cannot fall through to a status write',
+      (tester) async {
+        tester.view.physicalSize = const Size(1200, 2600);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final prefs = await SharedPreferences.getInstance();
+        final repo = _FakeAppRepo([sampleApp]);
+        final controller = CaseTrackerController(
+          initialApp: sampleApp,
+          userId: 'user-001',
+          prefs: prefs,
+          appRepository: repo,
+          requireRemotePersistence: true,
+        );
+        await tester.pumpWidget(
+          buildSubject(prefs: prefs, repo: repo, customTrackerCtrl: controller),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(sampleApp.title));
+        await tester.pumpAndSettle();
+        await tester.tap(find.widgetWithText(FilterChip, 'Under review'));
+        await tester.pumpAndSettle();
+        expect(repo.updateCalls, 0);
+        expect(repo.apps.single.status, ApplicationStatus.submitted);
+        expect(
+          controller.state.application.status,
+          ApplicationStatus.submitted,
+        );
+        expect(find.textContaining('Could not update'), findsOneWidget);
+      },
+    );
+
     testWidgets(
       'renders case detail with default milestones and progress gauge',
       (tester) async {

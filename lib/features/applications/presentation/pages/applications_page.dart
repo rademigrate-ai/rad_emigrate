@@ -581,20 +581,16 @@ class _ApplicationsPageState extends ConsumerState<ApplicationsPage> {
     setState(() => _updatingStatus = true);
     try {
       final caseCtrl = ref.read(caseTrackerControllerProvider(app).notifier);
-      await caseCtrl.transitionApplicationStatus(status);
-      await ref
-          .read(applicationControllerProvider.notifier)
-          .updateStatus(app.id, status);
-      final list = ref.read(applicationControllerProvider).valueOrNull ?? [];
-      VisaApplication? updated;
-      for (final item in list) {
-        if (item.id == app.id) {
-          updated = item;
-          break;
-        }
+      final accepted = await caseCtrl.transitionApplicationStatus(status);
+      if (!accepted) {
+        throw StateError('Application transition was not acknowledged.');
       }
+      await ref.read(applicationControllerProvider.notifier).load();
       if (mounted) {
-        setState(() => _selected = updated ?? app.copyWith(status: status));
+        final updated = ref
+            .read(caseTrackerControllerProvider(app))
+            .application;
+        setState(() => _selected = updated);
       }
     } catch (_) {
       if (mounted) {

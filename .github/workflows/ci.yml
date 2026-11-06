@@ -5,6 +5,8 @@ on:
   pull_request:
     branches: [main, integration/stage7-unified-20261026]
     paths:
+      - 'deploy/**'
+      - 'render.yaml'
       - 'docs/master_execution/**'
       - '.github/workflows/**'
       - 'lib/**'
@@ -34,6 +36,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'deploy/**'
+      - 'render.yaml'
       - 'docs/master_execution/**'
       - '.github/workflows/**'
       - 'lib/**'
@@ -435,6 +439,8 @@ jobs:
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_document_deletion_operations.sql
       - name: Verify owner-scoped case checklist RPC persistence and stale-edit protection
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_application_case_checklist_persistence.sql
+      - name: Verify owner-only status history cursor and privacy
+        run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/rad_application_owner_history.sql
       - name: Verify publication-head deletion invalidates only its search projection
         run: psql "${SUPABASE_DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}" -X -v ON_ERROR_STOP=1 -f supabase/tests/pr82_search_head_delete.sql
       - name: Verify editorial import, rich-source privacy and rollback boundaries
