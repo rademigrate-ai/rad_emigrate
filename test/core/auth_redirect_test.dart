@@ -218,6 +218,63 @@ void main() {
       );
     });
 
+    test('Visa deep links survive login and profile setup', () {
+      for (final destination in [
+        '/visa/canada',
+        '/visa/canada/programs/study-canada?section=documents',
+        '/visa/content/article-123?locale=fa#requirements',
+        '/visa/articles/article-123?locale=en',
+        '/visa/content-countries/CA',
+        '/visa/canada/skilled-worker#eligibility',
+        '/visa/search?q=study',
+        '/visa/other-titles',
+      ]) {
+        expect(
+          restoredProtectedDestination(destination),
+          destination,
+          reason: 'Intended destination lost: $destination',
+        );
+        final login = Uri(
+          path: '/login',
+          queryParameters: {'from': destination},
+        );
+        expect(
+          authRedirect(
+            uri: login,
+            isRestoring: false,
+            isAuthenticated: true,
+            profileComplete: true,
+          ),
+          destination,
+        );
+        expect(
+          authRedirect(
+            uri: login,
+            isRestoring: false,
+            isAuthenticated: true,
+            profileComplete: false,
+          ),
+          Uri(
+            path: '/profile-completion',
+            queryParameters: {'from': destination},
+          ).toString(),
+        );
+      }
+    });
+
+    test('rejects unsafe and unknown return destinations', () {
+      for (final destination in [
+        'https://evil.example/visa/canada',
+        '//evil.example/visa/canada',
+        '/visa/canada/../../admin',
+        '/visa/canada/invalid/path/extra',
+        '/documents/unknown',
+        '/dashboard/extra',
+      ]) {
+        expect(restoredProtectedDestination(destination), '/dashboard');
+      }
+    });
+
     test('unknown path is not forced to login so NotFound can render', () {
       expect(
         authRedirect(
@@ -416,6 +473,34 @@ void main() {
           reason: '$path has no flow context',
         );
       }
+    });
+
+    test('OTP flow recognizes valid mobile identifiers', () {
+      for (final identifier in ['+989121234567', '09121234567', '9121234567']) {
+        final route = Uri(
+          path: '/otp',
+          queryParameters: {'identifier': identifier},
+        );
+        expect(
+          authRedirect(
+            uri: route,
+            isRestoring: false,
+            isAuthenticated: false,
+            profileComplete: false,
+          ),
+          isNull,
+          reason: identifier,
+        );
+      }
+      expect(
+        authRedirect(
+          uri: Uri.parse('/otp?identifier=%2B123'),
+          isRestoring: false,
+          isAuthenticated: false,
+          profileComplete: false,
+        ),
+        '/login',
+      );
     });
 
     test('/otp with a pending verification flow stays available', () {
