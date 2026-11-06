@@ -11,6 +11,7 @@ import 'package:rad_emigrate/features/applications/domain/entities/visa_applicat
 import 'package:rad_emigrate/features/applications/domain/repositories/application_repository.dart';
 import 'package:rad_emigrate/features/applications/presentation/pages/applications_page.dart';
 import 'package:rad_emigrate/features/applications/presentation/providers/application_controller.dart';
+import 'package:rad_emigrate/features/auth/presentation/providers/auth_controller.dart';
 import 'package:rad_emigrate/l10n/app_localizations.dart';
 
 class _FakeAppRepo implements ApplicationRepository {
@@ -79,6 +80,10 @@ void main() {
     return ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
+        // The case tracker and list must share the same authenticated owner
+        // and server repository, so the status update has exactly one writer.
+        authenticatedUserIdProvider.overrideWithValue('test-user-id'),
+        applicationRepositoryProvider.overrideWithValue(repo),
         applicationControllerProvider.overrideWith(
           (ref) => ApplicationController(repo, 'test-user-id'),
         ),
