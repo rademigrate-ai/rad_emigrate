@@ -16,10 +16,14 @@ do $$ begin
   assert public.list_application_status_history(
     'b6100000-0000-4000-8000-0000000000a1',null,50)='[]'::jsonb;
 end $$;
-update public.applications set status='submitted'
- where id='b6100000-0000-4000-8000-0000000000a1';
-update public.applications set status='in_review'
- where id='b6100000-0000-4000-8000-0000000000a1';
+-- Synthetic history fixtures are inserted by the privileged SQL test runner;
+-- user-facing status transitions remain governed by private.guard_application_status.
+insert into public.application_status_history
+  (application_id, from_status, to_status, changed_by) values
+  ('b6100000-0000-4000-8000-0000000000a1',
+   'draft', 'submitted', 'b6100000-0000-4000-8000-000000000001'),
+  ('b6100000-0000-4000-8000-0000000000a1',
+   'submitted', 'in_review', 'b6100000-0000-4000-8000-000000000001');
 do $check$
 declare v jsonb; older jsonb;
 begin
