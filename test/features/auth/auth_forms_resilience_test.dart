@@ -199,7 +199,7 @@ void main() {
       await tester.tap(continueBtn);
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('Required'), findsOneWidget);
+      expect(find.text('Required'), findsNWidgets(2));
     });
   });
 }

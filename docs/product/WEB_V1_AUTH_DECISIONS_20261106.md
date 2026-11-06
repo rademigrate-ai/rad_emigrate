@@ -32,11 +32,12 @@ This document does not authorize deployment, database modification, migration ap
 - Adds mobile/email and OTP/password selection to unified Login Web UI, defaulting to mobile OTP. Register/signup URLs render this same unified entry screen; older RegisterPage remains in visual QA only.
 - Backend accepts E.164 mobile/password and unified sign-up by OTP; **SMS delivery and live verification remain unverified**.
 - OTP verification UI validates E.164 and Iran-local mobile identifiers in addition to email.
+- Profile-completion UI requires both first name and last name and currently persists their joined display name in the existing `full_name` column. Distinct field persistence needs a schema-approved follow-up.
 - Email sign-up requires a configured six-digit OTP email template; this branch does not enable or modify hosted configuration.
 
 - Accept phone-shaped OTP route context without redirecting it to login.
 - Preserve known nested Visa URLs as safe return destinations (with tests) while rejecting unknown and external return paths.
-- **Not complete:** live SMS provider, complete email OTP template and delivery verification, optional post-OTP password onboarding, first/last-name profile split and storage, identity linking, session management, secure recovery, account deletion, legal/retention approvals, and end-to-end UAT.
+- **Not complete:** live SMS provider, complete email OTP template and delivery verification, optional post-OTP password onboarding, separate first/last-name database storage (UI now validates both), identity linking, session management, secure recovery, account deletion, legal/retention approvals, and end-to-end UAT.
 
 ## Acceptance gates for future implementation
 
