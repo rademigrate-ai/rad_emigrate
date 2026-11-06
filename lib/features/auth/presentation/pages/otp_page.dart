@@ -18,6 +18,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/l10n/locale_controller.dart';
 import '../../../../core/widgets/premium_visuals.dart';
 import '../providers/auth_controller.dart';
+import '../../data/datasources/auth_remote_datasource.dart';
 
 class OtpPage extends ConsumerStatefulWidget {
   const OtpPage({
@@ -88,8 +89,10 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     if (_submitting) return;
     final identifier = _identifierCtrl.text.trim();
     final otp = _otpCtrl.text.trim();
-    if (identifier.isEmpty || !identifier.contains('@')) {
-      setState(() => _error = l10n.invalidEmail);
+    if (identifier.isEmpty ||
+        (!identifier.contains('@') &&
+            AuthRemoteDataSource.normalizeE164(identifier) == null)) {
+      setState(() => _error = l10n.required);
       return;
     }
     if (!RegExp(r'^\d{6}$').hasMatch(otp)) {
@@ -137,8 +140,10 @@ class _OtpPageState extends ConsumerState<OtpPage> {
   Future<void> _resend() async {
     final l10n = AppLocalizations.of(context);
     final identifier = _identifierCtrl.text.trim();
-    if (identifier.isEmpty || !identifier.contains('@')) {
-      setState(() => _error = l10n.invalidEmail);
+    if (identifier.isEmpty ||
+        (!identifier.contains('@') &&
+            AuthRemoteDataSource.normalizeE164(identifier) == null)) {
+      setState(() => _error = l10n.required);
       return;
     }
     if (_cooldown > 0 || _resending) return;
@@ -223,7 +228,12 @@ class _OtpPageState extends ConsumerState<OtpPage> {
         children: [
           Text(l10n.otpTitle, style: theme.textTheme.headlineMedium),
           const SizedBox(height: 8),
-          Text(l10n.otpSubtitle, style: theme.textTheme.bodyMedium),
+          Text(
+            identifier.contains('@')
+                ? l10n.otpSubtitle
+                : '${l10n.otpTitle} · ${l10n.phone}',
+            style: theme.textTheme.bodyMedium,
+          ),
           if (identifier.isNotEmpty) ...[
             const SizedBox(height: 8),
             Directionality(
@@ -239,9 +249,13 @@ class _OtpPageState extends ConsumerState<OtpPage> {
             const SizedBox(height: 16),
             AppTextField(
               controller: _identifierCtrl,
-              label: l10n.email,
-              prefixIcon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
+              label: identifier.contains('@') ? l10n.email : l10n.phone,
+              prefixIcon: identifier.contains('@')
+                  ? Icons.email_outlined
+                  : Icons.phone_outlined,
+              keyboardType: identifier.contains('@')
+                  ? TextInputType.emailAddress
+                  : TextInputType.phone,
               textDirection: TextDirection.ltr,
               textInputAction: TextInputAction.next,
               autofillHints: const [AutofillHints.email],

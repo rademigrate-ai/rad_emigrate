@@ -22,7 +22,6 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/otp_page.dart';
 import '../../features/auth/presentation/pages/profile_completion_page.dart';
-import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/providers/auth_controller.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
@@ -96,13 +95,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/register',
         builder: (_, state) =>
-            RegisterPage(destination: state.uri.queryParameters['from']),
+            LoginPage(destination: state.uri.queryParameters['from']),
       ),
       // BUG-002: /signup is a compatibility alias for /register.
       GoRoute(
         path: '/signup',
         builder: (_, state) =>
-            RegisterPage(destination: state.uri.queryParameters['from']),
+            LoginPage(destination: state.uri.queryParameters['from']),
       ),
       GoRoute(
         path: '/forgot-password',

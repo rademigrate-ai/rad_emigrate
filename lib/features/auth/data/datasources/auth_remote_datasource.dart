@@ -45,15 +45,18 @@ class AuthRemoteDataSource {
       return _mapLegacySession(response.data);
     }
     _ensureSupabaseReady();
-    if (identifier.trim().isEmpty || !identifier.contains('@')) {
+    final raw = identifier.trim();
+    final phone = isEmail(raw) ? null : normalizeE164(raw);
+    if (raw.isEmpty || (!isEmail(raw) && phone == null)) {
       throw const ApiException(
-        message: 'Supabase email authentication requires an email address.',
-        code: 'invalid_email',
+        message: 'A valid email address or phone number is required.',
+        code: 'invalid_identifier',
       );
     }
     try {
       final response = await _service.client.auth.signInWithPassword(
-        email: identifier.trim(),
+        email: isEmail(raw) ? raw : null,
+        phone: phone,
         password: password,
       );
       return await _mapSupabaseSession(response.session);
@@ -116,7 +119,7 @@ class AuthRemoteDataSource {
         } else {
           await _service.client.auth.signInWithOtp(
             email: raw,
-            shouldCreateUser: false,
+            shouldCreateUser: true,
           );
         }
         return;
@@ -130,7 +133,7 @@ class AuthRemoteDataSource {
       }
       await _service.client.auth.signInWithOtp(
         phone: phone,
-        shouldCreateUser: !signup ? false : true,
+        shouldCreateUser: true,
       );
     } catch (error) {
       throw _apiException(error);

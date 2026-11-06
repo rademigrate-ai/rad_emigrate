@@ -76,8 +76,12 @@ bool _isKnownLocation(String location) =>
 /// an email identifier (register or login-with-OTP). Bare /otp visits have no
 /// context and must not show a code-entry form.
 bool hasOtpFlowContext(Uri uri) {
-  final identifier = uri.queryParameters['identifier'] ?? '';
-  return identifier.contains('@');
+  final identifier = uri.queryParameters['identifier']?.trim() ?? '';
+  // A valid pending flow may use email or a phone format accepted by Auth.
+  return identifier.contains('@') ||
+      RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(identifier) ||
+      RegExp(r'^09\d{9}$').hasMatch(identifier) ||
+      RegExp(r'^9\d{9}$').hasMatch(identifier);
 }
 
 /// Resolves auth routing distinguishing session restoration, guest mode,
@@ -187,9 +191,25 @@ String restoredProtectedDestination(String? value) {
 
 bool _isKnownInAppDestination(String path) {
   if (path == '/splash') return false;
-  if (_publicInAppRoutes.contains(path) || _isBookingService(path)) return true;
+  if (_publicInAppRoutes.contains(path) ||
+      _isBookingService(path) ||
+      _isKnownVisaDestination(path)) {
+    return true;
+  }
   if (isProtectedPath(path)) return true;
   return false;
+}
+
+/// Only routes declared in visa_routes.dart, never arbitrary /visa/* URLs.
+bool _isKnownVisaDestination(String path) {
+  return RegExp(
+    r'^/visa/(?:'
+    r'(?:search|other-titles|content-countries)'
+    r'|content-countries/[a-zA-Z0-9_-]+'
+    r'|(?:content|articles)/[a-zA-Z0-9_-]+'
+    r'|[a-zA-Z0-9_-]+(?:/(?:articles|programs)/[a-zA-Z0-9_-]+|/[a-zA-Z0-9_-]+)?'
+    r')$',
+  ).hasMatch(path);
 }
 
 bool _isBookingService(String path) =>

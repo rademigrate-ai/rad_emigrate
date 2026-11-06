@@ -27,14 +27,16 @@ class ProfileCompletionPage extends ConsumerStatefulWidget {
 
 class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController();
+  final _firstNameCtrl = TextEditingController();
+  final _lastNameCtrl = TextEditingController();
   final _nationalityCtrl = TextEditingController();
   String? _error;
   bool _submitting = false;
 
   @override
   void dispose() {
-    _nameCtrl.dispose();
+    _firstNameCtrl.dispose();
+    _lastNameCtrl.dispose();
     _nationalityCtrl.dispose();
     super.dispose();
   }
@@ -50,7 +52,8 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
       await ref
           .read(authControllerProvider.notifier)
           .completeProfile(
-            fullName: _nameCtrl.text.trim(),
+            fullName:
+                '${_firstNameCtrl.text.trim()} ${_lastNameCtrl.text.trim()}',
             nationality: _nationalityCtrl.text.trim().isEmpty
                 ? null
                 : _nationalityCtrl.text.trim(),
@@ -116,9 +119,20 @@ class _ProfileCompletionPageState extends ConsumerState<ProfileCompletionPage> {
                   Text(l10n.aboutYou, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 16),
                   AppTextField(
-                    controller: _nameCtrl,
-                    label: l10n.fullName,
+                    controller: _firstNameCtrl,
+                    label: l10n.firstName,
                     prefixIcon: Icons.badge_outlined,
+                    textInputAction: TextInputAction.next,
+                    validator: (v) => (v == null || v.trim().length < 2)
+                        ? l10n.required
+                        : null,
+                  ),
+                  const SizedBox(height: 16),
+                  AppTextField(
+                    controller: _lastNameCtrl,
+                    label: l10n.lastName,
+                    prefixIcon: Icons.badge_outlined,
+                    textInputAction: TextInputAction.next,
                     validator: (v) => (v == null || v.trim().length < 2)
                         ? l10n.required
                         : null,
